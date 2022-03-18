@@ -1,165 +1,129 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d7/da1/a02231" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::BinaryParser&lt; Submesh &gt;</compoundname>
-    <basecompoundref refid="d1/d90/a02127" prot="public" virt="non-virtual">castor3d::BinaryParserBase&lt; Submesh &gt;</basecompoundref>
-    <includes local="no">BinarySubmesh.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d7/da1/a02231" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::Interpolator</compoundname>
+    <derivedcompoundref refid="df/d71/a02247" prot="public" virt="non-virtual">castor3d::InterpolatorT&lt; DataT, InterpolatorType::eLinear &gt;</derivedcompoundref>
+    <derivedcompoundref refid="d6/dd2/a02243" prot="public" virt="non-virtual">castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;</derivedcompoundref>
+    <includes local="no">Interpolator.hpp</includes>
     <templateparamlist>
+      <param>
+        <type>class DataT</type>
+      </param>
     </templateparamlist>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d7/da1/a02231_1ab571767cc83c4f3606bced26db4173d7" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::BinaryParser&lt; Submesh &gt;::doParse</definition>
-        <argsstring>(Submesh &amp;obj) override</argsstring>
-        <name>doParse</name>
-        <reimplements refid="d1/d90/a02127_1a020a66d5fc1b452dc76c82702d72bbb1">doParse</reimplements>
-        <param>
-          <type><ref refid="d0/dce/a03971" kindref="compound">Submesh</ref> &amp;</type>
-          <declname>obj</declname>
-        </param>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d7/da1/a02231_1a86511dc9c5cf1b7f36a57452e147cfef" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual castor3d::Interpolator&lt; DataT &gt;::~Interpolator</definition>
+        <argsstring>()=default</argsstring>
+        <name>~Interpolator</name>
+        <qualifiedname>castor3d::Interpolator::~Interpolator</qualifiedname>
         <briefdescription>
-<para>Function used to retrieve specific data from the chunk. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="out">obj</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The object to read </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Binary/BinarySubmesh.hpp" line="78" column="1"/>
+        <location file="Animation/Interpolator.hpp" line="15" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d7/da1/a02231_1a195f458651e1d5872824024368efc4d1" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::BinaryParser&lt; Submesh &gt;::doParse_v1_3</definition>
-        <argsstring>(Submesh &amp;obj) override</argsstring>
-        <name>doParse_v1_3</name>
-        <reimplements refid="d1/d90/a02127_1aab45074c2f8ac65df7fc52ee2530ebc1">doParse_v1_3</reimplements>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/da1/a02231_1a38c4c864a411f0fbc92d8af20d4ec52f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> DataT</type>
+        <definition>virtual C3D_API DataT castor3d::Interpolator&lt; DataT &gt;::interpolate</definition>
+        <argsstring>(DataT const &amp;src, DataT const &amp;dst, float percent) const =0</argsstring>
+        <name>interpolate</name>
+        <qualifiedname>castor3d::Interpolator::interpolate</qualifiedname>
+        <reimplementedby refid="d1/d0c/a02251_1a910141885b8ae03c0ab795586cc9f345">interpolate</reimplementedby>
+        <reimplementedby refid="d6/dd2/a02243_1a4a4f31bda83af9363dea99bd79694c63">interpolate</reimplementedby>
+        <reimplementedby refid="df/d71/a02247_1a92a8a65c746a2f9070fcfb0a48d7cff8">interpolate</reimplementedby>
         <param>
-          <type><ref refid="d0/dce/a03971" kindref="compound">Submesh</ref> &amp;</type>
-          <declname>obj</declname>
+          <type>DataT const &amp;</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type>DataT const &amp;</type>
+          <declname>dst</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>percent</declname>
         </param>
         <briefdescription>
-<para>Function used to retrieve specific data from the chunk. </para>
+<para>Interpolation function. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="out">obj</parametername>
+<parametername direction="in">src</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The object to read </para>
+<para>The start. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dst</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The end. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">percent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The percentage. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
-</simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Binary/BinarySubmesh.hpp" line="89" column="1"/>
+        <location file="Animation/Interpolator.hpp" line="30" column="23"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para><ref refid="dc/d66/a05171" kindref="compound">MovableObject</ref> loader. </para>
+<para>Template class which handles the interpolations, would it be quaternion, point, real, ... interpolations. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
-</simplesect>
-<simplesect kind="date"><para>14/02/2010</para>
-</simplesect>
-Loader de <ref refid="dc/d66/a05171" kindref="compound">MovableObject</ref> </para>
     </detaileddescription>
     <inheritancegraph>
-      <node id="325">
-        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
-        <link refid="d1/d90/a02127"/>
-      </node>
-      <node id="323">
-        <label>castor3d::BinaryParser&lt; Submesh &gt;</label>
+      <node id="4">
+        <label>castor3d::Interpolator&lt; castor::Quaternion &gt;</label>
         <link refid="d7/da1/a02231"/>
-        <childnode refid="324" relation="public-inheritance">
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::Quaternion &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="324">
-        <label>castor3d::BinaryParserBase&lt; Submesh &gt;</label>
-        <link refid="d1/d90/a02127"/>
-        <childnode refid="325" relation="template-instance">
-          <edgelabel>&lt; Submesh &gt;</edgelabel>
+      <node id="1">
+        <label>castor3d::Interpolator&lt; DataT &gt;</label>
+        <link refid="d7/da1/a02231"/>
+      </node>
+      <node id="2">
+        <label>castor3d::InterpolatorT&lt; DataT, InterpolatorType::eLinear &gt;</label>
+        <link refid="df/d71/a02247"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;</label>
+        <link refid="d6/dd2/a02243"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;</label>
+        <link refid="d1/d0c/a02251"/>
+        <childnode refid="4" relation="public-inheritance">
         </childnode>
       </node>
     </inheritancegraph>
-    <collaborationgraph>
-      <node id="330">
-        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
-        <link refid="d1/d90/a02127"/>
-        <childnode refid="328" relation="usage">
-          <edgelabel>m_chunk</edgelabel>
-        </childnode>
-        <childnode refid="329" relation="usage">
-          <edgelabel>m_fileVersion</edgelabel>
-        </childnode>
-      </node>
-      <node id="329">
-        <label>castor3d::Version</label>
-        <link refid="d2/db0/a03827"/>
-      </node>
-      <node id="326">
-        <label>castor3d::BinaryParser&lt; Submesh &gt;</label>
-        <link refid="d7/da1/a02231"/>
-        <childnode refid="327" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="328">
-        <label>castor3d::BinaryChunk</label>
-        <link refid="d2/d31/a02087"/>
-      </node>
-      <node id="327">
-        <label>castor3d::BinaryParserBase&lt; Submesh &gt;</label>
-        <link refid="d1/d90/a02127"/>
-        <childnode refid="328" relation="usage">
-          <edgelabel>m_chunk</edgelabel>
-        </childnode>
-        <childnode refid="329" relation="usage">
-          <edgelabel>m_fileVersion</edgelabel>
-        </childnode>
-        <childnode refid="330" relation="template-instance">
-          <edgelabel>&lt; Submesh &gt;</edgelabel>
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Binary/BinarySubmesh.hpp" line="66" column="1" bodyfile="Binary/BinarySubmesh.hpp" bodystart="64" bodyend="90"/>
+    <location file="Animation/Interpolator.hpp" line="12" column="1" bodyfile="Animation/Interpolator.hpp" bodystart="13" bodyend="33"/>
     <listofallmembers>
-      <member refid="d1/d90/a02127_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>checkError</name></member>
-      <member refid="d1/d90/a02127_1ae6f4694ede819151fe4e30e33235ff07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>createBinaryParser</name></member>
-      <member refid="d1/d90/a02127_1ab5f9ba53ad5865f967b41e5a27ed73a9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doGetSubChunk</name></member>
-      <member refid="d7/da1/a02231_1ab571767cc83c4f3606bced26db4173d7" prot="private" virt="virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doParse</name></member>
-      <member refid="d7/da1/a02231_1a195f458651e1d5872824024368efc4d1" prot="private" virt="virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doParse_v1_3</name></member>
-      <member refid="d1/d90/a02127_1a0e1aa917e3bf897fab03a32d20890062" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doParseChunk</name></member>
-      <member refid="d1/d90/a02127_1a22ca62addb3ab167995e18f49267efcf" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doParseChunk</name></member>
-      <member refid="d1/d90/a02127_1a5a648553ce168f5bc34adeedc8d169a7" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doParseChunk</name></member>
-      <member refid="d1/d90/a02127_1a90df4e46072e5ef14aebebd00cbcc1f5" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doParseChunk</name></member>
-      <member refid="d1/d90/a02127_1a5fac84360102001f5e730be1927c024e" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doParseChunk</name></member>
-      <member refid="d1/d90/a02127_1a035881aba2b64571b30a5efd3faaf3d9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doParseHeader</name></member>
-      <member refid="d1/d90/a02127_1ab3df04f9aa2eb1f7a533ed18631f09c4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>m_chunk</name></member>
-      <member refid="d1/d90/a02127_1a455764ca72b659dab2652baf56ce5885" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>m_fileVersion</name></member>
-      <member refid="d1/d90/a02127_1ae4820a3ab3e4b282240e5f1b969153c1" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>Name</name></member>
-      <member refid="d1/d90/a02127_1a5db83668684ca219f67de3a381898e64" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>parse</name></member>
-      <member refid="d1/d90/a02127_1a6bbbb529f463085c7d259600ae1b3e99" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>parse</name></member>
-      <member refid="d1/d90/a02127_1a61b02dbf69d89569eff5be22facd5f07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>parse_v1_1</name></member>
-      <member refid="d1/d90/a02127_1a95788692ddd6fae91074c299b674aaab" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>parse_v1_2</name></member>
-      <member refid="d1/d90/a02127_1a6f39b66d980e4a65660016f71115a89c" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>parse_v1_3</name></member>
-      <member refid="d1/d90/a02127_1aabc068daf8d99718497aa35f7a17c346" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>parse_v1_4</name></member>
+      <member refid="d7/da1/a02231_1a38c4c864a411f0fbc92d8af20d4ec52f" prot="public" virt="pure-virtual"><scope>castor3d::Interpolator</scope><name>interpolate</name></member>
+      <member refid="d7/da1/a02231_1a86511dc9c5cf1b7f36a57452e147cfef" prot="protected" virt="virtual"><scope>castor3d::Interpolator</scope><name>~Interpolator</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

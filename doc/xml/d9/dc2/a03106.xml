@@ -1,33 +1,34 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d9/dc2/a03106" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkExternalFenceProperties &gt;</compoundname>
+    <compoundname>castor3d::VkStructTraits&lt; VkPipelineColorBlendStateCreateInfo &gt;</compoundname>
     <includes local="no">makeVkType.hpp</includes>
     <templateparamlist>
     </templateparamlist>
       <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d9/dc2/a03106_1adc38770379e146ac635640ede6a1ff4c" prot="public" static="yes" mutable="no">
+      <memberdef kind="variable" id="d9/dc2/a03106_1a217db81b08d050b0221cf0e58acfbea3" prot="public" static="yes" constexpr="yes" mutable="no">
         <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkExternalFenceProperties &gt;::value</definition>
+        <definition>VkStructureType constexpr castor3d::VkStructTraits&lt; VkPipelineColorBlendStateCreateInfo &gt;::value</definition>
         <argsstring></argsstring>
         <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_EXTERNAL_FENCE_PROPERTIES</initializer>
+        <qualifiedname>castor3d::VkStructTraits&lt; VkPipelineColorBlendStateCreateInfo &gt;::value</qualifiedname>
+        <initializer>= VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="118" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="118" bodyend="-1"/>
+        <location file="Miscellaneous/makeVkType.hpp" line="40" column="65" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="40" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="118" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="118" bodyend="118"/>
+    <location file="Miscellaneous/makeVkType.hpp" line="40" column="10" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="40" bodyend="40"/>
     <listofallmembers>
-      <member refid="d9/dc2/a03106_1adc38770379e146ac635640ede6a1ff4c" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkExternalFenceProperties &gt;</scope><name>value</name></member>
+      <member refid="d9/dc2/a03106_1a217db81b08d050b0221cf0e58acfbea3" prot="public" virt="non-virtual"><scope>castor3d::VkStructTraits&lt; VkPipelineColorBlendStateCreateInfo &gt;</scope><name>value</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

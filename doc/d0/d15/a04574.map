@@ -1,16 +1,5 @@
-<map id="castor3d::SceneRenderPass" name="castor3d::SceneRenderPass">
-<area shape="rect" id="node1" title=" " alt="" coords="240,183,428,209"/>
-<area shape="rect" id="node4" href="$d5/d8a/a04475.html" title=" " alt="" coords="505,81,658,108"/>
-<area shape="rect" id="node5" href="$df/d7b/a04903.html" title=" " alt="" coords="476,132,687,159"/>
-<area shape="rect" id="node10" href="$da/de7/a04643.html" title=" " alt="" coords="491,208,672,235"/>
-<area shape="rect" id="node14" href="$d7/d3c/a05003.html" title=" " alt="" coords="501,259,661,285"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,157,192,184"/>
-<area shape="rect" id="node3" title=" " alt="" coords="67,208,130,235"/>
-<area shape="rect" id="node6" href="$d2/d5e/a04363.html" title=" " alt="" coords="791,5,935,32"/>
-<area shape="rect" id="node7" href="$d6/d8c/a04703.html" title=" " alt="" coords="735,56,991,83"/>
-<area shape="rect" id="node8" href="$d9/d87/a04855.html" title=" " alt="" coords="785,107,940,133"/>
-<area shape="rect" id="node9" href="$d7/dda/a04911.html" title=" " alt="" coords="773,157,952,184"/>
-<area shape="rect" id="node11" href="$d3/df2/a04647.html" title=" " alt="" coords="741,208,984,235"/>
-<area shape="rect" id="node12" href="$da/d47/a04651.html" title=" " alt="" coords="757,259,968,285"/>
-<area shape="rect" id="node13" href="$d0/d5e/a04655.html" title=" " alt="" coords="759,309,967,336"/>
+<map id="castor3d::ObjectCacheTraitsT&lt; ParticleSystem, castor::String &gt;" name="castor3d::ObjectCacheTraitsT&lt; ParticleSystem, castor::String &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="14,229,201,285"/>
+<area shape="rect" id="node2" href="$de/d22/a04619.html" title=" " alt="" coords="5,124,209,180"/>
+<area shape="rect" id="node3" href="$de/d22/a04619.html" title=" " alt="" coords="14,5,201,47"/>
 </map>

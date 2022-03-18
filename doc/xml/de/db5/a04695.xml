@@ -1,489 +1,173 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="de/db5/a04695" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::SsaoRawAOPass</compoundname>
-    <includes local="no">SsaoRawAOPass.hpp</includes>
-    <innerclass refid="df/d5e/a04699" prot="private">castor3d::SsaoRawAOPass::RenderQuad</innerclass>
-      <sectiondef kind="user-defined">
-      <memberdef kind="function" id="de/db5/a04695_1a609599bc378da9cb255da62874ae1e8d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d8/dd7/a02643" kindref="compound">TextureUnit</ref> const  &amp;</type>
-        <definition>TextureUnit const&amp; castor3d::SsaoRawAOPass::getResult</definition>
-        <argsstring>() const</argsstring>
-        <name>getResult</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>name Getters. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="90" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="90" bodyend="93"/>
-      </memberdef>
-      <memberdef kind="function" id="de/db5/a04695_1ab9e3a40db5e9d74a7eadb50517da8adf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d8/dd7/a02643" kindref="compound">TextureUnit</ref> const  &amp;</type>
-        <definition>TextureUnit const&amp; castor3d::SsaoRawAOPass::getBentResult</definition>
-        <argsstring>() const</argsstring>
-        <name>getBentResult</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="95" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="95" bodyend="98"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="de/db5/a04695_1ae137b1d9ea13d46bf0c90fed7e04969b" prot="public" static="yes" mutable="no">
-        <type>VkFormat constexpr</type>
-        <definition>VkFormat constexpr castor3d::SsaoRawAOPass::ResultFormat</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="de/db5/a04695" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::LightBuffer::LightData</compoundname>
+    <includes local="no">LightBuffer.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/db5/a04695_1aa8f1d4a50c73a0ba9f2a2ca3d60ff7bc" prot="public" static="no" mutable="no">
+        <type><ref refid="db/dc1/a04671" kindref="compound">Float4</ref></type>
+        <definition>Float4 castor3d::LightBuffer::LightData::colourIndex</definition>
         <argsstring></argsstring>
-        <name>ResultFormat</name>
-        <initializer>= VK_FORMAT_R32G32B32A32_SFLOAT</initializer>
+        <name>colourIndex</name>
+        <qualifiedname>castor3d::LightBuffer::LightData::colourIndex</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="102" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="102" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="107" column="8" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="107" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="de/db5/a04695_1a6ae94279dfd4d2102d591de20cd28318" prot="private" static="no" mutable="no">
-        <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
-        <definition>Engine&amp; castor3d::SsaoRawAOPass::m_engine</definition>
+      <memberdef kind="variable" id="de/db5/a04695_1ad136768a0f7dbe07813cee25f318c257" prot="public" static="no" mutable="no">
+        <type><ref refid="db/dc1/a04671" kindref="compound">Float4</ref></type>
+        <definition>Float4 castor3d::LightBuffer::LightData::intensityFarPlane</definition>
         <argsstring></argsstring>
-        <name>m_engine</name>
+        <name>intensityFarPlane</name>
+        <qualifiedname>castor3d::LightBuffer::LightData::intensityFarPlane</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="127" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="127" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="108" column="8" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="108" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="de/db5/a04695_1a4cb260c9b492455e8fd22ae35c6ec6f0" prot="private" static="no" mutable="no">
-        <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const  &amp;</type>
-        <definition>RenderDevice const&amp; castor3d::SsaoRawAOPass::m_device</definition>
+      <memberdef kind="variable" id="de/db5/a04695_1a1256e00ee0917560659557002446a7f3" prot="public" static="no" mutable="no">
+        <type><ref refid="db/dc1/a04671" kindref="compound">Float4</ref></type>
+        <definition>Float4 castor3d::LightBuffer::LightData::volumetric</definition>
         <argsstring></argsstring>
-        <name>m_device</name>
+        <name>volumetric</name>
+        <qualifiedname>castor3d::LightBuffer::LightData::volumetric</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="128" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="128" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="109" column="8" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="109" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="de/db5/a04695_1a276f177dc0e84cc3e2fb42c72c813eb9" prot="private" static="no" mutable="no">
-        <type><ref refid="d6/d12/a04691" kindref="compound">SsaoConfig</ref> const  &amp;</type>
-        <definition>SsaoConfig const&amp; castor3d::SsaoRawAOPass::m_ssaoConfig</definition>
+      <memberdef kind="variable" id="de/db5/a04695_1ab62828d6da6a71e98032a686a35b01ba" prot="public" static="no" mutable="no">
+        <type><ref refid="db/dc1/a04671" kindref="compound">Float4</ref></type>
+        <definition>Float4 castor3d::LightBuffer::LightData::shadowsOffsets</definition>
         <argsstring></argsstring>
-        <name>m_ssaoConfig</name>
+        <name>shadowsOffsets</name>
+        <qualifiedname>castor3d::LightBuffer::LightData::shadowsOffsets</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="129" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="129" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="110" column="8" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="110" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="de/db5/a04695_1a50b19e6c276599cced6e2d6579d16bd8" prot="private" static="no" mutable="no">
-        <type><ref refid="d9/d91/a05523" kindref="compound">SsaoConfigUbo</ref> &amp;</type>
-        <definition>SsaoConfigUbo&amp; castor3d::SsaoRawAOPass::m_ssaoConfigUbo</definition>
+      <memberdef kind="variable" id="de/db5/a04695_1a72fdbc95f788eae691cc8b0975cfb8b5" prot="public" static="no" mutable="no">
+        <type><ref refid="db/dc1/a04671" kindref="compound">Float4</ref></type>
+        <definition>Float4 castor3d::LightBuffer::LightData::shadowsVariances</definition>
         <argsstring></argsstring>
-        <name>m_ssaoConfigUbo</name>
+        <name>shadowsVariances</name>
+        <qualifiedname>castor3d::LightBuffer::LightData::shadowsVariances</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="130" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="130" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="111" column="8" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="111" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="de/db5/a04695_1a1e4fe2de170561413ecf88495ef4141a" prot="private" static="no" mutable="no">
-        <type><ref refid="dd/d83/a05443" kindref="compound">GpInfoUbo</ref> const  &amp;</type>
-        <definition>GpInfoUbo const&amp; castor3d::SsaoRawAOPass::m_gpInfoUbo</definition>
+      <memberdef kind="variable" id="de/db5/a04695_1abb390b37b5a65cd29a5c0a7f8ae34812" prot="public" static="no" mutable="no">
+        <type><ref refid="de/d69/a04679" kindref="compound">SpecLight</ref></type>
+        <definition>SpecLight castor3d::LightBuffer::LightData::specific</definition>
         <argsstring></argsstring>
-        <name>m_gpInfoUbo</name>
+        <name>specific</name>
+        <qualifiedname>castor3d::LightBuffer::LightData::specific</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="131" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="131" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/db5/a04695_1a6a4dd43721b4671dc5613a4d39ceeb3b" prot="private" static="no" mutable="no">
-        <type><ref refid="d8/dd7/a02643" kindref="compound">TextureUnit</ref> const  &amp;</type>
-        <definition>TextureUnit const&amp; castor3d::SsaoRawAOPass::m_linearisedDepthBuffer</definition>
-        <argsstring></argsstring>
-        <name>m_linearisedDepthBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="132" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="132" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/db5/a04695_1abbe85fb6350b51f6f07d782a4e31b9da" prot="private" static="no" mutable="no">
-        <type>ashes::ImageView const  &amp;</type>
-        <definition>ashes::ImageView const&amp; castor3d::SsaoRawAOPass::m_normals</definition>
-        <argsstring></argsstring>
-        <name>m_normals</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="133" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="133" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/db5/a04695_1ad97360edb8e2cad50dccbbd1542be339" prot="private" static="no" mutable="no">
-        <type>VkExtent2D</type>
-        <definition>VkExtent2D castor3d::SsaoRawAOPass::m_size</definition>
-        <argsstring></argsstring>
-        <name>m_size</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="134" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="134" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/db5/a04695_1a4a904e89bc6e7cc6969b88ba6bf676ff" prot="private" static="no" mutable="no">
-        <type><ref refid="d8/dd7/a02643" kindref="compound">TextureUnit</ref></type>
-        <definition>TextureUnit castor3d::SsaoRawAOPass::m_result</definition>
-        <argsstring></argsstring>
-        <name>m_result</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="135" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="135" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/db5/a04695_1afb9e508c1b8f15ee1729bd1a80cbe8cc" prot="private" static="no" mutable="no">
-        <type><ref refid="d8/dd7/a02643" kindref="compound">TextureUnit</ref></type>
-        <definition>TextureUnit castor3d::SsaoRawAOPass::m_bentNormals</definition>
-        <argsstring></argsstring>
-        <name>m_bentNormals</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="136" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="136" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/db5/a04695_1a07483eb27d5f02ffc9c4a05ac0392901" prot="private" static="no" mutable="no">
-        <type>ashes::RenderPassPtr</type>
-        <definition>ashes::RenderPassPtr castor3d::SsaoRawAOPass::m_renderPass</definition>
-        <argsstring></argsstring>
-        <name>m_renderPass</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="137" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="137" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/db5/a04695_1a0afae02fbb00e923b832c845ceb4b026" prot="private" static="no" mutable="no">
-        <type>ashes::FrameBufferPtr</type>
-        <definition>ashes::FrameBufferPtr castor3d::SsaoRawAOPass::m_frameBuffer</definition>
-        <argsstring></argsstring>
-        <name>m_frameBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="138" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="138" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/db5/a04695_1a6927daa658489f90e5e565ac9b4f9fc9" prot="private" static="no" mutable="no">
-        <type>std::array&lt; RenderQuad, 2u &gt;</type>
-        <definition>std::array&lt; RenderQuad, 2u &gt; castor3d::SsaoRawAOPass::m_quads</definition>
-        <argsstring></argsstring>
-        <name>m_quads</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="139" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="139" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/db5/a04695_1a1a9c1ca90a48852d10baad1c32e7bf54" prot="private" static="no" mutable="no">
-        <type>std::array&lt; ashes::CommandBufferPtr, 2u &gt;</type>
-        <definition>std::array&lt; ashes::CommandBufferPtr, 2u &gt; castor3d::SsaoRawAOPass::m_commandBuffers</definition>
-        <argsstring></argsstring>
-        <name>m_commandBuffers</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="140" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="140" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/db5/a04695_1a4a32acc05f33dd1911e9f39ded956613" prot="private" static="no" mutable="no">
-        <type>ashes::SemaphorePtr</type>
-        <definition>ashes::SemaphorePtr castor3d::SsaoRawAOPass::m_finished</definition>
-        <argsstring></argsstring>
-        <name>m_finished</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="141" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="141" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/db5/a04695_1acd1f4c26c6c57572b4e3c6380cb388c2" prot="private" static="no" mutable="no">
-        <type>RenderPassTimerSPtr</type>
-        <definition>RenderPassTimerSPtr castor3d::SsaoRawAOPass::m_timer</definition>
-        <argsstring></argsstring>
-        <name>m_timer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="142" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="142" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="de/db5/a04695_1a680acc1fd90efb2b55d4b06a99a83978" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::SsaoRawAOPass::SsaoRawAOPass</definition>
-        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, VkExtent2D const &amp;size, SsaoConfig const &amp;config, SsaoConfigUbo &amp;ssaoConfigUbo, GpInfoUbo const &amp;gpInfoUbo, TextureUnit const &amp;linearisedDepthBuffer, ashes::ImageView const &amp;normals)</argsstring>
-        <name>SsaoRawAOPass</name>
-        <param>
-          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
-        </param>
-        <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>VkExtent2D const &amp;</type>
-          <declname>size</declname>
-        </param>
-        <param>
-          <type><ref refid="d6/d12/a04691" kindref="compound">SsaoConfig</ref> const &amp;</type>
-          <declname>config</declname>
-        </param>
-        <param>
-          <type><ref refid="d9/d91/a05523" kindref="compound">SsaoConfigUbo</ref> &amp;</type>
-          <declname>ssaoConfigUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="dd/d83/a05443" kindref="compound">GpInfoUbo</ref> const &amp;</type>
-          <declname>gpInfoUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="d8/dd7/a02643" kindref="compound">TextureUnit</ref> const &amp;</type>
-          <declname>linearisedDepthBuffer</declname>
-        </param>
-        <param>
-          <type>ashes::ImageView const &amp;</type>
-          <declname>normals</declname>
-        </param>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">engine</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The engine. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">size</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render area dimensions. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">config</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The SSAO configuration. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">ssaoConfigUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The SSAO configuration UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">gpInfoUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GBuffer configuration UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">linearisedDepthBuffer</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The linearised depth buffer. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">normals</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The normals buffer. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="45" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="de/db5/a04695_1ab2af17229cdb334f5bb41e175975d756" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::SsaoRawAOPass::~SsaoRawAOPass</definition>
-        <argsstring>()</argsstring>
-        <name>~SsaoRawAOPass</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="59" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="de/db5/a04695_1a326b7dfea39095530b021dfbb42fc5c0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type>ashes::Semaphore const  &amp;</type>
-        <definition>ashes::Semaphore const&amp; castor3d::SsaoRawAOPass::compute</definition>
-        <argsstring>(ashes::Semaphore const &amp;toWait) const</argsstring>
-        <name>compute</name>
-        <param>
-          <type>ashes::Semaphore const &amp;</type>
-          <declname>toWait</declname>
-        </param>
-        <briefdescription>
-<para>Renders the pass. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">toWait</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The semaphore from the previous render pass. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="68" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="de/db5/a04695_1a9678f811408a3410bc35b975c8fd759f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SsaoRawAOPass::accept</definition>
-        <argsstring>(SsaoConfig &amp;config, PipelineVisitorBase &amp;visitor)</argsstring>
-        <name>accept</name>
-        <param>
-          <type><ref refid="d6/d12/a04691" kindref="compound">SsaoConfig</ref> &amp;</type>
-          <declname>config</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/dab/a03815" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
-          <declname>visitor</declname>
-        </param>
-        <briefdescription>
-<para>Accepts a visitor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">config</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The SSAO config. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">visitor</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The visitor. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="79" column="1"/>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="112" column="11" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="112" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Ssao/SsaoRawAOPass.hpp" line="21" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="20" bodyend="143"/>
+    <collaborationgraph>
+      <node id="7">
+        <label>T</label>
+      </node>
+      <node id="4">
+        <label>std::array&lt; castor3d::LightBuffer::Float4x4, 4u &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; castor3d::LightBuffer::Float4x4, 4u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::LightBuffer::Float4</label>
+        <link refid="db/dc1/a04671"/>
+      </node>
+      <node id="5">
+        <label>castor3d::LightBuffer::Float4x4</label>
+        <link refid="d1/d64/a04675"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>c0</edgelabel>
+          <edgelabel>c1</edgelabel>
+          <edgelabel>c2</edgelabel>
+          <edgelabel>c3</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::LightBuffer::LightData</label>
+        <link refid="de/db5/a04695"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>colourIndex</edgelabel>
+          <edgelabel>intensityFarPlane</edgelabel>
+          <edgelabel>shadowsOffsets</edgelabel>
+          <edgelabel>shadowsVariances</edgelabel>
+          <edgelabel>volumetric</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>specific</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::LightBuffer::SpecLight</label>
+        <link refid="de/d69/a04679"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>attenuation</edgelabel>
+          <edgelabel>direction</edgelabel>
+          <edgelabel>directionCount</edgelabel>
+          <edgelabel>exponentCutOff</edgelabel>
+          <edgelabel>position</edgelabel>
+          <edgelabel>splitDepths</edgelabel>
+          <edgelabel>splitScales</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>transforms</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>transform</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="105" column="1" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="106" bodyend="113"/>
     <listofallmembers>
-      <member refid="de/db5/a04695_1a9678f811408a3410bc35b975c8fd759f" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>accept</name></member>
-      <member refid="de/db5/a04695_1a326b7dfea39095530b021dfbb42fc5c0" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>compute</name></member>
-      <member refid="de/db5/a04695_1ab9e3a40db5e9d74a7eadb50517da8adf" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>getBentResult</name></member>
-      <member refid="de/db5/a04695_1a609599bc378da9cb255da62874ae1e8d" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>getResult</name></member>
-      <member refid="de/db5/a04695_1afb9e508c1b8f15ee1729bd1a80cbe8cc" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_bentNormals</name></member>
-      <member refid="de/db5/a04695_1a1a9c1ca90a48852d10baad1c32e7bf54" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_commandBuffers</name></member>
-      <member refid="de/db5/a04695_1a4cb260c9b492455e8fd22ae35c6ec6f0" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_device</name></member>
-      <member refid="de/db5/a04695_1a6ae94279dfd4d2102d591de20cd28318" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_engine</name></member>
-      <member refid="de/db5/a04695_1a4a32acc05f33dd1911e9f39ded956613" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_finished</name></member>
-      <member refid="de/db5/a04695_1a0afae02fbb00e923b832c845ceb4b026" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_frameBuffer</name></member>
-      <member refid="de/db5/a04695_1a1e4fe2de170561413ecf88495ef4141a" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_gpInfoUbo</name></member>
-      <member refid="de/db5/a04695_1a6a4dd43721b4671dc5613a4d39ceeb3b" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_linearisedDepthBuffer</name></member>
-      <member refid="de/db5/a04695_1abbe85fb6350b51f6f07d782a4e31b9da" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_normals</name></member>
-      <member refid="de/db5/a04695_1a6927daa658489f90e5e565ac9b4f9fc9" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_quads</name></member>
-      <member refid="de/db5/a04695_1a07483eb27d5f02ffc9c4a05ac0392901" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_renderPass</name></member>
-      <member refid="de/db5/a04695_1a4a904e89bc6e7cc6969b88ba6bf676ff" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_result</name></member>
-      <member refid="de/db5/a04695_1ad97360edb8e2cad50dccbbd1542be339" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_size</name></member>
-      <member refid="de/db5/a04695_1a276f177dc0e84cc3e2fb42c72c813eb9" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_ssaoConfig</name></member>
-      <member refid="de/db5/a04695_1a50b19e6c276599cced6e2d6579d16bd8" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_ssaoConfigUbo</name></member>
-      <member refid="de/db5/a04695_1acd1f4c26c6c57572b4e3c6380cb388c2" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_timer</name></member>
-      <member refid="de/db5/a04695_1ae137b1d9ea13d46bf0c90fed7e04969b" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>ResultFormat</name></member>
-      <member refid="de/db5/a04695_1a680acc1fd90efb2b55d4b06a99a83978" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>SsaoRawAOPass</name></member>
-      <member refid="de/db5/a04695_1ab2af17229cdb334f5bb41e175975d756" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>~SsaoRawAOPass</name></member>
+      <member refid="de/db5/a04695_1aa8f1d4a50c73a0ba9f2a2ca3d60ff7bc" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::LightData</scope><name>colourIndex</name></member>
+      <member refid="de/db5/a04695_1ad136768a0f7dbe07813cee25f318c257" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::LightData</scope><name>intensityFarPlane</name></member>
+      <member refid="de/db5/a04695_1ab62828d6da6a71e98032a686a35b01ba" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::LightData</scope><name>shadowsOffsets</name></member>
+      <member refid="de/db5/a04695_1a72fdbc95f788eae691cc8b0975cfb8b5" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::LightData</scope><name>shadowsVariances</name></member>
+      <member refid="de/db5/a04695_1abb390b37b5a65cd29a5c0a7f8ae34812" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::LightData</scope><name>specific</name></member>
+      <member refid="de/db5/a04695_1a1256e00ee0917560659557002446a7f3" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::LightData</scope><name>volumetric</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

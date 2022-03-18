@@ -1,33 +1,360 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d6/d13/a03258" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkMemoryFdPropertiesKHR &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d6/d13/a03258" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Pattern</compoundname>
+    <includes local="no">Pattern.hpp</includes>
     <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
     </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d6/d13/a03258_1a01ca971b5f9a5d13bf9190c2b7349caa" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkMemoryFdPropertiesKHR &gt;::value</definition>
+      <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="d6/d13/a03258_1a3096c5e1c11c09eeba02d406bcd32f6c" prot="private" static="no">
+        <type>T</type>
+        <definition>typedef T castor3d::Pattern&lt; T &gt;::TObj</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_MEMORY_FD_PROPERTIES_KHR</initializer>
+        <name>TObj</name>
+        <qualifiedname>castor3d::Pattern::TObj</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="219" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="219" bodyend="-1"/>
+        <location file="Miscellaneous/Pattern.hpp" line="17" column="11" bodyfile="Miscellaneous/Pattern.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d6/d13/a03258_1aadb28b2c383371140c061014e4aed578" prot="private" static="no">
+        <type>T &amp;</type>
+        <definition>typedef T&amp; castor3d::Pattern&lt; T &gt;::TObjRef</definition>
+        <argsstring></argsstring>
+        <name>TObjRef</name>
+        <qualifiedname>castor3d::Pattern::TObjRef</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Pattern.hpp" line="18" column="12" bodyfile="Miscellaneous/Pattern.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d6/d13/a03258_1ada9b2d5b5151c4b9ccc160c5838012b9" prot="private" static="no">
+        <type>T const  &amp;</type>
+        <definition>typedef T const&amp; castor3d::Pattern&lt; T &gt;::TObjConstRef</definition>
+        <argsstring></argsstring>
+        <name>TObjConstRef</name>
+        <qualifiedname>castor3d::Pattern::TObjConstRef</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Pattern.hpp" line="19" column="18" bodyfile="Miscellaneous/Pattern.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d6/d13/a03258_1a8dbd33fe36e3b69feddc818b6aa3a0a1" prot="private" static="no">
+        <type>std::list&lt; TObj &gt;</type>
+        <definition>typedef std::list&lt; TObj &gt; castor3d::Pattern&lt; T &gt;::TObjList</definition>
+        <argsstring></argsstring>
+        <name>TObjList</name>
+        <qualifiedname>castor3d::Pattern::TObjList</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Pattern.hpp" line="20" column="28" bodyfile="Miscellaneous/Pattern.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d6/d13/a03258_1abfe55b113992613799e75769feb7996b" prot="private" static="no" mutable="no">
+        <type>TObjList</type>
+        <definition>TObjList castor3d::Pattern&lt; T &gt;::m_elements</definition>
+        <argsstring></argsstring>
+        <name>m_elements</name>
+        <qualifiedname>castor3d::Pattern::m_elements</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Pattern.hpp" line="192" column="10" bodyfile="Miscellaneous/Pattern.hpp" bodystart="192" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d13/a03258_1ac2250940a12351f6b45a2d0f6667d757" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::Pattern&lt; T &gt;::Pattern</definition>
+        <argsstring>()=default</argsstring>
+        <name>Pattern</name>
+        <qualifiedname>castor3d::Pattern::Pattern</qualifiedname>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Pattern.hpp" line="29" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d13/a03258_1a9eaf02d46d6dc568fd90bdc979cef64d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d6/d13/a03258" kindref="compound">Pattern</ref>&lt; T &gt;</type>
+        <definition>Pattern&lt; T &gt; castor3d::Pattern&lt; T &gt;::getReversed</definition>
+        <argsstring>() const</argsstring>
+        <name>getReversed</name>
+        <qualifiedname>castor3d::Pattern::getReversed</qualifiedname>
+        <briefdescription>
+<para>Builds the mirror pattern. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The built pattern </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Pattern.hpp" line="38" column="9" bodyfile="Miscellaneous/Pattern.hpp" bodystart="38" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d13/a03258_1ad04782d02b5c4cbd1c26ce13c7bfffa9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::Pattern&lt; T &gt;::isClosed</definition>
+        <argsstring>() const</argsstring>
+        <name>isClosed</name>
+        <qualifiedname>castor3d::Pattern::isClosed</qualifiedname>
+        <briefdescription>
+<para>Tells if the pattern is closed (first element is also the last) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if closed, <computeroutput>false</computeroutput> if not </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Pattern.hpp" line="57" column="6" bodyfile="Miscellaneous/Pattern.hpp" bodystart="57" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d13/a03258_1a63227f8d655f6aaaa3f559688ba39282" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Pattern&lt; T &gt;::addElement</definition>
+        <argsstring>(TObjConstRef element, uint32_t index=0xFFFFFFFF)</argsstring>
+        <name>addElement</name>
+        <qualifiedname>castor3d::Pattern::addElement</qualifiedname>
+        <param>
+          <type>TObjConstRef</type>
+          <declname>element</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+          <defval>0xFFFFFFFF</defval>
+        </param>
+        <briefdescription>
+<para>adds an element to the list, at a given index </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">element</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element to add </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The index at which the insertion must be done </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Pattern.hpp" line="73" column="6" bodyfile="Miscellaneous/Pattern.hpp" bodystart="73" bodyend="91"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d13/a03258_1a08266789654d039b702c3fe4c60a59d5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Pattern&lt; T &gt;::getSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getSize</name>
+        <qualifiedname>castor3d::Pattern::getSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The number of elements constituting the pattern </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Pattern.hpp" line="98" column="17" bodyfile="Miscellaneous/Pattern.hpp" bodystart="98" bodyend="101"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d13/a03258_1afb4d1a5791c80e5fd914b1f84451a571" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>TObjRef</type>
+        <definition>TObjRef castor3d::Pattern&lt; T &gt;::operator[]</definition>
+        <argsstring>(uint32_t index)</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor3d::Pattern::operator[]</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Accessor to an element. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the index of the wanted element </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Modifiable element reference </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Pattern.hpp" line="112" column="9" bodyfile="Miscellaneous/Pattern.hpp" bodystart="112" bodyend="123"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d13/a03258_1a939bca231138a17ebf5bc05b19512a74" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>TObjConstRef</type>
+        <definition>TObjConstRef castor3d::Pattern&lt; T &gt;::operator[]</definition>
+        <argsstring>(uint32_t index) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor3d::Pattern::operator[]</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Constant accessor to an element. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the index of the wanted element </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Constant element reference </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Pattern.hpp" line="134" column="14" bodyfile="Miscellaneous/Pattern.hpp" bodystart="134" bodyend="145"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d13/a03258_1a1a23877b40c72fa0d3843679e64dd515" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>TObjRef</type>
+        <definition>TObjRef castor3d::Pattern&lt; T &gt;::getElement</definition>
+        <argsstring>(uint32_t index)</argsstring>
+        <name>getElement</name>
+        <qualifiedname>castor3d::Pattern::getElement</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Accessor to an element. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the index of the wanted element </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Modifiable element </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Pattern.hpp" line="156" column="9" bodyfile="Miscellaneous/Pattern.hpp" bodystart="156" bodyend="167"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d13/a03258_1afa8e83de38e07161d77a284d48399910" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>TObjConstRef</type>
+        <definition>TObjConstRef castor3d::Pattern&lt; T &gt;::getElement</definition>
+        <argsstring>(uint32_t index) const</argsstring>
+        <name>getElement</name>
+        <qualifiedname>castor3d::Pattern::getElement</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Constant accessor to an element. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the index of the wanted element </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Constant element </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Pattern.hpp" line="178" column="14" bodyfile="Miscellaneous/Pattern.hpp" bodystart="178" bodyend="189"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para><ref refid="d6/d13/a03258" kindref="compound">Pattern</ref> handler class. </para>
     </briefdescription>
     <detaileddescription>
+<para><simplesect kind="remark"><para>A pattern is a collection of consecutive points. </para>
+</simplesect>
+</para>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="219" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="219" bodyend="219"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::Pattern&lt; castor::Point3f &gt;</label>
+        <link refid="d6/d13/a03258"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::Point3f &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::Pattern&lt; T &gt;</label>
+        <link refid="d6/d13/a03258"/>
+      </node>
+    </inheritancegraph>
+    <location file="Miscellaneous/Pattern.hpp" line="14" column="1" bodyfile="Miscellaneous/Pattern.hpp" bodystart="15" bodyend="193"/>
     <listofallmembers>
-      <member refid="d6/d13/a03258_1a01ca971b5f9a5d13bf9190c2b7349caa" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkMemoryFdPropertiesKHR &gt;</scope><name>value</name></member>
+      <member refid="d6/d13/a03258_1a63227f8d655f6aaaa3f559688ba39282" prot="public" virt="non-virtual"><scope>castor3d::Pattern</scope><name>addElement</name></member>
+      <member refid="d6/d13/a03258_1a1a23877b40c72fa0d3843679e64dd515" prot="public" virt="non-virtual"><scope>castor3d::Pattern</scope><name>getElement</name></member>
+      <member refid="d6/d13/a03258_1afa8e83de38e07161d77a284d48399910" prot="public" virt="non-virtual"><scope>castor3d::Pattern</scope><name>getElement</name></member>
+      <member refid="d6/d13/a03258_1a9eaf02d46d6dc568fd90bdc979cef64d" prot="public" virt="non-virtual"><scope>castor3d::Pattern</scope><name>getReversed</name></member>
+      <member refid="d6/d13/a03258_1a08266789654d039b702c3fe4c60a59d5" prot="public" virt="non-virtual"><scope>castor3d::Pattern</scope><name>getSize</name></member>
+      <member refid="d6/d13/a03258_1ad04782d02b5c4cbd1c26ce13c7bfffa9" prot="public" virt="non-virtual"><scope>castor3d::Pattern</scope><name>isClosed</name></member>
+      <member refid="d6/d13/a03258_1abfe55b113992613799e75769feb7996b" prot="private" virt="non-virtual"><scope>castor3d::Pattern</scope><name>m_elements</name></member>
+      <member refid="d6/d13/a03258_1afb4d1a5791c80e5fd914b1f84451a571" prot="public" virt="non-virtual"><scope>castor3d::Pattern</scope><name>operator[]</name></member>
+      <member refid="d6/d13/a03258_1a939bca231138a17ebf5bc05b19512a74" prot="public" virt="non-virtual"><scope>castor3d::Pattern</scope><name>operator[]</name></member>
+      <member refid="d6/d13/a03258_1ac2250940a12351f6b45a2d0f6667d757" prot="public" virt="non-virtual"><scope>castor3d::Pattern</scope><name>Pattern</name></member>
+      <member refid="d6/d13/a03258_1a3096c5e1c11c09eeba02d406bcd32f6c" prot="private" virt="non-virtual"><scope>castor3d::Pattern</scope><name>TObj</name></member>
+      <member refid="d6/d13/a03258_1ada9b2d5b5151c4b9ccc160c5838012b9" prot="private" virt="non-virtual"><scope>castor3d::Pattern</scope><name>TObjConstRef</name></member>
+      <member refid="d6/d13/a03258_1a8dbd33fe36e3b69feddc818b6aa3a0a1" prot="private" virt="non-virtual"><scope>castor3d::Pattern</scope><name>TObjList</name></member>
+      <member refid="d6/d13/a03258_1aadb28b2c383371140c061014e4aed578" prot="private" virt="non-virtual"><scope>castor3d::Pattern</scope><name>TObjRef</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

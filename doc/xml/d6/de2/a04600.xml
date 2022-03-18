@@ -1,226 +1,198 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d6/de2/a04600" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::SceneRenderPass::VertexInputs</compoundname>
-    <includes local="no">RenderPass.hpp</includes>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d6/de2/a04600_1a3eb836143e25baba0264d5ed9fa5361d" prot="public" static="yes" mutable="no">
-        <type>uint32_t constexpr</type>
-        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::PositionLocation</definition>
+    <compoundname>castor3d::SceneFileContext::SceneImportConfig</compoundname>
+    <includes local="no">SceneFileParser.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/de2/a04600_1ae3a5a57f3c292b4a02d2fde4e4c866c3" prot="public" static="no" mutable="no">
+        <type>castor::Path</type>
+        <definition>castor::Path castor3d::SceneFileContext::SceneImportConfig::file</definition>
         <argsstring></argsstring>
-        <name>PositionLocation</name>
-        <initializer>= 0u</initializer>
+        <name>file</name>
+        <qualifiedname>castor3d::SceneFileContext::SceneImportConfig::file</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderPass.hpp" line="1258" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1258" bodyend="-1"/>
+        <location file="Scene/SceneFileParser.hpp" line="112" column="14" bodyfile="Scene/SceneFileParser.hpp" bodystart="112" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/de2/a04600_1af4de18d78d37a1ce9ce9861a67b877bd" prot="public" static="yes" mutable="no">
-        <type>uint32_t constexpr</type>
-        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::NormalLocation</definition>
+      <memberdef kind="variable" id="d6/de2/a04600_1aaad557c539b6dee11f785e7171f9e47f" prot="public" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::SceneFileContext::SceneImportConfig::prefix</definition>
         <argsstring></argsstring>
-        <name>NormalLocation</name>
-        <initializer>= 1u</initializer>
+        <name>prefix</name>
+        <qualifiedname>castor3d::SceneFileContext::SceneImportConfig::prefix</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderPass.hpp" line="1259" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1259" bodyend="-1"/>
+        <location file="Scene/SceneFileParser.hpp" line="113" column="16" bodyfile="Scene/SceneFileParser.hpp" bodystart="113" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/de2/a04600_1a84ff7d72f5f6cbe621f7ae3007d6765f" prot="public" static="yes" mutable="no">
-        <type>uint32_t constexpr</type>
-        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::TangentLocation</definition>
+      <memberdef kind="variable" id="d6/de2/a04600_1ac48e79d41e37beeecbe91265c9227bb9" prot="public" static="no" mutable="no">
+        <type>std::map&lt; <ref refid="d2/df5/a01395_1ae3a32e32f3eaa63d0b9886aa3e942742" kindref="member">TextureFlag</ref>, <ref refid="dd/d3f/a02912" kindref="compound">TextureConfiguration</ref> &gt;</type>
+        <definition>std::map&lt; TextureFlag, TextureConfiguration &gt; castor3d::SceneFileContext::SceneImportConfig::textureRemaps</definition>
         <argsstring></argsstring>
-        <name>TangentLocation</name>
-        <initializer>= 2u</initializer>
+        <name>textureRemaps</name>
+        <qualifiedname>castor3d::SceneFileContext::SceneImportConfig::textureRemaps</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderPass.hpp" line="1260" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1260" bodyend="-1"/>
+        <location file="Scene/SceneFileParser.hpp" line="114" column="10" bodyfile="Scene/SceneFileParser.hpp" bodystart="114" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/de2/a04600_1a1ab5d96bb66dbca4b9d0c8ca71356fdb" prot="public" static="yes" mutable="no">
-        <type>uint32_t constexpr</type>
-        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::TextureLocation</definition>
+      <memberdef kind="variable" id="d6/de2/a04600_1a6cef26615ca379a7acfaac4cd76557f7" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SceneFileContext::SceneImportConfig::rescale</definition>
         <argsstring></argsstring>
-        <name>TextureLocation</name>
-        <initializer>= 3u</initializer>
+        <name>rescale</name>
+        <qualifiedname>castor3d::SceneFileContext::SceneImportConfig::rescale</qualifiedname>
+        <initializer>{ 1.0f }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderPass.hpp" line="1261" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1261" bodyend="-1"/>
+        <location file="Scene/SceneFileParser.hpp" line="115" column="7" bodyfile="Scene/SceneFileParser.hpp" bodystart="115" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/de2/a04600_1a412ebd9de376fb4a73571d071c13cf73" prot="public" static="yes" mutable="no">
-        <type>uint32_t constexpr</type>
-        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::BoneIds0Location</definition>
+      <memberdef kind="variable" id="d6/de2/a04600_1ae23b93b12411bc43434767899bca3bba" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SceneFileContext::SceneImportConfig::pitch</definition>
         <argsstring></argsstring>
-        <name>BoneIds0Location</name>
-        <initializer>= 4u</initializer>
+        <name>pitch</name>
+        <qualifiedname>castor3d::SceneFileContext::SceneImportConfig::pitch</qualifiedname>
+        <initializer>{ 0.0f }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderPass.hpp" line="1263" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1263" bodyend="-1"/>
+        <location file="Scene/SceneFileParser.hpp" line="116" column="7" bodyfile="Scene/SceneFileParser.hpp" bodystart="116" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/de2/a04600_1ac813bcc7c015e8b6b419aea88349e791" prot="public" static="yes" mutable="no">
-        <type>uint32_t constexpr</type>
-        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::BoneIds1Location</definition>
+      <memberdef kind="variable" id="d6/de2/a04600_1a3d6e8b46d7206716cc1f1c1550c0ffa2" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SceneFileContext::SceneImportConfig::yaw</definition>
         <argsstring></argsstring>
-        <name>BoneIds1Location</name>
-        <initializer>= 5u</initializer>
+        <name>yaw</name>
+        <qualifiedname>castor3d::SceneFileContext::SceneImportConfig::yaw</qualifiedname>
+        <initializer>{ 0.0f }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderPass.hpp" line="1264" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1264" bodyend="-1"/>
+        <location file="Scene/SceneFileParser.hpp" line="117" column="7" bodyfile="Scene/SceneFileParser.hpp" bodystart="117" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/de2/a04600_1abf3ccc5fd61e964caa6d569338f5b5bf" prot="public" static="yes" mutable="no">
-        <type>uint32_t constexpr</type>
-        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::Weights0Location</definition>
+      <memberdef kind="variable" id="d6/de2/a04600_1abed6fccde71e66aac81f943bd1d4e998" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SceneFileContext::SceneImportConfig::roll</definition>
         <argsstring></argsstring>
-        <name>Weights0Location</name>
-        <initializer>= 6u</initializer>
+        <name>roll</name>
+        <qualifiedname>castor3d::SceneFileContext::SceneImportConfig::roll</qualifiedname>
+        <initializer>{ 0.0f }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderPass.hpp" line="1265" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1265" bodyend="-1"/>
+        <location file="Scene/SceneFileParser.hpp" line="118" column="7" bodyfile="Scene/SceneFileParser.hpp" bodystart="118" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/de2/a04600_1a3bbdaf3da3826e385d784c209426fb0f" prot="public" static="yes" mutable="no">
-        <type>uint32_t constexpr</type>
-        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::Weights1Location</definition>
+      <memberdef kind="variable" id="d6/de2/a04600_1ac5c4eccae52c226039278b4d0bfc63b9" prot="public" static="no" mutable="no">
+        <type>std::map&lt; <ref refid="d2/df5/a01395_1ae3a32e32f3eaa63d0b9886aa3e942742" kindref="member">TextureFlag</ref>, <ref refid="dd/d3f/a02912" kindref="compound">TextureConfiguration</ref> &gt;::iterator</type>
+        <definition>std::map&lt;TextureFlag,TextureConfiguration&gt;::iterator castor3d::SceneFileContext::SceneImportConfig::textureRemapIt</definition>
         <argsstring></argsstring>
-        <name>Weights1Location</name>
-        <initializer>= 7u</initializer>
+        <name>textureRemapIt</name>
+        <qualifiedname>castor3d::SceneFileContext::SceneImportConfig::textureRemapIt</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderPass.hpp" line="1266" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1266" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d6/de2/a04600_1a474be99b221b44e82d8aa17d122f65d5" prot="public" static="yes" mutable="no">
-        <type>uint32_t constexpr</type>
-        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::Position2Location</definition>
-        <argsstring></argsstring>
-        <name>Position2Location</name>
-        <initializer>= 8u</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPass.hpp" line="1268" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1268" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d6/de2/a04600_1ae7ed2aff91c9064644ac0fbea49cb24c" prot="public" static="yes" mutable="no">
-        <type>uint32_t constexpr</type>
-        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::Normal2Location</definition>
-        <argsstring></argsstring>
-        <name>Normal2Location</name>
-        <initializer>= 9u</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPass.hpp" line="1269" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1269" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d6/de2/a04600_1a384710ee0b9dc137a3194cc978f7002d" prot="public" static="yes" mutable="no">
-        <type>uint32_t constexpr</type>
-        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::Tangent2Location</definition>
-        <argsstring></argsstring>
-        <name>Tangent2Location</name>
-        <initializer>= 10u</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPass.hpp" line="1270" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1270" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d6/de2/a04600_1a2543cba449ff9de465a51f904c868bd8" prot="public" static="yes" mutable="no">
-        <type>uint32_t constexpr</type>
-        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::Texture2Location</definition>
-        <argsstring></argsstring>
-        <name>Texture2Location</name>
-        <initializer>= 11u</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPass.hpp" line="1271" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1271" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d6/de2/a04600_1a64553bd618a193a3f037e524d58560d6" prot="public" static="yes" mutable="no">
-        <type>uint32_t constexpr</type>
-        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::TransformLocation</definition>
-        <argsstring></argsstring>
-        <name>TransformLocation</name>
-        <initializer>= 8u</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPass.hpp" line="1273" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1273" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d6/de2/a04600_1aad29e6e66a38e43cf16a306db7955fe4" prot="public" static="yes" mutable="no">
-        <type>uint32_t constexpr</type>
-        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::MaterialLocation</definition>
-        <argsstring></argsstring>
-        <name>MaterialLocation</name>
-        <initializer>= 12u</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPass.hpp" line="1274" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1274" bodyend="-1"/>
+        <location file="Scene/SceneFileParser.hpp" line="119" column="21" bodyfile="Scene/SceneFileParser.hpp" bodystart="119" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/RenderPass.hpp" line="1256" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1255" bodyend="1275"/>
+    <collaborationgraph>
+      <node id="6">
+        <label>K</label>
+      </node>
+      <node id="7">
+        <label>T</label>
+      </node>
+      <node id="1">
+        <label>castor3d::SceneFileContext::SceneImportConfig</label>
+        <link refid="d6/de2/a04600"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>textureRemapIt</edgelabel>
+          <edgelabel>textureRemaps</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::TextureConfiguration</label>
+        <link refid="dd/d3f/a02912"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>transform</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>AlbedoTexture</edgelabel>
+          <edgelabel>DiffuseTexture</edgelabel>
+          <edgelabel>EmissiveTexture</edgelabel>
+          <edgelabel>GlossinessTexture</edgelabel>
+          <edgelabel>HeightTexture</edgelabel>
+          <edgelabel>MetalnessTexture</edgelabel>
+          <edgelabel>NormalTexture</edgelabel>
+          <edgelabel>OcclusionTexture</edgelabel>
+          <edgelabel>OpacityTexture</edgelabel>
+          <edgelabel>RoughnessTexture</edgelabel>
+          <edgelabel>...</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::TextureTransform</label>
+        <link refid="df/dfc/a02908"/>
+      </node>
+      <node id="2">
+        <label>std::map&lt; TextureFlag, castor3d::TextureConfiguration &gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; TextureFlag, castor3d::TextureConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/SceneFileParser.hpp" line="110" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="111" bodyend="120"/>
     <listofallmembers>
-      <member refid="d6/de2/a04600_1a412ebd9de376fb4a73571d071c13cf73" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>BoneIds0Location</name></member>
-      <member refid="d6/de2/a04600_1ac813bcc7c015e8b6b419aea88349e791" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>BoneIds1Location</name></member>
-      <member refid="d6/de2/a04600_1aad29e6e66a38e43cf16a306db7955fe4" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>MaterialLocation</name></member>
-      <member refid="d6/de2/a04600_1ae7ed2aff91c9064644ac0fbea49cb24c" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>Normal2Location</name></member>
-      <member refid="d6/de2/a04600_1af4de18d78d37a1ce9ce9861a67b877bd" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>NormalLocation</name></member>
-      <member refid="d6/de2/a04600_1a474be99b221b44e82d8aa17d122f65d5" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>Position2Location</name></member>
-      <member refid="d6/de2/a04600_1a3eb836143e25baba0264d5ed9fa5361d" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>PositionLocation</name></member>
-      <member refid="d6/de2/a04600_1a384710ee0b9dc137a3194cc978f7002d" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>Tangent2Location</name></member>
-      <member refid="d6/de2/a04600_1a84ff7d72f5f6cbe621f7ae3007d6765f" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>TangentLocation</name></member>
-      <member refid="d6/de2/a04600_1a2543cba449ff9de465a51f904c868bd8" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>Texture2Location</name></member>
-      <member refid="d6/de2/a04600_1a1ab5d96bb66dbca4b9d0c8ca71356fdb" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>TextureLocation</name></member>
-      <member refid="d6/de2/a04600_1a64553bd618a193a3f037e524d58560d6" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>TransformLocation</name></member>
-      <member refid="d6/de2/a04600_1abf3ccc5fd61e964caa6d569338f5b5bf" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>Weights0Location</name></member>
-      <member refid="d6/de2/a04600_1a3bbdaf3da3826e385d784c209426fb0f" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>Weights1Location</name></member>
+      <member refid="d6/de2/a04600_1ae3a5a57f3c292b4a02d2fde4e4c866c3" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext::SceneImportConfig</scope><name>file</name></member>
+      <member refid="d6/de2/a04600_1ae23b93b12411bc43434767899bca3bba" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext::SceneImportConfig</scope><name>pitch</name></member>
+      <member refid="d6/de2/a04600_1aaad557c539b6dee11f785e7171f9e47f" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext::SceneImportConfig</scope><name>prefix</name></member>
+      <member refid="d6/de2/a04600_1a6cef26615ca379a7acfaac4cd76557f7" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext::SceneImportConfig</scope><name>rescale</name></member>
+      <member refid="d6/de2/a04600_1abed6fccde71e66aac81f943bd1d4e998" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext::SceneImportConfig</scope><name>roll</name></member>
+      <member refid="d6/de2/a04600_1ac5c4eccae52c226039278b4d0bfc63b9" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext::SceneImportConfig</scope><name>textureRemapIt</name></member>
+      <member refid="d6/de2/a04600_1ac48e79d41e37beeecbe91265c9227bb9" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext::SceneImportConfig</scope><name>textureRemaps</name></member>
+      <member refid="d6/de2/a04600_1a3d6e8b46d7206716cc1f1c1550c0ffa2" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext::SceneImportConfig</scope><name>yaw</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

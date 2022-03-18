@@ -1,120 +1,443 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="df/d88/a04358" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::CombinePassConfigT</compoundname>
-    <basecompoundref refid="d9/d8d/a04442" prot="public" virt="non-virtual">castor3d::rq::ConfigT&lt; WrapperT &gt;</basecompoundref>
-    <includes local="no">PassesModule.hpp</includes>
-    <templateparamlist>
-      <param>
-        <type>template&lt; typename ValueT &gt; typename</type>
-        <declname>WrapperT</declname>
-        <defname>WrapperT</defname>
-      </param>
-    </templateparamlist>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="df/d88/a04358_1a949875a08a33df7d643a191a6838cfb9" prot="public" static="no" mutable="no">
-        <type>WrapperT&lt; TextureLayoutSPtr &gt;</type>
-        <definition>WrapperT&lt; TextureLayoutSPtr &gt; castor3d::CombinePassConfigT&lt; WrapperT &gt;::resultTexture</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="df/d88/a04358" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Texture3DTo2D</compoundname>
+    <includes local="no">Texture3DTo2D.hpp</includes>
+    <innerclass refid="d4/d8a/a04362" prot="private">castor3d::Texture3DTo2D::Texture3DToScreen</innerclass>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="df/d88/a04358_1a4fd153c10193133784a46e5a83edacc9" prot="private" static="no" mutable="no">
+        <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::Texture3DTo2D::m_device</definition>
         <argsstring></argsstring>
-        <name>resultTexture</name>
+        <name>m_device</name>
+        <qualifiedname>castor3d::Texture3DTo2D::m_device</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/CombinePass.hpp" line="36" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="36" bodyend="-1"/>
-        <referencedby refid="d7/dc9/a04370_1a7630c9174a0efca28e7fe0c56f7af18d" compoundref="dd/dd8/a00719" startline="127" endline="131">castor3d::CombinePassBuilder::resultTexture</referencedby>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="54" column="21" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="54" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="df/d88/a04358_1a1f6fafeb1d14c82b7db7eecf0ef87dec" prot="public" static="no" mutable="no">
-        <type>WrapperT&lt; VkImageLayout &gt;</type>
-        <definition>WrapperT&lt; VkImageLayout &gt; castor3d::CombinePassConfigT&lt; WrapperT &gt;::lhsLayout</definition>
+      <memberdef kind="variable" id="df/d88/a04358_1adf2af3f8b92384a142f6e390a267f66e" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d8f/a04930" kindref="compound">MatrixUbo</ref> const  &amp;</type>
+        <definition>MatrixUbo const&amp; castor3d::Texture3DTo2D::m_matrixUbo</definition>
         <argsstring></argsstring>
-        <name>lhsLayout</name>
+        <name>m_matrixUbo</name>
+        <qualifiedname>castor3d::Texture3DTo2D::m_matrixUbo</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/CombinePass.hpp" line="37" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="37" bodyend="-1"/>
-        <referencedby refid="d7/dc9/a04370_1addc1ffaf03ac2984e7de4dc024c9688a" compoundref="dd/dd8/a00719" startline="133" endline="137">castor3d::CombinePassBuilder::lhsViewLayout</referencedby>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="55" column="18" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="55" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="df/d88/a04358_1afd3d3153720dd635598e14e976b76d41" prot="public" static="no" mutable="no">
-        <type>WrapperT&lt; VkImageLayout &gt;</type>
-        <definition>WrapperT&lt; VkImageLayout &gt; castor3d::CombinePassConfigT&lt; WrapperT &gt;::rhsLayout</definition>
+      <memberdef kind="variable" id="df/d88/a04358_1aebeeb4842e8ccfd105d91fab75420f4a" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d8c/a04318" kindref="compound">Texture</ref></type>
+        <definition>Texture castor3d::Texture3DTo2D::m_target</definition>
         <argsstring></argsstring>
-        <name>rhsLayout</name>
+        <name>m_target</name>
+        <qualifiedname>castor3d::Texture3DTo2D::m_target</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/CombinePass.hpp" line="38" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="38" bodyend="-1"/>
-        <referencedby refid="d7/dc9/a04370_1a6253a280faf87b846fc13f378af33037" compoundref="dd/dd8/a00719" startline="139" endline="143">castor3d::CombinePassBuilder::rhsViewLayout</referencedby>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="56" column="9" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="56" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="df/d88/a04358_1af284fa450224677ad95078d88cffc6d9" prot="public" static="no" mutable="no">
-        <type>WrapperT&lt; <ref refid="dc/d8b/a04578" kindref="compound">IntermediateView</ref> &gt;</type>
-        <definition>WrapperT&lt; IntermediateView &gt; castor3d::CombinePassConfigT&lt; WrapperT &gt;::tex3DResult</definition>
+      <memberdef kind="variable" id="df/d88/a04358_1ac2c0e6e32a8019f2b16b3f6a27dd879c" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d8c/a04318" kindref="compound">Texture</ref></type>
+        <definition>Texture castor3d::Texture3DTo2D::m_depthBuffer</definition>
         <argsstring></argsstring>
-        <name>tex3DResult</name>
+        <name>m_depthBuffer</name>
+        <qualifiedname>castor3d::Texture3DTo2D::m_depthBuffer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/CombinePass.hpp" line="39" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="39" bodyend="-1"/>
-        <referencedby refid="d7/dc9/a04370_1abe3925a5b104b5cece629b61e6d30576" compoundref="dd/dd8/a00719" startline="145" endline="151">castor3d::CombinePassBuilder::tex3DResult</referencedby>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="57" column="9" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d88/a04358_1a0b01dfb769ff0382aed18d35954014e9" prot="private" static="no" mutable="no">
+        <type><ref refid="df/d9b/a02514" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d6/db7/a04354" kindref="compound">Texture3DTo2DData</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Texture3DTo2DData &gt; castor3d::Texture3DTo2D::m_uniformBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_uniformBuffer</name>
+        <qualifiedname>castor3d::Texture3DTo2D::m_uniformBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="58" column="22" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d88/a04358_1a6c0eea7342acaae1b18b6d26a2a792ea" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetLayoutPtr</type>
+        <definition>ashes::DescriptorSetLayoutPtr castor3d::Texture3DTo2D::m_descriptorSetLayout</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorSetLayout</name>
+        <qualifiedname>castor3d::Texture3DTo2D::m_descriptorSetLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="59" column="31" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d88/a04358_1ae35a3446c3ff17eec79c4dc7ac14490e" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineLayoutPtr</type>
+        <definition>ashes::PipelineLayoutPtr castor3d::Texture3DTo2D::m_pipelineLayout</definition>
+        <argsstring></argsstring>
+        <name>m_pipelineLayout</name>
+        <qualifiedname>castor3d::Texture3DTo2D::m_pipelineLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="60" column="26" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d88/a04358_1aedc8d8e59d98324a11d14d06ffc8fd68" prot="private" static="no" mutable="no">
+        <type>ashes::RenderPassPtr</type>
+        <definition>ashes::RenderPassPtr castor3d::Texture3DTo2D::m_renderPass</definition>
+        <argsstring></argsstring>
+        <name>m_renderPass</name>
+        <qualifiedname>castor3d::Texture3DTo2D::m_renderPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="61" column="22" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d88/a04358_1a21c5b8d9798c47729927374a03dba564" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d64/a04750" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::Texture3DTo2D::m_vertexShader</definition>
+        <argsstring></argsstring>
+        <name>m_vertexShader</name>
+        <qualifiedname>castor3d::Texture3DTo2D::m_vertexShader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="62" column="14" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d88/a04358_1a3158df64ae150a98ecd48489641d6448" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d64/a04750" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::Texture3DTo2D::m_geometryShader</definition>
+        <argsstring></argsstring>
+        <name>m_geometryShader</name>
+        <qualifiedname>castor3d::Texture3DTo2D::m_geometryShader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="63" column="14" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d88/a04358_1a2ba99a9d6290c00f1f89c7c107c6d1a4" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d64/a04750" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::Texture3DTo2D::m_pixelShader</definition>
+        <argsstring></argsstring>
+        <name>m_pixelShader</name>
+        <qualifiedname>castor3d::Texture3DTo2D::m_pixelShader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="64" column="14" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d88/a04358_1a10d0f703da26c92e7b1e9251b24d2f7b" prot="private" static="no" mutable="no">
+        <type>ashes::GraphicsPipelinePtr</type>
+        <definition>ashes::GraphicsPipelinePtr castor3d::Texture3DTo2D::m_pipeline</definition>
+        <argsstring></argsstring>
+        <name>m_pipeline</name>
+        <qualifiedname>castor3d::Texture3DTo2D::m_pipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="65" column="28" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d88/a04358_1a0973c3ebca6621d0e8bf1dbdab6d2e09" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetPoolPtr</type>
+        <definition>ashes::DescriptorSetPoolPtr castor3d::Texture3DTo2D::m_descriptorSetPool</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorSetPool</name>
+        <qualifiedname>castor3d::Texture3DTo2D::m_descriptorSetPool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="66" column="29" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d88/a04358_1a2a58835ab536969a8fb1d604c51a1af9" prot="private" static="no" mutable="no">
+        <type>ashes::FrameBufferPtr</type>
+        <definition>ashes::FrameBufferPtr castor3d::Texture3DTo2D::m_frameBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_frameBuffer</name>
+        <qualifiedname>castor3d::Texture3DTo2D::m_frameBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="67" column="23" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d88/a04358_1ad3ba327b4f84ffd3709c7d9c5c4fceac" prot="private" static="no" mutable="no">
+        <type>IntermediateViewArray</type>
+        <definition>IntermediateViewArray castor3d::Texture3DTo2D::m_textures</definition>
+        <argsstring></argsstring>
+        <name>m_textures</name>
+        <qualifiedname>castor3d::Texture3DTo2D::m_textures</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="87" column="23" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d88/a04358_1a3d574d2e04a72149c5fbd294b4b7c19b" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; Texture3DToScreen &gt;</type>
+        <definition>std::vector&lt; Texture3DToScreen &gt; castor3d::Texture3DTo2D::m_texture3DToScreen</definition>
+        <argsstring></argsstring>
+        <name>m_texture3DToScreen</name>
+        <qualifiedname>castor3d::Texture3DTo2D::m_texture3DToScreen</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="88" column="13" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d88/a04358_1aaf6b0cdc2f3dba0473260cdd36112dfe" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Texture3DTo2D::m_index</definition>
+        <argsstring></argsstring>
+        <name>m_index</name>
+        <qualifiedname>castor3d::Texture3DTo2D::m_index</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="89" column="10" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d88/a04358_1aa380f601d19c1ba24beeab5ad5b606d8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Texture3DTo2D::Texture3DTo2D</definition>
+        <argsstring>(RenderDevice const &amp;device, VkExtent2D const &amp;size, MatrixUbo const &amp;matrixUbo)</argsstring>
+        <name>Texture3DTo2D</name>
+        <qualifiedname>castor3d::Texture3DTo2D::Texture3DTo2D</qualifiedname>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>VkExtent2D const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d8f/a04930" kindref="compound">MatrixUbo</ref> const &amp;</type>
+          <declname>matrixUbo</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="33" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d88/a04358_1ad4c3a60b43d1d0c551facb07c4ca291d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Texture3DTo2D::~Texture3DTo2D</definition>
+        <argsstring>()</argsstring>
+        <name>~Texture3DTo2D</name>
+        <qualifiedname>castor3d::Texture3DTo2D::~Texture3DTo2D</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="36" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d88/a04358_1ac02c0fdb6252329fee6add2231442f30" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Texture3DTo2D::createPasses</definition>
+        <argsstring>(QueueData const &amp;queueData, IntermediateViewArray intermediates)</argsstring>
+        <name>createPasses</name>
+        <qualifiedname>castor3d::Texture3DTo2D::createPasses</qualifiedname>
+        <param>
+          <type><ref refid="dc/d61/a03950" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <param>
+          <type>IntermediateViewArray</type>
+          <declname>intermediates</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="38" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d88/a04358_1a4d9d90e2d065cf2710758bdb293dcadc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Texture3DTo2D::initialise</definition>
+        <argsstring>(QueueData const &amp;queueData)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::Texture3DTo2D::initialise</qualifiedname>
+        <param>
+          <type><ref refid="dc/d61/a03950" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="40" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d88/a04358_1aebee08f485f6b227185b25f75df84b7f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Texture3DTo2D::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::Texture3DTo2D::update</qualifiedname>
+        <param>
+          <type><ref refid="d3/d14/a04046" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="41" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d88/a04358_1ad2db5c53a5db84982318f4ce3d88e579" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> crg::SemaphoreWait</type>
+        <definition>C3D_API crg::SemaphoreWait castor3d::Texture3DTo2D::render</definition>
+        <argsstring>(ashes::Queue const &amp;queue, crg::SemaphoreWait const &amp;toWait)</argsstring>
+        <name>render</name>
+        <qualifiedname>castor3d::Texture3DTo2D::render</qualifiedname>
+        <param>
+          <type>ashes::Queue const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>crg::SemaphoreWait const &amp;</type>
+          <declname>toWait</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="42" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d88/a04358_1a83143d4abb72bdee9754e2cee482b1ab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Texture3DTo2D::render</definition>
+        <argsstring>(ashes::Queue const &amp;queue, ashes::VkSemaphoreArray &amp;semaphores, ashes::VkPipelineStageFlagsArray &amp;stages)</argsstring>
+        <name>render</name>
+        <qualifiedname>castor3d::Texture3DTo2D::render</qualifiedname>
+        <param>
+          <type>ashes::Queue const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>ashes::VkSemaphoreArray &amp;</type>
+          <declname>semaphores</declname>
+        </param>
+        <param>
+          <type>ashes::VkPipelineStageFlagsArray &amp;</type>
+          <declname>stages</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="44" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d88/a04358_1a094dc8b3760f555383ec95c139bcc9b0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d8c/a04318" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::Texture3DTo2D::getTarget</definition>
+        <argsstring>()</argsstring>
+        <name>getTarget</name>
+        <qualifiedname>castor3d::Texture3DTo2D::getTarget</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="48" column="16" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="48" bodyend="51"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>The configuration to create a <ref refid="d4/d8a/a04362" kindref="compound">CombinePass</ref>. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="773">
-        <label>castor3d::CombinePassConfigT&lt; ashes::Optional &gt;</label>
-        <link refid="df/d88/a04358"/>
-        <childnode refid="771" relation="template-instance">
-          <edgelabel>&lt; ashes::Optional &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="771">
-        <label>castor3d::CombinePassConfigT&lt; WrapperT &gt;</label>
-        <link refid="df/d88/a04358"/>
-        <childnode refid="772" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="772">
-        <label>castor3d::rq::ConfigT&lt; WrapperT &gt;</label>
-        <link refid="d9/d8d/a04442"/>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="774">
-        <label>castor3d::CombinePassConfigT&lt; WrapperT &gt;</label>
-        <link refid="df/d88/a04358"/>
-        <childnode refid="775" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="775">
-        <label>castor3d::rq::ConfigT&lt; WrapperT &gt;</label>
-        <link refid="d9/d8d/a04442"/>
-      </node>
-    </collaborationgraph>
-    <location file="Render/Passes/CombinePass.hpp" line="35" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="33" bodyend="40"/>
+    <location file="Render/ToTexture/Texture3DTo2D.hpp" line="30" column="1" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="31" bodyend="90"/>
     <listofallmembers>
-      <member refid="d9/d8d/a04442_1ac4d5fa2df58c23f29429178eff899699" prot="public" virt="non-virtual"><scope>castor3d::CombinePassConfigT</scope><name>bindings</name></member>
-      <member refid="d9/d8d/a04442_1aad18baaa7ab25c7cf1f27c9f3719104e" prot="public" virt="non-virtual"><scope>castor3d::CombinePassConfigT</scope><name>blendMode</name></member>
-      <member refid="df/d88/a04358_1a1f6fafeb1d14c82b7db7eecf0ef87dec" prot="public" virt="non-virtual"><scope>castor3d::CombinePassConfigT</scope><name>lhsLayout</name></member>
-      <member refid="d9/d8d/a04442_1a34e232f8e87ff523d0df7cd3f697124f" prot="public" virt="non-virtual"><scope>castor3d::CombinePassConfigT</scope><name>range</name></member>
-      <member refid="df/d88/a04358_1a949875a08a33df7d643a191a6838cfb9" prot="public" virt="non-virtual"><scope>castor3d::CombinePassConfigT</scope><name>resultTexture</name></member>
-      <member refid="df/d88/a04358_1afd3d3153720dd635598e14e976b76d41" prot="public" virt="non-virtual"><scope>castor3d::CombinePassConfigT</scope><name>rhsLayout</name></member>
-      <member refid="df/d88/a04358_1af284fa450224677ad95078d88cffc6d9" prot="public" virt="non-virtual"><scope>castor3d::CombinePassConfigT</scope><name>tex3DResult</name></member>
-      <member refid="d9/d8d/a04442_1a4e4283067ecc109099b08f65723dffae" prot="public" virt="non-virtual"><scope>castor3d::CombinePassConfigT</scope><name>texcoordConfig</name></member>
+      <member refid="df/d88/a04358_1ac02c0fdb6252329fee6add2231442f30" prot="public" virt="non-virtual"><scope>castor3d::Texture3DTo2D</scope><name>createPasses</name></member>
+      <member refid="df/d88/a04358_1a094dc8b3760f555383ec95c139bcc9b0" prot="public" virt="non-virtual"><scope>castor3d::Texture3DTo2D</scope><name>getTarget</name></member>
+      <member refid="df/d88/a04358_1a4d9d90e2d065cf2710758bdb293dcadc" prot="public" virt="non-virtual"><scope>castor3d::Texture3DTo2D</scope><name>initialise</name></member>
+      <member refid="df/d88/a04358_1ac2c0e6e32a8019f2b16b3f6a27dd879c" prot="private" virt="non-virtual"><scope>castor3d::Texture3DTo2D</scope><name>m_depthBuffer</name></member>
+      <member refid="df/d88/a04358_1a6c0eea7342acaae1b18b6d26a2a792ea" prot="private" virt="non-virtual"><scope>castor3d::Texture3DTo2D</scope><name>m_descriptorSetLayout</name></member>
+      <member refid="df/d88/a04358_1a0973c3ebca6621d0e8bf1dbdab6d2e09" prot="private" virt="non-virtual"><scope>castor3d::Texture3DTo2D</scope><name>m_descriptorSetPool</name></member>
+      <member refid="df/d88/a04358_1a4fd153c10193133784a46e5a83edacc9" prot="private" virt="non-virtual"><scope>castor3d::Texture3DTo2D</scope><name>m_device</name></member>
+      <member refid="df/d88/a04358_1a2a58835ab536969a8fb1d604c51a1af9" prot="private" virt="non-virtual"><scope>castor3d::Texture3DTo2D</scope><name>m_frameBuffer</name></member>
+      <member refid="df/d88/a04358_1a3158df64ae150a98ecd48489641d6448" prot="private" virt="non-virtual"><scope>castor3d::Texture3DTo2D</scope><name>m_geometryShader</name></member>
+      <member refid="df/d88/a04358_1aaf6b0cdc2f3dba0473260cdd36112dfe" prot="private" virt="non-virtual"><scope>castor3d::Texture3DTo2D</scope><name>m_index</name></member>
+      <member refid="df/d88/a04358_1adf2af3f8b92384a142f6e390a267f66e" prot="private" virt="non-virtual"><scope>castor3d::Texture3DTo2D</scope><name>m_matrixUbo</name></member>
+      <member refid="df/d88/a04358_1a10d0f703da26c92e7b1e9251b24d2f7b" prot="private" virt="non-virtual"><scope>castor3d::Texture3DTo2D</scope><name>m_pipeline</name></member>
+      <member refid="df/d88/a04358_1ae35a3446c3ff17eec79c4dc7ac14490e" prot="private" virt="non-virtual"><scope>castor3d::Texture3DTo2D</scope><name>m_pipelineLayout</name></member>
+      <member refid="df/d88/a04358_1a2ba99a9d6290c00f1f89c7c107c6d1a4" prot="private" virt="non-virtual"><scope>castor3d::Texture3DTo2D</scope><name>m_pixelShader</name></member>
+      <member refid="df/d88/a04358_1aedc8d8e59d98324a11d14d06ffc8fd68" prot="private" virt="non-virtual"><scope>castor3d::Texture3DTo2D</scope><name>m_renderPass</name></member>
+      <member refid="df/d88/a04358_1aebeeb4842e8ccfd105d91fab75420f4a" prot="private" virt="non-virtual"><scope>castor3d::Texture3DTo2D</scope><name>m_target</name></member>
+      <member refid="df/d88/a04358_1a3d574d2e04a72149c5fbd294b4b7c19b" prot="private" virt="non-virtual"><scope>castor3d::Texture3DTo2D</scope><name>m_texture3DToScreen</name></member>
+      <member refid="df/d88/a04358_1ad3ba327b4f84ffd3709c7d9c5c4fceac" prot="private" virt="non-virtual"><scope>castor3d::Texture3DTo2D</scope><name>m_textures</name></member>
+      <member refid="df/d88/a04358_1a0b01dfb769ff0382aed18d35954014e9" prot="private" virt="non-virtual"><scope>castor3d::Texture3DTo2D</scope><name>m_uniformBuffer</name></member>
+      <member refid="df/d88/a04358_1a21c5b8d9798c47729927374a03dba564" prot="private" virt="non-virtual"><scope>castor3d::Texture3DTo2D</scope><name>m_vertexShader</name></member>
+      <member refid="df/d88/a04358_1ad2db5c53a5db84982318f4ce3d88e579" prot="public" virt="non-virtual"><scope>castor3d::Texture3DTo2D</scope><name>render</name></member>
+      <member refid="df/d88/a04358_1a83143d4abb72bdee9754e2cee482b1ab" prot="public" virt="non-virtual"><scope>castor3d::Texture3DTo2D</scope><name>render</name></member>
+      <member refid="df/d88/a04358_1aa380f601d19c1ba24beeab5ad5b606d8" prot="public" virt="non-virtual"><scope>castor3d::Texture3DTo2D</scope><name>Texture3DTo2D</name></member>
+      <member refid="df/d88/a04358_1aebee08f485f6b227185b25f75df84b7f" prot="public" virt="non-virtual"><scope>castor3d::Texture3DTo2D</scope><name>update</name></member>
+      <member refid="df/d88/a04358_1ad4c3a60b43d1d0c551facb07c4ca291d" prot="public" virt="non-virtual"><scope>castor3d::Texture3DTo2D</scope><name>~Texture3DTo2D</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

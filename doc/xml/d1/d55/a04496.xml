@@ -1,16 +1,16 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d1/d55/a04496" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::PickingPass</compoundname>
-    <basecompoundref refid="d8/d25/a04596" prot="public" virt="non-virtual">castor3d::SceneRenderPass</basecompoundref>
-    <includes local="no">PickingPass.hpp</includes>
+    <compoundname>castor3d::Light</compoundname>
+    <basecompoundref refid="d9/dbb/a04524" prot="public" virt="non-virtual">castor3d::MovableObject</basecompoundref>
+    <includes local="no">Light.hpp</includes>
       <sectiondef kind="user-defined">
-      <memberdef kind="function" id="d1/d55/a04496_1a0ba908df7a1f969a5fbb1f882bbfd572" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="da/d1e/a01479_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref></type>
-        <definition>C3D_API TextureFlags castor3d::PickingPass::getTexturesMask</definition>
-        <argsstring>() const override</argsstring>
-        <name>getTexturesMask</name>
-        <reimplements refid="d8/d25/a04596_1abe50f4442fa70138e392be9d1bfba637">getTexturesMask</reimplements>
+      <memberdef kind="function" id="d1/d55/a04496_1a139d5a12e0297a65ad78c9d18d8090fb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> DirectionalLightSPtr</type>
+        <definition>C3D_API DirectionalLightSPtr castor3d::Light::getDirectionalLight</definition>
+        <argsstring>() const</argsstring>
+        <name>getDirectionalLight</name>
+        <qualifiedname>castor3d::Light::getDirectionalLight</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -18,403 +18,1028 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="81" column="1"/>
+        <location file="Scene/Light/Light.hpp" line="88" column="30"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1a5f4f1bfc6411226e5dcb0d58a153fe55" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>GeometrySPtr</type>
-        <definition>GeometrySPtr castor3d::PickingPass::getPickedGeometry</definition>
+      <memberdef kind="function" id="d1/d55/a04496_1aa2363e032814390799f5f6ed34723ea9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> PointLightSPtr</type>
+        <definition>C3D_API PointLightSPtr castor3d::Light::getPointLight</definition>
         <argsstring>() const</argsstring>
-        <name>getPickedGeometry</name>
+        <name>getPointLight</name>
+        <qualifiedname>castor3d::Light::getPointLight</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="83" column="1" bodyfile="Render/PickingPass.hpp" bodystart="83" bodyend="86"/>
+        <location file="Scene/Light/Light.hpp" line="89" column="24"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1a4a7200821ede5c739b1de873b87d7542" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>BillboardBaseSPtr</type>
-        <definition>BillboardBaseSPtr castor3d::PickingPass::getPickedBillboard</definition>
+      <memberdef kind="function" id="d1/d55/a04496_1ac9823da72f2626fe21ef2bbb2485cac0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> SpotLightSPtr</type>
+        <definition>C3D_API SpotLightSPtr castor3d::Light::getSpotLight</definition>
         <argsstring>() const</argsstring>
-        <name>getPickedBillboard</name>
+        <name>getSpotLight</name>
+        <qualifiedname>castor3d::Light::getSpotLight</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="88" column="1" bodyfile="Render/PickingPass.hpp" bodystart="88" bodyend="91"/>
+        <location file="Scene/Light/Light.hpp" line="90" column="23"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1a496ebc6951a4df7c7e2256357a1b3063" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>SubmeshSPtr</type>
-        <definition>SubmeshSPtr castor3d::PickingPass::getPickedSubmesh</definition>
-        <argsstring>() const</argsstring>
-        <name>getPickedSubmesh</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="93" column="1" bodyfile="Render/PickingPass.hpp" bodystart="93" bodyend="96"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1ae2afba4085c3ec4f0725422ce335a261" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::PickingPass::getPickedFace</definition>
-        <argsstring>() const</argsstring>
-        <name>getPickedFace</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="98" column="1" bodyfile="Render/PickingPass.hpp" bodystart="98" bodyend="101"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1aacbe25dfb0840b73ccd62694dbed8c19" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::ImageView const  &amp;</type>
-        <definition>ashes::ImageView const&amp; castor3d::PickingPass::getResult</definition>
-        <argsstring>() const</argsstring>
-        <name>getResult</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="103" column="1" bodyfile="Render/PickingPass.hpp" bodystart="103" bodyend="106"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1a0174ab080d2d4151183653bb7c9e16c9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="da/d1e/a01479_1a658b8a9f25669fd516ba89c1af1d52e6" kindref="member">PickNodeType</ref></type>
-        <definition>PickNodeType castor3d::PickingPass::getPickedNodeType</definition>
-        <argsstring>() const</argsstring>
-        <name>getPickedNodeType</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="108" column="1" bodyfile="Render/PickingPass.hpp" bodystart="108" bodyend="111"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1a799dee77d8a8e73265ae5b48e6637692" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="d1/d55/a04496_1a95b2bdeec7ac533ab45cca25f82286b8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
-        <definition>bool castor3d::PickingPass::isPicking</definition>
+        <definition>bool castor3d::Light::hasChanged</definition>
         <argsstring>() const</argsstring>
-        <name>isPicking</name>
+        <name>hasChanged</name>
+        <qualifiedname>castor3d::Light::hasChanged</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="113" column="1" bodyfile="Render/PickingPass.hpp" bodystart="113" bodyend="116"/>
+        <location file="Scene/Light/Light.hpp" line="92" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="92" bodyend="95"/>
+        <references refid="d1/d55/a04496_1a6b4b6a833556cd396449fb62c00f0c6a" compoundref="d9/d7c/a01073" startline="391">m_dirty</references>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-type">
-      <memberdef kind="typedef" id="d1/d55/a04496_1a9877d6238d42f121d86f4ff963c3ddf7" prot="private" static="no">
-        <type>std::map&lt; <ref refid="d5/d9c/a05152" kindref="compound">Camera</ref> const *, <ref refid="d2/dfe/a04620" kindref="compound">RenderQueue</ref> &gt;</type>
-        <definition>using castor3d::PickingPass::CameraQueueMap =  std::map&lt; Camera const *, RenderQueue &gt;</definition>
-        <argsstring></argsstring>
-        <name>CameraQueueMap</name>
+      <memberdef kind="function" id="d1/d55/a04496_1ab6b83dc979ead3ead17bfa50107d76a7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/df5/a01395_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+        <definition>LightType castor3d::Light::getLightType</definition>
+        <argsstring>() const</argsstring>
+        <name>getLightType</name>
+        <qualifiedname>castor3d::Light::getLightType</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="165" column="1" bodyfile="Render/PickingPass.hpp" bodystart="165" bodyend="-1"/>
+        <location file="Scene/Light/Light.hpp" line="97" column="11" bodyfile="Scene/Light/Light.hpp" bodystart="97" bodyend="100"/>
+        <references refid="d1/d55/a04496_1a9d1a105eedcbe0b3e8d86ed99e0ad140" compoundref="d9/d7c/a01073" startline="393">m_category</references>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d1/d55/a04496_1a22db5ebafb42aa6cdc808269bf42993f" prot="public" static="yes" mutable="no">
-        <type>uint32_t constexpr</type>
-        <definition>uint32_t constexpr castor3d::PickingPass::PickingWidth</definition>
-        <argsstring></argsstring>
-        <name>PickingWidth</name>
-        <initializer>= 32u</initializer>
+      <memberdef kind="function" id="d1/d55/a04496_1a6723fd1b9198bf0ab4cb70bab6075d0e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::Light::isEnabled</definition>
+        <argsstring>() const</argsstring>
+        <name>isEnabled</name>
+        <qualifiedname>castor3d::Light::isEnabled</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="162" column="1" bodyfile="Render/PickingPass.hpp" bodystart="162" bodyend="-1"/>
+        <location file="Scene/Light/Light.hpp" line="102" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="102" bodyend="105"/>
+        <references refid="d1/d55/a04496_1a114ce2f1cb73ee23529bb28866876460" compoundref="d9/d7c/a01073" startline="388">m_enabled</references>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-static-attrib">
-      <memberdef kind="variable" id="d1/d55/a04496_1a56711428ee44a5bf72eda5e78f786d0c" prot="private" static="yes" mutable="no">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t const</type>
-        <definition>C3D_API uint32_t const castor3d::PickingPass::UboBindingPoint</definition>
-        <argsstring></argsstring>
-        <name>UboBindingPoint</name>
+      <memberdef kind="function" id="d1/d55/a04496_1ad7462e723ee2426f3fd331585e6bbc33" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point3f const &amp;</type>
+        <definition>castor::Point3f const  &amp; castor3d::Light::getColour</definition>
+        <argsstring>() const</argsstring>
+        <name>getColour</name>
+        <qualifiedname>castor3d::Light::getColour</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="166" column="1" bodyfile="Render/PickingPass.hpp" bodystart="166" bodyend="-1"/>
+        <location file="Scene/Light/Light.hpp" line="107" column="24" bodyfile="Scene/Light/Light.hpp" bodystart="107" bodyend="110"/>
+        <references refid="d1/d55/a04496_1a9d1a105eedcbe0b3e8d86ed99e0ad140" compoundref="d9/d7c/a01073" startline="393">m_category</references>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d1/d55/a04496_1af8aae0a9b3ff1acf719d1b3282478a33" prot="private" static="no" mutable="no">
-        <type>std::map&lt; castor::String, GeometryWPtr &gt;</type>
-        <definition>std::map&lt; castor::String, GeometryWPtr &gt; castor3d::PickingPass::m_pickable</definition>
-        <argsstring></argsstring>
-        <name>m_pickable</name>
+      <memberdef kind="function" id="d1/d55/a04496_1a7ee4e9c22e1deaa2e19ce0e9a5eb0f7f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point2f const &amp;</type>
+        <definition>castor::Point2f const  &amp; castor3d::Light::getIntensity</definition>
+        <argsstring>() const</argsstring>
+        <name>getIntensity</name>
+        <qualifiedname>castor3d::Light::getIntensity</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="169" column="1" bodyfile="Render/PickingPass.hpp" bodystart="169" bodyend="-1"/>
+        <location file="Scene/Light/Light.hpp" line="112" column="24" bodyfile="Scene/Light/Light.hpp" bodystart="112" bodyend="115"/>
+        <references refid="d1/d55/a04496_1a9d1a105eedcbe0b3e8d86ed99e0ad140" compoundref="d9/d7c/a01073" startline="393">m_category</references>
       </memberdef>
-      <memberdef kind="variable" id="d1/d55/a04496_1aefd9d97c42b8894289cb78db08caff8e" prot="private" static="no" mutable="no">
-        <type>ashes::ImagePtr</type>
-        <definition>ashes::ImagePtr castor3d::PickingPass::m_colourTexture</definition>
-        <argsstring></argsstring>
-        <name>m_colourTexture</name>
+      <memberdef kind="function" id="d1/d55/a04496_1a11a06ad5e35aa8e61f6a561c53271d8c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::Light::getFarPlane</definition>
+        <argsstring>() const</argsstring>
+        <name>getFarPlane</name>
+        <qualifiedname>castor3d::Light::getFarPlane</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="170" column="1" bodyfile="Render/PickingPass.hpp" bodystart="170" bodyend="-1"/>
+        <location file="Scene/Light/Light.hpp" line="117" column="7" bodyfile="Scene/Light/Light.hpp" bodystart="117" bodyend="120"/>
+        <references refid="d1/d55/a04496_1a9d1a105eedcbe0b3e8d86ed99e0ad140" compoundref="d9/d7c/a01073" startline="393">m_category</references>
       </memberdef>
-      <memberdef kind="variable" id="d1/d55/a04496_1a538c363df27ac21027b444c94e50c13d" prot="private" static="no" mutable="no">
-        <type>ashes::ImagePtr</type>
-        <definition>ashes::ImagePtr castor3d::PickingPass::m_depthTexture</definition>
-        <argsstring></argsstring>
-        <name>m_depthTexture</name>
+      <memberdef kind="function" id="d1/d55/a04496_1ab6fc83d60de05930f3e1ece5a3c65f20" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::Light::getDiffuseIntensity</definition>
+        <argsstring>() const</argsstring>
+        <name>getDiffuseIntensity</name>
+        <qualifiedname>castor3d::Light::getDiffuseIntensity</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="171" column="1" bodyfile="Render/PickingPass.hpp" bodystart="171" bodyend="-1"/>
+        <location file="Scene/Light/Light.hpp" line="122" column="7" bodyfile="Scene/Light/Light.hpp" bodystart="122" bodyend="125"/>
+        <references refid="d1/d55/a04496_1a9d1a105eedcbe0b3e8d86ed99e0ad140" compoundref="d9/d7c/a01073" startline="393">m_category</references>
       </memberdef>
-      <memberdef kind="variable" id="d1/d55/a04496_1a06bdd3a5f1988b7f108f82a901008c46" prot="private" static="no" mutable="no">
-        <type>ashes::ImageView</type>
-        <definition>ashes::ImageView castor3d::PickingPass::m_colourView</definition>
-        <argsstring></argsstring>
-        <name>m_colourView</name>
+      <memberdef kind="function" id="d1/d55/a04496_1ae3d2d01dfc67b3cbb3a13030ed45b035" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::Light::getSpecularIntensity</definition>
+        <argsstring>() const</argsstring>
+        <name>getSpecularIntensity</name>
+        <qualifiedname>castor3d::Light::getSpecularIntensity</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="172" column="1" bodyfile="Render/PickingPass.hpp" bodystart="172" bodyend="-1"/>
+        <location file="Scene/Light/Light.hpp" line="127" column="7" bodyfile="Scene/Light/Light.hpp" bodystart="127" bodyend="130"/>
+        <references refid="d1/d55/a04496_1a9d1a105eedcbe0b3e8d86ed99e0ad140" compoundref="d9/d7c/a01073" startline="393">m_category</references>
       </memberdef>
-      <memberdef kind="variable" id="d1/d55/a04496_1af5aa09639e88b20ed7cd78e9b115c78b" prot="private" static="no" mutable="no">
-        <type>ashes::ImageView</type>
-        <definition>ashes::ImageView castor3d::PickingPass::m_depthView</definition>
-        <argsstring></argsstring>
-        <name>m_depthView</name>
+      <memberdef kind="function" id="d1/d55/a04496_1a19ab321f7f7e49be5dda8be543cb2571" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::BoundingBox const &amp;</type>
+        <definition>castor::BoundingBox const  &amp; castor3d::Light::getBoundingBox</definition>
+        <argsstring>() const</argsstring>
+        <name>getBoundingBox</name>
+        <qualifiedname>castor3d::Light::getBoundingBox</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="173" column="1" bodyfile="Render/PickingPass.hpp" bodystart="173" bodyend="-1"/>
+        <location file="Scene/Light/Light.hpp" line="132" column="28" bodyfile="Scene/Light/Light.hpp" bodystart="132" bodyend="135"/>
+        <references refid="d1/d55/a04496_1a9d1a105eedcbe0b3e8d86ed99e0ad140" compoundref="d9/d7c/a01073" startline="393">m_category</references>
       </memberdef>
-      <memberdef kind="variable" id="d1/d55/a04496_1ac36ff18b8aeef63d35d15fda2ef99d75" prot="private" static="no" mutable="no">
-        <type>ashes::FrameBufferPtr</type>
-        <definition>ashes::FrameBufferPtr castor3d::PickingPass::m_frameBuffer</definition>
-        <argsstring></argsstring>
-        <name>m_frameBuffer</name>
+      <memberdef kind="function" id="d1/d55/a04496_1a8f845303910decae55049077969d4183" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>LightCategorySPtr</type>
+        <definition>LightCategorySPtr castor3d::Light::getCategory</definition>
+        <argsstring>() const</argsstring>
+        <name>getCategory</name>
+        <qualifiedname>castor3d::Light::getCategory</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="174" column="1" bodyfile="Render/PickingPass.hpp" bodystart="174" bodyend="-1"/>
+        <location file="Scene/Light/Light.hpp" line="137" column="19" bodyfile="Scene/Light/Light.hpp" bodystart="137" bodyend="140"/>
+        <references refid="d1/d55/a04496_1a9d1a105eedcbe0b3e8d86ed99e0ad140" compoundref="d9/d7c/a01073" startline="393">m_category</references>
       </memberdef>
-      <memberdef kind="variable" id="d1/d55/a04496_1a160ce88c5be184d09cd0686fc2700b0c" prot="private" static="no" mutable="no">
-        <type>VkBufferImageCopy</type>
-        <definition>VkBufferImageCopy castor3d::PickingPass::m_copyRegion</definition>
-        <argsstring></argsstring>
-        <name>m_copyRegion</name>
-        <initializer>{}</initializer>
+      <memberdef kind="function" id="d1/d55/a04496_1adcf030405dd307f368012ebfb0f6b3b8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::Light::isShadowProducer</definition>
+        <argsstring>() const</argsstring>
+        <name>isShadowProducer</name>
+        <qualifiedname>castor3d::Light::isShadowProducer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="175" column="1" bodyfile="Render/PickingPass.hpp" bodystart="175" bodyend="-1"/>
+        <location file="Scene/Light/Light.hpp" line="142" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="142" bodyend="145"/>
+        <references refid="d1/d55/a04496_1a921491a93a4b24f6e516ee1caab8d9a1" compoundref="d9/d7c/a01073" startline="390">m_currentShadowCaster</references>
       </memberdef>
-      <memberdef kind="variable" id="d1/d55/a04496_1a85083efde8a37118d592dbeb84bfc1dc" prot="private" static="no" mutable="no">
-        <type>VkBufferImageCopy</type>
-        <definition>VkBufferImageCopy castor3d::PickingPass::m_transferDisplayRegion</definition>
-        <argsstring></argsstring>
-        <name>m_transferDisplayRegion</name>
-        <initializer>{}</initializer>
+      <memberdef kind="function" id="d1/d55/a04496_1a722a2c0a9b858917acda75feee220dac" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::Light::isExpectedShadowProducer</definition>
+        <argsstring>() const</argsstring>
+        <name>isExpectedShadowProducer</name>
+        <qualifiedname>castor3d::Light::isExpectedShadowProducer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="176" column="1" bodyfile="Render/PickingPass.hpp" bodystart="176" bodyend="-1"/>
+        <location file="Scene/Light/Light.hpp" line="147" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="147" bodyend="150"/>
+        <references refid="d1/d55/a04496_1a0d5c25202c0ba81200cfb1da54e83842" compoundref="d9/d7c/a01073" startline="389">m_shadowCaster</references>
       </memberdef>
-      <memberdef kind="variable" id="d1/d55/a04496_1aab8b68b8fac9afef4d0d1f8eb4703e50" prot="private" static="no" mutable="no">
-        <type>std::vector&lt; VkBufferImageCopy &gt;</type>
-        <definition>std::vector&lt; VkBufferImageCopy &gt; castor3d::PickingPass::m_pickDisplayRegions</definition>
-        <argsstring></argsstring>
-        <name>m_pickDisplayRegions</name>
+      <memberdef kind="function" id="d1/d55/a04496_1af39d6a0500a74daeabcb6b9fd5104e01" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/df5/a01395_1a90275671c44e791e9556c4bed9033935" kindref="member">ShadowType</ref></type>
+        <definition>ShadowType castor3d::Light::getShadowType</definition>
+        <argsstring>() const</argsstring>
+        <name>getShadowType</name>
+        <qualifiedname>castor3d::Light::getShadowType</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="177" column="1" bodyfile="Render/PickingPass.hpp" bodystart="177" bodyend="-1"/>
+        <location file="Scene/Light/Light.hpp" line="152" column="12" bodyfile="Scene/Light/Light.hpp" bodystart="152" bodyend="155"/>
+        <references refid="d5/d62/a04648_1a38c33f848aa6dc85c84140086894e193" compoundref="d3/ddc/a01142" startline="15">castor3d::ShadowConfig::filterType</references>
+        <references refid="d1/d55/a04496_1a76793273677b06dfe52498b5e56677fb" compoundref="d9/d7c/a01073" startline="392">m_shadows</references>
       </memberdef>
-      <memberdef kind="variable" id="d1/d55/a04496_1a460dc73a1d9e50de3629731baf6be1c7" prot="private" static="no" mutable="no">
-        <type>ashes::CommandBufferPtr</type>
-        <definition>ashes::CommandBufferPtr castor3d::PickingPass::m_commandBuffer</definition>
-        <argsstring></argsstring>
-        <name>m_commandBuffer</name>
+      <memberdef kind="function" id="d1/d55/a04496_1a7c4e1a96f6e7f2f9c1288556fdf34709" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ShadowMapRPtr</type>
+        <definition>ShadowMapRPtr castor3d::Light::getShadowMap</definition>
+        <argsstring>() const</argsstring>
+        <name>getShadowMap</name>
+        <qualifiedname>castor3d::Light::getShadowMap</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="178" column="1" bodyfile="Render/PickingPass.hpp" bodystart="178" bodyend="-1"/>
+        <location file="Scene/Light/Light.hpp" line="157" column="15" bodyfile="Scene/Light/Light.hpp" bodystart="157" bodyend="160"/>
+        <references refid="d1/d55/a04496_1a4a8ae153290cbe75ff082f85be5dd0f9" compoundref="d9/d7c/a01073" startline="394">m_shadowMap</references>
       </memberdef>
-      <memberdef kind="variable" id="d1/d55/a04496_1acdbb9472eb0e585fb88a052df11fdd00" prot="private" static="no" mutable="no">
-        <type>ashes::BufferPtr&lt; castor::Point4f &gt;</type>
-        <definition>ashes::BufferPtr&lt; castor::Point4f &gt; castor3d::PickingPass::m_stagingBuffer</definition>
-        <argsstring></argsstring>
-        <name>m_stagingBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="179" column="1" bodyfile="Render/PickingPass.hpp" bodystart="179" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/d55/a04496_1a10037aa2b66d3ff6ecabbd5d45c03ac8" prot="private" static="no" mutable="no">
-        <type>std::map&lt; <ref refid="d5/d76/a05244" kindref="compound">Scene</ref> const *, CameraQueueMap &gt;</type>
-        <definition>std::map&lt; Scene const *, CameraQueueMap &gt; castor3d::PickingPass::m_scenes</definition>
-        <argsstring></argsstring>
-        <name>m_scenes</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="180" column="1" bodyfile="Render/PickingPass.hpp" bodystart="180" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/d55/a04496_1ab079d26c5b53daa65631b62f786841c7" prot="private" static="no" mutable="no">
-        <type>GeometryWPtr</type>
-        <definition>GeometryWPtr castor3d::PickingPass::m_geometry</definition>
-        <argsstring></argsstring>
-        <name>m_geometry</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="181" column="1" bodyfile="Render/PickingPass.hpp" bodystart="181" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/d55/a04496_1a0b5215fe978718f34d41d9840bbd73a6" prot="private" static="no" mutable="no">
-        <type>BillboardBaseWPtr</type>
-        <definition>BillboardBaseWPtr castor3d::PickingPass::m_billboard</definition>
-        <argsstring></argsstring>
-        <name>m_billboard</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="182" column="1" bodyfile="Render/PickingPass.hpp" bodystart="182" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/d55/a04496_1a5e4172d5ba00b6b782335b8fe04c7ac3" prot="private" static="no" mutable="no">
-        <type>SubmeshWPtr</type>
-        <definition>SubmeshWPtr castor3d::PickingPass::m_submesh</definition>
-        <argsstring></argsstring>
-        <name>m_submesh</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="183" column="1" bodyfile="Render/PickingPass.hpp" bodystart="183" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/d55/a04496_1ac69fe959a912d89ee61d9c990385c03a" prot="private" static="no" mutable="no">
+      <memberdef kind="function" id="d1/d55/a04496_1a327fa515d22687725af8dbb4c3be7ce9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>uint32_t</type>
-        <definition>uint32_t castor3d::PickingPass::m_face</definition>
-        <argsstring></argsstring>
-        <name>m_face</name>
-        <initializer>{ 0u }</initializer>
+        <definition>uint32_t castor3d::Light::getShadowMapIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>getShadowMapIndex</name>
+        <qualifiedname>castor3d::Light::getShadowMapIndex</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="184" column="1" bodyfile="Render/PickingPass.hpp" bodystart="184" bodyend="-1"/>
+        <location file="Scene/Light/Light.hpp" line="162" column="10" bodyfile="Scene/Light/Light.hpp" bodystart="162" bodyend="165"/>
+        <references refid="d1/d55/a04496_1a90abade79ded64d9b8b5b185f06dc234" compoundref="d9/d7c/a01073" startline="395">m_shadowMapIndex</references>
       </memberdef>
-      <memberdef kind="variable" id="d1/d55/a04496_1ad6d4e51875bfadc52104242db79f0445" prot="private" static="no" mutable="no">
-        <type>std::vector&lt; castor::Point4f &gt;</type>
-        <definition>std::vector&lt; castor::Point4f &gt; castor3d::PickingPass::m_buffer</definition>
-        <argsstring></argsstring>
-        <name>m_buffer</name>
+      <memberdef kind="function" id="d1/d55/a04496_1a85768890498349bca5200facec38f982" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Light::getBufferIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>getBufferIndex</name>
+        <qualifiedname>castor3d::Light::getBufferIndex</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="185" column="1" bodyfile="Render/PickingPass.hpp" bodystart="185" bodyend="-1"/>
+        <location file="Scene/Light/Light.hpp" line="167" column="10" bodyfile="Scene/Light/Light.hpp" bodystart="167" bodyend="170"/>
+        <references refid="d1/d55/a04496_1abce1e0be3cbf19bc63fe1a4f6a17c2b1" compoundref="d9/d7c/a01073" startline="397">m_bufferIndex</references>
       </memberdef>
-      <memberdef kind="variable" id="d1/d55/a04496_1a9e71e1d6a6f91e33291fc2f93f71a978" prot="private" static="no" mutable="no">
-        <type>ashes::FencePtr</type>
-        <definition>ashes::FencePtr castor3d::PickingPass::m_transferFence</definition>
-        <argsstring></argsstring>
-        <name>m_transferFence</name>
+      <memberdef kind="function" id="d1/d55/a04496_1a039a12c85a20cf0ad5030092befca555" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::Light::needsRsmShadowMaps</definition>
+        <argsstring>() const</argsstring>
+        <name>needsRsmShadowMaps</name>
+        <qualifiedname>castor3d::Light::needsRsmShadowMaps</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="186" column="1" bodyfile="Render/PickingPass.hpp" bodystart="186" bodyend="-1"/>
+        <location file="Scene/Light/Light.hpp" line="172" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="172" bodyend="175"/>
+        <references refid="d2/df5/a01395_1a94045726cb02c9deb4926f3bf0d0443eabe988781e4e1de1c6a36fb698afbbe1f">castor3d::eNone</references>
+        <references refid="d1/d55/a04496_1a3576166294ac56aaeb8c997b07950610" compoundref="d9/d7c/a01073" startline="177" endline="180">getGlobalIlluminationType</references>
       </memberdef>
-      <memberdef kind="variable" id="d1/d55/a04496_1a149b91d9d06eac08a35f966fb2d07604" prot="private" static="no" mutable="no">
-        <type><ref refid="da/d1e/a01479_1a658b8a9f25669fd516ba89c1af1d52e6" kindref="member">PickNodeType</ref></type>
-        <definition>PickNodeType castor3d::PickingPass::m_pickNodeType</definition>
-        <argsstring></argsstring>
-        <name>m_pickNodeType</name>
-        <initializer>{ <ref refid="da/d1e/a01479_1ad372dd0cc65f28ad7f558f07c78becb7abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">PickNodeType::eNone</ref> }</initializer>
+      <memberdef kind="function" id="d1/d55/a04496_1a3576166294ac56aaeb8c997b07950610" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/df5/a01395_1a94045726cb02c9deb4926f3bf0d0443e" kindref="member">GlobalIlluminationType</ref></type>
+        <definition>GlobalIlluminationType castor3d::Light::getGlobalIlluminationType</definition>
+        <argsstring>() const</argsstring>
+        <name>getGlobalIlluminationType</name>
+        <qualifiedname>castor3d::Light::getGlobalIlluminationType</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="187" column="1" bodyfile="Render/PickingPass.hpp" bodystart="187" bodyend="-1"/>
+        <location file="Scene/Light/Light.hpp" line="177" column="24" bodyfile="Scene/Light/Light.hpp" bodystart="177" bodyend="180"/>
+        <references refid="d1/d55/a04496_1ab226c2e090fdd62efb8f3b715ba2c0d6" compoundref="d9/d7c/a01073" startline="396">m_currentGlobalIllumination</references>
+        <referencedby refid="d1/d55/a04496_1a039a12c85a20cf0ad5030092befca555" compoundref="d9/d7c/a01073" startline="172" endline="175">needsRsmShadowMaps</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="d1/d55/a04496_1a54901e486a837b679732f5836f4502e5" prot="private" static="no" mutable="no">
-        <type>std::atomic_bool</type>
-        <definition>std::atomic_bool castor3d::PickingPass::m_picking</definition>
+      <memberdef kind="function" id="d1/d55/a04496_1a82fa672aa244e9768b6c7f3bd5101443" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/df5/a01395_1a94045726cb02c9deb4926f3bf0d0443e" kindref="member">GlobalIlluminationType</ref></type>
+        <definition>GlobalIlluminationType castor3d::Light::getExpectedGlobalIlluminationType</definition>
+        <argsstring>() const</argsstring>
+        <name>getExpectedGlobalIlluminationType</name>
+        <qualifiedname>castor3d::Light::getExpectedGlobalIlluminationType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="182" column="24" bodyfile="Scene/Light/Light.hpp" bodystart="182" bodyend="185"/>
+        <references refid="d5/d62/a04648_1a59f4e8ecdc3bc6c3f4715d3314d840b0" compoundref="d3/ddc/a01142" startline="16">castor3d::ShadowConfig::globalIllumination</references>
+        <references refid="d1/d55/a04496_1a76793273677b06dfe52498b5e56677fb" compoundref="d9/d7c/a01073" startline="392">m_shadows</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1a9251b5a952a5632263cbbe28056e5fb7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/d8c/a04508" kindref="compound">RsmConfig</ref> const &amp;</type>
+        <definition>RsmConfig const  &amp; castor3d::Light::getRsmConfig</definition>
+        <argsstring>() const</argsstring>
+        <name>getRsmConfig</name>
+        <qualifiedname>castor3d::Light::getRsmConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="187" column="18" bodyfile="Scene/Light/Light.hpp" bodystart="187" bodyend="190"/>
+        <references refid="d1/d55/a04496_1a76793273677b06dfe52498b5e56677fb" compoundref="d9/d7c/a01073" startline="392">m_shadows</references>
+        <references refid="d5/d62/a04648_1ae31ff08223e2732507521487591d67ce" compoundref="d3/ddc/a01142" startline="22">castor3d::ShadowConfig::rsmConfig</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1a2073c7978bf25a8de26e120624127d1d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/d8c/a04508" kindref="compound">RsmConfig</ref> &amp;</type>
+        <definition>RsmConfig &amp; castor3d::Light::getRsmConfig</definition>
+        <argsstring>()</argsstring>
+        <name>getRsmConfig</name>
+        <qualifiedname>castor3d::Light::getRsmConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="192" column="12" bodyfile="Scene/Light/Light.hpp" bodystart="192" bodyend="195"/>
+        <references refid="d1/d55/a04496_1a76793273677b06dfe52498b5e56677fb" compoundref="d9/d7c/a01073" startline="392">m_shadows</references>
+        <references refid="d5/d62/a04648_1ae31ff08223e2732507521487591d67ce" compoundref="d3/ddc/a01142" startline="22">castor3d::ShadowConfig::rsmConfig</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1a24fcb3481810ce02efe674ac98de9c19" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d7/d7e/a03736" kindref="compound">LpvConfig</ref> const &amp;</type>
+        <definition>LpvConfig const  &amp; castor3d::Light::getLpvConfig</definition>
+        <argsstring>() const</argsstring>
+        <name>getLpvConfig</name>
+        <qualifiedname>castor3d::Light::getLpvConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="197" column="18" bodyfile="Scene/Light/Light.hpp" bodystart="197" bodyend="200"/>
+        <references refid="d5/d62/a04648_1ac877fee9ddfa832866aaae2f54c7003f" compoundref="d3/ddc/a01142" startline="23">castor3d::ShadowConfig::lpvConfig</references>
+        <references refid="d1/d55/a04496_1a76793273677b06dfe52498b5e56677fb" compoundref="d9/d7c/a01073" startline="392">m_shadows</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1ac2fb7f973d0cba9b157c41ec8b5e5307" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d7/d7e/a03736" kindref="compound">LpvConfig</ref> &amp;</type>
+        <definition>LpvConfig &amp; castor3d::Light::getLpvConfig</definition>
+        <argsstring>()</argsstring>
+        <name>getLpvConfig</name>
+        <qualifiedname>castor3d::Light::getLpvConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="202" column="12" bodyfile="Scene/Light/Light.hpp" bodystart="202" bodyend="205"/>
+        <references refid="d5/d62/a04648_1ac877fee9ddfa832866aaae2f54c7003f" compoundref="d3/ddc/a01142" startline="23">castor3d::ShadowConfig::lpvConfig</references>
+        <references refid="d1/d55/a04496_1a76793273677b06dfe52498b5e56677fb" compoundref="d9/d7c/a01073" startline="392">m_shadows</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1a2ac1ceee105e02ea3857cba96a773e7e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Light::getVolumetricSteps</definition>
+        <argsstring>() const</argsstring>
+        <name>getVolumetricSteps</name>
+        <qualifiedname>castor3d::Light::getVolumetricSteps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="207" column="10" bodyfile="Scene/Light/Light.hpp" bodystart="207" bodyend="210"/>
+        <references refid="d1/d55/a04496_1a76793273677b06dfe52498b5e56677fb" compoundref="d9/d7c/a01073" startline="392">m_shadows</references>
+        <references refid="d5/d62/a04648_1a35b0dc99817232afc617ac6a7184fa53" compoundref="d3/ddc/a01142" startline="17">castor3d::ShadowConfig::volumetricSteps</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1a793fe1738e2c09dee90d5aa71732cc99" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::Light::getVolumetricScatteringFactor</definition>
+        <argsstring>() const</argsstring>
+        <name>getVolumetricScatteringFactor</name>
+        <qualifiedname>castor3d::Light::getVolumetricScatteringFactor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="212" column="7" bodyfile="Scene/Light/Light.hpp" bodystart="212" bodyend="215"/>
+        <references refid="d1/d55/a04496_1a76793273677b06dfe52498b5e56677fb" compoundref="d9/d7c/a01073" startline="392">m_shadows</references>
+        <references refid="d5/d62/a04648_1a688cb64dfa59feb2e92e00fdc35d9526" compoundref="d3/ddc/a01142" startline="18">castor3d::ShadowConfig::volumetricScattering</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1ac938aebbd0d17ed48b4f4d138d0f4fdd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point2f const &amp;</type>
+        <definition>castor::Point2f const  &amp; castor3d::Light::getShadowRawOffsets</definition>
+        <argsstring>() const</argsstring>
+        <name>getShadowRawOffsets</name>
+        <qualifiedname>castor3d::Light::getShadowRawOffsets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="217" column="24" bodyfile="Scene/Light/Light.hpp" bodystart="217" bodyend="220"/>
+        <references refid="d1/d55/a04496_1a76793273677b06dfe52498b5e56677fb" compoundref="d9/d7c/a01073" startline="392">m_shadows</references>
+        <references refid="d5/d62/a04648_1ab5a47fd1fe0d735179bc753013a0095f" compoundref="d3/ddc/a01142" startline="19">castor3d::ShadowConfig::rawOffsets</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1a8d6383ed14358d7e885a00543b3f6d4f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point2f const &amp;</type>
+        <definition>castor::Point2f const  &amp; castor3d::Light::getShadowPcfOffsets</definition>
+        <argsstring>() const</argsstring>
+        <name>getShadowPcfOffsets</name>
+        <qualifiedname>castor3d::Light::getShadowPcfOffsets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="222" column="24" bodyfile="Scene/Light/Light.hpp" bodystart="222" bodyend="225"/>
+        <references refid="d1/d55/a04496_1a76793273677b06dfe52498b5e56677fb" compoundref="d9/d7c/a01073" startline="392">m_shadows</references>
+        <references refid="d5/d62/a04648_1a7f392d242bbc87e8f1452b058403cf96" compoundref="d3/ddc/a01142" startline="20">castor3d::ShadowConfig::pcfOffsets</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1a7e3c593ed0acb97d9423b8689cce4e8e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point2f const &amp;</type>
+        <definition>castor::Point2f const  &amp; castor3d::Light::getShadowVariance</definition>
+        <argsstring>() const</argsstring>
+        <name>getShadowVariance</name>
+        <qualifiedname>castor3d::Light::getShadowVariance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="227" column="24" bodyfile="Scene/Light/Light.hpp" bodystart="227" bodyend="230"/>
+        <references refid="d1/d55/a04496_1a76793273677b06dfe52498b5e56677fb" compoundref="d9/d7c/a01073" startline="392">m_shadows</references>
+        <references refid="d5/d62/a04648_1ad5bd9285af8969ff5a375985a3ede871" compoundref="d3/ddc/a01142" startline="21">castor3d::ShadowConfig::variance</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1a6cdb1ccafb7469cde9c863aafe08c9a5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d62/a04648" kindref="compound">ShadowConfig</ref> const &amp;</type>
+        <definition>ShadowConfig const  &amp; castor3d::Light::getShadowConfig</definition>
+        <argsstring>() const</argsstring>
+        <name>getShadowConfig</name>
+        <qualifiedname>castor3d::Light::getShadowConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="232" column="21" bodyfile="Scene/Light/Light.hpp" bodystart="232" bodyend="235"/>
+        <references refid="d1/d55/a04496_1a76793273677b06dfe52498b5e56677fb" compoundref="d9/d7c/a01073" startline="392">m_shadows</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d1/d55/a04496_1a2094d253c211c895dfa6def5096ae4c5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Light::setColour</definition>
+        <argsstring>(float *values)</argsstring>
+        <name>setColour</name>
+        <qualifiedname>castor3d::Light::setColour</qualifiedname>
+        <param>
+          <type>float *</type>
+          <declname>values</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Mutators. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="246" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="246" bodyend="249"/>
+        <references refid="d1/d55/a04496_1a9d1a105eedcbe0b3e8d86ed99e0ad140" compoundref="d9/d7c/a01073" startline="393">m_category</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1ab14b3527ea4d5ade57a9835758a0b727" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Light::setColour</definition>
+        <argsstring>(float r, float g, float b)</argsstring>
+        <name>setColour</name>
+        <qualifiedname>castor3d::Light::setColour</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>g</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="251" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="251" bodyend="254"/>
+        <references refid="d1/d55/a04496_1a9d1a105eedcbe0b3e8d86ed99e0ad140" compoundref="d9/d7c/a01073" startline="393">m_category</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1a71c276ea29470777831890c8d73fceb9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Light::setColour</definition>
+        <argsstring>(castor::Point3f const &amp;value)</argsstring>
+        <name>setColour</name>
+        <qualifiedname>castor3d::Light::setColour</qualifiedname>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="256" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="256" bodyend="259"/>
+        <references refid="d1/d55/a04496_1a9d1a105eedcbe0b3e8d86ed99e0ad140" compoundref="d9/d7c/a01073" startline="393">m_category</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1a2feee97aa88f6d9300e14353551377f7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Light::setColour</definition>
+        <argsstring>(castor::RgbColour const &amp;value)</argsstring>
+        <name>setColour</name>
+        <qualifiedname>castor3d::Light::setColour</qualifiedname>
+        <param>
+          <type>castor::RgbColour const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="261" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="261" bodyend="264"/>
+        <references refid="d1/d55/a04496_1a9d1a105eedcbe0b3e8d86ed99e0ad140" compoundref="d9/d7c/a01073" startline="393">m_category</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1aa64a4b899d2fa6844905b11f6d0bde5b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Light::setIntensity</definition>
+        <argsstring>(float *values)</argsstring>
+        <name>setIntensity</name>
+        <qualifiedname>castor3d::Light::setIntensity</qualifiedname>
+        <param>
+          <type>float *</type>
+          <declname>values</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="266" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="266" bodyend="269"/>
+        <references refid="d1/d55/a04496_1a9d1a105eedcbe0b3e8d86ed99e0ad140" compoundref="d9/d7c/a01073" startline="393">m_category</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1a29a9bb78f8597478c2a255cda7816979" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Light::setIntensity</definition>
+        <argsstring>(float d, float s)</argsstring>
+        <name>setIntensity</name>
+        <qualifiedname>castor3d::Light::setIntensity</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>d</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="271" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="271" bodyend="274"/>
+        <references refid="d1/d55/a04496_1a9d1a105eedcbe0b3e8d86ed99e0ad140" compoundref="d9/d7c/a01073" startline="393">m_category</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1ae6dbbb714908e77dcfd96df6bbf98519" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Light::setIntensity</definition>
+        <argsstring>(castor::Point2f const &amp;value)</argsstring>
+        <name>setIntensity</name>
+        <qualifiedname>castor3d::Light::setIntensity</qualifiedname>
+        <param>
+          <type>castor::Point2f const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="276" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="276" bodyend="279"/>
+        <references refid="d1/d55/a04496_1a9d1a105eedcbe0b3e8d86ed99e0ad140" compoundref="d9/d7c/a01073" startline="393">m_category</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1a77dfd6ae4809d3f29896fcd71422b500" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Light::setDiffuseIntensity</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setDiffuseIntensity</name>
+        <qualifiedname>castor3d::Light::setDiffuseIntensity</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="281" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="281" bodyend="284"/>
+        <references refid="d1/d55/a04496_1a9d1a105eedcbe0b3e8d86ed99e0ad140" compoundref="d9/d7c/a01073" startline="393">m_category</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1a205f8a28c549c4525f82c7e490a30037" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Light::setSpecularIntensity</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setSpecularIntensity</name>
+        <qualifiedname>castor3d::Light::setSpecularIntensity</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="286" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="286" bodyend="289"/>
+        <references refid="d1/d55/a04496_1a9d1a105eedcbe0b3e8d86ed99e0ad140" compoundref="d9/d7c/a01073" startline="393">m_category</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1a21ce69b7de756188ae6981c4e61043d7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Light::setEnabled</definition>
+        <argsstring>(bool value)</argsstring>
+        <name>setEnabled</name>
+        <qualifiedname>castor3d::Light::setEnabled</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="291" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="291" bodyend="294"/>
+        <references refid="d1/d55/a04496_1a114ce2f1cb73ee23529bb28866876460" compoundref="d9/d7c/a01073" startline="388">m_enabled</references>
+        <referencedby refid="d1/d55/a04496_1a5eebf24c72db4dcd902b7459f73c2cb4" compoundref="d9/d7c/a01073" startline="301" endline="304">disable</referencedby>
+        <referencedby refid="d1/d55/a04496_1a48860d01cbacbe601ef107fb2ae91ba4" compoundref="d9/d7c/a01073" startline="296" endline="299">enable</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1a48860d01cbacbe601ef107fb2ae91ba4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Light::enable</definition>
+        <argsstring>()</argsstring>
+        <name>enable</name>
+        <qualifiedname>castor3d::Light::enable</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="296" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="296" bodyend="299"/>
+        <references refid="d1/d55/a04496_1a21ce69b7de756188ae6981c4e61043d7" compoundref="d9/d7c/a01073" startline="291" endline="294">setEnabled</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1a5eebf24c72db4dcd902b7459f73c2cb4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Light::disable</definition>
+        <argsstring>()</argsstring>
+        <name>disable</name>
+        <qualifiedname>castor3d::Light::disable</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="301" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="301" bodyend="304"/>
+        <references refid="d1/d55/a04496_1a21ce69b7de756188ae6981c4e61043d7" compoundref="d9/d7c/a01073" startline="291" endline="294">setEnabled</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1ac5e313e49589b7de9de6f142b61db2de" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Light::setShadowProducer</definition>
+        <argsstring>(bool value)</argsstring>
+        <name>setShadowProducer</name>
+        <qualifiedname>castor3d::Light::setShadowProducer</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="306" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="306" bodyend="310"/>
+        <references refid="d1/d55/a04496_1a0d5c25202c0ba81200cfb1da54e83842" compoundref="d9/d7c/a01073" startline="389">m_shadowCaster</references>
+        <references refid="d1/d55/a04496_1a6706a625d22310535338d7b422bc7892" compoundref="d9/d7c/a01073" startline="381">onChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1a1d5a9518b3e2851917b57c6415ef3761" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Light::setShadowMap</definition>
+        <argsstring>(ShadowMapRPtr value, uint32_t index=0u)</argsstring>
+        <name>setShadowMap</name>
+        <qualifiedname>castor3d::Light::setShadowMap</qualifiedname>
+        <param>
+          <type>ShadowMapRPtr</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="312" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="312" bodyend="321"/>
+        <references refid="d1/d55/a04496_1a4a8ae153290cbe75ff082f85be5dd0f9" compoundref="d9/d7c/a01073" startline="394">m_shadowMap</references>
+        <references refid="d1/d55/a04496_1a90abade79ded64d9b8b5b185f06dc234" compoundref="d9/d7c/a01073" startline="395">m_shadowMapIndex</references>
+        <references refid="d1/d55/a04496_1a99a8fc1a214dc9faa2d5262206d1116e" compoundref="d9/d7c/a01073" startline="382">onGPUChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1ac251086294c1586f164bf32242e3fd8f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Light::setGlobalIlluminationType</definition>
+        <argsstring>(GlobalIlluminationType value)</argsstring>
+        <name>setGlobalIlluminationType</name>
+        <qualifiedname>castor3d::Light::setGlobalIlluminationType</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a94045726cb02c9deb4926f3bf0d0443e" kindref="member">GlobalIlluminationType</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="323" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="323" bodyend="327"/>
+        <references refid="d5/d62/a04648_1a59f4e8ecdc3bc6c3f4715d3314d840b0" compoundref="d3/ddc/a01142" startline="16">castor3d::ShadowConfig::globalIllumination</references>
+        <references refid="d1/d55/a04496_1a76793273677b06dfe52498b5e56677fb" compoundref="d9/d7c/a01073" startline="392">m_shadows</references>
+        <references refid="d1/d55/a04496_1a6706a625d22310535338d7b422bc7892" compoundref="d9/d7c/a01073" startline="381">onChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1a8db0fba4dc0c69f124e5f11e2fb3845b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Light::setShadowType</definition>
+        <argsstring>(ShadowType value)</argsstring>
+        <name>setShadowType</name>
+        <qualifiedname>castor3d::Light::setShadowType</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a90275671c44e791e9556c4bed9033935" kindref="member">ShadowType</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="329" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="329" bodyend="332"/>
+        <references refid="d5/d62/a04648_1a38c33f848aa6dc85c84140086894e193" compoundref="d3/ddc/a01142" startline="15">castor3d::ShadowConfig::filterType</references>
+        <references refid="d1/d55/a04496_1a76793273677b06dfe52498b5e56677fb" compoundref="d9/d7c/a01073" startline="392">m_shadows</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1ae272e20fac3c3329c9bf6556aec5ade0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Light::setVolumetricSteps</definition>
+        <argsstring>(uint32_t value)</argsstring>
+        <name>setVolumetricSteps</name>
+        <qualifiedname>castor3d::Light::setVolumetricSteps</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="334" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="334" bodyend="337"/>
+        <references refid="d1/d55/a04496_1a76793273677b06dfe52498b5e56677fb" compoundref="d9/d7c/a01073" startline="392">m_shadows</references>
+        <references refid="d5/d62/a04648_1a35b0dc99817232afc617ac6a7184fa53" compoundref="d3/ddc/a01142" startline="17">castor3d::ShadowConfig::volumetricSteps</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1aa8b881e3208f3bb9bd46c2532299c4a2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Light::setVolumetricScatteringFactor</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setVolumetricScatteringFactor</name>
+        <qualifiedname>castor3d::Light::setVolumetricScatteringFactor</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="339" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="339" bodyend="342"/>
+        <references refid="d1/d55/a04496_1a76793273677b06dfe52498b5e56677fb" compoundref="d9/d7c/a01073" startline="392">m_shadows</references>
+        <references refid="d5/d62/a04648_1a688cb64dfa59feb2e92e00fdc35d9526" compoundref="d3/ddc/a01142" startline="18">castor3d::ShadowConfig::volumetricScattering</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1ac75e21f7eb5001c3bee7648300a73758" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Light::setRawMinOffset</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setRawMinOffset</name>
+        <qualifiedname>castor3d::Light::setRawMinOffset</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="344" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="344" bodyend="347"/>
+        <references refid="d1/d55/a04496_1a76793273677b06dfe52498b5e56677fb" compoundref="d9/d7c/a01073" startline="392">m_shadows</references>
+        <references refid="d5/d62/a04648_1ab5a47fd1fe0d735179bc753013a0095f" compoundref="d3/ddc/a01142" startline="19">castor3d::ShadowConfig::rawOffsets</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1a829d5dfd0008b1db500fc857c17db39c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Light::setRawMaxSlopeOffset</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setRawMaxSlopeOffset</name>
+        <qualifiedname>castor3d::Light::setRawMaxSlopeOffset</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="349" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="349" bodyend="352"/>
+        <references refid="d1/d55/a04496_1a76793273677b06dfe52498b5e56677fb" compoundref="d9/d7c/a01073" startline="392">m_shadows</references>
+        <references refid="d5/d62/a04648_1ab5a47fd1fe0d735179bc753013a0095f" compoundref="d3/ddc/a01142" startline="19">castor3d::ShadowConfig::rawOffsets</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1a80cdda0de453402ca23bf06c33209962" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Light::setPcfMinOffset</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setPcfMinOffset</name>
+        <qualifiedname>castor3d::Light::setPcfMinOffset</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="354" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="354" bodyend="357"/>
+        <references refid="d1/d55/a04496_1a76793273677b06dfe52498b5e56677fb" compoundref="d9/d7c/a01073" startline="392">m_shadows</references>
+        <references refid="d5/d62/a04648_1a7f392d242bbc87e8f1452b058403cf96" compoundref="d3/ddc/a01142" startline="20">castor3d::ShadowConfig::pcfOffsets</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1aa036e5714df4591be760247bd1327aef" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Light::setPcfMaxSlopeOffset</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setPcfMaxSlopeOffset</name>
+        <qualifiedname>castor3d::Light::setPcfMaxSlopeOffset</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="359" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="359" bodyend="362"/>
+        <references refid="d1/d55/a04496_1a76793273677b06dfe52498b5e56677fb" compoundref="d9/d7c/a01073" startline="392">m_shadows</references>
+        <references refid="d5/d62/a04648_1a7f392d242bbc87e8f1452b058403cf96" compoundref="d3/ddc/a01142" startline="20">castor3d::ShadowConfig::pcfOffsets</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1a2c09f78deb46159b8831bdcdcc33f398" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Light::setVsmMaxVariance</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setVsmMaxVariance</name>
+        <qualifiedname>castor3d::Light::setVsmMaxVariance</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="364" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="364" bodyend="367"/>
+        <references refid="d1/d55/a04496_1a76793273677b06dfe52498b5e56677fb" compoundref="d9/d7c/a01073" startline="392">m_shadows</references>
+        <references refid="d5/d62/a04648_1ad5bd9285af8969ff5a375985a3ede871" compoundref="d3/ddc/a01142" startline="21">castor3d::ShadowConfig::variance</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1a749f038f31023d178d69484d7c7f10da" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Light::setVsmVarianceBias</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setVsmVarianceBias</name>
+        <qualifiedname>castor3d::Light::setVsmVarianceBias</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="369" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="369" bodyend="372"/>
+        <references refid="d1/d55/a04496_1a76793273677b06dfe52498b5e56677fb" compoundref="d9/d7c/a01073" startline="392">m_shadows</references>
+        <references refid="d5/d62/a04648_1ad5bd9285af8969ff5a375985a3ede871" compoundref="d3/ddc/a01142" startline="21">castor3d::ShadowConfig::variance</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1a6c5ced23009dec35e5d6892aa39a4469" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Light::setBufferIndex</definition>
+        <argsstring>(uint32_t value)</argsstring>
+        <name>setBufferIndex</name>
+        <qualifiedname>castor3d::Light::setBufferIndex</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="374" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="374" bodyend="377"/>
+        <references refid="d1/d55/a04496_1abce1e0be3cbf19bc63fe1a4f6a17c2b1" compoundref="d9/d7c/a01073" startline="397">m_bufferIndex</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/d55/a04496_1a6706a625d22310535338d7b422bc7892" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/df5/a01395_1a3024d012c4a0e713bfd4a1412be6ed9c" kindref="member">OnLightChanged</ref></type>
+        <definition>OnLightChanged castor3d::Light::onChanged</definition>
         <argsstring></argsstring>
-        <name>m_picking</name>
+        <name>onChanged</name>
+        <qualifiedname>castor3d::Light::onChanged</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="381" column="16" bodyfile="Scene/Light/Light.hpp" bodystart="381" bodyend="-1"/>
+        <referencedby refid="d1/d55/a04496_1ac251086294c1586f164bf32242e3fd8f" compoundref="d9/d7c/a01073" startline="323" endline="327">setGlobalIlluminationType</referencedby>
+        <referencedby refid="d1/d55/a04496_1ac5e313e49589b7de9de6f142b61db2de" compoundref="d9/d7c/a01073" startline="306" endline="310">setShadowProducer</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d55/a04496_1a99a8fc1a214dc9faa2d5262206d1116e" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/df5/a01395_1a3024d012c4a0e713bfd4a1412be6ed9c" kindref="member">OnLightChanged</ref></type>
+        <definition>OnLightChanged castor3d::Light::onGPUChanged</definition>
+        <argsstring></argsstring>
+        <name>onGPUChanged</name>
+        <qualifiedname>castor3d::Light::onGPUChanged</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="382" column="16" bodyfile="Scene/Light/Light.hpp" bodystart="382" bodyend="-1"/>
+        <referencedby refid="d1/d55/a04496_1a1d5a9518b3e2851917b57c6415ef3761" compoundref="d9/d7c/a01073" startline="312" endline="321">setShadowMap</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d1/d55/a04496_1a114ce2f1cb73ee23529bb28866876460" prot="protected" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::Light::m_enabled</definition>
+        <argsstring></argsstring>
+        <name>m_enabled</name>
+        <qualifiedname>castor3d::Light::m_enabled</qualifiedname>
         <initializer>{ false }</initializer>
         <briefdescription>
         </briefdescription>
@@ -422,26 +1047,213 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="188" column="1" bodyfile="Render/PickingPass.hpp" bodystart="188" bodyend="-1"/>
+        <location file="Scene/Light/Light.hpp" line="388" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="388" bodyend="-1"/>
+        <referencedby refid="d1/d55/a04496_1a6723fd1b9198bf0ab4cb70bab6075d0e" compoundref="d9/d7c/a01073" startline="102" endline="105">isEnabled</referencedby>
+        <referencedby refid="d1/d55/a04496_1a21ce69b7de756188ae6981c4e61043d7" compoundref="d9/d7c/a01073" startline="291" endline="294">setEnabled</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d55/a04496_1a0d5c25202c0ba81200cfb1da54e83842" prot="protected" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::Light::m_shadowCaster</definition>
+        <argsstring></argsstring>
+        <name>m_shadowCaster</name>
+        <qualifiedname>castor3d::Light::m_shadowCaster</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="389" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="389" bodyend="-1"/>
+        <referencedby refid="d1/d55/a04496_1a722a2c0a9b858917acda75feee220dac" compoundref="d9/d7c/a01073" startline="147" endline="150">isExpectedShadowProducer</referencedby>
+        <referencedby refid="d1/d55/a04496_1ac5e313e49589b7de9de6f142b61db2de" compoundref="d9/d7c/a01073" startline="306" endline="310">setShadowProducer</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d55/a04496_1a921491a93a4b24f6e516ee1caab8d9a1" prot="protected" static="no" mutable="no">
+        <type>std::atomic_bool</type>
+        <definition>std::atomic_bool castor3d::Light::m_currentShadowCaster</definition>
+        <argsstring></argsstring>
+        <name>m_currentShadowCaster</name>
+        <qualifiedname>castor3d::Light::m_currentShadowCaster</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="390" column="18" bodyfile="Scene/Light/Light.hpp" bodystart="390" bodyend="-1"/>
+        <referencedby refid="d1/d55/a04496_1adcf030405dd307f368012ebfb0f6b3b8" compoundref="d9/d7c/a01073" startline="142" endline="145">isShadowProducer</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d55/a04496_1a6b4b6a833556cd396449fb62c00f0c6a" prot="protected" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::Light::m_dirty</definition>
+        <argsstring></argsstring>
+        <name>m_dirty</name>
+        <qualifiedname>castor3d::Light::m_dirty</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="391" column="6" bodyfile="Scene/Light/Light.hpp" bodystart="391" bodyend="-1"/>
+        <referencedby refid="d1/d55/a04496_1a95b2bdeec7ac533ab45cca25f82286b8" compoundref="d9/d7c/a01073" startline="92" endline="95">hasChanged</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d55/a04496_1a76793273677b06dfe52498b5e56677fb" prot="protected" static="no" mutable="no">
+        <type><ref refid="d5/d62/a04648" kindref="compound">ShadowConfig</ref></type>
+        <definition>ShadowConfig castor3d::Light::m_shadows</definition>
+        <argsstring></argsstring>
+        <name>m_shadows</name>
+        <qualifiedname>castor3d::Light::m_shadows</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="392" column="14" bodyfile="Scene/Light/Light.hpp" bodystart="392" bodyend="-1"/>
+        <referencedby refid="d1/d55/a04496_1a82fa672aa244e9768b6c7f3bd5101443" compoundref="d9/d7c/a01073" startline="182" endline="185">getExpectedGlobalIlluminationType</referencedby>
+        <referencedby refid="d1/d55/a04496_1a24fcb3481810ce02efe674ac98de9c19" compoundref="d9/d7c/a01073" startline="197" endline="200">getLpvConfig</referencedby>
+        <referencedby refid="d1/d55/a04496_1a9251b5a952a5632263cbbe28056e5fb7" compoundref="d9/d7c/a01073" startline="187" endline="190">getRsmConfig</referencedby>
+        <referencedby refid="d1/d55/a04496_1a6cdb1ccafb7469cde9c863aafe08c9a5" compoundref="d9/d7c/a01073" startline="232" endline="235">getShadowConfig</referencedby>
+        <referencedby refid="d1/d55/a04496_1a8d6383ed14358d7e885a00543b3f6d4f" compoundref="d9/d7c/a01073" startline="222" endline="225">getShadowPcfOffsets</referencedby>
+        <referencedby refid="d1/d55/a04496_1ac938aebbd0d17ed48b4f4d138d0f4fdd" compoundref="d9/d7c/a01073" startline="217" endline="220">getShadowRawOffsets</referencedby>
+        <referencedby refid="d1/d55/a04496_1af39d6a0500a74daeabcb6b9fd5104e01" compoundref="d9/d7c/a01073" startline="152" endline="155">getShadowType</referencedby>
+        <referencedby refid="d1/d55/a04496_1a7e3c593ed0acb97d9423b8689cce4e8e" compoundref="d9/d7c/a01073" startline="227" endline="230">getShadowVariance</referencedby>
+        <referencedby refid="d1/d55/a04496_1a793fe1738e2c09dee90d5aa71732cc99" compoundref="d9/d7c/a01073" startline="212" endline="215">getVolumetricScatteringFactor</referencedby>
+        <referencedby refid="d1/d55/a04496_1a2ac1ceee105e02ea3857cba96a773e7e" compoundref="d9/d7c/a01073" startline="207" endline="210">getVolumetricSteps</referencedby>
+        <referencedby refid="d1/d55/a04496_1ac251086294c1586f164bf32242e3fd8f" compoundref="d9/d7c/a01073" startline="323" endline="327">setGlobalIlluminationType</referencedby>
+        <referencedby refid="d1/d55/a04496_1aa036e5714df4591be760247bd1327aef" compoundref="d9/d7c/a01073" startline="359" endline="362">setPcfMaxSlopeOffset</referencedby>
+        <referencedby refid="d1/d55/a04496_1a80cdda0de453402ca23bf06c33209962" compoundref="d9/d7c/a01073" startline="354" endline="357">setPcfMinOffset</referencedby>
+        <referencedby refid="d1/d55/a04496_1a829d5dfd0008b1db500fc857c17db39c" compoundref="d9/d7c/a01073" startline="349" endline="352">setRawMaxSlopeOffset</referencedby>
+        <referencedby refid="d1/d55/a04496_1ac75e21f7eb5001c3bee7648300a73758" compoundref="d9/d7c/a01073" startline="344" endline="347">setRawMinOffset</referencedby>
+        <referencedby refid="d1/d55/a04496_1a8db0fba4dc0c69f124e5f11e2fb3845b" compoundref="d9/d7c/a01073" startline="329" endline="332">setShadowType</referencedby>
+        <referencedby refid="d1/d55/a04496_1aa8b881e3208f3bb9bd46c2532299c4a2" compoundref="d9/d7c/a01073" startline="339" endline="342">setVolumetricScatteringFactor</referencedby>
+        <referencedby refid="d1/d55/a04496_1ae272e20fac3c3329c9bf6556aec5ade0" compoundref="d9/d7c/a01073" startline="334" endline="337">setVolumetricSteps</referencedby>
+        <referencedby refid="d1/d55/a04496_1a2c09f78deb46159b8831bdcdcc33f398" compoundref="d9/d7c/a01073" startline="364" endline="367">setVsmMaxVariance</referencedby>
+        <referencedby refid="d1/d55/a04496_1a749f038f31023d178d69484d7c7f10da" compoundref="d9/d7c/a01073" startline="369" endline="372">setVsmVarianceBias</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d55/a04496_1a9d1a105eedcbe0b3e8d86ed99e0ad140" prot="protected" static="no" mutable="no">
+        <type>LightCategorySPtr</type>
+        <definition>LightCategorySPtr castor3d::Light::m_category</definition>
+        <argsstring></argsstring>
+        <name>m_category</name>
+        <qualifiedname>castor3d::Light::m_category</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="393" column="19" bodyfile="Scene/Light/Light.hpp" bodystart="393" bodyend="-1"/>
+        <referencedby refid="d1/d55/a04496_1a19ab321f7f7e49be5dda8be543cb2571" compoundref="d9/d7c/a01073" startline="132" endline="135">getBoundingBox</referencedby>
+        <referencedby refid="d1/d55/a04496_1a8f845303910decae55049077969d4183" compoundref="d9/d7c/a01073" startline="137" endline="140">getCategory</referencedby>
+        <referencedby refid="d1/d55/a04496_1ad7462e723ee2426f3fd331585e6bbc33" compoundref="d9/d7c/a01073" startline="107" endline="110">getColour</referencedby>
+        <referencedby refid="d1/d55/a04496_1ab6fc83d60de05930f3e1ece5a3c65f20" compoundref="d9/d7c/a01073" startline="122" endline="125">getDiffuseIntensity</referencedby>
+        <referencedby refid="d1/d55/a04496_1a11a06ad5e35aa8e61f6a561c53271d8c" compoundref="d9/d7c/a01073" startline="117" endline="120">getFarPlane</referencedby>
+        <referencedby refid="d1/d55/a04496_1a7ee4e9c22e1deaa2e19ce0e9a5eb0f7f" compoundref="d9/d7c/a01073" startline="112" endline="115">getIntensity</referencedby>
+        <referencedby refid="d1/d55/a04496_1ab6b83dc979ead3ead17bfa50107d76a7" compoundref="d9/d7c/a01073" startline="97" endline="100">getLightType</referencedby>
+        <referencedby refid="d1/d55/a04496_1ae3d2d01dfc67b3cbb3a13030ed45b035" compoundref="d9/d7c/a01073" startline="127" endline="130">getSpecularIntensity</referencedby>
+        <referencedby refid="d1/d55/a04496_1a2094d253c211c895dfa6def5096ae4c5" compoundref="d9/d7c/a01073" startline="246" endline="249">setColour</referencedby>
+        <referencedby refid="d1/d55/a04496_1a77dfd6ae4809d3f29896fcd71422b500" compoundref="d9/d7c/a01073" startline="281" endline="284">setDiffuseIntensity</referencedby>
+        <referencedby refid="d1/d55/a04496_1aa64a4b899d2fa6844905b11f6d0bde5b" compoundref="d9/d7c/a01073" startline="266" endline="269">setIntensity</referencedby>
+        <referencedby refid="d1/d55/a04496_1a205f8a28c549c4525f82c7e490a30037" compoundref="d9/d7c/a01073" startline="286" endline="289">setSpecularIntensity</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d55/a04496_1a4a8ae153290cbe75ff082f85be5dd0f9" prot="protected" static="no" mutable="no">
+        <type>ShadowMapRPtr</type>
+        <definition>ShadowMapRPtr castor3d::Light::m_shadowMap</definition>
+        <argsstring></argsstring>
+        <name>m_shadowMap</name>
+        <qualifiedname>castor3d::Light::m_shadowMap</qualifiedname>
+        <initializer>{ nullptr }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="394" column="15" bodyfile="Scene/Light/Light.hpp" bodystart="394" bodyend="-1"/>
+        <referencedby refid="d1/d55/a04496_1a7c4e1a96f6e7f2f9c1288556fdf34709" compoundref="d9/d7c/a01073" startline="157" endline="160">getShadowMap</referencedby>
+        <referencedby refid="d1/d55/a04496_1a1d5a9518b3e2851917b57c6415ef3761" compoundref="d9/d7c/a01073" startline="312" endline="321">setShadowMap</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d55/a04496_1a90abade79ded64d9b8b5b185f06dc234" prot="protected" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Light::m_shadowMapIndex</definition>
+        <argsstring></argsstring>
+        <name>m_shadowMapIndex</name>
+        <qualifiedname>castor3d::Light::m_shadowMapIndex</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="395" column="10" bodyfile="Scene/Light/Light.hpp" bodystart="395" bodyend="-1"/>
+        <referencedby refid="d1/d55/a04496_1a327fa515d22687725af8dbb4c3be7ce9" compoundref="d9/d7c/a01073" startline="162" endline="165">getShadowMapIndex</referencedby>
+        <referencedby refid="d1/d55/a04496_1a1d5a9518b3e2851917b57c6415ef3761" compoundref="d9/d7c/a01073" startline="312" endline="321">setShadowMap</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d55/a04496_1ab226c2e090fdd62efb8f3b715ba2c0d6" prot="protected" static="no" mutable="no">
+        <type>std::atomic&lt; <ref refid="d2/df5/a01395_1a94045726cb02c9deb4926f3bf0d0443e" kindref="member">GlobalIlluminationType</ref> &gt;</type>
+        <definition>std::atomic&lt; GlobalIlluminationType &gt; castor3d::Light::m_currentGlobalIllumination</definition>
+        <argsstring></argsstring>
+        <name>m_currentGlobalIllumination</name>
+        <qualifiedname>castor3d::Light::m_currentGlobalIllumination</qualifiedname>
+        <initializer>{ <ref refid="d2/df5/a01395_1a94045726cb02c9deb4926f3bf0d0443eabe988781e4e1de1c6a36fb698afbbe1f" kindref="member">GlobalIlluminationType::eNone</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="396" column="13" bodyfile="Scene/Light/Light.hpp" bodystart="396" bodyend="-1"/>
+        <referencedby refid="d1/d55/a04496_1a3576166294ac56aaeb8c997b07950610" compoundref="d9/d7c/a01073" startline="177" endline="180">getGlobalIlluminationType</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d55/a04496_1abce1e0be3cbf19bc63fe1a4f6a17c2b1" prot="protected" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Light::m_bufferIndex</definition>
+        <argsstring></argsstring>
+        <name>m_bufferIndex</name>
+        <qualifiedname>castor3d::Light::m_bufferIndex</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="397" column="10" bodyfile="Scene/Light/Light.hpp" bodystart="397" bodyend="-1"/>
+        <referencedby refid="d1/d55/a04496_1a85768890498349bca5200facec38f982" compoundref="d9/d7c/a01073" startline="167" endline="170">getBufferIndex</referencedby>
+        <referencedby refid="d1/d55/a04496_1a6c5ced23009dec35e5d6892aa39a4469" compoundref="d9/d7c/a01073" startline="374" endline="377">setBufferIndex</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d1/d55/a04496_1a522710690b6bd389204cf5d06371e6bb" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::PickingPass::PickingPass</definition>
-        <argsstring>(Engine &amp;engine, MatrixUbo &amp;matrixUbo, SceneCuller &amp;culler)</argsstring>
-        <name>PickingPass</name>
+      <memberdef kind="function" id="d1/d55/a04496_1a16ddc7547eaa4d1cc715b926a27c9514" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Light::Light</definition>
+        <argsstring>(castor::String const &amp;name, Scene &amp;scene, SceneNode &amp;node, LightFactory &amp;factory, LightType lightType)</argsstring>
+        <name>Light</name>
+        <qualifiedname>castor3d::Light::Light</qualifiedname>
         <param>
-          <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
         </param>
         <param>
-          <type><ref refid="d2/d0e/a05496" kindref="compound">MatrixUbo</ref> &amp;</type>
-          <declname>matrixUbo</declname>
+          <type><ref refid="da/d34/a04592" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
         </param>
         <param>
-          <type><ref refid="d4/d4b/a04232" kindref="compound">SceneCuller</ref> &amp;</type>
-          <declname>culler</declname>
+          <type><ref refid="d4/d6d/a04636" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>node</declname>
+        </param>
+        <param>
+          <type><ref refid="de/da6/a04504" kindref="compound">LightFactory</ref> &amp;</type>
+          <declname>factory</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>lightType</declname>
         </param>
         <briefdescription>
 <para>Constructor. </para>
@@ -449,80 +1261,42 @@
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">engine</parametername>
+<parametername direction="in">name</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The engine. </para>
+<para>The light name. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
-<parameternamelist>
-<parametername direction="in">matrixUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The scene matrices UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">culler</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The culler for this pass. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="33" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1ae5c8a9c8effab1512befc8b71cbc9acf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::PickingPass::~PickingPass</definition>
-        <argsstring>()</argsstring>
-        <name>~PickingPass</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="42" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1a5ba2a99b91e93731e2a17a3838e409b1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::PickingPass::addScene</definition>
-        <argsstring>(Scene &amp;scene, Camera &amp;camera)</argsstring>
-        <name>addScene</name>
-        <param>
-          <type><ref refid="d5/d76/a05244" kindref="compound">Scene</ref> &amp;</type>
-          <declname>scene</declname>
-        </param>
-        <param>
-          <type><ref refid="d5/d9c/a05152" kindref="compound">Camera</ref> &amp;</type>
-          <declname>camera</declname>
-        </param>
-        <briefdescription>
-<para>Adds a scene rendered through this technique. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
 <parametername direction="in">scene</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The scene. </para>
+<para>Parent scene. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">camera</parametername>
+<parametername direction="in">node</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The camera through which the scene is viewed. </para>
+<para>The parent scene node. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">factory</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Factory used to create the <ref refid="da/d6e/a04500" kindref="compound">LightCategory</ref>. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lightType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The light type. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -530,844 +1304,119 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="53" column="1"/>
+        <location file="Scene/Light/Light.hpp" line="46" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1a5a8f9236ac222adbca31129809494b25" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="da/d1e/a01479_1a658b8a9f25669fd516ba89c1af1d52e6" kindref="member">PickNodeType</ref></type>
-        <definition>C3D_API PickNodeType castor3d::PickingPass::pick</definition>
-        <argsstring>(RenderDevice const &amp;device, castor::Position position, Camera const &amp;camera)</argsstring>
-        <name>pick</name>
+      <memberdef kind="function" id="d1/d55/a04496_1a1fa39cb56183e8eebc49f212edc2d8a2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Light::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::Light::update</qualifiedname>
         <param>
-          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>castor::Position</type>
-          <declname>position</declname>
-        </param>
-        <param>
-          <type><ref refid="d5/d9c/a05152" kindref="compound">Camera</ref> const &amp;</type>
-          <declname>camera</declname>
+          <type><ref refid="db/d69/a04040" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
         </param>
         <briefdescription>
-<para>Picks a geometry at given mouse position. </para>
+<para>CPU Update. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">device</parametername>
+<parametername direction="inout">updater</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">position</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The position in the pass. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">camera</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The viewing camera. </para>
+<para>The update data. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>PickingPass::PickNodeType::eNone if nothing was picked. </para>
-</simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="69" column="1"/>
+        <location file="Scene/Light/Light.hpp" line="59" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1a6fffe304faee36d250be72fa8a00f1e0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Light::fillBuffer</definition>
+        <argsstring>(uint32_t index, LightBuffer::LightData &amp;data)</argsstring>
+        <name>fillBuffer</name>
+        <qualifiedname>castor3d::Light::fillBuffer</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dcf/a04692" kindref="compound">LightBuffer::LightData</ref> &amp;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Records the light data into given buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="68" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d55/a04496_1a9e4a42449c5a4edf82d6536d1e7ccc80" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Light::attachTo</definition>
+        <argsstring>(SceneNode &amp;node) override</argsstring>
+        <name>attachTo</name>
+        <qualifiedname>castor3d::Light::attachTo</qualifiedname>
+        <reimplements refid="d9/dbb/a04524_1ab2169299d3e08b4e50066e400d1d86dc">attachTo</reimplements>
+        <param>
+          <type><ref refid="d4/d6d/a04636" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+<para>Attaches this light to a <ref refid="d4/d6d/a04636" kindref="compound">SceneNode</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">node</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new light&apos;s parent node. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/Light.hpp" line="78" column="14"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d1/d55/a04496_1a07281d4c1be94da67619998e00d63610" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d1/d55/a04496_1adec25f3475e3f4918092d91023a036e3" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::PickingPass::doUpdateNodes</definition>
-        <argsstring>(SceneCulledRenderNodes &amp;nodes)</argsstring>
-        <name>doUpdateNodes</name>
+        <definition>void castor3d::Light::onNodeChanged</definition>
+        <argsstring>(SceneNode const &amp;node)</argsstring>
+        <name>onNodeChanged</name>
+        <qualifiedname>castor3d::Light::onNodeChanged</qualifiedname>
         <param>
-          <type><ref refid="da/d16/a04336" kindref="compound">SceneCulledRenderNodes</ref> &amp;</type>
-          <declname>nodes</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="120" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1a206f5596d686ee8ed466ae70c360173b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::PickingPass::doFboPick</definition>
-        <argsstring>(RenderDevice const &amp;device, castor::Position const &amp;position, Camera const &amp;camera, ashes::CommandBuffer const &amp;commandBuffer)</argsstring>
-        <name>doFboPick</name>
-        <param>
-          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>castor::Position const &amp;</type>
-          <declname>position</declname>
-        </param>
-        <param>
-          <type><ref refid="d5/d9c/a05152" kindref="compound">Camera</ref> const &amp;</type>
-          <declname>camera</declname>
-        </param>
-        <param>
-          <type>ashes::CommandBuffer const &amp;</type>
-          <declname>commandBuffer</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="121" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1a7b749b8c4aa6d1d9c80558e75b26ec17" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="da/d1e/a01479_1a658b8a9f25669fd516ba89c1af1d52e6" kindref="member">PickNodeType</ref></type>
-        <definition>PickNodeType castor3d::PickingPass::doPick</definition>
-        <argsstring>(castor::Point4f const &amp;pixel, SceneCulledRenderNodes &amp;nodes)</argsstring>
-        <name>doPick</name>
-        <param>
-          <type>castor::Point4f const &amp;</type>
-          <declname>pixel</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d16/a04336" kindref="compound">SceneCulledRenderNodes</ref> &amp;</type>
-          <declname>nodes</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="125" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1aa826809fb4149d26dfb0e51f197dbf2f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::PickingPass::doUpdate</definition>
-        <argsstring>(SubmeshStaticRenderNodesPtrByPipelineMap &amp;nodes)</argsstring>
-        <name>doUpdate</name>
-        <param>
-          <type>SubmeshStaticRenderNodesPtrByPipelineMap &amp;</type>
-          <declname>nodes</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="127" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1a7900b836246ff2a6debe31d70f1f7fca" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::PickingPass::doUpdate</definition>
-        <argsstring>(StaticRenderNodesPtrByPipelineMap &amp;nodes)</argsstring>
-        <name>doUpdate</name>
-        <param>
-          <type>StaticRenderNodesPtrByPipelineMap &amp;</type>
-          <declname>nodes</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="128" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1a1e588248a4904051d8157720187bd106" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::PickingPass::doUpdate</definition>
-        <argsstring>(SkinningRenderNodesPtrByPipelineMap &amp;nodes)</argsstring>
-        <name>doUpdate</name>
-        <param>
-          <type>SkinningRenderNodesPtrByPipelineMap &amp;</type>
-          <declname>nodes</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="129" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1ae5932e56461a105a0e83672f8cfe06cb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::PickingPass::doUpdate</definition>
-        <argsstring>(SubmeshSkinningRenderNodesPtrByPipelineMap &amp;nodes)</argsstring>
-        <name>doUpdate</name>
-        <param>
-          <type>SubmeshSkinningRenderNodesPtrByPipelineMap &amp;</type>
-          <declname>nodes</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="130" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1aa433ee09a3f4b09ab582406473754711" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::PickingPass::doUpdate</definition>
-        <argsstring>(MorphingRenderNodesPtrByPipelineMap &amp;nodes)</argsstring>
-        <name>doUpdate</name>
-        <param>
-          <type>MorphingRenderNodesPtrByPipelineMap &amp;</type>
-          <declname>nodes</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="131" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1a98ab1ccfcccd696ec4acb9b402ed77d6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::PickingPass::doUpdate</definition>
-        <argsstring>(BillboardRenderNodesPtrByPipelineMap &amp;nodes)</argsstring>
-        <name>doUpdate</name>
-        <param>
-          <type>BillboardRenderNodesPtrByPipelineMap &amp;</type>
-          <declname>nodes</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="132" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1ae57a26f34ff9d942d9dc5976e474de76" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>bool</type>
-        <definition>bool castor3d::PickingPass::doInitialise</definition>
-        <argsstring>(RenderDevice const &amp;device, castor::Size const &amp;size) override</argsstring>
-        <name>doInitialise</name>
-        <reimplements refid="d8/d25/a04596_1abb2cbf41043f25a8e5a7edf335d1f4c6">doInitialise</reimplements>
-        <param>
-          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>castor::Size const &amp;</type>
-          <declname>size</declname>
-        </param>
-        <briefdescription>
-<para>Initialises the pass. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername>size</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pass needed dimensions. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>true</computeroutput> on ok. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="133" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1a06ceac03e62918d871f0ce9e481a6799" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::PickingPass::doCleanup</definition>
-        <argsstring>(RenderDevice const &amp;device) override</argsstring>
-        <name>doCleanup</name>
-        <reimplements refid="d8/d25/a04596_1a747fb083615688d7f6aed157719ef001">doCleanup</reimplements>
-        <param>
-          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-<para>Cleans up the pass. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="135" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1a925fb6958cba9129754cefcd610a97b3" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::PickingPass::doFillUboDescriptor</definition>
-        <argsstring>(ashes::DescriptorSetLayout const &amp;layout, BillboardListRenderNode &amp;node) override</argsstring>
-        <name>doFillUboDescriptor</name>
-        <reimplements refid="d8/d25/a04596_1aa3c113ef6dd789de03b30c2579e773f0">doFillUboDescriptor</reimplements>
-        <param>
-          <type>ashes::DescriptorSetLayout const &amp;</type>
-          <declname>layout</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d1e/a01479_1a384f6fd61b75ba3fbac28239a79872cd" kindref="member">BillboardListRenderNode</ref> &amp;</type>
+          <type><ref refid="d4/d6d/a04636" kindref="compound">SceneNode</ref> const &amp;</type>
           <declname>node</declname>
         </param>
         <briefdescription>
-<para>Initialises the descriptor set of a billboard node. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">layout</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The descriptors layout. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">node</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The node. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="136" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1af4d35a67b036bc8aac50aaf2e1022498" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::PickingPass::doFillUboDescriptor</definition>
-        <argsstring>(ashes::DescriptorSetLayout const &amp;layout, SubmeshRenderNode &amp;node) override</argsstring>
-        <name>doFillUboDescriptor</name>
-        <reimplements refid="d8/d25/a04596_1ac876a1d4eac1cd8094444d6562cc7952">doFillUboDescriptor</reimplements>
-        <param>
-          <type>ashes::DescriptorSetLayout const &amp;</type>
-          <declname>layout</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d1e/a01479_1ae05cd0daba83f842b870aa2eb08b1b91" kindref="member">SubmeshRenderNode</ref> &amp;</type>
-          <declname>node</declname>
-        </param>
-        <briefdescription>
-<para>Initialises the descriptor set of a morphing node. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">layout</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The descriptors layout. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">node</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The node. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="138" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1a7ef3a8afdf4a00af33642708a789a8ee" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::PickingPass::doFillTextureDescriptor</definition>
-        <argsstring>(ashes::DescriptorSetLayout const &amp;layout, uint32_t &amp;index, BillboardListRenderNode &amp;nodes, ShadowMapLightTypeArray const &amp;shadowMaps) override</argsstring>
-        <name>doFillTextureDescriptor</name>
-        <reimplements refid="d8/d25/a04596_1a2ff8b6ee2139a5f6dd562c74d94a913a">doFillTextureDescriptor</reimplements>
-        <param>
-          <type>ashes::DescriptorSetLayout const &amp;</type>
-          <declname>layout</declname>
-        </param>
-        <param>
-          <type>uint32_t &amp;</type>
-          <declname>index</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d1e/a01479_1a384f6fd61b75ba3fbac28239a79872cd" kindref="member">BillboardListRenderNode</ref> &amp;</type>
-          <declname>node</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d1e/a01479_1ad3137fb4b01f8deea8b1e20522ec8e6c" kindref="member">ShadowMapLightTypeArray</ref> const &amp;</type>
-          <declname>shadowMaps</declname>
-        </param>
-        <briefdescription>
-<para>Initialises the descriptor set of a billboard node. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">layout</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The descriptors layout. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="inout">index</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The texture index, updated to the next available. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">node</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The node. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">shadowMaps</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The shadow maps. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="140" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1a071decbc0597aaeb94423af9539219b6" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::PickingPass::doFillTextureDescriptor</definition>
-        <argsstring>(ashes::DescriptorSetLayout const &amp;layout, uint32_t &amp;index, SubmeshRenderNode &amp;nodes, ShadowMapLightTypeArray const &amp;shadowMaps) override</argsstring>
-        <name>doFillTextureDescriptor</name>
-        <reimplements refid="d8/d25/a04596_1a15b8a481485c2184f315c4ba4131ec3b">doFillTextureDescriptor</reimplements>
-        <param>
-          <type>ashes::DescriptorSetLayout const &amp;</type>
-          <declname>layout</declname>
-        </param>
-        <param>
-          <type>uint32_t &amp;</type>
-          <declname>index</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d1e/a01479_1ae05cd0daba83f842b870aa2eb08b1b91" kindref="member">SubmeshRenderNode</ref> &amp;</type>
-          <declname>node</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d1e/a01479_1ad3137fb4b01f8deea8b1e20522ec8e6c" kindref="member">ShadowMapLightTypeArray</ref> const &amp;</type>
-          <declname>shadowMaps</declname>
-        </param>
-        <briefdescription>
-<para>Initialises the descriptor set of a morphing node. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">layout</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The descriptors layout. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="inout">index</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The texture index, updated to the next available. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">node</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The node. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">shadowMaps</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The shadow maps. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="144" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1a6ba9f66a789d8c524de196544f855ec5" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::PickingPass::doUpdate</definition>
-        <argsstring>(RenderQueueArray &amp;queues) override</argsstring>
-        <name>doUpdate</name>
-        <reimplements refid="d8/d25/a04596_1a7b644b338ea6bbbffec7ed1cf4936a38">doUpdate</reimplements>
-        <param>
-          <type><ref refid="da/d1e/a01479_1a16af0407887759f4b7d74964b4533ec6" kindref="member">RenderQueueArray</ref> &amp;</type>
-          <declname>queues</declname>
-        </param>
-        <briefdescription>
-<para>Updates the specific data. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="remark"><para>Gather the render queues, for further update. </para>
-</simplesect>
-<parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="out">queues</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Receives the render queues needed for the rendering of the frame. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="148" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1aa1c792361b8406960958a7a2f2d56bd7" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="da/d1e/a01479_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
-        <definition>virtual ShaderPtr castor3d::PickingPass::doGetVertexShaderSource</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
-        <name>doGetVertexShaderSource</name>
-        <reimplements refid="d8/d25/a04596_1a81135a22e0eb402b74c05a66abb4b7a9">doGetVertexShaderSource</reimplements>
-        <param>
-          <type><ref refid="dd/db6/a04580" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves the vertex shader source matching the given flags. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="149" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1a185b70869a81a5e56255d5d767c98e17" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="da/d1e/a01479_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
-        <definition>ShaderPtr castor3d::PickingPass::doGetGeometryShaderSource</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
-        <name>doGetGeometryShaderSource</name>
-        <reimplements refid="d8/d25/a04596_1a29139e48d35633ad218f6ecc9e52c435">doGetGeometryShaderSource</reimplements>
-        <param>
-          <type><ref refid="dd/db6/a04580" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves the geometry shader source matching the given flags. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="150" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1a1b38a4fc01353fa31624f725652ea0c7" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="da/d1e/a01479_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
-        <definition>ShaderPtr castor3d::PickingPass::doGetPhongPixelShaderSource</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
-        <name>doGetPhongPixelShaderSource</name>
-        <reimplements refid="d8/d25/a04596_1a64c67405e2954877ce96d89c3bd6b0ad">doGetPhongPixelShaderSource</reimplements>
-        <param>
-          <type><ref refid="dd/db6/a04580" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves the pixel shader source matching the given flags. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="151" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1a1badb4060844c35818dc06c1b1a6f2d1" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="da/d1e/a01479_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
-        <definition>ShaderPtr castor3d::PickingPass::doGetPbrMRPixelShaderSource</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
-        <name>doGetPbrMRPixelShaderSource</name>
-        <reimplements refid="d8/d25/a04596_1a840611696fdbf0542000710c0191781f">doGetPbrMRPixelShaderSource</reimplements>
-        <param>
-          <type><ref refid="dd/db6/a04580" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves the pixel shader source matching the given flags. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="152" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1a435d03443c40035badfe28f5232dfbe5" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="da/d1e/a01479_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
-        <definition>ShaderPtr castor3d::PickingPass::doGetPbrSGPixelShaderSource</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
-        <name>doGetPbrSGPixelShaderSource</name>
-        <reimplements refid="d8/d25/a04596_1a26b38ac7476d3a153faa4b18573f3744">doGetPbrSGPixelShaderSource</reimplements>
-        <param>
-          <type><ref refid="dd/db6/a04580" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves the pixel shader source matching the given flags. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="153" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1a36a48cd0ebd1c385b886914473455817" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="da/d1e/a01479_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
-        <definition>ShaderPtr castor3d::PickingPass::doGetPixelShaderSource</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const</argsstring>
-        <name>doGetPixelShaderSource</name>
-        <param>
-          <type><ref refid="dd/db6/a04580" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="154" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1a749e61fea4ab25dae9b566d392a64743" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::PickingPass::doUpdatePipeline</definition>
-        <argsstring>(RenderPipeline &amp;pipeline) override</argsstring>
-        <name>doUpdatePipeline</name>
-        <reimplements refid="d8/d25/a04596_1a698e64428c216acae1ca725373359689">doUpdatePipeline</reimplements>
-        <param>
-          <type><ref refid="de/dfb/a04616" kindref="compound">RenderPipeline</ref> &amp;</type>
-          <declname>pipeline</declname>
-        </param>
-        <briefdescription>
-<para>Updates the pipeline. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">pipeline</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render pipeline. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="155" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1ae38cdbc6569003188112df0c6a520222" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type>ashes::VkDescriptorSetLayoutBindingArray</type>
-        <definition>ashes::VkDescriptorSetLayoutBindingArray castor3d::PickingPass::doCreateTextureBindings</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
-        <name>doCreateTextureBindings</name>
-        <reimplements refid="d8/d25/a04596_1add71461e455e60430c682a664e5ff163">doCreateTextureBindings</reimplements>
-        <param>
-          <type><ref refid="dd/db6/a04580" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Creates the common textures descriptor layout bindings. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="156" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1a876fa4b7195b471e51d04384a9664cb5" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type>ashes::PipelineDepthStencilStateCreateInfo</type>
-        <definition>ashes::PipelineDepthStencilStateCreateInfo castor3d::PickingPass::doCreateDepthStencilState</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
-        <name>doCreateDepthStencilState</name>
-        <reimplements refid="d8/d25/a04596_1a966911ad6ae24a856db42dc265df1c23">doCreateDepthStencilState</reimplements>
-        <param>
-          <type><ref refid="dd/db6/a04580" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Creates the depth stencil state. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="157" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1a7c26034c5d5b3fb2fb4bfc4f2241b40f" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type>ashes::PipelineColorBlendStateCreateInfo</type>
-        <definition>ashes::PipelineColorBlendStateCreateInfo castor3d::PickingPass::doCreateBlendState</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
-        <name>doCreateBlendState</name>
-        <reimplements refid="d8/d25/a04596_1aee56eed63ba3932ab498d5b7a10a5d41">doCreateBlendState</reimplements>
-        <param>
-          <type><ref refid="dd/db6/a04580" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Creates the colour blend state. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="158" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d55/a04496_1a6961e967bbe19b9fe97bbde00d1c3fb1" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::PickingPass::doUpdateFlags</definition>
-        <argsstring>(PipelineFlags &amp;flags) const override</argsstring>
-        <name>doUpdateFlags</name>
-        <reimplements refid="d8/d25/a04596_1a5d3dc93485a69008afb0170312d11e11">doUpdateFlags</reimplements>
-        <param>
-          <type><ref refid="dd/db6/a04580" kindref="compound">PipelineFlags</ref> &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Modifies the given flags to make them match the render pass requirements. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="inout">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PickingPass.hpp" line="159" column="1"/>
+        <location file="Scene/Light/Light.hpp" line="385" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -1375,296 +1424,236 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="2664">
-        <label>Named</label>
-      </node>
-      <node id="2662">
-        <label>castor3d::SceneRenderPass</label>
-        <link refid="d8/d25/a04596"/>
-        <childnode refid="2663" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2664" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2663">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="2661">
-        <label>castor3d::PickingPass</label>
+      <node id="1">
+        <label>castor3d::Light</label>
         <link refid="d1/d55/a04496"/>
-        <childnode refid="2662" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::MovableObject</label>
+        <link refid="d9/dbb/a04524"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="2680">
-        <label>castor3d::RenderQueue</label>
-        <link refid="d2/dfe/a04620"/>
-        <childnode refid="2681" relation="public-inheritance">
+      <node id="7">
+        <label>Animable</label>
+        <link refid="d8/d5f/a02216"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="2677">
-        <label>castor3d::SceneCuller</label>
-        <link refid="d4/d4b/a04232"/>
-      </node>
-      <node id="2676">
-        <label>castor3d::RenderSystem</label>
-        <link refid="d9/d38/a04624"/>
-        <childnode refid="2667" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2673">
+      <node id="11">
         <label>K</label>
       </node>
-      <node id="2674">
+      <node id="12">
         <label>T</label>
       </node>
-      <node id="2681">
-        <label>castor::OwnedBy&lt; SceneRenderPass &gt;</label>
+      <node id="18">
+        <label>std::atomic&lt; GlobalIlluminationType &gt;</label>
+        <childnode refid="19" relation="template-instance">
+          <edgelabel>&lt; GlobalIlluminationType &gt;</edgelabel>
+        </childnode>
       </node>
-      <node id="2672">
+      <node id="13">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d8/d5f/a02216"/>
+        <childnode refid="14" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::Light</label>
+        <link refid="d1/d55/a04496"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>m_shadows</edgelabel>
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>m_currentGlobalIllumination</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::LpvConfig</label>
+        <link refid="d7/d7e/a03736"/>
+      </node>
+      <node id="2">
+        <label>castor3d::MovableObject</label>
+        <link refid="d9/dbb/a04524"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor3d::RsmConfig</label>
+        <link refid="dd/d8c/a04508"/>
+      </node>
+      <node id="5">
+        <label>castor3d::SceneNode</label>
+        <link refid="d4/d6d/a04636"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::ShadowConfig</label>
+        <link refid="d5/d62/a04648"/>
+        <childnode refid="16" relation="usage">
+          <edgelabel>rsmConfig</edgelabel>
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>lpvConfig</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
+      </node>
+      <node id="14">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="8">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="9">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>std::atomic&lt; T &gt;</label>
+        <childnode refid="12" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
+      </node>
+      <node id="10">
         <label>std::map&lt; K, T &gt;</label>
-        <childnode refid="2673" relation="usage">
+        <childnode refid="11" relation="usage">
           <edgelabel>keys</edgelabel>
         </childnode>
-        <childnode refid="2674" relation="usage">
+        <childnode refid="12" relation="usage">
           <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="2671">
-        <label>castor3d::UniformBufferOffsetT&lt; DataT &gt;</label>
-        <link refid="d1/d47/a02300"/>
-      </node>
-      <node id="2668">
-        <label>Named</label>
-      </node>
-      <node id="2670">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelInstancesUboConfiguration &gt;</label>
-        <link refid="d1/d47/a02300"/>
-        <childnode refid="2671" relation="template-instance">
-          <edgelabel>&lt; castor3d::ModelInstancesUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2666">
-        <label>castor3d::SceneRenderPass</label>
-        <link refid="d8/d25/a04596"/>
-        <childnode refid="2667" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2668" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2669" relation="usage">
-          <edgelabel>m_modelsInstances</edgelabel>
-        </childnode>
-        <childnode refid="2675" relation="usage">
-          <edgelabel>m_sceneUbo</edgelabel>
-        </childnode>
-        <childnode refid="2676" relation="usage">
-          <edgelabel>m_renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="2677" relation="usage">
-          <edgelabel>m_culler</edgelabel>
-        </childnode>
-        <childnode refid="2678" relation="usage">
-          <edgelabel>m_timer</edgelabel>
-        </childnode>
-        <childnode refid="2679" relation="usage">
-          <edgelabel>m_matrixUbo</edgelabel>
-        </childnode>
-        <childnode refid="2680" relation="usage">
-          <edgelabel>m_renderQueue</edgelabel>
-        </childnode>
-      </node>
-      <node id="2675">
-        <label>castor3d::SceneUbo</label>
-        <link refid="df/d63/a05528"/>
-      </node>
-      <node id="2678">
-        <label>castor3d::RenderPassTimer</label>
-        <link refid="d7/dc4/a04612"/>
-        <childnode refid="2668" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2667">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="2665">
-        <label>castor3d::PickingPass</label>
-        <link refid="d1/d55/a04496"/>
-        <childnode refid="2666" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2679">
-        <label>castor3d::MatrixUbo</label>
-        <link refid="d2/d0e/a05496"/>
-      </node>
-      <node id="2669">
-        <label>std::map&lt; size_t, castor3d::UniformBufferOffsetT&lt; castor3d::ModelInstancesUboConfiguration &gt; &gt;</label>
-        <childnode refid="2670" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-        <childnode refid="2672" relation="template-instance">
-          <edgelabel>&lt; size_t, castor3d::UniformBufferOffsetT&lt; castor3d::ModelInstancesUboConfiguration &gt; &gt;</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Render/PickingPass.hpp" line="19" column="1" bodyfile="Render/PickingPass.hpp" bodystart="17" bodyend="189"/>
+    <location file="Scene/Light/Light.hpp" line="26" column="1" bodyfile="Scene/Light/Light.hpp" bodystart="28" bodyend="398"/>
     <listofallmembers>
-      <member refid="d1/d55/a04496_1a5ba2a99b91e93731e2a17a3838e409b1" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>addScene</name></member>
-      <member refid="d1/d55/a04496_1a9877d6238d42f121d86f4ff963c3ddf7" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>CameraQueueMap</name></member>
-      <member refid="d8/d25/a04596_1ac5627bf8072801b914f5a7a8fde7c4ef" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>cleanup</name></member>
-      <member refid="d8/d25/a04596_1a7534bc2c8e7a5e8812685d23cf92da18" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>createBillboardNode</name></member>
-      <member refid="d8/d25/a04596_1a85a295a43ea151d07bbb59a983fc0a9b" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>createBlendState</name></member>
-      <member refid="d8/d25/a04596_1aef15f688cd35f6b8b50970e7b5f57d1b" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>createMorphingNode</name></member>
-      <member refid="d8/d25/a04596_1a1f6309ff1990fcf752d1b1fc4162707e" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>createSkinningNode</name></member>
-      <member refid="d8/d25/a04596_1ad06a7b233133bd72a5f40a6309bbb636" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>createStaticNode</name></member>
-      <member refid="d8/d25/a04596_1acfc7eaded98ff40bb227979eb6f56274" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>DistanceSortedNodeMap</name></member>
-      <member refid="d1/d55/a04496_1a06ceac03e62918d871f0ce9e481a6799" prot="private" virt="virtual"><scope>castor3d::PickingPass</scope><name>doCleanup</name></member>
-      <member refid="d8/d25/a04596_1a5ad44dd6ff6eff2ff3ef28ffce50790d" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>doCopyNodesBones</name></member>
-      <member refid="d8/d25/a04596_1af6a1dcd4de30a16371ff2801ae10c23a" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>doCopyNodesBones</name></member>
-      <member refid="d8/d25/a04596_1ac7e8cea34069461a25c5dce78ad4133d" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>doCopyNodesMatrices</name></member>
-      <member refid="d8/d25/a04596_1abedc9556fe34264878d1175e4c5dd76d" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>doCopyNodesMatrices</name></member>
-      <member refid="d8/d25/a04596_1a8ea69998caa9d7ccc3c86d5fd5b4f0f0" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>doCopyNodesMatrices</name></member>
-      <member refid="d8/d25/a04596_1a6bce0687b325c3413c94465655611170" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>doCopyNodesMatrices</name></member>
-      <member refid="d1/d55/a04496_1a7c26034c5d5b3fb2fb4bfc4f2241b40f" prot="private" virt="virtual"><scope>castor3d::PickingPass</scope><name>doCreateBlendState</name></member>
-      <member refid="d1/d55/a04496_1a876fa4b7195b471e51d04384a9664cb5" prot="private" virt="virtual"><scope>castor3d::PickingPass</scope><name>doCreateDepthStencilState</name></member>
-      <member refid="d8/d25/a04596_1ab989a2da21f70c26e1fed17823e39af6" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>doCreatePassRenderNode</name></member>
-      <member refid="d8/d25/a04596_1a9bf6b45209c8b79cccfa152d51b3b144" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>doCreateSceneRenderNode</name></member>
-      <member refid="d1/d55/a04496_1ae38cdbc6569003188112df0c6a520222" prot="private" virt="virtual"><scope>castor3d::PickingPass</scope><name>doCreateTextureBindings</name></member>
-      <member refid="d8/d25/a04596_1ad540b45ce71ad9f060c3fee1e50da35f" prot="protected" virt="virtual"><scope>castor3d::PickingPass</scope><name>doCreateUboBindings</name></member>
-      <member refid="d1/d55/a04496_1a206f5596d686ee8ed466ae70c360173b" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>doFboPick</name></member>
-      <member refid="d1/d55/a04496_1a7ef3a8afdf4a00af33642708a789a8ee" prot="private" virt="virtual"><scope>castor3d::PickingPass</scope><name>doFillTextureDescriptor</name></member>
-      <member refid="d1/d55/a04496_1a071decbc0597aaeb94423af9539219b6" prot="private" virt="virtual"><scope>castor3d::PickingPass</scope><name>doFillTextureDescriptor</name></member>
-      <member refid="d1/d55/a04496_1a925fb6958cba9129754cefcd610a97b3" prot="private" virt="virtual"><scope>castor3d::PickingPass</scope><name>doFillUboDescriptor</name></member>
-      <member refid="d1/d55/a04496_1af4d35a67b036bc8aac50aaf2e1022498" prot="private" virt="virtual"><scope>castor3d::PickingPass</scope><name>doFillUboDescriptor</name></member>
-      <member refid="d8/d25/a04596_1adc154d1a476245fee3c7a997e51018ae" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>doGetBackPipelines</name></member>
-      <member refid="d8/d25/a04596_1a31fa7bcde80cfbdcb6acce0810df198e" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>doGetBackPipelines</name></member>
-      <member refid="d8/d25/a04596_1a1f4d8c2e2d67d3686c1059e189ab2d95" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>doGetFrontPipelines</name></member>
-      <member refid="d8/d25/a04596_1ab11482c4f9eb0c4a7d91af6681bc558d" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>doGetFrontPipelines</name></member>
-      <member refid="d1/d55/a04496_1a185b70869a81a5e56255d5d767c98e17" prot="private" virt="virtual"><scope>castor3d::PickingPass</scope><name>doGetGeometryShaderSource</name></member>
-      <member refid="d1/d55/a04496_1a1badb4060844c35818dc06c1b1a6f2d1" prot="private" virt="virtual"><scope>castor3d::PickingPass</scope><name>doGetPbrMRPixelShaderSource</name></member>
-      <member refid="d1/d55/a04496_1a435d03443c40035badfe28f5232dfbe5" prot="private" virt="virtual"><scope>castor3d::PickingPass</scope><name>doGetPbrSGPixelShaderSource</name></member>
-      <member refid="d1/d55/a04496_1a1b38a4fc01353fa31624f725652ea0c7" prot="private" virt="virtual"><scope>castor3d::PickingPass</scope><name>doGetPhongPixelShaderSource</name></member>
-      <member refid="d1/d55/a04496_1a36a48cd0ebd1c385b886914473455817" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>doGetPixelShaderSource</name></member>
-      <member refid="d8/d25/a04596_1a4b807ea9d74d5f1ccaba4b29e78c8085" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>doGetProgram</name></member>
-      <member refid="d1/d55/a04496_1aa1c792361b8406960958a7a2f2d56bd7" prot="private" virt="virtual"><scope>castor3d::PickingPass</scope><name>doGetVertexShaderSource</name></member>
-      <member refid="d1/d55/a04496_1ae57a26f34ff9d942d9dc5976e474de76" prot="private" virt="virtual"><scope>castor3d::PickingPass</scope><name>doInitialise</name></member>
-      <member refid="d1/d55/a04496_1a7b749b8c4aa6d1d9c80558e75b26ec17" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>doPick</name></member>
-      <member refid="d8/d25/a04596_1a01dba0c138042186e5976fd73e716fc5" prot="protected" virt="virtual"><scope>castor3d::PickingPass</scope><name>doPrepareBackPipeline</name></member>
-      <member refid="d8/d25/a04596_1ab5eabfab3b395ee4a59d0302b0e245d1" prot="protected" virt="virtual"><scope>castor3d::PickingPass</scope><name>doPrepareFrontPipeline</name></member>
-      <member refid="d1/d55/a04496_1aa826809fb4149d26dfb0e51f197dbf2f" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>doUpdate</name></member>
-      <member refid="d1/d55/a04496_1a7900b836246ff2a6debe31d70f1f7fca" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>doUpdate</name></member>
-      <member refid="d1/d55/a04496_1a1e588248a4904051d8157720187bd106" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>doUpdate</name></member>
-      <member refid="d1/d55/a04496_1ae5932e56461a105a0e83672f8cfe06cb" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>doUpdate</name></member>
-      <member refid="d1/d55/a04496_1aa433ee09a3f4b09ab582406473754711" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>doUpdate</name></member>
-      <member refid="d1/d55/a04496_1a98ab1ccfcccd696ec4acb9b402ed77d6" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>doUpdate</name></member>
-      <member refid="d1/d55/a04496_1a6ba9f66a789d8c524de196544f855ec5" prot="private" virt="virtual"><scope>castor3d::PickingPass</scope><name>doUpdate</name></member>
-      <member refid="d8/d25/a04596_1a8daee9fd51dd6295fcfde8f29d9b0215" prot="protected" virt="non-virtual" ambiguityscope="castor3d::SceneRenderPass::"><scope>castor3d::PickingPass</scope><name>doUpdate</name></member>
-      <member refid="d8/d25/a04596_1a42af41141686d6979c7f14d427b2b978" prot="protected" virt="non-virtual" ambiguityscope="castor3d::SceneRenderPass::"><scope>castor3d::PickingPass</scope><name>doUpdate</name></member>
-      <member refid="d8/d25/a04596_1ab524ba33c1aaec1b9f95ab64b8efaab5" prot="protected" virt="non-virtual" ambiguityscope="castor3d::SceneRenderPass::"><scope>castor3d::PickingPass</scope><name>doUpdate</name></member>
-      <member refid="d8/d25/a04596_1ae907440fd9c2237ba4bb5a4dec97a898" prot="protected" virt="non-virtual" ambiguityscope="castor3d::SceneRenderPass::"><scope>castor3d::PickingPass</scope><name>doUpdate</name></member>
-      <member refid="d8/d25/a04596_1acc81b152f8a75a0006f933aa9ad1c35b" prot="protected" virt="non-virtual" ambiguityscope="castor3d::SceneRenderPass::"><scope>castor3d::PickingPass</scope><name>doUpdate</name></member>
-      <member refid="d8/d25/a04596_1abcc866dd44044031e30ed73d47357ed0" prot="protected" virt="non-virtual" ambiguityscope="castor3d::SceneRenderPass::"><scope>castor3d::PickingPass</scope><name>doUpdate</name></member>
-      <member refid="d1/d55/a04496_1a6961e967bbe19b9fe97bbde00d1c3fb1" prot="private" virt="virtual"><scope>castor3d::PickingPass</scope><name>doUpdateFlags</name></member>
-      <member refid="d1/d55/a04496_1a07281d4c1be94da67619998e00d63610" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>doUpdateNodes</name></member>
-      <member refid="d1/d55/a04496_1a749e61fea4ab25dae9b566d392a64743" prot="private" virt="virtual"><scope>castor3d::PickingPass</scope><name>doUpdatePipeline</name></member>
-      <member refid="d8/d25/a04596_1acd676b5c76dd43d28372ae795dea952e" prot="protected" virt="virtual"><scope>castor3d::PickingPass</scope><name>doUpdateUbos</name></member>
-      <member refid="d8/d25/a04596_1a8dd34d9bcfcbf1cc93c73d633e26b375" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>forceTwoSided</name></member>
-      <member refid="d8/d25/a04596_1abcf02ee3b5e0f4dbfb0c9b5cf22a3245" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>getCommandBuffer</name></member>
-      <member refid="d8/d25/a04596_1a9ec598bacebe135008057204f4b7e498" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>getCuller</name></member>
-      <member refid="d8/d25/a04596_1ab06deeaf325f047f97f0fdd046b1db9a" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>getCuller</name></member>
-      <member refid="d8/d25/a04596_1ad17ff2b38eb4b3323973a04816eca7a9" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>getGeometryShaderSource</name></member>
-      <member refid="d8/d25/a04596_1ae964287f47d4145776448a31cb9a6ccd" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>getInstanceMult</name></member>
-      <member refid="d8/d25/a04596_1a283dc741d44f730b657f153ee8c0b21d" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>getMatrixUbo</name></member>
-      <member refid="d1/d55/a04496_1a4a7200821ede5c739b1de873b87d7542" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>getPickedBillboard</name></member>
-      <member refid="d1/d55/a04496_1ae2afba4085c3ec4f0725422ce335a261" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>getPickedFace</name></member>
-      <member refid="d1/d55/a04496_1a5f4f1bfc6411226e5dcb0d58a153fe55" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>getPickedGeometry</name></member>
-      <member refid="d1/d55/a04496_1a0174ab080d2d4151183653bb7c9e16c9" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>getPickedNodeType</name></member>
-      <member refid="d1/d55/a04496_1a496ebc6951a4df7c7e2256357a1b3063" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>getPickedSubmesh</name></member>
-      <member refid="d8/d25/a04596_1a3f2e595dabdcea8b9668d591a5e26879" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>getPipelineBack</name></member>
-      <member refid="d8/d25/a04596_1a9ee5e22f4b636f7d1eb3dc7993cc23a4" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>getPipelineFront</name></member>
-      <member refid="d8/d25/a04596_1a6f6289ae6913449d6cb3cb7a1ae64976" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>getPipelinesCount</name></member>
-      <member refid="d8/d25/a04596_1a32ad22d6a16a83d89a3a888599bf19ed" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>getPixelShaderSource</name></member>
-      <member refid="d8/d25/a04596_1af9a616bf4b5e1bf848d4a7783cff5dcf" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>getRenderPass</name></member>
-      <member refid="d1/d55/a04496_1aacbe25dfb0840b73ccd62694dbed8c19" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>getResult</name></member>
-      <member refid="d8/d25/a04596_1a9ce55bbe9de899304219df9a29869ac2" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>getSceneUbo</name></member>
-      <member refid="d8/d25/a04596_1ad5bf1e846317bf671e0cac4118922226" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>getSceneUbo</name></member>
-      <member refid="d1/d55/a04496_1a0ba908df7a1f969a5fbb1f882bbfd572" prot="public" virt="virtual"><scope>castor3d::PickingPass</scope><name>getTexturesMask</name></member>
-      <member refid="d8/d25/a04596_1ab21b006fe9daf0ae6172c17f076c5f85" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>getTimer</name></member>
-      <member refid="d8/d25/a04596_1a70c70fcde770cfa3efeaba683a11cbe4" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>getTimer</name></member>
-      <member refid="d8/d25/a04596_1a2d99705d33fb3391c2556e0c484d6ab8" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>getVertexShaderSource</name></member>
-      <member refid="d8/d25/a04596_1afaa168a458700f72a3365a1f4c550c55" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>hasNodes</name></member>
-      <member refid="d8/d25/a04596_1a659c1c103b9db5a461c77a6c0417be1b" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>initialise</name></member>
-      <member refid="d8/d25/a04596_1aa19a90dd2842009db8b987e205272135" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>initialise</name></member>
-      <member refid="d8/d25/a04596_1a3206b3416f9f404253530cd6a8bcf39d" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>initialiseTextureDescriptor</name></member>
-      <member refid="d8/d25/a04596_1a19fdc14553d98acdae5243a15a009b0e" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>initialiseTextureDescriptor</name></member>
-      <member refid="d8/d25/a04596_1a9f7a16a74d188c71932474d2dfabd496" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>initialiseTextureDescriptor</name></member>
-      <member refid="d8/d25/a04596_1a6293db061efb0ed860e247a10373b25b" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>initialiseTextureDescriptor</name></member>
-      <member refid="d8/d25/a04596_1a244414e5446292f40316010853b25a85" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>initialiseTextureDescriptor</name></member>
-      <member refid="d8/d25/a04596_1a80f92f9b5d2ac1396870e4a19d88baaa" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>initialiseTextureDescriptor</name></member>
-      <member refid="d8/d25/a04596_1a41e1f148667ede6bf4a4b15b63edbd09" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>initialiseUboDescriptor</name></member>
-      <member refid="d8/d25/a04596_1a1566db0372f6d6a3db34efc6c469cd26" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>initialiseUboDescriptor</name></member>
-      <member refid="d8/d25/a04596_1a6eb27cf641fd25efae02250beae221ac" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>initialiseUboDescriptor</name></member>
-      <member refid="d8/d25/a04596_1a8e22a05fc6dbb5c7a99030c0a688cc15" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>initialiseUboDescriptor</name></member>
-      <member refid="d8/d25/a04596_1a174e24b5897213c0dda6e3fcfb4d90d5" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>initialiseUboDescriptor</name></member>
-      <member refid="d8/d25/a04596_1ab6ccf8272797a7df98ad6dc8c7c43706" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>initialiseUboDescriptor</name></member>
-      <member refid="d8/d25/a04596_1a912328721eae90138599880d76a309ae" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>isDirty</name></member>
-      <member refid="d8/d25/a04596_1a4bac800c4178729d7e6c2324eb126fd6" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>isOrderIndependent</name></member>
-      <member refid="d1/d55/a04496_1a799dee77d8a8e73265ae5b48e6637692" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>isPicking</name></member>
-      <member refid="d1/d55/a04496_1a0b5215fe978718f34d41d9840bbd73a6" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_billboard</name></member>
-      <member refid="d1/d55/a04496_1ad6d4e51875bfadc52104242db79f0445" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_buffer</name></member>
-      <member refid="d8/d25/a04596_1aa7fc94ef9d99bc777795fb27941d7c65" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_category</name></member>
-      <member refid="d1/d55/a04496_1aefd9d97c42b8894289cb78db08caff8e" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_colourTexture</name></member>
-      <member refid="d1/d55/a04496_1a06bdd3a5f1988b7f108f82a901008c46" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_colourView</name></member>
-      <member refid="d1/d55/a04496_1a460dc73a1d9e50de3629731baf6be1c7" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_commandBuffer</name></member>
-      <member refid="d1/d55/a04496_1a160ce88c5be184d09cd0686fc2700b0c" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_copyRegion</name></member>
-      <member refid="d8/d25/a04596_1a16c632e89f0628620bcf01a70d520b2d" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_culler</name></member>
-      <member refid="d1/d55/a04496_1a538c363df27ac21027b444c94e50c13d" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_depthTexture</name></member>
-      <member refid="d1/d55/a04496_1af5aa09639e88b20ed7cd78e9b115c78b" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_depthView</name></member>
-      <member refid="d1/d55/a04496_1ac69fe959a912d89ee61d9c990385c03a" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_face</name></member>
-      <member refid="d8/d25/a04596_1aa9df6fd78c7eb9ca9b59c10574776085" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_forceTwoSided</name></member>
-      <member refid="d1/d55/a04496_1ac36ff18b8aeef63d35d15fda2ef99d75" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_frameBuffer</name></member>
-      <member refid="d1/d55/a04496_1ab079d26c5b53daa65631b62f786841c7" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_geometry</name></member>
-      <member refid="d8/d25/a04596_1a6e274505905d565cac4f9d6743b0417d" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_index</name></member>
-      <member refid="d8/d25/a04596_1afe43990c332123ca5bcaaa12e2204ff5" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_instanceMult</name></member>
-      <member refid="d8/d25/a04596_1ac70af3d0c68adfc6fa7ec2f68d5b6f12" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_isDirty</name></member>
-      <member refid="d8/d25/a04596_1a6b0f370e15e18a3a554c56b09fba85b4" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_matrixUbo</name></member>
-      <member refid="d8/d25/a04596_1a927f5ac447cecf2b3419ce9501632fd7" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_mode</name></member>
-      <member refid="d8/d25/a04596_1a923ae0f7686d6ef4c9a27f0799ca62c8" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_modelsInstances</name></member>
-      <member refid="d8/d25/a04596_1a898939bc8fc037bb32daebe391e6263b" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_oit</name></member>
-      <member refid="d8/d25/a04596_1a5faf1387a50606631d9eccf95060f84a" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_ownTimer</name></member>
-      <member refid="d1/d55/a04496_1af8aae0a9b3ff1acf719d1b3282478a33" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_pickable</name></member>
-      <member refid="d1/d55/a04496_1aab8b68b8fac9afef4d0d1f8eb4703e50" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_pickDisplayRegions</name></member>
-      <member refid="d1/d55/a04496_1a54901e486a837b679732f5836f4502e5" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_picking</name></member>
-      <member refid="d1/d55/a04496_1a149b91d9d06eac08a35f966fb2d07604" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_pickNodeType</name></member>
-      <member refid="d8/d25/a04596_1a6f215acabcb9564bc85f30f8abeaba56" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_renderPass</name></member>
-      <member refid="d8/d25/a04596_1a3fd80e792cc2f052add8f252b531c0e2" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_renderQueue</name></member>
-      <member refid="d8/d25/a04596_1a1513ba71b682375fed01e9819105c894" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_renderSystem</name></member>
-      <member refid="d1/d55/a04496_1a10037aa2b66d3ff6ecabbd5d45c03ac8" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_scenes</name></member>
-      <member refid="d8/d25/a04596_1aa623f3557914bcc6e2e8cf058da1c5e5" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_sceneUbo</name></member>
-      <member refid="d8/d25/a04596_1ab4b6ee7f462854794ed9e3fccdc5b10f" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_size</name></member>
-      <member refid="d1/d55/a04496_1acdbb9472eb0e585fb88a052df11fdd00" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_stagingBuffer</name></member>
-      <member refid="d1/d55/a04496_1a5e4172d5ba00b6b782335b8fe04c7ac3" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_submesh</name></member>
-      <member refid="d8/d25/a04596_1a729739080d9153cd9ce71129b909a869" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_timer</name></member>
-      <member refid="d1/d55/a04496_1a85083efde8a37118d592dbeb84bfc1dc" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_transferDisplayRegion</name></member>
-      <member refid="d1/d55/a04496_1a9e71e1d6a6f91e33291fc2f93f71a978" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>m_transferFence</name></member>
-      <member refid="d1/d55/a04496_1a5a8f9236ac222adbca31129809494b25" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>pick</name></member>
-      <member refid="d1/d55/a04496_1a522710690b6bd389204cf5d06371e6bb" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>PickingPass</name></member>
-      <member refid="d1/d55/a04496_1a22db5ebafb42aa6cdc808269bf42993f" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>PickingWidth</name></member>
-      <member refid="d8/d25/a04596_1a1944832d81c804c1db58c6ce658aa50c" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>prepareBackPipeline</name></member>
-      <member refid="d8/d25/a04596_1aca7f84fa9420e1056a2254e7387c4c56" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>prepareBackPipeline</name></member>
-      <member refid="d8/d25/a04596_1a8ef8352df2d2af6d596e4b8f7f013679" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>prepareFrontPipeline</name></member>
-      <member refid="d8/d25/a04596_1ab2e52ba19699b996f9a24a209af5c50d" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>prepareFrontPipeline</name></member>
-      <member refid="d8/d25/a04596_1affb5828080147f1657a582841cbaca01" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>SceneRenderPass</name></member>
-      <member refid="d8/d25/a04596_1ac65dc41b8e3392db21bd3cadd94754d6" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>SceneRenderPass</name></member>
-      <member refid="d8/d25/a04596_1a7a964bd723f31105db6937b6c2016344" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>SceneRenderPass</name></member>
-      <member refid="d8/d25/a04596_1a78ae5b7ef98084673c04980da95e359f" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>SceneRenderPass</name></member>
-      <member refid="d8/d25/a04596_1adf551a42f8dec9de911b7f2ffc56b666" prot="protected" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>SceneRenderPass</name></member>
-      <member refid="d1/d55/a04496_1a56711428ee44a5bf72eda5e78f786d0c" prot="private" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>UboBindingPoint</name></member>
-      <member refid="d8/d25/a04596_1add6df2057351a89dbe243c62d6a5728a" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>update</name></member>
-      <member refid="d8/d25/a04596_1a49f451446a2b5cc5622aaaeda521bfbf" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>updateFlags</name></member>
-      <member refid="d8/d25/a04596_1aeb30d85455e3fb74cff7074377268d80" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>updatePipeline</name></member>
-      <member refid="d1/d55/a04496_1ae5c8a9c8effab1512befc8b71cbc9acf" prot="public" virt="non-virtual"><scope>castor3d::PickingPass</scope><name>~PickingPass</name></member>
-      <member refid="d8/d25/a04596_1a8ece518761c68ec639b59e82cde459af" prot="public" virt="virtual"><scope>castor3d::PickingPass</scope><name>~SceneRenderPass</name></member>
+      <member refid="d1/d55/a04496_1a9e4a42449c5a4edf82d6536d1e7ccc80" prot="public" virt="virtual"><scope>castor3d::Light</scope><name>attachTo</name></member>
+      <member refid="d9/dbb/a04524_1afbef8194f2a0b9e15c9cc483221a08ee" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>detach</name></member>
+      <member refid="d1/d55/a04496_1a5eebf24c72db4dcd902b7459f73c2cb4" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>disable</name></member>
+      <member refid="d1/d55/a04496_1a48860d01cbacbe601ef107fb2ae91ba4" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>enable</name></member>
+      <member refid="d1/d55/a04496_1a6fffe304faee36d250be72fa8a00f1e0" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>fillBuffer</name></member>
+      <member refid="d1/d55/a04496_1a19ab321f7f7e49be5dda8be543cb2571" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getBoundingBox</name></member>
+      <member refid="d1/d55/a04496_1a85768890498349bca5200facec38f982" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getBufferIndex</name></member>
+      <member refid="d1/d55/a04496_1a8f845303910decae55049077969d4183" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getCategory</name></member>
+      <member refid="d1/d55/a04496_1ad7462e723ee2426f3fd331585e6bbc33" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getColour</name></member>
+      <member refid="d1/d55/a04496_1ab6fc83d60de05930f3e1ece5a3c65f20" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getDiffuseIntensity</name></member>
+      <member refid="d1/d55/a04496_1a139d5a12e0297a65ad78c9d18d8090fb" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getDirectionalLight</name></member>
+      <member refid="d9/dbb/a04524_1aa6c7b745273530f44b2fe2b2a2603e8d" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getEngine</name></member>
+      <member refid="d1/d55/a04496_1a82fa672aa244e9768b6c7f3bd5101443" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getExpectedGlobalIlluminationType</name></member>
+      <member refid="d1/d55/a04496_1a11a06ad5e35aa8e61f6a561c53271d8c" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getFarPlane</name></member>
+      <member refid="d1/d55/a04496_1a3576166294ac56aaeb8c997b07950610" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getGlobalIlluminationType</name></member>
+      <member refid="d1/d55/a04496_1a7ee4e9c22e1deaa2e19ce0e9a5eb0f7f" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getIntensity</name></member>
+      <member refid="d1/d55/a04496_1ab6b83dc979ead3ead17bfa50107d76a7" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getLightType</name></member>
+      <member refid="d1/d55/a04496_1a24fcb3481810ce02efe674ac98de9c19" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getLpvConfig</name></member>
+      <member refid="d1/d55/a04496_1ac2fb7f973d0cba9b157c41ec8b5e5307" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getLpvConfig</name></member>
+      <member refid="d9/dbb/a04524_1a19af4c363050397777f59c30b451be05" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getParent</name></member>
+      <member refid="d1/d55/a04496_1aa2363e032814390799f5f6ed34723ea9" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getPointLight</name></member>
+      <member refid="d1/d55/a04496_1a9251b5a952a5632263cbbe28056e5fb7" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getRsmConfig</name></member>
+      <member refid="d1/d55/a04496_1a2073c7978bf25a8de26e120624127d1d" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getRsmConfig</name></member>
+      <member refid="d1/d55/a04496_1a6cdb1ccafb7469cde9c863aafe08c9a5" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getShadowConfig</name></member>
+      <member refid="d1/d55/a04496_1a7c4e1a96f6e7f2f9c1288556fdf34709" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getShadowMap</name></member>
+      <member refid="d1/d55/a04496_1a327fa515d22687725af8dbb4c3be7ce9" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getShadowMapIndex</name></member>
+      <member refid="d1/d55/a04496_1a8d6383ed14358d7e885a00543b3f6d4f" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getShadowPcfOffsets</name></member>
+      <member refid="d1/d55/a04496_1ac938aebbd0d17ed48b4f4d138d0f4fdd" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getShadowRawOffsets</name></member>
+      <member refid="d1/d55/a04496_1af39d6a0500a74daeabcb6b9fd5104e01" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getShadowType</name></member>
+      <member refid="d1/d55/a04496_1a7e3c593ed0acb97d9423b8689cce4e8e" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getShadowVariance</name></member>
+      <member refid="d1/d55/a04496_1ae3d2d01dfc67b3cbb3a13030ed45b035" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getSpecularIntensity</name></member>
+      <member refid="d1/d55/a04496_1ac9823da72f2626fe21ef2bbb2485cac0" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getSpotLight</name></member>
+      <member refid="d9/dbb/a04524_1acf2dafd94427b63121981ac18ac652a7" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getType</name></member>
+      <member refid="d1/d55/a04496_1a793fe1738e2c09dee90d5aa71732cc99" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getVolumetricScatteringFactor</name></member>
+      <member refid="d1/d55/a04496_1a2ac1ceee105e02ea3857cba96a773e7e" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>getVolumetricSteps</name></member>
+      <member refid="d1/d55/a04496_1a95b2bdeec7ac533ab45cca25f82286b8" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>hasChanged</name></member>
+      <member refid="d1/d55/a04496_1a6723fd1b9198bf0ab4cb70bab6075d0e" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>isEnabled</name></member>
+      <member refid="d1/d55/a04496_1a722a2c0a9b858917acda75feee220dac" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>isExpectedShadowProducer</name></member>
+      <member refid="d1/d55/a04496_1adcf030405dd307f368012ebfb0f6b3b8" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>isShadowProducer</name></member>
+      <member refid="d1/d55/a04496_1a16ddc7547eaa4d1cc715b926a27c9514" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>Light</name></member>
+      <member refid="d1/d55/a04496_1abce1e0be3cbf19bc63fe1a4f6a17c2b1" prot="protected" virt="non-virtual"><scope>castor3d::Light</scope><name>m_bufferIndex</name></member>
+      <member refid="d1/d55/a04496_1a9d1a105eedcbe0b3e8d86ed99e0ad140" prot="protected" virt="non-virtual"><scope>castor3d::Light</scope><name>m_category</name></member>
+      <member refid="d1/d55/a04496_1ab226c2e090fdd62efb8f3b715ba2c0d6" prot="protected" virt="non-virtual"><scope>castor3d::Light</scope><name>m_currentGlobalIllumination</name></member>
+      <member refid="d1/d55/a04496_1a921491a93a4b24f6e516ee1caab8d9a1" prot="protected" virt="non-virtual"><scope>castor3d::Light</scope><name>m_currentShadowCaster</name></member>
+      <member refid="d1/d55/a04496_1a6b4b6a833556cd396449fb62c00f0c6a" prot="protected" virt="non-virtual"><scope>castor3d::Light</scope><name>m_dirty</name></member>
+      <member refid="d1/d55/a04496_1a114ce2f1cb73ee23529bb28866876460" prot="protected" virt="non-virtual"><scope>castor3d::Light</scope><name>m_enabled</name></member>
+      <member refid="d9/dbb/a04524_1a8385c7c8fd9aee20a3c6de804cb09514" prot="protected" virt="non-virtual"><scope>castor3d::Light</scope><name>m_notifyIndex</name></member>
+      <member refid="d9/dbb/a04524_1aa058c86365c45c7d4b85a04ce56a9d22" prot="protected" virt="non-virtual"><scope>castor3d::Light</scope><name>m_sceneNode</name></member>
+      <member refid="d1/d55/a04496_1a0d5c25202c0ba81200cfb1da54e83842" prot="protected" virt="non-virtual"><scope>castor3d::Light</scope><name>m_shadowCaster</name></member>
+      <member refid="d1/d55/a04496_1a4a8ae153290cbe75ff082f85be5dd0f9" prot="protected" virt="non-virtual"><scope>castor3d::Light</scope><name>m_shadowMap</name></member>
+      <member refid="d1/d55/a04496_1a90abade79ded64d9b8b5b185f06dc234" prot="protected" virt="non-virtual"><scope>castor3d::Light</scope><name>m_shadowMapIndex</name></member>
+      <member refid="d1/d55/a04496_1a76793273677b06dfe52498b5e56677fb" prot="protected" virt="non-virtual"><scope>castor3d::Light</scope><name>m_shadows</name></member>
+      <member refid="d9/dbb/a04524_1ab9493ad12e9af9b47db11e76d372a156" prot="protected" virt="non-virtual"><scope>castor3d::Light</scope><name>m_strNodeName</name></member>
+      <member refid="d9/dbb/a04524_1acf6726e80bb3098468fe1fcd5a1f720e" prot="protected" virt="non-virtual"><scope>castor3d::Light</scope><name>m_type</name></member>
+      <member refid="d9/dbb/a04524_1a40b0fe7602fb945cb5b89de71a8cf4d8" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>MovableObject</name></member>
+      <member refid="d9/dbb/a04524_1acf7517058566afbb2290a7856fc9dfee" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>MovableObject</name></member>
+      <member refid="d1/d55/a04496_1a039a12c85a20cf0ad5030092befca555" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>needsRsmShadowMaps</name></member>
+      <member refid="d1/d55/a04496_1a6706a625d22310535338d7b422bc7892" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>onChanged</name></member>
+      <member refid="d1/d55/a04496_1a99a8fc1a214dc9faa2d5262206d1116e" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>onGPUChanged</name></member>
+      <member refid="d1/d55/a04496_1adec25f3475e3f4918092d91023a036e3" prot="protected" virt="non-virtual"><scope>castor3d::Light</scope><name>onNodeChanged</name></member>
+      <member refid="d1/d55/a04496_1a6c5ced23009dec35e5d6892aa39a4469" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>setBufferIndex</name></member>
+      <member refid="d1/d55/a04496_1a2094d253c211c895dfa6def5096ae4c5" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>setColour</name></member>
+      <member refid="d1/d55/a04496_1ab14b3527ea4d5ade57a9835758a0b727" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>setColour</name></member>
+      <member refid="d1/d55/a04496_1a71c276ea29470777831890c8d73fceb9" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>setColour</name></member>
+      <member refid="d1/d55/a04496_1a2feee97aa88f6d9300e14353551377f7" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>setColour</name></member>
+      <member refid="d1/d55/a04496_1a77dfd6ae4809d3f29896fcd71422b500" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>setDiffuseIntensity</name></member>
+      <member refid="d1/d55/a04496_1a21ce69b7de756188ae6981c4e61043d7" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>setEnabled</name></member>
+      <member refid="d1/d55/a04496_1ac251086294c1586f164bf32242e3fd8f" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>setGlobalIlluminationType</name></member>
+      <member refid="d1/d55/a04496_1aa64a4b899d2fa6844905b11f6d0bde5b" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>setIntensity</name></member>
+      <member refid="d1/d55/a04496_1a29a9bb78f8597478c2a255cda7816979" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>setIntensity</name></member>
+      <member refid="d1/d55/a04496_1ae6dbbb714908e77dcfd96df6bbf98519" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>setIntensity</name></member>
+      <member refid="d1/d55/a04496_1aa036e5714df4591be760247bd1327aef" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>setPcfMaxSlopeOffset</name></member>
+      <member refid="d1/d55/a04496_1a80cdda0de453402ca23bf06c33209962" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>setPcfMinOffset</name></member>
+      <member refid="d1/d55/a04496_1a829d5dfd0008b1db500fc857c17db39c" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>setRawMaxSlopeOffset</name></member>
+      <member refid="d1/d55/a04496_1ac75e21f7eb5001c3bee7648300a73758" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>setRawMinOffset</name></member>
+      <member refid="d1/d55/a04496_1a1d5a9518b3e2851917b57c6415ef3761" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>setShadowMap</name></member>
+      <member refid="d1/d55/a04496_1ac5e313e49589b7de9de6f142b61db2de" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>setShadowProducer</name></member>
+      <member refid="d1/d55/a04496_1a8db0fba4dc0c69f124e5f11e2fb3845b" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>setShadowType</name></member>
+      <member refid="d1/d55/a04496_1a205f8a28c549c4525f82c7e490a30037" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>setSpecularIntensity</name></member>
+      <member refid="d1/d55/a04496_1aa8b881e3208f3bb9bd46c2532299c4a2" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>setVolumetricScatteringFactor</name></member>
+      <member refid="d1/d55/a04496_1ae272e20fac3c3329c9bf6556aec5ade0" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>setVolumetricSteps</name></member>
+      <member refid="d1/d55/a04496_1a2c09f78deb46159b8831bdcdcc33f398" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>setVsmMaxVariance</name></member>
+      <member refid="d1/d55/a04496_1a749f038f31023d178d69484d7c7f10da" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>setVsmVarianceBias</name></member>
+      <member refid="d1/d55/a04496_1a1fa39cb56183e8eebc49f212edc2d8a2" prot="public" virt="non-virtual"><scope>castor3d::Light</scope><name>update</name></member>
+      <member refid="d9/dbb/a04524_1a05bd8e8940d26cb4361fccfa67733b03" prot="public" virt="virtual"><scope>castor3d::Light</scope><name>~MovableObject</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

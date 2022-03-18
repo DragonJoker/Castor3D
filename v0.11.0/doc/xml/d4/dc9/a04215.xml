@@ -1,0 +1,171 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d4/dc9/a04215" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SceneCuller::CulledInstancesArrayT</compoundname>
+    <includes local="no">SceneCuller.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename</type>
+        <declname>CulledT</declname>
+        <defname>CulledT</defname>
+      </param>
+      <param>
+        <type>typename</type>
+        <declname>ArrayT</declname>
+        <defname>ArrayT</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/dc9/a04215_1a3cd6e1a32cfa599d64147ae39c698d74" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; CulledT &gt;</type>
+        <definition>std::vector&lt; CulledT &gt; castor3d::SceneCuller::CulledInstancesArrayT&lt; CulledT, ArrayT &gt;::objects</definition>
+        <argsstring></argsstring>
+        <name>objects</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="49" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="49" bodyend="-1"/>
+        <referencedby refid="d4/dc9/a04215_1affc6db3cf2cb6dd2e0086f7357b7f468" compoundref="dc/d4d/a00620" startline="53" endline="57">castor3d::SceneCuller::CulledInstancesArrayT&lt; CulledT, ArrayT &gt;::clear</referencedby>
+        <referencedby refid="d4/dc9/a04215_1a598fe5cf72a41c65b3e21543e34d6260" compoundref="dc/d4d/a00620" startline="66" endline="77">castor3d::SceneCuller::CulledInstancesArrayT&lt; CulledT, ArrayT &gt;::copy</referencedby>
+        <referencedby refid="d4/dc9/a04215_1a00746d5b6f500c50adedb075d8c26473" compoundref="dc/d4d/a00620" startline="59" endline="64">castor3d::SceneCuller::CulledInstancesArrayT&lt; CulledT, ArrayT &gt;::push_back</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dc9/a04215_1ab789087a8c83c4f0caeb543739db5ec2" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; ArrayT &gt;</type>
+        <definition>std::vector&lt; ArrayT &gt; castor3d::SceneCuller::CulledInstancesArrayT&lt; CulledT, ArrayT &gt;::instances</definition>
+        <argsstring></argsstring>
+        <name>instances</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="50" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="50" bodyend="-1"/>
+        <referencedby refid="d4/dc9/a04215_1affc6db3cf2cb6dd2e0086f7357b7f468" compoundref="dc/d4d/a00620" startline="53" endline="57">castor3d::SceneCuller::CulledInstancesArrayT&lt; CulledT, ArrayT &gt;::clear</referencedby>
+        <referencedby refid="d4/dc9/a04215_1a598fe5cf72a41c65b3e21543e34d6260" compoundref="dc/d4d/a00620" startline="66" endline="77">castor3d::SceneCuller::CulledInstancesArrayT&lt; CulledT, ArrayT &gt;::copy</referencedby>
+        <referencedby refid="d4/dc9/a04215_1a00746d5b6f500c50adedb075d8c26473" compoundref="dc/d4d/a00620" startline="59" endline="64">castor3d::SceneCuller::CulledInstancesArrayT&lt; CulledT, ArrayT &gt;::push_back</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dc9/a04215_1a4406af5bc2d34cc43587ae9252b5930d" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::SceneCuller::CulledInstancesArrayT&lt; CulledT, ArrayT &gt;::count</definition>
+        <argsstring></argsstring>
+        <name>count</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="51" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/dc9/a04215_1affc6db3cf2cb6dd2e0086f7357b7f468" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneCuller::CulledInstancesArrayT&lt; CulledT, ArrayT &gt;::clear</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>clear</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="53" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="53" bodyend="57"/>
+        <references refid="d4/dc9/a04215_1ab789087a8c83c4f0caeb543739db5ec2" compoundref="dc/d4d/a00620" startline="50">castor3d::SceneCuller::CulledInstancesArrayT&lt; CulledT, ArrayT &gt;::instances</references>
+        <references refid="d4/dc9/a04215_1a3cd6e1a32cfa599d64147ae39c698d74" compoundref="dc/d4d/a00620" startline="49">castor3d::SceneCuller::CulledInstancesArrayT&lt; CulledT, ArrayT &gt;::objects</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/dc9/a04215_1a00746d5b6f500c50adedb075d8c26473" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneCuller::CulledInstancesArrayT&lt; CulledT, ArrayT &gt;::push_back</definition>
+        <argsstring>(CulledT object, ArrayT instance)</argsstring>
+        <name>push_back</name>
+        <param>
+          <type>CulledT</type>
+          <declname>object</declname>
+        </param>
+        <param>
+          <type>ArrayT</type>
+          <declname>instance</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="59" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="59" bodyend="64"/>
+        <references refid="d4/dc9/a04215_1ab789087a8c83c4f0caeb543739db5ec2" compoundref="dc/d4d/a00620" startline="50">castor3d::SceneCuller::CulledInstancesArrayT&lt; CulledT, ArrayT &gt;::instances</references>
+        <references refid="d4/dc9/a04215_1a3cd6e1a32cfa599d64147ae39c698d74" compoundref="dc/d4d/a00620" startline="49">castor3d::SceneCuller::CulledInstancesArrayT&lt; CulledT, ArrayT &gt;::objects</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/dc9/a04215_1a598fe5cf72a41c65b3e21543e34d6260" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneCuller::CulledInstancesArrayT&lt; CulledT, ArrayT &gt;::copy</definition>
+        <argsstring>(CulledInstancesArrayT&lt; CulledT *, ArrayT * &gt; &amp;dst)</argsstring>
+        <name>copy</name>
+        <param>
+          <type><ref refid="d4/dc9/a04215" kindref="compound">CulledInstancesArrayT</ref>&lt; CulledT *, ArrayT * &gt; &amp;</type>
+          <declname>dst</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="66" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="66" bodyend="77"/>
+        <references refid="d4/dc9/a04215_1ab789087a8c83c4f0caeb543739db5ec2" compoundref="dc/d4d/a00620" startline="50">castor3d::SceneCuller::CulledInstancesArrayT&lt; CulledT, ArrayT &gt;::instances</references>
+        <references refid="d4/dc9/a04215_1a3cd6e1a32cfa599d64147ae39c698d74" compoundref="dc/d4d/a00620" startline="49">castor3d::SceneCuller::CulledInstancesArrayT&lt; CulledT, ArrayT &gt;::objects</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="3307">
+        <label>T</label>
+      </node>
+      <node id="3306">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="3307" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="3304">
+        <label>castor3d::SceneCuller::CulledInstancesArrayT&lt; CulledT, ArrayT &gt;</label>
+        <link refid="d4/dc9/a04215"/>
+        <childnode refid="3305" relation="usage">
+          <edgelabel>instances</edgelabel>
+        </childnode>
+        <childnode refid="3308" relation="usage">
+          <edgelabel>objects</edgelabel>
+        </childnode>
+      </node>
+      <node id="3308">
+        <label>std::vector&lt; CulledT &gt;</label>
+        <childnode refid="3306" relation="template-instance">
+          <edgelabel>&lt; CulledT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3305">
+        <label>std::vector&lt; ArrayT &gt;</label>
+        <childnode refid="3306" relation="template-instance">
+          <edgelabel>&lt; ArrayT &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Culling/SceneCuller.hpp" line="48" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="47" bodyend="78"/>
+    <listofallmembers>
+      <member refid="d4/dc9/a04215_1affc6db3cf2cb6dd2e0086f7357b7f468" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller::CulledInstancesArrayT</scope><name>clear</name></member>
+      <member refid="d4/dc9/a04215_1a598fe5cf72a41c65b3e21543e34d6260" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller::CulledInstancesArrayT</scope><name>copy</name></member>
+      <member refid="d4/dc9/a04215_1a4406af5bc2d34cc43587ae9252b5930d" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller::CulledInstancesArrayT</scope><name>count</name></member>
+      <member refid="d4/dc9/a04215_1ab789087a8c83c4f0caeb543739db5ec2" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller::CulledInstancesArrayT</scope><name>instances</name></member>
+      <member refid="d4/dc9/a04215_1a3cd6e1a32cfa599d64147ae39c698d74" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller::CulledInstancesArrayT</scope><name>objects</name></member>
+      <member refid="d4/dc9/a04215_1a00746d5b6f500c50adedb075d8c26473" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller::CulledInstancesArrayT</scope><name>push_back</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

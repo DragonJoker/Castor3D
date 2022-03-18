@@ -1,72 +1,85 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d2/db0/a03827" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::Version</compoundname>
-    <includes local="no">Version.hpp</includes>
+    <compoundname>castor3d::DownscalePass</compoundname>
+    <includes local="no">DownscalePass.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d2/db0/a03827_1a36dca3204fc13ce0fc57a8cd9b62eb63" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/de3/a01398_1a6d52e18d7b3bd01ecab19a6f87d7a6ad" kindref="member">TextureArray</ref> const &amp;</type>
+        <definition>TextureArray const  &amp; castor3d::DownscalePass::getResult</definition>
+        <argsstring>() const</argsstring>
+        <name>getResult</name>
+        <qualifiedname>castor3d::DownscalePass::getResult</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/DownscalePass.hpp" line="60" column="28" bodyfile="Render/Passes/DownscalePass.hpp" bodystart="60" bodyend="63"/>
+      </memberdef>
+      </sectiondef>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d2/db0/a03827_1a87d4ee3514bd6f8cad7fc9765c5d7ecc" prot="private" static="no" mutable="no">
-        <type>int</type>
-        <definition>int castor3d::Version::m_major</definition>
+      <memberdef kind="variable" id="d2/db0/a03827_1ac17d1903b4ff7866915eacc40c990a81" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::DownscalePass::m_device</definition>
         <argsstring></argsstring>
-        <name>m_major</name>
+        <name>m_device</name>
+        <qualifiedname>castor3d::DownscalePass::m_device</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>~english The major version number. ~french Le numéro majeur. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/Version.hpp" line="88" column="1" bodyfile="Miscellaneous/Version.hpp" bodystart="88" bodyend="-1"/>
+        <location file="Render/Passes/DownscalePass.hpp" line="67" column="21" bodyfile="Render/Passes/DownscalePass.hpp" bodystart="67" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d2/db0/a03827_1aa0704050c51386c301739bfbb5e29e91" prot="private" static="no" mutable="no">
-        <type>int</type>
-        <definition>int castor3d::Version::m_minor</definition>
+      <memberdef kind="variable" id="d2/db0/a03827_1abc0e9533e4c944f40a211aca69420785" prot="private" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1a6d52e18d7b3bd01ecab19a6f87d7a6ad" kindref="member">TextureArray</ref></type>
+        <definition>TextureArray castor3d::DownscalePass::m_result</definition>
         <argsstring></argsstring>
-        <name>m_minor</name>
+        <name>m_result</name>
+        <qualifiedname>castor3d::DownscalePass::m_result</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>~english The minor version number. ~french Le numéro mineur. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/Version.hpp" line="91" column="1" bodyfile="Miscellaneous/Version.hpp" bodystart="91" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/db0/a03827_1ad2a3010a79abedced9053b7a5e4c52f0" prot="private" static="no" mutable="no">
-        <type>int</type>
-        <definition>int castor3d::Version::m_build</definition>
-        <argsstring></argsstring>
-        <name>m_build</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>~english The build version number. ~french Le numéro de build. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Version.hpp" line="94" column="1" bodyfile="Miscellaneous/Version.hpp" bodystart="94" bodyend="-1"/>
+        <location file="Render/Passes/DownscalePass.hpp" line="68" column="14" bodyfile="Render/Passes/DownscalePass.hpp" bodystart="68" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d2/db0/a03827_1a12e99b1f68fc63b7bdeee89380993023" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d2/db0/a03827_1ac8172b503ed307bccda91c33ac6ea3fc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::Version::Version</definition>
-        <argsstring>(int major=C3D_VersionMajor, int minor=C3D_VersionMinor, int build=C3D_VersionBuild)</argsstring>
-        <name>Version</name>
+        <definition>C3D_API castor3d::DownscalePass::DownscalePass</definition>
+        <argsstring>(crg::FrameGraph &amp;graph, crg::FramePass const *&amp;previousPass, RenderDevice const &amp;device, castor::String const &amp;category, TextureArray const &amp;srcViews, VkExtent2D const &amp;dstSize)</argsstring>
+        <name>DownscalePass</name>
+        <qualifiedname>castor3d::DownscalePass::DownscalePass</qualifiedname>
         <param>
-          <type>int</type>
-          <declname>major</declname>
-          <defval>C3D_VersionMajor</defval>
+          <type>crg::FrameGraph &amp;</type>
+          <declname>graph</declname>
         </param>
         <param>
-          <type>int</type>
-          <declname>minor</declname>
-          <defval>C3D_VersionMinor</defval>
+          <type>crg::FramePass const *&amp;</type>
+          <declname>previousPass</declname>
         </param>
         <param>
-          <type>int</type>
-          <declname>build</declname>
-          <defval>C3D_VersionBuild</defval>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>category</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a6d52e18d7b3bd01ecab19a6f87d7a6ad" kindref="member">TextureArray</ref> const &amp;</type>
+          <declname>srcViews</declname>
+        </param>
+        <param>
+          <type>VkExtent2D const &amp;</type>
+          <declname>dstSize</declname>
         </param>
         <briefdescription>
 <para>Constructor. </para>
@@ -74,26 +87,50 @@
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">major</parametername>
+<parametername direction="in">graph</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The major version number. </para>
+<para>The parent graph. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">minor</parametername>
+<parametername direction="in">previousPass</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The minor version number. </para>
+<para>The previous frame pass. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">build</parametername>
+<parametername direction="in">device</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The build version number. </para>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">category</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The debug category name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">srcViews</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The source views (must be of same dimensions). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dstSize</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The wanted size. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -101,27 +138,28 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/Version.hpp" line="28" column="1"/>
+        <location file="Render/Passes/DownscalePass.hpp" line="41" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d2/db0/a03827_1a9a5e5294f62efaea8448db2eb6a06f64" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::Version::Version</definition>
-        <argsstring>(uint32_t vk)</argsstring>
-        <name>Version</name>
+      <memberdef kind="function" id="d2/db0/a03827_1a7218aedd5fb8a86f28111772a9ce3821" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::DownscalePass::accept</definition>
+        <argsstring>(PipelineVisitorBase &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::DownscalePass::accept</qualifiedname>
         <param>
-          <type>uint32_t</type>
-          <declname>vk</declname>
+          <type><ref refid="d6/d38/a03259" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
+<para>Visitor acceptance function. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">vk</parametername>
+<parametername>visitor</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The Vulkan compatible version number. </para>
+<para>The ... visitor. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -129,103 +167,20 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/Version.hpp" line="39" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/db0/a03827_1aaac054e2046a36037ce5f972f663b847" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::Version::~Version</definition>
-        <argsstring>()</argsstring>
-        <name>~Version</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Version.hpp" line="46" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/db0/a03827_1ae38ac0881396627899488116b61a029d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::Version::getVkVersion</definition>
-        <argsstring>() const</argsstring>
-        <name>getVkVersion</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The Vulkan compatible version number. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Version.hpp" line="53" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/db0/a03827_1a0927ba807ba2f1fef1b45a7b50c881ce" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint16_t</type>
-        <definition>uint16_t castor3d::Version::getMajor</definition>
-        <argsstring>() const</argsstring>
-        <name>getMajor</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The major version number. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Version.hpp" line="60" column="1" bodyfile="Miscellaneous/Version.hpp" bodystart="60" bodyend="63"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/db0/a03827_1a9d69f856bedecb98d55b05a95e9a25ef" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint16_t</type>
-        <definition>uint16_t castor3d::Version::getMinor</definition>
-        <argsstring>() const</argsstring>
-        <name>getMinor</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The major version number. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Version.hpp" line="70" column="1" bodyfile="Miscellaneous/Version.hpp" bodystart="70" bodyend="73"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/db0/a03827_1a7fe16a963347745bcb14e7c4a7519b38" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint16_t</type>
-        <definition>uint16_t castor3d::Version::getBuild</definition>
-        <argsstring>() const</argsstring>
-        <name>getBuild</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The build version number. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Version.hpp" line="80" column="1" bodyfile="Miscellaneous/Version.hpp" bodystart="80" bodyend="83"/>
+        <location file="Render/Passes/DownscalePass.hpp" line="50" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/Version.hpp" line="14" column="1" bodyfile="Miscellaneous/Version.hpp" bodystart="13" bodyend="95"/>
+    <location file="Render/Passes/DownscalePass.hpp" line="20" column="1" bodyfile="Render/Passes/DownscalePass.hpp" bodystart="21" bodyend="69"/>
     <listofallmembers>
-      <member refid="d2/db0/a03827_1a7fe16a963347745bcb14e7c4a7519b38" prot="public" virt="non-virtual"><scope>castor3d::Version</scope><name>getBuild</name></member>
-      <member refid="d2/db0/a03827_1a0927ba807ba2f1fef1b45a7b50c881ce" prot="public" virt="non-virtual"><scope>castor3d::Version</scope><name>getMajor</name></member>
-      <member refid="d2/db0/a03827_1a9d69f856bedecb98d55b05a95e9a25ef" prot="public" virt="non-virtual"><scope>castor3d::Version</scope><name>getMinor</name></member>
-      <member refid="d2/db0/a03827_1ae38ac0881396627899488116b61a029d" prot="public" virt="non-virtual"><scope>castor3d::Version</scope><name>getVkVersion</name></member>
-      <member refid="d2/db0/a03827_1ad2a3010a79abedced9053b7a5e4c52f0" prot="private" virt="non-virtual"><scope>castor3d::Version</scope><name>m_build</name></member>
-      <member refid="d2/db0/a03827_1a87d4ee3514bd6f8cad7fc9765c5d7ecc" prot="private" virt="non-virtual"><scope>castor3d::Version</scope><name>m_major</name></member>
-      <member refid="d2/db0/a03827_1aa0704050c51386c301739bfbb5e29e91" prot="private" virt="non-virtual"><scope>castor3d::Version</scope><name>m_minor</name></member>
-      <member refid="d2/db0/a03827_1a12e99b1f68fc63b7bdeee89380993023" prot="public" virt="non-virtual"><scope>castor3d::Version</scope><name>Version</name></member>
-      <member refid="d2/db0/a03827_1a9a5e5294f62efaea8448db2eb6a06f64" prot="public" virt="non-virtual"><scope>castor3d::Version</scope><name>Version</name></member>
-      <member refid="d2/db0/a03827_1aaac054e2046a36037ce5f972f663b847" prot="public" virt="non-virtual"><scope>castor3d::Version</scope><name>~Version</name></member>
+      <member refid="d2/db0/a03827_1a7218aedd5fb8a86f28111772a9ce3821" prot="public" virt="non-virtual"><scope>castor3d::DownscalePass</scope><name>accept</name></member>
+      <member refid="d2/db0/a03827_1ac8172b503ed307bccda91c33ac6ea3fc" prot="public" virt="non-virtual"><scope>castor3d::DownscalePass</scope><name>DownscalePass</name></member>
+      <member refid="d2/db0/a03827_1a36dca3204fc13ce0fc57a8cd9b62eb63" prot="public" virt="non-virtual"><scope>castor3d::DownscalePass</scope><name>getResult</name></member>
+      <member refid="d2/db0/a03827_1ac17d1903b4ff7866915eacc40c990a81" prot="private" virt="non-virtual"><scope>castor3d::DownscalePass</scope><name>m_device</name></member>
+      <member refid="d2/db0/a03827_1abc0e9533e4c944f40a211aca69420785" prot="private" virt="non-virtual"><scope>castor3d::DownscalePass</scope><name>m_result</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

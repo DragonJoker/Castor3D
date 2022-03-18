@@ -1,94 +1,85 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d1/dd4/a04958" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::EquirectangularToCube</compoundname>
-    <basecompoundref refid="d6/d5a/a04966" prot="private" virt="non-virtual">castor3d::RenderCube</basecompoundref>
-    <includes local="no">EquirectangularToCube.hpp</includes>
-    <innerclass refid="df/d92/a04962" prot="private">castor3d::EquirectangularToCube::FrameBuffer</innerclass>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d1/dd4/a04958_1a4bf0311628e058cc502b380fbbc1655f" prot="private" static="no" mutable="no">
-        <type>std::array&lt; FrameBuffer, 6u &gt;</type>
-        <definition>std::array&lt; FrameBuffer, 6u &gt; castor3d::EquirectangularToCube::m_frameBuffers</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d1/dd4/a04958" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::RsmConfigData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">RsmConfigUbo.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/dd4/a04958_1adaae6164149ff01a442a2975a621e0c2" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::RsmConfigData::rsmIntensity</definition>
         <argsstring></argsstring>
-        <name>m_frameBuffers</name>
+        <name>rsmIntensity</name>
+        <qualifiedname>castor3d::shader::RsmConfigData::rsmIntensity</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/EquirectangularToCube.hpp" line="31" column="1" bodyfile="Render/ToTexture/EquirectangularToCube.hpp" bodystart="31" bodyend="-1"/>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="33" column="12" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="33" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/dd4/a04958_1ae9cd9a4fb5116e3ac2781cbc89932666" prot="private" static="no" mutable="no">
-        <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const  &amp;</type>
-        <definition>RenderDevice const&amp; castor3d::EquirectangularToCube::m_device</definition>
+      <memberdef kind="variable" id="d1/dd4/a04958_1a5378e4b40341dc589d50594305cac747" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::RsmConfigData::rsmRMax</definition>
         <argsstring></argsstring>
-        <name>m_device</name>
+        <name>rsmRMax</name>
+        <qualifiedname>castor3d::shader::RsmConfigData::rsmRMax</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/EquirectangularToCube.hpp" line="32" column="1" bodyfile="Render/ToTexture/EquirectangularToCube.hpp" bodystart="32" bodyend="-1"/>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="34" column="12" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="34" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/dd4/a04958_1a38157871c0f4e721522f882af12716f9" prot="private" static="no" mutable="no">
-        <type>ashes::CommandBufferPtr</type>
-        <definition>ashes::CommandBufferPtr castor3d::EquirectangularToCube::m_commandBuffer</definition>
+      <memberdef kind="variable" id="d1/dd4/a04958_1a2ef0b869eed5dc41b1e63202220b500f" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::RsmConfigData::rsmSampleCount</definition>
         <argsstring></argsstring>
-        <name>m_commandBuffer</name>
+        <name>rsmSampleCount</name>
+        <qualifiedname>castor3d::shader::RsmConfigData::rsmSampleCount</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/EquirectangularToCube.hpp" line="33" column="1" bodyfile="Render/ToTexture/EquirectangularToCube.hpp" bodystart="33" bodyend="-1"/>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="35" column="11" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="35" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/dd4/a04958_1a846628d422e5669c05fc6ace76c4fe82" prot="private" static="no" mutable="no">
-        <type>ashes::ImageView const  &amp;</type>
-        <definition>ashes::ImageView const&amp; castor3d::EquirectangularToCube::m_view</definition>
+      <memberdef kind="variable" id="d1/dd4/a04958_1ae7e61311101f1bffe630d6c8ec2d579b" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::RsmConfigData::rsmIndex</definition>
         <argsstring></argsstring>
-        <name>m_view</name>
+        <name>rsmIndex</name>
+        <qualifiedname>castor3d::shader::RsmConfigData::rsmIndex</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/EquirectangularToCube.hpp" line="34" column="1" bodyfile="Render/ToTexture/EquirectangularToCube.hpp" bodystart="34" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/dd4/a04958_1a8234017deeff5ab377fc07907362887e" prot="private" static="no" mutable="no">
-        <type>ashes::RenderPassPtr</type>
-        <definition>ashes::RenderPassPtr castor3d::EquirectangularToCube::m_renderPass</definition>
-        <argsstring></argsstring>
-        <name>m_renderPass</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ToTexture/EquirectangularToCube.hpp" line="35" column="1" bodyfile="Render/ToTexture/EquirectangularToCube.hpp" bodystart="35" bodyend="-1"/>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="36" column="11" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="36" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d1/dd4/a04958_1a08bb82ddda0e8dd0e0a81216032bee12" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::EquirectangularToCube::EquirectangularToCube</definition>
-        <argsstring>(TextureLayout const &amp;equiRectangular, RenderDevice const &amp;device, TextureLayout const &amp;target)</argsstring>
-        <name>EquirectangularToCube</name>
+      <memberdef kind="function" id="d1/dd4/a04958_1a1533166fce74bd74f4e0f6597e0a0e75" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::RsmConfigData::RsmConfigData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>RsmConfigData</name>
+        <qualifiedname>castor3d::shader::RsmConfigData::RsmConfigData</qualifiedname>
         <param>
-          <type><ref refid="d5/d9a/a02650" kindref="compound">TextureLayout</ref> const &amp;</type>
-          <declname>equiRectangular</declname>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
         </param>
         <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
         </param>
         <param>
-          <type><ref refid="d5/d9a/a02650" kindref="compound">TextureLayout</ref> const &amp;</type>
-          <declname>target</declname>
+          <type>bool</type>
+          <declname>enabled</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -96,20 +87,65 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/EquirectangularToCube.hpp" line="20" column="1"/>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="25" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d1/dd4/a04958_1ab3e1f7fe0996aa18a5a6ea89d41d95df" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::EquirectangularToCube::render</definition>
-        <argsstring>()</argsstring>
-        <name>render</name>
+      <memberdef kind="function" id="d1/dd4/a04958_1ad276d9c141bf10db90f3d0a21fc4b95e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::RsmConfigData::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, RsmConfigData)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::RsmConfigData::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        </param>
+        <param>
+          <type><ref refid="d1/dd4/a04958" kindref="compound">RsmConfigData</ref></type>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/EquirectangularToCube.hpp" line="23" column="1"/>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="28" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d1/dd4/a04958_1a5e9fd629c9074786dcde7a70a25a0595" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
+        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::RsmConfigData::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::RsmConfigData::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="30" column="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dd4/a04958_1a61a731d489fda36272a89a42c5cd0d05" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::RsmConfigData::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::RsmConfigData::declare</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="31" column="32"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -117,100 +153,37 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="1103">
-        <label>castor3d::RenderCube</label>
-        <link refid="d6/d5a/a04966"/>
-      </node>
-      <node id="1102">
-        <label>castor3d::EquirectangularToCube</label>
+      <node id="1">
+        <label>castor3d::shader::RsmConfigData</label>
         <link refid="d1/dd4/a04958"/>
-        <childnode refid="1103" relation="private-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="1110">
-        <label>castor3d::RenderSystem</label>
-        <link refid="d1/d9a/a04618"/>
-        <childnode refid="1111" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1109">
-        <label>T</label>
-      </node>
-      <node id="1105">
-        <label>castor3d::RenderCube</label>
-        <link refid="d6/d5a/a04966"/>
-        <childnode refid="1106" relation="usage">
-          <edgelabel>m_device</edgelabel>
-        </childnode>
-      </node>
-      <node id="1113">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="1109" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="1108">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="1109" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="1112">
-        <label>std::vector&lt; ashes::CommandPoolPtr &gt;</label>
-        <childnode refid="1113" relation="template-instance">
-          <edgelabel>&lt; ashes::CommandPoolPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1107">
-        <label>std::array&lt; uint32_t, 4u &gt;</label>
-        <childnode refid="1108" relation="template-instance">
-          <edgelabel>&lt; uint32_t, 4u &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1111">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="1104">
-        <label>castor3d::EquirectangularToCube</label>
+      <node id="1">
+        <label>castor3d::shader::RsmConfigData</label>
         <link refid="d1/dd4/a04958"/>
-        <childnode refid="1105" relation="private-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="1106">
-        <label>castor3d::RenderDevice</label>
-        <link refid="d8/d4c/a04506"/>
-        <childnode refid="1107" relation="usage">
-          <edgelabel>queueFamiliesIndex</edgelabel>
-        </childnode>
-        <childnode refid="1110" relation="usage">
-          <edgelabel>renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="1112" relation="usage">
-          <edgelabel>commandPools</edgelabel>
-        </childnode>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </collaborationgraph>
-    <location file="Render/ToTexture/EquirectangularToCube.hpp" line="18" column="1" bodyfile="Render/ToTexture/EquirectangularToCube.hpp" bodystart="16" bodyend="36"/>
+    <location file="Shader/Ubos/RsmConfigUbo.hpp" line="22" column="1" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="24" bodyend="41"/>
     <listofallmembers>
-      <member refid="d6/d5a/a04966_1a3f0330fd2cd0b556433e50c505c2cfd0" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>cleanup</name></member>
-      <member refid="d6/d5a/a04966_1ae58f4e4abbd017b821ad1ce07bd1898c" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>createPipelines</name></member>
-      <member refid="d6/d5a/a04966_1a03e099cd27fb31640352a9925effa710" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>createPipelines</name></member>
-      <member refid="d1/dd4/a04958_1a08bb82ddda0e8dd0e0a81216032bee12" prot="public" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>EquirectangularToCube</name></member>
-      <member refid="d6/d5a/a04966_1aee72d95a1c9e3b4e7bf221867f1a80d5" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>getCommandBuffer</name></member>
-      <member refid="d1/dd4/a04958_1a38157871c0f4e721522f882af12716f9" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>m_commandBuffer</name></member>
-      <member refid="d1/dd4/a04958_1ae9cd9a4fb5116e3ac2781cbc89932666" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>m_device</name></member>
-      <member refid="d1/dd4/a04958_1a4bf0311628e058cc502b380fbbc1655f" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>m_frameBuffers</name></member>
-      <member refid="d6/d5a/a04966_1a84414b79673d6fe5e891f6078bc8b782" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>m_pipelineLayout</name></member>
-      <member refid="d1/dd4/a04958_1a8234017deeff5ab377fc07907362887e" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>m_renderPass</name></member>
-      <member refid="d6/d5a/a04966_1a09a2fc9d7fe9809ad64836ab33c3f2a8" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>m_sampler</name></member>
-      <member refid="d1/dd4/a04958_1a846628d422e5669c05fc6ace76c4fe82" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>m_view</name></member>
-      <member refid="d6/d5a/a04966_1a83fae0b06a6d865e7b3a9a12bf6ee6ff" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>prepareFrame</name></member>
-      <member refid="d6/d5a/a04966_1a4b8c2a6e867159e5545c6ae52e6ed246" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>registerFrame</name></member>
-      <member refid="d1/dd4/a04958_1ab3e1f7fe0996aa18a5a6ea89d41d95df" prot="public" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>render</name></member>
-      <member refid="d6/d5a/a04966_1ac600349f4887fe9d7765ecc3224b2992" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>RenderCube</name></member>
-      <member refid="d6/d5a/a04966_1a442e2372083596ae51f50d6aa8709e60" prot="private" virt="virtual"><scope>castor3d::EquirectangularToCube</scope><name>~RenderCube</name></member>
+      <member refid="d1/dd4/a04958_1a61a731d489fda36272a89a42c5cd0d05" prot="public" virt="non-virtual"><scope>castor3d::shader::RsmConfigData</scope><name>declare</name></member>
+      <member refid="d1/dd4/a04958_1a5e9fd629c9074786dcde7a70a25a0595" prot="public" virt="non-virtual"><scope>castor3d::shader::RsmConfigData</scope><name>makeType</name></member>
+      <member refid="d1/dd4/a04958_1a1533166fce74bd74f4e0f6597e0a0e75" prot="public" virt="non-virtual"><scope>castor3d::shader::RsmConfigData</scope><name>RsmConfigData</name></member>
+      <member refid="d1/dd4/a04958_1ae7e61311101f1bffe630d6c8ec2d579b" prot="public" virt="non-virtual"><scope>castor3d::shader::RsmConfigData</scope><name>rsmIndex</name></member>
+      <member refid="d1/dd4/a04958_1adaae6164149ff01a442a2975a621e0c2" prot="public" virt="non-virtual"><scope>castor3d::shader::RsmConfigData</scope><name>rsmIntensity</name></member>
+      <member refid="d1/dd4/a04958_1a5378e4b40341dc589d50594305cac747" prot="public" virt="non-virtual"><scope>castor3d::shader::RsmConfigData</scope><name>rsmRMax</name></member>
+      <member refid="d1/dd4/a04958_1a2ef0b869eed5dc41b1e63202220b500f" prot="public" virt="non-virtual"><scope>castor3d::shader::RsmConfigData</scope><name>rsmSampleCount</name></member>
+      <member refid="d1/dd4/a04958_1ad276d9c141bf10db90f3d0a21fc4b95e" prot="public" virt="non-virtual"><scope>castor3d::shader::RsmConfigData</scope><name>SDW_DeclStructInstance</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

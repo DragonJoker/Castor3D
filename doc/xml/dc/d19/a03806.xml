@@ -1,33 +1,45 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dc/d19/a03806" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPhysicalDeviceCooperativeMatrixFeaturesNV &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="dc/d19/a03806_1a233ea868f5aff25ac706751f13db0bc5" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPhysicalDeviceCooperativeMatrixFeaturesNV &gt;::value</definition>
-        <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_COOPERATIVE_MATRIX_FEATURES_NV</initializer>
+    <compoundname>castor3d::BackgroundPass::Cube::Quad</compoundname>
+    <includes local="no">BackgroundPass.hpp</includes>
+    <innerclass refid="d2/d29/a03810" prot="public">castor3d::BackgroundPass::Cube::Quad::Vertex</innerclass>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/d19/a03806_1a3cab46c23d47801de9dc0267123d487b" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d29/a03810" kindref="compound">Vertex</ref></type>
+        <definition>Vertex castor3d::BackgroundPass::Cube::Quad::vertex[4]</definition>
+        <argsstring>[4]</argsstring>
+        <name>vertex</name>
+        <qualifiedname>castor3d::BackgroundPass::Cube::Quad::vertex</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="364" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="364" bodyend="-1"/>
+        <location file="Render/Passes/BackgroundPass.hpp" line="94" column="8" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="94" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="364" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="364" bodyend="364"/>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::BackgroundPass::Cube::Quad</label>
+        <link refid="dc/d19/a03806"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>vertex</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::BackgroundPass::Cube::Quad::Vertex</label>
+        <link refid="d2/d29/a03810"/>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Passes/BackgroundPass.hpp" line="87" column="1" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="88" bodyend="95"/>
     <listofallmembers>
-      <member refid="dc/d19/a03806_1a233ea868f5aff25ac706751f13db0bc5" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPhysicalDeviceCooperativeMatrixFeaturesNV &gt;</scope><name>value</name></member>
+      <member refid="dc/d19/a03806_1a3cab46c23d47801de9dc0267123d487b" prot="public" virt="non-virtual"><scope>castor3d::BackgroundPass::Cube::Quad</scope><name>vertex</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

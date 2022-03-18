@@ -1,81 +1,228 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d4/dbc/a04994" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::TextureProjectionToCube</compoundname>
-    <basecompoundref refid="d6/d5a/a04966" prot="private" virt="non-virtual">castor3d::RenderCube</basecompoundref>
-    <includes local="no">TextureProjectionToCube.hpp</includes>
-    <innerclass refid="d3/d2d/a04998" prot="private">castor3d::TextureProjectionToCube::FrameBuffer</innerclass>
+    <compoundname>castor3d::SsaoConfigUbo</compoundname>
+    <includes local="no">SsaoConfigUbo.hpp</includes>
+    <innerclass refid="d3/d2d/a04998" prot="private">castor3d::SsaoConfigUbo::Configuration</innerclass>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d4/dbc/a04994_1ac1e010f129e6693cfbe0af16f5495fc9" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::BufferSsaoConfig</definition>
+        <argsstring></argsstring>
+        <name>BufferSsaoConfig</name>
+        <qualifiedname>castor3d::SsaoConfigUbo::BufferSsaoConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="170" column="37" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="170" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dbc/a04994_1afd0d9c0fbae7cb81b6d009c50c3e48f3" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::SsaoConfigData</definition>
+        <argsstring></argsstring>
+        <name>SsaoConfigData</name>
+        <qualifiedname>castor3d::SsaoConfigUbo::SsaoConfigData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="171" column="37" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="171" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d4/dbc/a04994_1aa86aab7a4127f981a92eea6cf4a5b5cb" prot="private" static="no" mutable="no">
-        <type>std::array&lt; FrameBuffer, 6u &gt;</type>
-        <definition>std::array&lt; FrameBuffer, 6u &gt; castor3d::TextureProjectionToCube::m_frameBuffers</definition>
+      <memberdef kind="variable" id="d4/dbc/a04994_1aef4f99386820fe5de3a286b86f688eed" prot="private" static="no" mutable="no">
+        <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::SsaoConfigUbo::m_device</definition>
         <argsstring></argsstring>
-        <name>m_frameBuffers</name>
+        <name>m_device</name>
+        <qualifiedname>castor3d::SsaoConfigUbo::m_device</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/TextureProjectionToCube.hpp" line="31" column="1" bodyfile="Render/ToTexture/TextureProjectionToCube.hpp" bodystart="31" bodyend="-1"/>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="174" column="21" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="174" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d4/dbc/a04994_1ab98cc802bdfad488ff57067d9226fa1e" prot="private" static="no" mutable="no">
-        <type>ashes::CommandBufferPtr</type>
-        <definition>ashes::CommandBufferPtr castor3d::TextureProjectionToCube::m_commandBuffer</definition>
+      <memberdef kind="variable" id="d4/dbc/a04994_1ae28673ce2e4af49756caf9bc20a5f1ba" prot="private" static="no" mutable="no">
+        <type><ref refid="df/d9b/a02514" kindref="compound">UniformBufferOffsetT</ref>&lt; Configuration &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::SsaoConfigUbo::m_ubo</definition>
         <argsstring></argsstring>
-        <name>m_commandBuffer</name>
+        <name>m_ubo</name>
+        <qualifiedname>castor3d::SsaoConfigUbo::m_ubo</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/TextureProjectionToCube.hpp" line="32" column="1" bodyfile="Render/ToTexture/TextureProjectionToCube.hpp" bodystart="32" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/dbc/a04994_1a91067f81384fc4d1818b7adf887d1ecd" prot="private" static="no" mutable="no">
-        <type>ashes::ImageView const  &amp;</type>
-        <definition>ashes::ImageView const&amp; castor3d::TextureProjectionToCube::m_view</definition>
-        <argsstring></argsstring>
-        <name>m_view</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ToTexture/TextureProjectionToCube.hpp" line="33" column="1" bodyfile="Render/ToTexture/TextureProjectionToCube.hpp" bodystart="33" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/dbc/a04994_1af09584f0c79326531ec28765843c15c2" prot="private" static="no" mutable="no">
-        <type>ashes::RenderPassPtr</type>
-        <definition>ashes::RenderPassPtr castor3d::TextureProjectionToCube::m_renderPass</definition>
-        <argsstring></argsstring>
-        <name>m_renderPass</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ToTexture/TextureProjectionToCube.hpp" line="34" column="1" bodyfile="Render/ToTexture/TextureProjectionToCube.hpp" bodystart="34" bodyend="-1"/>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="175" column="22" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="175" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d4/dbc/a04994_1ae87ba6b642bc8b7d6457abbd57f66310" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::TextureProjectionToCube::TextureProjectionToCube</definition>
-        <argsstring>(TextureLayout const &amp;equiRectangular, RenderDevice const &amp;device, TextureLayout const &amp;target)</argsstring>
-        <name>TextureProjectionToCube</name>
+      <memberdef kind="function" id="d4/dbc/a04994_1adcd379f2b2fb909a669243a80a4fd72d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SsaoConfigUbo::SsaoConfigUbo</definition>
+        <argsstring>(SsaoConfigUbo const &amp;rhs)=delete</argsstring>
+        <name>SsaoConfigUbo</name>
+        <qualifiedname>castor3d::SsaoConfigUbo::SsaoConfigUbo</qualifiedname>
         <param>
-          <type><ref refid="d5/d9a/a02650" kindref="compound">TextureLayout</ref> const &amp;</type>
-          <declname>equiRectangular</declname>
+          <type><ref refid="d4/dbc/a04994" kindref="compound">SsaoConfigUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
         </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="133" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dbc/a04994_1af868971741b6cde298013eeb02fda75e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/dbc/a04994" kindref="compound">SsaoConfigUbo</ref> &amp;</type>
+        <definition>C3D_API SsaoConfigUbo &amp; castor3d::SsaoConfigUbo::operator=</definition>
+        <argsstring>(SsaoConfigUbo const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::SsaoConfigUbo::operator=</qualifiedname>
         <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <type><ref refid="d4/dbc/a04994" kindref="compound">SsaoConfigUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="134" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dbc/a04994_1a78fd7f6f95b18c0c160899140f110423" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SsaoConfigUbo::SsaoConfigUbo</definition>
+        <argsstring>(SsaoConfigUbo &amp;&amp;rhs)=default</argsstring>
+        <name>SsaoConfigUbo</name>
+        <qualifiedname>castor3d::SsaoConfigUbo::SsaoConfigUbo</qualifiedname>
+        <param>
+          <type><ref refid="d4/dbc/a04994" kindref="compound">SsaoConfigUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="135" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dbc/a04994_1aaf1cfe78f37218a6cd8d55472c3ac792" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/dbc/a04994" kindref="compound">SsaoConfigUbo</ref> &amp;</type>
+        <definition>C3D_API SsaoConfigUbo &amp; castor3d::SsaoConfigUbo::operator=</definition>
+        <argsstring>(SsaoConfigUbo &amp;&amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::SsaoConfigUbo::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d4/dbc/a04994" kindref="compound">SsaoConfigUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="136" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dbc/a04994_1a8c169fbddbc22fff49606ea2a013fea2" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SsaoConfigUbo::SsaoConfigUbo</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>SsaoConfigUbo</name>
+        <qualifiedname>castor3d::SsaoConfigUbo::SsaoConfigUbo</qualifiedname>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
           <declname>device</declname>
         </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="137" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dbc/a04994_1ac128098248b2efcfcdb9740e0e31de01" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SsaoConfigUbo::~SsaoConfigUbo</definition>
+        <argsstring>()</argsstring>
+        <name>~SsaoConfigUbo</name>
+        <qualifiedname>castor3d::SsaoConfigUbo::~SsaoConfigUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="138" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dbc/a04994_1ae29e0218fad72725f30c5f66caa6600a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SsaoConfigUbo::cpuUpdate</definition>
+        <argsstring>(SsaoConfig const &amp;config, Camera const &amp;camera)</argsstring>
+        <name>cpuUpdate</name>
+        <qualifiedname>castor3d::SsaoConfigUbo::cpuUpdate</qualifiedname>
         <param>
-          <type><ref refid="d5/d9a/a02650" kindref="compound">TextureLayout</ref> const &amp;</type>
-          <declname>target</declname>
+          <type><ref refid="da/dea/a04170" kindref="compound">SsaoConfig</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d2e/a04482" kindref="compound">Camera</ref> const &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <briefdescription>
+<para>Updates the UBO content. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The SSAO configuration. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">camera</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The viewing camera. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="149" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dbc/a04994_1a04509506d8bf2e8b64bdc59b0006596f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SsaoConfigUbo::createPassBinding</definition>
+        <argsstring>(crg::FramePass &amp;pass, uint32_t binding) const</argsstring>
+        <name>createPassBinding</name>
+        <qualifiedname>castor3d::SsaoConfigUbo::createPassBinding</qualifiedname>
+        <param>
+          <type>crg::FramePass &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -83,121 +230,67 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/TextureProjectionToCube.hpp" line="20" column="1"/>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="152" column="6" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="152" bodyend="156"/>
+        <references refid="df/d9b/a02514_1ae2c055477d81767157b9832b18baa027" compoundref="de/db1/a00197" startline="86" endline="94">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createPassBinding</references>
       </memberdef>
-      <memberdef kind="function" id="d4/dbc/a04994_1acce884e20f1190783d8183cc850adda3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d4/dbc/a04994_1a073ca04d26a7b693d1bad1049ed59890" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::TextureProjectionToCube::render</definition>
-        <argsstring>()</argsstring>
-        <name>render</name>
+        <definition>void castor3d::SsaoConfigUbo::createSizedBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</argsstring>
+        <name>createSizedBinding</name>
+        <qualifiedname>castor3d::SsaoConfigUbo::createSizedBinding</qualifiedname>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>layoutBinding</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/TextureProjectionToCube.hpp" line="23" column="1"/>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="158" column="6" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="158" bodyend="162"/>
+        <references refid="df/d9b/a02514_1a2c6ad146d4910651544564c25ca7dccd" compoundref="de/db1/a00197" startline="96" endline="105">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/dbc/a04994_1a2e0cf6f6246f68556d56b71d48f33bb3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="df/d9b/a02514" kindref="compound">UniformBufferOffsetT</ref>&lt; Configuration &gt; const &amp;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; const  &amp; castor3d::SsaoConfigUbo::getUbo</definition>
+        <argsstring>() const</argsstring>
+        <name>getUbo</name>
+        <qualifiedname>castor3d::SsaoConfigUbo::getUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="164" column="29" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="164" bodyend="167"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="4433">
-        <label>castor3d::RenderCube</label>
-        <link refid="d6/d5a/a04966"/>
-      </node>
-      <node id="4432">
-        <label>castor3d::TextureProjectionToCube</label>
-        <link refid="d4/dbc/a04994"/>
-        <childnode refid="4433" relation="private-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="4440">
-        <label>castor3d::RenderSystem</label>
-        <link refid="d1/d9a/a04618"/>
-        <childnode refid="4441" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4439">
-        <label>T</label>
-      </node>
-      <node id="4435">
-        <label>castor3d::RenderCube</label>
-        <link refid="d6/d5a/a04966"/>
-        <childnode refid="4436" relation="usage">
-          <edgelabel>m_device</edgelabel>
-        </childnode>
-      </node>
-      <node id="4443">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="4439" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="4438">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="4439" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="4434">
-        <label>castor3d::TextureProjectionToCube</label>
-        <link refid="d4/dbc/a04994"/>
-        <childnode refid="4435" relation="private-inheritance">
-        </childnode>
-      </node>
-      <node id="4442">
-        <label>std::vector&lt; ashes::CommandPoolPtr &gt;</label>
-        <childnode refid="4443" relation="template-instance">
-          <edgelabel>&lt; ashes::CommandPoolPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4437">
-        <label>std::array&lt; uint32_t, 4u &gt;</label>
-        <childnode refid="4438" relation="template-instance">
-          <edgelabel>&lt; uint32_t, 4u &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4441">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="4436">
-        <label>castor3d::RenderDevice</label>
-        <link refid="d8/d4c/a04506"/>
-        <childnode refid="4437" relation="usage">
-          <edgelabel>queueFamiliesIndex</edgelabel>
-        </childnode>
-        <childnode refid="4440" relation="usage">
-          <edgelabel>renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="4442" relation="usage">
-          <edgelabel>commandPools</edgelabel>
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Render/ToTexture/TextureProjectionToCube.hpp" line="18" column="1" bodyfile="Render/ToTexture/TextureProjectionToCube.hpp" bodystart="16" bodyend="35"/>
+    <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="62" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="63" bodyend="176"/>
     <listofallmembers>
-      <member refid="d6/d5a/a04966_1a3f0330fd2cd0b556433e50c505c2cfd0" prot="private" virt="non-virtual"><scope>castor3d::TextureProjectionToCube</scope><name>cleanup</name></member>
-      <member refid="d6/d5a/a04966_1ae58f4e4abbd017b821ad1ce07bd1898c" prot="private" virt="non-virtual"><scope>castor3d::TextureProjectionToCube</scope><name>createPipelines</name></member>
-      <member refid="d6/d5a/a04966_1a03e099cd27fb31640352a9925effa710" prot="private" virt="non-virtual"><scope>castor3d::TextureProjectionToCube</scope><name>createPipelines</name></member>
-      <member refid="d6/d5a/a04966_1aee72d95a1c9e3b4e7bf221867f1a80d5" prot="private" virt="non-virtual"><scope>castor3d::TextureProjectionToCube</scope><name>getCommandBuffer</name></member>
-      <member refid="d4/dbc/a04994_1ab98cc802bdfad488ff57067d9226fa1e" prot="private" virt="non-virtual"><scope>castor3d::TextureProjectionToCube</scope><name>m_commandBuffer</name></member>
-      <member refid="d6/d5a/a04966_1af9d5218505481d37eec6dc49f638039a" prot="private" virt="non-virtual"><scope>castor3d::TextureProjectionToCube</scope><name>m_device</name></member>
-      <member refid="d4/dbc/a04994_1aa86aab7a4127f981a92eea6cf4a5b5cb" prot="private" virt="non-virtual"><scope>castor3d::TextureProjectionToCube</scope><name>m_frameBuffers</name></member>
-      <member refid="d6/d5a/a04966_1a84414b79673d6fe5e891f6078bc8b782" prot="private" virt="non-virtual"><scope>castor3d::TextureProjectionToCube</scope><name>m_pipelineLayout</name></member>
-      <member refid="d4/dbc/a04994_1af09584f0c79326531ec28765843c15c2" prot="private" virt="non-virtual"><scope>castor3d::TextureProjectionToCube</scope><name>m_renderPass</name></member>
-      <member refid="d6/d5a/a04966_1a09a2fc9d7fe9809ad64836ab33c3f2a8" prot="private" virt="non-virtual"><scope>castor3d::TextureProjectionToCube</scope><name>m_sampler</name></member>
-      <member refid="d4/dbc/a04994_1a91067f81384fc4d1818b7adf887d1ecd" prot="private" virt="non-virtual"><scope>castor3d::TextureProjectionToCube</scope><name>m_view</name></member>
-      <member refid="d6/d5a/a04966_1a83fae0b06a6d865e7b3a9a12bf6ee6ff" prot="private" virt="non-virtual"><scope>castor3d::TextureProjectionToCube</scope><name>prepareFrame</name></member>
-      <member refid="d6/d5a/a04966_1a4b8c2a6e867159e5545c6ae52e6ed246" prot="private" virt="non-virtual"><scope>castor3d::TextureProjectionToCube</scope><name>registerFrame</name></member>
-      <member refid="d4/dbc/a04994_1acce884e20f1190783d8183cc850adda3" prot="public" virt="non-virtual"><scope>castor3d::TextureProjectionToCube</scope><name>render</name></member>
-      <member refid="d6/d5a/a04966_1ac600349f4887fe9d7765ecc3224b2992" prot="private" virt="non-virtual"><scope>castor3d::TextureProjectionToCube</scope><name>RenderCube</name></member>
-      <member refid="d4/dbc/a04994_1ae87ba6b642bc8b7d6457abbd57f66310" prot="public" virt="non-virtual"><scope>castor3d::TextureProjectionToCube</scope><name>TextureProjectionToCube</name></member>
-      <member refid="d6/d5a/a04966_1a442e2372083596ae51f50d6aa8709e60" prot="private" virt="virtual"><scope>castor3d::TextureProjectionToCube</scope><name>~RenderCube</name></member>
+      <member refid="d4/dbc/a04994_1ac1e010f129e6693cfbe0af16f5495fc9" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>BufferSsaoConfig</name></member>
+      <member refid="d4/dbc/a04994_1ae29e0218fad72725f30c5f66caa6600a" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>cpuUpdate</name></member>
+      <member refid="d4/dbc/a04994_1a04509506d8bf2e8b64bdc59b0006596f" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>createPassBinding</name></member>
+      <member refid="d4/dbc/a04994_1a073ca04d26a7b693d1bad1049ed59890" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>createSizedBinding</name></member>
+      <member refid="d4/dbc/a04994_1a2e0cf6f6246f68556d56b71d48f33bb3" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>getUbo</name></member>
+      <member refid="d4/dbc/a04994_1aef4f99386820fe5de3a286b86f688eed" prot="private" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>m_device</name></member>
+      <member refid="d4/dbc/a04994_1ae28673ce2e4af49756caf9bc20a5f1ba" prot="private" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>m_ubo</name></member>
+      <member refid="d4/dbc/a04994_1af868971741b6cde298013eeb02fda75e" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>operator=</name></member>
+      <member refid="d4/dbc/a04994_1aaf1cfe78f37218a6cd8d55472c3ac792" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>operator=</name></member>
+      <member refid="d4/dbc/a04994_1afd0d9c0fbae7cb81b6d009c50c3e48f3" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>SsaoConfigData</name></member>
+      <member refid="d4/dbc/a04994_1adcd379f2b2fb909a669243a80a4fd72d" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>SsaoConfigUbo</name></member>
+      <member refid="d4/dbc/a04994_1a78fd7f6f95b18c0c160899140f110423" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>SsaoConfigUbo</name></member>
+      <member refid="d4/dbc/a04994_1a8c169fbddbc22fff49606ea2a013fea2" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>SsaoConfigUbo</name></member>
+      <member refid="d4/dbc/a04994_1ac128098248b2efcfcdb9740e0e31de01" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>~SsaoConfigUbo</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

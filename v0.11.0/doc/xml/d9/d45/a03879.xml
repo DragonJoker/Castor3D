@@ -1,0 +1,379 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d9/d45/a03879" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::MeshImporter</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <derivedcompoundref refid="d5/d95/a02267" prot="public" virt="non-virtual">castor3d::CmshImporter</derivedcompoundref>
+    <includes local="no">Importer.hpp</includes>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d9/d45/a03879_1a7136a295e404160089dbe8f17c07deb5" prot="protected" static="no" mutable="no">
+        <type>castor::Path</type>
+        <definition>castor::Path castor3d::MeshImporter::m_fileName</definition>
+        <argsstring></argsstring>
+        <name>m_fileName</name>
+        <briefdescription>
+<para>The file name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Importer.hpp" line="99" column="1" bodyfile="Model/Mesh/Importer.hpp" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d45/a03879_1afc8f20d32bfd80444da60342617748ad" prot="protected" static="no" mutable="no">
+        <type>castor::Path</type>
+        <definition>castor::Path castor3d::MeshImporter::m_filePath</definition>
+        <argsstring></argsstring>
+        <name>m_filePath</name>
+        <briefdescription>
+<para>The file full path. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Importer.hpp" line="101" column="1" bodyfile="Model/Mesh/Importer.hpp" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d45/a03879_1ac9f3f2e9a1060842f42d2da135641de5" prot="protected" static="no" mutable="no">
+        <type>SceneNodePtrArray</type>
+        <definition>SceneNodePtrArray castor3d::MeshImporter::m_nodes</definition>
+        <argsstring></argsstring>
+        <name>m_nodes</name>
+        <briefdescription>
+<para>The loaded scene nodes. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Importer.hpp" line="103" column="1" bodyfile="Model/Mesh/Importer.hpp" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d45/a03879_1a5dab227b4d20b86f974427433bbcf0e3" prot="protected" static="no" mutable="no">
+        <type>GeometryPtrStrMap</type>
+        <definition>GeometryPtrStrMap castor3d::MeshImporter::m_geometries</definition>
+        <argsstring></argsstring>
+        <name>m_geometries</name>
+        <briefdescription>
+<para>The loaded geometries. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Importer.hpp" line="105" column="1" bodyfile="Model/Mesh/Importer.hpp" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d45/a03879_1afb5a24369d04781b9fa30b5d824307a2" prot="protected" static="no" mutable="no">
+        <type><ref refid="d7/dd1/a01458_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref></type>
+        <definition>Parameters castor3d::MeshImporter::m_parameters</definition>
+        <argsstring></argsstring>
+        <name>m_parameters</name>
+        <briefdescription>
+<para>Import configuration parameters. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Importer.hpp" line="107" column="1" bodyfile="Model/Mesh/Importer.hpp" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/d45/a03879_1ab487a61ca9280ca08416a78209be114c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual castor3d::MeshImporter::~MeshImporter</definition>
+        <argsstring>()=default</argsstring>
+        <name>~MeshImporter</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Importer.hpp" line="22" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d45/a03879_1a045aa14041b53b76e24b6302849dcae4" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MeshImporter::MeshImporter</definition>
+        <argsstring>(Engine &amp;engine)</argsstring>
+        <name>MeshImporter</name>
+        <param>
+          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The core engine </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Importer.hpp" line="31" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d45/a03879_1ac7a60af9fbfa9bc67f77133fd7fb1834" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::MeshImporter::import</definition>
+        <argsstring>(Mesh &amp;mesh, castor::Path const &amp;pathFile, Parameters const &amp;parameters, bool initialise)</argsstring>
+        <name>import</name>
+        <param>
+          <type><ref refid="d5/d45/a03887" kindref="compound">Mesh</ref> &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <param>
+          <type>castor::Path const &amp;</type>
+          <declname>pathFile</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/dd1/a01458_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>initialise</declname>
+        </param>
+        <briefdescription>
+<para><ref refid="d5/d45/a03887" kindref="compound">Mesh</ref> import Function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the imported data. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pathFile</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The location of the file to import. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Import configuration parameters. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">initialise</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tells if the imported mesh must be initialised. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any problem occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Importer.hpp" line="48" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d45/a03879_1a04e2b14f4ceba76a6de55378d195ffb9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> TextureUnitSPtr</type>
+        <definition>C3D_API TextureUnitSPtr castor3d::MeshImporter::loadTexture</definition>
+        <argsstring>(castor::Path const &amp;path, TextureConfiguration const &amp;config) const</argsstring>
+        <name>loadTexture</name>
+        <param>
+          <type>castor::Path const &amp;</type>
+          <declname>path</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/dcf/a02615" kindref="compound">TextureConfiguration</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+<para>Loads a texture and adds it to the given pass. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">path</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The image file path (can be relative or absolute). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The texture unit configuration. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The texture unit. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Importer.hpp" line="64" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d45/a03879_1a56211b75461d1b62d6a09d127f490167" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> TextureUnitSPtr</type>
+        <definition>C3D_API TextureUnitSPtr castor3d::MeshImporter::loadTexture</definition>
+        <argsstring>(castor::Path const &amp;path, TextureConfiguration const &amp;config, Pass &amp;pass) const</argsstring>
+        <name>loadTexture</name>
+        <param>
+          <type>castor::Path const &amp;</type>
+          <declname>path</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/dcf/a02615" kindref="compound">TextureConfiguration</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d39/a02575" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+<para>Loads a texture and adds it to the given pass. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">path</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The image file path (can be relative or absolute). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The texture unit configuration. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Importer.hpp" line="80" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d9/d45/a03879_1a0eb9bc99966ced84853d1ff07fad8ce0" prot="protected" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::MeshImporter::doImportMesh</definition>
+        <argsstring>(Mesh &amp;mesh)=0</argsstring>
+        <name>doImportMesh</name>
+        <reimplementedby refid="d5/d95/a02267_1af85892cc57daf30d7a334c196de4eb37">doImportMesh</reimplementedby>
+        <param>
+          <type><ref refid="d5/d45/a03887" kindref="compound">Mesh</ref> &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <briefdescription>
+<para><ref refid="d5/d45/a03887" kindref="compound">Mesh</ref> import Function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the imported data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any problem occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Importer.hpp" line="95" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1959">
+        <label>castor3d::CmshImporter</label>
+        <link refid="d5/d95/a02267"/>
+        <childnode refid="1957" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1958">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="1957">
+        <label>castor3d::MeshImporter</label>
+        <link refid="d9/d45/a03879"/>
+        <childnode refid="1958" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1962">
+        <label>castor3d::ParametersT&lt; castor::String &gt;</label>
+        <link refid="d0/de6/a03807"/>
+        <childnode refid="1963" relation="template-instance">
+          <edgelabel>&lt; castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1963">
+        <label>castor3d::ParametersT&lt; KeyT &gt;</label>
+        <link refid="d0/de6/a03807"/>
+      </node>
+      <node id="1961">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="1960">
+        <label>castor3d::MeshImporter</label>
+        <link refid="d9/d45/a03879"/>
+        <childnode refid="1961" relation="public-inheritance">
+        </childnode>
+        <childnode refid="1962" relation="usage">
+          <edgelabel>m_parameters</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/Importer.hpp" line="20" column="1" bodyfile="Model/Mesh/Importer.hpp" bodystart="18" bodyend="108"/>
+    <listofallmembers>
+      <member refid="d9/d45/a03879_1a0eb9bc99966ced84853d1ff07fad8ce0" prot="protected" virt="pure-virtual"><scope>castor3d::MeshImporter</scope><name>doImportMesh</name></member>
+      <member refid="d9/d45/a03879_1ac7a60af9fbfa9bc67f77133fd7fb1834" prot="public" virt="non-virtual"><scope>castor3d::MeshImporter</scope><name>import</name></member>
+      <member refid="d9/d45/a03879_1a04e2b14f4ceba76a6de55378d195ffb9" prot="public" virt="non-virtual"><scope>castor3d::MeshImporter</scope><name>loadTexture</name></member>
+      <member refid="d9/d45/a03879_1a56211b75461d1b62d6a09d127f490167" prot="public" virt="non-virtual"><scope>castor3d::MeshImporter</scope><name>loadTexture</name></member>
+      <member refid="d9/d45/a03879_1a7136a295e404160089dbe8f17c07deb5" prot="protected" virt="non-virtual"><scope>castor3d::MeshImporter</scope><name>m_fileName</name></member>
+      <member refid="d9/d45/a03879_1afc8f20d32bfd80444da60342617748ad" prot="protected" virt="non-virtual"><scope>castor3d::MeshImporter</scope><name>m_filePath</name></member>
+      <member refid="d9/d45/a03879_1a5dab227b4d20b86f974427433bbcf0e3" prot="protected" virt="non-virtual"><scope>castor3d::MeshImporter</scope><name>m_geometries</name></member>
+      <member refid="d9/d45/a03879_1ac9f3f2e9a1060842f42d2da135641de5" prot="protected" virt="non-virtual"><scope>castor3d::MeshImporter</scope><name>m_nodes</name></member>
+      <member refid="d9/d45/a03879_1afb5a24369d04781b9fa30b5d824307a2" prot="protected" virt="non-virtual"><scope>castor3d::MeshImporter</scope><name>m_parameters</name></member>
+      <member refid="d9/d45/a03879_1a045aa14041b53b76e24b6302849dcae4" prot="public" virt="non-virtual"><scope>castor3d::MeshImporter</scope><name>MeshImporter</name></member>
+      <member refid="d9/d45/a03879_1ab487a61ca9280ca08416a78209be114c" prot="public" virt="virtual"><scope>castor3d::MeshImporter</scope><name>~MeshImporter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

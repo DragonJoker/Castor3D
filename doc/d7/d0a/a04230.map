@@ -1,15 +1,7 @@
-<map id="castor3d::GBufferBase" name="castor3d::GBufferBase">
-<area shape="rect" id="node1" title=" " alt="" coords="117,234,271,261"/>
-<area shape="rect" id="node3" href="$de/d93/a04235.html" title=" " alt="" coords="320,175,451,216"/>
-<area shape="rect" id="node4" href="$de/d93/a04235.html" title=" " alt="" coords="591,103,721,144"/>
-<area shape="rect" id="node6" href="$de/d93/a04235.html" title=" " alt="" coords="591,5,721,47"/>
-<area shape="rect" id="node8" href="$de/d93/a04235.html" title=" " alt="" coords="591,259,721,300"/>
-<area shape="rect" id="node10" href="$de/d93/a04235.html" title=" " alt="" coords="591,357,721,399"/>
-<area shape="rect" id="node12" href="$de/d93/a04235.html" title=" " alt="" coords="591,176,721,217"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,234,68,261"/>
-<area shape="rect" id="node5" href="$dc/d23/a04275.html" title=" " alt="" coords="775,103,958,144"/>
-<area shape="rect" id="node7" href="$df/d9b/a04755.html" title=" " alt="" coords="779,13,954,39"/>
-<area shape="rect" id="node9" href="$da/dea/a04915.html" title=" " alt="" coords="777,259,956,300"/>
-<area shape="rect" id="node11" href="$da/d9f/a04859.html" title=" " alt="" coords="771,365,963,391"/>
-<area shape="rect" id="node13" href="$db/dc1/a04671.html" title=" " alt="" coords="773,183,961,210"/>
+<map id="castor3d::LightRenderPass" name="castor3d::LightRenderPass">
+<area shape="rect" id="node1" title=" " alt="" coords="69,317,248,344"/>
+<area shape="rect" id="node2" title=" " alt="" coords="69,213,249,255"/>
+<area shape="rect" id="node3" href="$d8/d12/a04236.html" title=" " alt="" coords="5,95,184,136"/>
+<area shape="rect" id="node4" title=" " alt="" coords="209,102,322,129"/>
+<area shape="rect" id="node5" title=" " alt="" coords="246,5,285,32"/>
 </map>

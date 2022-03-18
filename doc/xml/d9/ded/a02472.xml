@@ -1,35 +1,99 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d9/ded/a02472" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::ElementProducer&lt; ShaderProgram, KeyType &gt;</compoundname>
-    <includes local="no">ElementProducer.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d9/ded/a02472" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ChunkParser&lt; castor::Path &gt;</compoundname>
+    <basecompoundref refid="d9/d04/a02460" prot="public" virt="non-virtual">castor3d::ChunkParserBase</basecompoundref>
+    <includes local="no">ChunkParser.hpp</includes>
     <templateparamlist>
-      <param>
-        <type>typename KeyType</type>
-      </param>
     </templateparamlist>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="d9/ded/a02472_1a65a7d5ff6fe2567cb68282a5446347c9" prot="public" static="no">
-        <type>std::function&lt; std::shared_ptr&lt; <ref refid="dc/da0/a05304" kindref="compound">ShaderProgram</ref> &gt;(KeyType const &amp;) &gt;</type>
-        <definition>using castor3d::ElementProducer&lt; ShaderProgram, KeyType &gt;::Type =  std::function&lt; std::shared_ptr&lt; ShaderProgram &gt;( KeyType const &amp; ) &gt;</definition>
-        <argsstring></argsstring>
-        <name>Type</name>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d9/ded/a02472_1ab3e16eea9051bc679aff2782279aafea" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool castor3d::ChunkParser&lt; castor::Path &gt;::parse</definition>
+        <argsstring>(castor::Path &amp;value, BinaryChunk &amp;chunk)</argsstring>
+        <name>parse</name>
+        <qualifiedname>castor3d::ChunkParser&lt; castor::Path &gt;::parse</qualifiedname>
+        <param>
+          <type>castor::Path &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d1a/a02288" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
         <briefdescription>
+<para>Retrieves a value from a chunk. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the parsed value </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk containing the value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/ElementProducer.hpp" line="29" column="1" bodyfile="Cache/ElementProducer.hpp" bodystart="29" bodyend="-1"/>
+        <location file="Binary/ChunkParser.hpp" line="183" column="20" bodyfile="Binary/ChunkParser.hpp" bodystart="183" bodyend="203"/>
+        <references refid="dc/d1a/a02288_1af711032d94753cb2d482fe2bcf3afb17">castor3d::BinaryChunk::checkAvailable</references>
+        <references refid="dc/d1a/a02288_1a2819c7ddf95251296b5a61bf40435358">castor3d::BinaryChunk::getRemaining</references>
+        <references refid="d9/d04/a02460_1a062463121032ba679336be2382c508d0" compoundref="d7/dce/a00143" startline="30" endline="42">castor3d::ChunkParserBase::parse</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para><ref refid="d3/d19/a02464" kindref="compound">ChunkParser</ref> specialisation for castor::Path. </para>
     </briefdescription>
     <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="version"><para>0.7.0.0 </para>
+</simplesect>
+<simplesect kind="date"><para>08/04/2014 </para>
+</simplesect>
+</para>
     </detaileddescription>
-    <location file="Cache/ElementProducer.hpp" line="28" column="1" bodyfile="Cache/ElementProducer.hpp" bodystart="27" bodyend="30"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::ChunkParser&lt; castor::Path &gt;</label>
+        <link refid="d9/ded/a02472"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ChunkParserBase</label>
+        <link refid="d9/d04/a02460"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::ChunkParser&lt; castor::Path &gt;</label>
+        <link refid="d9/ded/a02472"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ChunkParserBase</label>
+        <link refid="d9/d04/a02460"/>
+      </node>
+    </collaborationgraph>
+    <location file="Binary/ChunkParser.hpp" line="167" column="1" bodyfile="Binary/ChunkParser.hpp" bodystart="169" bodyend="204"/>
     <listofallmembers>
-      <member refid="d9/ded/a02472_1a65a7d5ff6fe2567cb68282a5446347c9" prot="public" virt="non-virtual"><scope>castor3d::ElementProducer&lt; ShaderProgram, KeyType &gt;</scope><name>Type</name></member>
+      <member refid="d9/ded/a02472_1ab3e16eea9051bc679aff2782279aafea" prot="public" virt="non-virtual"><scope>castor3d::ChunkParser&lt; castor::Path &gt;</scope><name>parse</name></member>
+      <member refid="d9/d04/a02460_1a062463121032ba679336be2382c508d0" prot="public" virt="non-virtual" ambiguityscope="castor3d::ChunkParserBase::"><scope>castor3d::ChunkParser&lt; castor::Path &gt;</scope><name>parse</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

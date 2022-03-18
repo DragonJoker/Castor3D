@@ -1,106 +1,35 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d3/dc2/a04267" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::LightPropagationVolumesBase::LightLpv</compoundname>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d3/dc2/a04267_1a148ac8094ae68ff0094733b41fce2475" prot="public" static="no" mutable="no">
-        <type><ref refid="d5/d35/a05471" kindref="compound">LpvLightConfigUbo</ref></type>
-        <definition>LpvLightConfigUbo castor3d::LightPropagationVolumesBase::LightLpv::lpvLightConfigUbo</definition>
-        <argsstring></argsstring>
-        <name>lpvLightConfigUbo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp" line="72" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp" bodystart="72" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/dc2/a04267_1a2356c94a6fd4d780a3b69e5513298107" prot="public" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::LightPropagationVolumesBase::LightLpv::lpvCellSize</definition>
-        <argsstring></argsstring>
-        <name>lpvCellSize</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp" line="73" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp" bodystart="73" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/dc2/a04267_1a62ee4d758db7e910f317354d5c611dd9" prot="public" static="no" mutable="no">
-        <type>LightInjectionPassUPtr</type>
-        <definition>LightInjectionPassUPtr castor3d::LightPropagationVolumesBase::LightLpv::lightInjectionPass</definition>
-        <argsstring></argsstring>
-        <name>lightInjectionPass</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp" line="74" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp" bodystart="74" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/dc2/a04267_1a7e44e3fc0b191ec1f2902cc897a17881" prot="public" static="no" mutable="no">
-        <type>GeometryInjectionPassUPtr</type>
-        <definition>GeometryInjectionPassUPtr castor3d::LightPropagationVolumesBase::LightLpv::geometryInjectionPass</definition>
-        <argsstring></argsstring>
-        <name>geometryInjectionPass</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp" line="75" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp" bodystart="75" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d3/dc2/a04267" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::OpaquePassResult</compoundname>
+    <basecompoundref refid="d6/dc7/a03683" prot="public" virt="non-virtual">castor3d::GBufferT&lt; DsTexture &gt;</basecompoundref>
+    <includes local="no">OpaquePassResult.hpp</includes>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d3/dc2/a04267_1ac5e4558a72eb5041076c9dd778a5b28d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::LightPropagationVolumesBase::LightLpv::LightLpv</definition>
-        <argsstring>(RenderDevice const &amp;device, castor::String const &amp;name, LightCache const &amp;lightCache, LightType lightType, ShadowMapResult const &amp;smResult, LpvGridConfigUbo const &amp;lpvGridConfigUbo, LightVolumePassResult const &amp;injection, uint32_t cascadeIndex, float lpvCellSize, TextureUnit *geometry)</argsstring>
-        <name>LightLpv</name>
+      <memberdef kind="function" id="d3/dc2/a04267_1a5511241511d0f951e5e134f6cc6a575f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::OpaquePassResult::OpaquePassResult</definition>
+        <argsstring>(crg::ResourceHandler &amp;handler, RenderDevice const &amp;device, TexturePtr depthTexture, TexturePtr data1Texture, TexturePtr velocityTexture)</argsstring>
+        <name>OpaquePassResult</name>
+        <qualifiedname>castor3d::OpaquePassResult::OpaquePassResult</qualifiedname>
         <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <type>crg::ResourceHandler &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
           <declname>device</declname>
         </param>
         <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
+          <type><ref refid="da/de3/a01398_1a174cedaf5dfc3b47caa264f344279af2" kindref="member">TexturePtr</ref></type>
+          <declname>depthTexture</declname>
         </param>
         <param>
-          <type><ref refid="d7/dd1/a01458_1a563d137a64a10483b6a4ba4b5174d05d" kindref="member">LightCache</ref> const &amp;</type>
-          <declname>lightCache</declname>
+          <type><ref refid="da/de3/a01398_1a174cedaf5dfc3b47caa264f344279af2" kindref="member">TexturePtr</ref></type>
+          <declname>data1Texture</declname>
         </param>
         <param>
-          <type><ref refid="d7/dd1/a01458_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
-          <declname>lightType</declname>
-        </param>
-        <param>
-          <type><ref refid="db/dc1/a04671" kindref="compound">ShadowMapResult</ref> const &amp;</type>
-          <declname>smResult</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d34/a05463" kindref="compound">LpvGridConfigUbo</ref> const &amp;</type>
-          <declname>lpvGridConfigUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="dc/d23/a04275" kindref="compound">LightVolumePassResult</ref> const &amp;</type>
-          <declname>injection</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>cascadeIndex</declname>
-        </param>
-        <param>
-          <type>float</type>
-          <declname>lpvCellSize</declname>
-        </param>
-        <param>
-          <type><ref refid="d8/dd7/a02643" kindref="compound">TextureUnit</ref> *</type>
-          <declname>geometry</declname>
+          <type><ref refid="da/de3/a01398_1a174cedaf5dfc3b47caa264f344279af2" kindref="member">TexturePtr</ref></type>
+          <declname>velocityTexture</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -108,62 +37,161 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp" line="61" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/dc2/a04267_1a034fc59a871a3f736af52414175bafc0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::LightPropagationVolumesBase::LightLpv::update</definition>
-        <argsstring>(CpuUpdater &amp;updater)</argsstring>
-        <name>update</name>
-        <param>
-          <type><ref refid="db/d82/a04567" kindref="compound">CpuUpdater</ref> &amp;</type>
-          <declname>updater</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp" line="71" column="1"/>
+        <location file="Render/Technique/Opaque/OpaquePassResult.hpp" line="19" column="9"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::GBufferT&lt; DsTexture &gt;</label>
+        <link refid="d6/dc7/a03683"/>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; DsTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::GBufferBase</label>
+        <link refid="d1/d7a/a03679"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="d6/dc7/a03683"/>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::OpaquePassResult</label>
+        <link refid="d3/dc2/a04267"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
+      </node>
+    </inheritancegraph>
     <collaborationgraph>
-      <node id="1741">
-        <label>castor3d::LpvLightConfigUbo</label>
-        <link refid="d5/d35/a05471"/>
-        <childnode refid="1742" relation="usage">
-          <edgelabel>LpvLightConfig</edgelabel>
-          <edgelabel>LpvLightData</edgelabel>
+      <node id="2">
+        <label>castor3d::GBufferT&lt; DsTexture &gt;</label>
+        <link refid="d6/dc7/a03683"/>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_result</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; DsTexture &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="1740">
-        <label>castor3d::LightPropagationVolumesBase::LightLpv</label>
-        <childnode refid="1741" relation="usage">
-          <edgelabel>lpvLightConfigUbo</edgelabel>
+      <node id="11">
+        <label>T</label>
+      </node>
+      <node id="3">
+        <label>castor3d::GBufferBase</label>
+        <link refid="d1/d7a/a03679"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_device</edgelabel>
         </childnode>
       </node>
-      <node id="1743">
-        <label>std::basic_string&lt; char &gt;</label>
+      <node id="14">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="d6/dc7/a03683"/>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_result</edgelabel>
+        </childnode>
       </node>
-      <node id="1742">
-        <label>std::string</label>
-        <childnode refid="1743" relation="public-inheritance">
+      <node id="1">
+        <label>castor3d::OpaquePassResult</label>
+        <link refid="d3/dc2/a04267"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::QueuesData</label>
+        <link refid="d5/d04/a03955"/>
+      </node>
+      <node id="5">
+        <label>castor3d::RenderDevice</label>
+        <link refid="d4/d87/a03963"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>queueFamilies</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d3/d9a/a04075"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
+      </node>
+      <node id="7">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="13">
+        <label>std::shared_ptr&lt; T &gt;</label>
+        <childnode refid="11" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="11" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::vector&lt; QueuesData &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; QueuesData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>std::vector&lt; TexturePtr &gt;</label>
+        <childnode refid="13" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; TexturePtr &gt;</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp" line="60" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp" bodystart="59" bodyend="76"/>
+    <location file="Render/Technique/Opaque/OpaquePassResult.hpp" line="15" column="1" bodyfile="Render/Technique/Opaque/OpaquePassResult.hpp" bodystart="17" bodyend="24"/>
     <listofallmembers>
-      <member refid="d3/dc2/a04267_1a7e44e3fc0b191ec1f2902cc897a17881" prot="public" virt="non-virtual"><scope>castor3d::LightPropagationVolumesBase::LightLpv</scope><name>geometryInjectionPass</name></member>
-      <member refid="d3/dc2/a04267_1a62ee4d758db7e910f317354d5c611dd9" prot="public" virt="non-virtual"><scope>castor3d::LightPropagationVolumesBase::LightLpv</scope><name>lightInjectionPass</name></member>
-      <member refid="d3/dc2/a04267_1ac5e4558a72eb5041076c9dd778a5b28d" prot="public" virt="non-virtual"><scope>castor3d::LightPropagationVolumesBase::LightLpv</scope><name>LightLpv</name></member>
-      <member refid="d3/dc2/a04267_1a2356c94a6fd4d780a3b69e5513298107" prot="public" virt="non-virtual"><scope>castor3d::LightPropagationVolumesBase::LightLpv</scope><name>lpvCellSize</name></member>
-      <member refid="d3/dc2/a04267_1a148ac8094ae68ff0094733b41fce2475" prot="public" virt="non-virtual"><scope>castor3d::LightPropagationVolumesBase::LightLpv</scope><name>lpvLightConfigUbo</name></member>
-      <member refid="d3/dc2/a04267_1a034fc59a871a3f736af52414175bafc0" prot="public" virt="non-virtual"><scope>castor3d::LightPropagationVolumesBase::LightLpv</scope><name>update</name></member>
+      <member refid="d6/dc7/a03683_1a794584976030474106bba3b69f4a7f80" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>begin</name></member>
+      <member refid="d6/dc7/a03683_1ae8ca53c58a918901635ec3492d4e064d" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>begin</name></member>
+      <member refid="d6/dc7/a03683_1ad184cb851604a0fdad0f1f8136ea6457" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>cbegin</name></member>
+      <member refid="d6/dc7/a03683_1a53d2fc5d9e1c83c50823f591a9650095" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>cend</name></member>
+      <member refid="d6/dc7/a03683_1a8939bb90032a1e4ec33e7840cb71c6c4" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>create</name></member>
+      <member refid="d6/dc7/a03683_1a54feb2c94b179d3ae6e16284d05a124c" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>end</name></member>
+      <member refid="d6/dc7/a03683_1a12e053e63b5593edca663b4a01962d6d" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>end</name></member>
+      <member refid="d6/dc7/a03683_1a67a677fc6cbdb36e74fa6b74a65c5015" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>GBufferT</name></member>
+      <member refid="d6/dc7/a03683_1a1ab6068973c95bddb3229dc2d9b1cc39" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>GBufferT</name></member>
+      <member refid="d6/dc7/a03683_1a1bb04fa8833cb8e9df999784c3f4e72d" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>GBufferT</name></member>
+      <member refid="d6/dc7/a03683_1aad84cb58cfbead8aa670554e5b015e54" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>GBufferT</name></member>
+      <member refid="d6/dc7/a03683_1ab53983ea6cfcc95da08034abb5e20d6b" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>m_result</name></member>
+      <member refid="d3/dc2/a04267_1a5511241511d0f951e5e134f6cc6a575f" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>OpaquePassResult</name></member>
+      <member refid="d6/dc7/a03683_1aa803d666fd91abf546fa7bb32507b038" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>operator=</name></member>
+      <member refid="d6/dc7/a03683_1a8c693c6743416a4b36022e98193e3aa3" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>operator=</name></member>
+      <member refid="d6/dc7/a03683_1afc570eab10faf45040bd5ecafcc39104" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>operator[]</name></member>
+      <member refid="d6/dc7/a03683_1a84462bb3e4892ec0bb69d310bf08a7c3" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>~GBufferT</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

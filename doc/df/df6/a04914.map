@@ -1,7 +1,4 @@
-<map id="castor3d::TransparentPassResult" name="castor3d::TransparentPassResult">
-<area shape="rect" id="node1" title=" " alt="" coords="13,352,191,393"/>
-<area shape="rect" id="node2" href="$de/d93/a04235.html" title=" " alt="" coords="37,261,167,303"/>
-<area shape="rect" id="node3" href="$d7/da1/a04231.html" title=" " alt="" coords="5,81,159,108"/>
-<area shape="rect" id="node5" href="$de/d93/a04235.html" title=" " alt="" coords="103,157,234,199"/>
-<area shape="rect" id="node4" title=" " alt="" coords="51,5,113,32"/>
+<map id="castor3d::shader::LpvLightData" name="castor3d::shader::LpvLightData">
+<area shape="rect" id="node1" title=" " alt="" coords="5,80,207,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="37,5,175,32"/>
 </map>

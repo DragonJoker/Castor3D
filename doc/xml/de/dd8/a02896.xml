@@ -1,33 +1,192 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="de/dd8/a02896" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPhysicalDevice16BitStorageFeatures &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="de/dd8/a02896_1a90e36331db32bb52c6522782a067456b" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPhysicalDevice16BitStorageFeatures &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="de/dd8/a02896" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::TextureAnimationKeyFrame</compoundname>
+    <basecompoundref refid="db/da6/a02224" prot="public" virt="non-virtual">castor3d::AnimationKeyFrame</basecompoundref>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; TextureAnimation &gt;</basecompoundref>
+    <includes local="no">TextureAnimationKeyFrame.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="de/dd8/a02896_1a0f438453ac48a97d125c754eaa953966" prot="private" static="no" mutable="no">
+        <type>castor::Point2ui</type>
+        <definition>castor::Point2ui castor3d::TextureAnimationKeyFrame::m_tile</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_16BIT_STORAGE_FEATURES</initializer>
+        <name>m_tile</name>
+        <qualifiedname>castor3d::TextureAnimationKeyFrame::m_tile</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="64" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="64" bodyend="-1"/>
+        <location file="Material/Texture/Animation/TextureAnimationKeyFrame.hpp" line="50" column="18" bodyfile="Material/Texture/Animation/TextureAnimationKeyFrame.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="de/dd8/a02896_1a0fc1071777467d2136dc623c55ac8f2a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class BinaryParser&lt; TextureAnimationKeyFrame &gt;</definition>
+        <argsstring></argsstring>
+        <name>BinaryParser&lt; TextureAnimationKeyFrame &gt;</name>
+        <qualifiedname>castor3d::TextureAnimationKeyFrame::BinaryParser&lt; TextureAnimationKeyFrame &gt;</qualifiedname>
+        <param>
+          <type><ref refid="d1/d03/a02332" kindref="compound">BinaryParser</ref>&lt; <ref refid="de/dd8/a02896" kindref="compound">TextureAnimationKeyFrame</ref> &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/Animation/TextureAnimationKeyFrame.hpp" line="50" column="18" bodyfile="Material/Texture/Animation/TextureAnimationKeyFrame.hpp" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/dd8/a02896_1a12e0ba4774e2c50cc6bc1880310b19c5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::TextureAnimationKeyFrame::TextureAnimationKeyFrame</definition>
+        <argsstring>(TextureAnimation &amp;parent, castor::Milliseconds const &amp;timeIndex)</argsstring>
+        <name>TextureAnimationKeyFrame</name>
+        <qualifiedname>castor3d::TextureAnimationKeyFrame::TextureAnimationKeyFrame</qualifiedname>
+        <param>
+          <type><ref refid="d7/d07/a02892" kindref="compound">TextureAnimation</ref> &amp;</type>
+          <declname>parent</declname>
+        </param>
+        <param>
+          <type>castor::Milliseconds const &amp;</type>
+          <declname>timeIndex</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent animation. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">timeIndex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>When the key frame starts. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/Animation/TextureAnimationKeyFrame.hpp" line="30" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd8/a02896_1ae92320c9bbc58234f7b701ec57d16916" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextureAnimationKeyFrame::setTile</definition>
+        <argsstring>(castor::Point2ui tile)</argsstring>
+        <name>setTile</name>
+        <qualifiedname>castor3d::TextureAnimationKeyFrame::setTile</qualifiedname>
+        <param>
+          <type>castor::Point2ui</type>
+          <declname>tile</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/Animation/TextureAnimationKeyFrame.hpp" line="33" column="6" bodyfile="Material/Texture/Animation/TextureAnimationKeyFrame.hpp" bodystart="33" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd8/a02896_1a2ffacbc3792aec6e9e14619a57773d85" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point2ui const &amp;</type>
+        <definition>castor::Point2ui const  &amp; castor3d::TextureAnimationKeyFrame::getTile</definition>
+        <argsstring>() const</argsstring>
+        <name>getTile</name>
+        <qualifiedname>castor3d::TextureAnimationKeyFrame::getTile</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/Animation/TextureAnimationKeyFrame.hpp" line="38" column="25" bodyfile="Material/Texture/Animation/TextureAnimationKeyFrame.hpp" bodystart="38" bodyend="41"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="de/dd8/a02896_1a32daf797e64eb25bf9e779893629b09a" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextureAnimationKeyFrame::doSetTimeIndex</definition>
+        <argsstring>(castor::Milliseconds const &amp;time)</argsstring>
+        <name>doSetTimeIndex</name>
+        <qualifiedname>castor3d::TextureAnimationKeyFrame::doSetTimeIndex</qualifiedname>
+        <param>
+          <type>castor::Milliseconds const &amp;</type>
+          <declname>time</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/Animation/TextureAnimationKeyFrame.hpp" line="44" column="6" bodyfile="Material/Texture/Animation/TextureAnimationKeyFrame.hpp" bodystart="44" bodyend="47"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="64" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="64" bodyend="64"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::AnimationKeyFrame</label>
+        <link refid="db/da6/a02224"/>
+      </node>
+      <node id="1">
+        <label>castor3d::TextureAnimationKeyFrame</label>
+        <link refid="de/dd8/a02896"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; TextureAnimation &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::AnimationKeyFrame</label>
+        <link refid="db/da6/a02224"/>
+      </node>
+      <node id="1">
+        <label>castor3d::TextureAnimationKeyFrame</label>
+        <link refid="de/dd8/a02896"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; TextureAnimation &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Texture/Animation/TextureAnimationKeyFrame.hpp" line="15" column="1" bodyfile="Material/Texture/Animation/TextureAnimationKeyFrame.hpp" bodystart="18" bodyend="53"/>
     <listofallmembers>
-      <member refid="de/dd8/a02896_1a90e36331db32bb52c6522782a067456b" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPhysicalDevice16BitStorageFeatures &gt;</scope><name>value</name></member>
+      <member refid="db/da6/a02224_1a4c0d4b7afbe022ee8f9dcb9dc1ea54f0" prot="public" virt="non-virtual"><scope>castor3d::TextureAnimationKeyFrame</scope><name>AnimationKeyFrame</name></member>
+      <member refid="de/dd8/a02896_1a0fc1071777467d2136dc623c55ac8f2a" prot="private" virt="non-virtual"><scope>castor3d::TextureAnimationKeyFrame</scope><name>BinaryParser&lt; TextureAnimationKeyFrame &gt;</name></member>
+      <member refid="de/dd8/a02896_1a32daf797e64eb25bf9e779893629b09a" prot="private" virt="non-virtual"><scope>castor3d::TextureAnimationKeyFrame</scope><name>doSetTimeIndex</name></member>
+      <member refid="de/dd8/a02896_1a2ffacbc3792aec6e9e14619a57773d85" prot="public" virt="non-virtual"><scope>castor3d::TextureAnimationKeyFrame</scope><name>getTile</name></member>
+      <member refid="db/da6/a02224_1a7b65d0aeb639d12908b9d17335702a17" prot="public" virt="non-virtual"><scope>castor3d::TextureAnimationKeyFrame</scope><name>getTimeIndex</name></member>
+      <member refid="db/da6/a02224_1a14d9b59106f5406a66f2b8af33367991" prot="public" virt="virtual"><scope>castor3d::TextureAnimationKeyFrame</scope><name>initialise</name></member>
+      <member refid="db/da6/a02224_1abc9e4e2a76ef5ec53fe3308add665082" prot="protected" virt="non-virtual"><scope>castor3d::TextureAnimationKeyFrame</scope><name>m_boundingBox</name></member>
+      <member refid="de/dd8/a02896_1a0f438453ac48a97d125c754eaa953966" prot="private" virt="non-virtual"><scope>castor3d::TextureAnimationKeyFrame</scope><name>m_tile</name></member>
+      <member refid="db/da6/a02224_1a093b74b56f13b6376ea4a51e28893db5" prot="protected" virt="non-virtual"><scope>castor3d::TextureAnimationKeyFrame</scope><name>m_timeIndex</name></member>
+      <member refid="de/dd8/a02896_1ae92320c9bbc58234f7b701ec57d16916" prot="public" virt="non-virtual"><scope>castor3d::TextureAnimationKeyFrame</scope><name>setTile</name></member>
+      <member refid="de/dd8/a02896_1a12e0ba4774e2c50cc6bc1880310b19c5" prot="public" virt="non-virtual"><scope>castor3d::TextureAnimationKeyFrame</scope><name>TextureAnimationKeyFrame</name></member>
+      <member refid="db/da6/a02224_1a0e38208bad19dd09708af045818c2f8d" prot="public" virt="virtual"><scope>castor3d::TextureAnimationKeyFrame</scope><name>~AnimationKeyFrame</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

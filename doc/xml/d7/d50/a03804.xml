@@ -1,33 +1,31 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d7/d50/a03804" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkImageStencilUsageCreateInfoEXT &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d7/d50/a03804_1ac9dc6a83557a1468a2f68fb104d55854" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkImageStencilUsageCreateInfoEXT &gt;::value</definition>
+    <compoundname>castor3d::BackgroundPass::Cube::Quad::Vertex</compoundname>
+    <includes local="no">BackgroundPass.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/d50/a03804_1adfd27d804b929c079cb4f8b464745d97" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::BackgroundPass::Cube::Quad::Vertex::position</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_IMAGE_STENCIL_USAGE_CREATE_INFO_EXT</initializer>
+        <name>position</name>
+        <qualifiedname>castor3d::BackgroundPass::Cube::Quad::Vertex::position</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="362" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="362" bodyend="-1"/>
+        <location file="Render/Passes/BackgroundPass.hpp" line="71" column="17" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="71" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="362" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="362" bodyend="362"/>
+    <location file="Render/Passes/BackgroundPass.hpp" line="69" column="1" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="70" bodyend="72"/>
     <listofallmembers>
-      <member refid="d7/d50/a03804_1ac9dc6a83557a1468a2f68fb104d55854" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkImageStencilUsageCreateInfoEXT &gt;</scope><name>value</name></member>
+      <member refid="d7/d50/a03804_1adfd27d804b929c079cb4f8b464745d97" prot="public" virt="non-virtual"><scope>castor3d::BackgroundPass::Cube::Quad::Vertex</scope><name>position</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

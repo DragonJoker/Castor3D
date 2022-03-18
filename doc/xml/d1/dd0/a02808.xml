@@ -1,33 +1,106 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d1/dd0/a02808" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkGraphicsPipelineCreateInfo &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d1/dd0/a02808_1a6fa4ef6b2af38292a5be097b6f0834be" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkGraphicsPipelineCreateInfo &gt;::value</definition>
+    <compoundname>castor3d::PassRegisterInfo</compoundname>
+    <includes local="no">PassFactory.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/dd0/a02808_1aff2b0987c95b9f234daa456cf073d37b" prot="public" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::PassRegisterInfo::lightingModel</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO</initializer>
+        <name>lightingModel</name>
+        <qualifiedname>castor3d::PassRegisterInfo::lightingModel</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="42" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="42" bodyend="-1"/>
+        <location file="Material/Pass/PassFactory.hpp" line="21" column="16" bodyfile="Material/Pass/PassFactory.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dd0/a02808_1a01c66ae22cbfa76405c381012ccd0dae" prot="public" static="no" mutable="no">
+        <type>PassFactoryBase::Creator</type>
+        <definition>PassFactoryBase::Creator castor3d::PassRegisterInfo::passCreator</definition>
+        <argsstring></argsstring>
+        <name>passCreator</name>
+        <qualifiedname>castor3d::PassRegisterInfo::passCreator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassFactory.hpp" line="22" column="26" bodyfile="Material/Pass/PassFactory.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dd0/a02808_1ae30c4c273fd9c387aea74408e76ede38" prot="public" static="no" mutable="no">
+        <type>castor::AttributeParsers</type>
+        <definition>castor::AttributeParsers castor3d::PassRegisterInfo::parsers</definition>
+        <argsstring></argsstring>
+        <name>parsers</name>
+        <qualifiedname>castor3d::PassRegisterInfo::parsers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassFactory.hpp" line="23" column="26" bodyfile="Material/Pass/PassFactory.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dd0/a02808_1afe91f6cc5b54e9241b7c935ddbb6156b" prot="public" static="no" mutable="no">
+        <type>castor::StrUInt32Map</type>
+        <definition>castor::StrUInt32Map castor3d::PassRegisterInfo::sections</definition>
+        <argsstring></argsstring>
+        <name>sections</name>
+        <qualifiedname>castor3d::PassRegisterInfo::sections</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassFactory.hpp" line="24" column="22" bodyfile="Material/Pass/PassFactory.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dd0/a02808_1a6674ee6e3c5dbb15210aeb3e1b19ba96" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/d1c/a01397_1a100645f1ed72275702ff30244bfa3b15" kindref="member">shader::LightingModelCreator</ref></type>
+        <definition>shader::LightingModelCreator castor3d::PassRegisterInfo::lightingModelCreator</definition>
+        <argsstring></argsstring>
+        <name>lightingModelCreator</name>
+        <qualifiedname>castor3d::PassRegisterInfo::lightingModelCreator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassFactory.hpp" line="25" column="30" bodyfile="Material/Pass/PassFactory.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dd0/a02808_1afbd91caf4c07268b2a9a0cb6b3013512" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::PassRegisterInfo::isIBLNeeded</definition>
+        <argsstring></argsstring>
+        <name>isIBLNeeded</name>
+        <qualifiedname>castor3d::PassRegisterInfo::isIBLNeeded</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassFactory.hpp" line="26" column="6" bodyfile="Material/Pass/PassFactory.hpp" bodystart="26" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="42" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="42" bodyend="42"/>
+    <location file="Material/Pass/PassFactory.hpp" line="19" column="1" bodyfile="Material/Pass/PassFactory.hpp" bodystart="20" bodyend="27"/>
     <listofallmembers>
-      <member refid="d1/dd0/a02808_1a6fa4ef6b2af38292a5be097b6f0834be" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkGraphicsPipelineCreateInfo &gt;</scope><name>value</name></member>
+      <member refid="d1/dd0/a02808_1afbd91caf4c07268b2a9a0cb6b3013512" prot="public" virt="non-virtual"><scope>castor3d::PassRegisterInfo</scope><name>isIBLNeeded</name></member>
+      <member refid="d1/dd0/a02808_1aff2b0987c95b9f234daa456cf073d37b" prot="public" virt="non-virtual"><scope>castor3d::PassRegisterInfo</scope><name>lightingModel</name></member>
+      <member refid="d1/dd0/a02808_1a6674ee6e3c5dbb15210aeb3e1b19ba96" prot="public" virt="non-virtual"><scope>castor3d::PassRegisterInfo</scope><name>lightingModelCreator</name></member>
+      <member refid="d1/dd0/a02808_1ae30c4c273fd9c387aea74408e76ede38" prot="public" virt="non-virtual"><scope>castor3d::PassRegisterInfo</scope><name>parsers</name></member>
+      <member refid="d1/dd0/a02808_1a01c66ae22cbfa76405c381012ccd0dae" prot="public" virt="non-virtual"><scope>castor3d::PassRegisterInfo</scope><name>passCreator</name></member>
+      <member refid="d1/dd0/a02808_1afe91f6cc5b54e9241b7c935ddbb6156b" prot="public" virt="non-virtual"><scope>castor3d::PassRegisterInfo</scope><name>sections</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

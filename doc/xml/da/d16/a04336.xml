@@ -1,400 +1,45 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="da/d16/a04336" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::SceneCulledRenderNodes</compoundname>
-    <includes local="no">SceneCulledRenderNodes.hpp</includes>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="da/d16/a04336_1af5a7444e97e0647460b798058b9fe3d0" prot="public" static="no">
-        <type><ref refid="dc/d81/a04344" kindref="compound">RenderNodesT</ref>&lt; <ref refid="d5/dad/a04360" kindref="compound">StaticRenderNode</ref>, StaticRenderNodesPtrByPipelineMap &gt;</type>
-        <definition>using castor3d::SceneCulledRenderNodes::StaticNodesMap =  RenderNodesT&lt; StaticRenderNode, StaticRenderNodesPtrByPipelineMap &gt;</definition>
-        <argsstring></argsstring>
-        <name>StaticNodesMap</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Node/SceneCulledRenderNodes.hpp" line="15" column="1" bodyfile="Render/Node/SceneCulledRenderNodes.hpp" bodystart="15" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="da/d16/a04336_1a41ac8612dce0f44c515f10e0f133ef20" prot="public" static="no">
-        <type><ref refid="dc/d81/a04344" kindref="compound">RenderNodesT</ref>&lt; <ref refid="db/d20/a04356" kindref="compound">SkinningRenderNode</ref>, SkinningRenderNodesPtrByPipelineMap &gt;</type>
-        <definition>using castor3d::SceneCulledRenderNodes::SkinnedNodesMap =  RenderNodesT&lt; SkinningRenderNode, SkinningRenderNodesPtrByPipelineMap &gt;</definition>
-        <argsstring></argsstring>
-        <name>SkinnedNodesMap</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Node/SceneCulledRenderNodes.hpp" line="16" column="1" bodyfile="Render/Node/SceneCulledRenderNodes.hpp" bodystart="16" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="da/d16/a04336_1a88be4d732170cebacc66c4eed28acf39" prot="public" static="no">
-        <type><ref refid="dc/d81/a04344" kindref="compound">RenderNodesT</ref>&lt; <ref refid="d5/dad/a04360" kindref="compound">StaticRenderNode</ref>, SubmeshStaticRenderNodesPtrByPipelineMap &gt;</type>
-        <definition>using castor3d::SceneCulledRenderNodes::InstantiatedStaticNodesMap =  RenderNodesT&lt; StaticRenderNode, SubmeshStaticRenderNodesPtrByPipelineMap &gt;</definition>
-        <argsstring></argsstring>
-        <name>InstantiatedStaticNodesMap</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Node/SceneCulledRenderNodes.hpp" line="17" column="1" bodyfile="Render/Node/SceneCulledRenderNodes.hpp" bodystart="17" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="da/d16/a04336_1a19cc03d984fcccfdf1cd27904b730310" prot="public" static="no">
-        <type><ref refid="dc/d81/a04344" kindref="compound">RenderNodesT</ref>&lt; <ref refid="db/d20/a04356" kindref="compound">SkinningRenderNode</ref>, SubmeshSkinningRenderNodesPtrByPipelineMap &gt;</type>
-        <definition>using castor3d::SceneCulledRenderNodes::InstantiatedSkinnedNodesMap =  RenderNodesT&lt; SkinningRenderNode, SubmeshSkinningRenderNodesPtrByPipelineMap &gt;</definition>
-        <argsstring></argsstring>
-        <name>InstantiatedSkinnedNodesMap</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Node/SceneCulledRenderNodes.hpp" line="18" column="1" bodyfile="Render/Node/SceneCulledRenderNodes.hpp" bodystart="18" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="da/d16/a04336_1a329627ed703c75003e7ad2d94ab1e02a" prot="public" static="no">
-        <type><ref refid="dc/d81/a04344" kindref="compound">RenderNodesT</ref>&lt; <ref refid="de/d38/a04316" kindref="compound">MorphingRenderNode</ref>, MorphingRenderNodesPtrByPipelineMap &gt;</type>
-        <definition>using castor3d::SceneCulledRenderNodes::MorphingNodesMap =  RenderNodesT&lt; MorphingRenderNode, MorphingRenderNodesPtrByPipelineMap &gt;</definition>
-        <argsstring></argsstring>
-        <name>MorphingNodesMap</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Node/SceneCulledRenderNodes.hpp" line="19" column="1" bodyfile="Render/Node/SceneCulledRenderNodes.hpp" bodystart="19" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="da/d16/a04336_1a9aac23e0c40d765400f84e0c21e0186c" prot="public" static="no">
-        <type><ref refid="dc/d81/a04344" kindref="compound">RenderNodesT</ref>&lt; <ref refid="dd/deb/a04304" kindref="compound">BillboardRenderNode</ref>, BillboardRenderNodesPtrByPipelineMap &gt;</type>
-        <definition>using castor3d::SceneCulledRenderNodes::BillboardNodesMap =  RenderNodesT&lt; BillboardRenderNode, BillboardRenderNodesPtrByPipelineMap &gt;</definition>
-        <argsstring></argsstring>
-        <name>BillboardNodesMap</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Node/SceneCulledRenderNodes.hpp" line="20" column="1" bodyfile="Render/Node/SceneCulledRenderNodes.hpp" bodystart="20" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="da/d16/a04336" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::EquirectangularToCube::FrameBuffer</compoundname>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="da/d16/a04336_1ad89e1b6fc1c1a7c25070b835e5b42e06" prot="public" static="no" mutable="no">
-        <type><ref refid="d5/d76/a05244" kindref="compound">Scene</ref> const  &amp;</type>
-        <definition>Scene const&amp; castor3d::SceneCulledRenderNodes::scene</definition>
+      <memberdef kind="variable" id="da/d16/a04336_1a8427e16432bbaa0a1b5c1de40f781d10" prot="public" static="no" mutable="no">
+        <type>ashes::ImageView</type>
+        <definition>ashes::ImageView castor3d::EquirectangularToCube::FrameBuffer::view</definition>
         <argsstring></argsstring>
-        <name>scene</name>
+        <name>view</name>
+        <qualifiedname>castor3d::EquirectangularToCube::FrameBuffer::view</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The scene. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Node/SceneCulledRenderNodes.hpp" line="24" column="1" bodyfile="Render/Node/SceneCulledRenderNodes.hpp" bodystart="24" bodyend="-1"/>
-        <referencedby refid="da/d16/a04336_1af45a56c4b1110e303489a3fdd7c92fba" compoundref="d4/deb/a00710" startline="44" endline="47">SceneCulledRenderNodes</referencedby>
+        <location file="Render/ToTexture/EquirectangularToCube.hpp" line="28" column="18" bodyfile="Render/ToTexture/EquirectangularToCube.hpp" bodystart="28" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="da/d16/a04336_1a81325039eeefe6bb434a29761ebcad20" prot="public" static="no" mutable="no">
-        <type><ref refid="da/d16/a04336_1af5a7444e97e0647460b798058b9fe3d0" kindref="member">StaticNodesMap</ref></type>
-        <definition>StaticNodesMap castor3d::SceneCulledRenderNodes::staticNodes</definition>
+      <memberdef kind="variable" id="da/d16/a04336_1ac4a3f0c19f7fb8336901f57d976cbf3c" prot="public" static="no" mutable="no">
+        <type>ashes::FrameBufferPtr</type>
+        <definition>ashes::FrameBufferPtr castor3d::EquirectangularToCube::FrameBuffer::frameBuffer</definition>
         <argsstring></argsstring>
-        <name>staticNodes</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The static render nodes, sorted by shader program. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Node/SceneCulledRenderNodes.hpp" line="27" column="1" bodyfile="Render/Node/SceneCulledRenderNodes.hpp" bodystart="27" bodyend="-1"/>
-        <referencedby refid="da/d16/a04336_1a9ad8a7253def8e69c037ae31564aa573" compoundref="d4/deb/a00710" startline="54" endline="68">hasNodes</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="da/d16/a04336_1a308000ba0b45ad7050dd62ca2bedc0b9" prot="public" static="no" mutable="no">
-        <type><ref refid="da/d16/a04336_1a41ac8612dce0f44c515f10e0f133ef20" kindref="member">SkinnedNodesMap</ref></type>
-        <definition>SkinnedNodesMap castor3d::SceneCulledRenderNodes::skinnedNodes</definition>
-        <argsstring></argsstring>
-        <name>skinnedNodes</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The animated render nodes, sorted by shader program. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Node/SceneCulledRenderNodes.hpp" line="30" column="1" bodyfile="Render/Node/SceneCulledRenderNodes.hpp" bodystart="30" bodyend="-1"/>
-        <referencedby refid="da/d16/a04336_1a9ad8a7253def8e69c037ae31564aa573" compoundref="d4/deb/a00710" startline="54" endline="68">hasNodes</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="da/d16/a04336_1ac1989d8db8ac5702f817825a89c16bbe" prot="public" static="no" mutable="no">
-        <type><ref refid="da/d16/a04336_1a88be4d732170cebacc66c4eed28acf39" kindref="member">InstantiatedStaticNodesMap</ref></type>
-        <definition>InstantiatedStaticNodesMap castor3d::SceneCulledRenderNodes::instancedStaticNodes</definition>
-        <argsstring></argsstring>
-        <name>instancedStaticNodes</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The instanced render nodes, sorted by shader program. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Node/SceneCulledRenderNodes.hpp" line="33" column="1" bodyfile="Render/Node/SceneCulledRenderNodes.hpp" bodystart="33" bodyend="-1"/>
-        <referencedby refid="da/d16/a04336_1a9ad8a7253def8e69c037ae31564aa573" compoundref="d4/deb/a00710" startline="54" endline="68">hasNodes</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="da/d16/a04336_1aef6f1ebe780492f9713df86f7908bca0" prot="public" static="no" mutable="no">
-        <type><ref refid="da/d16/a04336_1a19cc03d984fcccfdf1cd27904b730310" kindref="member">InstantiatedSkinnedNodesMap</ref></type>
-        <definition>InstantiatedSkinnedNodesMap castor3d::SceneCulledRenderNodes::instancedSkinnedNodes</definition>
-        <argsstring></argsstring>
-        <name>instancedSkinnedNodes</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The animated render nodes, sorted by shader program. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Node/SceneCulledRenderNodes.hpp" line="36" column="1" bodyfile="Render/Node/SceneCulledRenderNodes.hpp" bodystart="36" bodyend="-1"/>
-        <referencedby refid="da/d16/a04336_1a9ad8a7253def8e69c037ae31564aa573" compoundref="d4/deb/a00710" startline="54" endline="68">hasNodes</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="da/d16/a04336_1a4943d78fa70d9271e104c7362101cb1e" prot="public" static="no" mutable="no">
-        <type><ref refid="da/d16/a04336_1a329627ed703c75003e7ad2d94ab1e02a" kindref="member">MorphingNodesMap</ref></type>
-        <definition>MorphingNodesMap castor3d::SceneCulledRenderNodes::morphingNodes</definition>
-        <argsstring></argsstring>
-        <name>morphingNodes</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The animated render nodes, sorted by shader program. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Node/SceneCulledRenderNodes.hpp" line="39" column="1" bodyfile="Render/Node/SceneCulledRenderNodes.hpp" bodystart="39" bodyend="-1"/>
-        <referencedby refid="da/d16/a04336_1a9ad8a7253def8e69c037ae31564aa573" compoundref="d4/deb/a00710" startline="54" endline="68">hasNodes</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="da/d16/a04336_1a8c3a1634b816cff96fffa416039ed8fc" prot="public" static="no" mutable="no">
-        <type><ref refid="da/d16/a04336_1a9aac23e0c40d765400f84e0c21e0186c" kindref="member">BillboardNodesMap</ref></type>
-        <definition>BillboardNodesMap castor3d::SceneCulledRenderNodes::billboardNodes</definition>
-        <argsstring></argsstring>
-        <name>billboardNodes</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The billboards render nodes, sorted by shader program. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Node/SceneCulledRenderNodes.hpp" line="42" column="1" bodyfile="Render/Node/SceneCulledRenderNodes.hpp" bodystart="42" bodyend="-1"/>
-        <referencedby refid="da/d16/a04336_1a9ad8a7253def8e69c037ae31564aa573" compoundref="d4/deb/a00710" startline="54" endline="68">hasNodes</referencedby>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="da/d16/a04336_1af45a56c4b1110e303489a3fdd7c92fba" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::SceneCulledRenderNodes::SceneCulledRenderNodes</definition>
-        <argsstring>(Scene const &amp;scene)</argsstring>
-        <name>SceneCulledRenderNodes</name>
-        <param>
-          <type><ref refid="d5/d76/a05244" kindref="compound">Scene</ref> const &amp;</type>
-          <declname>scene</declname>
-        </param>
+        <name>frameBuffer</name>
+        <qualifiedname>castor3d::EquirectangularToCube::FrameBuffer::frameBuffer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Node/SceneCulledRenderNodes.hpp" line="44" column="1" bodyfile="Render/Node/SceneCulledRenderNodes.hpp" bodystart="44" bodyend="47"/>
-        <references refid="da/d16/a04336_1ad89e1b6fc1c1a7c25070b835e5b42e06" compoundref="d4/deb/a00710" startline="24">scene</references>
-      </memberdef>
-      <memberdef kind="function" id="da/d16/a04336_1a1537cedf6c121ea5815c2799663b0f12" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SceneCulledRenderNodes::parse</definition>
-        <argsstring>(RenderQueue const &amp;queue)</argsstring>
-        <name>parse</name>
-        <param>
-          <type><ref refid="d2/dfe/a04620" kindref="compound">RenderQueue</ref> const &amp;</type>
-          <declname>queue</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Node/SceneCulledRenderNodes.hpp" line="49" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="da/d16/a04336_1a86f3f017dcf876bea29505071f4e2141" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SceneCulledRenderNodes::prepareCommandBuffers</definition>
-        <argsstring>(RenderQueue const &amp;queue, ashes::Optional&lt; VkViewport &gt; const &amp;viewport, ashes::Optional&lt; VkRect2D &gt; const &amp;scissors)</argsstring>
-        <name>prepareCommandBuffers</name>
-        <param>
-          <type><ref refid="d2/dfe/a04620" kindref="compound">RenderQueue</ref> const &amp;</type>
-          <declname>queue</declname>
-        </param>
-        <param>
-          <type>ashes::Optional&lt; VkViewport &gt; const &amp;</type>
-          <declname>viewport</declname>
-        </param>
-        <param>
-          <type>ashes::Optional&lt; VkRect2D &gt; const &amp;</type>
-          <declname>scissors</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Node/SceneCulledRenderNodes.hpp" line="50" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="da/d16/a04336_1a9ad8a7253def8e69c037ae31564aa573" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::SceneCulledRenderNodes::hasNodes</definition>
-        <argsstring>() const</argsstring>
-        <name>hasNodes</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Node/SceneCulledRenderNodes.hpp" line="54" column="1" bodyfile="Render/Node/SceneCulledRenderNodes.hpp" bodystart="54" bodyend="68"/>
-        <references refid="dc/d81/a04344_1a78b19f283ba543e7ff6b5c1d3067d0d0" compoundref="d2/d94/a00716" startline="21">castor3d::RenderNodesT&lt; NodeType, MapType &gt;::backCulled</references>
-        <references refid="da/d16/a04336_1a8c3a1634b816cff96fffa416039ed8fc" compoundref="d4/deb/a00710" startline="42">billboardNodes</references>
-        <references refid="dc/d81/a04344_1a5e9a30f96da43050f242c1256db1d3de" compoundref="d2/d94/a00716" startline="18">castor3d::RenderNodesT&lt; NodeType, MapType &gt;::frontCulled</references>
-        <references refid="da/d16/a04336_1aef6f1ebe780492f9713df86f7908bca0" compoundref="d4/deb/a00710" startline="36">instancedSkinnedNodes</references>
-        <references refid="da/d16/a04336_1ac1989d8db8ac5702f817825a89c16bbe" compoundref="d4/deb/a00710" startline="33">instancedStaticNodes</references>
-        <references refid="da/d16/a04336_1a4943d78fa70d9271e104c7362101cb1e" compoundref="d4/deb/a00710" startline="39">morphingNodes</references>
-        <references refid="da/d16/a04336_1a308000ba0b45ad7050dd62ca2bedc0b9" compoundref="d4/deb/a00710" startline="30">skinnedNodes</references>
-        <references refid="da/d16/a04336_1a81325039eeefe6bb434a29761ebcad20" compoundref="d4/deb/a00710" startline="27">staticNodes</references>
+        <location file="Render/ToTexture/EquirectangularToCube.hpp" line="29" column="23" bodyfile="Render/ToTexture/EquirectangularToCube.hpp" bodystart="29" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="3287">
-        <label>MapType</label>
-      </node>
-      <node id="3289">
-        <label>castor3d::RenderNodesT&lt; SkinningRenderNode, SubmeshSkinningRenderNodesPtrByPipelineMap &gt;</label>
-        <link refid="dc/d81/a04344"/>
-        <childnode refid="3286" relation="template-instance">
-          <edgelabel>&lt; SkinningRenderNode, SubmeshSkinningRenderNodesPtrByPipelineMap &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3286">
-        <label>castor3d::RenderNodesT&lt; NodeType, MapType &gt;</label>
-        <link refid="dc/d81/a04344"/>
-        <childnode refid="3287" relation="usage">
-          <edgelabel>frontCulled</edgelabel>
-          <edgelabel>backCulled</edgelabel>
-        </childnode>
-      </node>
-      <node id="3288">
-        <label>castor3d::RenderNodesT&lt; BillboardRenderNode, BillboardRenderNodesPtrByPipelineMap &gt;</label>
-        <link refid="dc/d81/a04344"/>
-        <childnode refid="3286" relation="template-instance">
-          <edgelabel>&lt; BillboardRenderNode, BillboardRenderNodesPtrByPipelineMap &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3296">
-        <label>Named</label>
-      </node>
-      <node id="3285">
-        <label>castor3d::RenderNodesT&lt; SkinningRenderNode, SkinningRenderNodesPtrByPipelineMap &gt;</label>
-        <link refid="dc/d81/a04344"/>
-        <childnode refid="3286" relation="template-instance">
-          <edgelabel>&lt; SkinningRenderNode, SkinningRenderNodesPtrByPipelineMap &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3294">
-        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
-      </node>
-      <node id="3295">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="3284">
-        <label>castor3d::SceneCulledRenderNodes</label>
-        <link refid="da/d16/a04336"/>
-        <childnode refid="3285" relation="usage">
-          <edgelabel>skinnedNodes</edgelabel>
-        </childnode>
-        <childnode refid="3288" relation="usage">
-          <edgelabel>billboardNodes</edgelabel>
-        </childnode>
-        <childnode refid="3289" relation="usage">
-          <edgelabel>instancedSkinnedNodes</edgelabel>
-        </childnode>
-        <childnode refid="3290" relation="usage">
-          <edgelabel>staticNodes</edgelabel>
-        </childnode>
-        <childnode refid="3291" relation="usage">
-          <edgelabel>morphingNodes</edgelabel>
-        </childnode>
-        <childnode refid="3292" relation="usage">
-          <edgelabel>instancedStaticNodes</edgelabel>
-        </childnode>
-        <childnode refid="3293" relation="usage">
-          <edgelabel>scene</edgelabel>
-        </childnode>
-      </node>
-      <node id="3291">
-        <label>castor3d::RenderNodesT&lt; MorphingRenderNode, MorphingRenderNodesPtrByPipelineMap &gt;</label>
-        <link refid="dc/d81/a04344"/>
-        <childnode refid="3286" relation="template-instance">
-          <edgelabel>&lt; MorphingRenderNode, MorphingRenderNodesPtrByPipelineMap &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3290">
-        <label>castor3d::RenderNodesT&lt; StaticRenderNode, StaticRenderNodesPtrByPipelineMap &gt;</label>
-        <link refid="dc/d81/a04344"/>
-        <childnode refid="3286" relation="template-instance">
-          <edgelabel>&lt; StaticRenderNode, StaticRenderNodesPtrByPipelineMap &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3292">
-        <label>castor3d::RenderNodesT&lt; StaticRenderNode, SubmeshStaticRenderNodesPtrByPipelineMap &gt;</label>
-        <link refid="dc/d81/a04344"/>
-        <childnode refid="3286" relation="template-instance">
-          <edgelabel>&lt; StaticRenderNode, SubmeshStaticRenderNodesPtrByPipelineMap &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3293">
-        <label>castor3d::Scene</label>
-        <link refid="d5/d76/a05244"/>
-        <childnode refid="3294" relation="public-inheritance">
-        </childnode>
-        <childnode refid="3295" relation="public-inheritance">
-        </childnode>
-        <childnode refid="3296" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Render/Node/SceneCulledRenderNodes.hpp" line="14" column="1" bodyfile="Render/Node/SceneCulledRenderNodes.hpp" bodystart="13" bodyend="69"/>
+    <location file="Render/ToTexture/EquirectangularToCube.hpp" line="26" column="1" bodyfile="Render/ToTexture/EquirectangularToCube.hpp" bodystart="27" bodyend="30"/>
     <listofallmembers>
-      <member refid="da/d16/a04336_1a8c3a1634b816cff96fffa416039ed8fc" prot="public" virt="non-virtual"><scope>castor3d::SceneCulledRenderNodes</scope><name>billboardNodes</name></member>
-      <member refid="da/d16/a04336_1a9aac23e0c40d765400f84e0c21e0186c" prot="public" virt="non-virtual"><scope>castor3d::SceneCulledRenderNodes</scope><name>BillboardNodesMap</name></member>
-      <member refid="da/d16/a04336_1a9ad8a7253def8e69c037ae31564aa573" prot="public" virt="non-virtual"><scope>castor3d::SceneCulledRenderNodes</scope><name>hasNodes</name></member>
-      <member refid="da/d16/a04336_1aef6f1ebe780492f9713df86f7908bca0" prot="public" virt="non-virtual"><scope>castor3d::SceneCulledRenderNodes</scope><name>instancedSkinnedNodes</name></member>
-      <member refid="da/d16/a04336_1ac1989d8db8ac5702f817825a89c16bbe" prot="public" virt="non-virtual"><scope>castor3d::SceneCulledRenderNodes</scope><name>instancedStaticNodes</name></member>
-      <member refid="da/d16/a04336_1a19cc03d984fcccfdf1cd27904b730310" prot="public" virt="non-virtual"><scope>castor3d::SceneCulledRenderNodes</scope><name>InstantiatedSkinnedNodesMap</name></member>
-      <member refid="da/d16/a04336_1a88be4d732170cebacc66c4eed28acf39" prot="public" virt="non-virtual"><scope>castor3d::SceneCulledRenderNodes</scope><name>InstantiatedStaticNodesMap</name></member>
-      <member refid="da/d16/a04336_1a4943d78fa70d9271e104c7362101cb1e" prot="public" virt="non-virtual"><scope>castor3d::SceneCulledRenderNodes</scope><name>morphingNodes</name></member>
-      <member refid="da/d16/a04336_1a329627ed703c75003e7ad2d94ab1e02a" prot="public" virt="non-virtual"><scope>castor3d::SceneCulledRenderNodes</scope><name>MorphingNodesMap</name></member>
-      <member refid="da/d16/a04336_1a1537cedf6c121ea5815c2799663b0f12" prot="public" virt="non-virtual"><scope>castor3d::SceneCulledRenderNodes</scope><name>parse</name></member>
-      <member refid="da/d16/a04336_1a86f3f017dcf876bea29505071f4e2141" prot="public" virt="non-virtual"><scope>castor3d::SceneCulledRenderNodes</scope><name>prepareCommandBuffers</name></member>
-      <member refid="da/d16/a04336_1ad89e1b6fc1c1a7c25070b835e5b42e06" prot="public" virt="non-virtual"><scope>castor3d::SceneCulledRenderNodes</scope><name>scene</name></member>
-      <member refid="da/d16/a04336_1af45a56c4b1110e303489a3fdd7c92fba" prot="public" virt="non-virtual"><scope>castor3d::SceneCulledRenderNodes</scope><name>SceneCulledRenderNodes</name></member>
-      <member refid="da/d16/a04336_1a308000ba0b45ad7050dd62ca2bedc0b9" prot="public" virt="non-virtual"><scope>castor3d::SceneCulledRenderNodes</scope><name>skinnedNodes</name></member>
-      <member refid="da/d16/a04336_1a41ac8612dce0f44c515f10e0f133ef20" prot="public" virt="non-virtual"><scope>castor3d::SceneCulledRenderNodes</scope><name>SkinnedNodesMap</name></member>
-      <member refid="da/d16/a04336_1a81325039eeefe6bb434a29761ebcad20" prot="public" virt="non-virtual"><scope>castor3d::SceneCulledRenderNodes</scope><name>staticNodes</name></member>
-      <member refid="da/d16/a04336_1af5a7444e97e0647460b798058b9fe3d0" prot="public" virt="non-virtual"><scope>castor3d::SceneCulledRenderNodes</scope><name>StaticNodesMap</name></member>
+      <member refid="da/d16/a04336_1ac4a3f0c19f7fb8336901f57d976cbf3c" prot="public" virt="non-virtual"><scope>castor3d::EquirectangularToCube::FrameBuffer</scope><name>frameBuffer</name></member>
+      <member refid="da/d16/a04336_1a8427e16432bbaa0a1b5c1de40f781d10" prot="public" virt="non-virtual"><scope>castor3d::EquirectangularToCube::FrameBuffer</scope><name>view</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

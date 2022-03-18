@@ -1,182 +1,193 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d0/d0c/a04484" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::IblTextures</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Scene &gt;</basecompoundref>
-    <includes local="no">IblTextures.hpp</includes>
-      <sectiondef kind="user-defined">
-      <memberdef kind="function" id="d0/d0c/a04484_1ab9bdf726119dc6dad0d3bc06897366df" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::ImageView const  &amp;</type>
-        <definition>ashes::ImageView const&amp; castor3d::IblTextures::getIrradianceTexture</definition>
-        <argsstring>() const</argsstring>
-        <name>getIrradianceTexture</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>name Getters. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="80" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="80" bodyend="83"/>
-        <references refid="de/d37/a04488_1af5a3a3243ba1dd29450e7cd8367688bf" compoundref="d5/dae/a00767" startline="69" endline="72">castor3d::RadianceComputer::getResult</references>
-      </memberdef>
-      <memberdef kind="function" id="d0/d0c/a04484_1a5f1b72447c7debd0c884ce628b718bdf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::ImageView const  &amp;</type>
-        <definition>ashes::ImageView const&amp; castor3d::IblTextures::getPrefilteredEnvironmentTexture</definition>
-        <argsstring>() const</argsstring>
-        <name>getPrefilteredEnvironmentTexture</name>
+    <compoundname>castor3d::Geometry</compoundname>
+    <basecompoundref refid="d9/dbb/a04524" prot="public" virt="non-virtual">castor3d::MovableObject</basecompoundref>
+    <basecompoundref refid="dc/d0d/a04588" prot="public" virt="non-virtual">castor3d::RenderedObject</basecompoundref>
+    <includes local="no">Geometry.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/d0c/a04484_1acaec2f1849bad9f6ae8c91f6e2f72c26" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/df5/a01395_1a5e1933c5222153048a973fda3517e72d" kindref="member">OnSubmeshMaterialChanged</ref></type>
+        <definition>OnSubmeshMaterialChanged castor3d::Geometry::onMaterialChanged</definition>
+        <argsstring></argsstring>
+        <name>onMaterialChanged</name>
+        <qualifiedname>castor3d::Geometry::onMaterialChanged</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="85" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="85" bodyend="88"/>
-        <references refid="df/dfb/a04472_1a432eda24881219a29f325c583ff68ca3" compoundref="d2/d4a/a00758" startline="100" endline="103">castor3d::EnvironmentPrefilter::getResult</references>
-      </memberdef>
-      <memberdef kind="function" id="d0/d0c/a04484_1a0fadef06d78460e0f57b7c73d1743cc5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::ImageView const  &amp;</type>
-        <definition>ashes::ImageView const&amp; castor3d::IblTextures::getPrefilteredBrdfTexture</definition>
-        <argsstring>() const</argsstring>
-        <name>getPrefilteredBrdfTexture</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="90" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="90" bodyend="93"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d0c/a04484_1ac929a2cee25cd0cc758d601ae9de8144" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::Sampler const  &amp;</type>
-        <definition>ashes::Sampler const&amp; castor3d::IblTextures::getIrradianceSampler</definition>
-        <argsstring>() const</argsstring>
-        <name>getIrradianceSampler</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="95" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="95" bodyend="98"/>
-        <references refid="de/d37/a04488_1a31fc2df8651d5866af9071e15e8cef35">castor3d::RadianceComputer::getSampler</references>
-      </memberdef>
-      <memberdef kind="function" id="d0/d0c/a04484_1a89468d02a076cf84f24ec26123e1f6e1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::Sampler const  &amp;</type>
-        <definition>ashes::Sampler const&amp; castor3d::IblTextures::getPrefilteredEnvironmentSampler</definition>
-        <argsstring>() const</argsstring>
-        <name>getPrefilteredEnvironmentSampler</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="100" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="100" bodyend="103"/>
-        <references refid="df/dfb/a04472_1ae19f95cf5dd58bb2ceef4d57d8ade925" compoundref="d2/d4a/a00758" startline="105" endline="108">castor3d::EnvironmentPrefilter::getSampler</references>
-      </memberdef>
-      <memberdef kind="function" id="d0/d0c/a04484_1a1332177eb8ef664b4cdab52ef25cfdd1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::Sampler const  &amp;</type>
-        <definition>ashes::Sampler const&amp; castor3d::IblTextures::getPrefilteredBrdfSampler</definition>
-        <argsstring>() const</argsstring>
-        <name>getPrefilteredBrdfSampler</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="105" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="105" bodyend="108"/>
+        <location file="Scene/Geometry.hpp" line="166" column="26" bodyfile="Scene/Geometry.hpp" bodystart="166" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d0/d0c/a04484_1aeb03ae17132cdbc5c59d81ecab517543" prot="private" static="no" mutable="no">
-        <type>ashes::ImagePtr</type>
-        <definition>ashes::ImagePtr castor3d::IblTextures::m_prefilteredBrdf</definition>
+      <memberdef kind="variable" id="d0/d0c/a04484_1ac033d9c416ceea39bb00b9272a4857e4" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/df5/a01395_1a788a36216ccbb048af69a0b240aef244" kindref="member">MeshResPtr</ref></type>
+        <definition>MeshResPtr castor3d::Geometry::m_mesh</definition>
         <argsstring></argsstring>
-        <name>m_prefilteredBrdf</name>
+        <name>m_mesh</name>
+        <qualifiedname>castor3d::Geometry::m_mesh</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="112" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="112" bodyend="-1"/>
+        <location file="Scene/Geometry.hpp" line="173" column="12" bodyfile="Scene/Geometry.hpp" bodystart="173" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d0/d0c/a04484_1ad3a72bd93748368aebd28a913a2de34d" prot="private" static="no" mutable="no">
-        <type>ashes::ImageView</type>
-        <definition>ashes::ImageView castor3d::IblTextures::m_prefilteredBrdfView</definition>
+      <memberdef kind="variable" id="d0/d0c/a04484_1a4eca92c3f7d2e55c28742d7639959ff6" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::Geometry::m_meshName</definition>
         <argsstring></argsstring>
-        <name>m_prefilteredBrdfView</name>
+        <name>m_meshName</name>
+        <qualifiedname>castor3d::Geometry::m_meshName</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="113" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="113" bodyend="-1"/>
+        <location file="Scene/Geometry.hpp" line="174" column="16" bodyfile="Scene/Geometry.hpp" bodystart="174" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d0/d0c/a04484_1ad0ade1df7ddc5541cb4b2cd4c30d279e" prot="private" static="no" mutable="no">
-        <type>SamplerSPtr</type>
-        <definition>SamplerSPtr castor3d::IblTextures::m_sampler</definition>
+      <memberdef kind="variable" id="d0/d0c/a04484_1a5ae481a597837e2ff8d619170d42eb5b" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::Geometry::m_listCreated</definition>
         <argsstring></argsstring>
-        <name>m_sampler</name>
+        <name>m_listCreated</name>
+        <qualifiedname>castor3d::Geometry::m_listCreated</qualifiedname>
+        <initializer>{ false }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="114" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="114" bodyend="-1"/>
+        <location file="Scene/Geometry.hpp" line="175" column="6" bodyfile="Scene/Geometry.hpp" bodystart="175" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d0/d0c/a04484_1a5fba7190da8b10e7a66579ab8c9bf721" prot="private" static="no" mutable="no">
-        <type><ref refid="de/d37/a04488" kindref="compound">RadianceComputer</ref></type>
-        <definition>RadianceComputer castor3d::IblTextures::m_radianceComputer</definition>
+      <memberdef kind="variable" id="d0/d0c/a04484_1ae5e04fc7896bd4116a8f8892caff2a47" prot="private" static="no" mutable="yes">
+        <type>castor::SpinMutex</type>
+        <definition>castor::SpinMutex castor3d::Geometry::m_mutex</definition>
         <argsstring></argsstring>
-        <name>m_radianceComputer</name>
+        <name>m_mutex</name>
+        <qualifiedname>castor3d::Geometry::m_mutex</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="115" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="115" bodyend="-1"/>
+        <location file="Scene/Geometry.hpp" line="176" column="27" bodyfile="Scene/Geometry.hpp" bodystart="176" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d0/d0c/a04484_1a0b8a2ed6e7b6504d80d2100bcdd22eb1" prot="private" static="no" mutable="no">
-        <type><ref refid="df/dfb/a04472" kindref="compound">EnvironmentPrefilter</ref></type>
-        <definition>EnvironmentPrefilter castor3d::IblTextures::m_environmentPrefilter</definition>
+      <memberdef kind="variable" id="d0/d0c/a04484_1a87407a0e713213b243fd325989e1da42" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/df5/a01395_1a7955e4f37b721c387f00f04fe355c3b1" kindref="member">SubmeshMaterialMap</ref></type>
+        <definition>SubmeshMaterialMap castor3d::Geometry::m_submeshesMaterials</definition>
         <argsstring></argsstring>
-        <name>m_environmentPrefilter</name>
+        <name>m_submeshesMaterials</name>
+        <qualifiedname>castor3d::Geometry::m_submeshesMaterials</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="116" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="116" bodyend="-1"/>
+        <location file="Scene/Geometry.hpp" line="177" column="20" bodyfile="Scene/Geometry.hpp" bodystart="177" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d0c/a04484_1ae483f7f8b06a215fb1440f17fdb7a119" prot="private" static="no" mutable="no">
+        <type>SubmeshBoundingBoxMap</type>
+        <definition>SubmeshBoundingBoxMap castor3d::Geometry::m_submeshesBoxes</definition>
+        <argsstring></argsstring>
+        <name>m_submeshesBoxes</name>
+        <qualifiedname>castor3d::Geometry::m_submeshesBoxes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="178" column="23" bodyfile="Scene/Geometry.hpp" bodystart="178" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d0c/a04484_1addb364d4efb330a32de68dff8f177964" prot="private" static="no" mutable="no">
+        <type>SubmeshBoundingSphereMap</type>
+        <definition>SubmeshBoundingSphereMap castor3d::Geometry::m_submeshesSpheres</definition>
+        <argsstring></argsstring>
+        <name>m_submeshesSpheres</name>
+        <qualifiedname>castor3d::Geometry::m_submeshesSpheres</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="179" column="26" bodyfile="Scene/Geometry.hpp" bodystart="179" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d0c/a04484_1a0c5f3f21bf755ba8f5f8331705673cc3" prot="private" static="no" mutable="no">
+        <type>castor::BoundingBox</type>
+        <definition>castor::BoundingBox castor3d::Geometry::m_box</definition>
+        <argsstring></argsstring>
+        <name>m_box</name>
+        <qualifiedname>castor3d::Geometry::m_box</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="180" column="21" bodyfile="Scene/Geometry.hpp" bodystart="180" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d0c/a04484_1a1cd243563b7c605c0f0fbb0955cde897" prot="private" static="no" mutable="no">
+        <type>castor::BoundingSphere</type>
+        <definition>castor::BoundingSphere castor3d::Geometry::m_sphere</definition>
+        <argsstring></argsstring>
+        <name>m_sphere</name>
+        <qualifiedname>castor3d::Geometry::m_sphere</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="181" column="24" bodyfile="Scene/Geometry.hpp" bodystart="181" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d0c/a04484_1a36ba45ca884c2c25b660b7a76ab0e319" prot="private" static="no" mutable="no">
+        <type>std::unordered_map&lt; <ref refid="df/dd0/a02804" kindref="compound">Pass</ref> const *, std::unordered_map&lt; uint32_t, uint32_t &gt; &gt;</type>
+        <definition>std::unordered_map&lt; Pass const *, std::unordered_map&lt; uint32_t, uint32_t &gt; &gt; castor3d::Geometry::m_ids</definition>
+        <argsstring></argsstring>
+        <name>m_ids</name>
+        <qualifiedname>castor3d::Geometry::m_ids</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="182" column="20" bodyfile="Scene/Geometry.hpp" bodystart="182" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d0/d0c/a04484_1ade1997c1f92aef1ddd8ef233801c950e" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::IblTextures::IblTextures</definition>
-        <argsstring>(Scene &amp;scene, RenderDevice const &amp;device, ashes::Image const &amp;source, SamplerSPtr sampler)</argsstring>
-        <name>IblTextures</name>
+      <memberdef kind="function" id="d0/d0c/a04484_1a1e732a00568688732d0c23ab3108b014" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Geometry::Geometry</definition>
+        <argsstring>(castor::String const &amp;name, Scene &amp;scene, SceneNode &amp;node, MeshResPtr mesh={})</argsstring>
+        <name>Geometry</name>
+        <qualifiedname>castor3d::Geometry::Geometry</qualifiedname>
         <param>
-          <type><ref refid="d5/d76/a05244" kindref="compound">Scene</ref> &amp;</type>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d34/a04592" kindref="compound">Scene</ref> &amp;</type>
           <declname>scene</declname>
         </param>
         <param>
-          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
+          <type><ref refid="d4/d6d/a04636" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>node</declname>
         </param>
         <param>
-          <type>ashes::Image const &amp;</type>
-          <declname>source</declname>
-        </param>
-        <param>
-          <type>SamplerSPtr</type>
-          <declname>sampler</declname>
+          <type><ref refid="d2/df5/a01395_1a788a36216ccbb048af69a0b240aef244" kindref="member">MeshResPtr</ref></type>
+          <declname>mesh</declname>
+          <defval>{}</defval>
         </param>
         <briefdescription>
 <para>Constructor. </para>
@@ -184,34 +195,34 @@
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The geometry name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
 <parametername direction="in">scene</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The scene. </para>
+<para>The parent scene. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">device</parametername>
+<parametername direction="in">node</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The GPU device. </para>
+<para>The scene node to which the geometry is attached. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">source</parametername>
+<parametername direction="in">mesh</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The source environment map. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">sampler</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The sampler used for the environment map. </para>
+<para>The mesh. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -219,55 +230,53 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="35" column="1"/>
+        <location file="Scene/Geometry.hpp" line="42" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d0/d0c/a04484_1a22e8af0801fa2367f7bbcb052929d9c4" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>virtual C3D_API castor3d::IblTextures::~IblTextures</definition>
-        <argsstring>()</argsstring>
-        <name>~IblTextures</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="45" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d0c/a04484_1a381eeb8bf63b295044c7017087bfc7c1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::IblTextures::update</definition>
-        <argsstring>()</argsstring>
-        <name>update</name>
-        <briefdescription>
-<para>Updates the environment maps. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="52" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d0c/a04484_1af18aed1ad05c4d704e324ec051c0d249" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Semaphore const  &amp;</type>
-        <definition>C3D_API ashes::Semaphore const&amp; castor3d::IblTextures::update</definition>
-        <argsstring>(ashes::Semaphore const &amp;toWait)</argsstring>
-        <name>update</name>
+      <memberdef kind="function" id="d0/d0c/a04484_1a8b0243a48eaa874d2b97649c5e673281" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Geometry::Geometry</definition>
+        <argsstring>(castor::String const &amp;name, Scene &amp;scene, MeshResPtr mesh={})</argsstring>
+        <name>Geometry</name>
+        <qualifiedname>castor3d::Geometry::Geometry</qualifiedname>
         <param>
-          <type>ashes::Semaphore const &amp;</type>
-          <declname>toWait</declname>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d34/a04592" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a788a36216ccbb048af69a0b240aef244" kindref="member">MeshResPtr</ref></type>
+          <declname>mesh</declname>
+          <defval>{}</defval>
         </param>
         <briefdescription>
-<para>Updates the environment maps. </para>
+<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">toWait</parametername>
+<parametername direction="in">name</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The semaphore from the previous render pass. </para>
+<para>The geometry name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent scene. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mesh. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -275,27 +284,68 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="61" column="1"/>
+        <location file="Scene/Geometry.hpp" line="58" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d0/d0c/a04484_1a2b70c8a53dce789d4c504ff5435be539" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::IblTextures::debugDisplay</definition>
-        <argsstring>(castor::Size const &amp;size) const</argsstring>
-        <name>debugDisplay</name>
+      <memberdef kind="function" id="d0/d0c/a04484_1a1edb8a6926be6c9e7bd62c74c8846b88" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Geometry::prepare</definition>
+        <argsstring>(uint32_t &amp;nbFaces, uint32_t &amp;nbVertex)</argsstring>
+        <name>prepare</name>
+        <qualifiedname>castor3d::Geometry::prepare</qualifiedname>
         <param>
-          <type>castor::Size const &amp;</type>
-          <declname>size</declname>
+          <type>uint32_t &amp;</type>
+          <declname>nbFaces</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>nbVertex</declname>
         </param>
         <briefdescription>
-<para>Displays the maps. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>brief Creates the mesh buffers <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">nbFaces</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to retrieve the faces number </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">nbVertex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to retrieve the vertexes number </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="71" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0c/a04484_1a61c105feac66d1986d5b2039c0a92da7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Geometry::setMesh</definition>
+        <argsstring>(MeshResPtr mesh)</argsstring>
+        <name>setMesh</name>
+        <qualifiedname>castor3d::Geometry::setMesh</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a788a36216ccbb048af69a0b240aef244" kindref="member">MeshResPtr</ref></type>
+          <declname>mesh</declname>
+        </param>
+        <briefdescription>
+<para>Defines this geometry&apos;s mesh. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">size</parametername>
+<parametername direction="in">mesh</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The render size. </para>
+<para>The mesh. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -303,7 +353,332 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="70" column="1"/>
+        <location file="Scene/Geometry.hpp" line="80" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0c/a04484_1a9576d94311af6daaaa652e4e04058c34" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> MaterialRPtr</type>
+        <definition>C3D_API MaterialRPtr castor3d::Geometry::getMaterial</definition>
+        <argsstring>(Submesh const &amp;submesh) const</argsstring>
+        <name>getMaterial</name>
+        <qualifiedname>castor3d::Geometry::getMaterial</qualifiedname>
+        <param>
+          <type><ref refid="dc/dc7/a03424" kindref="compound">Submesh</ref> const &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves the submesh material. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The submesh. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The material. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="91" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0c/a04484_1a8ba378a16c2aa99a06754973aeaaab7d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Geometry::setMaterial</definition>
+        <argsstring>(Submesh &amp;submesh, MaterialRPtr material, bool updateSubmesh=true)</argsstring>
+        <name>setMaterial</name>
+        <qualifiedname>castor3d::Geometry::setMaterial</qualifiedname>
+        <param>
+          <type><ref refid="dc/dc7/a03424" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <param>
+          <type>MaterialRPtr</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>updateSubmesh</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>Defines a submesh material. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The submesh. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">material</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The material. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">updateSubmesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tells if the submesh&apos;s buffers need to be updated. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="104" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0c/a04484_1a5560136582e1fadb948fa0b7a7bb1fd9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Geometry::updateContainers</definition>
+        <argsstring>(SubmeshBoundingBoxList const &amp;boxes)</argsstring>
+        <name>updateContainers</name>
+        <qualifiedname>castor3d::Geometry::updateContainers</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1ac45304de9c80b94acff3cef7b03302ba" kindref="member">SubmeshBoundingBoxList</ref> const &amp;</type>
+          <declname>boxes</declname>
+        </param>
+        <briefdescription>
+<para>Computes the bounding box from the given submeshes boxes. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="113" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0c/a04484_1a2045792a2c1e0de09afc8e406a2a3481" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::BoundingBox const &amp;</type>
+        <definition>C3D_API castor::BoundingBox const  &amp; castor3d::Geometry::getBoundingBox</definition>
+        <argsstring>(Submesh const &amp;submesh) const</argsstring>
+        <name>getBoundingBox</name>
+        <qualifiedname>castor3d::Geometry::getBoundingBox</qualifiedname>
+        <param>
+          <type><ref refid="dc/dc7/a03424" kindref="compound">Submesh</ref> const &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The submesh. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The collision box for given submesh. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="122" column="36"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0c/a04484_1adfb482d1a3b7be4fe6e812edf41bc30c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::BoundingSphere const &amp;</type>
+        <definition>C3D_API castor::BoundingSphere const  &amp; castor3d::Geometry::getBoundingSphere</definition>
+        <argsstring>(Submesh const &amp;submesh) const</argsstring>
+        <name>getBoundingSphere</name>
+        <qualifiedname>castor3d::Geometry::getBoundingSphere</qualifiedname>
+        <param>
+          <type><ref refid="dc/dc7/a03424" kindref="compound">Submesh</ref> const &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The submesh. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The collision sphere for given submesh. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="131" column="39"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0c/a04484_1afb3ad561f4d82c22a6c41103b45857ef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Geometry::setBoundingBox</definition>
+        <argsstring>(Submesh const &amp;submesh, castor::BoundingBox const &amp;box)</argsstring>
+        <name>setBoundingBox</name>
+        <qualifiedname>castor3d::Geometry::setBoundingBox</qualifiedname>
+        <param>
+          <type><ref refid="dc/dc7/a03424" kindref="compound">Submesh</ref> const &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <param>
+          <type>castor::BoundingBox const &amp;</type>
+          <declname>box</declname>
+        </param>
+        <briefdescription>
+<para>Sets the bounding box for given submesh. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The submesh. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">box</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The bounding box. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="142" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0c/a04484_1a62f297fb24f40d687f1ace0bb1df1e45" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::Geometry::getId</definition>
+        <argsstring>(Pass const &amp;pass, Submesh const &amp;submesh) const</argsstring>
+        <name>getId</name>
+        <qualifiedname>castor3d::Geometry::getId</qualifiedname>
+        <param>
+          <type><ref refid="df/dd0/a02804" kindref="compound">Pass</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/dc7/a03424" kindref="compound">Submesh</ref> const &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="145" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0c/a04484_1abcbc4577a3dc370ec74f8f374da8473c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Geometry::setId</definition>
+        <argsstring>(Pass const &amp;pass, Submesh const &amp;submesh, uint32_t id)</argsstring>
+        <name>setId</name>
+        <qualifiedname>castor3d::Geometry::setId</qualifiedname>
+        <param>
+          <type><ref refid="df/dd0/a02804" kindref="compound">Pass</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/dc7/a03424" kindref="compound">Submesh</ref> const &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>id</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="147" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0c/a04484_1a2bede69a064873ffc7b786e28602a8ed" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/df5/a01395_1a788a36216ccbb048af69a0b240aef244" kindref="member">MeshResPtr</ref></type>
+        <definition>MeshResPtr castor3d::Geometry::getMesh</definition>
+        <argsstring>() const</argsstring>
+        <name>getMesh</name>
+        <qualifiedname>castor3d::Geometry::getMesh</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="151" column="12" bodyfile="Scene/Geometry.hpp" bodystart="151" bodyend="154"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0c/a04484_1a0274bffd4e42efc9cad6db961b575af1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::BoundingBox const &amp;</type>
+        <definition>castor::BoundingBox const  &amp; castor3d::Geometry::getBoundingBox</definition>
+        <argsstring>() const</argsstring>
+        <name>getBoundingBox</name>
+        <qualifiedname>castor3d::Geometry::getBoundingBox</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="156" column="28" bodyfile="Scene/Geometry.hpp" bodystart="156" bodyend="159"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0c/a04484_1a60e2bfbeefa3ab2206cde3737781c4ff" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::BoundingSphere const &amp;</type>
+        <definition>castor::BoundingSphere const  &amp; castor3d::Geometry::getBoundingSphere</definition>
+        <argsstring>() const</argsstring>
+        <name>getBoundingSphere</name>
+        <qualifiedname>castor3d::Geometry::getBoundingSphere</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="161" column="31" bodyfile="Scene/Geometry.hpp" bodystart="161" bodyend="164"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d0/d0c/a04484_1a8fc03d7b7b3f0b2b4dabc75cf032126a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Geometry::doUpdateMesh</definition>
+        <argsstring>()</argsstring>
+        <name>doUpdateMesh</name>
+        <qualifiedname>castor3d::Geometry::doUpdateMesh</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="169" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0c/a04484_1ab7d9f6547f65a44291c9d8c2be902fea" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Geometry::doUpdateContainers</definition>
+        <argsstring>()</argsstring>
+        <name>doUpdateContainers</name>
+        <qualifiedname>castor3d::Geometry::doUpdateContainers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="170" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -311,45 +686,185 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="1397">
+      <node id="1">
+        <label>castor3d::Geometry</label>
+        <link refid="d0/d0c/a04484"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::MovableObject</label>
+        <link refid="d9/dbb/a04524"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::RenderedObject</label>
+        <link refid="dc/d0d/a04588"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
+      </node>
+      <node id="3">
         <label>castor::OwnedBy&lt; Scene &gt;</label>
       </node>
-      <node id="1396">
-        <label>castor3d::IblTextures</label>
-        <link refid="d0/d0c/a04484"/>
-        <childnode refid="1397" relation="public-inheritance">
-        </childnode>
+      <node id="6">
+        <label>std::enable_shared_from_this&lt; RenderedObject &gt;</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="1399">
+      <node id="7">
+        <label>Animable</label>
+        <link refid="d8/d5f/a02216"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>K</label>
+      </node>
+      <node id="12">
+        <label>T</label>
+      </node>
+      <node id="13">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d8/d5f/a02216"/>
+        <childnode refid="14" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::Geometry</label>
+        <link refid="d0/d0c/a04484"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::MovableObject</label>
+        <link refid="d9/dbb/a04524"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::RenderedObject</label>
+        <link refid="dc/d0d/a04588"/>
+        <childnode refid="16" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::SceneNode</label>
+        <link refid="d4/d6d/a04636"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
+      </node>
+      <node id="14">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="8">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="3">
         <label>castor::OwnedBy&lt; Scene &gt;</label>
       </node>
-      <node id="1398">
-        <label>castor3d::IblTextures</label>
-        <link refid="d0/d0c/a04484"/>
-        <childnode refid="1399" relation="public-inheritance">
+      <node id="9">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>std::enable_shared_from_this&lt; RenderedObject &gt;</label>
+      </node>
+      <node id="6">
+        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
+      </node>
+      <node id="10">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="11" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>elements</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Render/PBR/IblTextures.hpp" line="19" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="17" bodyend="117"/>
+    <location file="Scene/Geometry.hpp" line="23" column="1" bodyfile="Scene/Geometry.hpp" bodystart="26" bodyend="183"/>
     <listofallmembers>
-      <member refid="d0/d0c/a04484_1a2b70c8a53dce789d4c504ff5435be539" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>debugDisplay</name></member>
-      <member refid="d0/d0c/a04484_1ac929a2cee25cd0cc758d601ae9de8144" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getIrradianceSampler</name></member>
-      <member refid="d0/d0c/a04484_1ab9bdf726119dc6dad0d3bc06897366df" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getIrradianceTexture</name></member>
-      <member refid="d0/d0c/a04484_1a1332177eb8ef664b4cdab52ef25cfdd1" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getPrefilteredBrdfSampler</name></member>
-      <member refid="d0/d0c/a04484_1a0fadef06d78460e0f57b7c73d1743cc5" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getPrefilteredBrdfTexture</name></member>
-      <member refid="d0/d0c/a04484_1a89468d02a076cf84f24ec26123e1f6e1" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getPrefilteredEnvironmentSampler</name></member>
-      <member refid="d0/d0c/a04484_1a5f1b72447c7debd0c884ce628b718bdf" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getPrefilteredEnvironmentTexture</name></member>
-      <member refid="d0/d0c/a04484_1ade1997c1f92aef1ddd8ef233801c950e" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>IblTextures</name></member>
-      <member refid="d0/d0c/a04484_1a0b8a2ed6e7b6504d80d2100bcdd22eb1" prot="private" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>m_environmentPrefilter</name></member>
-      <member refid="d0/d0c/a04484_1aeb03ae17132cdbc5c59d81ecab517543" prot="private" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>m_prefilteredBrdf</name></member>
-      <member refid="d0/d0c/a04484_1ad3a72bd93748368aebd28a913a2de34d" prot="private" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>m_prefilteredBrdfView</name></member>
-      <member refid="d0/d0c/a04484_1a5fba7190da8b10e7a66579ab8c9bf721" prot="private" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>m_radianceComputer</name></member>
-      <member refid="d0/d0c/a04484_1ad0ade1df7ddc5541cb4b2cd4c30d279e" prot="private" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>m_sampler</name></member>
-      <member refid="d0/d0c/a04484_1a381eeb8bf63b295044c7017087bfc7c1" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>update</name></member>
-      <member refid="d0/d0c/a04484_1af18aed1ad05c4d704e324ec051c0d249" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>update</name></member>
-      <member refid="d0/d0c/a04484_1a22e8af0801fa2367f7bbcb052929d9c4" prot="public" virt="virtual"><scope>castor3d::IblTextures</scope><name>~IblTextures</name></member>
+      <member refid="d9/dbb/a04524_1ab2169299d3e08b4e50066e400d1d86dc" prot="public" virt="virtual"><scope>castor3d::Geometry</scope><name>attachTo</name></member>
+      <member refid="d9/dbb/a04524_1afbef8194f2a0b9e15c9cc483221a08ee" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>detach</name></member>
+      <member refid="d0/d0c/a04484_1ab7d9f6547f65a44291c9d8c2be902fea" prot="private" virt="non-virtual"><scope>castor3d::Geometry</scope><name>doUpdateContainers</name></member>
+      <member refid="d0/d0c/a04484_1a8fc03d7b7b3f0b2b4dabc75cf032126a" prot="private" virt="non-virtual"><scope>castor3d::Geometry</scope><name>doUpdateMesh</name></member>
+      <member refid="d0/d0c/a04484_1a1e732a00568688732d0c23ab3108b014" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>Geometry</name></member>
+      <member refid="d0/d0c/a04484_1a8b0243a48eaa874d2b97649c5e673281" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>Geometry</name></member>
+      <member refid="d0/d0c/a04484_1a2045792a2c1e0de09afc8e406a2a3481" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>getBoundingBox</name></member>
+      <member refid="d0/d0c/a04484_1a0274bffd4e42efc9cad6db961b575af1" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>getBoundingBox</name></member>
+      <member refid="d0/d0c/a04484_1adfb482d1a3b7be4fe6e812edf41bc30c" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>getBoundingSphere</name></member>
+      <member refid="d0/d0c/a04484_1a60e2bfbeefa3ab2206cde3737781c4ff" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>getBoundingSphere</name></member>
+      <member refid="d9/dbb/a04524_1aa6c7b745273530f44b2fe2b2a2603e8d" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>getEngine</name></member>
+      <member refid="d0/d0c/a04484_1a62f297fb24f40d687f1ace0bb1df1e45" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>getId</name></member>
+      <member refid="d0/d0c/a04484_1a9576d94311af6daaaa652e4e04058c34" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>getMaterial</name></member>
+      <member refid="d0/d0c/a04484_1a2bede69a064873ffc7b786e28602a8ed" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>getMesh</name></member>
+      <member refid="d9/dbb/a04524_1a19af4c363050397777f59c30b451be05" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>getParent</name></member>
+      <member refid="d9/dbb/a04524_1acf2dafd94427b63121981ac18ac652a7" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>getType</name></member>
+      <member refid="dc/d0d/a04588_1a29922953eee8cbc43aae4b710f08c29a" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>isCulled</name></member>
+      <member refid="dc/d0d/a04588_1ab40947f3ec91820fc5e70a85f1cc160a" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>isShadowCaster</name></member>
+      <member refid="dc/d0d/a04588_1a3e73e7500445cfd605cf4b6f2414277b" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>isShadowReceiver</name></member>
+      <member refid="dc/d0d/a04588_1a5ce1326805379a47d42dec81b6b41d62" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>isVisible</name></member>
+      <member refid="d0/d0c/a04484_1a0c5f3f21bf755ba8f5f8331705673cc3" prot="private" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_box</name></member>
+      <member refid="d0/d0c/a04484_1a36ba45ca884c2c25b660b7a76ab0e319" prot="private" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_ids</name></member>
+      <member refid="d0/d0c/a04484_1a5ae481a597837e2ff8d619170d42eb5b" prot="private" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_listCreated</name></member>
+      <member refid="d0/d0c/a04484_1ac033d9c416ceea39bb00b9272a4857e4" prot="private" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_mesh</name></member>
+      <member refid="d0/d0c/a04484_1a4eca92c3f7d2e55c28742d7639959ff6" prot="private" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_meshName</name></member>
+      <member refid="d0/d0c/a04484_1ae5e04fc7896bd4116a8f8892caff2a47" prot="private" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_mutex</name></member>
+      <member refid="d9/dbb/a04524_1a8385c7c8fd9aee20a3c6de804cb09514" prot="protected" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_notifyIndex</name></member>
+      <member refid="d9/dbb/a04524_1aa058c86365c45c7d4b85a04ce56a9d22" prot="protected" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_sceneNode</name></member>
+      <member refid="d0/d0c/a04484_1a1cd243563b7c605c0f0fbb0955cde897" prot="private" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_sphere</name></member>
+      <member refid="d9/dbb/a04524_1ab9493ad12e9af9b47db11e76d372a156" prot="protected" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_strNodeName</name></member>
+      <member refid="d0/d0c/a04484_1ae483f7f8b06a215fb1440f17fdb7a119" prot="private" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_submeshesBoxes</name></member>
+      <member refid="d0/d0c/a04484_1a87407a0e713213b243fd325989e1da42" prot="private" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_submeshesMaterials</name></member>
+      <member refid="d0/d0c/a04484_1addb364d4efb330a32de68dff8f177964" prot="private" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_submeshesSpheres</name></member>
+      <member refid="d9/dbb/a04524_1acf6726e80bb3098468fe1fcd5a1f720e" prot="protected" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_type</name></member>
+      <member refid="d9/dbb/a04524_1a40b0fe7602fb945cb5b89de71a8cf4d8" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>MovableObject</name></member>
+      <member refid="d9/dbb/a04524_1acf7517058566afbb2290a7856fc9dfee" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>MovableObject</name></member>
+      <member refid="d0/d0c/a04484_1acaec2f1849bad9f6ae8c91f6e2f72c26" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>onMaterialChanged</name></member>
+      <member refid="d0/d0c/a04484_1a1edb8a6926be6c9e7bd62c74c8846b88" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>prepare</name></member>
+      <member refid="d0/d0c/a04484_1afb3ad561f4d82c22a6c41103b45857ef" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>setBoundingBox</name></member>
+      <member refid="dc/d0d/a04588_1a4e32f37027d761824f754df07c6703ae" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>setCulled</name></member>
+      <member refid="d0/d0c/a04484_1abcbc4577a3dc370ec74f8f374da8473c" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>setId</name></member>
+      <member refid="d0/d0c/a04484_1a8ba378a16c2aa99a06754973aeaaab7d" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>setMaterial</name></member>
+      <member refid="d0/d0c/a04484_1a61c105feac66d1986d5b2039c0a92da7" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>setMesh</name></member>
+      <member refid="dc/d0d/a04588_1a5b052f28d3f247a7231c34b1c9520997" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>setShadowCaster</name></member>
+      <member refid="dc/d0d/a04588_1a17b0b8487b724ca7492f2e08ce8706f6" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>setShadowReceiver</name></member>
+      <member refid="dc/d0d/a04588_1ac78739036c5c66a41cb2f960e532627e" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>setVisible</name></member>
+      <member refid="d0/d0c/a04484_1a5560136582e1fadb948fa0b7a7bb1fd9" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>updateContainers</name></member>
+      <member refid="d9/dbb/a04524_1a05bd8e8940d26cb4361fccfa67733b03" prot="public" virt="virtual"><scope>castor3d::Geometry</scope><name>~MovableObject</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

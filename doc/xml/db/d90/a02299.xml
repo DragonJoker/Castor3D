@@ -1,31 +1,117 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="db/d90/a02299" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::GpuBufferBuddyAllocatorTraits::Block</compoundname>
-    <includes local="no">GpuBufferBuddyAllocator.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="db/d90/a02299_1a35b84f4c8e3c9cb893d72247a4c17631" prot="public" static="no" mutable="no">
-        <type><ref refid="dd/da4/a02295_1ad5aca6297e2f1509e1a9195e846f05ff" kindref="member">PointerType</ref></type>
-        <definition>PointerType castor3d::GpuBufferBuddyAllocatorTraits::Block::data</definition>
-        <argsstring></argsstring>
-        <name>data</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="db/d90/a02299" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BinaryWriter&lt; Mesh &gt;</compoundname>
+    <basecompoundref refid="d2/da6/a02339" prot="public" virt="non-virtual">castor3d::BinaryWriterBase&lt; Mesh &gt;</basecompoundref>
+    <includes local="no">BinaryMesh.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="db/d90/a02299_1af34cf38176f0875eadac43d1b31d0c43" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BinaryWriter&lt; Mesh &gt;::doWrite</definition>
+        <argsstring>(Mesh const &amp;obj) override</argsstring>
+        <name>doWrite</name>
+        <qualifiedname>castor3d::BinaryWriter&lt; Mesh &gt;::doWrite</qualifiedname>
+        <reimplements refid="d2/da6/a02339_1a720ab792b3e53c6556c3cb4e5b0e2d06">doWrite</reimplements>
+        <param>
+          <type><ref refid="d1/d13/a03339" kindref="compound">Mesh</ref> const &amp;</type>
+          <declname>obj</declname>
+        </param>
         <briefdescription>
+<para>Function used to fill the chunk from specific data. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to write. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/GpuBufferBuddyAllocator.hpp" line="16" column="1" bodyfile="Buffer/GpuBufferBuddyAllocator.hpp" bodystart="16" bodyend="-1"/>
-        <referencedby refid="dd/da4/a02295_1ad6e226481f38134632f4f82aa5c3aab1" compoundref="d5/db1/a00140" startline="85" endline="88">castor3d::GpuBufferBuddyAllocatorTraits::isNull</referencedby>
+        <location file="Binary/BinaryMesh.hpp" line="53" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para><ref refid="df/dd3/a04527" kindref="compound">MovableObject</ref> loader. </para>
     </briefdescription>
     <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="date"><para>14/02/2010</para>
+</simplesect>
+Loader de <ref refid="df/dd3/a04527" kindref="compound">MovableObject</ref> </para>
     </detaileddescription>
-    <location file="Buffer/GpuBufferBuddyAllocator.hpp" line="15" column="1" bodyfile="Buffer/GpuBufferBuddyAllocator.hpp" bodystart="14" bodyend="17"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::BinaryWriterBase&lt; Mesh &gt;</label>
+        <link refid="d2/da6/a02339"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Mesh &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryWriter&lt; Mesh &gt;</label>
+        <link refid="db/d90/a02299"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::BinaryWriterBase&lt; TWritten &gt;</label>
+        <link refid="d2/da6/a02339"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::BinaryWriterBase&lt; Mesh &gt;</label>
+        <link refid="d2/da6/a02339"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Mesh &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::BinaryChunk</label>
+        <link refid="dd/d3b/a02291"/>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryWriter&lt; Mesh &gt;</label>
+        <link refid="db/d90/a02299"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::BinaryWriterBase&lt; TWritten &gt;</label>
+        <link refid="d2/da6/a02339"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Binary/BinaryMesh.hpp" line="39" column="1" bodyfile="Binary/BinaryMesh.hpp" bodystart="41" bodyend="54"/>
     <listofallmembers>
-      <member refid="db/d90/a02299_1a35b84f4c8e3c9cb893d72247a4c17631" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBuddyAllocatorTraits::Block</scope><name>data</name></member>
+      <member refid="db/d90/a02299_1af34cf38176f0875eadac43d1b31d0c43" prot="private" virt="virtual"><scope>castor3d::BinaryWriter&lt; Mesh &gt;</scope><name>doWrite</name></member>
+      <member refid="d2/da6/a02339_1a95685db95521fe46169767620976688c" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Mesh &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d2/da6/a02339_1ac978d1019caf2d37ad181911c78dde33" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Mesh &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d2/da6/a02339_1a5eef4da7e3bbce50e00c878bd7b32516" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Mesh &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d2/da6/a02339_1a5b782961d4526354e5d0e84e78c6bbbb" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Mesh &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d2/da6/a02339_1a3bd1cb047e1f2872668a4397496bd7c4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Mesh &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d2/da6/a02339_1a7bdb655caf767fdde8a4267602e06191" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Mesh &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d2/da6/a02339_1a8828d359b7a61ea2b657d5aada2dd87b" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Mesh &gt;</scope><name>doWriteHeader</name></member>
+      <member refid="d2/da6/a02339_1ad6c66bdde51dd57ab2b27f4ddc8db513" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Mesh &gt;</scope><name>m_chunk</name></member>
+      <member refid="d2/da6/a02339_1a21e7985d2f99ff20a6056d198aac07c5" prot="public" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Mesh &gt;</scope><name>write</name></member>
+      <member refid="d2/da6/a02339_1a3b4ae75e6ecd0bdf9f5dc26381633dab" prot="public" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Mesh &gt;</scope><name>write</name></member>
+      <member refid="d2/da6/a02339_1a455d885b04ddaed4d650461bbef1711c" prot="public" virt="virtual"><scope>castor3d::BinaryWriter&lt; Mesh &gt;</scope><name>~BinaryWriterBase</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

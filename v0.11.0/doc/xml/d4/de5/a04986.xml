@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d4/de5/a04986" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::Texture3DTo2D::Texture3DToScreen</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/de5/a04986_1a93fd371f4d901c039161cdc3234559ae" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::Texture3DTo2D::Texture3DToScreen::descriptorSet</definition>
+        <argsstring></argsstring>
+        <name>descriptorSet</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="77" column="1" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/de5/a04986_1aea7670a2c520c74f48952e1123d65ec7" prot="public" static="no" mutable="no">
+        <type><ref refid="db/da9/a04374" kindref="compound">CommandsSemaphore</ref></type>
+        <definition>CommandsSemaphore castor3d::Texture3DTo2D::Texture3DToScreen::commands</definition>
+        <argsstring></argsstring>
+        <name>commands</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="78" column="1" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/de5/a04986_1ac75528d996f9f865cae2dc90be6321c2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::Texture3DTo2D::Texture3DToScreen::Texture3DToScreen</definition>
+        <argsstring>()</argsstring>
+        <name>Texture3DToScreen</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="66" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/de5/a04986_1a7494ad6e698728cc2654c5ea7d232575" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::Texture3DTo2D::Texture3DToScreen::Texture3DToScreen</definition>
+        <argsstring>(RenderDevice const &amp;device, UniformBufferOffsetT&lt; Texture3DTo2DData &gt; const &amp;uniformBuffer, MatrixUbo const &amp;matrixUbo, IntermediateView const &amp;texture3D, ashes::RenderPass const &amp;renderPass, ashes::DescriptorSetPool const &amp;descriptorSetPool, ashes::FrameBuffer const &amp;frameBuffer, ashes::PipelineLayout const &amp;pipelineLayout, ashes::GraphicsPipeline const &amp;pipeline)</argsstring>
+        <name>Texture3DToScreen</name>
+        <param>
+          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dae/a02294" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d5/df8/a04978" kindref="compound">Texture3DTo2DData</ref> &gt; const &amp;</type>
+          <declname>uniformBuffer</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d30/a05490" kindref="compound">MatrixUbo</ref> const &amp;</type>
+          <declname>matrixUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d8b/a04578" kindref="compound">IntermediateView</ref> const &amp;</type>
+          <declname>texture3D</declname>
+        </param>
+        <param>
+          <type>ashes::RenderPass const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type>ashes::DescriptorSetPool const &amp;</type>
+          <declname>descriptorSetPool</declname>
+        </param>
+        <param>
+          <type>ashes::FrameBuffer const &amp;</type>
+          <declname>frameBuffer</declname>
+        </param>
+        <param>
+          <type>ashes::PipelineLayout const &amp;</type>
+          <declname>pipelineLayout</declname>
+        </param>
+        <param>
+          <type>ashes::GraphicsPipeline const &amp;</type>
+          <declname>pipeline</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="67" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4367">
+        <label>castor3d::Texture3DTo2D::Texture3DToScreen</label>
+        <childnode refid="4368" relation="usage">
+          <edgelabel>commands</edgelabel>
+        </childnode>
+      </node>
+      <node id="4368">
+        <label>castor3d::CommandsSemaphore</label>
+        <link refid="db/da9/a04374"/>
+      </node>
+    </collaborationgraph>
+    <location file="Render/ToTexture/Texture3DTo2D.hpp" line="65" column="1" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="64" bodyend="79"/>
+    <listofallmembers>
+      <member refid="d4/de5/a04986_1aea7670a2c520c74f48952e1123d65ec7" prot="public" virt="non-virtual"><scope>castor3d::Texture3DTo2D::Texture3DToScreen</scope><name>commands</name></member>
+      <member refid="d4/de5/a04986_1a93fd371f4d901c039161cdc3234559ae" prot="public" virt="non-virtual"><scope>castor3d::Texture3DTo2D::Texture3DToScreen</scope><name>descriptorSet</name></member>
+      <member refid="d4/de5/a04986_1ac75528d996f9f865cae2dc90be6321c2" prot="public" virt="non-virtual"><scope>castor3d::Texture3DTo2D::Texture3DToScreen</scope><name>Texture3DToScreen</name></member>
+      <member refid="d4/de5/a04986_1a7494ad6e698728cc2654c5ea7d232575" prot="public" virt="non-virtual"><scope>castor3d::Texture3DTo2D::Texture3DToScreen</scope><name>Texture3DToScreen</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

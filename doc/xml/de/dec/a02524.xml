@@ -1,117 +1,223 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="de/dec/a02524" kind="class" language="C++" prot="public" abstract="yes">
-    <compoundname>castor3d::CpuFrameEvent</compoundname>
-    <derivedcompoundref refid="d8/d65/a02528" prot="public" virt="non-virtual">castor3d::CpuFunctorEvent</derivedcompoundref>
-    <includes local="no">CpuFrameEvent.hpp</includes>
-      <sectiondef kind="protected-attrib">
-      <memberdef kind="variable" id="de/dec/a02524_1a5a5e26283b8543afb6d89443498c3ece" prot="protected" static="no" mutable="no">
-        <type><ref refid="da/d1e/a01479_1ad442bf3c1ba8a06ac36f710ba30b2870" kindref="member">EventType</ref></type>
-        <definition>EventType castor3d::CpuFrameEvent::m_type</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="de/dec/a02524" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::GpuBufferBase</compoundname>
+    <derivedcompoundref refid="d1/df5/a02496" prot="public" virt="non-virtual">castor3d::GpuBufferT&lt; GpuBufferPackedAllocator &gt;</derivedcompoundref>
+    <derivedcompoundref refid="d1/df5/a02496" prot="public" virt="non-virtual">castor3d::GpuBufferT&lt; AllocatorT &gt;</derivedcompoundref>
+    <includes local="no">GpuBuffer.hpp</includes>
+    <innerclass refid="d8/d65/a02528" prot="private">castor3d::GpuBufferBase::MemoryRange</innerclass>
+      <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="de/dec/a02524_1a5f73c06dc063fb909b7fa723b4ee90c8" prot="private" static="no">
+        <type>std::vector&lt; MemoryRange &gt;</type>
+        <definition>using castor3d::GpuBufferBase::MemoryRangeArray =  std::vector&lt; MemoryRange &gt;</definition>
         <argsstring></argsstring>
-        <name>m_type</name>
+        <name>MemoryRangeArray</name>
+        <qualifiedname>castor3d::GpuBufferBase::MemoryRangeArray</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The event type. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/Frame/CpuFrameEvent.hpp" line="57" column="1" bodyfile="Event/Frame/CpuFrameEvent.hpp" bodystart="57" bodyend="-1"/>
-        <referencedby refid="de/dec/a02524_1a1838923995e8f180a7a627280580566e" compoundref="d2/d04/a00281" startline="49" endline="52">getType</referencedby>
+        <location file="Buffer/GpuBuffer.hpp" line="222" column="1" bodyfile="Buffer/GpuBuffer.hpp" bodystart="222" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="de/dec/a02524_1a524ea078d871f55861b6bf095da318a0" prot="protected" static="no" mutable="no">
-        <type>castor::String</type>
-        <definition>castor::String castor3d::CpuFrameEvent::m_stackTrace</definition>
+      </sectiondef>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="de/dec/a02524_1a01ce6a31562ddfd446c446f4a24ed188" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class GpuBufferPool</definition>
         <argsstring></argsstring>
-        <name>m_stackTrace</name>
+        <name>GpuBufferPool</name>
+        <qualifiedname>castor3d::GpuBufferBase::GpuBufferPool</qualifiedname>
+        <param>
+          <type><ref refid="de/d48/a02552" kindref="compound">GpuBufferPool</ref></type>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The event creation stack trace. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/Frame/CpuFrameEvent.hpp" line="63" column="1" bodyfile="Event/Frame/CpuFrameEvent.hpp" bodystart="63" bodyend="-1"/>
+        <location file="Buffer/GpuBuffer.hpp" line="25" column="14" bodyfile="Buffer/GpuBuffer.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="de/dec/a02524_1a9951e34699ca072e47a0dd28f80ff31c" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dbb/a04072" kindref="compound">RenderSystem</ref> const  &amp;</type>
+        <definition>RenderSystem const&amp; castor3d::GpuBufferBase::m_renderSystem</definition>
+        <argsstring></argsstring>
+        <name>m_renderSystem</name>
+        <qualifiedname>castor3d::GpuBufferBase::m_renderSystem</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBuffer.hpp" line="206" column="21" bodyfile="Buffer/GpuBuffer.hpp" bodystart="206" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dec/a02524_1ac93213c36218f65e9a8375fc2c567fdf" prot="private" static="no" mutable="no">
+        <type>VkBufferUsageFlags</type>
+        <definition>VkBufferUsageFlags castor3d::GpuBufferBase::m_usage</definition>
+        <argsstring></argsstring>
+        <name>m_usage</name>
+        <qualifiedname>castor3d::GpuBufferBase::m_usage</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBuffer.hpp" line="207" column="20" bodyfile="Buffer/GpuBuffer.hpp" bodystart="207" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dec/a02524_1a4c730337dc92891d1bd441f08e614955" prot="private" static="no" mutable="no">
+        <type>VkMemoryPropertyFlags</type>
+        <definition>VkMemoryPropertyFlags castor3d::GpuBufferBase::m_memoryFlags</definition>
+        <argsstring></argsstring>
+        <name>m_memoryFlags</name>
+        <qualifiedname>castor3d::GpuBufferBase::m_memoryFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBuffer.hpp" line="208" column="23" bodyfile="Buffer/GpuBuffer.hpp" bodystart="208" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dec/a02524_1a392feb8ee91255bfffcadec61f4ea34d" prot="private" static="no" mutable="no">
+        <type>ashes::QueueShare</type>
+        <definition>ashes::QueueShare castor3d::GpuBufferBase::m_sharingMode</definition>
+        <argsstring></argsstring>
+        <name>m_sharingMode</name>
+        <qualifiedname>castor3d::GpuBufferBase::m_sharingMode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBuffer.hpp" line="209" column="19" bodyfile="Buffer/GpuBuffer.hpp" bodystart="209" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dec/a02524_1a587d96355485bef31424b29912a593a0" prot="private" static="no" mutable="no">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::GpuBufferBase::m_allocatedSize</definition>
+        <argsstring></argsstring>
+        <name>m_allocatedSize</name>
+        <qualifiedname>castor3d::GpuBufferBase::m_allocatedSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBuffer.hpp" line="210" column="14" bodyfile="Buffer/GpuBuffer.hpp" bodystart="210" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dec/a02524_1a9a7538519685faae7f6428fc3eb2cc83" prot="private" static="no" mutable="no">
+        <type>ashes::BufferPtr&lt; uint8_t &gt;</type>
+        <definition>ashes::BufferPtr&lt; uint8_t &gt; castor3d::GpuBufferBase::m_buffer</definition>
+        <argsstring></argsstring>
+        <name>m_buffer</name>
+        <qualifiedname>castor3d::GpuBufferBase::m_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBuffer.hpp" line="211" column="18" bodyfile="Buffer/GpuBuffer.hpp" bodystart="211" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dec/a02524_1a70cb190f18fd0d79504e538b3d5370f1" prot="private" static="no" mutable="no">
+        <type>ashes::StagingBufferPtr</type>
+        <definition>ashes::StagingBufferPtr castor3d::GpuBufferBase::m_stagingBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_stagingBuffer</name>
+        <qualifiedname>castor3d::GpuBufferBase::m_stagingBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBuffer.hpp" line="212" column="25" bodyfile="Buffer/GpuBuffer.hpp" bodystart="212" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dec/a02524_1a22d827d0a42cfa72cd42ea3947460c4c" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; uint8_t &gt;</type>
+        <definition>std::vector&lt; uint8_t &gt; castor3d::GpuBufferBase::m_ownData</definition>
+        <argsstring></argsstring>
+        <name>m_ownData</name>
+        <qualifiedname>castor3d::GpuBufferBase::m_ownData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBuffer.hpp" line="213" column="13" bodyfile="Buffer/GpuBuffer.hpp" bodystart="213" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dec/a02524_1a2e69a28df19b20f94149211604e9232f" prot="private" static="no" mutable="no">
+        <type>castor::ArrayView&lt; uint8_t &gt;</type>
+        <definition>castor::ArrayView&lt; uint8_t &gt; castor3d::GpuBufferBase::m_data</definition>
+        <argsstring></argsstring>
+        <name>m_data</name>
+        <qualifiedname>castor3d::GpuBufferBase::m_data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBuffer.hpp" line="214" column="19" bodyfile="Buffer/GpuBuffer.hpp" bodystart="214" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dec/a02524_1ac7691c910eedc0c3c24ad3ab3032a53f" prot="private" static="no" mutable="no">
+        <type>std::unordered_map&lt; size_t, MemoryRangeArray &gt;</type>
+        <definition>std::unordered_map&lt; size_t, MemoryRangeArray &gt; castor3d::GpuBufferBase::m_ranges</definition>
+        <argsstring></argsstring>
+        <name>m_ranges</name>
+        <qualifiedname>castor3d::GpuBufferBase::m_ranges</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBuffer.hpp" line="223" column="20" bodyfile="Buffer/GpuBuffer.hpp" bodystart="223" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="de/dec/a02524_1ae83db3b8b709ecf853a35d683ad8b6e8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::CpuFrameEvent::CpuFrameEvent</definition>
-        <argsstring>(CpuFrameEvent const &amp;object)=default</argsstring>
-        <name>CpuFrameEvent</name>
+      <memberdef kind="function" id="de/dec/a02524_1a4f0cb57ba7d81f99e64b3fa0096023fa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::GpuBufferBase::GpuBufferBase</definition>
+        <argsstring>(RenderSystem const &amp;renderSystem, VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryFlags, castor::String debugName, ashes::QueueShare sharingMode, VkDeviceSize allocatedSize, bool smallData=false)</argsstring>
+        <name>GpuBufferBase</name>
+        <qualifiedname>castor3d::GpuBufferBase::GpuBufferBase</qualifiedname>
         <param>
-          <type><ref refid="de/dec/a02524" kindref="compound">CpuFrameEvent</ref> const &amp;</type>
-          <declname>object</declname>
+          <type><ref refid="d2/dbb/a04072" kindref="compound">RenderSystem</ref> const &amp;</type>
+          <declname>renderSystem</declname>
         </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/Frame/CpuFrameEvent.hpp" line="14" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="de/dec/a02524_1aa5118537fba83fa70a961831602b01ab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::CpuFrameEvent::CpuFrameEvent</definition>
-        <argsstring>(CpuFrameEvent &amp;&amp;object)=default</argsstring>
-        <name>CpuFrameEvent</name>
         <param>
-          <type><ref refid="de/dec/a02524" kindref="compound">CpuFrameEvent</ref> &amp;&amp;</type>
-          <declname>object</declname>
+          <type>VkBufferUsageFlags</type>
+          <declname>usage</declname>
         </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/Frame/CpuFrameEvent.hpp" line="15" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="de/dec/a02524_1a93dc90e257b2baa38767bab42d92713f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="de/dec/a02524" kindref="compound">CpuFrameEvent</ref> &amp;</type>
-        <definition>C3D_API CpuFrameEvent&amp; castor3d::CpuFrameEvent::operator=</definition>
-        <argsstring>(CpuFrameEvent const &amp;object)=default</argsstring>
-        <name>operator=</name>
         <param>
-          <type><ref refid="de/dec/a02524" kindref="compound">CpuFrameEvent</ref> const &amp;</type>
-          <declname>object</declname>
+          <type>VkMemoryPropertyFlags</type>
+          <declname>memoryFlags</declname>
         </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/Frame/CpuFrameEvent.hpp" line="16" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="de/dec/a02524_1a175874ffb8e6c175da89443e3ab48d83" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="de/dec/a02524" kindref="compound">CpuFrameEvent</ref> &amp;</type>
-        <definition>C3D_API CpuFrameEvent&amp; castor3d::CpuFrameEvent::operator=</definition>
-        <argsstring>(CpuFrameEvent &amp;&amp;object)=default</argsstring>
-        <name>operator=</name>
         <param>
-          <type><ref refid="de/dec/a02524" kindref="compound">CpuFrameEvent</ref> &amp;&amp;</type>
-          <declname>object</declname>
+          <type>castor::String</type>
+          <declname>debugName</declname>
         </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/Frame/CpuFrameEvent.hpp" line="17" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="de/dec/a02524_1aaf3cac5e82d244c2c6dbe23debd5d915" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::CpuFrameEvent::CpuFrameEvent</definition>
-        <argsstring>(EventType type)</argsstring>
-        <name>CpuFrameEvent</name>
         <param>
-          <type><ref refid="da/d1e/a01479_1ad442bf3c1ba8a06ac36f710ba30b2870" kindref="member">EventType</ref></type>
-          <declname>type</declname>
+          <type>ashes::QueueShare</type>
+          <declname>sharingMode</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>allocatedSize</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>smallData</declname>
+          <defval>false</defval>
         </param>
         <briefdescription>
 <para>Constructor. </para>
@@ -119,10 +225,58 @@
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">type</parametername>
+<parametername direction="in">renderSystem</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The event type. </para>
+<para>The device on which the storage is allocated. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">usage</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer targets. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">memoryFlags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer memory properties. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">debugName</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The debug name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sharingMode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The sharing mode. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">allocatedSize</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer size. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">smallData</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tells if the memory chunks allocated through this buffer are less than 65536 bytes. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -130,56 +284,372 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/Frame/CpuFrameEvent.hpp" line="26" column="1"/>
+        <location file="Buffer/GpuBuffer.hpp" line="48" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="de/dec/a02524_1a4e9e9aceb04443692aa5c494293fdae2" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>virtual C3D_API castor3d::CpuFrameEvent::~CpuFrameEvent</definition>
-        <argsstring>()=default</argsstring>
-        <name>~CpuFrameEvent</name>
+      <memberdef kind="function" id="de/dec/a02524_1a23305046cd563d8ec97a43b9ab41500f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::GpuBufferBase::upload</definition>
+        <argsstring>(ashes::CommandBuffer const &amp;cb)</argsstring>
+        <name>upload</name>
+        <qualifiedname>castor3d::GpuBufferBase::upload</qualifiedname>
+        <param>
+          <type>ashes::CommandBuffer const &amp;</type>
+          <declname>cb</declname>
+        </param>
         <briefdescription>
-<para>Destructor. </para>
+<para>Uploads all ready memory ranges to VRAM. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">cb</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The command buffer on which transfer commands are recorded. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/Frame/CpuFrameEvent.hpp" line="33" column="1"/>
+        <location file="Buffer/GpuBuffer.hpp" line="63" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="de/dec/a02524_1ae31a541d4c966f978a3174b048a45b2a" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>virtual C3D_API void castor3d::CpuFrameEvent::apply</definition>
-        <argsstring>()=0</argsstring>
-        <name>apply</name>
-        <reimplementedby refid="d8/d65/a02528_1af2c8330462afd5efbcb1b15458f796bb">apply</reimplementedby>
+      <memberdef kind="function" id="de/dec/a02524_1adbd7c63833b19b5aeedc5c5ddbe10f6d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::GpuBufferBase::uploadDirect</definition>
+        <argsstring>(ashes::Queue const &amp;queue, ashes::CommandPool const &amp;commandPool, VkDeviceSize offset, VkDeviceSize size, VkAccessFlags dstAccessFlags, VkPipelineStageFlags dstPipelineFlags)</argsstring>
+        <name>uploadDirect</name>
+        <qualifiedname>castor3d::GpuBufferBase::uploadDirect</qualifiedname>
+        <param>
+          <type>ashes::Queue const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>ashes::CommandPool const &amp;</type>
+          <declname>commandPool</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>VkAccessFlags</type>
+          <declname>dstAccessFlags</declname>
+        </param>
+        <param>
+          <type>VkPipelineStageFlags</type>
+          <declname>dstPipelineFlags</declname>
+        </param>
         <briefdescription>
-<para>Applies the event. </para>
+<para>Uploads a memory range. </para>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="remark"><para>Must be implemented by children classes. </para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to which the upload commands will be submitted to. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">commandPool</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The command pool from which the command buffer will be created. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The memory range. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dstAccessFlags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The access flags wanted after upload. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dstPipelineFlags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pipeline stage flags wanted after upload. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBuffer.hpp" line="80" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dec/a02524_1a06f1c510406ae4dd17d134022e94a497" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::GpuBufferBase::markDirty</definition>
+        <argsstring>(VkDeviceSize offset, VkDeviceSize size, VkAccessFlags dstAccessFlags, VkPipelineStageFlags dstPipelineFlags)</argsstring>
+        <name>markDirty</name>
+        <qualifiedname>castor3d::GpuBufferBase::markDirty</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>VkAccessFlags</type>
+          <declname>dstAccessFlags</declname>
+        </param>
+        <param>
+          <type>VkPipelineStageFlags</type>
+          <declname>dstPipelineFlags</declname>
+        </param>
+        <briefdescription>
+<para>Marks a memory range to be ready for upload. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The memory range. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dstAccessFlags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The access flags wanted after upload. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dstPipelineFlags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pipeline stage flags wanted after upload. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBuffer.hpp" line="98" column="14"/>
+        <referencedby refid="dc/d32/a02556_1a57a1562087eb0cec6b650c6dbebb7c17" compoundref="d5/de9/a00176" startline="162" endline="169">castor3d::ObjectBufferOffset::markBonesDirty</referencedby>
+        <referencedby refid="d4/dad/a02500_1a82d29cdbd10db3d1c4cc8b91f2a3b585" compoundref="dc/de6/a00167" startline="99" endline="106">castor3d::GpuBufferOffsetT&lt; DataT &gt;::markDirty</referencedby>
+        <referencedby refid="dc/d32/a02556_1a49454eb5619d9141d118bd3e0730d518" compoundref="d5/de9/a00176" startline="153" endline="160">castor3d::ObjectBufferOffset::markIndexDirty</referencedby>
+        <referencedby refid="dc/d32/a02556_1a1de8378b29ce99d89dd43b2438907f95" compoundref="d5/de9/a00176" startline="144" endline="151">castor3d::ObjectBufferOffset::markVertexDirty</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="de/dec/a02524_1a3f399bb8c877bc2155fe02aebd6c0329" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::GpuBufferBase::hasBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>hasBuffer</name>
+        <qualifiedname>castor3d::GpuBufferBase::hasBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The internal buffer. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/Frame/CpuFrameEvent.hpp" line="42" column="1"/>
+        <location file="Buffer/GpuBuffer.hpp" line="110" column="6" bodyfile="Buffer/GpuBuffer.hpp" bodystart="110" bodyend="113"/>
+        <referencedby refid="d4/dad/a02500_1a661b1a290c461596f62b66adf4502835" compoundref="dc/de6/a00167" startline="52" endline="56">castor3d::GpuBufferOffsetT&lt; DataT &gt;::operator bool</referencedby>
       </memberdef>
-      <memberdef kind="function" id="de/dec/a02524_1a1838923995e8f180a7a627280580566e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="da/d1e/a01479_1ad442bf3c1ba8a06ac36f710ba30b2870" kindref="member">EventType</ref></type>
-        <definition>EventType castor3d::CpuFrameEvent::getType</definition>
+      <memberdef kind="function" id="de/dec/a02524_1a2e96ae884d0c9c48a92282e0c9d1b816" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Buffer&lt; uint8_t &gt; const &amp;</type>
+        <definition>ashes::Buffer&lt; uint8_t &gt; const  &amp; castor3d::GpuBufferBase::getBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>getBuffer</name>
+        <qualifiedname>castor3d::GpuBufferBase::getBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The internal buffer. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBuffer.hpp" line="122" column="22" bodyfile="Buffer/GpuBuffer.hpp" bodystart="122" bodyend="125"/>
+        <referencedby refid="dc/d32/a02556_1abd2a18b67e20307f0b946a0bc16e0f2b" compoundref="d5/de9/a00176" startline="39" endline="42">castor3d::ObjectBufferOffset::getBonesBuffer</referencedby>
+        <referencedby refid="d4/dad/a02500_1aaf498e1f12b8c86de5b613e41e9fb87e" compoundref="dc/de6/a00167" startline="68" endline="71">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getBuffer</referencedby>
+        <referencedby refid="dc/d32/a02556_1a13f508b50ff059287380d597539b586d" compoundref="d5/de9/a00176" startline="29" endline="32">castor3d::ObjectBufferOffset::getIndexBuffer</referencedby>
+        <referencedby refid="dc/d32/a02556_1a801f606247b1560fabe21f575381a268" compoundref="d5/de9/a00176" startline="34" endline="37">castor3d::ObjectBufferOffset::getVertexBuffer</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="de/dec/a02524_1ab0b76b8e65ce793ffd15dc6c5d65a70d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::GpuBufferBase::operator ashes::Buffer&lt; uint8_t &gt; const &amp;</definition>
+        <argsstring>() const</argsstring>
+        <name>operator ashes::Buffer&lt; uint8_t &gt; const &amp;</name>
+        <qualifiedname>castor3d::GpuBufferBase::Buffer&lt; uint8_t &gt; const &amp;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBuffer.hpp" line="126" column="1" bodyfile="Buffer/GpuBuffer.hpp" bodystart="126" bodyend="129"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dec/a02524_1ad5c0c039b286c923f49bfb1e7e6282e8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Buffer&lt; uint8_t &gt; &amp;</type>
+        <definition>ashes::Buffer&lt; uint8_t &gt; &amp; castor3d::GpuBufferBase::getBuffer</definition>
         <argsstring>()</argsstring>
-        <name>getType</name>
+        <name>getBuffer</name>
+        <qualifiedname>castor3d::GpuBufferBase::getBuffer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The event type. </para>
+<para><simplesect kind="return"><para>The internal buffer. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/Frame/CpuFrameEvent.hpp" line="49" column="1" bodyfile="Event/Frame/CpuFrameEvent.hpp" bodystart="49" bodyend="52"/>
-        <references refid="de/dec/a02524_1a5a5e26283b8543afb6d89443498c3ece" compoundref="d2/d04/a00281" startline="57">m_type</references>
+        <location file="Buffer/GpuBuffer.hpp" line="138" column="16" bodyfile="Buffer/GpuBuffer.hpp" bodystart="138" bodyend="141"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dec/a02524_1a91928d1e743ed5edbb8a3af9bd859af1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::GpuBufferBase::operator ashes::Buffer&lt; uint8_t &gt; &amp;</definition>
+        <argsstring>()</argsstring>
+        <name>operator ashes::Buffer&lt; uint8_t &gt; &amp;</name>
+        <qualifiedname>castor3d::GpuBufferBase::Buffer&lt; uint8_t &gt; &amp;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBuffer.hpp" line="142" column="1" bodyfile="Buffer/GpuBuffer.hpp" bodystart="142" bodyend="145"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dec/a02524_1aa9ce48ae045bf1f7be2b87315bf56394" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename DataT</type>
+          </param>
+        </templateparamlist>
+        <type>DataT const &amp;</type>
+        <definition>DataT const  &amp; castor3d::GpuBufferBase::getData</definition>
+        <argsstring>(VkDeviceSize offset) const</argsstring>
+        <name>getData</name>
+        <qualifiedname>castor3d::GpuBufferBase::getData</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The N-th instance of the data. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The memory chunk offset. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBuffer.hpp" line="159" column="14" bodyfile="Buffer/GpuBuffer.hpp" bodystart="159" bodyend="162"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dec/a02524_1a1c9e4696f89164001d11831b35f15f77" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename DataT</type>
+          </param>
+        </templateparamlist>
+        <type>DataT &amp;</type>
+        <definition>DataT &amp; castor3d::GpuBufferBase::getData</definition>
+        <argsstring>(VkDeviceSize offset)</argsstring>
+        <name>getData</name>
+        <qualifiedname>castor3d::GpuBufferBase::getData</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The N-th instance of the data. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The memory chunk offset. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBuffer.hpp" line="176" column="8" bodyfile="Buffer/GpuBuffer.hpp" bodystart="176" bodyend="179"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dec/a02524_1ae81d18fb4565a12c2d525b775cb4e27f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::ArrayView&lt; uint8_t &gt; const &amp;</type>
+        <definition>castor::ArrayView&lt; uint8_t &gt; const  &amp; castor3d::GpuBufferBase::getDatas</definition>
+        <argsstring>() const</argsstring>
+        <name>getDatas</name>
+        <qualifiedname>castor3d::GpuBufferBase::getDatas</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The data. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBuffer.hpp" line="188" column="26" bodyfile="Buffer/GpuBuffer.hpp" bodystart="188" bodyend="191"/>
+        <referencedby refid="dc/d32/a02556_1a78ff41feec92e694e8f44141e6e06b0b" compoundref="d5/de9/a00176" startline="75" endline="80">castor3d::ObjectBufferOffset::getBoneData</referencedby>
+        <referencedby refid="d4/dad/a02500_1aab6c41b3e6bd874a2eea4fe95d769f68" compoundref="dc/de6/a00167" startline="93" endline="97">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getData</referencedby>
+        <referencedby refid="dc/d32/a02556_1a61bc3e37e6a74ec6fd084ac0342cdda9" compoundref="d5/de9/a00176" startline="60" endline="65">castor3d::ObjectBufferOffset::getIndexData</referencedby>
+        <referencedby refid="dc/d32/a02556_1a812844899cb02530ed9556969353e02c" compoundref="d5/de9/a00176" startline="68" endline="73">castor3d::ObjectBufferOffset::getVertexData</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="de/dec/a02524_1af3d715f75b94aba18ba8d3a39b5e73d2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::ArrayView&lt; uint8_t &gt; &amp;</type>
+        <definition>castor::ArrayView&lt; uint8_t &gt; &amp; castor3d::GpuBufferBase::getDatas</definition>
+        <argsstring>()</argsstring>
+        <name>getDatas</name>
+        <qualifiedname>castor3d::GpuBufferBase::getDatas</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The data. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBuffer.hpp" line="200" column="20" bodyfile="Buffer/GpuBuffer.hpp" bodystart="200" bodyend="203"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -187,29 +657,53 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="809">
-        <label>castor3d::CpuFrameEvent</label>
+      <node id="2">
+        <label>castor3d::GpuBufferT&lt; GpuBufferPackedAllocator &gt;</label>
+        <link refid="d1/df5/a02496"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; GpuBufferPackedAllocator &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::GpuBufferBase</label>
         <link refid="de/dec/a02524"/>
       </node>
-      <node id="810">
-        <label>castor3d::CpuFunctorEvent</label>
-        <link refid="d8/d65/a02528"/>
-        <childnode refid="809" relation="public-inheritance">
+      <node id="3">
+        <label>castor3d::GpuBufferT&lt; AllocatorT &gt;</label>
+        <link refid="d1/df5/a02496"/>
+        <childnode refid="1" relation="public-inheritance">
         </childnode>
       </node>
     </inheritancegraph>
-    <location file="Event/Frame/CpuFrameEvent.hpp" line="12" column="1" bodyfile="Event/Frame/CpuFrameEvent.hpp" bodystart="11" bodyend="66"/>
+    <location file="Buffer/GpuBuffer.hpp" line="23" column="1" bodyfile="Buffer/GpuBuffer.hpp" bodystart="24" bodyend="224"/>
     <listofallmembers>
-      <member refid="de/dec/a02524_1ae31a541d4c966f978a3174b048a45b2a" prot="public" virt="pure-virtual"><scope>castor3d::CpuFrameEvent</scope><name>apply</name></member>
-      <member refid="de/dec/a02524_1ae83db3b8b709ecf853a35d683ad8b6e8" prot="public" virt="non-virtual"><scope>castor3d::CpuFrameEvent</scope><name>CpuFrameEvent</name></member>
-      <member refid="de/dec/a02524_1aa5118537fba83fa70a961831602b01ab" prot="public" virt="non-virtual"><scope>castor3d::CpuFrameEvent</scope><name>CpuFrameEvent</name></member>
-      <member refid="de/dec/a02524_1aaf3cac5e82d244c2c6dbe23debd5d915" prot="public" virt="non-virtual"><scope>castor3d::CpuFrameEvent</scope><name>CpuFrameEvent</name></member>
-      <member refid="de/dec/a02524_1a1838923995e8f180a7a627280580566e" prot="public" virt="non-virtual"><scope>castor3d::CpuFrameEvent</scope><name>getType</name></member>
-      <member refid="de/dec/a02524_1a524ea078d871f55861b6bf095da318a0" prot="protected" virt="non-virtual"><scope>castor3d::CpuFrameEvent</scope><name>m_stackTrace</name></member>
-      <member refid="de/dec/a02524_1a5a5e26283b8543afb6d89443498c3ece" prot="protected" virt="non-virtual"><scope>castor3d::CpuFrameEvent</scope><name>m_type</name></member>
-      <member refid="de/dec/a02524_1a93dc90e257b2baa38767bab42d92713f" prot="public" virt="non-virtual"><scope>castor3d::CpuFrameEvent</scope><name>operator=</name></member>
-      <member refid="de/dec/a02524_1a175874ffb8e6c175da89443e3ab48d83" prot="public" virt="non-virtual"><scope>castor3d::CpuFrameEvent</scope><name>operator=</name></member>
-      <member refid="de/dec/a02524_1a4e9e9aceb04443692aa5c494293fdae2" prot="public" virt="virtual"><scope>castor3d::CpuFrameEvent</scope><name>~CpuFrameEvent</name></member>
+      <member refid="de/dec/a02524_1a2e96ae884d0c9c48a92282e0c9d1b816" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBase</scope><name>getBuffer</name></member>
+      <member refid="de/dec/a02524_1ad5c0c039b286c923f49bfb1e7e6282e8" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBase</scope><name>getBuffer</name></member>
+      <member refid="de/dec/a02524_1aa9ce48ae045bf1f7be2b87315bf56394" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBase</scope><name>getData</name></member>
+      <member refid="de/dec/a02524_1a1c9e4696f89164001d11831b35f15f77" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBase</scope><name>getData</name></member>
+      <member refid="de/dec/a02524_1ae81d18fb4565a12c2d525b775cb4e27f" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBase</scope><name>getDatas</name></member>
+      <member refid="de/dec/a02524_1af3d715f75b94aba18ba8d3a39b5e73d2" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBase</scope><name>getDatas</name></member>
+      <member refid="de/dec/a02524_1a4f0cb57ba7d81f99e64b3fa0096023fa" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBase</scope><name>GpuBufferBase</name></member>
+      <member refid="de/dec/a02524_1a01ce6a31562ddfd446c446f4a24ed188" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferBase</scope><name>GpuBufferPool</name></member>
+      <member refid="de/dec/a02524_1a3f399bb8c877bc2155fe02aebd6c0329" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBase</scope><name>hasBuffer</name></member>
+      <member refid="de/dec/a02524_1a587d96355485bef31424b29912a593a0" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferBase</scope><name>m_allocatedSize</name></member>
+      <member refid="de/dec/a02524_1a9a7538519685faae7f6428fc3eb2cc83" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferBase</scope><name>m_buffer</name></member>
+      <member refid="de/dec/a02524_1a2e69a28df19b20f94149211604e9232f" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferBase</scope><name>m_data</name></member>
+      <member refid="de/dec/a02524_1a4c730337dc92891d1bd441f08e614955" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferBase</scope><name>m_memoryFlags</name></member>
+      <member refid="de/dec/a02524_1a22d827d0a42cfa72cd42ea3947460c4c" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferBase</scope><name>m_ownData</name></member>
+      <member refid="de/dec/a02524_1ac7691c910eedc0c3c24ad3ab3032a53f" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferBase</scope><name>m_ranges</name></member>
+      <member refid="de/dec/a02524_1a9951e34699ca072e47a0dd28f80ff31c" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferBase</scope><name>m_renderSystem</name></member>
+      <member refid="de/dec/a02524_1a392feb8ee91255bfffcadec61f4ea34d" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferBase</scope><name>m_sharingMode</name></member>
+      <member refid="de/dec/a02524_1a70cb190f18fd0d79504e538b3d5370f1" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferBase</scope><name>m_stagingBuffer</name></member>
+      <member refid="de/dec/a02524_1ac93213c36218f65e9a8375fc2c567fdf" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferBase</scope><name>m_usage</name></member>
+      <member refid="de/dec/a02524_1a06f1c510406ae4dd17d134022e94a497" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBase</scope><name>markDirty</name></member>
+      <member refid="de/dec/a02524_1a5f73c06dc063fb909b7fa723b4ee90c8" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferBase</scope><name>MemoryRangeArray</name></member>
+      <member refid="de/dec/a02524_1a91928d1e743ed5edbb8a3af9bd859af1" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBase</scope><name>operator ashes::Buffer&lt; uint8_t &gt; &amp;</name></member>
+      <member refid="de/dec/a02524_1ab0b76b8e65ce793ffd15dc6c5d65a70d" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBase</scope><name>operator ashes::Buffer&lt; uint8_t &gt; const &amp;</name></member>
+      <member refid="de/dec/a02524_1a23305046cd563d8ec97a43b9ab41500f" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBase</scope><name>upload</name></member>
+      <member refid="de/dec/a02524_1adbd7c63833b19b5aeedc5c5ddbe10f6d" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBase</scope><name>uploadDirect</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

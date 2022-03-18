@@ -1,33 +1,399 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d6/d36/a03456" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkDebugUtilsMessengerCreateInfoEXT &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d6/d36/a03456_1abc74cd65eec4dac827dffa7614a085c2" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkDebugUtilsMessengerCreateInfoEXT &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d6/d36/a03456" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Bone</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">std::enable_shared_from_this&lt; Bone &gt;</basecompoundref>
+    <basecompoundref prot="public" virt="non-virtual">castor::Named</basecompoundref>
+    <includes local="no">Bone.hpp</includes>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="d6/d36/a03456_1a6a11291b70c2cbded85d321ce539c62f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class Skeleton</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT</initializer>
+        <name>Skeleton</name>
+        <qualifiedname>castor3d::Bone::Skeleton</qualifiedname>
+        <param>
+          <type><ref refid="dc/d18/a03460" kindref="compound">Skeleton</ref></type>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="275" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="275" bodyend="-1"/>
+        <location file="Model/Skeleton/Bone.hpp" line="21" column="14" bodyfile="Model/Skeleton/Bone.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="d6/d36/a03456_1a8990cb4e069e1bce2bed0c02ca8ebbc2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class BinaryWriter&lt; Bone &gt;</definition>
+        <argsstring></argsstring>
+        <name>BinaryWriter&lt; Bone &gt;</name>
+        <qualifiedname>castor3d::Bone::BinaryWriter&lt; Bone &gt;</qualifiedname>
+        <param>
+          <type><ref refid="df/d49/a02340" kindref="compound">BinaryWriter</ref>&lt; <ref refid="d6/d36/a03456" kindref="compound">Bone</ref> &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Bone.hpp" line="21" column="14" bodyfile="Model/Skeleton/Bone.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="d6/d36/a03456_1aa620b5c7619fb25278682492b0343a38" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class BinaryParser&lt; Bone &gt;</definition>
+        <argsstring></argsstring>
+        <name>BinaryParser&lt; Bone &gt;</name>
+        <qualifiedname>castor3d::Bone::BinaryParser&lt; Bone &gt;</qualifiedname>
+        <param>
+          <type><ref refid="d1/d03/a02332" kindref="compound">BinaryParser</ref>&lt; <ref refid="d6/d36/a03456" kindref="compound">Bone</ref> &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Bone.hpp" line="21" column="14" bodyfile="Model/Skeleton/Bone.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d6/d36/a03456_1a77dc4a114e047d31967ffeba8f7e58fc" prot="private" static="no" mutable="no">
+        <type>BoneSPtr</type>
+        <definition>BoneSPtr castor3d::Bone::m_parent</definition>
+        <argsstring></argsstring>
+        <name>m_parent</name>
+        <qualifiedname>castor3d::Bone::m_parent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Bone.hpp" line="115" column="10" bodyfile="Model/Skeleton/Bone.hpp" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d36/a03456_1a61aa8457366c848a0ac6df3c3e242fd4" prot="private" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::Bone::m_offset</definition>
+        <argsstring></argsstring>
+        <name>m_offset</name>
+        <qualifiedname>castor3d::Bone::m_offset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Bone.hpp" line="116" column="20" bodyfile="Model/Skeleton/Bone.hpp" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d36/a03456_1ad54ba84de4b2cd54231d3fcbf1a3c347" prot="private" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::Bone::m_absoluteOffset</definition>
+        <argsstring></argsstring>
+        <name>m_absoluteOffset</name>
+        <qualifiedname>castor3d::Bone::m_absoluteOffset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Bone.hpp" line="117" column="20" bodyfile="Model/Skeleton/Bone.hpp" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d36/a03456_1acfb06b50ab4d2c99a0c27b094935e4fd" prot="private" static="no" mutable="no">
+        <type>BonePtrStrMap</type>
+        <definition>BonePtrStrMap castor3d::Bone::m_children</definition>
+        <argsstring></argsstring>
+        <name>m_children</name>
+        <qualifiedname>castor3d::Bone::m_children</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Bone.hpp" line="118" column="15" bodyfile="Model/Skeleton/Bone.hpp" bodystart="118" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d36/a03456_1aea75cfaf2fd492a92ee92c9a956da178" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d18/a03460" kindref="compound">Skeleton</ref> &amp;</type>
+        <definition>Skeleton&amp; castor3d::Bone::m_skeleton</definition>
+        <argsstring></argsstring>
+        <name>m_skeleton</name>
+        <qualifiedname>castor3d::Bone::m_skeleton</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Bone.hpp" line="119" column="11" bodyfile="Model/Skeleton/Bone.hpp" bodystart="119" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d36/a03456_1ad42451c9b9999d4991c56d86d3694c73" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Bone::Bone</definition>
+        <argsstring>(Skeleton &amp;skeleton, castor::Matrix4x4f const &amp;offset)</argsstring>
+        <name>Bone</name>
+        <qualifiedname>castor3d::Bone::Bone</qualifiedname>
+        <param>
+          <type><ref refid="dc/d18/a03460" kindref="compound">Skeleton</ref> &amp;</type>
+          <declname>skeleton</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">skeleton</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent skeleton. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The transfromation matrix from mesh space to bone space. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Bone.hpp" line="36" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d36/a03456_1aba821cc3925524ea554710829e0c43aa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Bone::~Bone</definition>
+        <argsstring>()</argsstring>
+        <name>~Bone</name>
+        <qualifiedname>castor3d::Bone::~Bone</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Bone.hpp" line="44" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d36/a03456_1a370ccc032019351ca060693ef105c44b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::BoundingBox</type>
+        <definition>C3D_API castor::BoundingBox castor3d::Bone::computeBoundingBox</definition>
+        <argsstring>(Mesh const &amp;mesh, uint32_t boneIndex) const</argsstring>
+        <name>computeBoundingBox</name>
+        <qualifiedname>castor3d::Bone::computeBoundingBox</qualifiedname>
+        <param>
+          <type><ref refid="d1/d24/a03336" kindref="compound">Mesh</ref> const &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>boneIndex</declname>
+        </param>
+        <briefdescription>
+<para>Computes the bounding box and sphere for each bone, for given mesh. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Bone.hpp" line="51" column="29"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d36/a03456_1a0e9c9b40566242a0b0dd52003b2d37cd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const castor::Matrix4x4f &amp;</type>
+        <definition>const castor::Matrix4x4f &amp; castor3d::Bone::getOffsetMatrix</definition>
+        <argsstring>() const</argsstring>
+        <name>getOffsetMatrix</name>
+        <qualifiedname>castor3d::Bone::getOffsetMatrix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The transfromation matrix from mesh space to bone space. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Bone.hpp" line="59" column="34" bodyfile="Model/Skeleton/Bone.hpp" bodystart="59" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d36/a03456_1a93784ad5a8f202e674f5f161ed4e55b0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const castor::Matrix4x4f &amp;</type>
+        <definition>const castor::Matrix4x4f &amp; castor3d::Bone::getAbsoluteOffsetMatrix</definition>
+        <argsstring>() const</argsstring>
+        <name>getAbsoluteOffsetMatrix</name>
+        <qualifiedname>castor3d::Bone::getAbsoluteOffsetMatrix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The absolute transfromation matrix from mesh space to bone space. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Bone.hpp" line="69" column="34" bodyfile="Model/Skeleton/Bone.hpp" bodystart="69" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d36/a03456_1aad652a79257887f456e0a49760a18a70" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const <ref refid="dc/d18/a03460" kindref="compound">Skeleton</ref> &amp;</type>
+        <definition>const Skeleton &amp; castor3d::Bone::getSkeleton</definition>
+        <argsstring>() const</argsstring>
+        <name>getSkeleton</name>
+        <qualifiedname>castor3d::Bone::getSkeleton</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The parent skeleton. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Bone.hpp" line="79" column="24" bodyfile="Model/Skeleton/Bone.hpp" bodystart="79" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d36/a03456_1adc8aff6eb60be5ac0fe532c810b497d4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>BoneSPtr</type>
+        <definition>BoneSPtr castor3d::Bone::getParent</definition>
+        <argsstring>() const</argsstring>
+        <name>getParent</name>
+        <qualifiedname>castor3d::Bone::getParent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The parent bone. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Bone.hpp" line="89" column="10" bodyfile="Model/Skeleton/Bone.hpp" bodystart="89" bodyend="92"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d6/d36/a03456_1a65de907450aff183776e6008178225cb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Bone::addChild</definition>
+        <argsstring>(BoneSPtr bone)</argsstring>
+        <name>addChild</name>
+        <qualifiedname>castor3d::Bone::addChild</qualifiedname>
+        <param>
+          <type>BoneSPtr</type>
+          <declname>bone</declname>
+        </param>
+        <briefdescription>
+<para>Adds a child bone. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">bone</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The bone. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Bone.hpp" line="103" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d36/a03456_1adacba25e51f54160ca6c316d37196913" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Bone::setParent</definition>
+        <argsstring>(BoneSPtr bone)</argsstring>
+        <name>setParent</name>
+        <qualifiedname>castor3d::Bone::setParent</qualifiedname>
+        <param>
+          <type>BoneSPtr</type>
+          <declname>bone</declname>
+        </param>
+        <briefdescription>
+<para>Sets the parent bone. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">bone</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The bone. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Bone.hpp" line="112" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="275" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="275" bodyend="275"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::Bone</label>
+        <link refid="d6/d36/a03456"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+      <node id="2">
+        <label>std::enable_shared_from_this&lt; Bone &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::Bone</label>
+        <link refid="d6/d36/a03456"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+      <node id="2">
+        <label>std::enable_shared_from_this&lt; Bone &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Skeleton/Bone.hpp" line="17" column="1" bodyfile="Model/Skeleton/Bone.hpp" bodystart="20" bodyend="120"/>
     <listofallmembers>
-      <member refid="d6/d36/a03456_1abc74cd65eec4dac827dffa7614a085c2" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkDebugUtilsMessengerCreateInfoEXT &gt;</scope><name>value</name></member>
+      <member refid="d6/d36/a03456_1a65de907450aff183776e6008178225cb" prot="private" virt="non-virtual"><scope>castor3d::Bone</scope><name>addChild</name></member>
+      <member refid="d6/d36/a03456_1aa620b5c7619fb25278682492b0343a38" prot="private" virt="non-virtual"><scope>castor3d::Bone</scope><name>BinaryParser&lt; Bone &gt;</name></member>
+      <member refid="d6/d36/a03456_1a8990cb4e069e1bce2bed0c02ca8ebbc2" prot="private" virt="non-virtual"><scope>castor3d::Bone</scope><name>BinaryWriter&lt; Bone &gt;</name></member>
+      <member refid="d6/d36/a03456_1ad42451c9b9999d4991c56d86d3694c73" prot="public" virt="non-virtual"><scope>castor3d::Bone</scope><name>Bone</name></member>
+      <member refid="d6/d36/a03456_1a370ccc032019351ca060693ef105c44b" prot="public" virt="non-virtual"><scope>castor3d::Bone</scope><name>computeBoundingBox</name></member>
+      <member refid="d6/d36/a03456_1a93784ad5a8f202e674f5f161ed4e55b0" prot="public" virt="non-virtual"><scope>castor3d::Bone</scope><name>getAbsoluteOffsetMatrix</name></member>
+      <member refid="d6/d36/a03456_1a0e9c9b40566242a0b0dd52003b2d37cd" prot="public" virt="non-virtual"><scope>castor3d::Bone</scope><name>getOffsetMatrix</name></member>
+      <member refid="d6/d36/a03456_1adc8aff6eb60be5ac0fe532c810b497d4" prot="public" virt="non-virtual"><scope>castor3d::Bone</scope><name>getParent</name></member>
+      <member refid="d6/d36/a03456_1aad652a79257887f456e0a49760a18a70" prot="public" virt="non-virtual"><scope>castor3d::Bone</scope><name>getSkeleton</name></member>
+      <member refid="d6/d36/a03456_1ad54ba84de4b2cd54231d3fcbf1a3c347" prot="private" virt="non-virtual"><scope>castor3d::Bone</scope><name>m_absoluteOffset</name></member>
+      <member refid="d6/d36/a03456_1acfb06b50ab4d2c99a0c27b094935e4fd" prot="private" virt="non-virtual"><scope>castor3d::Bone</scope><name>m_children</name></member>
+      <member refid="d6/d36/a03456_1a61aa8457366c848a0ac6df3c3e242fd4" prot="private" virt="non-virtual"><scope>castor3d::Bone</scope><name>m_offset</name></member>
+      <member refid="d6/d36/a03456_1a77dc4a114e047d31967ffeba8f7e58fc" prot="private" virt="non-virtual"><scope>castor3d::Bone</scope><name>m_parent</name></member>
+      <member refid="d6/d36/a03456_1aea75cfaf2fd492a92ee92c9a956da178" prot="private" virt="non-virtual"><scope>castor3d::Bone</scope><name>m_skeleton</name></member>
+      <member refid="d6/d36/a03456_1adacba25e51f54160ca6c316d37196913" prot="private" virt="non-virtual"><scope>castor3d::Bone</scope><name>setParent</name></member>
+      <member refid="d6/d36/a03456_1a6a11291b70c2cbded85d321ce539c62f" prot="private" virt="non-virtual"><scope>castor3d::Bone</scope><name>Skeleton</name></member>
+      <member refid="d6/d36/a03456_1aba821cc3925524ea554710829e0c43aa" prot="public" virt="non-virtual"><scope>castor3d::Bone</scope><name>~Bone</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

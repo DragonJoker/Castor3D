@@ -1,33 +1,439 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="de/de4/a03655" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkCalibratedTimestampInfoEXT &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="de/de4/a03655_1a50bb0954da39fc3b2670e8c9c640599f" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkCalibratedTimestampInfoEXT &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="de/de4/a03655" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::FrustumCuller</compoundname>
+    <basecompoundref refid="dd/d77/a03659" prot="public" virt="non-virtual">castor3d::SceneCuller</basecompoundref>
+    <includes local="no">FrustumCuller.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="de/de4/a03655_1a8f7d29ba9b28dc261da8da28cf4ac6b1" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dff/a03675" kindref="compound">Frustum</ref> *</type>
+        <definition>Frustum* castor3d::FrustumCuller::m_frustum</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_CALIBRATED_TIMESTAMP_INFO_EXT</initializer>
+        <name>m_frustum</name>
+        <qualifiedname>castor3d::FrustumCuller::m_frustum</qualifiedname>
+        <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="330" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="330" bodyend="-1"/>
+        <location file="Render/Culling/FrustumCuller.hpp" line="29" column="10" bodyfile="Render/Culling/FrustumCuller.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/de4/a03655_1a31c850999c2c2c2cc54c8e055b14de33" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::FrustumCuller::FrustumCuller</definition>
+        <argsstring>(Scene &amp;scene, Camera &amp;camera)</argsstring>
+        <name>FrustumCuller</name>
+        <qualifiedname>castor3d::FrustumCuller::FrustumCuller</qualifiedname>
+        <param>
+          <type><ref refid="dd/dec/a04595" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/dd6/a04479" kindref="compound">Camera</ref> &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/FrustumCuller.hpp" line="16" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="de/de4/a03655_1aa8e0a14e45aa82de84796533c3e231c6" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::FrustumCuller::FrustumCuller</definition>
+        <argsstring>(Camera &amp;camera)</argsstring>
+        <name>FrustumCuller</name>
+        <qualifiedname>castor3d::FrustumCuller::FrustumCuller</qualifiedname>
+        <param>
+          <type><ref refid="d7/dd6/a04479" kindref="compound">Camera</ref> &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/FrustumCuller.hpp" line="18" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="de/de4/a03655_1a155bcf84eec4a32cb6d08dfbdce21393" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::FrustumCuller::FrustumCuller</definition>
+        <argsstring>(Scene &amp;scene, Frustum &amp;frustum)</argsstring>
+        <name>FrustumCuller</name>
+        <qualifiedname>castor3d::FrustumCuller::FrustumCuller</qualifiedname>
+        <param>
+          <type><ref refid="dd/dec/a04595" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dff/a03675" kindref="compound">Frustum</ref> &amp;</type>
+          <declname>frustum</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/FrustumCuller.hpp" line="19" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="de/de4/a03655_1a71e7a417b6aefe16cb14170b413f9d7d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::FrustumCuller::updateFrustum</definition>
+        <argsstring>(castor::Matrix4x4f const &amp;projection, castor::Matrix4x4f const &amp;view)</argsstring>
+        <name>updateFrustum</name>
+        <qualifiedname>castor3d::FrustumCuller::updateFrustum</qualifiedname>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>projection</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>view</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/FrustumCuller.hpp" line="22" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="de/de4/a03655_1a6fc87a32e6897ed8cff1932c3a43153f" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::FrustumCuller::doCullGeometries</definition>
+        <argsstring>() override</argsstring>
+        <name>doCullGeometries</name>
+        <qualifiedname>castor3d::FrustumCuller::doCullGeometries</qualifiedname>
+        <reimplements refid="dd/d77/a03659_1a0d74224399dca0d24b63fdcfb00e4190">doCullGeometries</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/FrustumCuller.hpp" line="26" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="de/de4/a03655_1a59d5be41512f0523e3383d1e1b9a7b67" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::FrustumCuller::doCullBillboards</definition>
+        <argsstring>() override</argsstring>
+        <name>doCullBillboards</name>
+        <qualifiedname>castor3d::FrustumCuller::doCullBillboards</qualifiedname>
+        <reimplements refid="dd/d77/a03659_1a2fb1e62a81ff84a80abe983dce32ac07">doCullBillboards</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/FrustumCuller.hpp" line="27" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="330" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="330" bodyend="330"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::FrustumCuller</label>
+        <link refid="de/de4/a03655"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SceneCuller</label>
+        <link refid="dd/d77/a03659"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="9">
+        <label>Animable</label>
+        <link refid="de/d59/a02219"/>
+        <childnode refid="10" relation="public-inheritance">
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>K</label>
+      </node>
+      <node id="14">
+        <label>T</label>
+      </node>
+      <node id="28">
+        <label>std::array&lt; castor3d::RenderNodesPass::PassDescriptors, size_t(RenderNodeType::eCount) &gt;</label>
+        <childnode refid="29" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="30" relation="template-instance">
+          <edgelabel>&lt; castor3d::RenderNodesPass::PassDescriptors, size_t(RenderNodeType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="de/d59/a02219"/>
+        <childnode refid="16" relation="public-inheritance">
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::Camera</label>
+        <link refid="d7/dd6/a04479"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::FrustumCuller</label>
+        <link refid="de/de4/a03655"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="26">
+        <label>castor3d::MatrixUbo</label>
+        <link refid="de/d42/a04927"/>
+      </node>
+      <node id="4">
+        <label>castor3d::MovableObject</label>
+        <link refid="df/dd3/a04527"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
+      </node>
+      <node id="24">
+        <label>castor3d::QueuesData</label>
+        <link refid="d5/d04/a03955"/>
+      </node>
+      <node id="21">
+        <label>castor3d::RenderDevice</label>
+        <link refid="d4/d87/a03963"/>
+        <childnode refid="22" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="23" relation="usage">
+          <edgelabel>queueFamilies</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor3d::RenderNodesPass</label>
+        <link refid="d4/d54/a04055"/>
+        <childnode refid="19" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="20" relation="public-inheritance">
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>m_renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="26" relation="usage">
+          <edgelabel>m_matrixUbo</edgelabel>
+        </childnode>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_culler</edgelabel>
+        </childnode>
+        <childnode refid="27" relation="usage">
+          <edgelabel>m_sceneUbo</edgelabel>
+        </childnode>
+        <childnode refid="28" relation="usage">
+          <edgelabel>m_additionalDescriptors</edgelabel>
+        </childnode>
+      </node>
+      <node id="29">
+        <label>castor3d::RenderNodesPass::PassDescriptors</label>
+        <link refid="d0/d9e/a04059"/>
+      </node>
+      <node id="22">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d3/d9a/a04075"/>
+        <childnode refid="19" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SceneCuller</label>
+        <link refid="dd/d77/a03659"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_camera</edgelabel>
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>m_renderPasses</edgelabel>
+        </childnode>
+      </node>
+      <node id="31">
+        <label>castor3d::SceneCuller::RenderPassBuffers</label>
+        <link refid="d6/da4/a03663"/>
+        <childnode refid="32" relation="usage">
+          <edgelabel>nodesIds</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::SceneNode</label>
+        <link refid="d1/d30/a04639"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>castor3d::SceneUbo</label>
+        <link refid="da/d70/a04967"/>
+      </node>
+      <node id="6">
+        <label>castor::Named</label>
+      </node>
+      <node id="16">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="10">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="19">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="5">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="20">
+        <label>crg::RenderPass</label>
+      </node>
+      <node id="17">
+        <label>std::map&lt; castor3d::RenderNodesPass const *, castor3d::SceneCuller::RenderPassBuffers &gt;</label>
+        <childnode refid="18" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="31" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; castor3d::RenderNodesPass const *, castor3d::SceneCuller::RenderPassBuffers &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="30">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="14" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
+      </node>
+      <node id="12">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="13" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="25">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="14" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="32">
+        <label>std::vector&lt; PipelineBuffer &gt;</label>
+        <childnode refid="25" relation="template-instance">
+          <edgelabel>&lt; PipelineBuffer &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>std::vector&lt; QueuesData &gt;</label>
+        <childnode refid="24" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="template-instance">
+          <edgelabel>&lt; QueuesData &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Culling/FrustumCuller.hpp" line="12" column="1" bodyfile="Render/Culling/FrustumCuller.hpp" bodystart="14" bodyend="30"/>
     <listofallmembers>
-      <member refid="de/de4/a03655_1a50bb0954da39fc3b2670e8c9c640599f" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkCalibratedTimestampInfoEXT &gt;</scope><name>value</name></member>
+      <member refid="dd/d77/a03659_1a385eeac18cb22989bb3900f38e453a01" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>areAllChanged</name></member>
+      <member refid="dd/d77/a03659_1a28bd1305c7e968e95dfc30a0b60829da" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>areCulledChanged</name></member>
+      <member refid="dd/d77/a03659_1a7857d0d5c604e95479f3fa25346f5c0f" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>compute</name></member>
+      <member refid="de/de4/a03655_1a59d5be41512f0523e3383d1e1b9a7b67" prot="private" virt="virtual"><scope>castor3d::FrustumCuller</scope><name>doCullBillboards</name></member>
+      <member refid="de/de4/a03655_1a6fc87a32e6897ed8cff1932c3a43153f" prot="private" virt="virtual"><scope>castor3d::FrustumCuller</scope><name>doCullGeometries</name></member>
+      <member refid="dd/d77/a03659_1aab980445b5e3b308a83202c17ed319fe" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>DrawCommandsBuffer</name></member>
+      <member refid="de/de4/a03655_1a31c850999c2c2c2cc54c8e055b14de33" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>FrustumCuller</name></member>
+      <member refid="de/de4/a03655_1aa8e0a14e45aa82de84796533c3e231c6" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>FrustumCuller</name></member>
+      <member refid="de/de4/a03655_1a155bcf84eec4a32cb6d08dfbdce21393" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>FrustumCuller</name></member>
+      <member refid="dd/d77/a03659_1a9003118298fe8916dfd1e05f442506ca" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>getBillboardCommands</name></member>
+      <member refid="dd/d77/a03659_1a0dec79342b1ddc5d58f6d942520012ee" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>getBillboardNodes</name></member>
+      <member refid="dd/d77/a03659_1a7d8e0e08c971df07a39eee8182cd864c" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>getCamera</name></member>
+      <member refid="dd/d77/a03659_1ad025465f2c7325847ad75ecd4e9f3470" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>getCamera</name></member>
+      <member refid="dd/d77/a03659_1aa0ede0892ee9df11bbcce8bfa310779d" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>getInstancedSubmeshNodes</name></member>
+      <member refid="dd/d77/a03659_1a07511192799a761b32cc0e650bafc3f0" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>getMinCastersZ</name></member>
+      <member refid="dd/d77/a03659_1a0873968915bcde09a46c8805458fba13" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>getNodesIds</name></member>
+      <member refid="dd/d77/a03659_1a4a19eb863c0e17f0bf785f9c3db955aa" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>getPipelineNodesIndex</name></member>
+      <member refid="dd/d77/a03659_1aecd806adeb988c145bc486f1d883a0ee" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>getPipelineNodesIndex</name></member>
+      <member refid="dd/d77/a03659_1a3590fca4f928b3743f8275bbe1c2fd13" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>getScene</name></member>
+      <member refid="dd/d77/a03659_1afc93f8bfe6ad8dac4429937200be1715" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>getSubmeshIdxCommands</name></member>
+      <member refid="dd/d77/a03659_1a4f52ea00a27f70b3138dac472293dd96" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>getSubmeshNIdxCommands</name></member>
+      <member refid="dd/d77/a03659_1a55adac9263b85d93e7b675edfade1337" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>getSubmeshNodes</name></member>
+      <member refid="dd/d77/a03659_1a602a1b5c0447c9a02eaf7d65cde84e8c" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>hasCamera</name></member>
+      <member refid="dd/d77/a03659_1a96b401de419980460139e52b73da97eb" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>hasCulledNodes</name></member>
+      <member refid="dd/d77/a03659_1a9c5df1fcfd55a6050920465031ee16fe" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>IndexedDrawCommandsBuffer</name></member>
+      <member refid="dd/d77/a03659_1abdf1e8aa03f098948ac9753740fda0b8" prot="protected" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>m_allChanged</name></member>
+      <member refid="dd/d77/a03659_1a7368dd7328e770423fc67641b857e43f" prot="protected" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>m_camera</name></member>
+      <member refid="dd/d77/a03659_1af1d4537361720c437487c5dc7398ad96" prot="protected" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>m_cameraChanged</name></member>
+      <member refid="dd/d77/a03659_1aa41b2a37c6c7712c8123c72161276604" prot="protected" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>m_cameraDirty</name></member>
+      <member refid="dd/d77/a03659_1a4a80d7b1c3b7cc6bfd50cc3055b6cc6f" prot="protected" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>m_culledBillboards</name></member>
+      <member refid="dd/d77/a03659_1a92023fa128d7fd1c053bf5fccb4e7693" prot="protected" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>m_culledChanged</name></member>
+      <member refid="dd/d77/a03659_1a8d0bab282d0f0f6155bfb7f1ab44ec65" prot="protected" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>m_culledSubmeshes</name></member>
+      <member refid="de/de4/a03655_1a8f7d29ba9b28dc261da8da28cf4ac6b1" prot="private" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>m_frustum</name></member>
+      <member refid="dd/d77/a03659_1a4a83c5a413e1d842bbd0f1843f63e57e" prot="protected" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>m_index</name></member>
+      <member refid="dd/d77/a03659_1a2d7f344f44ea50cbd5d58ee626bf700f" prot="protected" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>m_minCullersZ</name></member>
+      <member refid="dd/d77/a03659_1ac8ff5db4d88280106fd24d798ed8f676" prot="protected" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>m_renderPasses</name></member>
+      <member refid="dd/d77/a03659_1a6a4720bed06bf39daf66f477cb308e13" prot="protected" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>m_sceneChanged</name></member>
+      <member refid="dd/d77/a03659_1a4c384c2709f95373c862a17d31a584ec" prot="protected" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>m_sceneDirty</name></member>
+      <member refid="dd/d77/a03659_1a06f548ebd0cf04de7f402777c289be95" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>NodeArrayT</name></member>
+      <member refid="dd/d77/a03659_1a332ff2fc76d0928ad82d675f863c1529" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>onCompute</name></member>
+      <member refid="dd/d77/a03659_1a0df54bafb8f37f2b9d2729913c034dbc" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>PipelineBufferArray</name></member>
+      <member refid="dd/d77/a03659_1ae574a8f382f045af7ef6da4649e40d36" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>PipelineNodesBuffer</name></member>
+      <member refid="dd/d77/a03659_1ab1455532a46b0ff41f24e0e54966c086" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>registerRenderPass</name></member>
+      <member refid="dd/d77/a03659_1a9dc2a4be078ba6b83fe40c434166f779" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>SceneCuller</name></member>
+      <member refid="dd/d77/a03659_1a3c2d5bca2fd136fea8f0f0924d356fff" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>SidedNodeArrayT</name></member>
+      <member refid="dd/d77/a03659_1a9b9bf62edb2c5e226b2041377cdd0bc5" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>SidedNodeBufferMapT</name></member>
+      <member refid="dd/d77/a03659_1a63128301aea730cc1e93a32d5d88acfc" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>SidedNodePipelineMapT</name></member>
+      <member refid="dd/d77/a03659_1ade4e2bab3f4456a4798a956f1bcee8c0" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>SidedObjectNodeBufferMapT</name></member>
+      <member refid="dd/d77/a03659_1af6ec96e40813b400947495d60019740c" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>SidedObjectNodeMapT</name></member>
+      <member refid="dd/d77/a03659_1a6c735e4da690af7cba24dddc5abce0a2" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>SidedObjectNodePassMapT</name></member>
+      <member refid="dd/d77/a03659_1a230881528f26599cfcf19fa9527e9c24" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>SidedObjectNodePipelineMapT</name></member>
+      <member refid="dd/d77/a03659_1a8aa4b091ae983edaae8340bec88d6e94" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>unregisterRenderPass</name></member>
+      <member refid="de/de4/a03655_1a71e7a417b6aefe16cb14170b413f9d7d" prot="public" virt="non-virtual"><scope>castor3d::FrustumCuller</scope><name>updateFrustum</name></member>
+      <member refid="dd/d77/a03659_1a7a69f93ed1489daa6f657854b04911bc" prot="public" virt="virtual"><scope>castor3d::FrustumCuller</scope><name>~SceneCuller</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

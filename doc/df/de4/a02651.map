@@ -1,4 +1,8 @@
-<map id="castor3d::SliceView&lt; ViewT &gt;" name="castor3d::SliceView&lt; ViewT &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="13,5,151,47"/>
-<area shape="rect" id="node2" href="$d2/d5a/a02652.html" title=" " alt="" coords="5,109,159,151"/>
+<map id="castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;" name="castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;">
+<area shape="rect" id="node1" title="Geometry cache." alt="" coords="905,45,1087,101"/>
+<area shape="rect" id="node2" href="$dd/dc4/a02632.html" title=" " alt="" coords="668,45,856,101"/>
+<area shape="rect" id="node3" title=" " alt="" coords="8,5,191,32"/>
+<area shape="rect" id="node5" href="$dd/dc4/a02632.html" title=" " alt="" coords="244,53,429,94"/>
+<area shape="rect" id="node4" title=" " alt="" coords="243,119,431,175"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,61,193,102"/>
 </map>

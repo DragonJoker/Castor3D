@@ -1,69 +1,131 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d9/d27/a02363" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::CacheTraits&lt; AnimatedObjectGroup, KeyType &gt;</compoundname>
-    <includes local="no">CacheModule.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d9/d27/a02363" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</compoundname>
+    <basecompoundref refid="d5/d1b/a02331" prot="public" virt="non-virtual">castor3d::BinaryParserBase&lt; SceneNodeAnimation &gt;</basecompoundref>
+    <includes local="no">BinarySceneNodeAnimation.hpp</includes>
     <templateparamlist>
-      <param>
-        <type>typename KeyType</type>
-      </param>
     </templateparamlist>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="d9/d27/a02363_1acd762eb8ef15ea0d36b0665c2261cb6a" prot="public" static="no">
-        <type>std::function&lt; std::shared_ptr&lt; <ref refid="de/ddd/a05031" kindref="compound">AnimatedObjectGroup</ref> &gt;(KeyType const &amp;) &gt;</type>
-        <definition>using castor3d::CacheTraits&lt; AnimatedObjectGroup, KeyType &gt;::Producer =  std::function&lt; std::shared_ptr&lt; AnimatedObjectGroup &gt;( KeyType const &amp; ) &gt;</definition>
-        <argsstring></argsstring>
-        <name>Producer</name>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d9/d27/a02363_1a00c41dff8d7bf04a261298f9d1623232" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BinaryParser&lt; SceneNodeAnimation &gt;::doParse</definition>
+        <argsstring>(SceneNodeAnimation &amp;obj) override</argsstring>
+        <name>doParse</name>
+        <qualifiedname>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;::doParse</qualifiedname>
+        <reimplements refid="d5/d1b/a02331_1a020a66d5fc1b452dc76c82702d72bbb1">doParse</reimplements>
+        <param>
+          <type><ref refid="d0/dc5/a04415" kindref="compound">SceneNodeAnimation</ref> &amp;</type>
+          <declname>obj</declname>
+        </param>
         <briefdescription>
+<para>Function used to retrieve specific data from the chunk. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/CacheModule.hpp" line="97" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="97" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d9/d27/a02363_1a42d4db91edb19654b9e717358ca063e4" prot="public" static="no">
-        <type>std::function&lt; void(<ref refid="d9/d5e/a02355" kindref="compound">CacheBase</ref>&lt; <ref refid="de/ddd/a05031" kindref="compound">AnimatedObjectGroup</ref>, KeyType &gt; const &amp;, castor::Collection&lt; <ref refid="de/ddd/a05031" kindref="compound">AnimatedObjectGroup</ref>, KeyType &gt; &amp;, std::shared_ptr&lt; <ref refid="de/ddd/a05031" kindref="compound">AnimatedObjectGroup</ref> &gt;) &gt;</type>
-        <definition>using castor3d::CacheTraits&lt; AnimatedObjectGroup, KeyType &gt;::Merger =  std::function&lt; void( CacheBase&lt; AnimatedObjectGroup, KeyType &gt; const &amp; , castor::Collection&lt; AnimatedObjectGroup, KeyType &gt; &amp; , std::shared_ptr&lt; AnimatedObjectGroup &gt; ) &gt;</definition>
-        <argsstring></argsstring>
-        <name>Merger</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/CacheModule.hpp" line="98" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="100" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d9/d27/a02363_1aa73e2eecf795e255a4a834383b65b51e" prot="public" static="yes" mutable="no">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
-        <definition>C3D_API const castor::String castor3d::CacheTraits&lt; AnimatedObjectGroup, KeyType &gt;::Name</definition>
-        <argsstring></argsstring>
-        <name>Name</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/CacheModule.hpp" line="96" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="96" bodyend="-1"/>
+        <location file="Binary/BinarySceneNodeAnimation.hpp" line="71" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Helper structure to specialise a cache behaviour. </para>
+<para><ref refid="d0/dc5/a04415" kindref="compound">SceneNodeAnimation</ref> binary loader. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="remark"><para>Specialisation for <ref refid="de/ddd/a05031" kindref="compound">AnimatedObjectGroup</ref>. </para>
-</simplesect>
-</para>
+<para>Loader binaire de <ref refid="d0/dc5/a04415" kindref="compound">SceneNodeAnimation</ref>. </para>
     </detaileddescription>
-    <location file="Cache/CacheModule.hpp" line="95" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="94" bodyend="101"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::BinaryParserBase&lt; SceneNodeAnimation &gt;</label>
+        <link refid="d5/d1b/a02331"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; SceneNodeAnimation &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</label>
+        <link refid="d9/d27/a02363"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
+        <link refid="d5/d1b/a02331"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::BinaryParserBase&lt; SceneNodeAnimation &gt;</label>
+        <link refid="d5/d1b/a02331"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_fileVersion</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; SceneNodeAnimation &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::BinaryChunk</label>
+        <link refid="dd/d3b/a02291"/>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</label>
+        <link refid="d9/d27/a02363"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
+        <link refid="d5/d1b/a02331"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_fileVersion</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::Version</label>
+        <link refid="d0/de5/a03279"/>
+      </node>
+    </collaborationgraph>
+    <location file="Binary/BinarySceneNodeAnimation.hpp" line="57" column="1" bodyfile="Binary/BinarySceneNodeAnimation.hpp" bodystart="59" bodyend="72"/>
     <listofallmembers>
-      <member refid="d9/d27/a02363_1a42d4db91edb19654b9e717358ca063e4" prot="public" virt="non-virtual"><scope>castor3d::CacheTraits&lt; AnimatedObjectGroup, KeyType &gt;</scope><name>Merger</name></member>
-      <member refid="d9/d27/a02363_1aa73e2eecf795e255a4a834383b65b51e" prot="public" virt="non-virtual"><scope>castor3d::CacheTraits&lt; AnimatedObjectGroup, KeyType &gt;</scope><name>Name</name></member>
-      <member refid="d9/d27/a02363_1acd762eb8ef15ea0d36b0665c2261cb6a" prot="public" virt="non-virtual"><scope>castor3d::CacheTraits&lt; AnimatedObjectGroup, KeyType &gt;</scope><name>Producer</name></member>
+      <member refid="d5/d1b/a02331_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>checkError</name></member>
+      <member refid="d5/d1b/a02331_1ae6f4694ede819151fe4e30e33235ff07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>createBinaryParser</name></member>
+      <member refid="d5/d1b/a02331_1ab5f9ba53ad5865f967b41e5a27ed73a9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>doGetSubChunk</name></member>
+      <member refid="d9/d27/a02363_1a00c41dff8d7bf04a261298f9d1623232" prot="private" virt="virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>doParse</name></member>
+      <member refid="d5/d1b/a02331_1a0e1aa917e3bf897fab03a32d20890062" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d5/d1b/a02331_1a22ca62addb3ab167995e18f49267efcf" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d5/d1b/a02331_1a5a648553ce168f5bc34adeedc8d169a7" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d5/d1b/a02331_1a90df4e46072e5ef14aebebd00cbcc1f5" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d5/d1b/a02331_1a5fac84360102001f5e730be1927c024e" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d5/d1b/a02331_1a035881aba2b64571b30a5efd3faaf3d9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>doParseHeader</name></member>
+      <member refid="d5/d1b/a02331_1ab3df04f9aa2eb1f7a533ed18631f09c4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>m_chunk</name></member>
+      <member refid="d5/d1b/a02331_1a455764ca72b659dab2652baf56ce5885" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>m_fileVersion</name></member>
+      <member refid="d5/d1b/a02331_1ae4820a3ab3e4b282240e5f1b969153c1" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>Name</name></member>
+      <member refid="d5/d1b/a02331_1a5db83668684ca219f67de3a381898e64" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>parse</name></member>
+      <member refid="d5/d1b/a02331_1a6bbbb529f463085c7d259600ae1b3e99" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>parse</name></member>
+      <member refid="d5/d1b/a02331_1a61b02dbf69d89569eff5be22facd5f07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>parse_v1_1</name></member>
+      <member refid="d5/d1b/a02331_1a95788692ddd6fae91074c299b674aaab" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>parse_v1_2</name></member>
+      <member refid="d5/d1b/a02331_1a6f39b66d980e4a65660016f71115a89c" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>parse_v1_3</name></member>
+      <member refid="d5/d1b/a02331_1aabc068daf8d99718497aa35f7a17c346" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>parse_v1_4</name></member>
+      <member refid="d5/d1b/a02331_1afb9e6fdcdc58e65458de7892d2bf8025" prot="public" virt="virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>~BinaryParserBase</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

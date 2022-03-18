@@ -1,40 +1,52 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="da/d7e/a04326" kind="struct" language="C++" prot="public">
-    <compoundname>castor::Deleter&lt; castor3d::SceneCulledRenderNodes &gt;</compoundname>
-    <includes local="no">RenderNodeModule.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="da/d7e/a04326_1a89c64936806001091026580ebb2f81e3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor::Deleter&lt; castor3d::SceneCulledRenderNodes &gt;::operator()</definition>
-        <argsstring>(castor3d::SceneCulledRenderNodes *ptr) noexcept</argsstring>
-        <name>operator()</name>
-        <param>
-          <type><ref refid="db/d6b/a04330" kindref="compound">castor3d::SceneCulledRenderNodes</ref> *</type>
-          <declname>ptr</declname>
-        </param>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="da/d7e/a04326" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::HdrConfig</compoundname>
+    <includes local="no">HdrConfig.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/d7e/a04326_1ac8fd9583280cdc34d0a26e1237764a0d" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::HdrConfig::exposure</definition>
+        <argsstring></argsstring>
+        <name>exposure</name>
+        <qualifiedname>castor3d::HdrConfig::exposure</qualifiedname>
+        <initializer>{ 1.0f }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The exposure value. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Node/RenderNodeModule.hpp" line="158" column="1"/>
+        <location file="Render/ToneMapping/HdrConfig.hpp" line="18" column="7" bodyfile="Render/ToneMapping/HdrConfig.hpp" bodystart="18" bodyend="-1"/>
+        <referencedby refid="d7/d2e/a04482_1a3164f41de67e9bb9b4df3e39a3bc4433" compoundref="d2/d49/a01067" startline="259" endline="263">castor3d::Camera::setExposure</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="da/d7e/a04326_1a9d5123b1dbd5da1ebb2517854c23fb26" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::HdrConfig::gamma</definition>
+        <argsstring></argsstring>
+        <name>gamma</name>
+        <qualifiedname>castor3d::HdrConfig::gamma</qualifiedname>
+        <initializer>{ 2.2f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The gamma correction value. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/HdrConfig.hpp" line="21" column="7" bodyfile="Render/ToneMapping/HdrConfig.hpp" bodystart="21" bodyend="-1"/>
+        <referencedby refid="d7/d2e/a04482_1af59eaccd54cff1df69b3ef0f406a2e06" compoundref="d2/d49/a01067" startline="265" endline="269">castor3d::Camera::setGamma</referencedby>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Deleter structure. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="remark"><para>Specialisation to hide implementation in .cpp (to reduce includes dependencies). </para>
-</simplesect>
-</para>
     </detaileddescription>
-    <location file="Render/Node/RenderNodeModule.hpp" line="157" column="1" bodyfile="Render/Node/RenderNodeModule.hpp" bodystart="156" bodyend="159"/>
+    <location file="Render/ToneMapping/HdrConfig.hpp" line="13" column="1" bodyfile="Render/ToneMapping/HdrConfig.hpp" bodystart="14" bodyend="22"/>
     <listofallmembers>
-      <member refid="da/d7e/a04326_1a89c64936806001091026580ebb2f81e3" prot="public" virt="non-virtual"><scope>castor::Deleter&lt; castor3d::SceneCulledRenderNodes &gt;</scope><name>operator()</name></member>
+      <member refid="da/d7e/a04326_1ac8fd9583280cdc34d0a26e1237764a0d" prot="public" virt="non-virtual"><scope>castor3d::HdrConfig</scope><name>exposure</name></member>
+      <member refid="da/d7e/a04326_1a9d5123b1dbd5da1ebb2517854c23fb26" prot="public" virt="non-virtual"><scope>castor3d::HdrConfig</scope><name>gamma</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

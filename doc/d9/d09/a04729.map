@@ -1,5 +1,7 @@
-<map id="castor3d::DirectionalLightPass::Program" name="castor3d::DirectionalLightPass::Program">
-<area shape="rect" id="node1" title="Directional light pass program." alt="" coords="5,169,175,211"/>
-<area shape="rect" id="node2" href="$de/df1/a04758.html" title="Base class for all light pass programs." alt="" coords="21,80,159,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="59,5,121,32"/>
+<map id="castor3d::SssProfileBuffer::SssProfileDataPtr" name="castor3d::SssProfileBuffer::SssProfileDataPtr">
+<area shape="rect" id="node1" title=" " alt="" coords="865,16,1037,57"/>
+<area shape="rect" id="node2" href="$dc/d12/a04723.html" title=" " alt="" coords="149,5,321,47"/>
+<area shape="rect" id="node3" title=" " alt="" coords="536,57,697,113"/>
+<area shape="rect" id="node4" title=" " alt="" coords="181,90,289,117"/>
+<area shape="rect" id="node5" title=" " alt="" coords="5,90,44,117"/>
 </map>

@@ -1,247 +1,81 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d5/d87/a05118" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::ColourBackground</compoundname>
-    <basecompoundref refid="d8/dc2/a05098" prot="public" virt="non-virtual">castor3d::SceneBackground</basecompoundref>
-    <includes local="no">Colour.hpp</includes>
-      <sectiondef kind="user-defined">
-      <memberdef kind="function" id="d5/d87/a05118_1a78d51aec7507ea800d2dd73a29b8d37c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d5/d9a/a02650" kindref="compound">TextureLayout</ref> const  &amp;</type>
-        <definition>TextureLayout const&amp; castor3d::ColourBackground::getTexture</definition>
-        <argsstring>() const</argsstring>
-        <name>getTexture</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>name Getters. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Colour.hpp" line="66" column="1" bodyfile="Scene/Background/Colour.hpp" bodystart="66" bodyend="70"/>
-        <references refid="d8/dc2/a05098_1ad0cdc0509b6d96af3320404feea93dbe" compoundref="d6/d80/a01076" startline="444">castor3d::SceneBackground::m_texture</references>
-      </memberdef>
-      <memberdef kind="function" id="d5/d87/a05118_1a815799b0789cea5f684edbfe3bda7cb9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d5/d9a/a02650" kindref="compound">TextureLayout</ref> &amp;</type>
-        <definition>TextureLayout&amp; castor3d::ColourBackground::getTexture</definition>
-        <argsstring>()</argsstring>
-        <name>getTexture</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Colour.hpp" line="72" column="1" bodyfile="Scene/Background/Colour.hpp" bodystart="72" bodyend="76"/>
-        <references refid="d8/dc2/a05098_1ad0cdc0509b6d96af3320404feea93dbe" compoundref="d6/d80/a01076" startline="444">castor3d::SceneBackground::m_texture</references>
-      </memberdef>
-      <memberdef kind="function" id="d5/d87/a05118_1ac591602ef057c4225c9084eef899a348" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::Image const  &amp;</type>
-        <definition>ashes::Image const&amp; castor3d::ColourBackground::getImage</definition>
-        <argsstring>() const</argsstring>
-        <name>getImage</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Colour.hpp" line="78" column="1" bodyfile="Scene/Background/Colour.hpp" bodystart="78" bodyend="82"/>
-        <references refid="d8/dc2/a05098_1ad0cdc0509b6d96af3320404feea93dbe" compoundref="d6/d80/a01076" startline="444">castor3d::SceneBackground::m_texture</references>
-      </memberdef>
-      <memberdef kind="function" id="d5/d87/a05118_1a907720d5f3247c9e5b74a88bc93d78bd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::ImageView const  &amp;</type>
-        <definition>ashes::ImageView const&amp; castor3d::ColourBackground::getView</definition>
-        <argsstring>() const</argsstring>
-        <name>getView</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Colour.hpp" line="84" column="1" bodyfile="Scene/Background/Colour.hpp" bodystart="84" bodyend="88"/>
-        <references refid="d8/dc2/a05098_1ad0cdc0509b6d96af3320404feea93dbe" compoundref="d6/d80/a01076" startline="444">castor3d::SceneBackground::m_texture</references>
-      </memberdef>
-      <memberdef kind="function" id="d5/d87/a05118_1abb84fa1b078a242127f115706e090877" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::HdrRgbColour const  &amp;</type>
-        <definition>castor::HdrRgbColour const&amp; castor3d::ColourBackground::getColour</definition>
-        <argsstring>() const</argsstring>
-        <name>getColour</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Colour.hpp" line="90" column="1" bodyfile="Scene/Background/Colour.hpp" bodystart="90" bodyend="93"/>
-      </memberdef>
-      </sectiondef>
+    <compoundname>castor::TextWriter&lt; castor3d::Material &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::Material &gt;</basecompoundref>
+    <includes local="no">TextMaterial.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d5/d87/a05118_1a4d0ce4f87cd64afc67d3194a99da0248" prot="private" static="no" mutable="no">
-        <type>castor::ChangeTracked&lt; castor::HdrRgbColour &gt;</type>
-        <definition>castor::ChangeTracked&lt; castor::HdrRgbColour &gt; castor3d::ColourBackground::m_colour</definition>
+      <memberdef kind="variable" id="d5/d87/a05118_1adeffb87ca323aaf53bb7ac36e85c7f27" prot="private" static="no" mutable="no">
+        <type>Path</type>
+        <definition>Path castor::TextWriter&lt; castor3d::Material &gt;::m_folder</definition>
         <argsstring></argsstring>
-        <name>m_colour</name>
+        <name>m_folder</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::Material &gt;::m_folder</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Background/Colour.hpp" line="105" column="1" bodyfile="Scene/Background/Colour.hpp" bodystart="105" bodyend="-1"/>
+        <location file="Text/TextMaterial.hpp" line="25" column="6" bodyfile="Text/TextMaterial.hpp" bodystart="25" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d5/d87/a05118_1a660e6c904c306dea0a324f8400459f63" prot="private" static="no" mutable="no">
-        <type>ashes::StagingTexturePtr</type>
-        <definition>ashes::StagingTexturePtr castor3d::ColourBackground::m_stagingTexture</definition>
+      <memberdef kind="variable" id="d5/d87/a05118_1af06550beb40ecd391fb62867cd3fc20b" prot="private" static="no" mutable="no">
+        <type>String</type>
+        <definition>String castor::TextWriter&lt; castor3d::Material &gt;::m_subfolder</definition>
         <argsstring></argsstring>
-        <name>m_stagingTexture</name>
+        <name>m_subfolder</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::Material &gt;::m_subfolder</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Background/Colour.hpp" line="106" column="1" bodyfile="Scene/Background/Colour.hpp" bodystart="106" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d5/d87/a05118_1affc8f3989d25652e10b268d9829c90a7" prot="private" static="no" mutable="no">
-        <type>ashes::CommandBufferPtr</type>
-        <definition>ashes::CommandBufferPtr castor3d::ColourBackground::m_cmdCopy</definition>
-        <argsstring></argsstring>
-        <name>m_cmdCopy</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Colour.hpp" line="107" column="1" bodyfile="Scene/Background/Colour.hpp" bodystart="107" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d5/d87/a05118_1a56cfba127e25bd1bf3b725e5f84bf188" prot="private" static="no" mutable="no">
-        <type><ref refid="d7/daf/a05002" kindref="compound">Viewport</ref></type>
-        <definition>Viewport castor3d::ColourBackground::m_viewport</definition>
-        <argsstring></argsstring>
-        <name>m_viewport</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Colour.hpp" line="108" column="1" bodyfile="Scene/Background/Colour.hpp" bodystart="108" bodyend="-1"/>
+        <location file="Text/TextMaterial.hpp" line="26" column="8" bodyfile="Text/TextMaterial.hpp" bodystart="26" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d5/d87/a05118_1a81c10d99488d162108627a433dfebd85" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::ColourBackground::ColourBackground</definition>
-        <argsstring>(Engine &amp;engine, Scene &amp;scene, castor::String const &amp;name=castor::String{})</argsstring>
-        <name>ColourBackground</name>
+      <memberdef kind="function" id="d5/d87/a05118_1aa69ee6879bf34915c72e30dcdbafb490" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::Material &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs, Path const &amp;folder, String const &amp;subfolder)</argsstring>
+        <name>TextWriter</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::Material &gt;::TextWriter</qualifiedname>
         <param>
-          <type><ref refid="df/d9b/a02514" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
+          <type>String const &amp;</type>
+          <declname>tabs</declname>
         </param>
         <param>
-          <type><ref refid="d6/d66/a05238" kindref="compound">Scene</ref> &amp;</type>
-          <declname>scene</declname>
+          <type>Path const &amp;</type>
+          <declname>folder</declname>
         </param>
         <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
-          <defval>castor::String{}</defval>
+          <type>String const &amp;</type>
+          <declname>subfolder</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">engine</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The engine. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">scene</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The scene. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername>name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The background name. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Background/Colour.hpp" line="41" column="1"/>
+        <location file="Text/TextMaterial.hpp" line="18" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d5/d87/a05118_1a9320d16584b636f6a065e8dbacebb4a2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::ColourBackground::~ColourBackground</definition>
-        <argsstring>()</argsstring>
-        <name>~ColourBackground</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Colour.hpp" line="52" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/d87/a05118_1a7472f5a7748c81a789225c2b7bc51364" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::ColourBackground::accept</definition>
-        <argsstring>(BackgroundVisitor &amp;visitor) override</argsstring>
-        <name>accept</name>
-        <reimplements refid="d8/dc2/a05098_1abb50a43cc66dc731a9a3a6e6298a412d">accept</reimplements>
+      <memberdef kind="function" id="d5/d87/a05118_1a6e28df9e4b54453a7da12346363946ba" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::Material &gt;::operator()</definition>
+        <argsstring>(castor3d::Material const &amp;material, castor::StringStream &amp;file) override</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::Material &gt;::operator()</qualifiedname>
         <param>
-          <type><ref refid="d5/d8c/a05130" kindref="compound">BackgroundVisitor</ref> &amp;</type>
-          <declname>visitor</declname>
-        </param>
-        <briefdescription>
-<para>Visitor acceptance function. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername>visitor</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The visitor. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Colour.hpp" line="56" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d5/d87/a05118_1a0dcca22eab054a23adb2aecf5b9b5ee5" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>bool</type>
-        <definition>bool castor3d::ColourBackground::doInitialise</definition>
-        <argsstring>(RenderDevice const &amp;device, ashes::RenderPass const &amp;renderPass) override</argsstring>
-        <name>doInitialise</name>
-        <reimplements refid="d8/dc2/a05098_1a4087adbb4074617151d496f24341f181">doInitialise</reimplements>
-        <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
+          <type><ref refid="d9/da4/a02798" kindref="compound">castor3d::Material</ref> const &amp;</type>
+          <declname>material</declname>
         </param>
         <param>
-          <type>ashes::RenderPass const &amp;</type>
-          <declname>renderPass</declname>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -249,74 +83,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Background/Colour.hpp" line="97" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/d87/a05118_1a2db112387d82d63e77152beaca8b7697" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::ColourBackground::doCleanup</definition>
-        <argsstring>() override</argsstring>
-        <name>doCleanup</name>
-        <reimplements refid="d8/dc2/a05098_1a224d34c6944a0dbdd63066e383718fd9">doCleanup</reimplements>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Colour.hpp" line="99" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/d87/a05118_1a091c1fd085aa61533808a749fcbb3151" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::ColourBackground::doCpuUpdate</definition>
-        <argsstring>(CpuUpdater &amp;updater) override</argsstring>
-        <name>doCpuUpdate</name>
-        <reimplements refid="d8/dc2/a05098_1a53efeadeca22e4759fe6f514ed3d218f">doCpuUpdate</reimplements>
-        <param>
-          <type><ref refid="d5/d03/a04582" kindref="compound">CpuUpdater</ref> &amp;</type>
-          <declname>updater</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Colour.hpp" line="100" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/d87/a05118_1aa1f34d496dcc46da236c79e66120162d" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::ColourBackground::doGpuUpdate</definition>
-        <argsstring>(GpuUpdater &amp;updater) override</argsstring>
-        <name>doGpuUpdate</name>
-        <reimplements refid="d8/dc2/a05098_1ad9ec9523a0a3d6b57fb885e2195a6d52">doGpuUpdate</reimplements>
-        <param>
-          <type><ref refid="df/dd7/a04586" kindref="compound">GpuUpdater</ref> &amp;</type>
-          <declname>updater</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Colour.hpp" line="101" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/d87/a05118_1a5f485d6fc4117f4118a0ec548161ecae" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::ColourBackground::doUpdateColour</definition>
-        <argsstring>(RenderDevice const &amp;device)</argsstring>
-        <name>doUpdateColour</name>
-        <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Colour.hpp" line="102" column="1"/>
+        <location file="Text/TextMaterial.hpp" line="21" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -324,181 +91,33 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="732">
-        <label>Named</label>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::Material &gt;</label>
       </node>
-      <node id="729">
-        <label>castor3d::ColourBackground</label>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::Material &gt;</label>
         <link refid="d5/d87/a05118"/>
-        <childnode refid="730" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="731">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="730">
-        <label>castor3d::SceneBackground</label>
-        <link refid="d8/dc2/a05098"/>
-        <childnode refid="731" relation="public-inheritance">
-        </childnode>
-        <childnode refid="732" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="744">
-        <label>T</label>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::Material &gt;</label>
       </node>
-      <node id="742">
-        <label>castor::OwnedBy&lt; Scene &gt;</label>
-      </node>
-      <node id="743">
-        <label>std::unique_ptr&lt; T &gt;</label>
-        <childnode refid="744" relation="usage">
-          <edgelabel>ptr</edgelabel>
-        </childnode>
-      </node>
-      <node id="736">
-        <label>Named</label>
-      </node>
-      <node id="733">
-        <label>castor3d::ColourBackground</label>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::Material &gt;</label>
         <link refid="d5/d87/a05118"/>
-        <childnode refid="734" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
-      </node>
-      <node id="739">
-        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
-      </node>
-      <node id="735">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="745">
-        <label>castor3d::ModelMatrixUbo</label>
-        <link refid="d6/dca/a05498"/>
-      </node>
-      <node id="734">
-        <label>castor3d::SceneBackground</label>
-        <link refid="d8/dc2/a05098"/>
-        <childnode refid="735" relation="public-inheritance">
-        </childnode>
-        <childnode refid="736" relation="public-inheritance">
-        </childnode>
-        <childnode refid="737" relation="usage">
-          <edgelabel>m_matrixUbo</edgelabel>
-        </childnode>
-        <childnode refid="738" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-        <childnode refid="740" relation="usage">
-          <edgelabel>m_ibl</edgelabel>
-        </childnode>
-        <childnode refid="745" relation="usage">
-          <edgelabel>m_modelMatrixUbo</edgelabel>
-        </childnode>
-      </node>
-      <node id="741">
-        <label>castor3d::IblTextures</label>
-        <link refid="d1/d6c/a04478"/>
-        <childnode refid="742" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="740">
-        <label>std::unique_ptr&lt; castor3d::IblTextures &gt;</label>
-        <childnode refid="741" relation="usage">
-          <edgelabel>ptr</edgelabel>
-        </childnode>
-        <childnode refid="743" relation="template-instance">
-          <edgelabel>&lt; castor3d::IblTextures &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="738">
-        <label>castor3d::Scene</label>
-        <link refid="d6/d66/a05238"/>
-        <childnode refid="739" relation="public-inheritance">
-        </childnode>
-        <childnode refid="735" relation="public-inheritance">
-        </childnode>
-        <childnode refid="736" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="737">
-        <label>castor3d::MatrixUbo</label>
-        <link refid="d2/d30/a05490"/>
       </node>
     </collaborationgraph>
-    <location file="Scene/Background/Colour.hpp" line="19" column="1" bodyfile="Scene/Background/Colour.hpp" bodystart="17" bodyend="109"/>
+    <location file="Text/TextMaterial.hpp" line="14" column="1" bodyfile="Text/TextMaterial.hpp" bodystart="16" bodyend="27"/>
     <listofallmembers>
-      <member refid="d5/d87/a05118_1a7472f5a7748c81a789225c2b7bc51364" prot="public" virt="virtual"><scope>castor3d::ColourBackground</scope><name>accept</name></member>
-      <member refid="d8/dc2/a05098_1a31a64b0a48a9634db8602f3eb6320f5b" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>cleanup</name></member>
-      <member refid="d5/d87/a05118_1a81c10d99488d162108627a433dfebd85" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>ColourBackground</name></member>
-      <member refid="d5/d87/a05118_1a2db112387d82d63e77152beaca8b7697" prot="private" virt="virtual"><scope>castor3d::ColourBackground</scope><name>doCleanup</name></member>
-      <member refid="d5/d87/a05118_1a091c1fd085aa61533808a749fcbb3151" prot="private" virt="virtual"><scope>castor3d::ColourBackground</scope><name>doCpuUpdate</name></member>
-      <member refid="d5/d87/a05118_1aa1f34d496dcc46da236c79e66120162d" prot="private" virt="virtual"><scope>castor3d::ColourBackground</scope><name>doGpuUpdate</name></member>
-      <member refid="d5/d87/a05118_1a0dcca22eab054a23adb2aecf5b9b5ee5" prot="private" virt="virtual"><scope>castor3d::ColourBackground</scope><name>doInitialise</name></member>
-      <member refid="d5/d87/a05118_1a5f485d6fc4117f4118a0ec548161ecae" prot="private" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>doUpdateColour</name></member>
-      <member refid="d5/d87/a05118_1abb84fa1b078a242127f115706e090877" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getColour</name></member>
-      <member refid="d8/dc2/a05098_1ad953e1c5391077680bc624cb2b8df9ff" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getIbl</name></member>
-      <member refid="d5/d87/a05118_1ac591602ef057c4225c9084eef899a348" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getImage</name></member>
-      <member refid="d8/dc2/a05098_1aed41a208694c4c75ceaa6a12e188afc3" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getIndexBuffer</name></member>
-      <member refid="d8/dc2/a05098_1a0fd855b631585829d71b1ee0bfc04141" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getPipeline</name></member>
-      <member refid="d8/dc2/a05098_1a435d9dcb08166c95ec2e88f6db6efd9c" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getPipelineLayout</name></member>
-      <member refid="d8/dc2/a05098_1a5ec17bcf4ad6490aa01e590edeb9b3f1" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getScene</name></member>
-      <member refid="d8/dc2/a05098_1abd4b50adcb20fe4e88937b0dd58febe6" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getScene</name></member>
-      <member refid="d8/dc2/a05098_1a554a7d224f6a7b27ac8107bcef5ed99a" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getSemaphore</name></member>
-      <member refid="d8/dc2/a05098_1a9cd3b5e1cc8c3574feb9335eda5e46a4" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getTexDescriptorLayout</name></member>
-      <member refid="d5/d87/a05118_1a78d51aec7507ea800d2dd73a29b8d37c" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getTexture</name></member>
-      <member refid="d5/d87/a05118_1a815799b0789cea5f684edbfe3bda7cb9" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getTexture</name></member>
-      <member refid="d8/dc2/a05098_1a4b83ebfc7dccd47b45de5c69dc832c57" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getType</name></member>
-      <member refid="d8/dc2/a05098_1a6878eed50a9a0be668b72cb1580b9a7d" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getUboDescriptorLayout</name></member>
-      <member refid="d8/dc2/a05098_1abad2d408ddb023d8d1245c9831f47e70" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getVertexBuffer</name></member>
-      <member refid="d5/d87/a05118_1a907720d5f3247c9e5b74a88bc93d78bd" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getView</name></member>
-      <member refid="d8/dc2/a05098_1a33b01c80a820a9523c7b4a7da69d6f9b" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>hasIbl</name></member>
-      <member refid="d8/dc2/a05098_1a12dae55d1b8c666ffdd2dfa3fd4ac649" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>HdrCfgUboIdx</name></member>
-      <member refid="d8/dc2/a05098_1a20d46ae1bb8cccf1e18dd4034de7eab8" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>initialise</name></member>
-      <member refid="d8/dc2/a05098_1a270d5a3390a3b6a747612134b11801f7" prot="public" virt="virtual"><scope>castor3d::ColourBackground</scope><name>initialiseDescriptorSets</name></member>
-      <member refid="d5/d87/a05118_1affc8f3989d25652e10b268d9829c90a7" prot="private" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_cmdCopy</name></member>
-      <member refid="d5/d87/a05118_1a4d0ce4f87cd64afc67d3194a99da0248" prot="private" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_colour</name></member>
-      <member refid="d8/dc2/a05098_1a6976c0fa06338604086b94015fa5c5ef" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_hdr</name></member>
-      <member refid="d8/dc2/a05098_1a309f8efbb3e4ec591d7fa63141e6eaa6" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_ibl</name></member>
-      <member refid="d8/dc2/a05098_1a16650740c6ef6d9b7d25edae87ae2c49" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_indexBuffer</name></member>
-      <member refid="d8/dc2/a05098_1a205a26001f4ddcb22affe1806df1e9be" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_initialised</name></member>
-      <member refid="d8/dc2/a05098_1a4fbbe8d995ff309039a39a98aa87071f" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_matrixUbo</name></member>
-      <member refid="d8/dc2/a05098_1aba38288b30a8fd5c864dcde663eaae7b" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_modelMatrixUbo</name></member>
-      <member refid="d8/dc2/a05098_1a6f16aa9a4acefe4833ade9c2ed80d37f" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_mtxModel</name></member>
-      <member refid="d8/dc2/a05098_1af7001d1c408a3cc9cb9e4f6c7ed6f759" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_pipeline</name></member>
-      <member refid="d8/dc2/a05098_1a4dca6a433d8d21b8a2a7c212be67aa10" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_pipelineLayout</name></member>
-      <member refid="d8/dc2/a05098_1ae52d271e8bee174bea9f07fe708cdbdc" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_sampler</name></member>
-      <member refid="d8/dc2/a05098_1a65fdb6af39d291d044c5a0774c1ec61f" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_scene</name></member>
-      <member refid="d8/dc2/a05098_1acdaddc3466157ad2388332658b613db8" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_semaphore</name></member>
-      <member refid="d5/d87/a05118_1a660e6c904c306dea0a324f8400459f63" prot="private" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_stagingTexture</name></member>
-      <member refid="d8/dc2/a05098_1a05a8dabded0b73a310e76b6aa3af129a" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_texDescriptorLayout</name></member>
-      <member refid="d8/dc2/a05098_1a79bd75f157e9e33fc04c34274113bf41" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_texDescriptorPool</name></member>
-      <member refid="d8/dc2/a05098_1a624e433c02dfc492e3c88c78c9288e3e" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_texDescriptorSet</name></member>
-      <member refid="d8/dc2/a05098_1ad0cdc0509b6d96af3320404feea93dbe" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_texture</name></member>
-      <member refid="d8/dc2/a05098_1a3dc4f5c64ce068f66b2dc50a8da96136" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_timer</name></member>
-      <member refid="d8/dc2/a05098_1a784d7ed978459602ec6edd9ad62eede4" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_type</name></member>
-      <member refid="d8/dc2/a05098_1af5ecb5327a78c06a9b358d483c6034d1" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_uboDescriptorLayout</name></member>
-      <member refid="d8/dc2/a05098_1a03e8dff8bd94a09a6c6dff15f91164db" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_uboDescriptorPool</name></member>
-      <member refid="d8/dc2/a05098_1ae57844be18b5514145bd96406f8ad230" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_uboDescriptorSet</name></member>
-      <member refid="d8/dc2/a05098_1a6e509401e07c23adda9565f3be573ce4" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_vertexBuffer</name></member>
-      <member refid="d5/d87/a05118_1a56cfba127e25bd1bf3b725e5f84bf188" prot="private" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_viewport</name></member>
-      <member refid="d8/dc2/a05098_1af8a1ed426b5f898523aecb7446c25db0" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>MdlMtxUboIdx</name></member>
-      <member refid="d8/dc2/a05098_1a4e1154198ece912b11cd8e44b2f7fef3" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>MtxUboIdx</name></member>
-      <member refid="d8/dc2/a05098_1afa9be9f8f1c561cb4d63d5c1494b05af" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>notifyChanged</name></member>
-      <member refid="d8/dc2/a05098_1af44b4b2ffcfc43f0e823c1c3fafc7f25" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>onChanged</name></member>
-      <member refid="d8/dc2/a05098_1a6290ff2f94b0385807858d48c0e0cd0e" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>prepareFrame</name></member>
-      <member refid="d8/dc2/a05098_1a7949831d48b71c583a3aea185a7a5456" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>prepareFrame</name></member>
-      <member refid="d8/dc2/a05098_1a00d0d0fc38e661b44dbbc898df644aee" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>prepareFrame</name></member>
-      <member refid="d8/dc2/a05098_1ab235843e07744ffe6429cbc3abf781ef" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>SceneBackground</name></member>
-      <member refid="d8/dc2/a05098_1aad9db08187186fd40239fd8c88968791" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>SkyBoxImgIdx</name></member>
-      <member refid="d8/dc2/a05098_1a254bf19e2a571945d0c59b67616b58be" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>start</name></member>
-      <member refid="d8/dc2/a05098_1a4503a2650c0cea9547ccba580e2259e7" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>TexSetIdx</name></member>
-      <member refid="d8/dc2/a05098_1ac60ccd53ec01a98c3b625f4e89d39c8c" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>UboSetIdx</name></member>
-      <member refid="d8/dc2/a05098_1a01a20154533abc0f96df65ec7b24283b" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>update</name></member>
-      <member refid="d8/dc2/a05098_1aacb256b2d51fe653623bfa3bb88f3860" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>update</name></member>
-      <member refid="d5/d87/a05118_1a9320d16584b636f6a065e8dbacebb4a2" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>~ColourBackground</name></member>
-      <member refid="d8/dc2/a05098_1aa1884723b97782f2f2eeea86fc44527b" prot="public" virt="virtual"><scope>castor3d::ColourBackground</scope><name>~SceneBackground</name></member>
+      <member refid="d5/d87/a05118_1adeffb87ca323aaf53bb7ac36e85c7f27" prot="private" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Material &gt;</scope><name>m_folder</name></member>
+      <member refid="d5/d87/a05118_1af06550beb40ecd391fb62867cd3fc20b" prot="private" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Material &gt;</scope><name>m_subfolder</name></member>
+      <member refid="d5/d87/a05118_1a6e28df9e4b54453a7da12346363946ba" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Material &gt;</scope><name>operator()</name></member>
+      <member refid="d5/d87/a05118_1aa69ee6879bf34915c72e30dcdbafb490" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Material &gt;</scope><name>TextWriter</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

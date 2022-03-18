@@ -1,0 +1,197 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d5/d3c/a03875" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Torus</compoundname>
+    <basecompoundref refid="d1/dc8/a03895" prot="public" virt="non-virtual">castor3d::MeshGenerator</basecompoundref>
+    <includes local="no">Torus.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d5/d3c/a03875_1a2261410e586943082d45419e9cb2b71c" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::Torus::m_internalRadius</definition>
+        <argsstring></argsstring>
+        <name>m_internalRadius</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Torus.hpp" line="39" column="1" bodyfile="Model/Mesh/Generator/Torus.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d3c/a03875_1a5f52bf56ad5b848befd623043e8f8e23" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::Torus::m_externalRadius</definition>
+        <argsstring></argsstring>
+        <name>m_externalRadius</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Torus.hpp" line="40" column="1" bodyfile="Model/Mesh/Generator/Torus.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d3c/a03875_1a1ced169079687aab179257dd32c78eb3" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Torus::m_internalNbFaces</definition>
+        <argsstring></argsstring>
+        <name>m_internalNbFaces</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Torus.hpp" line="41" column="1" bodyfile="Model/Mesh/Generator/Torus.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d3c/a03875_1a13c6ef4a2e27fd2a946722b688d5422f" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Torus::m_externalNbFaces</definition>
+        <argsstring></argsstring>
+        <name>m_externalNbFaces</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Torus.hpp" line="42" column="1" bodyfile="Model/Mesh/Generator/Torus.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/d3c/a03875_1ae3c93c17c8da00684cf7cae08cf28188" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Torus::Torus</definition>
+        <argsstring>()</argsstring>
+        <name>Torus</name>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Torus.hpp" line="21" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d3c/a03875_1a605cec5576857c8d91ec98035f3cc559" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Torus::~Torus</definition>
+        <argsstring>()</argsstring>
+        <name>~Torus</name>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Torus.hpp" line="28" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d5/d3c/a03875_1a67f55e8213492914c85b960ad0ff223e" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> MeshGeneratorSPtr</type>
+        <definition>static C3D_API MeshGeneratorSPtr castor3d::Torus::create</definition>
+        <argsstring>()</argsstring>
+        <name>create</name>
+        <briefdescription>
+<para>Creation function, used by Factory. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><ref refid="d5/daa/a03855" kindref="compound">Cylinder</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Torus.hpp" line="32" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d5/d3c/a03875_1af6596806029ab3cce940d8eb7c9fde76" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::Torus::doGenerate</definition>
+        <argsstring>(Mesh &amp;mesh, Parameters const &amp;parameters)</argsstring>
+        <name>doGenerate</name>
+        <reimplements refid="d1/dc8/a03895_1a690745122d7e670b311e317ae86c9b45">doGenerate</reimplements>
+        <param>
+          <type><ref refid="d5/d45/a03887" kindref="compound">Mesh</ref> &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/dd1/a01458_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para>Generates the mesh. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mesh. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The generator parameters. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Torus.hpp" line="35" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4510">
+        <label>castor3d::MeshGenerator</label>
+        <link refid="d1/dc8/a03895"/>
+      </node>
+      <node id="4509">
+        <label>castor3d::Torus</label>
+        <link refid="d5/d3c/a03875"/>
+        <childnode refid="4510" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4512">
+        <label>castor3d::MeshGenerator</label>
+        <link refid="d1/dc8/a03895"/>
+      </node>
+      <node id="4511">
+        <label>castor3d::Torus</label>
+        <link refid="d5/d3c/a03875"/>
+        <childnode refid="4512" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/Generator/Torus.hpp" line="13" column="1" bodyfile="Model/Mesh/Generator/Torus.hpp" bodystart="11" bodyend="43"/>
+    <listofallmembers>
+      <member refid="d1/dc8/a03895_1a3207825be521c851f6fc654751f54cf1" prot="public" virt="virtual"><scope>castor3d::Torus</scope><name>computeNormals</name></member>
+      <member refid="d5/d3c/a03875_1a67f55e8213492914c85b960ad0ff223e" prot="public" virt="non-virtual"><scope>castor3d::Torus</scope><name>create</name></member>
+      <member refid="d5/d3c/a03875_1af6596806029ab3cce940d8eb7c9fde76" prot="private" virt="virtual"><scope>castor3d::Torus</scope><name>doGenerate</name></member>
+      <member refid="d1/dc8/a03895_1a9fdc140f2d871ca6cb81029250c346ae" prot="public" virt="virtual"><scope>castor3d::Torus</scope><name>generate</name></member>
+      <member refid="d5/d3c/a03875_1a13c6ef4a2e27fd2a946722b688d5422f" prot="private" virt="non-virtual"><scope>castor3d::Torus</scope><name>m_externalNbFaces</name></member>
+      <member refid="d5/d3c/a03875_1a5f52bf56ad5b848befd623043e8f8e23" prot="private" virt="non-virtual"><scope>castor3d::Torus</scope><name>m_externalRadius</name></member>
+      <member refid="d5/d3c/a03875_1a1ced169079687aab179257dd32c78eb3" prot="private" virt="non-virtual"><scope>castor3d::Torus</scope><name>m_internalNbFaces</name></member>
+      <member refid="d5/d3c/a03875_1a2261410e586943082d45419e9cb2b71c" prot="private" virt="non-virtual"><scope>castor3d::Torus</scope><name>m_internalRadius</name></member>
+      <member refid="d1/dc8/a03895_1a3ccec3fd88667bbca33c6e81afdeff19" prot="public" virt="non-virtual"><scope>castor3d::Torus</scope><name>MeshGenerator</name></member>
+      <member refid="d5/d3c/a03875_1ae3c93c17c8da00684cf7cae08cf28188" prot="public" virt="non-virtual"><scope>castor3d::Torus</scope><name>Torus</name></member>
+      <member refid="d1/dc8/a03895_1adee42c7c921b0dff4cbbc99c29faf31f" prot="public" virt="virtual"><scope>castor3d::Torus</scope><name>~MeshGenerator</name></member>
+      <member refid="d5/d3c/a03875_1a605cec5576857c8d91ec98035f3cc559" prot="public" virt="non-virtual"><scope>castor3d::Torus</scope><name>~Torus</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,11 +1,8 @@
-<map id="castor3d::Plugin" name="castor3d::Plugin">
-<area shape="rect" id="node1" title=" " alt="" coords="240,157,356,184"/>
-<area shape="rect" id="node3" href="$d2/dbb/a04166.html" title=" " alt="" coords="423,5,578,32"/>
-<area shape="rect" id="node4" href="$da/dea/a04170.html" title=" " alt="" coords="414,56,587,83"/>
-<area shape="rect" id="node5" href="$d8/d93/a04174.html" title=" " alt="" coords="420,107,581,133"/>
-<area shape="rect" id="node6" href="$de/dd1/a04178.html" title=" " alt="" coords="419,157,582,184"/>
-<area shape="rect" id="node7" href="$dd/da0/a04182.html" title=" " alt="" coords="421,208,581,235"/>
-<area shape="rect" id="node8" href="$da/d02/a04194.html" title=" " alt="" coords="421,259,580,285"/>
-<area shape="rect" id="node9" href="$d1/def/a04198.html" title=" " alt="" coords="404,309,597,336"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,157,192,184"/>
+<map id="castor3d::ForwardRenderTechniquePass" name="castor3d::ForwardRenderTechniquePass">
+<area shape="rect" id="node1" title=" " alt="" coords="141,229,397,256"/>
+<area shape="rect" id="node2" href="$de/d3f/a04290.html" title=" " alt="" coords="164,155,375,181"/>
+<area shape="rect" id="node3" href="$dc/d64/a04058.html" title=" " alt="" coords="175,80,363,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,5,192,32"/>
+<area shape="rect" id="node5" title=" " alt="" coords="216,5,323,32"/>
+<area shape="rect" id="node6" title=" " alt="" coords="347,5,466,32"/>
 </map>

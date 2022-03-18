@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d8/df0/a00557" kind="file" language="C++">
+    <compoundname>Vertex.hpp</compoundname>
+    <includes refid="d9/d19/a00560" local="yes">VertexGroup.hpp</includes>
+    <includes local="no">cstdint</includes>
+    <incdepgraph>
+      <node id="10780">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="10783">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="10784">
+        <label>cstdint</label>
+      </node>
+      <node id="10782">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="10775">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="10776" relation="include">
+        </childnode>
+        <childnode refid="10777" relation="include">
+        </childnode>
+        <childnode refid="10778" relation="include">
+        </childnode>
+        <childnode refid="10779" relation="include">
+        </childnode>
+        <childnode refid="10780" relation="include">
+        </childnode>
+        <childnode refid="10781" relation="include">
+        </childnode>
+        <childnode refid="10782" relation="include">
+        </childnode>
+        <childnode refid="10783" relation="include">
+        </childnode>
+        <childnode refid="10784" relation="include">
+        </childnode>
+        <childnode refid="10785" relation="include">
+        </childnode>
+        <childnode refid="10786" relation="include">
+        </childnode>
+        <childnode refid="10787" relation="include">
+        </childnode>
+      </node>
+      <node id="10786">
+        <label>string</label>
+      </node>
+      <node id="10773">
+        <label>VertexGroup.hpp</label>
+        <link refid="d9/d19/a00560"/>
+        <childnode refid="10774" relation="include">
+        </childnode>
+      </node>
+      <node id="10774">
+        <label>ModelModule.hpp</label>
+        <link refid="d7/def/a00521"/>
+        <childnode refid="10775" relation="include">
+        </childnode>
+      </node>
+      <node id="10779">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="10776">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="10778">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="10777">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="10787">
+        <label>vector</label>
+      </node>
+      <node id="10781">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="10772">
+        <label>Model/Vertex.hpp</label>
+        <link refid="d8/df0/a00557"/>
+        <childnode refid="10773" relation="include">
+        </childnode>
+        <childnode refid="10784" relation="include">
+        </childnode>
+      </node>
+      <node id="10785">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="d4/d3a/a04056" prot="public">castor3d::SubmeshVertex</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Model/Vertex.hpp"/>
+  </compounddef>
+</doxygen>

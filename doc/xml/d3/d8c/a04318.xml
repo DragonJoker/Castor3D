@@ -1,33 +1,207 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d3/d8c/a04318" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::PassRenderNode</compoundname>
-    <includes local="no">PassRenderNode.hpp</includes>
+    <compoundname>castor3d::Texture</compoundname>
+    <includes local="no">Texture.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d3/d8c/a04318_1ac4cd675548dfcb16b9adde03f9ccc71f" prot="public" static="no" mutable="no">
-        <type><ref refid="df/d57/a02590" kindref="compound">Pass</ref> &amp;</type>
-        <definition>Pass&amp; castor3d::PassRenderNode::pass</definition>
+      <memberdef kind="variable" id="d3/d8c/a04318_1a78488df07446456c2a495bed23143a0f" prot="public" static="no" mutable="no">
+        <type>crg::ResourceHandler *</type>
+        <definition>crg::ResourceHandler* castor3d::Texture::handler</definition>
         <argsstring></argsstring>
-        <name>pass</name>
+        <name>handler</name>
+        <qualifiedname>castor3d::Texture::handler</qualifiedname>
+        <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The pass. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Node/PassRenderNode.hpp" line="34" column="1" bodyfile="Render/Node/PassRenderNode.hpp" bodystart="34" bodyend="-1"/>
+        <location file="Render/Texture.hpp" line="122" column="23" bodyfile="Render/Texture.hpp" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d8c/a04318_1a304daf484ecfbd1df308dd0886929afd" prot="public" static="no" mutable="no">
+        <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const  *</type>
+        <definition>RenderDevice const* castor3d::Texture::device</definition>
+        <argsstring></argsstring>
+        <name>device</name>
+        <qualifiedname>castor3d::Texture::device</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="123" column="21" bodyfile="Render/Texture.hpp" bodystart="123" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d8c/a04318_1a83fd1ff543a0a16e0dcea6ae7971a5ac" prot="public" static="no" mutable="no">
+        <type>crg::ImageId</type>
+        <definition>crg::ImageId castor3d::Texture::imageId</definition>
+        <argsstring></argsstring>
+        <name>imageId</name>
+        <qualifiedname>castor3d::Texture::imageId</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="124" column="14" bodyfile="Render/Texture.hpp" bodystart="124" bodyend="-1"/>
+        <referencedby refid="d3/d8c/a04318_1aff061b996537e3b273beed77560bb37a" compoundref="d5/da3/a00953" startline="117" endline="120">getExtent</referencedby>
+        <referencedby refid="d3/d8c/a04318_1a2108cbfdb3b95706338044126c0f7be5" compoundref="d5/da3/a00953" startline="112" endline="115">getFormat</referencedby>
+        <referencedby refid="d3/d8c/a04318_1adfc7ff5d1917d33f0c61fdada7d86ee6" compoundref="d5/da3/a00953" startline="107" endline="110">getMipLevels</referencedby>
+        <referencedby refid="df/d51/a04282_1a0a9f25a68632131099b720034f40b23d" compoundref="d8/d38/a00926" startline="184" endline="187">castor3d::RenderTechnique::getResultImg</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d8c/a04318_1a123f4f02dbe6540b49c5d19b96a19608" prot="public" static="no" mutable="no">
+        <type>VkImage</type>
+        <definition>VkImage castor3d::Texture::image</definition>
+        <argsstring></argsstring>
+        <name>image</name>
+        <qualifiedname>castor3d::Texture::image</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="125" column="9" bodyfile="Render/Texture.hpp" bodystart="125" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d8c/a04318_1a6fe1d88393b13e2b59f31171353a3fe7" prot="public" static="no" mutable="no">
+        <type>crg::ImageViewId</type>
+        <definition>crg::ImageViewId castor3d::Texture::wholeViewId</definition>
+        <argsstring></argsstring>
+        <name>wholeViewId</name>
+        <qualifiedname>castor3d::Texture::wholeViewId</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="126" column="18" bodyfile="Render/Texture.hpp" bodystart="126" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d8c/a04318_1a9b3954f3f3a12d2ff643b4d0b8b3f4aa" prot="public" static="no" mutable="no">
+        <type>crg::ImageViewId</type>
+        <definition>crg::ImageViewId castor3d::Texture::targetViewId</definition>
+        <argsstring></argsstring>
+        <name>targetViewId</name>
+        <qualifiedname>castor3d::Texture::targetViewId</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="127" column="18" bodyfile="Render/Texture.hpp" bodystart="127" bodyend="-1"/>
+        <referencedby refid="df/d51/a04282_1a6cf3c6fcee5689120d6c8f37a4bebeed" compoundref="d8/d38/a00926" startline="194" endline="197">castor3d::RenderTechnique::getResultTargetView</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d8c/a04318_1a23560694e7775b30e5e6f7282d1c6e97" prot="public" static="no" mutable="no">
+        <type>crg::ImageViewId</type>
+        <definition>crg::ImageViewId castor3d::Texture::sampledViewId</definition>
+        <argsstring></argsstring>
+        <name>sampledViewId</name>
+        <qualifiedname>castor3d::Texture::sampledViewId</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="128" column="18" bodyfile="Render/Texture.hpp" bodystart="128" bodyend="-1"/>
+        <referencedby refid="df/d51/a04282_1ae6c8a494a76d701b1f24d425996f493a" compoundref="d8/d38/a00926" startline="189" endline="192">castor3d::RenderTechnique::getResultImgView</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d8c/a04318_1af2d3fdd883b9e594c56017896bc07633" prot="public" static="no" mutable="no">
+        <type>VkImageView</type>
+        <definition>VkImageView castor3d::Texture::wholeView</definition>
+        <argsstring></argsstring>
+        <name>wholeView</name>
+        <qualifiedname>castor3d::Texture::wholeView</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="129" column="13" bodyfile="Render/Texture.hpp" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d8c/a04318_1a43352bdc5a46aa00a5a048c5456be2e7" prot="public" static="no" mutable="no">
+        <type>VkImageView</type>
+        <definition>VkImageView castor3d::Texture::targetView</definition>
+        <argsstring></argsstring>
+        <name>targetView</name>
+        <qualifiedname>castor3d::Texture::targetView</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="130" column="13" bodyfile="Render/Texture.hpp" bodystart="130" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d8c/a04318_1a77e1e88fde255b8a8be8003f8c458c65" prot="public" static="no" mutable="no">
+        <type>VkImageView</type>
+        <definition>VkImageView castor3d::Texture::sampledView</definition>
+        <argsstring></argsstring>
+        <name>sampledView</name>
+        <qualifiedname>castor3d::Texture::sampledView</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="131" column="13" bodyfile="Render/Texture.hpp" bodystart="131" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d8c/a04318_1a5e7bec43e8734a924c29f5d3e07327b7" prot="public" static="no" mutable="no">
+        <type>crg::ImageViewIdArray</type>
+        <definition>crg::ImageViewIdArray castor3d::Texture::subViewsId</definition>
+        <argsstring></argsstring>
+        <name>subViewsId</name>
+        <qualifiedname>castor3d::Texture::subViewsId</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="132" column="23" bodyfile="Render/Texture.hpp" bodystart="132" bodyend="-1"/>
+        <referencedby refid="d6/d35/a03670_1a771076e0efa8962bb8cbe45d53f88174" compoundref="dc/df2/a00656" startline="154" endline="158">castor3d::EnvironmentMap::getColourViewId</referencedby>
+        <referencedby refid="d6/d35/a03670_1a140fb267ca44d04e861eec043a6c5d96" compoundref="dc/df2/a00656" startline="160" endline="164">castor3d::EnvironmentMap::getDepthViewId</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d8c/a04318_1a5cd0ca468c4c3f604f815f0f7c9e9b5a" prot="public" static="no" mutable="no">
+        <type>ashes::Sampler const  *</type>
+        <definition>ashes::Sampler const* castor3d::Texture::sampler</definition>
+        <argsstring></argsstring>
+        <name>sampler</name>
+        <qualifiedname>castor3d::Texture::sampler</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="133" column="23" bodyfile="Render/Texture.hpp" bodystart="133" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d3/d8c/a04318_1a5feafb012105f9c53cb7984b13005ce9" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::PassRenderNode::PassRenderNode</definition>
-        <argsstring>(Pass &amp;pass)</argsstring>
-        <name>PassRenderNode</name>
+      <memberdef kind="function" id="d3/d8c/a04318_1ab67ee91da67767e98dfe2ec9f335ea77" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Texture::Texture</definition>
+        <argsstring>(Texture const &amp;)=delete</argsstring>
+        <name>Texture</name>
+        <qualifiedname>castor3d::Texture::Texture</qualifiedname>
         <param>
-          <type><ref refid="df/d57/a02590" kindref="compound">Pass</ref> &amp;</type>
-          <declname>pass</declname>
+          <type><ref refid="d3/d8c/a04318" kindref="compound">Texture</ref> const &amp;</type>
         </param>
         <briefdescription>
         </briefdescription>
@@ -35,29 +209,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Node/PassRenderNode.hpp" line="14" column="1"/>
+        <location file="Render/Texture.hpp" line="18" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d3/d8c/a04318_1a11fb7afcde7a3e7432621ef521053e63" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::PassRenderNode::fillDescriptor</definition>
-        <argsstring>(ashes::DescriptorSetLayout const &amp;layout, uint32_t &amp;index, ashes::DescriptorSet &amp;descriptorSet, TextureFlagsArray const &amp;mask={})</argsstring>
-        <name>fillDescriptor</name>
+      <memberdef kind="function" id="d3/d8c/a04318_1a9c57036f461190e08203603890e9dcb9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/d8c/a04318" kindref="compound">Texture</ref> &amp;</type>
+        <definition>C3D_API Texture &amp; castor3d::Texture::operator=</definition>
+        <argsstring>(Texture const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::Texture::operator=</qualifiedname>
         <param>
-          <type>ashes::DescriptorSetLayout const &amp;</type>
-          <declname>layout</declname>
-        </param>
-        <param>
-          <type>uint32_t &amp;</type>
-          <declname>index</declname>
-        </param>
-        <param>
-          <type>ashes::DescriptorSet &amp;</type>
-          <declname>descriptorSet</declname>
-        </param>
-        <param>
-          <type><ref refid="de/d13/a01473_1afa51b269ca00eaeff4f95f361bf2208f" kindref="member">TextureFlagsArray</ref> const &amp;</type>
-          <declname>mask</declname>
-          <defval>{}</defval>
+          <type><ref refid="d3/d8c/a04318" kindref="compound">Texture</ref> const &amp;</type>
         </param>
         <briefdescription>
         </briefdescription>
@@ -65,29 +226,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Node/PassRenderNode.hpp" line="15" column="1"/>
+        <location file="Render/Texture.hpp" line="19" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d3/d8c/a04318_1a2c240e96225ebc16e54840f435088790" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::PassRenderNode::fillDescriptor</definition>
-        <argsstring>(ashes::DescriptorSetLayout const &amp;layout, uint32_t &amp;index, ashes::WriteDescriptorSetArray &amp;writes, TextureFlagsArray const &amp;mask={})</argsstring>
-        <name>fillDescriptor</name>
+      <memberdef kind="function" id="d3/d8c/a04318_1ac3b172b41b9453435f0feb6c25f1da04" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Texture::Texture</definition>
+        <argsstring>(Texture &amp;&amp;rhs)</argsstring>
+        <name>Texture</name>
+        <qualifiedname>castor3d::Texture::Texture</qualifiedname>
         <param>
-          <type>ashes::DescriptorSetLayout const &amp;</type>
-          <declname>layout</declname>
-        </param>
-        <param>
-          <type>uint32_t &amp;</type>
-          <declname>index</declname>
-        </param>
-        <param>
-          <type>ashes::WriteDescriptorSetArray &amp;</type>
-          <declname>writes</declname>
-        </param>
-        <param>
-          <type><ref refid="de/d13/a01473_1afa51b269ca00eaeff4f95f361bf2208f" kindref="member">TextureFlagsArray</ref> const &amp;</type>
-          <declname>mask</declname>
-          <defval>{}</defval>
+          <type><ref refid="d3/d8c/a04318" kindref="compound">Texture</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -95,28 +244,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Node/PassRenderNode.hpp" line="19" column="1"/>
+        <location file="Render/Texture.hpp" line="20" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d3/d8c/a04318_1ad350826d8a1c36359b0828ae6187adff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::PassRenderNode::fillDescriptor</definition>
-        <argsstring>(ashes::DescriptorSetLayout const &amp;layout, uint32_t &amp;index, ashes::DescriptorSet &amp;descriptorSet, TextureFlags mask)</argsstring>
-        <name>fillDescriptor</name>
+      <memberdef kind="function" id="d3/d8c/a04318_1aa5043bed408fbc18eda4249dc62de6ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/d8c/a04318" kindref="compound">Texture</ref> &amp;</type>
+        <definition>C3D_API Texture &amp; castor3d::Texture::operator=</definition>
+        <argsstring>(Texture &amp;&amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::Texture::operator=</qualifiedname>
         <param>
-          <type>ashes::DescriptorSetLayout const &amp;</type>
-          <declname>layout</declname>
-        </param>
-        <param>
-          <type>uint32_t &amp;</type>
-          <declname>index</declname>
-        </param>
-        <param>
-          <type>ashes::DescriptorSet &amp;</type>
-          <declname>descriptorSet</declname>
-        </param>
-        <param>
-          <type><ref refid="de/d13/a01473_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref></type>
-          <declname>mask</declname>
+          <type><ref refid="d3/d8c/a04318" kindref="compound">Texture</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -124,28 +262,73 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Node/PassRenderNode.hpp" line="23" column="1"/>
+        <location file="Render/Texture.hpp" line="21" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d3/d8c/a04318_1a21bdd87112b7e1e1e0aae9bb3667815f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::PassRenderNode::fillDescriptor</definition>
-        <argsstring>(ashes::DescriptorSetLayout const &amp;layout, uint32_t &amp;index, ashes::WriteDescriptorSetArray &amp;writes, TextureFlags mask)</argsstring>
-        <name>fillDescriptor</name>
+      <memberdef kind="function" id="d3/d8c/a04318_1a2b6813807dfe80166ff0c36fe9247671" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Texture::Texture</definition>
+        <argsstring>()</argsstring>
+        <name>Texture</name>
+        <qualifiedname>castor3d::Texture::Texture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="23" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d8c/a04318_1a639c682807c6d2f3a32af9124b10e642" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Texture::Texture</definition>
+        <argsstring>(RenderDevice const &amp;device, crg::ResourceHandler &amp;handler, castor::String const &amp;name, VkImageCreateFlags createFlags, VkExtent3D const &amp;size, uint32_t layerCount, uint32_t mipLevels, VkFormat format, VkImageUsageFlags usageFlags, VkBorderColor const &amp;borderColor=VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK, bool createSubviews=true)</argsstring>
+        <name>Texture</name>
+        <qualifiedname>castor3d::Texture::Texture</qualifiedname>
         <param>
-          <type>ashes::DescriptorSetLayout const &amp;</type>
-          <declname>layout</declname>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
         </param>
         <param>
-          <type>uint32_t &amp;</type>
-          <declname>index</declname>
+          <type>crg::ResourceHandler &amp;</type>
+          <declname>handler</declname>
         </param>
         <param>
-          <type>ashes::WriteDescriptorSetArray &amp;</type>
-          <declname>writes</declname>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
         </param>
         <param>
-          <type><ref refid="de/d13/a01473_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref></type>
-          <declname>mask</declname>
+          <type>VkImageCreateFlags</type>
+          <declname>createFlags</declname>
+        </param>
+        <param>
+          <type>VkExtent3D const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>layerCount</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>mipLevels</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>format</declname>
+        </param>
+        <param>
+          <type>VkImageUsageFlags</type>
+          <declname>usageFlags</declname>
+        </param>
+        <param>
+          <type>VkBorderColor const &amp;</type>
+          <declname>borderColor</declname>
+          <defval>VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>createSubviews</declname>
+          <defval>true</defval>
         </param>
         <briefdescription>
         </briefdescription>
@@ -153,7 +336,556 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Node/PassRenderNode.hpp" line="27" column="1"/>
+        <location file="Render/Texture.hpp" line="24" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d8c/a04318_1a968eb63621281ed17892296a4fdfd790" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Texture::Texture</definition>
+        <argsstring>(RenderDevice const &amp;device, crg::ResourceHandler &amp;handler, castor::String const &amp;name, VkImageCreateFlags createFlags, VkExtent3D const &amp;size, uint32_t layerCount, uint32_t mipLevels, VkFormat format, VkImageUsageFlags usageFlags, VkFilter minFilter, VkFilter magFilter, VkSamplerMipmapMode mipFilter, VkSamplerAddressMode addressMode=VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE, VkBorderColor const &amp;borderColor=VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK, bool createSubviews=true)</argsstring>
+        <name>Texture</name>
+        <qualifiedname>castor3d::Texture::Texture</qualifiedname>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>crg::ResourceHandler &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkImageCreateFlags</type>
+          <declname>createFlags</declname>
+        </param>
+        <param>
+          <type>VkExtent3D const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>layerCount</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>mipLevels</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>format</declname>
+        </param>
+        <param>
+          <type>VkImageUsageFlags</type>
+          <declname>usageFlags</declname>
+        </param>
+        <param>
+          <type>VkFilter</type>
+          <declname>minFilter</declname>
+        </param>
+        <param>
+          <type>VkFilter</type>
+          <declname>magFilter</declname>
+        </param>
+        <param>
+          <type>VkSamplerMipmapMode</type>
+          <declname>mipFilter</declname>
+        </param>
+        <param>
+          <type>VkSamplerAddressMode</type>
+          <declname>addressMode</declname>
+          <defval>VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE</defval>
+        </param>
+        <param>
+          <type>VkBorderColor const &amp;</type>
+          <declname>borderColor</declname>
+          <defval>VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>createSubviews</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="35" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d8c/a04318_1a45bc5828356ec36257bdfe19a7806a4b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Texture::~Texture</definition>
+        <argsstring>()</argsstring>
+        <name>~Texture</name>
+        <qualifiedname>castor3d::Texture::~Texture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="50" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d8c/a04318_1a6ad0b1ec680c3a51f5629328152e8174" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Texture::create</definition>
+        <argsstring>()</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::Texture::create</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="52" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d8c/a04318_1a8841dbff1442bae4016cd357998e4c9e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Texture::destroy</definition>
+        <argsstring>()</argsstring>
+        <name>destroy</name>
+        <qualifiedname>castor3d::Texture::destroy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="53" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d8c/a04318_1a1ff709484114f72f2ae793eb143b0574" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkImageMemoryBarrier</type>
+        <definition>C3D_API VkImageMemoryBarrier castor3d::Texture::makeGeneralLayout</definition>
+        <argsstring>(VkImageLayout srcLayout, VkAccessFlags dstAccessFlags, uint32_t srcQueueFamily=VK_QUEUE_FAMILY_IGNORED, uint32_t dstQueueFamily=VK_QUEUE_FAMILY_IGNORED, bool target=false) const</argsstring>
+        <name>makeGeneralLayout</name>
+        <qualifiedname>castor3d::Texture::makeGeneralLayout</qualifiedname>
+        <param>
+          <type>VkImageLayout</type>
+          <declname>srcLayout</declname>
+        </param>
+        <param>
+          <type>VkAccessFlags</type>
+          <declname>dstAccessFlags</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>srcQueueFamily</declname>
+          <defval>VK_QUEUE_FAMILY_IGNORED</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstQueueFamily</declname>
+          <defval>VK_QUEUE_FAMILY_IGNORED</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>target</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="55" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d8c/a04318_1a0edbcc4f57745e31084f6b9720c253de" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkImageMemoryBarrier</type>
+        <definition>C3D_API VkImageMemoryBarrier castor3d::Texture::makeTransferDestination</definition>
+        <argsstring>(VkImageLayout srcLayout, uint32_t srcQueueFamily=VK_QUEUE_FAMILY_IGNORED, uint32_t dstQueueFamily=VK_QUEUE_FAMILY_IGNORED, bool target=false) const</argsstring>
+        <name>makeTransferDestination</name>
+        <qualifiedname>castor3d::Texture::makeTransferDestination</qualifiedname>
+        <param>
+          <type>VkImageLayout</type>
+          <declname>srcLayout</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>srcQueueFamily</declname>
+          <defval>VK_QUEUE_FAMILY_IGNORED</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstQueueFamily</declname>
+          <defval>VK_QUEUE_FAMILY_IGNORED</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>target</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="60" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d8c/a04318_1a91a9674a016d50bd58bde93dbeaac154" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkImageMemoryBarrier</type>
+        <definition>C3D_API VkImageMemoryBarrier castor3d::Texture::makeTransferSource</definition>
+        <argsstring>(VkImageLayout srcLayout, uint32_t srcQueueFamily=VK_QUEUE_FAMILY_IGNORED, uint32_t dstQueueFamily=VK_QUEUE_FAMILY_IGNORED, bool target=false) const</argsstring>
+        <name>makeTransferSource</name>
+        <qualifiedname>castor3d::Texture::makeTransferSource</qualifiedname>
+        <param>
+          <type>VkImageLayout</type>
+          <declname>srcLayout</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>srcQueueFamily</declname>
+          <defval>VK_QUEUE_FAMILY_IGNORED</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstQueueFamily</declname>
+          <defval>VK_QUEUE_FAMILY_IGNORED</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>target</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="64" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d8c/a04318_1a7f22204ee4a648f5c449a6120d19d2ab" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkImageMemoryBarrier</type>
+        <definition>C3D_API VkImageMemoryBarrier castor3d::Texture::makeShaderInputResource</definition>
+        <argsstring>(VkImageLayout srcLayout, uint32_t srcQueueFamily=VK_QUEUE_FAMILY_IGNORED, uint32_t dstQueueFamily=VK_QUEUE_FAMILY_IGNORED, bool target=false) const</argsstring>
+        <name>makeShaderInputResource</name>
+        <qualifiedname>castor3d::Texture::makeShaderInputResource</qualifiedname>
+        <param>
+          <type>VkImageLayout</type>
+          <declname>srcLayout</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>srcQueueFamily</declname>
+          <defval>VK_QUEUE_FAMILY_IGNORED</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstQueueFamily</declname>
+          <defval>VK_QUEUE_FAMILY_IGNORED</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>target</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="68" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d8c/a04318_1ad4ee7564d9b7adf7bb8d8a2e54c23c52" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkImageMemoryBarrier</type>
+        <definition>C3D_API VkImageMemoryBarrier castor3d::Texture::makeDepthStencilReadOnly</definition>
+        <argsstring>(VkImageLayout srcLayout, uint32_t srcQueueFamily=VK_QUEUE_FAMILY_IGNORED, uint32_t dstQueueFamily=VK_QUEUE_FAMILY_IGNORED, bool target=false) const</argsstring>
+        <name>makeDepthStencilReadOnly</name>
+        <qualifiedname>castor3d::Texture::makeDepthStencilReadOnly</qualifiedname>
+        <param>
+          <type>VkImageLayout</type>
+          <declname>srcLayout</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>srcQueueFamily</declname>
+          <defval>VK_QUEUE_FAMILY_IGNORED</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstQueueFamily</declname>
+          <defval>VK_QUEUE_FAMILY_IGNORED</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>target</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="72" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d8c/a04318_1aaf5970a9592c7df6e9e46d52660e488d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkImageMemoryBarrier</type>
+        <definition>C3D_API VkImageMemoryBarrier castor3d::Texture::makeColourAttachment</definition>
+        <argsstring>(VkImageLayout srcLayout, uint32_t srcQueueFamily=VK_QUEUE_FAMILY_IGNORED, uint32_t dstQueueFamily=VK_QUEUE_FAMILY_IGNORED, bool target=false) const</argsstring>
+        <name>makeColourAttachment</name>
+        <qualifiedname>castor3d::Texture::makeColourAttachment</qualifiedname>
+        <param>
+          <type>VkImageLayout</type>
+          <declname>srcLayout</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>srcQueueFamily</declname>
+          <defval>VK_QUEUE_FAMILY_IGNORED</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstQueueFamily</declname>
+          <defval>VK_QUEUE_FAMILY_IGNORED</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>target</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="76" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d8c/a04318_1aae7f09f43a0f8aa908ae432badc6df25" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkImageMemoryBarrier</type>
+        <definition>C3D_API VkImageMemoryBarrier castor3d::Texture::makeDepthStencilAttachment</definition>
+        <argsstring>(VkImageLayout srcLayout, uint32_t srcQueueFamily=VK_QUEUE_FAMILY_IGNORED, uint32_t dstQueueFamily=VK_QUEUE_FAMILY_IGNORED, bool target=false) const</argsstring>
+        <name>makeDepthStencilAttachment</name>
+        <qualifiedname>castor3d::Texture::makeDepthStencilAttachment</qualifiedname>
+        <param>
+          <type>VkImageLayout</type>
+          <declname>srcLayout</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>srcQueueFamily</declname>
+          <defval>VK_QUEUE_FAMILY_IGNORED</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstQueueFamily</declname>
+          <defval>VK_QUEUE_FAMILY_IGNORED</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>target</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="80" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d8c/a04318_1a74e2b93b7a1ce77fc41efab7c4a68bb3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkImageMemoryBarrier</type>
+        <definition>C3D_API VkImageMemoryBarrier castor3d::Texture::makePresentSource</definition>
+        <argsstring>(VkImageLayout srcLayout, uint32_t srcQueueFamily=VK_QUEUE_FAMILY_IGNORED, uint32_t dstQueueFamily=VK_QUEUE_FAMILY_IGNORED, bool target=false) const</argsstring>
+        <name>makePresentSource</name>
+        <qualifiedname>castor3d::Texture::makePresentSource</qualifiedname>
+        <param>
+          <type>VkImageLayout</type>
+          <declname>srcLayout</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>srcQueueFamily</declname>
+          <defval>VK_QUEUE_FAMILY_IGNORED</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstQueueFamily</declname>
+          <defval>VK_QUEUE_FAMILY_IGNORED</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>target</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="84" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d8c/a04318_1ad8e74fffe82d90f1b222afb6a790a674" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkImageMemoryBarrier</type>
+        <definition>C3D_API VkImageMemoryBarrier castor3d::Texture::makeLayoutTransition</definition>
+        <argsstring>(VkImageLayout sourceLayout, VkImageLayout destinationLayout, uint32_t srcQueueFamily, uint32_t dstQueueFamily, bool target=false) const</argsstring>
+        <name>makeLayoutTransition</name>
+        <qualifiedname>castor3d::Texture::makeLayoutTransition</qualifiedname>
+        <param>
+          <type>VkImageLayout</type>
+          <declname>sourceLayout</declname>
+        </param>
+        <param>
+          <type>VkImageLayout</type>
+          <declname>destinationLayout</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>srcQueueFamily</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstQueueFamily</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>target</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="88" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d8c/a04318_1a41869bcdae73aebfaa051f963bb6d960" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkImageMemoryBarrier</type>
+        <definition>C3D_API VkImageMemoryBarrier castor3d::Texture::makeLayoutTransition</definition>
+        <argsstring>(VkImageLayout srcLayout, VkImageLayout dstLayout, VkAccessFlags srcAccessFlags, uint32_t srcQueueFamily, uint32_t dstQueueFamily, bool target=false) const</argsstring>
+        <name>makeLayoutTransition</name>
+        <qualifiedname>castor3d::Texture::makeLayoutTransition</qualifiedname>
+        <param>
+          <type>VkImageLayout</type>
+          <declname>srcLayout</declname>
+        </param>
+        <param>
+          <type>VkImageLayout</type>
+          <declname>dstLayout</declname>
+        </param>
+        <param>
+          <type>VkAccessFlags</type>
+          <declname>srcAccessFlags</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>srcQueueFamily</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstQueueFamily</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>target</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="93" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d8c/a04318_1a5d60652b5627c4a88e483149035523cd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkImageMemoryBarrier</type>
+        <definition>C3D_API VkImageMemoryBarrier castor3d::Texture::makeLayoutTransition</definition>
+        <argsstring>(VkImageLayout srcLayout, VkImageLayout dstLayout, VkAccessFlags srcAccessFlags, VkAccessFlags dstAccessMask, uint32_t srcQueueFamily, uint32_t dstQueueFamily, bool target=false) const</argsstring>
+        <name>makeLayoutTransition</name>
+        <qualifiedname>castor3d::Texture::makeLayoutTransition</qualifiedname>
+        <param>
+          <type>VkImageLayout</type>
+          <declname>srcLayout</declname>
+        </param>
+        <param>
+          <type>VkImageLayout</type>
+          <declname>dstLayout</declname>
+        </param>
+        <param>
+          <type>VkAccessFlags</type>
+          <declname>srcAccessFlags</declname>
+        </param>
+        <param>
+          <type>VkAccessFlags</type>
+          <declname>dstAccessMask</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>srcQueueFamily</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstQueueFamily</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>target</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="99" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d8c/a04318_1adfc7ff5d1917d33f0c61fdada7d86ee6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Texture::getMipLevels</definition>
+        <argsstring>() const</argsstring>
+        <name>getMipLevels</name>
+        <qualifiedname>castor3d::Texture::getMipLevels</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="107" column="10" bodyfile="Render/Texture.hpp" bodystart="107" bodyend="110"/>
+        <references refid="d3/d8c/a04318_1a83fd1ff543a0a16e0dcea6ae7971a5ac" compoundref="d5/da3/a00953" startline="124">imageId</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/d8c/a04318_1a2108cbfdb3b95706338044126c0f7be5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkFormat</type>
+        <definition>VkFormat castor3d::Texture::getFormat</definition>
+        <argsstring>() const</argsstring>
+        <name>getFormat</name>
+        <qualifiedname>castor3d::Texture::getFormat</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="112" column="10" bodyfile="Render/Texture.hpp" bodystart="112" bodyend="115"/>
+        <references refid="d3/d8c/a04318_1a83fd1ff543a0a16e0dcea6ae7971a5ac" compoundref="d5/da3/a00953" startline="124">imageId</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/d8c/a04318_1aff061b996537e3b273beed77560bb37a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkExtent3D</type>
+        <definition>VkExtent3D castor3d::Texture::getExtent</definition>
+        <argsstring>() const</argsstring>
+        <name>getExtent</name>
+        <qualifiedname>castor3d::Texture::getExtent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="117" column="12" bodyfile="Render/Texture.hpp" bodystart="117" bodyend="120"/>
+        <references refid="d3/d8c/a04318_1a83fd1ff543a0a16e0dcea6ae7971a5ac" compoundref="d5/da3/a00953" startline="124">imageId</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -161,31 +893,93 @@
     <detaileddescription>
     </detaileddescription>
     <collaborationgraph>
-      <node id="2629">
-        <label>castor::OwnedBy&lt; Material &gt;</label>
+      <node id="8">
+        <label>T</label>
       </node>
-      <node id="2628">
-        <label>castor3d::Pass</label>
-        <link refid="df/d57/a02590"/>
-        <childnode refid="2629" relation="public-inheritance">
+      <node id="6">
+        <label>castor3d::QueuesData</label>
+        <link refid="de/d88/a03958"/>
+      </node>
+      <node id="2">
+        <label>castor3d::RenderDevice</label>
+        <link refid="df/de5/a03966"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>queueFamilies</edgelabel>
         </childnode>
       </node>
-      <node id="2627">
-        <label>castor3d::PassRenderNode</label>
+      <node id="3">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d7/d34/a04078"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::Texture</label>
         <link refid="d3/d8c/a04318"/>
-        <childnode refid="2628" relation="usage">
-          <edgelabel>pass</edgelabel>
+        <childnode refid="2" relation="usage">
+          <edgelabel>device</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="7">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="8" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::vector&lt; QueuesData &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; QueuesData &gt;</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Render/Node/PassRenderNode.hpp" line="13" column="1" bodyfile="Render/Node/PassRenderNode.hpp" bodystart="12" bodyend="35"/>
+    <location file="Render/Texture.hpp" line="16" column="1" bodyfile="Render/Texture.hpp" bodystart="17" bodyend="134"/>
     <listofallmembers>
-      <member refid="d3/d8c/a04318_1a11fb7afcde7a3e7432621ef521053e63" prot="public" virt="non-virtual"><scope>castor3d::PassRenderNode</scope><name>fillDescriptor</name></member>
-      <member refid="d3/d8c/a04318_1a2c240e96225ebc16e54840f435088790" prot="public" virt="non-virtual"><scope>castor3d::PassRenderNode</scope><name>fillDescriptor</name></member>
-      <member refid="d3/d8c/a04318_1ad350826d8a1c36359b0828ae6187adff" prot="public" virt="non-virtual"><scope>castor3d::PassRenderNode</scope><name>fillDescriptor</name></member>
-      <member refid="d3/d8c/a04318_1a21bdd87112b7e1e1e0aae9bb3667815f" prot="public" virt="non-virtual"><scope>castor3d::PassRenderNode</scope><name>fillDescriptor</name></member>
-      <member refid="d3/d8c/a04318_1ac4cd675548dfcb16b9adde03f9ccc71f" prot="public" virt="non-virtual"><scope>castor3d::PassRenderNode</scope><name>pass</name></member>
-      <member refid="d3/d8c/a04318_1a5feafb012105f9c53cb7984b13005ce9" prot="public" virt="non-virtual"><scope>castor3d::PassRenderNode</scope><name>PassRenderNode</name></member>
+      <member refid="d3/d8c/a04318_1a6ad0b1ec680c3a51f5629328152e8174" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>create</name></member>
+      <member refid="d3/d8c/a04318_1a8841dbff1442bae4016cd357998e4c9e" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>destroy</name></member>
+      <member refid="d3/d8c/a04318_1a304daf484ecfbd1df308dd0886929afd" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>device</name></member>
+      <member refid="d3/d8c/a04318_1aff061b996537e3b273beed77560bb37a" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>getExtent</name></member>
+      <member refid="d3/d8c/a04318_1a2108cbfdb3b95706338044126c0f7be5" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>getFormat</name></member>
+      <member refid="d3/d8c/a04318_1adfc7ff5d1917d33f0c61fdada7d86ee6" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>getMipLevels</name></member>
+      <member refid="d3/d8c/a04318_1a78488df07446456c2a495bed23143a0f" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>handler</name></member>
+      <member refid="d3/d8c/a04318_1a123f4f02dbe6540b49c5d19b96a19608" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>image</name></member>
+      <member refid="d3/d8c/a04318_1a83fd1ff543a0a16e0dcea6ae7971a5ac" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>imageId</name></member>
+      <member refid="d3/d8c/a04318_1aaf5970a9592c7df6e9e46d52660e488d" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>makeColourAttachment</name></member>
+      <member refid="d3/d8c/a04318_1aae7f09f43a0f8aa908ae432badc6df25" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>makeDepthStencilAttachment</name></member>
+      <member refid="d3/d8c/a04318_1ad4ee7564d9b7adf7bb8d8a2e54c23c52" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>makeDepthStencilReadOnly</name></member>
+      <member refid="d3/d8c/a04318_1a1ff709484114f72f2ae793eb143b0574" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>makeGeneralLayout</name></member>
+      <member refid="d3/d8c/a04318_1ad8e74fffe82d90f1b222afb6a790a674" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>makeLayoutTransition</name></member>
+      <member refid="d3/d8c/a04318_1a41869bcdae73aebfaa051f963bb6d960" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>makeLayoutTransition</name></member>
+      <member refid="d3/d8c/a04318_1a5d60652b5627c4a88e483149035523cd" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>makeLayoutTransition</name></member>
+      <member refid="d3/d8c/a04318_1a74e2b93b7a1ce77fc41efab7c4a68bb3" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>makePresentSource</name></member>
+      <member refid="d3/d8c/a04318_1a7f22204ee4a648f5c449a6120d19d2ab" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>makeShaderInputResource</name></member>
+      <member refid="d3/d8c/a04318_1a0edbcc4f57745e31084f6b9720c253de" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>makeTransferDestination</name></member>
+      <member refid="d3/d8c/a04318_1a91a9674a016d50bd58bde93dbeaac154" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>makeTransferSource</name></member>
+      <member refid="d3/d8c/a04318_1a9c57036f461190e08203603890e9dcb9" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>operator=</name></member>
+      <member refid="d3/d8c/a04318_1aa5043bed408fbc18eda4249dc62de6ff" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>operator=</name></member>
+      <member refid="d3/d8c/a04318_1a77e1e88fde255b8a8be8003f8c458c65" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>sampledView</name></member>
+      <member refid="d3/d8c/a04318_1a23560694e7775b30e5e6f7282d1c6e97" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>sampledViewId</name></member>
+      <member refid="d3/d8c/a04318_1a5cd0ca468c4c3f604f815f0f7c9e9b5a" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>sampler</name></member>
+      <member refid="d3/d8c/a04318_1a5e7bec43e8734a924c29f5d3e07327b7" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>subViewsId</name></member>
+      <member refid="d3/d8c/a04318_1a43352bdc5a46aa00a5a048c5456be2e7" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>targetView</name></member>
+      <member refid="d3/d8c/a04318_1a9b3954f3f3a12d2ff643b4d0b8b3f4aa" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>targetViewId</name></member>
+      <member refid="d3/d8c/a04318_1ab67ee91da67767e98dfe2ec9f335ea77" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>Texture</name></member>
+      <member refid="d3/d8c/a04318_1ac3b172b41b9453435f0feb6c25f1da04" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>Texture</name></member>
+      <member refid="d3/d8c/a04318_1a2b6813807dfe80166ff0c36fe9247671" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>Texture</name></member>
+      <member refid="d3/d8c/a04318_1a639c682807c6d2f3a32af9124b10e642" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>Texture</name></member>
+      <member refid="d3/d8c/a04318_1a968eb63621281ed17892296a4fdfd790" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>Texture</name></member>
+      <member refid="d3/d8c/a04318_1af2d3fdd883b9e594c56017896bc07633" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>wholeView</name></member>
+      <member refid="d3/d8c/a04318_1a6fe1d88393b13e2b59f31171353a3fe7" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>wholeViewId</name></member>
+      <member refid="d3/d8c/a04318_1a45bc5828356ec36257bdfe19a7806a4b" prot="public" virt="non-virtual"><scope>castor3d::Texture</scope><name>~Texture</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

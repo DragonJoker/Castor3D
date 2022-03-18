@@ -1,33 +1,302 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="de/d8c/a02747" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPipelineShaderStageCreateInfo &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="de/d8c/a02747_1a33272abf874d1365b678e8bd599501fe" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPipelineShaderStageCreateInfo &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="de/d8c/a02747" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::GpuFrameEvent</compoundname>
+    <derivedcompoundref refid="df/d23/a02751" prot="public" virt="non-virtual">castor3d::GpuFunctorEvent</derivedcompoundref>
+    <includes local="no">GpuFrameEvent.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="de/d8c/a02747_1a607a677b10106be306257a778795ff43" prot="private" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1ad442bf3c1ba8a06ac36f710ba30b2870" kindref="member">EventType</ref></type>
+        <definition>EventType castor3d::GpuFrameEvent::m_type</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO</initializer>
+        <name>m_type</name>
+        <qualifiedname>castor3d::GpuFrameEvent::m_type</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="32" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="32" bodyend="-1"/>
+        <location file="Event/Frame/GpuFrameEvent.hpp" line="85" column="11" bodyfile="Event/Frame/GpuFrameEvent.hpp" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d8c/a02747_1a3fbffe5e66e35468528767e656e01741" prot="private" static="no" mutable="no">
+        <type>std::atomic_bool</type>
+        <definition>std::atomic_bool castor3d::GpuFrameEvent::m_skip</definition>
+        <argsstring></argsstring>
+        <name>m_skip</name>
+        <qualifiedname>castor3d::GpuFrameEvent::m_skip</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/GpuFrameEvent.hpp" line="86" column="18" bodyfile="Event/Frame/GpuFrameEvent.hpp" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d8c/a02747_1a8136c7ee8f7ebfb4fcf4f1c9e5a0a433" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::GpuFrameEvent::m_stackTrace</definition>
+        <argsstring></argsstring>
+        <name>m_stackTrace</name>
+        <qualifiedname>castor3d::GpuFrameEvent::m_stackTrace</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The event creation stack trace. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/GpuFrameEvent.hpp" line="92" column="16" bodyfile="Event/Frame/GpuFrameEvent.hpp" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/d8c/a02747_1a4396d85eeb92ac5ce4623f6764a015eb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::GpuFrameEvent::GpuFrameEvent</definition>
+        <argsstring>(GpuFrameEvent const &amp;rhs)</argsstring>
+        <name>GpuFrameEvent</name>
+        <qualifiedname>castor3d::GpuFrameEvent::GpuFrameEvent</qualifiedname>
+        <param>
+          <type><ref refid="de/d8c/a02747" kindref="compound">GpuFrameEvent</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/GpuFrameEvent.hpp" line="19" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d8c/a02747_1ab1ec49376d1664cf008d9b970e1ca209" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::GpuFrameEvent::GpuFrameEvent</definition>
+        <argsstring>(GpuFrameEvent &amp;&amp;rhs)</argsstring>
+        <name>GpuFrameEvent</name>
+        <qualifiedname>castor3d::GpuFrameEvent::GpuFrameEvent</qualifiedname>
+        <param>
+          <type><ref refid="de/d8c/a02747" kindref="compound">GpuFrameEvent</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/GpuFrameEvent.hpp" line="20" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d8c/a02747_1a281733db596bc430b70e34bef81ef683" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="de/d8c/a02747" kindref="compound">GpuFrameEvent</ref> &amp;</type>
+        <definition>C3D_API GpuFrameEvent &amp; castor3d::GpuFrameEvent::operator=</definition>
+        <argsstring>(GpuFrameEvent const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::GpuFrameEvent::operator=</qualifiedname>
+        <param>
+          <type><ref refid="de/d8c/a02747" kindref="compound">GpuFrameEvent</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/GpuFrameEvent.hpp" line="21" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d8c/a02747_1ad6e51771c76dfff8afd56ce2f60aaf4c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="de/d8c/a02747" kindref="compound">GpuFrameEvent</ref> &amp;</type>
+        <definition>C3D_API GpuFrameEvent &amp; castor3d::GpuFrameEvent::operator=</definition>
+        <argsstring>(GpuFrameEvent &amp;&amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::GpuFrameEvent::operator=</qualifiedname>
+        <param>
+          <type><ref refid="de/d8c/a02747" kindref="compound">GpuFrameEvent</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/GpuFrameEvent.hpp" line="22" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d8c/a02747_1a44e18d18ad92f6bd7bb1ed56a6d1d65b" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::GpuFrameEvent::GpuFrameEvent</definition>
+        <argsstring>(EventType type)</argsstring>
+        <name>GpuFrameEvent</name>
+        <qualifiedname>castor3d::GpuFrameEvent::GpuFrameEvent</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1ad442bf3c1ba8a06ac36f710ba30b2870" kindref="member">EventType</ref></type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The event type. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/GpuFrameEvent.hpp" line="31" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d8c/a02747_1a139c794fbc28aebd27db9f05a727cfac" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::GpuFrameEvent::~GpuFrameEvent</definition>
+        <argsstring>()=default</argsstring>
+        <name>~GpuFrameEvent</name>
+        <qualifiedname>castor3d::GpuFrameEvent::~GpuFrameEvent</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/GpuFrameEvent.hpp" line="38" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d8c/a02747_1aa292ea9e487964102df7031d51ede8ed" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::GpuFrameEvent::apply</definition>
+        <argsstring>(RenderDevice const &amp;device, QueueData const &amp;queueData)</argsstring>
+        <name>apply</name>
+        <qualifiedname>castor3d::GpuFrameEvent::apply</qualifiedname>
+        <param>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d1d/a03947" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <briefdescription>
+<para>Applies the event. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">queueData</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue receiving the GPU commands. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/GpuFrameEvent.hpp" line="49" column="6" bodyfile="Event/Frame/GpuFrameEvent.hpp" bodystart="49" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d8c/a02747_1a5a2f2c4e326fcbfe11230945c28c060a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/de3/a01398_1ad442bf3c1ba8a06ac36f710ba30b2870" kindref="member">EventType</ref></type>
+        <definition>EventType castor3d::GpuFrameEvent::getType</definition>
+        <argsstring>() const</argsstring>
+        <name>getType</name>
+        <qualifiedname>castor3d::GpuFrameEvent::getType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The event type. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/GpuFrameEvent.hpp" line="65" column="11" bodyfile="Event/Frame/GpuFrameEvent.hpp" bodystart="65" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d8c/a02747_1a8b5bc2a786f70f4b54161d2ad6f92053" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::GpuFrameEvent::skip</definition>
+        <argsstring>()</argsstring>
+        <name>skip</name>
+        <qualifiedname>castor3d::GpuFrameEvent::skip</qualifiedname>
+        <briefdescription>
+<para>Sets the event to be skipped. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/GpuFrameEvent.hpp" line="75" column="6" bodyfile="Event/Frame/GpuFrameEvent.hpp" bodystart="75" bodyend="78"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="de/d8c/a02747_1a6f54a55b7ea6077e4cb3f024b4758849" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::GpuFrameEvent::doApply</definition>
+        <argsstring>(RenderDevice const &amp;device, QueueData const &amp;queueData)=0</argsstring>
+        <name>doApply</name>
+        <qualifiedname>castor3d::GpuFrameEvent::doApply</qualifiedname>
+        <reimplementedby refid="df/d23/a02751_1ac58f59101d5f535a36522c2a3b4e007a">doApply</reimplementedby>
+        <param>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d1d/a03947" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/GpuFrameEvent.hpp" line="81" column="22"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="32" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="32" bodyend="32"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::GpuFrameEvent</label>
+        <link refid="de/d8c/a02747"/>
+      </node>
+      <node id="2">
+        <label>castor3d::GpuFunctorEvent</label>
+        <link refid="df/d23/a02751"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="Event/Frame/GpuFrameEvent.hpp" line="16" column="1" bodyfile="Event/Frame/GpuFrameEvent.hpp" bodystart="17" bodyend="95"/>
     <listofallmembers>
-      <member refid="de/d8c/a02747_1a33272abf874d1365b678e8bd599501fe" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPipelineShaderStageCreateInfo &gt;</scope><name>value</name></member>
+      <member refid="de/d8c/a02747_1aa292ea9e487964102df7031d51ede8ed" prot="public" virt="non-virtual"><scope>castor3d::GpuFrameEvent</scope><name>apply</name></member>
+      <member refid="de/d8c/a02747_1a6f54a55b7ea6077e4cb3f024b4758849" prot="private" virt="pure-virtual"><scope>castor3d::GpuFrameEvent</scope><name>doApply</name></member>
+      <member refid="de/d8c/a02747_1a5a2f2c4e326fcbfe11230945c28c060a" prot="public" virt="non-virtual"><scope>castor3d::GpuFrameEvent</scope><name>getType</name></member>
+      <member refid="de/d8c/a02747_1a4396d85eeb92ac5ce4623f6764a015eb" prot="public" virt="non-virtual"><scope>castor3d::GpuFrameEvent</scope><name>GpuFrameEvent</name></member>
+      <member refid="de/d8c/a02747_1ab1ec49376d1664cf008d9b970e1ca209" prot="public" virt="non-virtual"><scope>castor3d::GpuFrameEvent</scope><name>GpuFrameEvent</name></member>
+      <member refid="de/d8c/a02747_1a44e18d18ad92f6bd7bb1ed56a6d1d65b" prot="public" virt="non-virtual"><scope>castor3d::GpuFrameEvent</scope><name>GpuFrameEvent</name></member>
+      <member refid="de/d8c/a02747_1a3fbffe5e66e35468528767e656e01741" prot="private" virt="non-virtual"><scope>castor3d::GpuFrameEvent</scope><name>m_skip</name></member>
+      <member refid="de/d8c/a02747_1a8136c7ee8f7ebfb4fcf4f1c9e5a0a433" prot="private" virt="non-virtual"><scope>castor3d::GpuFrameEvent</scope><name>m_stackTrace</name></member>
+      <member refid="de/d8c/a02747_1a607a677b10106be306257a778795ff43" prot="private" virt="non-virtual"><scope>castor3d::GpuFrameEvent</scope><name>m_type</name></member>
+      <member refid="de/d8c/a02747_1a281733db596bc430b70e34bef81ef683" prot="public" virt="non-virtual"><scope>castor3d::GpuFrameEvent</scope><name>operator=</name></member>
+      <member refid="de/d8c/a02747_1ad6e51771c76dfff8afd56ce2f60aaf4c" prot="public" virt="non-virtual"><scope>castor3d::GpuFrameEvent</scope><name>operator=</name></member>
+      <member refid="de/d8c/a02747_1a8b5bc2a786f70f4b54161d2ad6f92053" prot="public" virt="non-virtual"><scope>castor3d::GpuFrameEvent</scope><name>skip</name></member>
+      <member refid="de/d8c/a02747_1a139c794fbc28aebd27db9f05a727cfac" prot="public" virt="virtual"><scope>castor3d::GpuFrameEvent</scope><name>~GpuFrameEvent</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

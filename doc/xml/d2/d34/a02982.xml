@@ -1,33 +1,125 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d2/d34/a02982" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPhysicalDeviceMemoryProperties2 &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d2/d34/a02982_1adbfc0cd068c513a04698a1a253b9aaf8" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPhysicalDeviceMemoryProperties2 &gt;::value</definition>
+    <compoundname>castor3d::GpuObjectTracker::ObjectDeclaration</compoundname>
+    <includes local="no">GpuObjectTracker.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/d34/a02982_1a72f9321b47282171a3bc256c2f92ccdf" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::GpuObjectTracker::ObjectDeclaration::m_id</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MEMORY_PROPERTIES_2</initializer>
+        <name>m_id</name>
+        <qualifiedname>castor3d::GpuObjectTracker::ObjectDeclaration::m_id</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="87" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="87" bodyend="-1"/>
+        <location file="Miscellaneous/GpuObjectTracker.hpp" line="30" column="10" bodyfile="Miscellaneous/GpuObjectTracker.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d34/a02982_1a2aa3eca8fb8f98bd4dfff4eb20a081ce" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string castor3d::GpuObjectTracker::ObjectDeclaration::m_name</definition>
+        <argsstring></argsstring>
+        <name>m_name</name>
+        <qualifiedname>castor3d::GpuObjectTracker::ObjectDeclaration::m_name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuObjectTracker.hpp" line="31" column="13" bodyfile="Miscellaneous/GpuObjectTracker.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d34/a02982_1a69d4f260189cd1ef54cb7c7558fc928e" prot="public" static="no" mutable="no">
+        <type>void *</type>
+        <definition>void* castor3d::GpuObjectTracker::ObjectDeclaration::m_object</definition>
+        <argsstring></argsstring>
+        <name>m_object</name>
+        <qualifiedname>castor3d::GpuObjectTracker::ObjectDeclaration::m_object</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuObjectTracker.hpp" line="32" column="7" bodyfile="Miscellaneous/GpuObjectTracker.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d34/a02982_1aa392896ebb9a035d8d84de219656cd03" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string castor3d::GpuObjectTracker::ObjectDeclaration::m_file</definition>
+        <argsstring></argsstring>
+        <name>m_file</name>
+        <qualifiedname>castor3d::GpuObjectTracker::ObjectDeclaration::m_file</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuObjectTracker.hpp" line="33" column="13" bodyfile="Miscellaneous/GpuObjectTracker.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d34/a02982_1af2b18655c68a2cadf2796a6871df6391" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int castor3d::GpuObjectTracker::ObjectDeclaration::m_line</definition>
+        <argsstring></argsstring>
+        <name>m_line</name>
+        <qualifiedname>castor3d::GpuObjectTracker::ObjectDeclaration::m_line</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuObjectTracker.hpp" line="34" column="5" bodyfile="Miscellaneous/GpuObjectTracker.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d34/a02982_1a475fe43451308fcfc977dc6397925170" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string castor3d::GpuObjectTracker::ObjectDeclaration::m_stack</definition>
+        <argsstring></argsstring>
+        <name>m_stack</name>
+        <qualifiedname>castor3d::GpuObjectTracker::ObjectDeclaration::m_stack</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuObjectTracker.hpp" line="35" column="13" bodyfile="Miscellaneous/GpuObjectTracker.hpp" bodystart="35" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="87" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="87" bodyend="87"/>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::GpuObjectTracker::ObjectDeclaration</label>
+        <link refid="d2/d34/a02982"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_file</edgelabel>
+          <edgelabel>m_name</edgelabel>
+          <edgelabel>m_stack</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::string</label>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Miscellaneous/GpuObjectTracker.hpp" line="28" column="1" bodyfile="Miscellaneous/GpuObjectTracker.hpp" bodystart="29" bodyend="36"/>
     <listofallmembers>
-      <member refid="d2/d34/a02982_1adbfc0cd068c513a04698a1a253b9aaf8" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPhysicalDeviceMemoryProperties2 &gt;</scope><name>value</name></member>
+      <member refid="d2/d34/a02982_1aa392896ebb9a035d8d84de219656cd03" prot="public" virt="non-virtual"><scope>castor3d::GpuObjectTracker::ObjectDeclaration</scope><name>m_file</name></member>
+      <member refid="d2/d34/a02982_1a72f9321b47282171a3bc256c2f92ccdf" prot="public" virt="non-virtual"><scope>castor3d::GpuObjectTracker::ObjectDeclaration</scope><name>m_id</name></member>
+      <member refid="d2/d34/a02982_1af2b18655c68a2cadf2796a6871df6391" prot="public" virt="non-virtual"><scope>castor3d::GpuObjectTracker::ObjectDeclaration</scope><name>m_line</name></member>
+      <member refid="d2/d34/a02982_1a2aa3eca8fb8f98bd4dfff4eb20a081ce" prot="public" virt="non-virtual"><scope>castor3d::GpuObjectTracker::ObjectDeclaration</scope><name>m_name</name></member>
+      <member refid="d2/d34/a02982_1a69d4f260189cd1ef54cb7c7558fc928e" prot="public" virt="non-virtual"><scope>castor3d::GpuObjectTracker::ObjectDeclaration</scope><name>m_object</name></member>
+      <member refid="d2/d34/a02982_1a475fe43451308fcfc977dc6397925170" prot="public" virt="non-virtual"><scope>castor3d::GpuObjectTracker::ObjectDeclaration</scope><name>m_stack</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,41 +1,180 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d0/d0b/a03910" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::MeshGenerator</compoundname>
-    <derivedcompoundref refid="dd/d31/a03862" prot="public" virt="non-virtual">castor3d::Cone</derivedcompoundref>
-    <derivedcompoundref refid="db/d06/a03866" prot="public" virt="non-virtual">castor3d::Cube</derivedcompoundref>
-    <derivedcompoundref refid="dc/db8/a03870" prot="public" virt="non-virtual">castor3d::Cylinder</derivedcompoundref>
-    <derivedcompoundref refid="d0/d34/a03874" prot="public" virt="non-virtual">castor3d::Icosahedron</derivedcompoundref>
-    <derivedcompoundref refid="d0/d60/a03878" prot="public" virt="non-virtual">castor3d::Plane</derivedcompoundref>
-    <derivedcompoundref refid="dd/d94/a03882" prot="public" virt="non-virtual">castor3d::Projection</derivedcompoundref>
-    <derivedcompoundref refid="d4/d72/a03886" prot="public" virt="non-virtual">castor3d::Sphere</derivedcompoundref>
-    <derivedcompoundref refid="d2/df3/a03890" prot="public" virt="non-virtual">castor3d::Torus</derivedcompoundref>
-    <includes local="no">MeshGenerator.hpp</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d0/d0b/a03910_1ae4c4d2c67b9e8567baef9dfeb70415d1" prot="private" static="no" mutable="no">
-        <type>castor::String</type>
-        <definition>castor::String castor3d::MeshGenerator::m_meshType</definition>
-        <argsstring></argsstring>
-        <name>m_meshType</name>
+    <compoundname>castor3d::IblTextures</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Scene &gt;</basecompoundref>
+    <includes local="no">IblTextures.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d0/d0b/a03910_1ada1dcd43bcbef41de2017c0bc4c6eeb3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d8c/a04318" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::IblTextures::getIrradianceTexture</definition>
+        <argsstring>() const</argsstring>
+        <name>getIrradianceTexture</name>
+        <qualifiedname>castor3d::IblTextures::getIrradianceTexture</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The mesh type. </para>
+<para>name Getters. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/MeshGenerator.hpp" line="82" column="1" bodyfile="Model/Mesh/MeshGenerator.hpp" bodystart="82" bodyend="-1"/>
+        <location file="Render/PBR/IblTextures.hpp" line="72" column="23" bodyfile="Render/PBR/IblTextures.hpp" bodystart="72" bodyend="75"/>
+        <references refid="de/d7e/a03914_1a4a6e1b4199e798330b540cd53b30453b" compoundref="da/d96/a00782" startline="77" endline="80">castor3d::RadianceComputer::getResult</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0b/a03910_1ad89be757124326abbfb6907420912f58" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d8c/a04318" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::IblTextures::getPrefilteredEnvironmentTexture</definition>
+        <argsstring>() const</argsstring>
+        <name>getPrefilteredEnvironmentTexture</name>
+        <qualifiedname>castor3d::IblTextures::getPrefilteredEnvironmentTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="77" column="23" bodyfile="Render/PBR/IblTextures.hpp" bodystart="77" bodyend="80"/>
+        <references refid="d7/ddf/a03898_1a6dbf52dc4d47481cdc51ad1373666eb8" compoundref="d8/dba/a00773" startline="111" endline="114">castor3d::EnvironmentPrefilter::getResult</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0b/a03910_1ab49b1cdfec32960367c7c943f7c87d4e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d8c/a04318" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::IblTextures::getPrefilteredBrdfTexture</definition>
+        <argsstring>() const</argsstring>
+        <name>getPrefilteredBrdfTexture</name>
+        <qualifiedname>castor3d::IblTextures::getPrefilteredBrdfTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="82" column="23" bodyfile="Render/PBR/IblTextures.hpp" bodystart="82" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0b/a03910_1a5d45288d46639de661d172598822b5f7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Sampler const &amp;</type>
+        <definition>ashes::Sampler const  &amp; castor3d::IblTextures::getIrradianceSampler</definition>
+        <argsstring>() const</argsstring>
+        <name>getIrradianceSampler</name>
+        <qualifiedname>castor3d::IblTextures::getIrradianceSampler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="87" column="30" bodyfile="Render/PBR/IblTextures.hpp" bodystart="87" bodyend="90"/>
+        <references refid="de/d7e/a03914_1ad1f45bde74c7608a6bbf99e4088f9c11">castor3d::RadianceComputer::getSampler</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0b/a03910_1a2837d9e63ab70246556f53cb0aff6fe1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Sampler const &amp;</type>
+        <definition>ashes::Sampler const  &amp; castor3d::IblTextures::getPrefilteredEnvironmentSampler</definition>
+        <argsstring>() const</argsstring>
+        <name>getPrefilteredEnvironmentSampler</name>
+        <qualifiedname>castor3d::IblTextures::getPrefilteredEnvironmentSampler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="92" column="30" bodyfile="Render/PBR/IblTextures.hpp" bodystart="92" bodyend="95"/>
+        <references refid="d7/ddf/a03898_1ace19dfaaff10ee60ff4be98880c44d76" compoundref="d8/dba/a00773" startline="116" endline="119">castor3d::EnvironmentPrefilter::getSampler</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0b/a03910_1a54b5d41fb98711d8092c7c343ca5af12" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Sampler const &amp;</type>
+        <definition>ashes::Sampler const  &amp; castor3d::IblTextures::getPrefilteredBrdfSampler</definition>
+        <argsstring>() const</argsstring>
+        <name>getPrefilteredBrdfSampler</name>
+        <qualifiedname>castor3d::IblTextures::getPrefilteredBrdfSampler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="97" column="30" bodyfile="Render/PBR/IblTextures.hpp" bodystart="97" bodyend="100"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/d0b/a03910_1ac7e66d8ba32e7b9c858823bebea9efa7" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d8c/a04318" kindref="compound">Texture</ref></type>
+        <definition>Texture castor3d::IblTextures::m_prefilteredBrdf</definition>
+        <argsstring></argsstring>
+        <name>m_prefilteredBrdf</name>
+        <qualifiedname>castor3d::IblTextures::m_prefilteredBrdf</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="104" column="9" bodyfile="Render/PBR/IblTextures.hpp" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d0b/a03910_1a42729699065309e5b062ac73d01105d5" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a723c56c48a833a5992bd2a5a9a366e45" kindref="member">SamplerResPtr</ref></type>
+        <definition>SamplerResPtr castor3d::IblTextures::m_sampler</definition>
+        <argsstring></argsstring>
+        <name>m_sampler</name>
+        <qualifiedname>castor3d::IblTextures::m_sampler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="105" column="15" bodyfile="Render/PBR/IblTextures.hpp" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d0b/a03910_1a5fba7190da8b10e7a66579ab8c9bf721" prot="private" static="no" mutable="no">
+        <type><ref refid="de/d7e/a03914" kindref="compound">RadianceComputer</ref></type>
+        <definition>RadianceComputer castor3d::IblTextures::m_radianceComputer</definition>
+        <argsstring></argsstring>
+        <name>m_radianceComputer</name>
+        <qualifiedname>castor3d::IblTextures::m_radianceComputer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="106" column="18" bodyfile="Render/PBR/IblTextures.hpp" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d0b/a03910_1a0b8a2ed6e7b6504d80d2100bcdd22eb1" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/ddf/a03898" kindref="compound">EnvironmentPrefilter</ref></type>
+        <definition>EnvironmentPrefilter castor3d::IblTextures::m_environmentPrefilter</definition>
+        <argsstring></argsstring>
+        <name>m_environmentPrefilter</name>
+        <qualifiedname>castor3d::IblTextures::m_environmentPrefilter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="107" column="22" bodyfile="Render/PBR/IblTextures.hpp" bodystart="107" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d0/d0b/a03910_1a3ccec3fd88667bbca33c6e81afdeff19" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::MeshGenerator::MeshGenerator</definition>
-        <argsstring>(castor::String const &amp;meshType)</argsstring>
-        <name>MeshGenerator</name>
+      <memberdef kind="function" id="d0/d0b/a03910_1a5e79944c8fdc443d5499eb5b0296b7e3" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::IblTextures::IblTextures</definition>
+        <argsstring>(Scene &amp;scene, RenderDevice const &amp;device, Texture const &amp;source, SamplerResPtr sampler)</argsstring>
+        <name>IblTextures</name>
+        <qualifiedname>castor3d::IblTextures::IblTextures</qualifiedname>
         <param>
-          <type>castor::String const &amp;</type>
-          <declname>meshType</declname>
+          <type><ref refid="d6/d71/a04598" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d8c/a04318" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>source</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a723c56c48a833a5992bd2a5a9a366e45" kindref="member">SamplerResPtr</ref></type>
+          <declname>sampler</declname>
         </param>
         <briefdescription>
 <para>Constructor. </para>
@@ -43,105 +182,34 @@
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">meshType</parametername>
+<parametername direction="in">scene</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The mesh type </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/MeshGenerator.hpp" line="23" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d0b/a03910_1adee42c7c921b0dff4cbbc99c29faf31f" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>virtual C3D_API castor3d::MeshGenerator::~MeshGenerator</definition>
-        <argsstring>()</argsstring>
-        <name>~MeshGenerator</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/MeshGenerator.hpp" line="30" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d0b/a03910_1a9fdc140f2d871ca6cb81029250c346ae" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>virtual C3D_API void castor3d::MeshGenerator::generate</definition>
-        <argsstring>(Mesh &amp;mesh, Parameters const &amp;parameters)</argsstring>
-        <name>generate</name>
-        <param>
-          <type><ref refid="d9/d7a/a03902" kindref="compound">Mesh</ref> &amp;</type>
-          <declname>mesh</declname>
-        </param>
-        <param>
-          <type><ref refid="de/d13/a01473_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
-          <declname>parameters</declname>
-        </param>
-        <briefdescription>
-<para>Generates the mesh. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">mesh</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The mesh. </para>
+<para>The scene. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">parameters</parametername>
+<parametername direction="in">device</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The generator parameters. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/MeshGenerator.hpp" line="50" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d0b/a03910_1a3207825be521c851f6fc654751f54cf1" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>virtual C3D_API void castor3d::MeshGenerator::computeNormals</definition>
-        <argsstring>(Mesh &amp;mesh, bool reverted=false)</argsstring>
-        <name>computeNormals</name>
-        <param>
-          <type><ref refid="d9/d7a/a03902" kindref="compound">Mesh</ref> &amp;</type>
-          <declname>mesh</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>reverted</declname>
-          <defval>false</defval>
-        </param>
-        <briefdescription>
-<para>Generates normals and tangents. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">mesh</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The mesh. </para>
+<para>The GPU device. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">reverted</parametername>
+<parametername direction="in">source</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>Tells if the generated tangent space must be inverted. </para>
+<para>The source environment map. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sampler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The sampler used for the environment map. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -149,76 +217,93 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/MeshGenerator.hpp" line="62" column="1"/>
+        <location file="Render/PBR/IblTextures.hpp" line="35" column="18"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-static-func">
-      <memberdef kind="function" id="d0/d0b/a03910_1a8127572fa9988909cabb37dd343fc26d" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>MeshGeneratorSPtr</type>
-        <definition>static MeshGeneratorSPtr castor3d::MeshGenerator::create</definition>
+      <memberdef kind="function" id="d0/d0b/a03910_1a0931c8cee3d5c72c2877071344fe73a3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::IblTextures::~IblTextures</definition>
         <argsstring>()</argsstring>
-        <name>create</name>
+        <name>~IblTextures</name>
+        <qualifiedname>castor3d::IblTextures::~IblTextures</qualifiedname>
         <briefdescription>
-<para>Creation function, used by Factory. </para>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para><ref refid="dc/db8/a03870" kindref="compound">Cylinder</ref> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="39" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0b/a03910_1ae0a2faec0feaa0da2cca40a9b3067c9c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::IblTextures::update</definition>
+        <argsstring>(QueueData const &amp;queueData)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::IblTextures::update</qualifiedname>
+        <param>
+          <type><ref refid="dc/d61/a03950" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <briefdescription>
+<para>Updates the environment maps. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">queueData</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue receiving the GPU commands. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="48" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0b/a03910_1a087b069a7236cdf0d8ffe7e9e8e216b8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Semaphore const &amp;</type>
+        <definition>C3D_API ashes::Semaphore const  &amp; castor3d::IblTextures::update</definition>
+        <argsstring>(QueueData const &amp;queueData, ashes::Semaphore const &amp;toWait)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::IblTextures::update</qualifiedname>
+        <param>
+          <type><ref refid="dc/d61/a03950" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <param>
+          <type>ashes::Semaphore const &amp;</type>
+          <declname>toWait</declname>
+        </param>
+        <briefdescription>
+<para>Updates the environment maps. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">queueData</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue receiving the GPU commands. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">toWait</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The semaphore from the previous render pass. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The semaphores signaled by this pass. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/MeshGenerator.hpp" line="39" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d0/d0b/a03910_1a690745122d7e670b311e317ae86c9b45" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>virtual void castor3d::MeshGenerator::doGenerate</definition>
-        <argsstring>(Mesh &amp;mesh, Parameters const &amp;parameters)</argsstring>
-        <name>doGenerate</name>
-        <reimplementedby refid="d2/df3/a03890_1af6596806029ab3cce940d8eb7c9fde76">doGenerate</reimplementedby>
-        <reimplementedby refid="d4/d72/a03886_1a1424ee4b6ceba752232d30bd13f66ff0">doGenerate</reimplementedby>
-        <reimplementedby refid="d0/d60/a03878_1a1ac34b70058ab97af2bb6e29fbd4ac24">doGenerate</reimplementedby>
-        <reimplementedby refid="d0/d34/a03874_1a54f2aafff435d955b3ddab9e36c947c6">doGenerate</reimplementedby>
-        <reimplementedby refid="dc/db8/a03870_1a73de96f4680962717f63b3a516144594">doGenerate</reimplementedby>
-        <reimplementedby refid="db/d06/a03866_1aa3fcbfaf110467b1c3340976013957e1">doGenerate</reimplementedby>
-        <reimplementedby refid="dd/d31/a03862_1a819e95620959f57aa10384f533671243">doGenerate</reimplementedby>
-        <reimplementedby refid="dd/d94/a03882_1a96eea4fe0c0eb99a0491a750ee7d3b88">doGenerate</reimplementedby>
-        <param>
-          <type><ref refid="d9/d7a/a03902" kindref="compound">Mesh</ref> &amp;</type>
-          <declname>mesh</declname>
-        </param>
-        <param>
-          <type><ref refid="de/d13/a01473_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
-          <declname>parameters</declname>
-        </param>
-        <briefdescription>
-<para>Generates the mesh. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">mesh</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The mesh. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">parameters</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The generator parameters. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/MeshGenerator.hpp" line="76" column="1"/>
+        <location file="Render/PBR/IblTextures.hpp" line="61" column="33"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -226,68 +311,43 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="1952">
-        <label>castor3d::Plane</label>
-        <link refid="d0/d60/a03878"/>
-        <childnode refid="1947" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1951">
-        <label>castor3d::Icosahedron</label>
-        <link refid="d0/d34/a03874"/>
-        <childnode refid="1947" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1947">
-        <label>castor3d::MeshGenerator</label>
+      <node id="1">
+        <label>castor3d::IblTextures</label>
         <link refid="d0/d0b/a03910"/>
-      </node>
-      <node id="1953">
-        <label>castor3d::Projection</label>
-        <link refid="dd/d94/a03882"/>
-        <childnode refid="1947" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="1954">
-        <label>castor3d::Sphere</label>
-        <link refid="d4/d72/a03886"/>
-        <childnode refid="1947" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1948">
-        <label>castor3d::Cone</label>
-        <link refid="dd/d31/a03862"/>
-        <childnode refid="1947" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1949">
-        <label>castor3d::Cube</label>
-        <link refid="db/d06/a03866"/>
-        <childnode refid="1947" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1950">
-        <label>castor3d::Cylinder</label>
-        <link refid="dc/db8/a03870"/>
-        <childnode refid="1947" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1955">
-        <label>castor3d::Torus</label>
-        <link refid="d2/df3/a03890"/>
-        <childnode refid="1947" relation="public-inheritance">
-        </childnode>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
       </node>
     </inheritancegraph>
-    <location file="Model/Mesh/MeshGenerator.hpp" line="13" column="1" bodyfile="Model/Mesh/MeshGenerator.hpp" bodystart="12" bodyend="83"/>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::IblTextures</label>
+        <link refid="d0/d0b/a03910"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Render/PBR/IblTextures.hpp" line="17" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="19" bodyend="108"/>
     <listofallmembers>
-      <member refid="d0/d0b/a03910_1a3207825be521c851f6fc654751f54cf1" prot="public" virt="virtual"><scope>castor3d::MeshGenerator</scope><name>computeNormals</name></member>
-      <member refid="d0/d0b/a03910_1a8127572fa9988909cabb37dd343fc26d" prot="public" virt="non-virtual"><scope>castor3d::MeshGenerator</scope><name>create</name></member>
-      <member refid="d0/d0b/a03910_1a690745122d7e670b311e317ae86c9b45" prot="private" virt="virtual"><scope>castor3d::MeshGenerator</scope><name>doGenerate</name></member>
-      <member refid="d0/d0b/a03910_1a9fdc140f2d871ca6cb81029250c346ae" prot="public" virt="virtual"><scope>castor3d::MeshGenerator</scope><name>generate</name></member>
-      <member refid="d0/d0b/a03910_1ae4c4d2c67b9e8567baef9dfeb70415d1" prot="private" virt="non-virtual"><scope>castor3d::MeshGenerator</scope><name>m_meshType</name></member>
-      <member refid="d0/d0b/a03910_1a3ccec3fd88667bbca33c6e81afdeff19" prot="public" virt="non-virtual"><scope>castor3d::MeshGenerator</scope><name>MeshGenerator</name></member>
-      <member refid="d0/d0b/a03910_1adee42c7c921b0dff4cbbc99c29faf31f" prot="public" virt="virtual"><scope>castor3d::MeshGenerator</scope><name>~MeshGenerator</name></member>
+      <member refid="d0/d0b/a03910_1a5d45288d46639de661d172598822b5f7" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getIrradianceSampler</name></member>
+      <member refid="d0/d0b/a03910_1ada1dcd43bcbef41de2017c0bc4c6eeb3" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getIrradianceTexture</name></member>
+      <member refid="d0/d0b/a03910_1a54b5d41fb98711d8092c7c343ca5af12" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getPrefilteredBrdfSampler</name></member>
+      <member refid="d0/d0b/a03910_1ab49b1cdfec32960367c7c943f7c87d4e" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getPrefilteredBrdfTexture</name></member>
+      <member refid="d0/d0b/a03910_1a2837d9e63ab70246556f53cb0aff6fe1" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getPrefilteredEnvironmentSampler</name></member>
+      <member refid="d0/d0b/a03910_1ad89be757124326abbfb6907420912f58" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getPrefilteredEnvironmentTexture</name></member>
+      <member refid="d0/d0b/a03910_1a5e79944c8fdc443d5499eb5b0296b7e3" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>IblTextures</name></member>
+      <member refid="d0/d0b/a03910_1a0b8a2ed6e7b6504d80d2100bcdd22eb1" prot="private" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>m_environmentPrefilter</name></member>
+      <member refid="d0/d0b/a03910_1ac7e66d8ba32e7b9c858823bebea9efa7" prot="private" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>m_prefilteredBrdf</name></member>
+      <member refid="d0/d0b/a03910_1a5fba7190da8b10e7a66579ab8c9bf721" prot="private" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>m_radianceComputer</name></member>
+      <member refid="d0/d0b/a03910_1a42729699065309e5b062ac73d01105d5" prot="private" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>m_sampler</name></member>
+      <member refid="d0/d0b/a03910_1ae0a2faec0feaa0da2cca40a9b3067c9c" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>update</name></member>
+      <member refid="d0/d0b/a03910_1a087b069a7236cdf0d8ffe7e9e8e216b8" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>update</name></member>
+      <member refid="d0/d0b/a03910_1a0931c8cee3d5c72c2877071344fe73a3" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>~IblTextures</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

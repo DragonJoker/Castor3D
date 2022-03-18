@@ -1,165 +1,44 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d7/d70/a02252" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::BinaryParser&lt; Submesh &gt;</compoundname>
-    <basecompoundref refid="d2/d08/a02148" prot="public" virt="non-virtual">castor3d::BinaryParserBase&lt; Submesh &gt;</basecompoundref>
-    <includes local="no">BinarySubmesh.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d7/d70/a02252" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ChunkTyper&lt; Animation &gt;</compoundname>
+    <includes local="no">BinaryAnimation.hpp</includes>
     <templateparamlist>
     </templateparamlist>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d7/d70/a02252_1ab571767cc83c4f3606bced26db4173d7" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::BinaryParser&lt; Submesh &gt;::doParse</definition>
-        <argsstring>(Submesh &amp;obj) override</argsstring>
-        <name>doParse</name>
-        <reimplements refid="d2/d08/a02148_1a020a66d5fc1b452dc76c82702d72bbb1">doParse</reimplements>
-        <param>
-          <type><ref refid="d9/d0c/a03992" kindref="compound">Submesh</ref> &amp;</type>
-          <declname>obj</declname>
-        </param>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d7/d70/a02252_1a649cf382bfc47818805de4bd2f33e840" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/df5/a01395_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref> const</type>
+        <definition>ChunkType const castor3d::ChunkTyper&lt; Animation &gt;::Value</definition>
+        <argsstring></argsstring>
+        <name>Value</name>
+        <qualifiedname>castor3d::ChunkTyper&lt; Animation &gt;::Value</qualifiedname>
+        <initializer>= <ref refid="d2/df5/a01395_1a742783d4e4b7354fac3e375ae107414daf8b3bcfa9a9160ba9956d2197892e796" kindref="member">ChunkType::eAnimation</ref></initializer>
         <briefdescription>
-<para>Function used to retrieve specific data from the chunk. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="out">obj</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The object to read </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Binary/BinarySubmesh.hpp" line="78" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d70/a02252_1a195f458651e1d5872824024368efc4d1" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::BinaryParser&lt; Submesh &gt;::doParse_v1_3</definition>
-        <argsstring>(Submesh &amp;obj) override</argsstring>
-        <name>doParse_v1_3</name>
-        <reimplements refid="d2/d08/a02148_1aab45074c2f8ac65df7fc52ee2530ebc1">doParse_v1_3</reimplements>
-        <param>
-          <type><ref refid="d9/d0c/a03992" kindref="compound">Submesh</ref> &amp;</type>
-          <declname>obj</declname>
-        </param>
-        <briefdescription>
-<para>Function used to retrieve specific data from the chunk. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="out">obj</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The object to read </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Binary/BinarySubmesh.hpp" line="89" column="1"/>
+        <location file="Binary/BinaryAnimation.hpp" line="28" column="24" bodyfile="Binary/BinaryAnimation.hpp" bodystart="28" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para><ref refid="d9/d4a/a05192" kindref="compound">MovableObject</ref> loader. </para>
+<para>Helper structure to find ChunkType from a type. </para>
     </briefdescription>
     <detaileddescription>
 <para><simplesect kind="author"><para>Sylvain DOREMUS </para>
 </simplesect>
-<simplesect kind="date"><para>14/02/2010</para>
+<simplesect kind="version"><para>0.9.0 </para>
 </simplesect>
-Loader de <ref refid="d9/d4a/a05192" kindref="compound">MovableObject</ref> </para>
+<simplesect kind="date"><para>28/05/2016</para>
+</simplesect>
+<simplesect kind="remark"><para>Specialisation for Animation. </para>
+</simplesect>
+</para>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="325">
-        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
-        <link refid="d2/d08/a02148"/>
-      </node>
-      <node id="323">
-        <label>castor3d::BinaryParser&lt; Submesh &gt;</label>
-        <link refid="d7/d70/a02252"/>
-        <childnode refid="324" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="324">
-        <label>castor3d::BinaryParserBase&lt; Submesh &gt;</label>
-        <link refid="d2/d08/a02148"/>
-        <childnode refid="325" relation="template-instance">
-          <edgelabel>&lt; Submesh &gt;</edgelabel>
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="330">
-        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
-        <link refid="d2/d08/a02148"/>
-        <childnode refid="328" relation="usage">
-          <edgelabel>m_chunk</edgelabel>
-        </childnode>
-        <childnode refid="329" relation="usage">
-          <edgelabel>m_fileVersion</edgelabel>
-        </childnode>
-      </node>
-      <node id="329">
-        <label>castor3d::Version</label>
-        <link refid="de/de6/a03848"/>
-      </node>
-      <node id="326">
-        <label>castor3d::BinaryParser&lt; Submesh &gt;</label>
-        <link refid="d7/d70/a02252"/>
-        <childnode refid="327" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="328">
-        <label>castor3d::BinaryChunk</label>
-        <link refid="d8/dd8/a02108"/>
-      </node>
-      <node id="327">
-        <label>castor3d::BinaryParserBase&lt; Submesh &gt;</label>
-        <link refid="d2/d08/a02148"/>
-        <childnode refid="328" relation="usage">
-          <edgelabel>m_chunk</edgelabel>
-        </childnode>
-        <childnode refid="329" relation="usage">
-          <edgelabel>m_fileVersion</edgelabel>
-        </childnode>
-        <childnode refid="330" relation="template-instance">
-          <edgelabel>&lt; Submesh &gt;</edgelabel>
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Binary/BinarySubmesh.hpp" line="66" column="1" bodyfile="Binary/BinarySubmesh.hpp" bodystart="64" bodyend="90"/>
+    <location file="Binary/BinaryAnimation.hpp" line="26" column="1" bodyfile="Binary/BinaryAnimation.hpp" bodystart="27" bodyend="29"/>
     <listofallmembers>
-      <member refid="d2/d08/a02148_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>checkError</name></member>
-      <member refid="d2/d08/a02148_1ae6f4694ede819151fe4e30e33235ff07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>createBinaryParser</name></member>
-      <member refid="d2/d08/a02148_1ab5f9ba53ad5865f967b41e5a27ed73a9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doGetSubChunk</name></member>
-      <member refid="d7/d70/a02252_1ab571767cc83c4f3606bced26db4173d7" prot="private" virt="virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doParse</name></member>
-      <member refid="d7/d70/a02252_1a195f458651e1d5872824024368efc4d1" prot="private" virt="virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doParse_v1_3</name></member>
-      <member refid="d2/d08/a02148_1a0e1aa917e3bf897fab03a32d20890062" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doParseChunk</name></member>
-      <member refid="d2/d08/a02148_1a22ca62addb3ab167995e18f49267efcf" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doParseChunk</name></member>
-      <member refid="d2/d08/a02148_1a5a648553ce168f5bc34adeedc8d169a7" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doParseChunk</name></member>
-      <member refid="d2/d08/a02148_1a90df4e46072e5ef14aebebd00cbcc1f5" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doParseChunk</name></member>
-      <member refid="d2/d08/a02148_1a5fac84360102001f5e730be1927c024e" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doParseChunk</name></member>
-      <member refid="d2/d08/a02148_1a035881aba2b64571b30a5efd3faaf3d9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doParseHeader</name></member>
-      <member refid="d2/d08/a02148_1ab3df04f9aa2eb1f7a533ed18631f09c4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>m_chunk</name></member>
-      <member refid="d2/d08/a02148_1a455764ca72b659dab2652baf56ce5885" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>m_fileVersion</name></member>
-      <member refid="d2/d08/a02148_1ae4820a3ab3e4b282240e5f1b969153c1" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>Name</name></member>
-      <member refid="d2/d08/a02148_1a5db83668684ca219f67de3a381898e64" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>parse</name></member>
-      <member refid="d2/d08/a02148_1a6bbbb529f463085c7d259600ae1b3e99" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>parse</name></member>
-      <member refid="d2/d08/a02148_1a61b02dbf69d89569eff5be22facd5f07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>parse_v1_1</name></member>
-      <member refid="d2/d08/a02148_1a95788692ddd6fae91074c299b674aaab" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>parse_v1_2</name></member>
-      <member refid="d2/d08/a02148_1a6f39b66d980e4a65660016f71115a89c" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>parse_v1_3</name></member>
-      <member refid="d2/d08/a02148_1aabc068daf8d99718497aa35f7a17c346" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>parse_v1_4</name></member>
+      <member refid="d7/d70/a02252_1a649cf382bfc47818805de4bd2f33e840" prot="public" virt="non-virtual"><scope>castor3d::ChunkTyper&lt; Animation &gt;</scope><name>Value</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

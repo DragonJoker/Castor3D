@@ -1,4 +1,5 @@
-<map id="castor3d::CpuFrameEvent" name="castor3d::CpuFrameEvent">
-<area shape="rect" id="node1" title=" " alt="" coords="9,5,181,32"/>
-<area shape="rect" id="node2" href="$d7/da8/a02522.html" title=" " alt="" coords="5,80,184,107"/>
+<map id="castor3d::GpuBufferBase" name="castor3d::GpuBufferBase">
+<area shape="rect" id="node1" title=" " alt="" coords="5,11,172,38"/>
+<area shape="rect" id="node2" href="$d5/ddd/a02490.html" title=" " alt="" coords="595,5,793,47"/>
+<area shape="rect" id="node3" href="$d5/ddd/a02490.html" title="A GPU buffer, that uses a buddy allocator to allocate sub&#45;buffers." alt="" coords="221,40,365,81"/>
 </map>

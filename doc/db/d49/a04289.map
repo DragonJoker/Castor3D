@@ -1,7 +1,6 @@
-<map id="castor3d::LightVolumePassResult" name="castor3d::LightVolumePassResult">
-<area shape="rect" id="node1" title=" " alt="" coords="11,352,193,393"/>
-<area shape="rect" id="node2" href="$d1/dcc/a04250.html" title=" " alt="" coords="37,261,167,303"/>
-<area shape="rect" id="node3" href="$d1/d5a/a04246.html" title=" " alt="" coords="5,81,159,108"/>
-<area shape="rect" id="node5" href="$d1/dcc/a04250.html" title=" " alt="" coords="103,157,234,199"/>
-<area shape="rect" id="node4" title=" " alt="" coords="51,5,113,32"/>
+<map id="castor3d::RenderTechniqueVisitor" name="castor3d::RenderTechniqueVisitor">
+<area shape="rect" id="node1" title=" " alt="" coords="12,261,192,303"/>
+<area shape="rect" id="node2" href="$de/d11/a03267.html" title=" " alt="" coords="21,185,183,212"/>
+<area shape="rect" id="node3" href="$d6/d38/a03259.html" title=" " alt="" coords="5,109,199,136"/>
+<area shape="rect" id="node4" href="$dc/dc1/a03263.html" title=" " alt="" coords="21,5,183,47"/>
 </map>

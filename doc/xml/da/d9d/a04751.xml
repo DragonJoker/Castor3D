@@ -1,91 +1,71 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="da/d9d/a04751" kind="struct" language="C++" prot="protected">
-    <compoundname>castor3d::LightPass::Config</compoundname>
-    <includes local="no">LightPass.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="da/d9d/a04751" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SpirVShader</compoundname>
+    <includes local="no">ShaderModule.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="da/d9d/a04751_1a2041d60b5ed7805c684ed5b447bbc74c" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::LightPass::Config::colourIndex</definition>
+      <memberdef kind="variable" id="da/d9d/a04751_1aa9154c5d764c20f2d45b6161ac65159a" prot="public" static="no" mutable="no">
+        <type>castor::UInt32Array</type>
+        <definition>castor::UInt32Array castor3d::SpirVShader::spirv</definition>
         <argsstring></argsstring>
-        <name>colourIndex</name>
+        <name>spirv</name>
+        <qualifiedname>castor3d::SpirVShader::spirv</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The variable containing the light colour and index. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="559" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="559" bodyend="-1"/>
+        <location file="Shader/ShaderModule.hpp" line="63" column="21" bodyfile="Shader/ShaderModule.hpp" bodystart="63" bodyend="-1"/>
+        <referencedby refid="da/de3/a01398_1a0c19aca64c0ae4f33a537e1071e48963" compoundref="de/df1/a01151" startline="161" endline="178">castor3d::makeShaderState</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="da/d9d/a04751_1a6d3b3b41cab4f515f17fcd25d50285eb" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::LightPass::Config::intensityFarPlane</definition>
+      <memberdef kind="variable" id="da/d9d/a04751_1a814dd927d2a2a4306a668b8a0180cba5" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string castor3d::SpirVShader::text</definition>
         <argsstring></argsstring>
-        <name>intensityFarPlane</name>
+        <name>text</name>
+        <qualifiedname>castor3d::SpirVShader::text</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The variable containing the light intensities (RG) and far plane (B). </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="562" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="562" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="da/d9d/a04751_1a3f366ab841f3fad66c02df7b0e9dd7a7" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::LightPass::Config::volumetric</definition>
-        <argsstring></argsstring>
-        <name>volumetric</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The variable containing the light volumetric scattering data. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="565" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="565" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="da/d9d/a04751_1adbed9f2dba2b9f9cace6bbd77c59fd64" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::LightPass::Config::shadowsOffsets</definition>
-        <argsstring></argsstring>
-        <name>shadowsOffsets</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The variable containing the light raw and PCF shadow data. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="568" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="568" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="da/d9d/a04751_1a75faef2a902baf50aa71823dbee06400" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::LightPass::Config::shadowsVariances</definition>
-        <argsstring></argsstring>
-        <name>shadowsVariances</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The variable containing the light VSM shadow data. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="571" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="571" bodyend="-1"/>
+        <location file="Shader/ShaderModule.hpp" line="64" column="13" bodyfile="Shader/ShaderModule.hpp" bodystart="64" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>A SPIR-V shader module, with SPIR-V binary and debug text source. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="556" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="555" bodyend="572"/>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::SpirVShader</label>
+        <link refid="da/d9d/a04751"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>spirv</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>text</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>UInt32Array</label>
+      </node>
+      <node id="4">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="3">
+        <label>std::string</label>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/ShaderModule.hpp" line="61" column="1" bodyfile="Shader/ShaderModule.hpp" bodystart="62" bodyend="65"/>
     <listofallmembers>
-      <member refid="da/d9d/a04751_1a2041d60b5ed7805c684ed5b447bbc74c" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Config</scope><name>colourIndex</name></member>
-      <member refid="da/d9d/a04751_1a6d3b3b41cab4f515f17fcd25d50285eb" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Config</scope><name>intensityFarPlane</name></member>
-      <member refid="da/d9d/a04751_1adbed9f2dba2b9f9cace6bbd77c59fd64" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Config</scope><name>shadowsOffsets</name></member>
-      <member refid="da/d9d/a04751_1a75faef2a902baf50aa71823dbee06400" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Config</scope><name>shadowsVariances</name></member>
-      <member refid="da/d9d/a04751_1a3f366ab841f3fad66c02df7b0e9dd7a7" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Config</scope><name>volumetric</name></member>
+      <member refid="da/d9d/a04751_1aa9154c5d764c20f2d45b6161ac65159a" prot="public" virt="non-virtual"><scope>castor3d::SpirVShader</scope><name>spirv</name></member>
+      <member refid="da/d9d/a04751_1a814dd927d2a2a4306a668b8a0180cba5" prot="public" virt="non-virtual"><scope>castor3d::SpirVShader</scope><name>text</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

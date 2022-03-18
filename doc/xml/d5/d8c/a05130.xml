@@ -1,94 +1,51 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d5/d8c/a05130" kind="class" language="C++" prot="public" abstract="yes">
-    <compoundname>castor3d::BackgroundVisitor</compoundname>
-    <derivedcompoundref refid="d5/d80/a05114" prot="public" virt="non-virtual">castor3d::BackgroundTextWriter</derivedcompoundref>
-    <includes local="no">Visitor.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d5/d8c/a05130" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::OverlayCategory &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::OverlayCategory &gt;</basecompoundref>
+    <includes local="no">TextOverlayCategory.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d5/d8c/a05130_1af05ce31b5608cdd6b02f87ab1eadae6f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::BackgroundVisitor::BackgroundVisitor</definition>
-        <argsstring>()</argsstring>
-        <name>BackgroundVisitor</name>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Visitor.hpp" line="20" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/d8c/a05130_1a575ad64b4b6f1bf1bd76adc9891ce58d" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>virtual C3D_API castor3d::BackgroundVisitor::~BackgroundVisitor</definition>
-        <argsstring>()</argsstring>
-        <name>~BackgroundVisitor</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Visitor.hpp" line="27" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/d8c/a05130_1ad29638182ddf77a3a1f8652f12dc5d0c" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>virtual C3D_API void castor3d::BackgroundVisitor::visit</definition>
-        <argsstring>(ColourBackground &amp;background)=0</argsstring>
-        <name>visit</name>
-        <reimplementedby refid="d5/d80/a05114_1aa3a7db97a7795a6197b9fb1ca203069d">visit</reimplementedby>
+      <memberdef kind="function" id="d5/d8c/a05130_1af54f4d5f76741833d1cf253afc7dde87" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::OverlayCategory &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs)</argsstring>
+        <name>TextWriter</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::OverlayCategory &gt;::TextWriter</qualifiedname>
         <param>
-          <type><ref refid="d5/d87/a05118" kindref="compound">ColourBackground</ref> &amp;</type>
-          <declname>background</declname>
+          <type>String const &amp;</type>
+          <declname>tabs</declname>
         </param>
         <briefdescription>
-<para>Visits a colour background. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Background/Visitor.hpp" line="36" column="1"/>
+        <location file="Text/TextOverlayCategory.hpp" line="18" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d5/d8c/a05130_1a0cf4b81b17c74c49364f0cab18567ef0" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>virtual C3D_API void castor3d::BackgroundVisitor::visit</definition>
-        <argsstring>(SkyboxBackground &amp;background)=0</argsstring>
-        <name>visit</name>
-        <reimplementedby refid="d5/d80/a05114_1a3c7a63e29f8ad50ad597265e458d6c2e">visit</reimplementedby>
+      <memberdef kind="function" id="d5/d8c/a05130_1afe264fe65ddb4ab86aede12c919773db" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::OverlayCategory &gt;::operator()</definition>
+        <argsstring>(castor3d::OverlayCategory const &amp;overlay, castor::StringStream &amp;file) override</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::OverlayCategory &gt;::operator()</qualifiedname>
         <param>
-          <type><ref refid="dc/de6/a05126" kindref="compound">SkyboxBackground</ref> &amp;</type>
-          <declname>background</declname>
+          <type><ref refid="d4/d5e/a03542" kindref="compound">castor3d::OverlayCategory</ref> const &amp;</type>
+          <declname>overlay</declname>
+        </param>
+        <param>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
         </param>
         <briefdescription>
-<para>Visits a skybox background. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Background/Visitor.hpp" line="45" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/d8c/a05130_1a3c4bae12afffa3a4f2b08f4733f7c119" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>virtual C3D_API void castor3d::BackgroundVisitor::visit</definition>
-        <argsstring>(ImageBackground &amp;background)=0</argsstring>
-        <name>visit</name>
-        <reimplementedby refid="d5/d80/a05114_1a738cbed54e5babeadea2e891bf67264c">visit</reimplementedby>
-        <param>
-          <type><ref refid="dc/d0c/a05122" kindref="compound">ImageBackground</ref> &amp;</type>
-          <declname>background</declname>
-        </param>
-        <briefdescription>
-<para>Visits an image background. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Visitor.hpp" line="54" column="1"/>
+        <location file="Text/TextOverlayCategory.hpp" line="19" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -96,24 +53,31 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="128">
-        <label>castor3d::BackgroundTextWriter</label>
-        <link refid="d5/d80/a05114"/>
-        <childnode refid="127" relation="public-inheritance">
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::OverlayCategory &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::OverlayCategory &gt;</label>
+        <link refid="d5/d8c/a05130"/>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="127">
-        <label>castor3d::BackgroundVisitor</label>
-        <link refid="d5/d8c/a05130"/>
-      </node>
     </inheritancegraph>
-    <location file="Scene/Background/Visitor.hpp" line="12" column="1" bodyfile="Scene/Background/Visitor.hpp" bodystart="11" bodyend="55"/>
+    <collaborationgraph>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::OverlayCategory &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::OverlayCategory &gt;</label>
+        <link refid="d5/d8c/a05130"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextOverlayCategory.hpp" line="14" column="1" bodyfile="Text/TextOverlayCategory.hpp" bodystart="16" bodyend="21"/>
     <listofallmembers>
-      <member refid="d5/d8c/a05130_1af05ce31b5608cdd6b02f87ab1eadae6f" prot="public" virt="non-virtual"><scope>castor3d::BackgroundVisitor</scope><name>BackgroundVisitor</name></member>
-      <member refid="d5/d8c/a05130_1ad29638182ddf77a3a1f8652f12dc5d0c" prot="public" virt="pure-virtual"><scope>castor3d::BackgroundVisitor</scope><name>visit</name></member>
-      <member refid="d5/d8c/a05130_1a0cf4b81b17c74c49364f0cab18567ef0" prot="public" virt="pure-virtual"><scope>castor3d::BackgroundVisitor</scope><name>visit</name></member>
-      <member refid="d5/d8c/a05130_1a3c4bae12afffa3a4f2b08f4733f7c119" prot="public" virt="pure-virtual"><scope>castor3d::BackgroundVisitor</scope><name>visit</name></member>
-      <member refid="d5/d8c/a05130_1a575ad64b4b6f1bf1bd76adc9891ce58d" prot="public" virt="virtual"><scope>castor3d::BackgroundVisitor</scope><name>~BackgroundVisitor</name></member>
+      <member refid="d5/d8c/a05130_1afe264fe65ddb4ab86aede12c919773db" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::OverlayCategory &gt;</scope><name>operator()</name></member>
+      <member refid="d5/d8c/a05130_1af54f4d5f76741833d1cf253afc7dde87" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::OverlayCategory &gt;</scope><name>TextWriter</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

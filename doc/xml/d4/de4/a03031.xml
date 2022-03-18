@@ -1,33 +1,34 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d4/de4/a03031" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkSamplerYcbcrConversionInfo &gt;</compoundname>
+    <compoundname>castor3d::VkStructTraits&lt; VkFenceCreateInfo &gt;</compoundname>
     <includes local="no">makeVkType.hpp</includes>
     <templateparamlist>
     </templateparamlist>
       <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d4/de4/a03031_1ae6e3d5408ff82beb02840d61f1f6eec0" prot="public" static="yes" mutable="no">
+      <memberdef kind="variable" id="d4/de4/a03031_1aad60f73f32df4a5515eaf37893a9162f" prot="public" static="yes" constexpr="yes" mutable="no">
         <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkSamplerYcbcrConversionInfo &gt;::value</definition>
+        <definition>VkStructureType constexpr castor3d::VkStructTraits&lt; VkFenceCreateInfo &gt;::value</definition>
         <argsstring></argsstring>
         <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO</initializer>
+        <qualifiedname>castor3d::VkStructTraits&lt; VkFenceCreateInfo &gt;::value</qualifiedname>
+        <initializer>= VK_STRUCTURE_TYPE_FENCE_CREATE_INFO</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="103" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="103" bodyend="-1"/>
+        <location file="Miscellaneous/makeVkType.hpp" line="22" column="65" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="22" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="103" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="103" bodyend="103"/>
+    <location file="Miscellaneous/makeVkType.hpp" line="22" column="10" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="22" bodyend="22"/>
     <listofallmembers>
-      <member refid="d4/de4/a03031_1ae6e3d5408ff82beb02840d61f1f6eec0" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkSamplerYcbcrConversionInfo &gt;</scope><name>value</name></member>
+      <member refid="d4/de4/a03031_1aad60f73f32df4a5515eaf37893a9162f" prot="public" virt="non-virtual"><scope>castor3d::VkStructTraits&lt; VkFenceCreateInfo &gt;</scope><name>value</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

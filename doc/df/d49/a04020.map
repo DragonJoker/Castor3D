@@ -1,5 +1,4 @@
-<map id="castor3d::Bone" name="castor3d::Bone">
-<area shape="rect" id="node1" title=" " alt="" coords="79,95,190,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,141,47"/>
-<area shape="rect" id="node3" title=" " alt="" coords="166,13,229,39"/>
+<map id="castor3d::TexturedCube::Quad" name="castor3d::TexturedCube::Quad">
+<area shape="rect" id="node1" title=" " alt="" coords="5,109,165,151"/>
+<area shape="rect" id="node2" href="$db/df2/a04026.html" title=" " alt="" coords="5,5,165,47"/>
 </map>

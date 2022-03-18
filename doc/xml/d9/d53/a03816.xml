@@ -1,33 +1,365 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d9/d53/a03816" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkCooperativeMatrixPropertiesNV &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d9/d53/a03816_1a430d4ef66a0d29eef7ef34025fb275a1" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkCooperativeMatrixPropertiesNV &gt;::value</definition>
-        <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_COOPERATIVE_MATRIX_PROPERTIES_NV</initializer>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d9/d53/a03816" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ComputeDepthRange</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">crg::RunnablePass</basecompoundref>
+    <includes local="no">ComputeDepthRange.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="enum" id="d9/d53/a03816_1a9541371fc5b53aec2b0e0be97ec5f4fc" prot="public" static="no" strong="no">
+        <type>uint32_t</type>
+        <name>Bindings</name>
+        <qualifiedname>castor3d::ComputeDepthRange::Bindings</qualifiedname>
+        <enumvalue id="d9/d53/a03816_1a9541371fc5b53aec2b0e0be97ec5f4fcae095622c8c9700742d711f0392596d0d" prot="public">
+          <name>eInput</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d9/d53/a03816_1a9541371fc5b53aec2b0e0be97ec5f4fca30fdc102e33a5457ba6f94289fadfa4f" prot="public">
+          <name>eOutput</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="365" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="365" bodyend="-1"/>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="24" column="1" bodyfile="Render/Passes/ComputeDepthRange.hpp" bodystart="25" bodyend="28"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d9/d53/a03816_1a4ff749577d9658e362acfb1c117e7b57" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::ComputeDepthRange::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::ComputeDepthRange::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="61" column="21" bodyfile="Render/Passes/ComputeDepthRange.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d53/a03816_1a653d11a6b86ba6efe141415ddc8ab349" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetLayoutPtr</type>
+        <definition>ashes::DescriptorSetLayoutPtr castor3d::ComputeDepthRange::m_descriptorSetLayout</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorSetLayout</name>
+        <qualifiedname>castor3d::ComputeDepthRange::m_descriptorSetLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="62" column="31" bodyfile="Render/Passes/ComputeDepthRange.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d53/a03816_1a2a558f58e99d794ffc7611081c743c7f" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineLayoutPtr</type>
+        <definition>ashes::PipelineLayoutPtr castor3d::ComputeDepthRange::m_pipelineLayout</definition>
+        <argsstring></argsstring>
+        <name>m_pipelineLayout</name>
+        <qualifiedname>castor3d::ComputeDepthRange::m_pipelineLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="63" column="26" bodyfile="Render/Passes/ComputeDepthRange.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d53/a03816_1ab1bf2bcbc282ffef018f7523e12f9251" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/d0e/a04744" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::ComputeDepthRange::m_shader</definition>
+        <argsstring></argsstring>
+        <name>m_shader</name>
+        <qualifiedname>castor3d::ComputeDepthRange::m_shader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="64" column="14" bodyfile="Render/Passes/ComputeDepthRange.hpp" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d53/a03816_1a681791c761ca484ebc1c0a9ec6519ede" prot="private" static="no" mutable="no">
+        <type>ashes::ComputePipelinePtr</type>
+        <definition>ashes::ComputePipelinePtr castor3d::ComputeDepthRange::m_pipeline</definition>
+        <argsstring></argsstring>
+        <name>m_pipeline</name>
+        <qualifiedname>castor3d::ComputeDepthRange::m_pipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="65" column="27" bodyfile="Render/Passes/ComputeDepthRange.hpp" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d53/a03816_1a381e97bd1c638a05a6003dbbfb223740" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetPoolPtr</type>
+        <definition>ashes::DescriptorSetPoolPtr castor3d::ComputeDepthRange::m_descriptorSetPool</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorSetPool</name>
+        <qualifiedname>castor3d::ComputeDepthRange::m_descriptorSetPool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="66" column="29" bodyfile="Render/Passes/ComputeDepthRange.hpp" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d53/a03816_1a715ef3513c13fd1092fcfb4bcb00ebff" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::ComputeDepthRange::m_descriptorSet</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorSet</name>
+        <qualifiedname>castor3d::ComputeDepthRange::m_descriptorSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="67" column="25" bodyfile="Render/Passes/ComputeDepthRange.hpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/d53/a03816_1a21cccffa3c9076a9d7f1299d7206acde" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ComputeDepthRange::ComputeDepthRange</definition>
+        <argsstring>(crg::FramePass const &amp;pass, crg::GraphContext &amp;context, crg::RunnableGraph &amp;graph, RenderDevice const &amp;device, bool &amp;enabled)</argsstring>
+        <name>ComputeDepthRange</name>
+        <qualifiedname>castor3d::ComputeDepthRange::ComputeDepthRange</qualifiedname>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>crg::GraphContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>crg::RunnableGraph &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>bool &amp;</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">vctConfig</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The voxelizer configuration. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">voxels</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The voxels buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">result</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The resulting texture. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="41" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d53/a03816_1a9f1e44f3e194c0334de51d4960940ec4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ComputeDepthRange::accept</definition>
+        <argsstring>(RenderTechniqueVisitor &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::ComputeDepthRange::accept</qualifiedname>
+        <param>
+          <type><ref refid="df/dfd/a04288" kindref="compound">RenderTechniqueVisitor</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Visitor acceptance function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ... visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="49" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d9/d53/a03816_1a108f215087c503eaf1bc9511c46aee6d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ComputeDepthRange::doInitialise</definition>
+        <argsstring>()</argsstring>
+        <name>doInitialise</name>
+        <qualifiedname>castor3d::ComputeDepthRange::doInitialise</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="52" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d53/a03816_1a98a60c5c59aaec99343a915bc8fc7076" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ComputeDepthRange::doRecordInto</definition>
+        <argsstring>(crg::RecordContext &amp;context, VkCommandBuffer commandBuffer, uint32_t index)</argsstring>
+        <name>doRecordInto</name>
+        <qualifiedname>castor3d::ComputeDepthRange::doRecordInto</qualifiedname>
+        <param>
+          <type>crg::RecordContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>VkCommandBuffer</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="53" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d53/a03816_1a036c2c5f6b59af3b4a423a11a48d8d60" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>VkPipelineStageFlags</type>
+        <definition>VkPipelineStageFlags castor3d::ComputeDepthRange::doGetSemaphoreWaitFlags</definition>
+        <argsstring>() const</argsstring>
+        <name>doGetSemaphoreWaitFlags</name>
+        <qualifiedname>castor3d::ComputeDepthRange::doGetSemaphoreWaitFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="56" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d53/a03816_1a122f8b80c1ebd0094d61284533e2fa48" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ComputeDepthRange::doGetPassIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>doGetPassIndex</name>
+        <qualifiedname>castor3d::ComputeDepthRange::doGetPassIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="57" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d53/a03816_1adc69c38a23668b58848d9d7a60748111" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ComputeDepthRange::doIsComputePass</definition>
+        <argsstring>() const</argsstring>
+        <name>doIsComputePass</name>
+        <qualifiedname>castor3d::ComputeDepthRange::doIsComputePass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="58" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="365" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="365" bodyend="365"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::ComputeDepthRange</label>
+        <link refid="d9/d53/a03816"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>crg::RunnablePass</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::ComputeDepthRange</label>
+        <link refid="d9/d53/a03816"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>crg::RunnablePass</label>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Passes/ComputeDepthRange.hpp" line="20" column="1" bodyfile="Render/Passes/ComputeDepthRange.hpp" bodystart="22" bodyend="68"/>
     <listofallmembers>
-      <member refid="d9/d53/a03816_1a430d4ef66a0d29eef7ef34025fb275a1" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkCooperativeMatrixPropertiesNV &gt;</scope><name>value</name></member>
+      <member refid="d9/d53/a03816_1a9f1e44f3e194c0334de51d4960940ec4" prot="public" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>accept</name></member>
+      <member refid="d9/d53/a03816_1a9541371fc5b53aec2b0e0be97ec5f4fc" prot="public" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>Bindings</name></member>
+      <member refid="d9/d53/a03816_1a21cccffa3c9076a9d7f1299d7206acde" prot="public" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>ComputeDepthRange</name></member>
+      <member refid="d9/d53/a03816_1a122f8b80c1ebd0094d61284533e2fa48" prot="private" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>doGetPassIndex</name></member>
+      <member refid="d9/d53/a03816_1a036c2c5f6b59af3b4a423a11a48d8d60" prot="private" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>doGetSemaphoreWaitFlags</name></member>
+      <member refid="d9/d53/a03816_1a108f215087c503eaf1bc9511c46aee6d" prot="private" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>doInitialise</name></member>
+      <member refid="d9/d53/a03816_1adc69c38a23668b58848d9d7a60748111" prot="private" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>doIsComputePass</name></member>
+      <member refid="d9/d53/a03816_1a98a60c5c59aaec99343a915bc8fc7076" prot="private" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>doRecordInto</name></member>
+      <member refid="d9/d53/a03816_1a9541371fc5b53aec2b0e0be97ec5f4fcae095622c8c9700742d711f0392596d0d" prot="public" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>eInput</name></member>
+      <member refid="d9/d53/a03816_1a9541371fc5b53aec2b0e0be97ec5f4fca30fdc102e33a5457ba6f94289fadfa4f" prot="public" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>eOutput</name></member>
+      <member refid="d9/d53/a03816_1a715ef3513c13fd1092fcfb4bcb00ebff" prot="private" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>m_descriptorSet</name></member>
+      <member refid="d9/d53/a03816_1a653d11a6b86ba6efe141415ddc8ab349" prot="private" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>m_descriptorSetLayout</name></member>
+      <member refid="d9/d53/a03816_1a381e97bd1c638a05a6003dbbfb223740" prot="private" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>m_descriptorSetPool</name></member>
+      <member refid="d9/d53/a03816_1a4ff749577d9658e362acfb1c117e7b57" prot="private" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>m_device</name></member>
+      <member refid="d9/d53/a03816_1a681791c761ca484ebc1c0a9ec6519ede" prot="private" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>m_pipeline</name></member>
+      <member refid="d9/d53/a03816_1a2a558f58e99d794ffc7611081c743c7f" prot="private" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>m_pipelineLayout</name></member>
+      <member refid="d9/d53/a03816_1ab1bf2bcbc282ffef018f7523e12f9251" prot="private" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>m_shader</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

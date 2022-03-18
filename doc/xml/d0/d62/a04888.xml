@@ -1,173 +1,77 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d0/d62/a04888" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::OpaqueResolvePass::ProgramPipeline</compoundname>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d0/d62/a04888_1a39fc9f31e3e7f5d5c26dfa732f2a2c3e" prot="public" static="no" mutable="no">
-        <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> &amp;</type>
-        <definition>Engine&amp; castor3d::OpaqueResolvePass::ProgramPipeline::engine</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d0/d62/a04888" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::HdrConfigData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">HdrConfigUbo.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/d62/a04888_1ac9b1139dea1f2ca136900262e46920b3" prot="private" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::HdrConfigData::m_exposure</definition>
         <argsstring></argsstring>
-        <name>engine</name>
+        <name>m_exposure</name>
+        <qualifiedname>castor3d::shader::HdrConfigData::m_exposure</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="137" column="1" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="137" bodyend="-1"/>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="49" column="12" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="49" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d0/d62/a04888_1a1f78161016f95b08b308a309993a7ac0" prot="public" static="no" mutable="no">
-        <type><ref refid="d1/dcd/a04880" kindref="compound">OpaquePassResult</ref> const  &amp;</type>
-        <definition>OpaquePassResult const&amp; castor3d::OpaqueResolvePass::ProgramPipeline::opaquePassResult</definition>
+      <memberdef kind="variable" id="d0/d62/a04888_1a6a6e0ba9011bb3a2c8aabe1c102097d5" prot="private" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::HdrConfigData::m_gamma</definition>
         <argsstring></argsstring>
-        <name>opaquePassResult</name>
+        <name>m_gamma</name>
+        <qualifiedname>castor3d::shader::HdrConfigData::m_gamma</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="138" column="1" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="138" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/d62/a04888_1a8a5a084b87fe804574d4f21e922eb3e8" prot="public" static="no" mutable="no">
-        <type>ashes::RenderPass const  *</type>
-        <definition>ashes::RenderPass const* castor3d::OpaqueResolvePass::ProgramPipeline::renderPass</definition>
-        <argsstring></argsstring>
-        <name>renderPass</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="139" column="1" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="139" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/d62/a04888_1a815c91e5b9e35078381a0b06c1125f13" prot="public" static="no" mutable="no">
-        <type><ref refid="d7/d32/a05312" kindref="compound">castor3d::ShaderModule</ref></type>
-        <definition>castor3d::ShaderModule castor3d::OpaqueResolvePass::ProgramPipeline::vertexShader</definition>
-        <argsstring></argsstring>
-        <name>vertexShader</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="140" column="1" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="140" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/d62/a04888_1ae479fcd5ec103cf03c261b5c51bcdd84" prot="public" static="no" mutable="no">
-        <type><ref refid="d7/d32/a05312" kindref="compound">castor3d::ShaderModule</ref></type>
-        <definition>castor3d::ShaderModule castor3d::OpaqueResolvePass::ProgramPipeline::pixelShader</definition>
-        <argsstring></argsstring>
-        <name>pixelShader</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="141" column="1" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="141" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/d62/a04888_1aa541bd82cdcb3097b9c458e91e9ff5ce" prot="public" static="no" mutable="no">
-        <type>ashes::PipelineShaderStageCreateInfoArray</type>
-        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::OpaqueResolvePass::ProgramPipeline::program</definition>
-        <argsstring></argsstring>
-        <name>program</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="142" column="1" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="142" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/d62/a04888_1a83bc787fbef885d6a2cc260f7e2c6b32" prot="public" static="no" mutable="no">
-        <type>ashes::DescriptorSetLayoutPtr</type>
-        <definition>ashes::DescriptorSetLayoutPtr castor3d::OpaqueResolvePass::ProgramPipeline::texDescriptorLayout</definition>
-        <argsstring></argsstring>
-        <name>texDescriptorLayout</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="143" column="1" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="143" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/d62/a04888_1a52367110e08d773cb22507ceaa8f9875" prot="public" static="no" mutable="no">
-        <type>ashes::DescriptorSetPoolPtr</type>
-        <definition>ashes::DescriptorSetPoolPtr castor3d::OpaqueResolvePass::ProgramPipeline::texDescriptorPool</definition>
-        <argsstring></argsstring>
-        <name>texDescriptorPool</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="144" column="1" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="144" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/d62/a04888_1ae4d360ac7fe9c74343ceb8636cd71501" prot="public" static="no" mutable="no">
-        <type>ashes::DescriptorSetPtr</type>
-        <definition>ashes::DescriptorSetPtr castor3d::OpaqueResolvePass::ProgramPipeline::texDescriptorSet</definition>
-        <argsstring></argsstring>
-        <name>texDescriptorSet</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="145" column="1" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="145" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/d62/a04888_1a353bb1013f6589eeccc5c69fb67f4915" prot="public" static="no" mutable="no">
-        <type>ashes::PipelineLayoutPtr</type>
-        <definition>ashes::PipelineLayoutPtr castor3d::OpaqueResolvePass::ProgramPipeline::pipelineLayout</definition>
-        <argsstring></argsstring>
-        <name>pipelineLayout</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="146" column="1" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="146" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/d62/a04888_1a0c3b9d4e9b623e9fba41ed40adc2b176" prot="public" static="no" mutable="no">
-        <type>ashes::GraphicsPipelinePtr</type>
-        <definition>ashes::GraphicsPipelinePtr castor3d::OpaqueResolvePass::ProgramPipeline::pipeline</definition>
-        <argsstring></argsstring>
-        <name>pipeline</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="147" column="1" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="147" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/d62/a04888_1a84b498d76707a3a9fbc75a6576e470bd" prot="public" static="no" mutable="no">
-        <type>ashes::CommandBufferPtr</type>
-        <definition>ashes::CommandBufferPtr castor3d::OpaqueResolvePass::ProgramPipeline::commandBuffer</definition>
-        <argsstring></argsstring>
-        <name>commandBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="148" column="1" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="148" bodyend="-1"/>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="50" column="12" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="50" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d0/d62/a04888_1ad9c3fa78529a533eb75d7223f37e9cc3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d0/d62/a04888_1aa4b3985e56b89eb774c91422268f503f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::HdrConfigData::HdrConfigData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>HdrConfigData</name>
+        <qualifiedname>castor3d::shader::HdrConfigData::HdrConfigData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="23" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d62/a04888_1aa5fd6284c030c07bec5cd60563c3660c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
-        <definition>castor3d::OpaqueResolvePass::ProgramPipeline::ProgramPipeline</definition>
-        <argsstring>(ProgramPipeline const &amp;)=delete</argsstring>
-        <name>ProgramPipeline</name>
+        <definition>castor3d::shader::HdrConfigData::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, HdrConfigData)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::HdrConfigData::SDW_DeclStructInstance</qualifiedname>
         <param>
-          <type>ProgramPipeline const &amp;</type>
+          <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        </param>
+        <param>
+          <type><ref refid="d0/d62/a04888" kindref="compound">HdrConfigData</ref></type>
         </param>
         <briefdescription>
         </briefdescription>
@@ -175,15 +79,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="111" column="1"/>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="26" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="d0/d62/a04888_1ab89ec5d042ad1027985e21c952ffbd57" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::OpaqueResolvePass::ProgramPipeline::ProgramPipeline</definition>
-        <argsstring>(ProgramPipeline &amp;&amp;)=default</argsstring>
-        <name>ProgramPipeline</name>
+      <memberdef kind="function" id="d0/d62/a04888_1a6000f9a1f644604620451d2e96c4a6c8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::HdrConfigData::removeGamma</definition>
+        <argsstring>(sdw::Vec3 const &amp;srgb) const</argsstring>
+        <name>removeGamma</name>
+        <qualifiedname>castor3d::shader::HdrConfigData::removeGamma</qualifiedname>
         <param>
-          <type>ProgramPipeline &amp;&amp;</type>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>srgb</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -191,15 +97,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="112" column="1"/>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="31" column="19"/>
       </memberdef>
-      <memberdef kind="function" id="d0/d62/a04888_1a8fd98739c891624faebff89ecd7bc3ca" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>ProgramPipeline &amp;</type>
-        <definition>ProgramPipeline&amp; castor3d::OpaqueResolvePass::ProgramPipeline::operator=</definition>
-        <argsstring>(ProgramPipeline const &amp;)=delete</argsstring>
-        <name>operator=</name>
+      <memberdef kind="function" id="d0/d62/a04888_1aa86b1a7cda6a33a6d42b7ceecbb030eb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::HdrConfigData::applyGamma</definition>
+        <argsstring>(sdw::Vec3 const &amp;hdr) const</argsstring>
+        <name>applyGamma</name>
+        <qualifiedname>castor3d::shader::HdrConfigData::applyGamma</qualifiedname>
         <param>
-          <type>ProgramPipeline const &amp;</type>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>hdr</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -207,121 +115,47 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="113" column="1"/>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="32" column="19"/>
       </memberdef>
-      <memberdef kind="function" id="d0/d62/a04888_1aa2ebdcdc77e3f04135eb5b62afc1709f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>ProgramPipeline &amp;</type>
-        <definition>ProgramPipeline&amp; castor3d::OpaqueResolvePass::ProgramPipeline::operator=</definition>
-        <argsstring>(ProgramPipeline &amp;&amp;)=delete</argsstring>
-        <name>operator=</name>
-        <param>
-          <type>ProgramPipeline &amp;&amp;</type>
-        </param>
+      <memberdef kind="function" id="d0/d62/a04888_1a2576a3e710aca8bc82b79251031a6346" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Float const &amp;</type>
+        <definition>sdw::Float const  &amp; castor3d::shader::HdrConfigData::getExposure</definition>
+        <argsstring>() const</argsstring>
+        <name>getExposure</name>
+        <qualifiedname>castor3d::shader::HdrConfigData::getExposure</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="114" column="1"/>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="34" column="19" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="34" bodyend="37"/>
       </memberdef>
-      <memberdef kind="function" id="d0/d62/a04888_1a1285e1acd803dc8fa05922c9898df61e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::OpaqueResolvePass::ProgramPipeline::ProgramPipeline</definition>
-        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, OpaquePassResult const &amp;gp, ashes::DescriptorSetLayout const &amp;uboLayout, ashes::RenderPass const &amp;renderPass, ashes::ImageView const *ssao, ashes::ImageView const *subsurfaceScattering, ashes::ImageView const &amp;lightDiffuse, ashes::ImageView const &amp;lightSpecular, ashes::ImageView const *lightIndirectDiffuse, ashes::ImageView const *lightIndirectSpecular, SamplerSPtr const &amp;sampler, VkExtent2D const &amp;size, FogType fogType, MaterialType matType, Scene const &amp;scene)</argsstring>
-        <name>ProgramPipeline</name>
-        <param>
-          <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/dcd/a04880" kindref="compound">OpaquePassResult</ref> const &amp;</type>
-          <declname>gp</declname>
-        </param>
-        <param>
-          <type>ashes::DescriptorSetLayout const &amp;</type>
-          <declname>uboLayout</declname>
-        </param>
-        <param>
-          <type>ashes::RenderPass const &amp;</type>
-          <declname>renderPass</declname>
-        </param>
-        <param>
-          <type>ashes::ImageView const *</type>
-          <declname>ssao</declname>
-        </param>
-        <param>
-          <type>ashes::ImageView const *</type>
-          <declname>subsurfaceScattering</declname>
-        </param>
-        <param>
-          <type>ashes::ImageView const &amp;</type>
-          <declname>lightDiffuse</declname>
-        </param>
-        <param>
-          <type>ashes::ImageView const &amp;</type>
-          <declname>lightSpecular</declname>
-        </param>
-        <param>
-          <type>ashes::ImageView const *</type>
-          <declname>lightIndirectDiffuse</declname>
-        </param>
-        <param>
-          <type>ashes::ImageView const *</type>
-          <declname>lightIndirectSpecular</declname>
-        </param>
-        <param>
-          <type>SamplerSPtr const &amp;</type>
-          <declname>sampler</declname>
-        </param>
-        <param>
-          <type>VkExtent2D const &amp;</type>
-          <declname>size</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d1e/a01479_1a99a6b51dbe68abcf95c70f03008dd3a3" kindref="member">FogType</ref></type>
-          <declname>fogType</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d1e/a01479_1a90306964da63b9bbc97f4e205ecc5b7a" kindref="member">MaterialType</ref></type>
-          <declname>matType</declname>
-        </param>
-        <param>
-          <type><ref refid="d5/d76/a05244" kindref="compound">Scene</ref> const &amp;</type>
-          <declname>scene</declname>
-        </param>
+      <memberdef kind="function" id="d0/d62/a04888_1ad09c077e6ddf9d6fa57569132be85ab1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Float const &amp;</type>
+        <definition>sdw::Float const  &amp; castor3d::shader::HdrConfigData::getGamma</definition>
+        <argsstring>() const</argsstring>
+        <name>getGamma</name>
+        <qualifiedname>castor3d::shader::HdrConfigData::getGamma</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="115" column="1"/>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="39" column="19" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="39" bodyend="42"/>
       </memberdef>
-      <memberdef kind="function" id="d0/d62/a04888_1a0fee5d7709874c3e8a3d9a491dd19372" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::OpaqueResolvePass::ProgramPipeline::updateCommandBuffer</definition>
-        <argsstring>(ashes::VertexBufferBase &amp;vbo, ashes::DescriptorSet const &amp;uboSet, ashes::FrameBuffer const &amp;frameBuffer, RenderPassTimer &amp;timer)</argsstring>
-        <name>updateCommandBuffer</name>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d0/d62/a04888_1ac7711ab0654723a9d18d0305e786036d" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
+        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::HdrConfigData::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::HdrConfigData::makeType</qualifiedname>
         <param>
-          <type>ashes::VertexBufferBase &amp;</type>
-          <declname>vbo</declname>
-        </param>
-        <param>
-          <type>ashes::DescriptorSet const &amp;</type>
-          <declname>uboSet</declname>
-        </param>
-        <param>
-          <type>ashes::FrameBuffer const &amp;</type>
-          <declname>frameBuffer</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/dc4/a04612" kindref="compound">RenderPassTimer</ref> &amp;</type>
-          <declname>timer</declname>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -329,16 +163,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="131" column="1"/>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="28" column="41"/>
       </memberdef>
-      <memberdef kind="function" id="d0/d62/a04888_1ac141adc78941ee392b5ff08af553b044" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::OpaqueResolvePass::ProgramPipeline::accept</definition>
-        <argsstring>(PipelineVisitorBase &amp;visitor)</argsstring>
-        <name>accept</name>
+      <memberdef kind="function" id="d0/d62/a04888_1a6920224d376eaae015d791630cfca431" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::HdrConfigData::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::HdrConfigData::declare</qualifiedname>
         <param>
-          <type><ref refid="d5/d73/a03836" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
-          <declname>visitor</declname>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -346,128 +181,47 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="135" column="1"/>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="29" column="32"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::HdrConfigData</label>
+        <link refid="d0/d62/a04888"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
     <collaborationgraph>
-      <node id="2432">
-        <label>T</label>
-      </node>
-      <node id="2425">
-        <label>castor3d::GBufferT&lt; DsTexture &gt;</label>
-        <link refid="d8/dc6/a04256"/>
-        <childnode refid="2426" relation="private-inheritance">
-        </childnode>
-        <childnode refid="2422" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="2428" relation="template-instance">
-          <edgelabel>&lt; DsTexture &gt;</edgelabel>
+      <node id="1">
+        <label>castor3d::shader::HdrConfigData</label>
+        <link refid="d0/d62/a04888"/>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="2431">
-        <label>std::unique_ptr&lt; T &gt;</label>
-        <childnode refid="2432" relation="usage">
-          <edgelabel>ptr</edgelabel>
-        </childnode>
-      </node>
-      <node id="2427">
-        <label>Named</label>
-      </node>
-      <node id="2421">
-        <label>castor3d::OpaqueResolvePass::ProgramPipeline</label>
-        <childnode refid="2422" relation="usage">
-          <edgelabel>engine</edgelabel>
-        </childnode>
-        <childnode refid="2424" relation="usage">
-          <edgelabel>opaquePassResult</edgelabel>
-        </childnode>
-        <childnode refid="2429" relation="usage">
-          <edgelabel>pixelShader</edgelabel>
-          <edgelabel>vertexShader</edgelabel>
-        </childnode>
-      </node>
-      <node id="2423">
-        <label>castor::Unique&lt; Engine &gt;</label>
-      </node>
-      <node id="2434">
-        <label>std::basic_string&lt; char &gt;</label>
-      </node>
-      <node id="2430">
-        <label>std::unique_ptr&lt; ast::Shader &gt;</label>
-        <childnode refid="2431" relation="template-instance">
-          <edgelabel>&lt; ast::Shader &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2422">
-        <label>castor3d::Engine</label>
-        <link refid="dc/dbb/a02520"/>
-        <childnode refid="2423" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2428">
-        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
-        <link refid="d8/dc6/a04256"/>
-        <childnode refid="2426" relation="private-inheritance">
-        </childnode>
-        <childnode refid="2422" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-      </node>
-      <node id="2426">
-        <label>castor3d::GBufferBase</label>
-        <link refid="dc/de4/a04252"/>
-        <childnode refid="2427" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2429">
-        <label>castor3d::ShaderModule</label>
-        <link refid="d7/d32/a05312"/>
-        <childnode refid="2430" relation="usage">
-          <edgelabel>shader</edgelabel>
-        </childnode>
-        <childnode refid="2433" relation="usage">
-          <edgelabel>source</edgelabel>
-          <edgelabel>name</edgelabel>
-        </childnode>
-      </node>
-      <node id="2424">
-        <label>castor3d::OpaquePassResult</label>
-        <link refid="d1/dcd/a04880"/>
-        <childnode refid="2425" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2433">
-        <label>std::string</label>
-        <childnode refid="2434" relation="public-inheritance">
-        </childnode>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </collaborationgraph>
-    <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="110" column="1" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="109" bodyend="149"/>
+    <location file="Shader/Ubos/HdrConfigUbo.hpp" line="20" column="1" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="22" bodyend="51"/>
     <listofallmembers>
-      <member refid="d0/d62/a04888_1ac141adc78941ee392b5ff08af553b044" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::ProgramPipeline</scope><name>accept</name></member>
-      <member refid="d0/d62/a04888_1a84b498d76707a3a9fbc75a6576e470bd" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::ProgramPipeline</scope><name>commandBuffer</name></member>
-      <member refid="d0/d62/a04888_1a39fc9f31e3e7f5d5c26dfa732f2a2c3e" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::ProgramPipeline</scope><name>engine</name></member>
-      <member refid="d0/d62/a04888_1a1f78161016f95b08b308a309993a7ac0" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::ProgramPipeline</scope><name>opaquePassResult</name></member>
-      <member refid="d0/d62/a04888_1a8fd98739c891624faebff89ecd7bc3ca" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::ProgramPipeline</scope><name>operator=</name></member>
-      <member refid="d0/d62/a04888_1aa2ebdcdc77e3f04135eb5b62afc1709f" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::ProgramPipeline</scope><name>operator=</name></member>
-      <member refid="d0/d62/a04888_1a0c3b9d4e9b623e9fba41ed40adc2b176" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::ProgramPipeline</scope><name>pipeline</name></member>
-      <member refid="d0/d62/a04888_1a353bb1013f6589eeccc5c69fb67f4915" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::ProgramPipeline</scope><name>pipelineLayout</name></member>
-      <member refid="d0/d62/a04888_1ae479fcd5ec103cf03c261b5c51bcdd84" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::ProgramPipeline</scope><name>pixelShader</name></member>
-      <member refid="d0/d62/a04888_1aa541bd82cdcb3097b9c458e91e9ff5ce" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::ProgramPipeline</scope><name>program</name></member>
-      <member refid="d0/d62/a04888_1ad9c3fa78529a533eb75d7223f37e9cc3" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::ProgramPipeline</scope><name>ProgramPipeline</name></member>
-      <member refid="d0/d62/a04888_1ab89ec5d042ad1027985e21c952ffbd57" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::ProgramPipeline</scope><name>ProgramPipeline</name></member>
-      <member refid="d0/d62/a04888_1a1285e1acd803dc8fa05922c9898df61e" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::ProgramPipeline</scope><name>ProgramPipeline</name></member>
-      <member refid="d0/d62/a04888_1a8a5a084b87fe804574d4f21e922eb3e8" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::ProgramPipeline</scope><name>renderPass</name></member>
-      <member refid="d0/d62/a04888_1a83bc787fbef885d6a2cc260f7e2c6b32" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::ProgramPipeline</scope><name>texDescriptorLayout</name></member>
-      <member refid="d0/d62/a04888_1a52367110e08d773cb22507ceaa8f9875" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::ProgramPipeline</scope><name>texDescriptorPool</name></member>
-      <member refid="d0/d62/a04888_1ae4d360ac7fe9c74343ceb8636cd71501" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::ProgramPipeline</scope><name>texDescriptorSet</name></member>
-      <member refid="d0/d62/a04888_1a0fee5d7709874c3e8a3d9a491dd19372" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::ProgramPipeline</scope><name>updateCommandBuffer</name></member>
-      <member refid="d0/d62/a04888_1a815c91e5b9e35078381a0b06c1125f13" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::ProgramPipeline</scope><name>vertexShader</name></member>
+      <member refid="d0/d62/a04888_1aa86b1a7cda6a33a6d42b7ceecbb030eb" prot="public" virt="non-virtual"><scope>castor3d::shader::HdrConfigData</scope><name>applyGamma</name></member>
+      <member refid="d0/d62/a04888_1a6920224d376eaae015d791630cfca431" prot="public" virt="non-virtual"><scope>castor3d::shader::HdrConfigData</scope><name>declare</name></member>
+      <member refid="d0/d62/a04888_1a2576a3e710aca8bc82b79251031a6346" prot="public" virt="non-virtual"><scope>castor3d::shader::HdrConfigData</scope><name>getExposure</name></member>
+      <member refid="d0/d62/a04888_1ad09c077e6ddf9d6fa57569132be85ab1" prot="public" virt="non-virtual"><scope>castor3d::shader::HdrConfigData</scope><name>getGamma</name></member>
+      <member refid="d0/d62/a04888_1aa4b3985e56b89eb774c91422268f503f" prot="public" virt="non-virtual"><scope>castor3d::shader::HdrConfigData</scope><name>HdrConfigData</name></member>
+      <member refid="d0/d62/a04888_1ac9b1139dea1f2ca136900262e46920b3" prot="private" virt="non-virtual"><scope>castor3d::shader::HdrConfigData</scope><name>m_exposure</name></member>
+      <member refid="d0/d62/a04888_1a6a6e0ba9011bb3a2c8aabe1c102097d5" prot="private" virt="non-virtual"><scope>castor3d::shader::HdrConfigData</scope><name>m_gamma</name></member>
+      <member refid="d0/d62/a04888_1ac7711ab0654723a9d18d0305e786036d" prot="public" virt="non-virtual"><scope>castor3d::shader::HdrConfigData</scope><name>makeType</name></member>
+      <member refid="d0/d62/a04888_1a6000f9a1f644604620451d2e96c4a6c8" prot="public" virt="non-virtual"><scope>castor3d::shader::HdrConfigData</scope><name>removeGamma</name></member>
+      <member refid="d0/d62/a04888_1aa5fd6284c030c07bec5cd60563c3660c" prot="public" virt="non-virtual"><scope>castor3d::shader::HdrConfigData</scope><name>SDW_DeclStructInstance</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

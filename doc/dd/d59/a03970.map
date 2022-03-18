@@ -1,6 +1,6 @@
-<map id="castor3d::LinesMapping" name="castor3d::LinesMapping">
-<area shape="rect" id="node1" title=" " alt="" coords="26,229,186,256"/>
-<area shape="rect" id="node2" href="$d3/d4a/a03948.html" title=" " alt="" coords="26,155,186,181"/>
-<area shape="rect" id="node3" href="$dd/d78/a03980.html" title=" " alt="" coords="5,80,207,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,5,207,32"/>
+<map id="castor3d::RenderLoop" name="castor3d::RenderLoop">
+<area shape="rect" id="node1" title=" " alt="" coords="127,80,276,107"/>
+<area shape="rect" id="node3" href="$d1/d42/a03979.html" title=" " alt="" coords="5,155,192,181"/>
+<area shape="rect" id="node4" href="$d1/de2/a03983.html" title=" " alt="" coords="216,155,395,181"/>
+<area shape="rect" id="node2" title=" " alt="" coords="108,5,295,32"/>
 </map>

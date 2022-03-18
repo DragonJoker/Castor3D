@@ -1,4 +1,4 @@
-<map id="castor3d::FontTexture" name="castor3d::FontTexture">
-<area shape="rect" id="node1" title=" " alt="" coords="24,80,173,107"/>
+<map id="castor3d::RenderSystem" name="castor3d::RenderSystem">
+<area shape="rect" id="node1" title=" " alt="" coords="15,80,182,107"/>
 <area shape="rect" id="node2" title=" " alt="" coords="5,5,192,32"/>
 </map>

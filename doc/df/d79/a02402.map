@@ -1,4 +1,6 @@
-<map id="castor3d::CacheView&lt; ResourceType, CacheType, EventType &gt;" name="castor3d::CacheView&lt; ResourceType, CacheType, EventType &gt;">
-<area shape="rect" id="node1" title="View on a resource cache." alt="" coords="5,80,200,136"/>
-<area shape="rect" id="node2" title=" " alt="" coords="71,5,134,32"/>
+<map id="castor3d::BinaryWriter&lt; SkeletonAnimationBone &gt;" name="castor3d::BinaryWriter&lt; SkeletonAnimationBone &gt;">
+<area shape="rect" id="node1" title="MovingBone binary loader." alt="" coords="5,289,191,331"/>
+<area shape="rect" id="node2" href="$d3/d9c/a02336.html" title=" " alt="" coords="5,199,191,240"/>
+<area shape="rect" id="node3" href="$dc/d1a/a02288.html" title=" " alt="" coords="53,5,207,32"/>
+<area shape="rect" id="node4" href="$d3/d9c/a02336.html" title="Binary data chunk writer base class." alt="" coords="159,95,341,136"/>
 </map>

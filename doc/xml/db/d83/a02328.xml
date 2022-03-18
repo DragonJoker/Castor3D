@@ -1,631 +1,1233 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="db/d83/a02328" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::PoolUniformBuffer</compoundname>
-    <includes local="no">PoolUniformBuffer.hpp</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="db/d83/a02328_1a41ce37131b470a87b0ae6ab96ce5b3a7" prot="private" static="no" mutable="no">
-        <type><ref refid="d9/d38/a04624" kindref="compound">RenderSystem</ref> const  &amp;</type>
-        <definition>RenderSystem const&amp; castor3d::PoolUniformBuffer::m_renderSystem</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="db/d83/a02328" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::BinaryParserBase</compoundname>
+    <includes local="no">BinaryParser.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class TParsed</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="db/d83/a02328_1af07e46a537db6181733f95fa289f1d23" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>class</type>
+        <definition>friend class BinaryParserBase</definition>
         <argsstring></argsstring>
-        <name>m_renderSystem</name>
+        <name>BinaryParserBase</name>
+        <qualifiedname>castor3d::BinaryParserBase::BinaryParserBase</qualifiedname>
+        <param>
+          <type><ref refid="db/d83/a02328" kindref="compound">BinaryParserBase</ref></type>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/PoolUniformBuffer.hpp" line="241" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="241" bodyend="-1"/>
+        <location file="Binary/BinaryParser.hpp" line="19" column="14" bodyfile="Binary/BinaryParser.hpp" bodystart="19" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="db/d83/a02328_1a85afdeb1cde8aedbc74d5d7be3d4d077" prot="private" static="no" mutable="no">
-        <type>VkBufferUsageFlags</type>
-        <definition>VkBufferUsageFlags castor3d::PoolUniformBuffer::m_usage</definition>
+      </sectiondef>
+      <sectiondef kind="protected-static-attrib">
+      <memberdef kind="variable" id="db/d83/a02328_1ae4820a3ab3e4b282240e5f1b969153c1" prot="protected" static="yes" mutable="no">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String</type>
+        <definition>C3D_API castor::String castor3d::BinaryParserBase&lt; TParsed &gt;::Name</definition>
         <argsstring></argsstring>
-        <name>m_usage</name>
+        <name>Name</name>
+        <qualifiedname>castor3d::BinaryParserBase::Name</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/PoolUniformBuffer.hpp" line="242" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="242" bodyend="-1"/>
+        <location file="Binary/BinaryParser.hpp" line="572" column="31" bodyfile="Binary/BinaryParser.hpp" bodystart="572" bodyend="-1"/>
+        <referencedby refid="db/d83/a02328_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" compoundref="df/d98/a00107" startline="574" endline="581">castor3d::BinaryParserBase&lt; TParsed &gt;::checkError</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="db/d83/a02328_1a0f50cc79281f6c234c727f926ddfbcf8" prot="private" static="no" mutable="no">
-        <type>VkMemoryPropertyFlags</type>
-        <definition>VkMemoryPropertyFlags castor3d::PoolUniformBuffer::m_flags</definition>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="db/d83/a02328_1ab3df04f9aa2eb1f7a533ed18631f09c4" prot="protected" static="no" mutable="no">
+        <type><ref refid="dc/d1a/a02288" kindref="compound">BinaryChunk</ref> *</type>
+        <definition>BinaryChunk* castor3d::BinaryParserBase&lt; TParsed &gt;::m_chunk</definition>
         <argsstring></argsstring>
-        <name>m_flags</name>
+        <name>m_chunk</name>
+        <qualifiedname>castor3d::BinaryParserBase::m_chunk</qualifiedname>
+        <initializer>{ nullptr }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The writer&apos;s chunk. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/PoolUniformBuffer.hpp" line="243" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="243" bodyend="-1"/>
+        <location file="Binary/BinaryParser.hpp" line="586" column="14" bodyfile="Binary/BinaryParser.hpp" bodystart="586" bodyend="-1"/>
+        <referencedby refid="db/d83/a02328_1ab5f9ba53ad5865f967b41e5a27ed73a9" compoundref="df/d98/a00107" startline="489" endline="500">castor3d::BinaryParserBase&lt; TParsed &gt;::doGetSubChunk</referencedby>
+        <referencedby refid="db/d83/a02328_1a6bbbb529f463085c7d259600ae1b3e99" compoundref="df/d98/a00107" startline="99" endline="149">castor3d::BinaryParserBase&lt; TParsed &gt;::parse</referencedby>
+        <referencedby refid="db/d83/a02328_1a61b02dbf69d89569eff5be22facd5f07" compoundref="df/d98/a00107" startline="162" endline="189">castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_1</referencedby>
+        <referencedby refid="db/d83/a02328_1a95788692ddd6fae91074c299b674aaab" compoundref="df/d98/a00107" startline="202" endline="229">castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_2</referencedby>
+        <referencedby refid="db/d83/a02328_1a6f39b66d980e4a65660016f71115a89c" compoundref="df/d98/a00107" startline="242" endline="269">castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_3</referencedby>
+        <referencedby refid="db/d83/a02328_1aabc068daf8d99718497aa35f7a17c346" compoundref="df/d98/a00107" startline="282" endline="309">castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_4</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="db/d83/a02328_1a20d1cd447ae5f875a7c9d13419e33035" prot="private" static="no" mutable="no">
-        <type>ashes::QueueShare</type>
-        <definition>ashes::QueueShare castor3d::PoolUniformBuffer::m_sharingMode</definition>
+      <memberdef kind="variable" id="db/d83/a02328_1a455764ca72b659dab2652baf56ce5885" prot="protected" static="no" mutable="yes">
+        <type><ref refid="d0/ded/a03276" kindref="compound">Version</ref></type>
+        <definition>Version castor3d::BinaryParserBase&lt; TParsed &gt;::m_fileVersion</definition>
         <argsstring></argsstring>
-        <name>m_sharingMode</name>
+        <name>m_fileVersion</name>
+        <qualifiedname>castor3d::BinaryParserBase::m_fileVersion</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The chunk version from the file. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/PoolUniformBuffer.hpp" line="244" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="244" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="db/d83/a02328_1aab23d4b9089c3943656b943c38c25289" prot="private" static="no" mutable="no">
-        <type>std::set&lt; <ref refid="db/d77/a02304" kindref="compound">MemChunk</ref> &gt;</type>
-        <definition>std::set&lt; MemChunk &gt; castor3d::PoolUniformBuffer::m_allocated</definition>
-        <argsstring></argsstring>
-        <name>m_allocated</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/PoolUniformBuffer.hpp" line="245" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="245" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="db/d83/a02328_1a1cd07230309159b3e8b81b32a8553266" prot="private" static="no" mutable="no">
-        <type>ashes::UniformBufferPtr</type>
-        <definition>ashes::UniformBufferPtr castor3d::PoolUniformBuffer::m_buffer</definition>
-        <argsstring></argsstring>
-        <name>m_buffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/PoolUniformBuffer.hpp" line="246" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="246" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="db/d83/a02328_1a2f46362bb79c8f5bc308bd36978ab280" prot="private" static="no" mutable="no">
-        <type>castor::String</type>
-        <definition>castor::String castor3d::PoolUniformBuffer::m_debugName</definition>
-        <argsstring></argsstring>
-        <name>m_debugName</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/PoolUniformBuffer.hpp" line="247" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="247" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="db/d83/a02328_1a741b5ad3d0c991d22d148fb2a7933372" prot="private" static="no" mutable="no">
-        <type>castor::ArrayView&lt; uint8_t &gt;</type>
-        <definition>castor::ArrayView&lt; uint8_t &gt; castor3d::PoolUniformBuffer::m_data</definition>
-        <argsstring></argsstring>
-        <name>m_data</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/PoolUniformBuffer.hpp" line="248" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="248" bodyend="-1"/>
+        <location file="Binary/BinaryParser.hpp" line="589" column="17" bodyfile="Binary/BinaryParser.hpp" bodystart="589" bodyend="-1"/>
+        <referencedby refid="db/d83/a02328_1ae6f4694ede819151fe4e30e33235ff07" compoundref="df/d98/a00107" startline="30" endline="35">castor3d::BinaryParserBase&lt; TParsed &gt;::createBinaryParser</referencedby>
+        <referencedby refid="db/d83/a02328_1a035881aba2b64571b30a5efd3faaf3d9" compoundref="df/d98/a00107" startline="322" endline="385">castor3d::BinaryParserBase&lt; TParsed &gt;::doParseHeader</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="db/d83/a02328_1a2bb9306a9d408dd999bb213a20cfc58e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::PoolUniformBuffer::PoolUniformBuffer</definition>
-        <argsstring>(RenderSystem const &amp;renderSystem, castor::ArrayView&lt; uint8_t &gt; data, VkBufferUsageFlags usage, VkMemoryPropertyFlags flags, castor::String debugName, ashes::QueueShare sharingMode={})</argsstring>
-        <name>PoolUniformBuffer</name>
-        <param>
-          <type><ref refid="d9/d38/a04624" kindref="compound">RenderSystem</ref> const &amp;</type>
-          <declname>renderSystem</declname>
-        </param>
-        <param>
-          <type>castor::ArrayView&lt; uint8_t &gt;</type>
-          <declname>data</declname>
-        </param>
-        <param>
-          <type>VkBufferUsageFlags</type>
-          <declname>usage</declname>
-        </param>
-        <param>
-          <type>VkMemoryPropertyFlags</type>
-          <declname>flags</declname>
-        </param>
-        <param>
-          <type>castor::String</type>
-          <declname>debugName</declname>
-        </param>
-        <param>
-          <type>ashes::QueueShare</type>
-          <declname>sharingMode</declname>
-          <defval>{}</defval>
-        </param>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">renderSystem</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The <ref refid="d9/d38/a04624" kindref="compound">RenderSystem</ref>. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">data</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The mapped data. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">usage</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The buffer usage flags. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The buffer memory flags. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">debugName</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The buffer debug name. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">sharingMode</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The sharing mode. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/PoolUniformBuffer.hpp" line="40" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="db/d83/a02328_1acb9da7d65165c0ffee76279f21ac9c54" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
-        <definition>C3D_API uint32_t castor3d::PoolUniformBuffer::initialise</definition>
-        <argsstring>(RenderDevice const &amp;device)</argsstring>
-        <name>initialise</name>
-        <param>
-          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-<para>Initialises the GPU buffer. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/PoolUniformBuffer.hpp" line="54" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="db/d83/a02328_1ab2dde565384597c456092f4a8c884c13" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::PoolUniformBuffer::cleanup</definition>
-        <argsstring>(RenderDevice const &amp;device)</argsstring>
-        <name>cleanup</name>
-        <param>
-          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-<para>Cleans up the GPU buffer. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/PoolUniformBuffer.hpp" line="63" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="db/d83/a02328_1af825adaf870341eb0810ef0fc70a2811" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::PoolUniformBuffer::hasAvailable</definition>
-        <argsstring>(VkDeviceSize size) const</argsstring>
-        <name>hasAvailable</name>
-        <param>
-          <type>VkDeviceSize</type>
-          <declname>size</declname>
-        </param>
+      <memberdef kind="function" id="db/d83/a02328_1afb9e6fdcdc58e65458de7892d2bf8025" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual castor3d::BinaryParserBase&lt; TParsed &gt;::~BinaryParserBase</definition>
+        <argsstring>()=default</argsstring>
+        <name>~BinaryParserBase</name>
+        <qualifiedname>castor3d::BinaryParserBase::~BinaryParserBase</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername>size</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The size wanted. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>true</computeroutput> if there is enough remaining memory for a new element. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/PoolUniformBuffer.hpp" line="72" column="1"/>
+        <location file="Binary/BinaryParser.hpp" line="22" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="db/d83/a02328_1a7cc2d0d50f79a7425983da27baae4147" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="db/d77/a02304" kindref="compound">MemChunk</ref></type>
-        <definition>C3D_API MemChunk castor3d::PoolUniformBuffer::allocate</definition>
-        <argsstring>(VkDeviceSize size)</argsstring>
-        <name>allocate</name>
-        <param>
-          <type>VkDeviceSize</type>
-          <declname>size</declname>
-        </param>
-        <briefdescription>
-<para>Allocates a memory chunk for a CPU buffer. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername>size</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The size wanted. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The memory chunk offset. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/PoolUniformBuffer.hpp" line="83" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="db/d83/a02328_1a7b2e62bf5f3fd11e264e8588838adba2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::PoolUniformBuffer::deallocate</definition>
-        <argsstring>(VkDeviceSize offset)</argsstring>
-        <name>deallocate</name>
-        <param>
-          <type>VkDeviceSize</type>
-          <declname>offset</declname>
-        </param>
-        <briefdescription>
-<para>Deallocates memory. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">offset</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The memory chunk offset. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/PoolUniformBuffer.hpp" line="92" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="db/d83/a02328_1a2049a44b19ffaa6f48aaa00e7f9bd62f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="db/d83/a02328_1ae6f4694ede819151fe4e30e33235ff07" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
-            <type>typename DataT</type>
+            <type>typename T</type>
           </param>
         </templateparamlist>
-        <type>DataT const  &amp;</type>
-        <definition>DataT const&amp; castor3d::PoolUniformBuffer::getData</definition>
-        <argsstring>(VkDeviceSize offset) const</argsstring>
-        <name>getData</name>
-        <param>
-          <type>VkDeviceSize</type>
-          <declname>offset</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The N-th instance of the data. </para>
-</simplesect>
-<parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">offset</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The memory chunk offset. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/PoolUniformBuffer.hpp" line="106" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="106" bodyend="109"/>
-        <referencedby refid="d1/d47/a02300_1a30110cf344fed3ed16b4d7972ebd263d" compoundref="db/dd9/a00179" startline="35" endline="38">castor3d::UniformBufferOffsetT&lt; castor3d::SkinningUboConfiguration &gt;::getData</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="db/d83/a02328_1af7977fae14997051051d08b25d4b26d6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename DataT</type>
-          </param>
-        </templateparamlist>
-        <type>DataT &amp;</type>
-        <definition>DataT&amp; castor3d::PoolUniformBuffer::getData</definition>
-        <argsstring>(VkDeviceSize offset)</argsstring>
-        <name>getData</name>
-        <param>
-          <type>VkDeviceSize</type>
-          <declname>offset</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The N-th instance of the data. </para>
-</simplesect>
-<parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">offset</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The memory chunk offset. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/PoolUniformBuffer.hpp" line="123" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="123" bodyend="126"/>
-      </memberdef>
-      <memberdef kind="function" id="db/d83/a02328_1a5157e5b0efdadac6100df15f21f1b50f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::ArrayView&lt; uint8_t &gt; const  &amp;</type>
-        <definition>castor::ArrayView&lt; uint8_t &gt; const&amp; castor3d::PoolUniformBuffer::getDatas</definition>
-        <argsstring>() const</argsstring>
-        <name>getDatas</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The data. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/PoolUniformBuffer.hpp" line="135" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="135" bodyend="138"/>
-      </memberdef>
-      <memberdef kind="function" id="db/d83/a02328_1a1d2649b8bb78bf888aa4771080e0d08c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::ArrayView&lt; uint8_t &gt; &amp;</type>
-        <definition>castor::ArrayView&lt; uint8_t &gt;&amp; castor3d::PoolUniformBuffer::getDatas</definition>
+        <type><ref refid="d1/d03/a02332" kindref="compound">BinaryParser</ref>&lt; T &gt;</type>
+        <definition>BinaryParser&lt; T &gt; castor3d::BinaryParserBase&lt; TParsed &gt;::createBinaryParser</definition>
         <argsstring>()</argsstring>
-        <name>getDatas</name>
+        <name>createBinaryParser</name>
+        <qualifiedname>castor3d::BinaryParserBase::createBinaryParser</qualifiedname>
         <briefdescription>
+<para>Creates a binary parser. </para>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The data. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/PoolUniformBuffer.hpp" line="147" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="147" bodyend="150"/>
+        <location file="Binary/BinaryParser.hpp" line="30" column="21" bodyfile="Binary/BinaryParser.hpp" bodystart="30" bodyend="35"/>
+        <references refid="db/d83/a02328_1a455764ca72b659dab2652baf56ce5885" compoundref="df/d98/a00107" startline="589">castor3d::BinaryParserBase&lt; TParsed &gt;::m_fileVersion</references>
       </memberdef>
-      <memberdef kind="function" id="db/d83/a02328_1a77619c448a45c14bbfcd61b22b592274" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="db/d83/a02328_1a5db83668684ca219f67de3a381898e64" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
-        <definition>bool castor3d::PoolUniformBuffer::hasBuffer</definition>
-        <argsstring>() const</argsstring>
-        <name>hasBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para><computeroutput>false</computeroutput> if the internal buffer doesn&apos;t exist. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/PoolUniformBuffer.hpp" line="159" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="159" bodyend="162"/>
-        <referencedby refid="d1/d47/a02300_1ad7a4b5aef7f032e598077b111714ad28" compoundref="db/dd9/a00179" startline="29" endline="33">castor3d::UniformBufferOffsetT&lt; castor3d::SkinningUboConfiguration &gt;::operator bool</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="db/d83/a02328_1aefd626770b301d79f1b170b5776c34cd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::UniformBuffer const  &amp;</type>
-        <definition>ashes::UniformBuffer const&amp; castor3d::PoolUniformBuffer::getBuffer</definition>
-        <argsstring>() const</argsstring>
-        <name>getBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The internal buffer. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/PoolUniformBuffer.hpp" line="171" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="171" bodyend="174"/>
-        <referencedby refid="d1/d47/a02300_1a2c6ad146d4910651544564c25ca7dccd" compoundref="db/dd9/a00179" startline="70" endline="79">castor3d::UniformBufferOffsetT&lt; castor3d::SkinningUboConfiguration &gt;::createSizedBinding</referencedby>
-        <referencedby refid="db/d83/a02328_1a32a13128eaf15955c1ff544751dcac6a" compoundref="d5/dcb/a00170" startline="223" endline="226">getAlignedSize</referencedby>
-        <referencedby refid="d1/d47/a02300_1adc389f5d4fd605791054221d7119cdae" compoundref="db/dd9/a00179" startline="55" endline="58">castor3d::UniformBufferOffsetT&lt; castor3d::SkinningUboConfiguration &gt;::getBuffer</referencedby>
-        <referencedby refid="d1/d47/a02300_1ad7dcad7c96a620540d10eb85f3d4586b" compoundref="db/dd9/a00179" startline="81" endline="94">castor3d::UniformBufferOffsetT&lt; castor3d::SkinningUboConfiguration &gt;::getDescriptorWrite</referencedby>
-        <referencedby refid="db/d83/a02328_1ad3de3f47551cdd4bd91f2372e504bd4d" compoundref="d5/dcb/a00170" startline="203" endline="206">getElementSize</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="db/d83/a02328_1a3f8292fb08362bce16522a0e987f6344" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::PoolUniformBuffer::operator ashes::UniformBuffer const &amp;</definition>
-        <argsstring>() const</argsstring>
-        <name>operator ashes::UniformBuffer const &amp;</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/PoolUniformBuffer.hpp" line="175" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="175" bodyend="178"/>
-      </memberdef>
-      <memberdef kind="function" id="db/d83/a02328_1a8ec615fc48fa0de114d0ee09808e1c60" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::UniformBuffer &amp;</type>
-        <definition>ashes::UniformBuffer&amp; castor3d::PoolUniformBuffer::getBuffer</definition>
-        <argsstring>()</argsstring>
-        <name>getBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The internal buffer. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/PoolUniformBuffer.hpp" line="187" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="187" bodyend="190"/>
-      </memberdef>
-      <memberdef kind="function" id="db/d83/a02328_1aef9b5a32ba56c24595a4b819ad25c7c9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::PoolUniformBuffer::operator ashes::UniformBuffer &amp;</definition>
-        <argsstring>()</argsstring>
-        <name>operator ashes::UniformBuffer &amp;</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/PoolUniformBuffer.hpp" line="191" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="191" bodyend="194"/>
-      </memberdef>
-      <memberdef kind="function" id="db/d83/a02328_1ad3de3f47551cdd4bd91f2372e504bd4d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::PoolUniformBuffer::getElementSize</definition>
-        <argsstring>() const</argsstring>
-        <name>getElementSize</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The size of one element in the buffer. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/PoolUniformBuffer.hpp" line="203" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="203" bodyend="206"/>
-        <references refid="db/d83/a02328_1aefd626770b301d79f1b170b5776c34cd" compoundref="d5/dcb/a00170" startline="171" endline="174">getBuffer</references>
-        <referencedby refid="db/d83/a02328_1ab9520ff65055aeb19c8b5bfca02ae4a3" compoundref="d5/dcb/a00170" startline="235" endline="238">getAlignedSize</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="db/d83/a02328_1a32a13128eaf15955c1ff544751dcac6a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::PoolUniformBuffer::getAlignedSize</definition>
-        <argsstring>(uint32_t size) const</argsstring>
-        <name>getAlignedSize</name>
+        <definition>bool castor3d::BinaryParserBase&lt; TParsed &gt;::parse</definition>
+        <argsstring>(TParsed &amp;obj, castor::BinaryFile &amp;file)</argsstring>
+        <name>parse</name>
+        <qualifiedname>castor3d::BinaryParserBase::parse</qualifiedname>
         <param>
-          <type>uint32_t</type>
-          <declname>size</declname>
+          <type>TParsed &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <param>
+          <type>castor::BinaryFile &amp;</type>
+          <declname>file</declname>
         </param>
         <briefdescription>
-<para>Retrieves the aligned size for an element. </para>
+<para>From file reader function. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">size</parametername>
+<parametername direction="out">obj</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The size of an element. </para>
+<para>The object to read </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The file containing the chunk </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>The aligned size. </para>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/PoolUniformBuffer.hpp" line="223" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="223" bodyend="226"/>
-        <references refid="db/d83/a02328_1ab9520ff65055aeb19c8b5bfca02ae4a3" compoundref="d5/dcb/a00170" startline="235" endline="238">getAlignedSize</references>
-        <references refid="db/d83/a02328_1aefd626770b301d79f1b170b5776c34cd" compoundref="d5/dcb/a00170" startline="171" endline="174">getBuffer</references>
-        <referencedby refid="d1/d47/a02300_1a27740308743c3e5d9e0a84631b3df4b9" compoundref="db/dd9/a00179" startline="65" endline="68">castor3d::UniformBufferOffsetT&lt; castor3d::SkinningUboConfiguration &gt;::getAlignedSize</referencedby>
-        <referencedby refid="d1/d47/a02300_1a30110cf344fed3ed16b4d7972ebd263d" compoundref="db/dd9/a00179" startline="35" endline="38">castor3d::UniformBufferOffsetT&lt; castor3d::SkinningUboConfiguration &gt;::getData</referencedby>
+        <location file="Binary/BinaryParser.hpp" line="48" column="13" bodyfile="Binary/BinaryParser.hpp" bodystart="48" bodyend="86"/>
+        <references refid="dc/d1a/a02288_1af711032d94753cb2d482fe2bcf3afb17">castor3d::BinaryChunk::checkAvailable</references>
+        <references refid="db/d83/a02328_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" compoundref="df/d98/a00107" startline="574" endline="581">castor3d::BinaryParserBase&lt; TParsed &gt;::checkError</references>
+        <references refid="db/d83/a02328_1a035881aba2b64571b30a5efd3faaf3d9" compoundref="df/d98/a00107" startline="322" endline="385">castor3d::BinaryParserBase&lt; TParsed &gt;::doParseHeader</references>
+        <references refid="d2/df5/a01395_1a742783d4e4b7354fac3e375ae107414da3af707888e537c6e9dde81b11bf02959">castor3d::eCmshFile</references>
+        <references refid="dc/d1a/a02288_1a4b542ea9ab36cf0aaa73e9f1fed8967b" compoundref="d1/dc1/a00092" startline="269" endline="272">castor3d::BinaryChunk::getChunkType</references>
+        <references refid="dc/d1a/a02288_1ab3148d763e8fca01e746ec01991db22b">castor3d::BinaryChunk::getSubChunk</references>
+        <references refid="db/d83/a02328_1a5db83668684ca219f67de3a381898e64" compoundref="df/d98/a00107" startline="48" endline="86">castor3d::BinaryParserBase&lt; TParsed &gt;::parse</references>
+        <references refid="dc/d1a/a02288_1aef0d7f6fbdd6f0ace675b5c4784b4089">castor3d::BinaryChunk::read</references>
+        <referencedby refid="db/d83/a02328_1a5db83668684ca219f67de3a381898e64" compoundref="df/d98/a00107" startline="48" endline="86">castor3d::BinaryParserBase&lt; TParsed &gt;::parse</referencedby>
       </memberdef>
-      <memberdef kind="function" id="db/d83/a02328_1ab9520ff65055aeb19c8b5bfca02ae4a3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::PoolUniformBuffer::getAlignedSize</definition>
-        <argsstring>() const</argsstring>
-        <name>getAlignedSize</name>
+      <memberdef kind="function" id="db/d83/a02328_1a6bbbb529f463085c7d259600ae1b3e99" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BinaryParserBase&lt; TParsed &gt;::parse</definition>
+        <argsstring>(TParsed &amp;obj, BinaryChunk &amp;chunk)</argsstring>
+        <name>parse</name>
+        <qualifiedname>castor3d::BinaryParserBase::parse</qualifiedname>
+        <param>
+          <type>TParsed &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d1a/a02288" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>From chunk reader function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="99" column="13" bodyfile="Binary/BinaryParser.hpp" bodystart="99" bodyend="149"/>
+        <references refid="db/d83/a02328_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" compoundref="df/d98/a00107" startline="574" endline="581">castor3d::BinaryParserBase&lt; TParsed &gt;::checkError</references>
+        <references refid="dc/d1a/a02288_1a08e242acd79584a8c061b89c14f68452" compoundref="d1/dc1/a00092" startline="318" endline="321">castor3d::BinaryChunk::endParse</references>
+        <references refid="dc/d1a/a02288_1a4b542ea9ab36cf0aaa73e9f1fed8967b" compoundref="d1/dc1/a00092" startline="269" endline="272">castor3d::BinaryChunk::getChunkType</references>
+        <references refid="db/d83/a02328_1ab3df04f9aa2eb1f7a533ed18631f09c4" compoundref="df/d98/a00107" startline="586">castor3d::BinaryParserBase&lt; TParsed &gt;::m_chunk</references>
+        <references refid="dc/d1a/a02288_1a7a755e5c70676c80e150d61574442c2c" compoundref="d1/dc1/a00092" startline="328" endline="331">castor3d::BinaryChunk::resetParse</references>
+      </memberdef>
+      <memberdef kind="function" id="db/d83/a02328_1a61b02dbf69d89569eff5be22facd5f07" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_1</definition>
+        <argsstring>(TParsed &amp;obj, BinaryChunk &amp;chunk)</argsstring>
+        <name>parse_v1_1</name>
+        <qualifiedname>castor3d::BinaryParserBase::parse_v1_1</qualifiedname>
+        <param>
+          <type>TParsed &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d1a/a02288" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>From chunk reader function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="162" column="13" bodyfile="Binary/BinaryParser.hpp" bodystart="162" bodyend="189"/>
+        <references refid="db/d83/a02328_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" compoundref="df/d98/a00107" startline="574" endline="581">castor3d::BinaryParserBase&lt; TParsed &gt;::checkError</references>
+        <references refid="dc/d1a/a02288_1a08e242acd79584a8c061b89c14f68452" compoundref="d1/dc1/a00092" startline="318" endline="321">castor3d::BinaryChunk::endParse</references>
+        <references refid="dc/d1a/a02288_1a4b542ea9ab36cf0aaa73e9f1fed8967b" compoundref="d1/dc1/a00092" startline="269" endline="272">castor3d::BinaryChunk::getChunkType</references>
+        <references refid="db/d83/a02328_1ab3df04f9aa2eb1f7a533ed18631f09c4" compoundref="df/d98/a00107" startline="586">castor3d::BinaryParserBase&lt; TParsed &gt;::m_chunk</references>
+      </memberdef>
+      <memberdef kind="function" id="db/d83/a02328_1a95788692ddd6fae91074c299b674aaab" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_2</definition>
+        <argsstring>(TParsed &amp;obj, BinaryChunk &amp;chunk)</argsstring>
+        <name>parse_v1_2</name>
+        <qualifiedname>castor3d::BinaryParserBase::parse_v1_2</qualifiedname>
+        <param>
+          <type>TParsed &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d1a/a02288" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>From chunk reader function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="202" column="13" bodyfile="Binary/BinaryParser.hpp" bodystart="202" bodyend="229"/>
+        <references refid="db/d83/a02328_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" compoundref="df/d98/a00107" startline="574" endline="581">castor3d::BinaryParserBase&lt; TParsed &gt;::checkError</references>
+        <references refid="dc/d1a/a02288_1a08e242acd79584a8c061b89c14f68452" compoundref="d1/dc1/a00092" startline="318" endline="321">castor3d::BinaryChunk::endParse</references>
+        <references refid="dc/d1a/a02288_1a4b542ea9ab36cf0aaa73e9f1fed8967b" compoundref="d1/dc1/a00092" startline="269" endline="272">castor3d::BinaryChunk::getChunkType</references>
+        <references refid="db/d83/a02328_1ab3df04f9aa2eb1f7a533ed18631f09c4" compoundref="df/d98/a00107" startline="586">castor3d::BinaryParserBase&lt; TParsed &gt;::m_chunk</references>
+      </memberdef>
+      <memberdef kind="function" id="db/d83/a02328_1a6f39b66d980e4a65660016f71115a89c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_3</definition>
+        <argsstring>(TParsed &amp;obj, BinaryChunk &amp;chunk)</argsstring>
+        <name>parse_v1_3</name>
+        <qualifiedname>castor3d::BinaryParserBase::parse_v1_3</qualifiedname>
+        <param>
+          <type>TParsed &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d1a/a02288" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>From chunk reader function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="242" column="13" bodyfile="Binary/BinaryParser.hpp" bodystart="242" bodyend="269"/>
+        <references refid="db/d83/a02328_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" compoundref="df/d98/a00107" startline="574" endline="581">castor3d::BinaryParserBase&lt; TParsed &gt;::checkError</references>
+        <references refid="dc/d1a/a02288_1a08e242acd79584a8c061b89c14f68452" compoundref="d1/dc1/a00092" startline="318" endline="321">castor3d::BinaryChunk::endParse</references>
+        <references refid="dc/d1a/a02288_1a4b542ea9ab36cf0aaa73e9f1fed8967b" compoundref="d1/dc1/a00092" startline="269" endline="272">castor3d::BinaryChunk::getChunkType</references>
+        <references refid="db/d83/a02328_1ab3df04f9aa2eb1f7a533ed18631f09c4" compoundref="df/d98/a00107" startline="586">castor3d::BinaryParserBase&lt; TParsed &gt;::m_chunk</references>
+      </memberdef>
+      <memberdef kind="function" id="db/d83/a02328_1aabc068daf8d99718497aa35f7a17c346" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_4</definition>
+        <argsstring>(TParsed &amp;obj, BinaryChunk &amp;chunk)</argsstring>
+        <name>parse_v1_4</name>
+        <qualifiedname>castor3d::BinaryParserBase::parse_v1_4</qualifiedname>
+        <param>
+          <type>TParsed &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d1a/a02288" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>From chunk reader function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="282" column="13" bodyfile="Binary/BinaryParser.hpp" bodystart="282" bodyend="309"/>
+        <references refid="db/d83/a02328_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" compoundref="df/d98/a00107" startline="574" endline="581">castor3d::BinaryParserBase&lt; TParsed &gt;::checkError</references>
+        <references refid="dc/d1a/a02288_1a08e242acd79584a8c061b89c14f68452" compoundref="d1/dc1/a00092" startline="318" endline="321">castor3d::BinaryChunk::endParse</references>
+        <references refid="dc/d1a/a02288_1a4b542ea9ab36cf0aaa73e9f1fed8967b" compoundref="d1/dc1/a00092" startline="269" endline="272">castor3d::BinaryChunk::getChunkType</references>
+        <references refid="db/d83/a02328_1ab3df04f9aa2eb1f7a533ed18631f09c4" compoundref="df/d98/a00107" startline="586">castor3d::BinaryParserBase&lt; TParsed &gt;::m_chunk</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="db/d83/a02328_1a035881aba2b64571b30a5efd3faaf3d9" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BinaryParserBase&lt; TParsed &gt;::doParseHeader</definition>
+        <argsstring>(BinaryChunk &amp;chunk) const</argsstring>
+        <name>doParseHeader</name>
+        <qualifiedname>castor3d::BinaryParserBase::doParseHeader</qualifiedname>
+        <param>
+          <type><ref refid="dc/d1a/a02288" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Parses the header chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent chunk. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="322" column="13" bodyfile="Binary/BinaryParser.hpp" bodystart="322" bodyend="385"/>
+        <references refid="dc/d1a/a02288_1af711032d94753cb2d482fe2bcf3afb17">castor3d::BinaryChunk::checkAvailable</references>
+        <references refid="db/d83/a02328_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" compoundref="df/d98/a00107" startline="574" endline="581">castor3d::BinaryParserBase&lt; TParsed &gt;::checkError</references>
+        <references refid="d2/df5/a01395_1abb378ab1c4b7208b4d80b496f3ad14bc" compoundref="d1/dc1/a00092" startline="42">castor3d::CurrentCmshVersion</references>
+        <references refid="db/d83/a02328_1a0e1aa917e3bf897fab03a32d20890062" compoundref="df/d98/a00107" startline="401" endline="406">castor3d::BinaryParserBase&lt; TParsed &gt;::doParseChunk</references>
+        <references refid="d2/df5/a01395_1a742783d4e4b7354fac3e375ae107414da9e33398324cc27f4d18d60ffe7436294">castor3d::eCmshHeader</references>
+        <references refid="d2/df5/a01395_1a742783d4e4b7354fac3e375ae107414da52eafb299773df06313321e3eca83362">castor3d::eCmshVersion</references>
+        <references refid="d2/df5/a01395_1a742783d4e4b7354fac3e375ae107414daa866af182acab9fffb643ecb752cd9e5">castor3d::eName</references>
+        <references refid="dc/d1a/a02288_1a08e242acd79584a8c061b89c14f68452" compoundref="d1/dc1/a00092" startline="318" endline="321">castor3d::BinaryChunk::endParse</references>
+        <references refid="dc/d1a/a02288_1a4b542ea9ab36cf0aaa73e9f1fed8967b" compoundref="d1/dc1/a00092" startline="269" endline="272">castor3d::BinaryChunk::getChunkType</references>
+        <references refid="d2/df5/a01395_1a7f5dee29f8589db515b5267b84c9ac5e" compoundref="d1/dc1/a00092" startline="25" endline="28">castor3d::getCmshMajor</references>
+        <references refid="d2/df5/a01395_1a55001a89450107aff1d25db30844947e" compoundref="d1/dc1/a00092" startline="30" endline="33">castor3d::getCmshMinor</references>
+        <references refid="d2/df5/a01395_1aab8661e5d664e92f493a8f6c8272e264" compoundref="d1/dc1/a00092" startline="35" endline="38">castor3d::getCmshRevision</references>
+        <references refid="dc/d1a/a02288_1ab3148d763e8fca01e746ec01991db22b">castor3d::BinaryChunk::getSubChunk</references>
+        <references refid="db/d83/a02328_1a455764ca72b659dab2652baf56ce5885" compoundref="df/d98/a00107" startline="589">castor3d::BinaryParserBase&lt; TParsed &gt;::m_fileVersion</references>
+        <references refid="d8/d7d/a02988_1ae0f926a36c8502d923618ac94126bff5" compoundref="d4/d27/a00392" startline="28">castor3d::log::warn</references>
+        <referencedby refid="db/d83/a02328_1a5db83668684ca219f67de3a381898e64" compoundref="df/d98/a00107" startline="48" endline="86">castor3d::BinaryParserBase&lt; TParsed &gt;::parse</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="db/d83/a02328_1a0e1aa917e3bf897fab03a32d20890062" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::BinaryParserBase&lt; TParsed &gt;::doParseChunk</definition>
+        <argsstring>(T *values, size_t count, BinaryChunk &amp;chunk) const</argsstring>
+        <name>doParseChunk</name>
+        <qualifiedname>castor3d::BinaryParserBase::doParseChunk</qualifiedname>
+        <param>
+          <type>T *</type>
+          <declname>values</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>count</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d1a/a02288" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves a value array from a chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the parsed values </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The values count </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk containing the values </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="401" column="13" bodyfile="Binary/BinaryParser.hpp" bodystart="401" bodyend="406"/>
+        <references refid="d3/d19/a02464_1a51aa9cc211a27e96cdfbdb431808cc8f" compoundref="d7/dce/a00143" startline="72" endline="86">castor3d::ChunkParser&lt; T &gt;::parse</references>
+        <referencedby refid="db/d83/a02328_1a035881aba2b64571b30a5efd3faaf3d9" compoundref="df/d98/a00107" startline="322" endline="385">castor3d::BinaryParserBase&lt; TParsed &gt;::doParseHeader</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="db/d83/a02328_1a22ca62addb3ab167995e18f49267efcf" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>size_t</type>
+            <declname>Count</declname>
+            <defname>Count</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::BinaryParserBase&lt; TParsed &gt;::doParseChunk</definition>
+        <argsstring>(T(&amp;values)[Count], BinaryChunk &amp;chunk) const</argsstring>
+        <name>doParseChunk</name>
+        <qualifiedname>castor3d::BinaryParserBase::doParseChunk</qualifiedname>
+        <param>
+          <type>T(&amp;)</type>
+          <declname>values</declname>
+          <array>[Count]</array>
+        </param>
+        <param>
+          <type><ref refid="dc/d1a/a02288" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves a value array from a chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the parsed values </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk containing the values </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="420" column="13" bodyfile="Binary/BinaryParser.hpp" bodystart="420" bodyend="424"/>
+        <references refid="d3/d19/a02464_1a51aa9cc211a27e96cdfbdb431808cc8f" compoundref="d7/dce/a00143" startline="72" endline="86">castor3d::ChunkParser&lt; T &gt;::parse</references>
+      </memberdef>
+      <memberdef kind="function" id="db/d83/a02328_1a5a648553ce168f5bc34adeedc8d169a7" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>size_t</type>
+            <declname>Count</declname>
+            <defname>Count</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::BinaryParserBase&lt; TParsed &gt;::doParseChunk</definition>
+        <argsstring>(std::array&lt; T, Count &gt; &amp;values, BinaryChunk &amp;chunk) const</argsstring>
+        <name>doParseChunk</name>
+        <qualifiedname>castor3d::BinaryParserBase::doParseChunk</qualifiedname>
+        <param>
+          <type>std::array&lt; T, Count &gt; &amp;</type>
+          <declname>values</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d1a/a02288" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves a value array from a chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the parsed values </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk containing the values </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="438" column="13" bodyfile="Binary/BinaryParser.hpp" bodystart="438" bodyend="442"/>
+        <references refid="d3/d19/a02464_1a51aa9cc211a27e96cdfbdb431808cc8f" compoundref="d7/dce/a00143" startline="72" endline="86">castor3d::ChunkParser&lt; T &gt;::parse</references>
+      </memberdef>
+      <memberdef kind="function" id="db/d83/a02328_1a90df4e46072e5ef14aebebd00cbcc1f5" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::BinaryParserBase&lt; TParsed &gt;::doParseChunk</definition>
+        <argsstring>(std::vector&lt; T &gt; &amp;values, BinaryChunk &amp;chunk) const</argsstring>
+        <name>doParseChunk</name>
+        <qualifiedname>castor3d::BinaryParserBase::doParseChunk</qualifiedname>
+        <param>
+          <type>std::vector&lt; T &gt; &amp;</type>
+          <declname>values</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d1a/a02288" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves a value array from a chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the parsed values </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk containing the values </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="456" column="13" bodyfile="Binary/BinaryParser.hpp" bodystart="456" bodyend="460"/>
+        <references refid="d3/d19/a02464_1a51aa9cc211a27e96cdfbdb431808cc8f" compoundref="d7/dce/a00143" startline="72" endline="86">castor3d::ChunkParser&lt; T &gt;::parse</references>
+      </memberdef>
+      <memberdef kind="function" id="db/d83/a02328_1a5fac84360102001f5e730be1927c024e" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::BinaryParserBase&lt; TParsed &gt;::doParseChunk</definition>
+        <argsstring>(T &amp;value, BinaryChunk &amp;chunk) const</argsstring>
+        <name>doParseChunk</name>
+        <qualifiedname>castor3d::BinaryParserBase::doParseChunk</qualifiedname>
+        <param>
+          <type>T &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d1a/a02288" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves a value from a chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the parsed value </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk containing the value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="474" column="13" bodyfile="Binary/BinaryParser.hpp" bodystart="474" bodyend="478"/>
+        <references refid="d3/d19/a02464_1a51aa9cc211a27e96cdfbdb431808cc8f" compoundref="d7/dce/a00143" startline="72" endline="86">castor3d::ChunkParser&lt; T &gt;::parse</references>
+      </memberdef>
+      <memberdef kind="function" id="db/d83/a02328_1ab5f9ba53ad5865f967b41e5a27ed73a9" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BinaryParserBase&lt; TParsed &gt;::doGetSubChunk</definition>
+        <argsstring>(BinaryChunk &amp;chunk)</argsstring>
+        <name>doGetSubChunk</name>
+        <qualifiedname>castor3d::BinaryParserBase::doGetSubChunk</qualifiedname>
+        <param>
+          <type><ref refid="dc/d1a/a02288" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves a subchunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the subchunk. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="489" column="13" bodyfile="Binary/BinaryParser.hpp" bodystart="489" bodyend="500"/>
+        <references refid="dc/d1a/a02288_1af711032d94753cb2d482fe2bcf3afb17">castor3d::BinaryChunk::checkAvailable</references>
+        <references refid="dc/d1a/a02288_1ab3148d763e8fca01e746ec01991db22b">castor3d::BinaryChunk::getSubChunk</references>
+        <references refid="db/d83/a02328_1ab3df04f9aa2eb1f7a533ed18631f09c4" compoundref="df/d98/a00107" startline="586">castor3d::BinaryParserBase&lt; TParsed &gt;::m_chunk</references>
+      </memberdef>
+      <memberdef kind="function" id="db/d83/a02328_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BinaryParserBase&lt; TParsed &gt;::checkError</definition>
+        <argsstring>(bool result, castor::String const &amp;text) const</argsstring>
+        <name>checkError</name>
+        <qualifiedname>castor3d::BinaryParserBase::checkError</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>result</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>text</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The aligned size for an element. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="574" column="13" bodyfile="Binary/BinaryParser.hpp" bodystart="574" bodyend="581"/>
+        <references refid="d8/d7d/a02988_1aa59b94a4fd876453e5d3d04da799b209" compoundref="d4/d27/a00392" startline="29">castor3d::log::error</references>
+        <references refid="db/d83/a02328_1ae4820a3ab3e4b282240e5f1b969153c1" compoundref="df/d98/a00107" startline="572">castor3d::BinaryParserBase&lt; TParsed &gt;::Name</references>
+        <referencedby refid="db/d83/a02328_1a035881aba2b64571b30a5efd3faaf3d9" compoundref="df/d98/a00107" startline="322" endline="385">castor3d::BinaryParserBase&lt; TParsed &gt;::doParseHeader</referencedby>
+        <referencedby refid="db/d83/a02328_1a5db83668684ca219f67de3a381898e64" compoundref="df/d98/a00107" startline="48" endline="86">castor3d::BinaryParserBase&lt; TParsed &gt;::parse</referencedby>
+        <referencedby refid="db/d83/a02328_1a61b02dbf69d89569eff5be22facd5f07" compoundref="df/d98/a00107" startline="162" endline="189">castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_1</referencedby>
+        <referencedby refid="db/d83/a02328_1a95788692ddd6fae91074c299b674aaab" compoundref="df/d98/a00107" startline="202" endline="229">castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_2</referencedby>
+        <referencedby refid="db/d83/a02328_1a6f39b66d980e4a65660016f71115a89c" compoundref="df/d98/a00107" startline="242" endline="269">castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_3</referencedby>
+        <referencedby refid="db/d83/a02328_1aabc068daf8d99718497aa35f7a17c346" compoundref="df/d98/a00107" startline="282" endline="309">castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_4</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="db/d83/a02328_1a020a66d5fc1b452dc76c82702d72bbb1" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::BinaryParserBase&lt; TParsed &gt;::doParse</definition>
+        <argsstring>(TParsed &amp;obj)=0</argsstring>
+        <name>doParse</name>
+        <qualifiedname>castor3d::BinaryParserBase::doParse</qualifiedname>
+        <reimplementedby refid="dc/d18/a02260_1a7b8d23b4c209a00a927c030f1d49ec81">doParse</reimplementedby>
+        <reimplementedby refid="d5/dc0/a02272_1a55428e2af7eb3e14ee428f427c9c994c">doParse</reimplementedby>
+        <reimplementedby refid="d3/d81/a02284_1aec8a0fc7f6bae890fa9b42e225faf1d6">doParse</reimplementedby>
+        <reimplementedby refid="d1/d47/a02300_1a587b0836656b9d1efdd6699d92e43a7b">doParse</reimplementedby>
+        <reimplementedby refid="df/d73/a02312_1ab383b7d77eebdc9c6068cd65f0a7afce">doParse</reimplementedby>
+        <reimplementedby refid="dd/d6e/a02324_1ae8788e102fb675cc6beb55fb8249df54">doParse</reimplementedby>
+        <reimplementedby refid="d3/d35/a02360_1a00c41dff8d7bf04a261298f9d1623232">doParse</reimplementedby>
+        <reimplementedby refid="da/d75/a02372_1af1a601419f0670440e195b345d14060f">doParse</reimplementedby>
+        <reimplementedby refid="d2/d11/a02384_1a88d99ac05a3ce441413cbb9574d78a16">doParse</reimplementedby>
+        <reimplementedby refid="d5/d10/a02396_1ad6ebfdff6b2a5b6762d052ba65ab23fd">doParse</reimplementedby>
+        <reimplementedby refid="d4/d2d/a02408_1ae674ccd0f87c445bf7d82f4fbba2f150">doParse</reimplementedby>
+        <reimplementedby refid="d5/d2b/a02420_1a02fa5d9fd6655f1076985f8cd1fd92bd">doParse</reimplementedby>
+        <reimplementedby refid="da/d5c/a02432_1a44ff83dae67379f5b138bd9d158fbd65">doParse</reimplementedby>
+        <reimplementedby refid="d4/da8/a02444_1a76cd8550066e3624426e52870f9a4399">doParse</reimplementedby>
+        <reimplementedby refid="d5/dcb/a02456_1ab571767cc83c4f3606bced26db4173d7">doParse</reimplementedby>
+        <param>
+          <type>TParsed &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>From chunk reader function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/PoolUniformBuffer.hpp" line="235" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="235" bodyend="238"/>
-        <references refid="db/d83/a02328_1ad3de3f47551cdd4bd91f2372e504bd4d" compoundref="d5/dcb/a00170" startline="203" endline="206">getElementSize</references>
-        <referencedby refid="db/d83/a02328_1a32a13128eaf15955c1ff544751dcac6a" compoundref="d5/dcb/a00170" startline="223" endline="226">getAlignedSize</referencedby>
+        <location file="Binary/BinaryParser.hpp" line="513" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d83/a02328_1aee71b68a40835a10fafe1e1ea5802650" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::BinaryParserBase&lt; TParsed &gt;::doParse_v1_1</definition>
+        <argsstring>(TParsed &amp;obj)</argsstring>
+        <name>doParse_v1_1</name>
+        <qualifiedname>castor3d::BinaryParserBase::doParse_v1_1</qualifiedname>
+        <reimplementedby refid="d4/da8/a02444_1a7ba8a597521230966cbf42b062bb545a">doParse_v1_1</reimplementedby>
+        <param>
+          <type>TParsed &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>Chunk reader function from a chunk of version 1.1. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="524" column="22" bodyfile="Binary/BinaryParser.hpp" bodystart="524" bodyend="527"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d83/a02328_1a2df9eb54490b9522c10067b3dbc41e73" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::BinaryParserBase&lt; TParsed &gt;::doParse_v1_2</definition>
+        <argsstring>(TParsed &amp;obj)</argsstring>
+        <name>doParse_v1_2</name>
+        <qualifiedname>castor3d::BinaryParserBase::doParse_v1_2</qualifiedname>
+        <reimplementedby refid="d1/d47/a02300_1afccfd73473da146d760298a96208b993">doParse_v1_2</reimplementedby>
+        <param>
+          <type>TParsed &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>Chunk reader function from a chunk of version 1.2. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="538" column="22" bodyfile="Binary/BinaryParser.hpp" bodystart="538" bodyend="541"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d83/a02328_1aab45074c2f8ac65df7fc52ee2530ebc1" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::BinaryParserBase&lt; TParsed &gt;::doParse_v1_3</definition>
+        <argsstring>(TParsed &amp;obj)</argsstring>
+        <name>doParse_v1_3</name>
+        <qualifiedname>castor3d::BinaryParserBase::doParse_v1_3</qualifiedname>
+        <reimplementedby refid="dd/d6e/a02324_1a1f0c8a30f09a14b4ec1171e63affe2fd">doParse_v1_3</reimplementedby>
+        <reimplementedby refid="d5/d2b/a02420_1ab8901d3152fdcff078ee8574ed673b4b">doParse_v1_3</reimplementedby>
+        <reimplementedby refid="d5/dcb/a02456_1a195f458651e1d5872824024368efc4d1">doParse_v1_3</reimplementedby>
+        <param>
+          <type>TParsed &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>Chunk reader function from a chunk of version 1.3. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="552" column="22" bodyfile="Binary/BinaryParser.hpp" bodystart="552" bodyend="555"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d83/a02328_1a518964b604fa8129ace4f8f5795d47bc" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::BinaryParserBase&lt; TParsed &gt;::doParse_v1_4</definition>
+        <argsstring>(TParsed &amp;obj)</argsstring>
+        <name>doParse_v1_4</name>
+        <qualifiedname>castor3d::BinaryParserBase::doParse_v1_4</qualifiedname>
+        <reimplementedby refid="d1/d47/a02300_1a75054badb15d0ca0511796ddbe003456">doParse_v1_4</reimplementedby>
+        <param>
+          <type>TParsed &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>Chunk reader function from a chunk of version 1.4. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="566" column="22" bodyfile="Binary/BinaryParser.hpp" bodystart="566" bodyend="569"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>Binary data chunk reader base class. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Buffer/PoolUniformBuffer.hpp" line="20" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="19" bodyend="249"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::BinaryParserBase&lt; Animation &gt;</label>
+        <link refid="db/d83/a02328"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Animation &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::BinaryParserBase&lt; Bone &gt;</label>
+        <link refid="db/d83/a02328"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Bone &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::BinaryParserBase&lt; BonesComponent &gt;</label>
+        <link refid="db/d83/a02328"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; BonesComponent &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::BinaryParserBase&lt; Mesh &gt;</label>
+        <link refid="db/d83/a02328"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Mesh &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::BinaryParserBase&lt; MeshAnimation &gt;</label>
+        <link refid="db/d83/a02328"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; MeshAnimation &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::BinaryParserBase&lt; MeshAnimationKeyFrame &gt;</label>
+        <link refid="db/d83/a02328"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; MeshAnimationKeyFrame &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::BinaryParserBase&lt; SceneNodeAnimation &gt;</label>
+        <link refid="db/d83/a02328"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SceneNodeAnimation &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor3d::BinaryParserBase&lt; SceneNodeAnimationKeyFrame &gt;</label>
+        <link refid="db/d83/a02328"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SceneNodeAnimationKeyFrame &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor3d::BinaryParserBase&lt; Skeleton &gt;</label>
+        <link refid="db/d83/a02328"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Skeleton &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor3d::BinaryParserBase&lt; SkeletonAnimation &gt;</label>
+        <link refid="db/d83/a02328"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimation &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>castor3d::BinaryParserBase&lt; SkeletonAnimationBone &gt;</label>
+        <link refid="db/d83/a02328"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationBone &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="24">
+        <label>castor3d::BinaryParserBase&lt; SkeletonAnimationKeyFrame &gt;</label>
+        <link refid="db/d83/a02328"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationKeyFrame &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="26">
+        <label>castor3d::BinaryParserBase&lt; SkeletonAnimationNode &gt;</label>
+        <link refid="db/d83/a02328"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationNode &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="28">
+        <label>castor3d::BinaryParserBase&lt; SkeletonAnimationObject &gt;</label>
+        <link refid="db/d83/a02328"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationObject &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="30">
+        <label>castor3d::BinaryParserBase&lt; Submesh &gt;</label>
+        <link refid="db/d83/a02328"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Submesh &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::BinaryParser&lt; Animation &gt;</label>
+        <link refid="dc/d18/a02260"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::BinaryParser&lt; Bone &gt;</label>
+        <link refid="d5/dc0/a02272"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::BinaryParser&lt; BonesComponent &gt;</label>
+        <link refid="d3/d81/a02284"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::BinaryParser&lt; Mesh &gt;</label>
+        <link refid="d1/d47/a02300"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor3d::BinaryParser&lt; MeshAnimation &gt;</label>
+        <link refid="df/d73/a02312"/>
+        <childnode refid="10" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;</label>
+        <link refid="dd/d6e/a02324"/>
+        <childnode refid="12" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</label>
+        <link refid="d3/d35/a02360"/>
+        <childnode refid="14" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::BinaryParser&lt; SceneNodeAnimationKeyFrame &gt;</label>
+        <link refid="da/d75/a02372"/>
+        <childnode refid="16" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor3d::BinaryParser&lt; Skeleton &gt;</label>
+        <link refid="d2/d11/a02384"/>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor3d::BinaryParser&lt; SkeletonAnimation &gt;</label>
+        <link refid="d5/d10/a02396"/>
+        <childnode refid="20" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="23">
+        <label>castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;</label>
+        <link refid="d4/d2d/a02408"/>
+        <childnode refid="22" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="25">
+        <label>castor3d::BinaryParser&lt; SkeletonAnimationKeyFrame &gt;</label>
+        <link refid="d5/d2b/a02420"/>
+        <childnode refid="24" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>castor3d::BinaryParser&lt; SkeletonAnimationNode &gt;</label>
+        <link refid="da/d5c/a02432"/>
+        <childnode refid="26" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="29">
+        <label>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</label>
+        <link refid="d4/da8/a02444"/>
+        <childnode refid="28" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="31">
+        <label>castor3d::BinaryParser&lt; Submesh &gt;</label>
+        <link refid="d5/dcb/a02456"/>
+        <childnode refid="30" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
+        <link refid="db/d83/a02328"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::BinaryChunk</label>
+        <link refid="dc/d1a/a02288"/>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
+        <link refid="db/d83/a02328"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_fileVersion</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::Version</label>
+        <link refid="d0/ded/a03276"/>
+      </node>
+    </collaborationgraph>
+    <location file="Binary/BinaryParser.hpp" line="16" column="1" bodyfile="Binary/BinaryParser.hpp" bodystart="17" bodyend="590"/>
     <listofallmembers>
-      <member refid="db/d83/a02328_1a7cc2d0d50f79a7425983da27baae4147" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>allocate</name></member>
-      <member refid="db/d83/a02328_1ab2dde565384597c456092f4a8c884c13" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>cleanup</name></member>
-      <member refid="db/d83/a02328_1a7b2e62bf5f3fd11e264e8588838adba2" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>deallocate</name></member>
-      <member refid="db/d83/a02328_1a32a13128eaf15955c1ff544751dcac6a" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getAlignedSize</name></member>
-      <member refid="db/d83/a02328_1ab9520ff65055aeb19c8b5bfca02ae4a3" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getAlignedSize</name></member>
-      <member refid="db/d83/a02328_1aefd626770b301d79f1b170b5776c34cd" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getBuffer</name></member>
-      <member refid="db/d83/a02328_1a8ec615fc48fa0de114d0ee09808e1c60" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getBuffer</name></member>
-      <member refid="db/d83/a02328_1a2049a44b19ffaa6f48aaa00e7f9bd62f" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getData</name></member>
-      <member refid="db/d83/a02328_1af7977fae14997051051d08b25d4b26d6" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getData</name></member>
-      <member refid="db/d83/a02328_1a5157e5b0efdadac6100df15f21f1b50f" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getDatas</name></member>
-      <member refid="db/d83/a02328_1a1d2649b8bb78bf888aa4771080e0d08c" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getDatas</name></member>
-      <member refid="db/d83/a02328_1ad3de3f47551cdd4bd91f2372e504bd4d" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getElementSize</name></member>
-      <member refid="db/d83/a02328_1af825adaf870341eb0810ef0fc70a2811" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>hasAvailable</name></member>
-      <member refid="db/d83/a02328_1a77619c448a45c14bbfcd61b22b592274" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>hasBuffer</name></member>
-      <member refid="db/d83/a02328_1acb9da7d65165c0ffee76279f21ac9c54" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>initialise</name></member>
-      <member refid="db/d83/a02328_1aab23d4b9089c3943656b943c38c25289" prot="private" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>m_allocated</name></member>
-      <member refid="db/d83/a02328_1a1cd07230309159b3e8b81b32a8553266" prot="private" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>m_buffer</name></member>
-      <member refid="db/d83/a02328_1a741b5ad3d0c991d22d148fb2a7933372" prot="private" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>m_data</name></member>
-      <member refid="db/d83/a02328_1a2f46362bb79c8f5bc308bd36978ab280" prot="private" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>m_debugName</name></member>
-      <member refid="db/d83/a02328_1a0f50cc79281f6c234c727f926ddfbcf8" prot="private" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>m_flags</name></member>
-      <member refid="db/d83/a02328_1a41ce37131b470a87b0ae6ab96ce5b3a7" prot="private" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>m_renderSystem</name></member>
-      <member refid="db/d83/a02328_1a20d1cd447ae5f875a7c9d13419e33035" prot="private" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>m_sharingMode</name></member>
-      <member refid="db/d83/a02328_1a85afdeb1cde8aedbc74d5d7be3d4d077" prot="private" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>m_usage</name></member>
-      <member refid="db/d83/a02328_1aef9b5a32ba56c24595a4b819ad25c7c9" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>operator ashes::UniformBuffer &amp;</name></member>
-      <member refid="db/d83/a02328_1a3f8292fb08362bce16522a0e987f6344" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>operator ashes::UniformBuffer const &amp;</name></member>
-      <member refid="db/d83/a02328_1a2bb9306a9d408dd999bb213a20cfc58e" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>PoolUniformBuffer</name></member>
+      <member refid="db/d83/a02328_1af07e46a537db6181733f95fa289f1d23" prot="private" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>BinaryParserBase</name></member>
+      <member refid="db/d83/a02328_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>checkError</name></member>
+      <member refid="db/d83/a02328_1ae6f4694ede819151fe4e30e33235ff07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>createBinaryParser</name></member>
+      <member refid="db/d83/a02328_1ab5f9ba53ad5865f967b41e5a27ed73a9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>doGetSubChunk</name></member>
+      <member refid="db/d83/a02328_1a020a66d5fc1b452dc76c82702d72bbb1" prot="private" virt="pure-virtual"><scope>castor3d::BinaryParserBase</scope><name>doParse</name></member>
+      <member refid="db/d83/a02328_1aee71b68a40835a10fafe1e1ea5802650" prot="private" virt="virtual"><scope>castor3d::BinaryParserBase</scope><name>doParse_v1_1</name></member>
+      <member refid="db/d83/a02328_1a2df9eb54490b9522c10067b3dbc41e73" prot="private" virt="virtual"><scope>castor3d::BinaryParserBase</scope><name>doParse_v1_2</name></member>
+      <member refid="db/d83/a02328_1aab45074c2f8ac65df7fc52ee2530ebc1" prot="private" virt="virtual"><scope>castor3d::BinaryParserBase</scope><name>doParse_v1_3</name></member>
+      <member refid="db/d83/a02328_1a518964b604fa8129ace4f8f5795d47bc" prot="private" virt="virtual"><scope>castor3d::BinaryParserBase</scope><name>doParse_v1_4</name></member>
+      <member refid="db/d83/a02328_1a0e1aa917e3bf897fab03a32d20890062" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>doParseChunk</name></member>
+      <member refid="db/d83/a02328_1a22ca62addb3ab167995e18f49267efcf" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>doParseChunk</name></member>
+      <member refid="db/d83/a02328_1a5a648553ce168f5bc34adeedc8d169a7" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>doParseChunk</name></member>
+      <member refid="db/d83/a02328_1a90df4e46072e5ef14aebebd00cbcc1f5" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>doParseChunk</name></member>
+      <member refid="db/d83/a02328_1a5fac84360102001f5e730be1927c024e" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>doParseChunk</name></member>
+      <member refid="db/d83/a02328_1a035881aba2b64571b30a5efd3faaf3d9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>doParseHeader</name></member>
+      <member refid="db/d83/a02328_1ab3df04f9aa2eb1f7a533ed18631f09c4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>m_chunk</name></member>
+      <member refid="db/d83/a02328_1a455764ca72b659dab2652baf56ce5885" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>m_fileVersion</name></member>
+      <member refid="db/d83/a02328_1ae4820a3ab3e4b282240e5f1b969153c1" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>Name</name></member>
+      <member refid="db/d83/a02328_1a5db83668684ca219f67de3a381898e64" prot="public" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>parse</name></member>
+      <member refid="db/d83/a02328_1a6bbbb529f463085c7d259600ae1b3e99" prot="public" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>parse</name></member>
+      <member refid="db/d83/a02328_1a61b02dbf69d89569eff5be22facd5f07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>parse_v1_1</name></member>
+      <member refid="db/d83/a02328_1a95788692ddd6fae91074c299b674aaab" prot="public" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>parse_v1_2</name></member>
+      <member refid="db/d83/a02328_1a6f39b66d980e4a65660016f71115a89c" prot="public" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>parse_v1_3</name></member>
+      <member refid="db/d83/a02328_1aabc068daf8d99718497aa35f7a17c346" prot="public" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>parse_v1_4</name></member>
+      <member refid="db/d83/a02328_1afb9e6fdcdc58e65458de7892d2bf8025" prot="public" virt="virtual"><scope>castor3d::BinaryParserBase</scope><name>~BinaryParserBase</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,0 +1,731 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d3/d23/a04822" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::SubsurfaceScatteringPass</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <includes local="no">SubsurfaceScatteringPass.hpp</includes>
+    <innerclass refid="d4/de4/a04834" prot="private">castor3d::SubsurfaceScatteringPass::Blur</innerclass>
+    <innerclass refid="d6/df5/a04826" prot="public">castor3d::SubsurfaceScatteringPass::BlurConfiguration</innerclass>
+    <innerclass refid="d2/da7/a04830" prot="public">castor3d::SubsurfaceScatteringPass::BlurWeights</innerclass>
+    <innerclass refid="da/d67/a04838" prot="private">castor3d::SubsurfaceScatteringPass::Combine</innerclass>
+      <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="d3/d23/a04822_1a263e062c3bbf53ad3ff07d21352b4173" prot="private" static="no">
+        <type>std::array&lt; <ref refid="df/d14/a02658" kindref="compound">TextureUnit</ref>, PassCount &gt;</type>
+        <definition>using castor3d::SubsurfaceScatteringPass::BlurResult =  std::array&lt; TextureUnit, PassCount &gt;</definition>
+        <argsstring></argsstring>
+        <name>BlurResult</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="149" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="149" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d3/d23/a04822_1a541be1b22a4da21c7d3f8764c7d02de7" prot="private" static="no">
+        <type>std::array&lt; std::unique_ptr&lt; Blur &gt;, PassCount &gt;</type>
+        <definition>using castor3d::SubsurfaceScatteringPass::BlurArray =  std::array&lt; std::unique_ptr&lt; Blur &gt;, PassCount &gt;</definition>
+        <argsstring></argsstring>
+        <name>BlurArray</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="150" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="150" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d3/d23/a04822_1a901fd327809eb399652e361c56b08941" prot="public" static="yes" mutable="no">
+        <type>castor::String const</type>
+        <definition>castor::String const castor3d::SubsurfaceScatteringPass::Config</definition>
+        <argsstring></argsstring>
+        <name>Config</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="102" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d23/a04822_1a21c56f360cadb98247b9475bc6a00fc1" prot="public" static="yes" mutable="no">
+        <type>castor::String const</type>
+        <definition>castor::String const castor3d::SubsurfaceScatteringPass::Step</definition>
+        <argsstring></argsstring>
+        <name>Step</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="103" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d23/a04822_1af7706e05c28e70845346ec7fc53c9993" prot="public" static="yes" mutable="no">
+        <type>castor::String const</type>
+        <definition>castor::String const castor3d::SubsurfaceScatteringPass::Correction</definition>
+        <argsstring></argsstring>
+        <name>Correction</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="104" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d23/a04822_1a5410c213270a09a94c1f81f18bfc619d" prot="public" static="yes" mutable="no">
+        <type>castor::String const</type>
+        <definition>castor::String const castor3d::SubsurfaceScatteringPass::PixelSize</definition>
+        <argsstring></argsstring>
+        <name>PixelSize</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="105" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d23/a04822_1a5e8480714c60f1b03257668e172cf0dc" prot="public" static="yes" mutable="no">
+        <type>castor::String const</type>
+        <definition>castor::String const castor3d::SubsurfaceScatteringPass::Weights</definition>
+        <argsstring></argsstring>
+        <name>Weights</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="106" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d23/a04822_1a5d8f7011175203d682fbc5e2af3be0d6" prot="public" static="yes" mutable="no">
+        <type>castor::String const</type>
+        <definition>castor::String const castor3d::SubsurfaceScatteringPass::Offsets</definition>
+        <argsstring></argsstring>
+        <name>Offsets</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="107" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="d3/d23/a04822_1a11cea32de862834b9893ddccbe2ea2e5" prot="private" static="yes" mutable="no">
+        <type>constexpr uint32_t</type>
+        <definition>constexpr uint32_t castor3d::SubsurfaceScatteringPass::PassCount</definition>
+        <argsstring></argsstring>
+        <name>PassCount</name>
+        <initializer>= 3u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="148" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="148" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d3/d23/a04822_1a45084740db2329c4622b2aff4b6bd7be" prot="private" static="no" mutable="no">
+        <type><ref refid="de/d5f/a05458" kindref="compound">GpInfoUbo</ref> const  &amp;</type>
+        <definition>GpInfoUbo const&amp; castor3d::SubsurfaceScatteringPass::m_gpInfoUbo</definition>
+        <argsstring></argsstring>
+        <name>m_gpInfoUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="177" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="177" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d23/a04822_1ae4377299531e49e3828d057c2f773a49" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d79/a05522" kindref="compound">SceneUbo</ref> &amp;</type>
+        <definition>SceneUbo&amp; castor3d::SubsurfaceScatteringPass::m_sceneUbo</definition>
+        <argsstring></argsstring>
+        <name>m_sceneUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="178" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="178" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d23/a04822_1ac188206baf0d5468da946ef3d260fd00" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/d8e/a04874" kindref="compound">OpaquePassResult</ref> const  &amp;</type>
+        <definition>OpaquePassResult const&amp; castor3d::SubsurfaceScatteringPass::m_gpResult</definition>
+        <argsstring></argsstring>
+        <name>m_gpResult</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="179" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="179" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d23/a04822_1ae91db5c12cf0e422db9bdeb86a9aec88" prot="private" static="no" mutable="no">
+        <type><ref refid="d6/df5/a04770" kindref="compound">LightPassResult</ref> const  &amp;</type>
+        <definition>LightPassResult const&amp; castor3d::SubsurfaceScatteringPass::m_lpResult</definition>
+        <argsstring></argsstring>
+        <name>m_lpResult</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="180" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="180" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d23/a04822_1a8dc294ea334af7e8e702be5c5cbe7f78" prot="private" static="no" mutable="no">
+        <type>castor::Size</type>
+        <definition>castor::Size castor3d::SubsurfaceScatteringPass::m_size</definition>
+        <argsstring></argsstring>
+        <name>m_size</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="181" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="181" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d23/a04822_1aa8f0683705fa8e0be044b48f7ebb713d" prot="private" static="no" mutable="no">
+        <type><ref refid="df/d14/a02658" kindref="compound">TextureUnit</ref></type>
+        <definition>TextureUnit castor3d::SubsurfaceScatteringPass::m_intermediate</definition>
+        <argsstring></argsstring>
+        <name>m_intermediate</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="182" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="182" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d23/a04822_1a50f2197324e5fd9e604045f82dfe58b8" prot="private" static="no" mutable="no">
+        <type>BlurResult</type>
+        <definition>BlurResult castor3d::SubsurfaceScatteringPass::m_blurResults</definition>
+        <argsstring></argsstring>
+        <name>m_blurResults</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="183" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="183" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d23/a04822_1a0ca2ca8e1325644a3c5b68bdf20740c5" prot="private" static="no" mutable="no">
+        <type><ref refid="df/d14/a02658" kindref="compound">TextureUnit</ref></type>
+        <definition>TextureUnit castor3d::SubsurfaceScatteringPass::m_result</definition>
+        <argsstring></argsstring>
+        <name>m_result</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="184" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="184" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d23/a04822_1ae5dfb1712f317c0d86c75a0afbff4ee0" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/d63/a05306" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::SubsurfaceScatteringPass::m_blurHorizVertexShader</definition>
+        <argsstring></argsstring>
+        <name>m_blurHorizVertexShader</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="185" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="185" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d23/a04822_1ae2171aa05b7f61516221ac50020965b7" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/d63/a05306" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::SubsurfaceScatteringPass::m_blurHorizPixelShader</definition>
+        <argsstring></argsstring>
+        <name>m_blurHorizPixelShader</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="186" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="186" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d23/a04822_1a0860fa5e15c035e3e96bb06d98e0c01d" prot="private" static="no" mutable="no">
+        <type>BlurArray</type>
+        <definition>BlurArray castor3d::SubsurfaceScatteringPass::m_blurX</definition>
+        <argsstring></argsstring>
+        <name>m_blurX</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="187" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="187" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d23/a04822_1a2e29d169b4fcca32f1111f816f26834f" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/d63/a05306" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::SubsurfaceScatteringPass::m_blurVerticVertexShader</definition>
+        <argsstring></argsstring>
+        <name>m_blurVerticVertexShader</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="188" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="188" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d23/a04822_1a710e4f1679d57e91018698ecdf62d843" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/d63/a05306" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::SubsurfaceScatteringPass::m_blurVerticPixelShader</definition>
+        <argsstring></argsstring>
+        <name>m_blurVerticPixelShader</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="189" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="189" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d23/a04822_1aa5a97d646e6797e4ff0da600ab25d210" prot="private" static="no" mutable="no">
+        <type>BlurArray</type>
+        <definition>BlurArray castor3d::SubsurfaceScatteringPass::m_blurY</definition>
+        <argsstring></argsstring>
+        <name>m_blurY</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="190" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="190" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d23/a04822_1a9a264215cea63bbb9a311d740ea846b8" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/d63/a05306" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::SubsurfaceScatteringPass::m_combineVertexShader</definition>
+        <argsstring></argsstring>
+        <name>m_combineVertexShader</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="191" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="191" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d23/a04822_1a41be77d3b7f42e955a76af29d69aeaa3" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/d63/a05306" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::SubsurfaceScatteringPass::m_combinePixelShader</definition>
+        <argsstring></argsstring>
+        <name>m_combinePixelShader</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="192" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="192" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d23/a04822_1a56a5edb382ef2e06db648d900c490b55" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; Combine &gt;</type>
+        <definition>std::unique_ptr&lt; Combine &gt; castor3d::SubsurfaceScatteringPass::m_combine</definition>
+        <argsstring></argsstring>
+        <name>m_combine</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="193" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="193" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d23/a04822_1a957a8ba6ef960279bad57daa8c139eb8" prot="private" static="no" mutable="no">
+        <type>ashes::CommandBufferPtr</type>
+        <definition>ashes::CommandBufferPtr castor3d::SubsurfaceScatteringPass::m_commandBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_commandBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="194" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="194" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d23/a04822_1ae87a27309bd17b1292d6bbfde4f36dce" prot="private" static="no" mutable="no">
+        <type>ashes::SemaphorePtr</type>
+        <definition>ashes::SemaphorePtr castor3d::SubsurfaceScatteringPass::m_finished</definition>
+        <argsstring></argsstring>
+        <name>m_finished</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="195" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="195" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d23/a04822_1a908039b879d2a4476e59cb909c728e1c" prot="private" static="no" mutable="no">
+        <type>RenderPassTimerSPtr</type>
+        <definition>RenderPassTimerSPtr castor3d::SubsurfaceScatteringPass::m_timer</definition>
+        <argsstring></argsstring>
+        <name>m_timer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="196" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="196" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d23/a04822_1a244377bd670e79d458a7b25382d8c8de" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SubsurfaceScatteringPass::m_initialised</definition>
+        <argsstring></argsstring>
+        <name>m_initialised</name>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="197" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="197" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d23/a04822_1a957a87327c436b2b56b9cb1c9dc380f8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SubsurfaceScatteringPass::SubsurfaceScatteringPass</definition>
+        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, GpInfoUbo const &amp;gpInfoUbo, SceneUbo &amp;sceneUbo, castor::Size const &amp;textureSize, OpaquePassResult const &amp;gpResult, LightPassResult const &amp;lpResult)</argsstring>
+        <name>SubsurfaceScatteringPass</name>
+        <param>
+          <type><ref refid="df/d9b/a02514" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d5f/a05458" kindref="compound">GpInfoUbo</ref> const &amp;</type>
+          <declname>gpInfoUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d79/a05522" kindref="compound">SceneUbo</ref> &amp;</type>
+          <declname>sceneUbo</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>textureSize</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d8e/a04874" kindref="compound">OpaquePassResult</ref> const &amp;</type>
+          <declname>gpResult</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/df5/a04770" kindref="compound">LightPassResult</ref> const &amp;</type>
+          <declname>lpResult</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">gpInfoUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The geometry pass UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sceneUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">textureSize</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render area dimensions. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">gpResult</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The geometry pass result. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lpResult</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The light pass result. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="47" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d23/a04822_1a52b88d36498c08b088fc30734ade682e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SubsurfaceScatteringPass::~SubsurfaceScatteringPass</definition>
+        <argsstring>()=default</argsstring>
+        <name>~SubsurfaceScatteringPass</name>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="60" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d23/a04822_1a8e2bf0e6ce9226ebc676f214b119a0af" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SubsurfaceScatteringPass::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>initialise</name>
+        <param>
+          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Initialises the GPU elements. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="69" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d23/a04822_1a4f2b6e8552ebcb68dfde1d4221b450d3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SubsurfaceScatteringPass::cleanup</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>cleanup</name>
+        <param>
+          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Cleans up the GPU elements. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="78" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d23/a04822_1a903b20d8fdb47a3c1c43d6a4630c1f55" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Semaphore const  &amp;</type>
+        <definition>C3D_API ashes::Semaphore const&amp; castor3d::SubsurfaceScatteringPass::render</definition>
+        <argsstring>(RenderDevice const &amp;device, ashes::Semaphore const &amp;toWait) const</argsstring>
+        <name>render</name>
+        <param>
+          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>ashes::Semaphore const &amp;</type>
+          <declname>toWait</declname>
+        </param>
+        <briefdescription>
+<para>Renders the subsurfaces scattering. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">toWait</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The semaphore to wait. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="89" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d23/a04822_1afb1071318ff6a1671bbf3d62273f4497" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SubsurfaceScatteringPass::accept</definition>
+        <argsstring>(PipelineVisitorBase &amp;visitor)</argsstring>
+        <name>accept</name>
+        <param>
+          <type><ref refid="d5/de2/a03830" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Visitor acceptance function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ... visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="94" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d23/a04822_1a7240d46cbacaa04aaf8ad4b71ff3cf73" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="df/d14/a02658" kindref="compound">TextureUnit</ref> const  &amp;</type>
+        <definition>TextureUnit const&amp; castor3d::SubsurfaceScatteringPass::getResult</definition>
+        <argsstring>() const</argsstring>
+        <name>getResult</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="96" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="96" bodyend="99"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4310">
+        <label>castor3d::SubsurfaceScatteringPass</label>
+        <link refid="d3/d23/a04822"/>
+        <childnode refid="4311" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4311">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4312">
+        <label>castor3d::SubsurfaceScatteringPass</label>
+        <link refid="d3/d23/a04822"/>
+        <childnode refid="4313" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4313">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="25" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="23" bodyend="198"/>
+    <listofallmembers>
+      <member refid="d3/d23/a04822_1afb1071318ff6a1671bbf3d62273f4497" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>accept</name></member>
+      <member refid="d3/d23/a04822_1a541be1b22a4da21c7d3f8764c7d02de7" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>BlurArray</name></member>
+      <member refid="d3/d23/a04822_1a263e062c3bbf53ad3ff07d21352b4173" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>BlurResult</name></member>
+      <member refid="d3/d23/a04822_1a4f2b6e8552ebcb68dfde1d4221b450d3" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>cleanup</name></member>
+      <member refid="d3/d23/a04822_1a901fd327809eb399652e361c56b08941" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>Config</name></member>
+      <member refid="d3/d23/a04822_1af7706e05c28e70845346ec7fc53c9993" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>Correction</name></member>
+      <member refid="d3/d23/a04822_1a7240d46cbacaa04aaf8ad4b71ff3cf73" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>getResult</name></member>
+      <member refid="d3/d23/a04822_1a8e2bf0e6ce9226ebc676f214b119a0af" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>initialise</name></member>
+      <member refid="d3/d23/a04822_1ae2171aa05b7f61516221ac50020965b7" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>m_blurHorizPixelShader</name></member>
+      <member refid="d3/d23/a04822_1ae5dfb1712f317c0d86c75a0afbff4ee0" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>m_blurHorizVertexShader</name></member>
+      <member refid="d3/d23/a04822_1a50f2197324e5fd9e604045f82dfe58b8" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>m_blurResults</name></member>
+      <member refid="d3/d23/a04822_1a710e4f1679d57e91018698ecdf62d843" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>m_blurVerticPixelShader</name></member>
+      <member refid="d3/d23/a04822_1a2e29d169b4fcca32f1111f816f26834f" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>m_blurVerticVertexShader</name></member>
+      <member refid="d3/d23/a04822_1a0860fa5e15c035e3e96bb06d98e0c01d" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>m_blurX</name></member>
+      <member refid="d3/d23/a04822_1aa5a97d646e6797e4ff0da600ab25d210" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>m_blurY</name></member>
+      <member refid="d3/d23/a04822_1a56a5edb382ef2e06db648d900c490b55" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>m_combine</name></member>
+      <member refid="d3/d23/a04822_1a41be77d3b7f42e955a76af29d69aeaa3" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>m_combinePixelShader</name></member>
+      <member refid="d3/d23/a04822_1a9a264215cea63bbb9a311d740ea846b8" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>m_combineVertexShader</name></member>
+      <member refid="d3/d23/a04822_1a957a8ba6ef960279bad57daa8c139eb8" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>m_commandBuffer</name></member>
+      <member refid="d3/d23/a04822_1ae87a27309bd17b1292d6bbfde4f36dce" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>m_finished</name></member>
+      <member refid="d3/d23/a04822_1a45084740db2329c4622b2aff4b6bd7be" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>m_gpInfoUbo</name></member>
+      <member refid="d3/d23/a04822_1ac188206baf0d5468da946ef3d260fd00" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>m_gpResult</name></member>
+      <member refid="d3/d23/a04822_1a244377bd670e79d458a7b25382d8c8de" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>m_initialised</name></member>
+      <member refid="d3/d23/a04822_1aa8f0683705fa8e0be044b48f7ebb713d" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>m_intermediate</name></member>
+      <member refid="d3/d23/a04822_1ae91db5c12cf0e422db9bdeb86a9aec88" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>m_lpResult</name></member>
+      <member refid="d3/d23/a04822_1a0ca2ca8e1325644a3c5b68bdf20740c5" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>m_result</name></member>
+      <member refid="d3/d23/a04822_1ae4377299531e49e3828d057c2f773a49" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>m_sceneUbo</name></member>
+      <member refid="d3/d23/a04822_1a8dc294ea334af7e8e702be5c5cbe7f78" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>m_size</name></member>
+      <member refid="d3/d23/a04822_1a908039b879d2a4476e59cb909c728e1c" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>m_timer</name></member>
+      <member refid="d3/d23/a04822_1a5d8f7011175203d682fbc5e2af3be0d6" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>Offsets</name></member>
+      <member refid="d3/d23/a04822_1a11cea32de862834b9893ddccbe2ea2e5" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>PassCount</name></member>
+      <member refid="d3/d23/a04822_1a5410c213270a09a94c1f81f18bfc619d" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>PixelSize</name></member>
+      <member refid="d3/d23/a04822_1a903b20d8fdb47a3c1c43d6a4630c1f55" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>render</name></member>
+      <member refid="d3/d23/a04822_1a21c56f360cadb98247b9475bc6a00fc1" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>Step</name></member>
+      <member refid="d3/d23/a04822_1a957a87327c436b2b56b9cb1c9dc380f8" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>SubsurfaceScatteringPass</name></member>
+      <member refid="d3/d23/a04822_1a5e8480714c60f1b03257668e172cf0dc" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>Weights</name></member>
+      <member refid="d3/d23/a04822_1a52b88d36498c08b088fc30734ade682e" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass</scope><name>~SubsurfaceScatteringPass</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

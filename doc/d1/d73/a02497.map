@@ -1,4 +1,4 @@
-<map id="castor3d::Engine" name="castor3d::Engine">
-<area shape="rect" id="node1" title=" " alt="" coords="31,80,151,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,176,32"/>
+<map id="castor3d::GpuBufferT&lt; AllocatorT &gt;" name="castor3d::GpuBufferT&lt; AllocatorT &gt;">
+<area shape="rect" id="node1" title="A GPU buffer, that uses a buddy allocator to allocate sub&#45;buffers." alt="" coords="17,80,161,121"/>
+<area shape="rect" id="node2" href="$d7/d7d/a02527.html" title=" " alt="" coords="5,5,172,32"/>
 </map>

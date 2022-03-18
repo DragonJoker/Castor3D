@@ -1,19 +1,31 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d9/d4e/a04307" kind="struct" language="C++" prot="public">
-    <compoundname>castor::Deleter&lt; castor3d::SceneRenderNodes &gt;</compoundname>
-    <includes local="no">RenderNodeModule.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d9/d4e/a04307" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::TransparentPassResult</compoundname>
+    <basecompoundref refid="d6/dc7/a03683" prot="public" virt="non-virtual">castor3d::GBufferT&lt; WbTexture &gt;</basecompoundref>
+    <includes local="no">TransparentPassResult.hpp</includes>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d9/d4e/a04307_1a9299a89628e884aca230dd696bc519ba" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor::Deleter&lt; castor3d::SceneRenderNodes &gt;::operator()</definition>
-        <argsstring>(castor3d::SceneRenderNodes *ptr) noexcept</argsstring>
-        <name>operator()</name>
+      <memberdef kind="function" id="d9/d4e/a04307_1ab618b645b72d1ce4c2b02297f5e2a62a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::TransparentPassResult::TransparentPassResult</definition>
+        <argsstring>(crg::ResourceHandler &amp;handler, RenderDevice const &amp;device, TexturePtr depthTexture, TexturePtr velocityTexture)</argsstring>
+        <name>TransparentPassResult</name>
+        <qualifiedname>castor3d::TransparentPassResult::TransparentPassResult</qualifiedname>
         <param>
-          <type><ref refid="da/d63/a04327" kindref="compound">castor3d::SceneRenderNodes</ref> *</type>
-          <declname>ptr</declname>
+          <type>crg::ResourceHandler &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a174cedaf5dfc3b47caa264f344279af2" kindref="member">TexturePtr</ref></type>
+          <declname>depthTexture</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a174cedaf5dfc3b47caa264f344279af2" kindref="member">TexturePtr</ref></type>
+          <declname>velocityTexture</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -21,20 +33,161 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Node/RenderNodeModule.hpp" line="141" column="1"/>
+        <location file="Render/Technique/Transparent/TransparentPassResult.hpp" line="17" column="9"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Deleter structure. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="remark"><para>Specialisation to hide implementation in .cpp (to reduce includes dependencies). </para>
-</simplesect>
-</para>
     </detaileddescription>
-    <location file="Render/Node/RenderNodeModule.hpp" line="140" column="1" bodyfile="Render/Node/RenderNodeModule.hpp" bodystart="139" bodyend="142"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::GBufferT&lt; WbTexture &gt;</label>
+        <link refid="d6/dc7/a03683"/>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; WbTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::GBufferBase</label>
+        <link refid="d1/d7a/a03679"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="d6/dc7/a03683"/>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::TransparentPassResult</label>
+        <link refid="d9/d4e/a04307"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::GBufferT&lt; WbTexture &gt;</label>
+        <link refid="d6/dc7/a03683"/>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_result</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; WbTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>T</label>
+      </node>
+      <node id="3">
+        <label>castor3d::GBufferBase</label>
+        <link refid="d1/d7a/a03679"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="d6/dc7/a03683"/>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_result</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::QueuesData</label>
+        <link refid="d5/d04/a03955"/>
+      </node>
+      <node id="5">
+        <label>castor3d::RenderDevice</label>
+        <link refid="d4/d87/a03963"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>queueFamilies</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d3/d9a/a04075"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::TransparentPassResult</label>
+        <link refid="d9/d4e/a04307"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
+      </node>
+      <node id="7">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="13">
+        <label>std::shared_ptr&lt; T &gt;</label>
+        <childnode refid="11" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="11" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::vector&lt; QueuesData &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; QueuesData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>std::vector&lt; TexturePtr &gt;</label>
+        <childnode refid="13" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; TexturePtr &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Technique/Transparent/TransparentPassResult.hpp" line="13" column="1" bodyfile="Render/Technique/Transparent/TransparentPassResult.hpp" bodystart="15" bodyend="21"/>
     <listofallmembers>
-      <member refid="d9/d4e/a04307_1a9299a89628e884aca230dd696bc519ba" prot="public" virt="non-virtual"><scope>castor::Deleter&lt; castor3d::SceneRenderNodes &gt;</scope><name>operator()</name></member>
+      <member refid="d6/dc7/a03683_1a794584976030474106bba3b69f4a7f80" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>begin</name></member>
+      <member refid="d6/dc7/a03683_1ae8ca53c58a918901635ec3492d4e064d" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>begin</name></member>
+      <member refid="d6/dc7/a03683_1ad184cb851604a0fdad0f1f8136ea6457" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>cbegin</name></member>
+      <member refid="d6/dc7/a03683_1a53d2fc5d9e1c83c50823f591a9650095" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>cend</name></member>
+      <member refid="d6/dc7/a03683_1a8939bb90032a1e4ec33e7840cb71c6c4" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>create</name></member>
+      <member refid="d6/dc7/a03683_1a54feb2c94b179d3ae6e16284d05a124c" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>end</name></member>
+      <member refid="d6/dc7/a03683_1a12e053e63b5593edca663b4a01962d6d" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>end</name></member>
+      <member refid="d6/dc7/a03683_1a67a677fc6cbdb36e74fa6b74a65c5015" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>GBufferT</name></member>
+      <member refid="d6/dc7/a03683_1a1ab6068973c95bddb3229dc2d9b1cc39" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>GBufferT</name></member>
+      <member refid="d6/dc7/a03683_1a1bb04fa8833cb8e9df999784c3f4e72d" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>GBufferT</name></member>
+      <member refid="d6/dc7/a03683_1aad84cb58cfbead8aa670554e5b015e54" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>GBufferT</name></member>
+      <member refid="d6/dc7/a03683_1ab53983ea6cfcc95da08034abb5e20d6b" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>m_result</name></member>
+      <member refid="d6/dc7/a03683_1aa803d666fd91abf546fa7bb32507b038" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>operator=</name></member>
+      <member refid="d6/dc7/a03683_1a8c693c6743416a4b36022e98193e3aa3" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>operator=</name></member>
+      <member refid="d6/dc7/a03683_1afc570eab10faf45040bd5ecafcc39104" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>operator[]</name></member>
+      <member refid="d9/d4e/a04307_1ab618b645b72d1ce4c2b02297f5e2a62a" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>TransparentPassResult</name></member>
+      <member refid="d6/dc7/a03683_1a84462bb3e4892ec0bb69d310bf08a7c3" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>~GBufferT</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

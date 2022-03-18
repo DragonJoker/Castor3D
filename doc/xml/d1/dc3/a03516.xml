@@ -1,33 +1,61 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d1/dc3/a03516" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPipelineColorBlendAdvancedStateCreateInfoEXT &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d1/dc3/a03516_1aa91a5820d18565d620511e76edd8b248" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPipelineColorBlendAdvancedStateCreateInfoEXT &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d1/dc3/a03516" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::DebugOverlays::PassOverlays::TimeOverlays</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/dc3/a03516_1a4583a7d7de39ceaed715397a0d33834d" prot="public" static="no" mutable="no">
+        <type>castor::Nanoseconds</type>
+        <definition>castor::Nanoseconds castor3d::DebugOverlays::PassOverlays::TimeOverlays::time</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_ADVANCED_STATE_CREATE_INFO_EXT</initializer>
+        <name>time</name>
+        <qualifiedname>castor3d::DebugOverlays::PassOverlays::TimeOverlays::time</qualifiedname>
+        <initializer>{ 0_ns }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="290" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="290" bodyend="-1"/>
+        <location file="Overlay/DebugOverlays.hpp" line="231" column="21" bodyfile="Overlay/DebugOverlays.hpp" bodystart="231" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dc3/a03516_1a6289f9b5dbc09eb9182faae071761949" prot="public" static="no" mutable="no">
+        <type>TextOverlaySPtr</type>
+        <definition>TextOverlaySPtr castor3d::DebugOverlays::PassOverlays::TimeOverlays::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>castor3d::DebugOverlays::PassOverlays::TimeOverlays::name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="232" column="17" bodyfile="Overlay/DebugOverlays.hpp" bodystart="232" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dc3/a03516_1a9bedf4e81f9a555db53181c08a99c869" prot="public" static="no" mutable="no">
+        <type>TextOverlaySPtr</type>
+        <definition>TextOverlaySPtr castor3d::DebugOverlays::PassOverlays::TimeOverlays::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <qualifiedname>castor3d::DebugOverlays::PassOverlays::TimeOverlays::value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="233" column="17" bodyfile="Overlay/DebugOverlays.hpp" bodystart="233" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="290" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="290" bodyend="290"/>
+    <location file="Overlay/DebugOverlays.hpp" line="229" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="230" bodyend="234"/>
     <listofallmembers>
-      <member refid="d1/dc3/a03516_1aa91a5820d18565d620511e76edd8b248" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPipelineColorBlendAdvancedStateCreateInfoEXT &gt;</scope><name>value</name></member>
+      <member refid="d1/dc3/a03516_1a6289f9b5dbc09eb9182faae071761949" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays::TimeOverlays</scope><name>name</name></member>
+      <member refid="d1/dc3/a03516_1a4583a7d7de39ceaed715397a0d33834d" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays::TimeOverlays</scope><name>time</name></member>
+      <member refid="d1/dc3/a03516_1a9bedf4e81f9a555db53181c08a99c869" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays::TimeOverlays</scope><name>value</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

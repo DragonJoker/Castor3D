@@ -1,44 +1,80 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="db/dab/a02567" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::TextureFlagsId</compoundname>
-    <includes local="no">MaterialModule.hpp</includes>
+    <compoundname>castor3d::VertexBufferPool::ModelBuffers</compoundname>
+    <includes local="no">ObjectBufferPool.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="db/dab/a02567_1ad57186504176a62f6e78d36337fb9221" prot="public" static="no" mutable="no">
-        <type><ref refid="d7/dd1/a01458_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref></type>
-        <definition>TextureFlags castor3d::TextureFlagsId::flags</definition>
+      <memberdef kind="variable" id="db/dab/a02567_1afc367c22500db7aebdc184ed0cbfb096" prot="public" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1a7616d1d27aba8f61289a44545c397f8d" kindref="member">GpuPackedBuffer</ref></type>
+        <definition>GpuPackedBuffer castor3d::VertexBufferPool::ModelBuffers::vertex</definition>
         <argsstring></argsstring>
-        <name>flags</name>
+        <name>vertex</name>
+        <qualifiedname>castor3d::VertexBufferPool::ModelBuffers::vertex</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/MaterialModule.hpp" line="109" column="1" bodyfile="Material/MaterialModule.hpp" bodystart="109" bodyend="-1"/>
+        <location file="Buffer/ObjectBufferPool.hpp" line="27" column="17" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="27" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="db/dab/a02567_1add8db50fa1f749d90e7950caa4c691e8" prot="public" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::TextureFlagsId::id</definition>
-        <argsstring></argsstring>
-        <name>id</name>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/dab/a02567_1ac96ca687ec408f798b64167a064a9bb1" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::VertexBufferPool::ModelBuffers::ModelBuffers</definition>
+        <argsstring>(GpuPackedBuffer vtx)</argsstring>
+        <name>ModelBuffers</name>
+        <qualifiedname>castor3d::VertexBufferPool::ModelBuffers::ModelBuffers</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1a7616d1d27aba8f61289a44545c397f8d" kindref="member">GpuPackedBuffer</ref></type>
+          <declname>vtx</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/MaterialModule.hpp" line="110" column="1" bodyfile="Material/MaterialModule.hpp" bodystart="110" bodyend="-1"/>
+        <location file="Buffer/ObjectBufferPool.hpp" line="22" column="10" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="22" bodyend="25"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Material/MaterialModule.hpp" line="108" column="1" bodyfile="Material/MaterialModule.hpp" bodystart="107" bodyend="111"/>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::GpuBufferT&lt; GpuBufferPackedAllocator &gt;</label>
+        <link refid="d0/d7c/a02499"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; GpuBufferPackedAllocator &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::GpuBufferBase</label>
+        <link refid="d7/d7d/a02527"/>
+      </node>
+      <node id="4">
+        <label>castor3d::GpuBufferT&lt; AllocatorT &gt;</label>
+        <link refid="d0/d7c/a02499"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::VertexBufferPool::ModelBuffers</label>
+        <link refid="db/dab/a02567"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>vertex</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Buffer/ObjectBufferPool.hpp" line="20" column="1" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="21" bodyend="28"/>
     <listofallmembers>
-      <member refid="db/dab/a02567_1ad57186504176a62f6e78d36337fb9221" prot="public" virt="non-virtual"><scope>castor3d::TextureFlagsId</scope><name>flags</name></member>
-      <member refid="db/dab/a02567_1add8db50fa1f749d90e7950caa4c691e8" prot="public" virt="non-virtual"><scope>castor3d::TextureFlagsId</scope><name>id</name></member>
+      <member refid="db/dab/a02567_1ac96ca687ec408f798b64167a064a9bb1" prot="public" virt="non-virtual"><scope>castor3d::VertexBufferPool::ModelBuffers</scope><name>ModelBuffers</name></member>
+      <member refid="db/dab/a02567_1afc367c22500db7aebdc184ed0cbfb096" prot="public" virt="non-virtual"><scope>castor3d::VertexBufferPool::ModelBuffers</scope><name>vertex</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

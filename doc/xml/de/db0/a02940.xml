@@ -1,33 +1,151 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="de/db0/a02940" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkDeviceGroupDeviceCreateInfo &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
+    <compoundname>castor3d::ResourceCacheTraitsT&lt; Sampler, castor::String &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::ResourceCacheTraitsBaseT&lt; Sampler, castor::String, ResourceCacheTraitsT&lt; Sampler, castor::String &gt; &gt;</basecompoundref>
+    <includes local="no">TextureModule.hpp</includes>
     <templateparamlist>
     </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="de/db0/a02940_1af57a0d63c1d304a6570cc1cd2db87b59" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkDeviceGroupDeviceCreateInfo &gt;::value</definition>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="de/db0/a02940_1a2b515af7437a8fcadda51f0f0f8db868" prot="public" static="no">
+        <type><ref refid="d8/d05/a02904" kindref="compound">Sampler</ref></type>
+        <definition>using castor3d::ResourceCacheTraitsT&lt; Sampler, castor::String &gt;::ResT =  Sampler</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_DEVICE_GROUP_DEVICE_CREATE_INFO</initializer>
+        <name>ResT</name>
+        <qualifiedname>castor3d::ResourceCacheTraitsT&lt; Sampler, castor::String &gt;::ResT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="75" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="75" bodyend="-1"/>
+        <location file="Material/Texture/TextureModule.hpp" line="217" column="1" bodyfile="Material/Texture/TextureModule.hpp" bodystart="217" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/db0/a02940_1af4f35fd585923ba05e7682d2c083a3af" prot="public" static="no">
+        <type>castor::String</type>
+        <definition>using castor3d::ResourceCacheTraitsT&lt; Sampler, castor::String &gt;::KeyT =  castor::String</definition>
+        <argsstring></argsstring>
+        <name>KeyT</name>
+        <qualifiedname>castor3d::ResourceCacheTraitsT&lt; Sampler, castor::String &gt;::KeyT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureModule.hpp" line="218" column="1" bodyfile="Material/Texture/TextureModule.hpp" bodystart="218" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/db0/a02940_1a88f1de8a82e61dd4f82b7b04bb3a3bc0" prot="public" static="no">
+        <type><ref refid="d4/d9d/a02704" kindref="compound">ResourceCacheTraitsT</ref>&lt; <ref refid="de/db0/a02940_1a2b515af7437a8fcadda51f0f0f8db868" kindref="member">ResT</ref>, <ref refid="de/db0/a02940_1af4f35fd585923ba05e7682d2c083a3af" kindref="member">KeyT</ref> &gt;</type>
+        <definition>using castor3d::ResourceCacheTraitsT&lt; Sampler, castor::String &gt;::TraitsT =  ResourceCacheTraitsT&lt; ResT, KeyT &gt;</definition>
+        <argsstring></argsstring>
+        <name>TraitsT</name>
+        <qualifiedname>castor3d::ResourceCacheTraitsT&lt; Sampler, castor::String &gt;::TraitsT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureModule.hpp" line="219" column="1" bodyfile="Material/Texture/TextureModule.hpp" bodystart="219" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/db0/a02940_1a65830c6ebeaf40eb10750435ce719cf9" prot="public" static="no">
+        <type>castor::ResourceCacheTraitsBaseT&lt; <ref refid="de/db0/a02940_1a2b515af7437a8fcadda51f0f0f8db868" kindref="member">ResT</ref>, <ref refid="de/db0/a02940_1af4f35fd585923ba05e7682d2c083a3af" kindref="member">KeyT</ref>, <ref refid="de/db0/a02940_1a88f1de8a82e61dd4f82b7b04bb3a3bc0" kindref="member">TraitsT</ref> &gt;</type>
+        <definition>using castor3d::ResourceCacheTraitsT&lt; Sampler, castor::String &gt;::Base =  castor::ResourceCacheTraitsBaseT&lt; ResT, KeyT, TraitsT &gt;</definition>
+        <argsstring></argsstring>
+        <name>Base</name>
+        <qualifiedname>castor3d::ResourceCacheTraitsT&lt; Sampler, castor::String &gt;::Base</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureModule.hpp" line="220" column="1" bodyfile="Material/Texture/TextureModule.hpp" bodystart="220" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/db0/a02940_1a06e6e94a750c2dc9e38930ada34dc5ca" prot="public" static="no">
+        <type>typename Base::ElementT</type>
+        <definition>using castor3d::ResourceCacheTraitsT&lt; Sampler, castor::String &gt;::ElementT =  typename Base::ElementT</definition>
+        <argsstring></argsstring>
+        <name>ElementT</name>
+        <qualifiedname>castor3d::ResourceCacheTraitsT&lt; Sampler, castor::String &gt;::ElementT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureModule.hpp" line="221" column="1" bodyfile="Material/Texture/TextureModule.hpp" bodystart="221" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/db0/a02940_1aaa75d1deaf4c5f5e49b9165dc6f67c92" prot="public" static="no">
+        <type>typename Base::ElementPtrT</type>
+        <definition>using castor3d::ResourceCacheTraitsT&lt; Sampler, castor::String &gt;::ElementPtrT =  typename Base::ElementPtrT</definition>
+        <argsstring></argsstring>
+        <name>ElementPtrT</name>
+        <qualifiedname>castor3d::ResourceCacheTraitsT&lt; Sampler, castor::String &gt;::ElementPtrT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureModule.hpp" line="222" column="1" bodyfile="Material/Texture/TextureModule.hpp" bodystart="222" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="de/db0/a02940_1afbe24c9343925ea48a6c25f5eee6c441" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <definition>C3D_API const castor::String castor3d::ResourceCacheTraitsT&lt; Sampler, castor::String &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor3d::ResourceCacheTraitsT&lt; Sampler, castor::String &gt;::Name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureModule.hpp" line="224" column="37" bodyfile="Material/Texture/TextureModule.hpp" bodystart="224" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
+<para>Helper structure to specialise a cache behaviour. <simplesect kind="remark"><para>Specialisation for <ref refid="d8/d05/a02904" kindref="compound">Sampler</ref>. </para>
+</simplesect>
+</para>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="75" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="75" bodyend="75"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::ResourceCacheTraitsT&lt; Sampler, castor::String &gt;</label>
+        <link refid="de/db0/a02940"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::ResourceCacheTraitsBaseT&lt; Sampler, castor::String, ResourceCacheTraitsT&lt; Sampler, castor::String &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::ResourceCacheTraitsT&lt; Sampler, castor::String &gt;</label>
+        <link refid="de/db0/a02940"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::ResourceCacheTraitsBaseT&lt; Sampler, castor::String, ResourceCacheTraitsT&lt; Sampler, castor::String &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Texture/TextureModule.hpp" line="214" column="1" bodyfile="Material/Texture/TextureModule.hpp" bodystart="216" bodyend="225"/>
     <listofallmembers>
-      <member refid="de/db0/a02940_1af57a0d63c1d304a6570cc1cd2db87b59" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkDeviceGroupDeviceCreateInfo &gt;</scope><name>value</name></member>
+      <member refid="de/db0/a02940_1a65830c6ebeaf40eb10750435ce719cf9" prot="public" virt="non-virtual"><scope>castor3d::ResourceCacheTraitsT&lt; Sampler, castor::String &gt;</scope><name>Base</name></member>
+      <member refid="de/db0/a02940_1aaa75d1deaf4c5f5e49b9165dc6f67c92" prot="public" virt="non-virtual"><scope>castor3d::ResourceCacheTraitsT&lt; Sampler, castor::String &gt;</scope><name>ElementPtrT</name></member>
+      <member refid="de/db0/a02940_1a06e6e94a750c2dc9e38930ada34dc5ca" prot="public" virt="non-virtual"><scope>castor3d::ResourceCacheTraitsT&lt; Sampler, castor::String &gt;</scope><name>ElementT</name></member>
+      <member refid="de/db0/a02940_1af4f35fd585923ba05e7682d2c083a3af" prot="public" virt="non-virtual"><scope>castor3d::ResourceCacheTraitsT&lt; Sampler, castor::String &gt;</scope><name>KeyT</name></member>
+      <member refid="de/db0/a02940_1afbe24c9343925ea48a6c25f5eee6c441" prot="public" virt="non-virtual"><scope>castor3d::ResourceCacheTraitsT&lt; Sampler, castor::String &gt;</scope><name>Name</name></member>
+      <member refid="de/db0/a02940_1a2b515af7437a8fcadda51f0f0f8db868" prot="public" virt="non-virtual"><scope>castor3d::ResourceCacheTraitsT&lt; Sampler, castor::String &gt;</scope><name>ResT</name></member>
+      <member refid="de/db0/a02940_1a88f1de8a82e61dd4f82b7b04bb3a3bc0" prot="public" virt="non-virtual"><scope>castor3d::ResourceCacheTraitsT&lt; Sampler, castor::String &gt;</scope><name>TraitsT</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

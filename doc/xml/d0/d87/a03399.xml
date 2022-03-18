@@ -1,33 +1,58 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d0/d87/a03399" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkDisplayProperties2KHR &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d0/d87/a03399_1a55620194ab3e156f6b4a7067d8ca717c" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkDisplayProperties2KHR &gt;::value</definition>
+    <compoundname>castor3d::LineIndices</compoundname>
+    <includes local="no">LineIndices.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/d87/a03399_1ac8d2569b7f8e6030b425ffb8e651b617" prot="public" static="no" mutable="no">
+        <type>std::array&lt; uint32_t, 2 &gt;</type>
+        <definition>std::array&lt; uint32_t, 2 &gt; castor3d::LineIndices::m_index</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_DISPLAY_PROPERTIES_2_KHR</initializer>
+        <name>m_index</name>
+        <qualifiedname>castor3d::LineIndices::m_index</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The indices. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="266" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="266" bodyend="-1"/>
+        <location file="Model/Mesh/Submesh/Component/LineIndices.hpp" line="15" column="12" bodyfile="Model/Mesh/Submesh/Component/LineIndices.hpp" bodystart="15" bodyend="-1"/>
+        <referencedby refid="d6/d0e/a03395_1acd37f954f3a44a3ae092cd5431253fc7" compoundref="d4/d1f/a00506" startline="33" endline="37">castor3d::Line::operator[]</referencedby>
+        <referencedby refid="da/de3/a01398_1a1281cbf080321b1041acc691028f9d97" compoundref="d7/dce/a00143" startline="1300" endline="1307">castor3d::prepareChunkData</referencedby>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="266" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="266" bodyend="266"/>
+    <collaborationgraph>
+      <node id="4">
+        <label>T</label>
+      </node>
+      <node id="2">
+        <label>std::array&lt; uint32_t, 2 &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; uint32_t, 2 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::LineIndices</label>
+        <link refid="d0/d87/a03399"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_index</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/Submesh/Component/LineIndices.hpp" line="11" column="1" bodyfile="Model/Mesh/Submesh/Component/LineIndices.hpp" bodystart="12" bodyend="16"/>
     <listofallmembers>
-      <member refid="d0/d87/a03399_1a55620194ab3e156f6b4a7067d8ca717c" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkDisplayProperties2KHR &gt;</scope><name>value</name></member>
+      <member refid="d0/d87/a03399_1ac8d2569b7f8e6030b425ffb8e651b617" prot="public" virt="non-virtual"><scope>castor3d::LineIndices</scope><name>m_index</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

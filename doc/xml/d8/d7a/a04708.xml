@@ -1,57 +1,156 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d8/d7a/a04708" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::SsaoBlurPass::Configuration</compoundname>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d8/d7a/a04708" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PassBuffer::PassData</compoundname>
+    <includes local="no">PassBuffer.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d8/d7a/a04708_1afe48646a08110b0695548c7456ea8132" prot="public" static="no" mutable="no">
-        <type>castor::Point2i</type>
-        <definition>castor::Point2i castor3d::SsaoBlurPass::Configuration::axis</definition>
+      <memberdef kind="variable" id="d8/d7a/a04708_1a4a852ac9cb909ef11eaf744f32b89469" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d88/a04704" kindref="compound">RgbaColour</ref></type>
+        <definition>RgbaColour castor3d::PassBuffer::PassData::colourDiv</definition>
         <argsstring></argsstring>
-        <name>axis</name>
+        <name>colourDiv</name>
+        <qualifiedname>castor3d::PassBuffer::PassData::colourDiv</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoBlurPass.hpp" line="134" column="1" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="134" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="72" column="12" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="72" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d8/d7a/a04708_1a19109c5c04b622edc1a03937f5e5612e" prot="public" static="no" mutable="no">
-        <type>castor::Point2i</type>
-        <definition>castor::Point2i castor3d::SsaoBlurPass::Configuration::dummy</definition>
+      <memberdef kind="variable" id="d8/d7a/a04708_1a0edd15eb28dc26c67c0a31a084f2c3d0" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d88/a04704" kindref="compound">RgbaColour</ref></type>
+        <definition>RgbaColour castor3d::PassBuffer::PassData::specDiv</definition>
         <argsstring></argsstring>
-        <name>dummy</name>
+        <name>specDiv</name>
+        <qualifiedname>castor3d::PassBuffer::PassData::specDiv</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoBlurPass.hpp" line="135" column="1" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="135" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="73" column="12" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="73" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d8/d7a/a04708_1a4b85a9fc9e1998aea1c9bc3849ced771" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::SsaoBlurPass::Configuration::gaussian[2]</definition>
-        <argsstring>[2]</argsstring>
-        <name>gaussian</name>
+      <memberdef kind="variable" id="d8/d7a/a04708_1a47f0d640619b1cca682eace728b89664" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d88/a04704" kindref="compound">RgbaColour</ref></type>
+        <definition>RgbaColour castor3d::PassBuffer::PassData::edgeFactors</definition>
+        <argsstring></argsstring>
+        <name>edgeFactors</name>
+        <qualifiedname>castor3d::PassBuffer::PassData::edgeFactors</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoBlurPass.hpp" line="136" column="1" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="136" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="74" column="12" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d7a/a04708_1a24fc4c91a65a8bdacbcfe072747a6e3d" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d88/a04704" kindref="compound">RgbaColour</ref></type>
+        <definition>RgbaColour castor3d::PassBuffer::PassData::edgeColour</definition>
+        <argsstring></argsstring>
+        <name>edgeColour</name>
+        <qualifiedname>castor3d::PassBuffer::PassData::edgeColour</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="75" column="12" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d7a/a04708_1ae075c6e5a3bbfa0a3d9dc47d2d547484" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d88/a04704" kindref="compound">RgbaColour</ref></type>
+        <definition>RgbaColour castor3d::PassBuffer::PassData::specific</definition>
+        <argsstring></argsstring>
+        <name>specific</name>
+        <qualifiedname>castor3d::PassBuffer::PassData::specific</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="76" column="12" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d7a/a04708_1afcf8d64fc505608dae35f72d87a3faab" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d88/a04704" kindref="compound">RgbaColour</ref></type>
+        <definition>RgbaColour castor3d::PassBuffer::PassData::common</definition>
+        <argsstring></argsstring>
+        <name>common</name>
+        <qualifiedname>castor3d::PassBuffer::PassData::common</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="77" column="12" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d7a/a04708_1a24a4015ebfcff465b7cb9310b1a87b6f" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d88/a04704" kindref="compound">RgbaColour</ref></type>
+        <definition>RgbaColour castor3d::PassBuffer::PassData::opacity</definition>
+        <argsstring></argsstring>
+        <name>opacity</name>
+        <qualifiedname>castor3d::PassBuffer::PassData::opacity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="78" column="12" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d7a/a04708_1a1b2ab80f57a51aadc6af394098ed231a" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d88/a04704" kindref="compound">RgbaColour</ref></type>
+        <definition>RgbaColour castor3d::PassBuffer::PassData::reflRefr</definition>
+        <argsstring></argsstring>
+        <name>reflRefr</name>
+        <qualifiedname>castor3d::PassBuffer::PassData::reflRefr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="79" column="12" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="79" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Ssao/SsaoBlurPass.hpp" line="133" column="1" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="132" bodyend="137"/>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::PassBuffer::PassData</label>
+        <link refid="d8/d7a/a04708"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>colourDiv</edgelabel>
+          <edgelabel>common</edgelabel>
+          <edgelabel>edgeColour</edgelabel>
+          <edgelabel>edgeFactors</edgelabel>
+          <edgelabel>opacity</edgelabel>
+          <edgelabel>reflRefr</edgelabel>
+          <edgelabel>specDiv</edgelabel>
+          <edgelabel>specific</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::PassBuffer::RgbaColour</label>
+        <link refid="d2/d88/a04704"/>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="70" column="1" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="71" bodyend="80"/>
     <listofallmembers>
-      <member refid="d8/d7a/a04708_1afe48646a08110b0695548c7456ea8132" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass::Configuration</scope><name>axis</name></member>
-      <member refid="d8/d7a/a04708_1a19109c5c04b622edc1a03937f5e5612e" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass::Configuration</scope><name>dummy</name></member>
-      <member refid="d8/d7a/a04708_1a4b85a9fc9e1998aea1c9bc3849ced771" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass::Configuration</scope><name>gaussian</name></member>
+      <member refid="d8/d7a/a04708_1a4a852ac9cb909ef11eaf744f32b89469" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassData</scope><name>colourDiv</name></member>
+      <member refid="d8/d7a/a04708_1afcf8d64fc505608dae35f72d87a3faab" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassData</scope><name>common</name></member>
+      <member refid="d8/d7a/a04708_1a24fc4c91a65a8bdacbcfe072747a6e3d" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassData</scope><name>edgeColour</name></member>
+      <member refid="d8/d7a/a04708_1a47f0d640619b1cca682eace728b89664" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassData</scope><name>edgeFactors</name></member>
+      <member refid="d8/d7a/a04708_1a24a4015ebfcff465b7cb9310b1a87b6f" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassData</scope><name>opacity</name></member>
+      <member refid="d8/d7a/a04708_1a1b2ab80f57a51aadc6af394098ed231a" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassData</scope><name>reflRefr</name></member>
+      <member refid="d8/d7a/a04708_1a0edd15eb28dc26c67c0a31a084f2c3d0" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassData</scope><name>specDiv</name></member>
+      <member refid="d8/d7a/a04708_1ae075c6e5a3bbfa0a3d9dc47d2d547484" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassData</scope><name>specific</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

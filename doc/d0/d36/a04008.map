@@ -1,5 +1,4 @@
-<map id="castor3d::SkeletonAnimationKeyFrame" name="castor3d::SkeletonAnimationKeyFrame">
-<area shape="rect" id="node1" title=" " alt="" coords="118,95,307,136"/>
-<area shape="rect" id="node2" href="$df/dcf/a02038.html" title=" " alt="" coords="5,13,204,39"/>
-<area shape="rect" id="node3" title=" " alt="" coords="228,5,413,47"/>
+<map id="castor3d::NonTexturedCube::Quad" name="castor3d::NonTexturedCube::Quad">
+<area shape="rect" id="node1" title=" " alt="" coords="5,109,188,151"/>
+<area shape="rect" id="node2" href="$d0/dee/a04014.html" title=" " alt="" coords="5,5,188,47"/>
 </map>

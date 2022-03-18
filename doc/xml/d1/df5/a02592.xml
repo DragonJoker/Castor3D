@@ -1,77 +1,205 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d1/df5/a02592" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::MetallicRoughnessPbrPass</compoundname>
-    <basecompoundref refid="df/d5d/a02596" prot="public" virt="non-virtual">castor3d::Pass</basecompoundref>
-    <includes local="no">MetallicRoughnessPbrPass.hpp</includes>
+    <compoundname>castor3d::UniformBufferPool</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; RenderSystem &gt;</basecompoundref>
+    <includes local="no">UniformBufferPool.hpp</includes>
+    <innerclass refid="df/d5d/a02596" prot="public">castor3d::UniformBufferPool::Buffer</innerclass>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d1/df5/a02592_1a0ea7d5631078243e871214bc01420477" prot="public" static="no">
+        <type>std::vector&lt; <ref refid="df/d5d/a02596" kindref="compound">Buffer</ref> &gt;</type>
+        <definition>using castor3d::UniformBufferPool::BufferArray =  std::vector&lt; Buffer &gt;</definition>
+        <argsstring></argsstring>
+        <name>BufferArray</name>
+        <qualifiedname>castor3d::UniformBufferPool::BufferArray</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferPool.hpp" line="31" column="1" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d1/df5/a02592_1aae97cca13fe3db9ef74c3b588087b8bb" prot="private" static="no" mutable="no">
-        <type>castor::RgbColour</type>
-        <definition>castor::RgbColour castor3d::MetallicRoughnessPbrPass::m_albedo</definition>
+      <memberdef kind="variable" id="d1/df5/a02592_1ad4d27ef7f68c25ebcb34809a9defbbd6" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::UniformBufferPool::m_device</definition>
         <argsstring></argsstring>
-        <name>m_albedo</name>
+        <name>m_device</name>
+        <qualifiedname>castor3d::UniformBufferPool::m_device</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The albedo colour. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Pass/MetallicRoughnessPbrPass.hpp" line="131" column="1" bodyfile="Material/Pass/MetallicRoughnessPbrPass.hpp" bodystart="131" bodyend="-1"/>
+        <location file="Buffer/UniformBufferPool.hpp" line="100" column="21" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="100" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/df5/a02592_1a1f0cbd915b1904a2f94848bf2e09b844" prot="private" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::MetallicRoughnessPbrPass::m_roughness</definition>
+      <memberdef kind="variable" id="d1/df5/a02592_1a386040447a914e32fbc5a43be8b592b3" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::UniformBufferPool::m_maxUboElemCount</definition>
         <argsstring></argsstring>
-        <name>m_roughness</name>
-        <initializer>{ 1.0 }</initializer>
+        <name>m_maxUboElemCount</name>
+        <qualifiedname>castor3d::UniformBufferPool::m_maxUboElemCount</qualifiedname>
+        <initializer>{ 0u }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The roughness. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Pass/MetallicRoughnessPbrPass.hpp" line="134" column="1" bodyfile="Material/Pass/MetallicRoughnessPbrPass.hpp" bodystart="134" bodyend="-1"/>
+        <location file="Buffer/UniformBufferPool.hpp" line="101" column="10" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="101" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/df5/a02592_1ac26dc47536abe57ef092ec363e3cac96" prot="private" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::MetallicRoughnessPbrPass::m_metallic</definition>
+      <memberdef kind="variable" id="d1/df5/a02592_1ab4e771e909b7ee1c22efc4072f5c212c" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::UniformBufferPool::m_maxUboSize</definition>
         <argsstring></argsstring>
-        <name>m_metallic</name>
-        <initializer>{ 0.0 }</initializer>
+        <name>m_maxUboSize</name>
+        <qualifiedname>castor3d::UniformBufferPool::m_maxUboSize</qualifiedname>
+        <initializer>{ 0u }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The reflectance. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Pass/MetallicRoughnessPbrPass.hpp" line="137" column="1" bodyfile="Material/Pass/MetallicRoughnessPbrPass.hpp" bodystart="137" bodyend="-1"/>
+        <location file="Buffer/UniformBufferPool.hpp" line="102" column="10" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/df5/a02592_1a4bc2c7a4077d88312326386aa0b68c5a" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::UniformBufferPool::m_maxPoolUboCount</definition>
+        <argsstring></argsstring>
+        <name>m_maxPoolUboCount</name>
+        <qualifiedname>castor3d::UniformBufferPool::m_maxPoolUboCount</qualifiedname>
+        <initializer>{ 100u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferPool.hpp" line="103" column="10" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/df5/a02592_1a748573e727087aa95e8ede0680248e42" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::UniformBufferPool::m_currentUboIndex</definition>
+        <argsstring></argsstring>
+        <name>m_currentUboIndex</name>
+        <qualifiedname>castor3d::UniformBufferPool::m_currentUboIndex</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferPool.hpp" line="104" column="10" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/df5/a02592_1a7f44760d6aac8f6b65614e7a7de2ba81" prot="private" static="no" mutable="no">
+        <type>ashes::StagingBufferPtr</type>
+        <definition>ashes::StagingBufferPtr castor3d::UniformBufferPool::m_stagingBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_stagingBuffer</name>
+        <qualifiedname>castor3d::UniformBufferPool::m_stagingBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferPool.hpp" line="105" column="25" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/df5/a02592_1a386e7ae3c32a6d251f3dcab40558a229" prot="private" static="no" mutable="no">
+        <type>uint8_t *</type>
+        <definition>uint8_t* castor3d::UniformBufferPool::m_stagingData</definition>
+        <argsstring></argsstring>
+        <name>m_stagingData</name>
+        <qualifiedname>castor3d::UniformBufferPool::m_stagingData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferPool.hpp" line="106" column="10" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/df5/a02592_1a24f1d7f7442261f35694222e541b32d2" prot="private" static="no" mutable="no">
+        <type>std::map&lt; uint32_t, <ref refid="d1/df5/a02592_1a0ea7d5631078243e871214bc01420477" kindref="member">BufferArray</ref> &gt;</type>
+        <definition>std::map&lt; uint32_t, BufferArray &gt; castor3d::UniformBufferPool::m_buffers</definition>
+        <argsstring></argsstring>
+        <name>m_buffers</name>
+        <qualifiedname>castor3d::UniformBufferPool::m_buffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferPool.hpp" line="107" column="10" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/df5/a02592_1ad7e1feb1fb4b8c31e96e052ff9587379" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::UniformBufferPool::m_debugName</definition>
+        <argsstring></argsstring>
+        <name>m_debugName</name>
+        <qualifiedname>castor3d::UniformBufferPool::m_debugName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferPool.hpp" line="108" column="16" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/df5/a02592_1aa6f5cb04122621e5a281ec19794a7b75" prot="private" static="no" mutable="no">
+        <type>std::mutex</type>
+        <definition>std::mutex castor3d::UniformBufferPool::m_mutex</definition>
+        <argsstring></argsstring>
+        <name>m_mutex</name>
+        <qualifiedname>castor3d::UniformBufferPool::m_mutex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferPool.hpp" line="109" column="12" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="109" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d1/df5/a02592_1a8e0528dfd96b70c81b176155cd9da4ef" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::MetallicRoughnessPbrPass::MetallicRoughnessPbrPass</definition>
-        <argsstring>(Material &amp;parent)</argsstring>
-        <name>MetallicRoughnessPbrPass</name>
+      <memberdef kind="function" id="d1/df5/a02592_1aea75551fe4c7ac2e6191be02b1b3c319" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::UniformBufferPool::UniformBufferPool</definition>
+        <argsstring>(RenderDevice const &amp;device, castor::String debugName)</argsstring>
+        <name>UniformBufferPool</name>
+        <qualifiedname>castor3d::UniformBufferPool::UniformBufferPool</qualifiedname>
         <param>
-          <type><ref refid="dc/d28/a02584" kindref="compound">Material</ref> &amp;</type>
-          <declname>parent</declname>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String</type>
+          <declname>debugName</declname>
         </param>
         <briefdescription>
 <para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="remark"><para>Used by <ref refid="dc/d28/a02584" kindref="compound">Material</ref>, don&apos;t use it. </para>
-</simplesect>
-<parameterlist kind="param"><parameteritem>
+<para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">parent</parametername>
+<parametername direction="in">device</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The parent material. </para>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">debugName</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer debug name. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -79,42 +207,43 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Pass/MetallicRoughnessPbrPass.hpp" line="29" column="1"/>
+        <location file="Buffer/UniformBufferPool.hpp" line="44" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d1/df5/a02592_1abcd1dcaad42aed365ce19d28d321123d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::MetallicRoughnessPbrPass::~MetallicRoughnessPbrPass</definition>
+      <memberdef kind="function" id="d1/df5/a02592_1ab89552434457ac675f106a9df0c31bd0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UniformBufferPool::cleanup</definition>
         <argsstring>()</argsstring>
-        <name>~MetallicRoughnessPbrPass</name>
+        <name>cleanup</name>
+        <qualifiedname>castor3d::UniformBufferPool::cleanup</qualifiedname>
         <briefdescription>
-<para>Destructor. </para>
+<para>Cleans up all GPU buffers. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Pass/MetallicRoughnessPbrPass.hpp" line="36" column="1"/>
+        <location file="Buffer/UniformBufferPool.hpp" line="52" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d1/df5/a02592_1a140fa1af13aafb414717061987071ab1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::MetallicRoughnessPbrPass::accept</definition>
-        <argsstring>(PassBuffer &amp;buffer) const override</argsstring>
-        <name>accept</name>
-        <reimplements refid="df/d5d/a02596_1aafe56e511ba96efcc10b1ab0936bb464">accept</reimplements>
+      <memberdef kind="function" id="d1/df5/a02592_1a2e93544049d7df3cd8f0a544a61a6fcd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UniformBufferPool::upload</definition>
+        <argsstring>(ashes::CommandBuffer const &amp;cb) const</argsstring>
+        <name>upload</name>
+        <qualifiedname>castor3d::UniformBufferPool::upload</qualifiedname>
         <param>
-          <type><ref refid="d1/d54/a05272" kindref="compound">PassBuffer</ref> &amp;</type>
-          <declname>buffer</declname>
+          <type>ashes::CommandBuffer const &amp;</type>
+          <declname>cb</declname>
         </param>
         <briefdescription>
-<para>Fills the pass buffer with this pass data. </para>
+<para>Uploads all GPU buffers to VRAM. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="inout">buffer</parametername>
+<parametername direction="in">cb</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The pass buffer. </para>
+<para>The command buffer on which transfer commands are recorded. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -122,44 +251,69 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Pass/MetallicRoughnessPbrPass.hpp" line="40" column="1"/>
+        <location file="Buffer/UniformBufferPool.hpp" line="61" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d1/df5/a02592_1a3522cbffe3c972a1f3e91aeb5b0ddcf0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::MetallicRoughnessPbrPass::getPassSize</definition>
-        <argsstring>() const override</argsstring>
-        <name>getPassSize</name>
-        <reimplements refid="df/d5d/a02596_1a5b88bf15e67ea2dcf4ee9bed758ffdf2">getPassSize</reimplements>
+      <memberdef kind="function" id="d1/df5/a02592_1a907f89179818583347fdc1d4e94c2de1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename DataT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d9/de2/a02508" kindref="compound">UniformBufferOffsetT</ref>&lt; DataT &gt;</type>
+        <definition>UniformBufferOffsetT&lt; DataT &gt; castor3d::UniformBufferPool::getBuffer</definition>
+        <argsstring>(VkMemoryPropertyFlags flags)</argsstring>
+        <name>getBuffer</name>
+        <qualifiedname>castor3d::UniformBufferPool::getBuffer</qualifiedname>
+        <param>
+          <type>VkMemoryPropertyFlags</type>
+          <declname>flags</declname>
+        </param>
         <briefdescription>
+<para>Retrieves a uniform buffer. </para>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="remark"><para>Passes are aligned on float[4], so the size of a pass is the number of float[4] needed to contain it. </para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer memory flags. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The uniform buffer. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Pass/MetallicRoughnessPbrPass.hpp" line="49" column="1" bodyfile="Material/Pass/MetallicRoughnessPbrPass.hpp" bodystart="49" bodyend="52"/>
+        <location file="Buffer/UniformBufferPool.hpp" line="73" column="22"/>
       </memberdef>
-      <memberdef kind="function" id="d1/df5/a02592_1a905f9c0de627bd2d663710821c9069a9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="d1/df5/a02592_1a06647da5ae455e2dae3583a1ffa6e05a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename DataT</type>
+          </param>
+        </templateparamlist>
         <type>void</type>
-        <definition>void castor3d::MetallicRoughnessPbrPass::setAlbedo</definition>
-        <argsstring>(castor::RgbColour const &amp;value)</argsstring>
-        <name>setAlbedo</name>
+        <definition>void castor3d::UniformBufferPool::putBuffer</definition>
+        <argsstring>(UniformBufferOffsetT&lt; DataT &gt; const &amp;bufferOffset)</argsstring>
+        <name>putBuffer</name>
+        <qualifiedname>castor3d::UniformBufferPool::putBuffer</qualifiedname>
         <param>
-          <type>castor::RgbColour const &amp;</type>
-          <declname>value</declname>
+          <type><ref refid="d9/de2/a02508" kindref="compound">UniformBufferOffsetT</ref>&lt; DataT &gt; const &amp;</type>
+          <declname>bufferOffset</declname>
         </param>
         <briefdescription>
-<para>Sets the albedo colour. </para>
+<para>Releases a GPU buffer. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">value</parametername>
+<parametername direction="in">bufferOffset</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The new value. </para>
+<para>The buffer offset to release. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -167,154 +321,40 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Pass/MetallicRoughnessPbrPass.hpp" line="61" column="1" bodyfile="Material/Pass/MetallicRoughnessPbrPass.hpp" bodystart="61" bodyend="65"/>
-        <references refid="df/d5d/a02596_1af9b53724c4861cdbcc9d122c2b9b8908" compoundref="dc/d50/a00332" startline="434">castor3d::Pass::onChanged</references>
+        <location file="Buffer/UniformBufferPool.hpp" line="83" column="6"/>
       </memberdef>
-      <memberdef kind="function" id="d1/df5/a02592_1a97129799935edb55afd2d62a5663ad86" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::MetallicRoughnessPbrPass::setRoughness</definition>
-        <argsstring>(float value)</argsstring>
-        <name>setRoughness</name>
-        <param>
-          <type>float</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-<para>Sets the roughness. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The new value. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Pass/MetallicRoughnessPbrPass.hpp" line="74" column="1" bodyfile="Material/Pass/MetallicRoughnessPbrPass.hpp" bodystart="74" bodyend="78"/>
-        <references refid="df/d5d/a02596_1af9b53724c4861cdbcc9d122c2b9b8908" compoundref="dc/d50/a00332" startline="434">castor3d::Pass::onChanged</references>
-      </memberdef>
-      <memberdef kind="function" id="d1/df5/a02592_1a06dcbe42056fcac346a272986cf4a5ec" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::MetallicRoughnessPbrPass::setMetallic</definition>
-        <argsstring>(float value)</argsstring>
-        <name>setMetallic</name>
-        <param>
-          <type>float</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-<para>Sets the reflectance. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The new value. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Pass/MetallicRoughnessPbrPass.hpp" line="87" column="1" bodyfile="Material/Pass/MetallicRoughnessPbrPass.hpp" bodystart="87" bodyend="91"/>
-        <references refid="df/d5d/a02596_1af9b53724c4861cdbcc9d122c2b9b8908" compoundref="dc/d50/a00332" startline="434">castor3d::Pass::onChanged</references>
-      </memberdef>
-      <memberdef kind="function" id="d1/df5/a02592_1a0dcdf414eecb4f1fc7838264817744be" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::RgbColour const  &amp;</type>
-        <definition>castor::RgbColour const&amp; castor3d::MetallicRoughnessPbrPass::getAlbedo</definition>
+      <memberdef kind="function" id="d1/df5/a02592_1a4b075518088a79c039934e45feee6771" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::UniformBufferPool::getBufferCount</definition>
         <argsstring>() const</argsstring>
-        <name>getAlbedo</name>
+        <name>getBufferCount</name>
+        <qualifiedname>castor3d::UniformBufferPool::getBufferCount</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The colour. </para>
+<para><simplesect kind="return"><para>The pool buffers count. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Pass/MetallicRoughnessPbrPass.hpp" line="98" column="1" bodyfile="Material/Pass/MetallicRoughnessPbrPass.hpp" bodystart="98" bodyend="101"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/df5/a02592_1ad2da23db622376a2166d3af0112066f5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>float</type>
-        <definition>float castor3d::MetallicRoughnessPbrPass::getRoughness</definition>
-        <argsstring>() const</argsstring>
-        <name>getRoughness</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The roughness. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Pass/MetallicRoughnessPbrPass.hpp" line="108" column="1" bodyfile="Material/Pass/MetallicRoughnessPbrPass.hpp" bodystart="108" bodyend="111"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/df5/a02592_1a8bb28652c30287d90d709a2d10ef5889" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>float const  &amp;</type>
-        <definition>float const&amp; castor3d::MetallicRoughnessPbrPass::getMetallic</definition>
-        <argsstring>() const</argsstring>
-        <name>getMetallic</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The reflectance. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Pass/MetallicRoughnessPbrPass.hpp" line="118" column="1" bodyfile="Material/Pass/MetallicRoughnessPbrPass.hpp" bodystart="118" bodyend="121"/>
+        <location file="Buffer/UniformBufferPool.hpp" line="90" column="18"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-func">
-      <memberdef kind="function" id="d1/df5/a02592_1a0d4a5705d57dbb6d0409550d81086a84" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::MetallicRoughnessPbrPass::doInitialise</definition>
-        <argsstring>() override</argsstring>
-        <name>doInitialise</name>
-        <reimplements refid="df/d5d/a02596_1a3c1ecb328117637a1b43a2fb2f1f4829">doInitialise</reimplements>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Pass/MetallicRoughnessPbrPass.hpp" line="124" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/df5/a02592_1af3ee08691d8659988f45d17f7c0dd5e8" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::MetallicRoughnessPbrPass::doCleanup</definition>
-        <argsstring>() override</argsstring>
-        <name>doCleanup</name>
-        <reimplements refid="df/d5d/a02596_1a5ab0a5a79cc6f673f551a57557f46bef">doCleanup</reimplements>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Pass/MetallicRoughnessPbrPass.hpp" line="125" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/df5/a02592_1a9b5953bed76ad12181bca6c84e11b82e" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::MetallicRoughnessPbrPass::doSetOpacity</definition>
-        <argsstring>(float value) override</argsstring>
-        <name>doSetOpacity</name>
-        <reimplements refid="df/d5d/a02596_1aa2062c95952fb3cd54265b944c5af829">doSetOpacity</reimplements>
+      <memberdef kind="function" id="d1/df5/a02592_1abb170dd6155c01a2753bde5157cf2cf9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> BufferArray::iterator</type>
+        <definition>C3D_API BufferArray::iterator castor3d::UniformBufferPool::doFindBuffer</definition>
+        <argsstring>(BufferArray &amp;array, VkDeviceSize alignedSize)</argsstring>
+        <name>doFindBuffer</name>
+        <qualifiedname>castor3d::UniformBufferPool::doFindBuffer</qualifiedname>
         <param>
-          <type>float</type>
-          <declname>value</declname>
+          <type><ref refid="d1/df5/a02592_1a0ea7d5631078243e871214bc01420477" kindref="member">BufferArray</ref> &amp;</type>
+          <declname>array</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>alignedSize</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -322,7 +362,43 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Pass/MetallicRoughnessPbrPass.hpp" line="126" column="1"/>
+        <location file="Buffer/UniformBufferPool.hpp" line="93" column="31"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/df5/a02592_1a18ebfe544a45be68637e222fc4d8cbb4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UniformBufferPool::doCreateStagingBuffer</definition>
+        <argsstring>()</argsstring>
+        <name>doCreateStagingBuffer</name>
+        <qualifiedname>castor3d::UniformBufferPool::doCreateStagingBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferPool.hpp" line="95" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/df5/a02592_1aed58b3b64d5225ac4aa3d7a0eb461f0e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> BufferArray::iterator</type>
+        <definition>C3D_API BufferArray::iterator castor3d::UniformBufferPool::doCreatePoolBuffer</definition>
+        <argsstring>(VkMemoryPropertyFlags flags, UniformBufferPool::BufferArray &amp;buffers)</argsstring>
+        <name>doCreatePoolBuffer</name>
+        <qualifiedname>castor3d::UniformBufferPool::doCreatePoolBuffer</qualifiedname>
+        <param>
+          <type>VkMemoryPropertyFlags</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/df5/a02592_1a0ea7d5631078243e871214bc01420477" kindref="member">UniformBufferPool::BufferArray</ref> &amp;</type>
+          <declname>buffers</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferPool.hpp" line="96" column="31"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -330,116 +406,49 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="2063">
-        <label>castor::OwnedBy&lt; Material &gt;</label>
-      </node>
-      <node id="2061">
-        <label>castor3d::MetallicRoughnessPbrPass</label>
+      <node id="1">
+        <label>castor3d::UniformBufferPool</label>
         <link refid="d1/df5/a02592"/>
-        <childnode refid="2062" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="2062">
-        <label>castor3d::Pass</label>
-        <link refid="df/d5d/a02596"/>
-        <childnode refid="2063" relation="public-inheritance">
-        </childnode>
+      <node id="2">
+        <label>castor::OwnedBy&lt; RenderSystem &gt;</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="2066">
-        <label>castor::OwnedBy&lt; Material &gt;</label>
-      </node>
-      <node id="2064">
-        <label>castor3d::MetallicRoughnessPbrPass</label>
+      <node id="1">
+        <label>castor3d::UniformBufferPool</label>
         <link refid="d1/df5/a02592"/>
-        <childnode refid="2065" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="2065">
-        <label>castor3d::Pass</label>
-        <link refid="df/d5d/a02596"/>
-        <childnode refid="2066" relation="public-inheritance">
-        </childnode>
+      <node id="2">
+        <label>castor::OwnedBy&lt; RenderSystem &gt;</label>
       </node>
     </collaborationgraph>
-    <location file="Material/Pass/MetallicRoughnessPbrPass.hpp" line="17" column="1" bodyfile="Material/Pass/MetallicRoughnessPbrPass.hpp" bodystart="15" bodyend="138"/>
+    <location file="Buffer/UniformBufferPool.hpp" line="22" column="1" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="24" bodyend="110"/>
     <listofallmembers>
-      <member refid="d1/df5/a02592_1a140fa1af13aafb414717061987071ab1" prot="public" virt="virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>accept</name></member>
-      <member refid="df/d5d/a02596_1a7aae597888618591a0db7262cfc2081e" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>addTextureUnit</name></member>
-      <member refid="df/d5d/a02596_1adb6026c634eebbfaa26fa25973fafcda" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>begin</name></member>
-      <member refid="df/d5d/a02596_1a609f35aed9e87d4bc64a3158f6b9208f" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>begin</name></member>
-      <member refid="df/d5d/a02596_1ad88707e47153d55ec3a87a12a6259787" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>cleanup</name></member>
-      <member refid="d1/df5/a02592_1af3ee08691d8659988f45d17f7c0dd5e8" prot="private" virt="virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>doCleanup</name></member>
-      <member refid="d1/df5/a02592_1a0d4a5705d57dbb6d0409550d81086a84" prot="private" virt="virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>doInitialise</name></member>
-      <member refid="d1/df5/a02592_1a9b5953bed76ad12181bca6c84e11b82e" prot="private" virt="virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>doSetOpacity</name></member>
-      <member refid="df/d5d/a02596_1aecf9d2ec66d6fbc7819a7e888d3fedc6" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>enableReflections</name></member>
-      <member refid="df/d5d/a02596_1a4a7e36dd120a22b62dbf898654f43ab9" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>enableRefractions</name></member>
-      <member refid="df/d5d/a02596_1a747b9e8172704065f32c2c0b22c12eea" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>end</name></member>
-      <member refid="df/d5d/a02596_1a819275bac67ba6e090bbcbd72bb0b86b" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>end</name></member>
-      <member refid="d1/df5/a02592_1a0dcdf414eecb4f1fc7838264817744be" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>getAlbedo</name></member>
-      <member refid="df/d5d/a02596_1abab03a36cc4743c6908c5796aa2cfaf5" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>getAlphaBlendMode</name></member>
-      <member refid="df/d5d/a02596_1a5008debebdf91b98a449bcfe03791f65" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>getAlphaFunc</name></member>
-      <member refid="df/d5d/a02596_1a7ccad1e806e125101e2277999982fcb1" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>getAlphaValue</name></member>
-      <member refid="df/d5d/a02596_1a94afee54948f71d056e8aa3d51f50464" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>getBWAccumulationOperator</name></member>
-      <member refid="df/d5d/a02596_1aed61df74f8931cd420104e7f3d468f89" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>getColourBlendMode</name></member>
-      <member refid="df/d5d/a02596_1a11d2d9dd2ec12a119e70adcd56ffd76e" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>getEmissive</name></member>
-      <member refid="df/d5d/a02596_1aef76e51c5f621a5245cc0bab4342ae68" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>getHeightTextureIndex</name></member>
-      <member refid="df/d5d/a02596_1a791c432d1d906eb14ff32a882c3f9633" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>getId</name></member>
-      <member refid="d1/df5/a02592_1a8bb28652c30287d90d709a2d10ef5889" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>getMetallic</name></member>
-      <member refid="df/d5d/a02596_1a66390e7dc9648f56a538b8b2b14569ed" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>getOpacity</name></member>
-      <member refid="df/d5d/a02596_1a537cf487cb3b1633611ad23d67a87d23" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>getParallaxOcclusion</name></member>
-      <member refid="df/d5d/a02596_1a362c719ff6af42aa94550a526bd554a8" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>getPassFlags</name></member>
-      <member refid="d1/df5/a02592_1a3522cbffe3c972a1f3e91aeb5b0ddcf0" prot="public" virt="virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>getPassSize</name></member>
-      <member refid="df/d5d/a02596_1a46a166f8c07114d7a538f54fc358f555" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>getRefractionRatio</name></member>
-      <member refid="d1/df5/a02592_1ad2da23db622376a2166d3af0112066f5" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>getRoughness</name></member>
-      <member refid="df/d5d/a02596_1ad6e28793e4302f1aeb001e99a8d1d96a" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>getSubsurfaceScattering</name></member>
-      <member refid="df/d5d/a02596_1af877c181aeafc8f162c8fc8af7fff083" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>getTextures</name></member>
-      <member refid="df/d5d/a02596_1a860006fc14f56cd98156c82bd921c960" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>getTextures</name></member>
-      <member refid="df/d5d/a02596_1a97ceb48b79e58532c774f19336671bfc" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>getTextureUnit</name></member>
-      <member refid="df/d5d/a02596_1a8a35b30ce4e90a506a77d3cbaa9d0439" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>getTextureUnits</name></member>
-      <member refid="df/d5d/a02596_1aef7e358ffc5cec246f4f15484e2925f0" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>getTextureUnitsCount</name></member>
-      <member refid="df/d5d/a02596_1a1e4a27f33f80c5163f1a6d8a3af3c8e8" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>getTransmission</name></member>
-      <member refid="df/d5d/a02596_1af1056149c9fd47c2406e8406756091d3" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>getType</name></member>
-      <member refid="df/d5d/a02596_1ae87ec5c3a8297d7d27f4d28071173629" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>hasAlphaBlending</name></member>
-      <member refid="df/d5d/a02596_1abb555c3683dda21b77bace58ae285350" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>hasAlphaTest</name></member>
-      <member refid="df/d5d/a02596_1ac79b5fc42779ef6c26d94d9aa8624d8e" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>hasAutomaticShader</name></member>
-      <member refid="df/d5d/a02596_1ae656ac3132fb4e95fa30f28381d5e421" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>hasEnvironmentMapping</name></member>
-      <member refid="df/d5d/a02596_1af46d3754344dcf544ab178901c28e1af" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>hasParallaxOcclusion</name></member>
-      <member refid="df/d5d/a02596_1aa3955ee04b630768804e3b781f1fe16a" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>hasReflections</name></member>
-      <member refid="df/d5d/a02596_1ab485b377665e57615dd8e9b208469335" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>hasRefraction</name></member>
-      <member refid="df/d5d/a02596_1ae6d7fc739a401207ae97464165cab915" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>hasSubsurfaceScattering</name></member>
-      <member refid="df/d5d/a02596_1a84747efd3092f9ea3c127276b070e099" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>initialise</name></member>
-      <member refid="df/d5d/a02596_1aefef1849fa24ccbdef9905e161b687d2" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>isImplicit</name></member>
-      <member refid="df/d5d/a02596_1a81a6f05668f306b5fc1ac9f9ebdfab1d" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>isTwoSided</name></member>
-      <member refid="d1/df5/a02592_1aae97cca13fe3db9ef74c3b588087b8bb" prot="private" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>m_albedo</name></member>
-      <member refid="d1/df5/a02592_1ac26dc47536abe57ef092ec363e3cac96" prot="private" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>m_metallic</name></member>
-      <member refid="d1/df5/a02592_1a1f0cbd915b1904a2f94848bf2e09b844" prot="private" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>m_roughness</name></member>
-      <member refid="d1/df5/a02592_1a8e0528dfd96b70c81b176155cd9da4ef" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>MetallicRoughnessPbrPass</name></member>
-      <member refid="df/d5d/a02596_1a5147b49f4f720d5a69fec485f14a9128" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>needsGammaCorrection</name></member>
-      <member refid="df/d5d/a02596_1af9b53724c4861cdbcc9d122c2b9b8908" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>onChanged</name></member>
-      <member refid="df/d5d/a02596_1adbd35d91799171980767abf1e010746d" prot="protected" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>Pass</name></member>
-      <member refid="df/d5d/a02596_1a2e62df25714263fa6f73b50e5cd645e3" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>prepareTextures</name></member>
-      <member refid="df/d5d/a02596_1ab443dc15b22fda41fa106f151fcebc20" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>removeTextureUnit</name></member>
-      <member refid="d1/df5/a02592_1a905f9c0de627bd2d663710821c9069a9" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>setAlbedo</name></member>
-      <member refid="df/d5d/a02596_1af32c96d71f12e20feffd9823299cbfa6" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>setAlphaBlendMode</name></member>
-      <member refid="df/d5d/a02596_1afd5267eb88bff6d35f87054df9c1ee9a" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>setAlphaFunc</name></member>
-      <member refid="df/d5d/a02596_1a95c2f58fedf1951fcb9261ac31ed6412" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>setAlphaValue</name></member>
-      <member refid="df/d5d/a02596_1a28958958c6c7efbfcd76431a4cc02302" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>setBWAccumulationOperator</name></member>
-      <member refid="df/d5d/a02596_1a3b1fe1655d4a0ed0fcec79e095bf503f" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>setColourBlendMode</name></member>
-      <member refid="df/d5d/a02596_1a9260376e612bb8e9e608649c2e2bdd8b" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>setEmissive</name></member>
-      <member refid="df/d5d/a02596_1a1452b05883e625b72284ee291f6b975c" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>setId</name></member>
-      <member refid="df/d5d/a02596_1a6bc2b7550799348f5ebc673c5c54144e" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>setImplicit</name></member>
-      <member refid="d1/df5/a02592_1a06dcbe42056fcac346a272986cf4a5ec" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>setMetallic</name></member>
-      <member refid="df/d5d/a02596_1a4144dbf8c545566e2567e4b685c332c1" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>setOpacity</name></member>
-      <member refid="df/d5d/a02596_1acb44524ddbe5e27b131a2a79819cfd68" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>setParallaxOcclusion</name></member>
-      <member refid="df/d5d/a02596_1a3d937f0261b447dd91d89aa43037c960" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>setRefractionRatio</name></member>
-      <member refid="d1/df5/a02592_1a97129799935edb55afd2d62a5663ad86" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>setRoughness</name></member>
-      <member refid="df/d5d/a02596_1aa7ba059a9ca150b6701d1dd533256dee" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>setSubsurfaceScattering</name></member>
-      <member refid="df/d5d/a02596_1a4f3b1f8a5b24e9921abeace0407221d3" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>setTransmission</name></member>
-      <member refid="df/d5d/a02596_1a21496a3f31507920af9fce21254458ae" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>setTwoSided</name></member>
-      <member refid="d1/df5/a02592_1abcd1dcaad42aed365ce19d28d321123d" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>~MetallicRoughnessPbrPass</name></member>
-      <member refid="df/d5d/a02596_1a74eee47aa1790f57013e3b60d19d7ba8" prot="protected" virt="non-virtual"><scope>castor3d::MetallicRoughnessPbrPass</scope><name>~Pass</name></member>
+      <member refid="d1/df5/a02592_1a0ea7d5631078243e871214bc01420477" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>BufferArray</name></member>
+      <member refid="d1/df5/a02592_1ab89552434457ac675f106a9df0c31bd0" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>cleanup</name></member>
+      <member refid="d1/df5/a02592_1aed58b3b64d5225ac4aa3d7a0eb461f0e" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>doCreatePoolBuffer</name></member>
+      <member refid="d1/df5/a02592_1a18ebfe544a45be68637e222fc4d8cbb4" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>doCreateStagingBuffer</name></member>
+      <member refid="d1/df5/a02592_1abb170dd6155c01a2753bde5157cf2cf9" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>doFindBuffer</name></member>
+      <member refid="d1/df5/a02592_1a907f89179818583347fdc1d4e94c2de1" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>getBuffer</name></member>
+      <member refid="d1/df5/a02592_1a4b075518088a79c039934e45feee6771" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>getBufferCount</name></member>
+      <member refid="d1/df5/a02592_1a24f1d7f7442261f35694222e541b32d2" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>m_buffers</name></member>
+      <member refid="d1/df5/a02592_1a748573e727087aa95e8ede0680248e42" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>m_currentUboIndex</name></member>
+      <member refid="d1/df5/a02592_1ad7e1feb1fb4b8c31e96e052ff9587379" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>m_debugName</name></member>
+      <member refid="d1/df5/a02592_1ad4d27ef7f68c25ebcb34809a9defbbd6" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>m_device</name></member>
+      <member refid="d1/df5/a02592_1a4bc2c7a4077d88312326386aa0b68c5a" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>m_maxPoolUboCount</name></member>
+      <member refid="d1/df5/a02592_1a386040447a914e32fbc5a43be8b592b3" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>m_maxUboElemCount</name></member>
+      <member refid="d1/df5/a02592_1ab4e771e909b7ee1c22efc4072f5c212c" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>m_maxUboSize</name></member>
+      <member refid="d1/df5/a02592_1aa6f5cb04122621e5a281ec19794a7b75" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>m_mutex</name></member>
+      <member refid="d1/df5/a02592_1a7f44760d6aac8f6b65614e7a7de2ba81" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>m_stagingBuffer</name></member>
+      <member refid="d1/df5/a02592_1a386e7ae3c32a6d251f3dcab40558a229" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>m_stagingData</name></member>
+      <member refid="d1/df5/a02592_1a06647da5ae455e2dae3583a1ffa6e05a" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>putBuffer</name></member>
+      <member refid="d1/df5/a02592_1aea75551fe4c7ac2e6191be02b1b3c319" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>UniformBufferPool</name></member>
+      <member refid="d1/df5/a02592_1a2e93544049d7df3cd8f0a544a61a6fcd" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>upload</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

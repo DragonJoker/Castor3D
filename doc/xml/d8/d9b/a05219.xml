@@ -1,187 +1,51 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d8/d9b/a05219" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::RenderedObject</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">std::enable_shared_from_this&lt; RenderedObject &gt;</basecompoundref>
-    <derivedcompoundref refid="d3/d91/a05119" prot="public" virt="non-virtual">castor3d::BillboardBase</derivedcompoundref>
-    <derivedcompoundref refid="db/d6b/a05139" prot="public" virt="non-virtual">castor3d::Geometry</derivedcompoundref>
-    <includes local="no">RenderedObject.hpp</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d8/d9b/a05219_1a190aa06081d39ef23cb3208d03cdf5bb" prot="private" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::RenderedObject::m_visible</definition>
-        <argsstring></argsstring>
-        <name>m_visible</name>
-        <initializer>{ true }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/RenderedObject.hpp" line="85" column="1" bodyfile="Scene/RenderedObject.hpp" bodystart="85" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/d9b/a05219_1a37ac57f728383e0f38374b30bd7bdf5d" prot="private" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::RenderedObject::m_castsShadows</definition>
-        <argsstring></argsstring>
-        <name>m_castsShadows</name>
-        <initializer>{ true }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/RenderedObject.hpp" line="86" column="1" bodyfile="Scene/RenderedObject.hpp" bodystart="86" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/d9b/a05219_1a55b3c824efc26e2164c95ea94211bba4" prot="private" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::RenderedObject::m_receivesShadows</definition>
-        <argsstring></argsstring>
-        <name>m_receivesShadows</name>
-        <initializer>{ true }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/RenderedObject.hpp" line="87" column="1" bodyfile="Scene/RenderedObject.hpp" bodystart="87" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
+    <compoundname>castor::TextWriter&lt; castor3d::VoxelSceneData &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::VoxelSceneData &gt;</basecompoundref>
+    <includes local="no">TextVoxelSceneData.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d8/d9b/a05219_1a5ce1326805379a47d42dec81b6b41d62" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::RenderedObject::isVisible</definition>
-        <argsstring>() const</argsstring>
-        <name>isVisible</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The visibility status. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/RenderedObject.hpp" line="23" column="1" bodyfile="Scene/RenderedObject.hpp" bodystart="23" bodyend="26"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/d9b/a05219_1ac78739036c5c66a41cb2f960e532627e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::RenderedObject::setVisible</definition>
-        <argsstring>(bool value)</argsstring>
-        <name>setVisible</name>
+      <memberdef kind="function" id="d8/d9b/a05219_1a8b665d4d79867d6a9ea0ac1ca130ef73" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::VoxelSceneData &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs)</argsstring>
+        <name>TextWriter</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::VoxelSceneData &gt;::TextWriter</qualifiedname>
         <param>
-          <type>bool</type>
-          <declname>value</declname>
+          <type>String const &amp;</type>
+          <declname>tabs</declname>
         </param>
         <briefdescription>
-<para>Defines the visibility status. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The new value. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/RenderedObject.hpp" line="35" column="1" bodyfile="Scene/RenderedObject.hpp" bodystart="35" bodyend="38"/>
+        <location file="Text/TextVoxelSceneData.hpp" line="18" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d8/d9b/a05219_1ab40947f3ec91820fc5e70a85f1cc160a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::RenderedObject::isShadowCaster</definition>
-        <argsstring>() const</argsstring>
-        <name>isShadowCaster</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The shadow casting status. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/RenderedObject.hpp" line="45" column="1" bodyfile="Scene/RenderedObject.hpp" bodystart="45" bodyend="48"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/d9b/a05219_1a5b052f28d3f247a7231c34b1c9520997" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::RenderedObject::setShadowCaster</definition>
-        <argsstring>(bool value)</argsstring>
-        <name>setShadowCaster</name>
+      <memberdef kind="function" id="d8/d9b/a05219_1abc7cf02a7297f268d478dec2acaa1859" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::VoxelSceneData &gt;::operator()</definition>
+        <argsstring>(castor3d::VoxelSceneData const &amp;obj, StringStream &amp;file) override</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::VoxelSceneData &gt;::operator()</qualifiedname>
         <param>
-          <type>bool</type>
-          <declname>value</declname>
+          <type><ref refid="d4/df0/a03763" kindref="compound">castor3d::VoxelSceneData</ref> const &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <param>
+          <type>StringStream &amp;</type>
+          <declname>file</declname>
         </param>
         <briefdescription>
-<para>Defines the shadow caster status. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The new value. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/RenderedObject.hpp" line="57" column="1" bodyfile="Scene/RenderedObject.hpp" bodystart="57" bodyend="60"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/d9b/a05219_1a3e73e7500445cfd605cf4b6f2414277b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::RenderedObject::isShadowReceiver</definition>
-        <argsstring>() const</argsstring>
-        <name>isShadowReceiver</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The shadow receiving status. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/RenderedObject.hpp" line="67" column="1" bodyfile="Scene/RenderedObject.hpp" bodystart="67" bodyend="70"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/d9b/a05219_1a17b0b8487b724ca7492f2e08ce8706f6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::RenderedObject::setShadowReceiver</definition>
-        <argsstring>(bool value)</argsstring>
-        <name>setShadowReceiver</name>
-        <param>
-          <type>bool</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-<para>Defines the shadow receiving status. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The new value. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/RenderedObject.hpp" line="79" column="1" bodyfile="Scene/RenderedObject.hpp" bodystart="79" bodyend="82"/>
+        <location file="Text/TextVoxelSceneData.hpp" line="19" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -189,56 +53,31 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="2889">
-        <label>castor3d::Geometry</label>
-        <link refid="db/d6b/a05139"/>
-        <childnode refid="2885" relation="public-inheritance">
-        </childnode>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::VoxelSceneData &gt;</label>
       </node>
-      <node id="2885">
-        <label>castor3d::RenderedObject</label>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::VoxelSceneData &gt;</label>
         <link refid="d8/d9b/a05219"/>
-        <childnode refid="2886" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
-      </node>
-      <node id="2887">
-        <label>castor3d::BillboardBase</label>
-        <link refid="d3/d91/a05119"/>
-        <childnode refid="2885" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2888">
-        <label>castor3d::BillboardList</label>
-        <link refid="d0/d42/a05127"/>
-        <childnode refid="2887" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2886">
-        <label>std::enable_shared_from_this&lt; RenderedObject &gt;</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="2890">
-        <label>castor3d::RenderedObject</label>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::VoxelSceneData &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::VoxelSceneData &gt;</label>
         <link refid="d8/d9b/a05219"/>
-        <childnode refid="2891" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="2891">
-        <label>std::enable_shared_from_this&lt; RenderedObject &gt;</label>
-      </node>
     </collaborationgraph>
-    <location file="Scene/RenderedObject.hpp" line="15" column="1" bodyfile="Scene/RenderedObject.hpp" bodystart="13" bodyend="88"/>
+    <location file="Text/TextVoxelSceneData.hpp" line="14" column="1" bodyfile="Text/TextVoxelSceneData.hpp" bodystart="16" bodyend="21"/>
     <listofallmembers>
-      <member refid="d8/d9b/a05219_1ab40947f3ec91820fc5e70a85f1cc160a" prot="public" virt="non-virtual"><scope>castor3d::RenderedObject</scope><name>isShadowCaster</name></member>
-      <member refid="d8/d9b/a05219_1a3e73e7500445cfd605cf4b6f2414277b" prot="public" virt="non-virtual"><scope>castor3d::RenderedObject</scope><name>isShadowReceiver</name></member>
-      <member refid="d8/d9b/a05219_1a5ce1326805379a47d42dec81b6b41d62" prot="public" virt="non-virtual"><scope>castor3d::RenderedObject</scope><name>isVisible</name></member>
-      <member refid="d8/d9b/a05219_1a37ac57f728383e0f38374b30bd7bdf5d" prot="private" virt="non-virtual"><scope>castor3d::RenderedObject</scope><name>m_castsShadows</name></member>
-      <member refid="d8/d9b/a05219_1a55b3c824efc26e2164c95ea94211bba4" prot="private" virt="non-virtual"><scope>castor3d::RenderedObject</scope><name>m_receivesShadows</name></member>
-      <member refid="d8/d9b/a05219_1a190aa06081d39ef23cb3208d03cdf5bb" prot="private" virt="non-virtual"><scope>castor3d::RenderedObject</scope><name>m_visible</name></member>
-      <member refid="d8/d9b/a05219_1a5b052f28d3f247a7231c34b1c9520997" prot="public" virt="non-virtual"><scope>castor3d::RenderedObject</scope><name>setShadowCaster</name></member>
-      <member refid="d8/d9b/a05219_1a17b0b8487b724ca7492f2e08ce8706f6" prot="public" virt="non-virtual"><scope>castor3d::RenderedObject</scope><name>setShadowReceiver</name></member>
-      <member refid="d8/d9b/a05219_1ac78739036c5c66a41cb2f960e532627e" prot="public" virt="non-virtual"><scope>castor3d::RenderedObject</scope><name>setVisible</name></member>
+      <member refid="d8/d9b/a05219_1abc7cf02a7297f268d478dec2acaa1859" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::VoxelSceneData &gt;</scope><name>operator()</name></member>
+      <member refid="d8/d9b/a05219_1a8b665d4d79867d6a9ea0ac1ca130ef73" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::VoxelSceneData &gt;</scope><name>TextWriter</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

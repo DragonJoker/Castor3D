@@ -1,82 +1,186 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d3/de3/a02483" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayCleaner</compoundname>
-    <includes local="no">OverlayCache.hpp</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d3/de3/a02483_1a55747507fa49a5305273475c97020092" prot="private" static="no" mutable="no">
-        <type><ref refid="d7/dd1/a01458_1a6573844f0848fb7a4664ac788b817e88" kindref="member">OverlayCategorySet</ref> &amp;</type>
-        <definition>OverlayCategorySet&amp; castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayCleaner::m_overlays</definition>
-        <argsstring></argsstring>
-        <name>m_overlays</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="80" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="80" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/de3/a02483_1a45af74e73c10cfa8ebee9923a1dfbddc" prot="private" static="no" mutable="no">
-        <type>std::vector&lt; int &gt; &amp;</type>
-        <definition>std::vector&lt; int &gt;&amp; castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayCleaner::m_overlayCountPerLevel</definition>
-        <argsstring></argsstring>
-        <name>m_overlayCountPerLevel</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="81" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="81" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d3/de3/a02483_1a3939d3126001f69aa5358340d12d1e9b" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayCleaner::OverlayCleaner</definition>
-        <argsstring>(Cache&lt; Overlay, castor::String &gt; &amp;cache)</argsstring>
-        <name>OverlayCleaner</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d3/de3/a02483" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ChunkWriter</compoundname>
+    <basecompoundref refid="d7/dc4/a02479" prot="public" virt="non-virtual">castor3d::ChunkWriterBase</basecompoundref>
+    <includes local="no">ChunkWriter.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d3/de3/a02483_1ac4cf51584e348def2f360b81e6ec7a9a" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool castor3d::ChunkWriter&lt; T &gt;::write</definition>
+        <argsstring>(T const *begin, T const *end, ChunkType type, BinaryChunk &amp;chunk)</argsstring>
+        <name>write</name>
+        <qualifiedname>castor3d::ChunkWriter::write</qualifiedname>
         <param>
-          <type><ref refid="dd/d1b/a02351" kindref="compound">Cache</ref>&lt; <ref refid="da/d33/a04079" kindref="compound">Overlay</ref>, castor::String &gt; &amp;</type>
-          <declname>cache</declname>
+          <type>T const *</type>
+          <declname>begin</declname>
+        </param>
+        <param>
+          <type>T const *</type>
+          <declname>end</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d3b/a02291" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
         </param>
         <briefdescription>
+<para>Writes a subchunk value into a chunk. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">begin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The values begin </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">end</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The values end </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The subchunk type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="76" column="1"/>
+        <location file="Binary/ChunkWriter.hpp" line="83" column="20" bodyfile="Binary/ChunkWriter.hpp" bodystart="83" bodyend="99"/>
+        <references refid="da/de3/a01398_1a430f3de9071e7d03358bb1b39d07c2b8" compoundref="d9/d77/a00095" startline="131" endline="137">castor3d::prepareChunkData</references>
+        <references refid="d7/dc4/a02479_1a6d5639d69c83f6b59094817e85f17398" compoundref="da/d1e/a00149" startline="32" endline="51">castor3d::ChunkWriterBase::write</references>
+        <referencedby refid="d2/da6/a02339_1a95685db95521fe46169767620976688c" compoundref="d5/db1/a00140" startline="121" endline="127">castor3d::BinaryWriterBase&lt; TWritten &gt;::doWriteChunk</referencedby>
       </memberdef>
-      <memberdef kind="function" id="d3/de3/a02483_1af9863175f6a99f38ea15f4a42c63de65" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayCleaner::operator()</definition>
-        <argsstring>(OverlaySPtr element)</argsstring>
-        <name>operator()</name>
+      <memberdef kind="function" id="d3/de3/a02483_1a9d1fa6f341bb8c14ae9a7c2c1bfb184b" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool castor3d::ChunkWriter&lt; T &gt;::write</definition>
+        <argsstring>(T const &amp;value, ChunkType type, BinaryChunk &amp;chunk)</argsstring>
+        <name>write</name>
+        <qualifiedname>castor3d::ChunkWriter::write</qualifiedname>
         <param>
-          <type>OverlaySPtr</type>
-          <declname>element</declname>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d3b/a02291" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
         </param>
         <briefdescription>
+<para>Writes a subchunk value into a chunk. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The value </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The subchunk type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="77" column="1"/>
+        <location file="Binary/ChunkWriter.hpp" line="114" column="20" bodyfile="Binary/ChunkWriter.hpp" bodystart="114" bodyend="123"/>
+        <references refid="da/de3/a01398_1a8cc7a2dbcb06b7114a71b9c2bd403efa" compoundref="d7/dce/a00143" startline="47" endline="50">castor3d::getBuffer</references>
+        <references refid="da/de3/a01398_1a0237c5eefd38c3d0de4466c3fbe0d713" compoundref="d7/dce/a00143" startline="384" endline="387">castor3d::getDataSize</references>
+        <references refid="da/de3/a01398_1a430f3de9071e7d03358bb1b39d07c2b8" compoundref="d9/d77/a00095" startline="131" endline="137">castor3d::prepareChunkData</references>
+        <references refid="d7/dc4/a02479_1a6d5639d69c83f6b59094817e85f17398" compoundref="da/d1e/a00149" startline="32" endline="51">castor3d::ChunkWriterBase::write</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>Chunk data writer. </para>
     </briefdescription>
     <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="version"><para>0.9.0 </para>
+</simplesect>
+<simplesect kind="date"><para>30/05/2016 </para>
+</simplesect>
+</para>
     </detaileddescription>
-    <location file="Cache/OverlayCache.hpp" line="75" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="74" bodyend="82"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::ChunkWriter&lt; T &gt;</label>
+        <link refid="d3/de3/a02483"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ChunkWriterBase</label>
+        <link refid="d7/dc4/a02479"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::ChunkWriter&lt; T &gt;</label>
+        <link refid="d3/de3/a02483"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ChunkWriterBase</label>
+        <link refid="d7/dc4/a02479"/>
+      </node>
+    </collaborationgraph>
+    <location file="Binary/ChunkWriter.hpp" line="63" column="1" bodyfile="Binary/ChunkWriter.hpp" bodystart="65" bodyend="124"/>
     <listofallmembers>
-      <member refid="d3/de3/a02483_1a45af74e73c10cfa8ebee9923a1dfbddc" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayCleaner</scope><name>m_overlayCountPerLevel</name></member>
-      <member refid="d3/de3/a02483_1a55747507fa49a5305273475c97020092" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayCleaner</scope><name>m_overlays</name></member>
-      <member refid="d3/de3/a02483_1af9863175f6a99f38ea15f4a42c63de65" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayCleaner</scope><name>operator()</name></member>
-      <member refid="d3/de3/a02483_1a3939d3126001f69aa5358340d12d1e9b" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayCleaner</scope><name>OverlayCleaner</name></member>
+      <member refid="d3/de3/a02483_1ac4cf51584e348def2f360b81e6ec7a9a" prot="public" virt="non-virtual"><scope>castor3d::ChunkWriter</scope><name>write</name></member>
+      <member refid="d3/de3/a02483_1a9d1fa6f341bb8c14ae9a7c2c1bfb184b" prot="public" virt="non-virtual"><scope>castor3d::ChunkWriter</scope><name>write</name></member>
+      <member refid="d7/dc4/a02479_1a6d5639d69c83f6b59094817e85f17398" prot="public" virt="non-virtual" ambiguityscope="castor3d::ChunkWriterBase::"><scope>castor3d::ChunkWriter</scope><name>write</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,58 +1,171 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d2/d04/a04815" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::SubsurfaceScatteringPass::BlurWeights</compoundname>
-    <includes local="no">SubsurfaceScatteringPass.hpp</includes>
+    <compoundname>castor3d::shader::OutputComponents</compoundname>
+    <includes local="no">GlslOutputComponents.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d2/d04/a04815_1a9f824803d0628b0dd429b3a58f6dfa69" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::SubsurfaceScatteringPass::BlurWeights::originalWeight</definition>
+      <memberdef kind="variable" id="d2/d04/a04815_1a052a635035966a4aa49e711b7146ebb0" prot="public" static="no" mutable="no">
+        <type>sdw::InOutVec3</type>
+        <definition>sdw::InOutVec3 castor3d::shader::OutputComponents::m_diffuse</definition>
         <argsstring></argsstring>
-        <name>originalWeight</name>
+        <name>m_diffuse</name>
+        <qualifiedname>castor3d::shader::OutputComponents::m_diffuse</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="117" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="117" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="30" column="16" bodyfile="Shader/Shaders/GlslOutputComponents.hpp" bodystart="30" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d2/d04/a04815_1a3229ded5b54533f92a6332f493eced2e" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::SubsurfaceScatteringPass::BlurWeights::blurWeights[3u]</definition>
-        <argsstring>[3u]</argsstring>
-        <name>blurWeights</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="118" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="118" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d04/a04815_1a0bf0b2b2456f6fed0218719ac6e99e3e" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::SubsurfaceScatteringPass::BlurWeights::blurVariance</definition>
+      <memberdef kind="variable" id="d2/d04/a04815_1aa4284b72c519ff3cfe28838f95555d32" prot="public" static="no" mutable="no">
+        <type>sdw::InOutVec3</type>
+        <definition>sdw::InOutVec3 castor3d::shader::OutputComponents::m_specular</definition>
         <argsstring></argsstring>
-        <name>blurVariance</name>
+        <name>m_specular</name>
+        <qualifiedname>castor3d::shader::OutputComponents::m_specular</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="119" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="119" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="31" column="16" bodyfile="Shader/Shaders/GlslOutputComponents.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/d04/a04815_1a90742d3c47b9acf0bc2ce854ea53c677" prot="private" static="no" mutable="no">
+        <type>ast::expr::ExprPtr</type>
+        <definition>ast::expr::ExprPtr castor3d::shader::OutputComponents::m_expr</definition>
+        <argsstring></argsstring>
+        <name>m_expr</name>
+        <qualifiedname>castor3d::shader::OutputComponents::m_expr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="34" column="20" bodyfile="Shader/Shaders/GlslOutputComponents.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/d04/a04815_1abdc4c22cd0cdf7d5640f1421f700c839" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::OutputComponents::OutputComponents</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>OutputComponents</name>
+        <qualifiedname>castor3d::shader::OutputComponents::OutputComponents</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="17" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d04/a04815_1a0c677bdf03fdb8c726117ec79cc7c305" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::OutputComponents::OutputComponents</definition>
+        <argsstring>(sdw::InOutVec3 const &amp;diffuse, sdw::InOutVec3 const &amp;specular)</argsstring>
+        <name>OutputComponents</name>
+        <qualifiedname>castor3d::shader::OutputComponents::OutputComponents</qualifiedname>
+        <param>
+          <type>sdw::InOutVec3 const &amp;</type>
+          <declname>diffuse</declname>
+        </param>
+        <param>
+          <type>sdw::InOutVec3 const &amp;</type>
+          <declname>specular</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="18" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d04/a04815_1ae38720bf915c66d9c2b9b39c8a35bb8f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::expr::Expr *</type>
+        <definition>C3D_API ast::expr::Expr * castor3d::shader::OutputComponents::getExpr</definition>
+        <argsstring>() const</argsstring>
+        <name>getExpr</name>
+        <qualifiedname>castor3d::shader::OutputComponents::getExpr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="21" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d04/a04815_1aeaa6e55891dcc064142a630b80a2b603" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::ShaderWriter *</type>
+        <definition>C3D_API sdw::ShaderWriter * castor3d::shader::OutputComponents::getWriter</definition>
+        <argsstring>() const</argsstring>
+        <name>getWriter</name>
+        <qualifiedname>castor3d::shader::OutputComponents::getWriter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="22" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d04/a04815_1a34792b7f5a9ece038745e91a09a750a0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::OutputComponents::setVar</definition>
+        <argsstring>(ast::var::VariableList::const_iterator &amp;var)</argsstring>
+        <name>setVar</name>
+        <qualifiedname>castor3d::shader::OutputComponents::setVar</qualifiedname>
+        <param>
+          <type>ast::var::VariableList::const_iterator &amp;</type>
+          <declname>var</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="23" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d04/a04815_1aacc80ec09e21fe588d551e5810b5fed5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::shader::OutputComponents::isEnabled</definition>
+        <argsstring>() const</argsstring>
+        <name>isEnabled</name>
+        <qualifiedname>castor3d::shader::OutputComponents::isEnabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="25" column="6" bodyfile="Shader/Shaders/GlslOutputComponents.hpp" bodystart="25" bodyend="28"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="116" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="115" bodyend="120"/>
+    <location file="Shader/Shaders/GlslOutputComponents.hpp" line="15" column="1" bodyfile="Shader/Shaders/GlslOutputComponents.hpp" bodystart="16" bodyend="35"/>
     <listofallmembers>
-      <member refid="d2/d04/a04815_1a0bf0b2b2456f6fed0218719ac6e99e3e" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::BlurWeights</scope><name>blurVariance</name></member>
-      <member refid="d2/d04/a04815_1a3229ded5b54533f92a6332f493eced2e" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::BlurWeights</scope><name>blurWeights</name></member>
-      <member refid="d2/d04/a04815_1a9f824803d0628b0dd429b3a58f6dfa69" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::BlurWeights</scope><name>originalWeight</name></member>
+      <member refid="d2/d04/a04815_1ae38720bf915c66d9c2b9b39c8a35bb8f" prot="public" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>getExpr</name></member>
+      <member refid="d2/d04/a04815_1aeaa6e55891dcc064142a630b80a2b603" prot="public" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>getWriter</name></member>
+      <member refid="d2/d04/a04815_1aacc80ec09e21fe588d551e5810b5fed5" prot="public" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>isEnabled</name></member>
+      <member refid="d2/d04/a04815_1a052a635035966a4aa49e711b7146ebb0" prot="public" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>m_diffuse</name></member>
+      <member refid="d2/d04/a04815_1a90742d3c47b9acf0bc2ce854ea53c677" prot="private" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>m_expr</name></member>
+      <member refid="d2/d04/a04815_1aa4284b72c519ff3cfe28838f95555d32" prot="public" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>m_specular</name></member>
+      <member refid="d2/d04/a04815_1abdc4c22cd0cdf7d5640f1421f700c839" prot="public" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>OutputComponents</name></member>
+      <member refid="d2/d04/a04815_1a0c677bdf03fdb8c726117ec79cc7c305" prot="public" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>OutputComponents</name></member>
+      <member refid="d2/d04/a04815_1a34792b7f5a9ece038745e91a09a750a0" prot="public" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>setVar</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

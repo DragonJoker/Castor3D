@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d9/dd1/a04340" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SceneRenderNode</compoundname>
+    <includes local="no">SceneRenderNode.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/dd1/a04340_1a8165a9adcd248857c9db91b5a81386ab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SceneRenderNode::SceneRenderNode</definition>
+        <argsstring>()</argsstring>
+        <name>SceneRenderNode</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNode.hpp" line="13" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Node/SceneRenderNode.hpp" line="12" column="1" bodyfile="Render/Node/SceneRenderNode.hpp" bodystart="11" bodyend="14"/>
+    <listofallmembers>
+      <member refid="d9/dd1/a04340_1a8165a9adcd248857c9db91b5a81386ab" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNode</scope><name>SceneRenderNode</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

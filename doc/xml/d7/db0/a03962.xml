@@ -1,24 +1,35 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d7/db0/a03962" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::LineIndices</compoundname>
-    <includes local="no">LineIndices.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d7/db0/a03962" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::QueuesData::QueueThreadData</compoundname>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d7/db0/a03962_1ac8d2569b7f8e6030b425ffb8e651b617" prot="public" static="no" mutable="no">
-        <type>std::array&lt; uint32_t, 2 &gt;</type>
-        <definition>std::array&lt; uint32_t, 2 &gt; castor3d::LineIndices::m_index</definition>
+      <memberdef kind="variable" id="d7/db0/a03962_1a7d03278b296fea39b60ac396a1c2db43" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/d61/a03950" kindref="compound">QueueData</ref> const  *</type>
+        <definition>QueueData const* castor3d::QueuesData::QueueThreadData::data</definition>
         <argsstring></argsstring>
-        <name>m_index</name>
+        <name>data</name>
+        <qualifiedname>castor3d::QueuesData::QueueThreadData::data</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The indices. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LineIndices.hpp" line="15" column="1" bodyfile="Model/Mesh/Submesh/Component/LineIndices.hpp" bodystart="15" bodyend="-1"/>
-        <referencedby refid="de/d88/a03958_1acd37f954f3a44a3ae092cd5431253fc7" compoundref="d4/ddf/a00488" startline="33" endline="37">castor3d::Line::operator[]</referencedby>
-        <referencedby refid="de/d13/a01473_1a1281cbf080321b1041acc691028f9d97" compoundref="de/d76/a00134" startline="1303" endline="1310">castor3d::prepareChunkData</referencedby>
+        <location file="Render/RenderDevice.hpp" line="255" column="18" bodyfile="Render/RenderDevice.hpp" bodystart="255" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/db0/a03962_1afb7d890355b21508c84bae766c0820c2" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::QueuesData::QueueThreadData::count</definition>
+        <argsstring></argsstring>
+        <name>count</name>
+        <qualifiedname>castor3d::QueuesData::QueueThreadData::count</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="256" column="10" bodyfile="Render/RenderDevice.hpp" bodystart="256" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -26,32 +37,28 @@
     <detaileddescription>
     </detaileddescription>
     <collaborationgraph>
-      <node id="1790">
-        <label>T</label>
-      </node>
-      <node id="1789">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="1790" relation="usage">
-          <edgelabel>elements</edgelabel>
+      <node id="2">
+        <label>castor3d::QueueData</label>
+        <link refid="dc/d61/a03950"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>parent</edgelabel>
         </childnode>
       </node>
-      <node id="1788">
-        <label>std::array&lt; uint32_t, 2 &gt;</label>
-        <childnode refid="1789" relation="template-instance">
-          <edgelabel>&lt; uint32_t, 2 &gt;</edgelabel>
-        </childnode>
+      <node id="3">
+        <label>castor3d::QueuesData</label>
+        <link refid="de/d88/a03958"/>
       </node>
-      <node id="1787">
-        <label>castor3d::LineIndices</label>
-        <link refid="d7/db0/a03962"/>
-        <childnode refid="1788" relation="usage">
-          <edgelabel>m_index</edgelabel>
+      <node id="1">
+        <label>castor3d::QueuesData::QueueThreadData</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>data</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Model/Mesh/Submesh/Component/LineIndices.hpp" line="12" column="1" bodyfile="Model/Mesh/Submesh/Component/LineIndices.hpp" bodystart="11" bodyend="16"/>
+    <location file="Render/RenderDevice.hpp" line="253" column="1" bodyfile="Render/RenderDevice.hpp" bodystart="254" bodyend="257"/>
     <listofallmembers>
-      <member refid="d7/db0/a03962_1ac8d2569b7f8e6030b425ffb8e651b617" prot="public" virt="non-virtual"><scope>castor3d::LineIndices</scope><name>m_index</name></member>
+      <member refid="d7/db0/a03962_1afb7d890355b21508c84bae766c0820c2" prot="public" virt="non-virtual"><scope>castor3d::QueuesData::QueueThreadData</scope><name>count</name></member>
+      <member refid="d7/db0/a03962_1a7d03278b296fea39b60ac396a1c2db43" prot="public" virt="non-virtual"><scope>castor3d::QueuesData::QueueThreadData</scope><name>data</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

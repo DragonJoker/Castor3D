@@ -1,6 +1,4 @@
-<map id="castor3d::RenderTechniqueVisitor" name="castor3d::RenderTechniqueVisitor">
-<area shape="rect" id="node1" title=" " alt="" coords="12,261,192,303"/>
-<area shape="rect" id="node2" href="$dd/d4d/a03844.html" title=" " alt="" coords="21,185,183,212"/>
-<area shape="rect" id="node3" href="$d5/d73/a03836.html" title=" " alt="" coords="5,109,199,136"/>
-<area shape="rect" id="node4" href="$dc/d8b/a03840.html" title=" " alt="" coords="21,5,183,47"/>
+<map id="castor3d::shader::ModelIndices" name="castor3d::shader::ModelIndices">
+<area shape="rect" id="node1" title=" " alt="" coords="5,80,208,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="38,5,175,32"/>
 </map>

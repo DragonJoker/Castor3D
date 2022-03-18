@@ -1,5 +1,5 @@
-<map id="castor3d::ObjectCache&lt; BillboardList, castor::String &gt;" name="castor3d::ObjectCache&lt; BillboardList, castor::String &gt;">
-<area shape="rect" id="node1" title="BillboardList cache." alt="" coords="21,229,175,285"/>
-<area shape="rect" id="node2" href="$d4/dde/a02422.html" title=" " alt="" coords="5,124,191,180"/>
-<area shape="rect" id="node3" href="$d4/dde/a02422.html" title="Base class for a scene element cache." alt="" coords="5,5,191,47"/>
+<map id="castor3d::BinaryParser&lt; SceneNodeAnimation &gt;" name="castor3d::BinaryParser&lt; SceneNodeAnimation &gt;">
+<area shape="rect" id="node1" title="SceneNodeAnimation binary loader." alt="" coords="13,200,183,241"/>
+<area shape="rect" id="node2" href="$d7/df2/a02322.html" title=" " alt="" coords="5,109,191,151"/>
+<area shape="rect" id="node3" href="$d7/df2/a02322.html" title="Binary data chunk reader base class." alt="" coords="5,5,191,47"/>
 </map>

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dir_a6d39f94f30b7e21e1610ee95d9a533e" kind="dir">
+    <compoundname>Material/Pass/Phong/Shaders</compoundname>
+    <innerfile refid="df/d91/a00335">GlslPhongLighting.hpp</innerfile>
+    <innerfile refid="dc/d84/a00338">GlslPhongMaterial.hpp</innerfile>
+    <innerfile refid="d3/d93/a00341">GlslPhongReflection.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/Pass/Phong/Shaders/"/>
+  </compounddef>
+</doxygen>

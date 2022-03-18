@@ -1,22 +1,364 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dc/ddd/a04738" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::LightPassShadowTraits</compoundname>
-    <includes local="no">LightingModule.hpp</includes>
-    <templateparamlist>
-      <param>
-        <type><ref refid="de/d13/a01473_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
-        <declname>LtType</declname>
-        <defname>LtType</defname>
-      </param>
-    </templateparamlist>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dc/ddd/a04738" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::TextureAnimationBuffer</compoundname>
+    <includes local="no">TextureAnimationBuffer.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dc/ddd/a04738_1a954fa6f71fb8a53fa54204b9273508a3" prot="public" static="no">
+        <type>castor::ArrayView&lt; <ref refid="d6/d1d/a02906" kindref="compound">TextureAnimationData</ref> &gt;</type>
+        <definition>using castor3d::TextureAnimationBuffer::TextureAnimationsData =  castor::ArrayView&lt; TextureAnimationData &gt;</definition>
+        <argsstring></argsstring>
+        <name>TextureAnimationsData</name>
+        <qualifiedname>castor3d::TextureAnimationBuffer::TextureAnimationsData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureAnimationBuffer.hpp" line="105" column="1" bodyfile="Shader/ShaderBuffers/TextureAnimationBuffer.hpp" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="dc/ddd/a04738_1a43ffda4b8268ee511e82e2f3996aa4b8" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::TextureAnimationBuffer::DataSize</definition>
+        <argsstring></argsstring>
+        <name>DataSize</name>
+        <qualifiedname>castor3d::TextureAnimationBuffer::DataSize</qualifiedname>
+        <initializer>= uint32_t( sizeof( <ref refid="d6/d1d/a02906" kindref="compound">TextureAnimationData</ref> ) )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureAnimationBuffer.hpp" line="106" column="27" bodyfile="Shader/ShaderBuffers/TextureAnimationBuffer.hpp" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dc/ddd/a04738_1aceb2d4249bc8839ecb8d6ea8d7b760f3" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/d54/a04666" kindref="compound">ShaderBuffer</ref></type>
+        <definition>ShaderBuffer castor3d::TextureAnimationBuffer::m_buffer</definition>
+        <argsstring></argsstring>
+        <name>m_buffer</name>
+        <qualifiedname>castor3d::TextureAnimationBuffer::m_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureAnimationBuffer.hpp" line="109" column="14" bodyfile="Shader/ShaderBuffers/TextureAnimationBuffer.hpp" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/ddd/a04738_1a0d9c7d3cd19d45da7e13d1736d457fad" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/ddd/a04738_1a954fa6f71fb8a53fa54204b9273508a3" kindref="member">TextureAnimationsData</ref></type>
+        <definition>TextureAnimationsData castor3d::TextureAnimationBuffer::m_data</definition>
+        <argsstring></argsstring>
+        <name>m_data</name>
+        <qualifiedname>castor3d::TextureAnimationBuffer::m_data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureAnimationBuffer.hpp" line="110" column="23" bodyfile="Shader/ShaderBuffers/TextureAnimationBuffer.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/ddd/a04738_1a43a1f4a46fd42ee618e4a9afb125ad7f" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d5/de5/a04390" kindref="compound">AnimatedTexture</ref> const * &gt;</type>
+        <definition>std::vector&lt; AnimatedTexture const * &gt; castor3d::TextureAnimationBuffer::m_animations</definition>
+        <argsstring></argsstring>
+        <name>m_animations</name>
+        <qualifiedname>castor3d::TextureAnimationBuffer::m_animations</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureAnimationBuffer.hpp" line="111" column="13" bodyfile="Shader/ShaderBuffers/TextureAnimationBuffer.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/ddd/a04738_1adeb38d2a8c6c902454224b489b112f11" prot="private" static="no" mutable="no">
+        <type>std::mutex</type>
+        <definition>std::mutex castor3d::TextureAnimationBuffer::m_mutex</definition>
+        <argsstring></argsstring>
+        <name>m_mutex</name>
+        <qualifiedname>castor3d::TextureAnimationBuffer::m_mutex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureAnimationBuffer.hpp" line="112" column="12" bodyfile="Shader/ShaderBuffers/TextureAnimationBuffer.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/ddd/a04738_1ad76b0a1ccf51e5f6f124b171b17b5ea7" prot="private" static="no" mutable="no">
+        <type>std::atomic_uint32_t</type>
+        <definition>std::atomic_uint32_t castor3d::TextureAnimationBuffer::m_count</definition>
+        <argsstring></argsstring>
+        <name>m_count</name>
+        <qualifiedname>castor3d::TextureAnimationBuffer::m_count</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureAnimationBuffer.hpp" line="113" column="22" bodyfile="Shader/ShaderBuffers/TextureAnimationBuffer.hpp" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/ddd/a04738_1a1cf572f90e90b0316d1fda89e1e2dc75" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::TextureAnimationBuffer::TextureAnimationBuffer</definition>
+        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, uint32_t count)</argsstring>
+        <name>TextureAnimationBuffer</name>
+        <qualifiedname>castor3d::TextureAnimationBuffer::TextureAnimationBuffer</qualifiedname>
+        <param>
+          <type><ref refid="d1/d3c/a02714" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The max configurations count. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureAnimationBuffer.hpp" line="39" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/ddd/a04738_1a68536e2e385e4a40ba5deb7af186d362" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureAnimationBuffer::addTextureAnimation</definition>
+        <argsstring>(AnimatedTexture const &amp;texture)</argsstring>
+        <name>addTextureAnimation</name>
+        <qualifiedname>castor3d::TextureAnimationBuffer::addTextureAnimation</qualifiedname>
+        <param>
+          <type><ref refid="d5/de5/a04390" kindref="compound">AnimatedTexture</ref> const &amp;</type>
+          <declname>texture</declname>
+        </param>
+        <briefdescription>
+<para>Adds a configuration to the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">texture</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The texture. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureAnimationBuffer.hpp" line="50" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/ddd/a04738_1af87139b24cc30a4b6bed347f744a692b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureAnimationBuffer::removeTextureAnimation</definition>
+        <argsstring>(AnimatedTexture const &amp;texture)</argsstring>
+        <name>removeTextureAnimation</name>
+        <qualifiedname>castor3d::TextureAnimationBuffer::removeTextureAnimation</qualifiedname>
+        <param>
+          <type><ref refid="d5/de5/a04390" kindref="compound">AnimatedTexture</ref> const &amp;</type>
+          <declname>texture</declname>
+        </param>
+        <briefdescription>
+<para>Removes a configuration from the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">texture</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The texture. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureAnimationBuffer.hpp" line="59" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/ddd/a04738_1afb182b0862fdf57feaaef7dbda28a741" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureAnimationBuffer::update</definition>
+        <argsstring>(ashes::CommandBuffer const &amp;commandBuffer)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::TextureAnimationBuffer::update</qualifiedname>
+        <param>
+          <type>ashes::CommandBuffer const &amp;</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <briefdescription>
+<para>Updates the configurations buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureAnimationBuffer.hpp" line="66" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/ddd/a04738_1a0d60e13109bef84d90bf200e433c532b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkDescriptorSetLayoutBinding</type>
+        <definition>C3D_API VkDescriptorSetLayoutBinding castor3d::TextureAnimationBuffer::createLayoutBinding</definition>
+        <argsstring>(uint32_t binding) const</argsstring>
+        <name>createLayoutBinding</name>
+        <qualifiedname>castor3d::TextureAnimationBuffer::createLayoutBinding</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+<para>Creates the descriptor set layout binding. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureAnimationBuffer.hpp" line="73" column="38"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/ddd/a04738_1af4b748cc374c486e19c50b3f07c558ac" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::WriteDescriptorSet</type>
+        <definition>C3D_API ashes::WriteDescriptorSet castor3d::TextureAnimationBuffer::getBinding</definition>
+        <argsstring>(uint32_t binding) const</argsstring>
+        <name>getBinding</name>
+        <qualifiedname>castor3d::TextureAnimationBuffer::getBinding</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+<para>Creates the descriptor write for this buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureAnimationBuffer.hpp" line="80" column="35"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/ddd/a04738_1a88494a9a88d014872cd13ae169e21b60" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureAnimationBuffer::createBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;binding) const</argsstring>
+        <name>createBinding</name>
+        <qualifiedname>castor3d::TextureAnimationBuffer::createBinding</qualifiedname>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+<para>Creates the descriptor set binding at given point. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">descriptorSet</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The descriptor set that receives the binding. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">binding</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The descriptor set layout binding. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureAnimationBuffer.hpp" line="91" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/ddd/a04738_1aba6cc4fd2d7e29489b14e422fada3669" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint8_t *</type>
+        <definition>uint8_t * castor3d::TextureAnimationBuffer::getPtr</definition>
+        <argsstring>()</argsstring>
+        <name>getPtr</name>
+        <qualifiedname>castor3d::TextureAnimationBuffer::getPtr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The pointer to the buffer. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureAnimationBuffer.hpp" line="99" column="17" bodyfile="Shader/ShaderBuffers/TextureAnimationBuffer.hpp" bodystart="99" bodyend="102"/>
+        <references refid="d7/d54/a04666_1a4fcf4ffabfc41ab525819285b87fdbfe" compoundref="d9/d25/a01157" startline="123" endline="126">castor3d::ShaderBuffer::getPtr</references>
+      </memberdef>
+      </sectiondef>
     <briefdescription>
-<para>Traits structure to specialise light passes with shadows. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Technique/Opaque/Lighting/LightingModule.hpp" line="91" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightingModule.hpp" bodystart="91" bodyend="-1"/>
+    <location file="Shader/ShaderBuffers/TextureAnimationBuffer.hpp" line="24" column="1" bodyfile="Shader/ShaderBuffers/TextureAnimationBuffer.hpp" bodystart="25" bodyend="114"/>
     <listofallmembers>
+      <member refid="dc/ddd/a04738_1a68536e2e385e4a40ba5deb7af186d362" prot="public" virt="non-virtual"><scope>castor3d::TextureAnimationBuffer</scope><name>addTextureAnimation</name></member>
+      <member refid="dc/ddd/a04738_1a88494a9a88d014872cd13ae169e21b60" prot="public" virt="non-virtual"><scope>castor3d::TextureAnimationBuffer</scope><name>createBinding</name></member>
+      <member refid="dc/ddd/a04738_1a0d60e13109bef84d90bf200e433c532b" prot="public" virt="non-virtual"><scope>castor3d::TextureAnimationBuffer</scope><name>createLayoutBinding</name></member>
+      <member refid="dc/ddd/a04738_1a43ffda4b8268ee511e82e2f3996aa4b8" prot="public" virt="non-virtual"><scope>castor3d::TextureAnimationBuffer</scope><name>DataSize</name></member>
+      <member refid="dc/ddd/a04738_1af4b748cc374c486e19c50b3f07c558ac" prot="public" virt="non-virtual"><scope>castor3d::TextureAnimationBuffer</scope><name>getBinding</name></member>
+      <member refid="dc/ddd/a04738_1aba6cc4fd2d7e29489b14e422fada3669" prot="public" virt="non-virtual"><scope>castor3d::TextureAnimationBuffer</scope><name>getPtr</name></member>
+      <member refid="dc/ddd/a04738_1a43a1f4a46fd42ee618e4a9afb125ad7f" prot="private" virt="non-virtual"><scope>castor3d::TextureAnimationBuffer</scope><name>m_animations</name></member>
+      <member refid="dc/ddd/a04738_1aceb2d4249bc8839ecb8d6ea8d7b760f3" prot="private" virt="non-virtual"><scope>castor3d::TextureAnimationBuffer</scope><name>m_buffer</name></member>
+      <member refid="dc/ddd/a04738_1ad76b0a1ccf51e5f6f124b171b17b5ea7" prot="private" virt="non-virtual"><scope>castor3d::TextureAnimationBuffer</scope><name>m_count</name></member>
+      <member refid="dc/ddd/a04738_1a0d9c7d3cd19d45da7e13d1736d457fad" prot="private" virt="non-virtual"><scope>castor3d::TextureAnimationBuffer</scope><name>m_data</name></member>
+      <member refid="dc/ddd/a04738_1adeb38d2a8c6c902454224b489b112f11" prot="private" virt="non-virtual"><scope>castor3d::TextureAnimationBuffer</scope><name>m_mutex</name></member>
+      <member refid="dc/ddd/a04738_1af87139b24cc30a4b6bed347f744a692b" prot="public" virt="non-virtual"><scope>castor3d::TextureAnimationBuffer</scope><name>removeTextureAnimation</name></member>
+      <member refid="dc/ddd/a04738_1a1cf572f90e90b0316d1fda89e1e2dc75" prot="public" virt="non-virtual"><scope>castor3d::TextureAnimationBuffer</scope><name>TextureAnimationBuffer</name></member>
+      <member refid="dc/ddd/a04738_1a954fa6f71fb8a53fa54204b9273508a3" prot="public" virt="non-virtual"><scope>castor3d::TextureAnimationBuffer</scope><name>TextureAnimationsData</name></member>
+      <member refid="dc/ddd/a04738_1afb182b0862fdf57feaaef7dbda28a741" prot="public" virt="non-virtual"><scope>castor3d::TextureAnimationBuffer</scope><name>update</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

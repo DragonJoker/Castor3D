@@ -1,308 +1,76 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d6/d5a/a04720" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::SsaoRawAOPass::RenderQuad</compoundname>
-    <basecompoundref refid="d4/d45/a04456" prot="public" virt="non-virtual">castor3d::RenderQuad</basecompoundref>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d6/d5a/a04720" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SssProfileBuffer::Data</compoundname>
+    <includes local="no">SssProfileBuffer.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d6/d5a/a04720_1a3b86cc7f5750eb51665c4767640cb3e4" prot="public" static="no" mutable="no">
-        <type><ref refid="d7/d32/a05312" kindref="compound">castor3d::ShaderModule</ref></type>
-        <definition>castor3d::ShaderModule castor3d::SsaoRawAOPass::RenderQuad::vertexShader</definition>
+      <memberdef kind="variable" id="d6/d5a/a04720_1a80a1b77623e0252bed6b54c53f247512" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SssProfileBuffer::Data::x</definition>
         <argsstring></argsstring>
-        <name>vertexShader</name>
+        <name>x</name>
+        <qualifiedname>castor3d::SssProfileBuffer::Data::x</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="117" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="117" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="29" column="7" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="29" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d5a/a04720_1a3678a80c542db812208a033af0bf15e8" prot="public" static="no" mutable="no">
-        <type><ref refid="d7/d32/a05312" kindref="compound">castor3d::ShaderModule</ref></type>
-        <definition>castor3d::ShaderModule castor3d::SsaoRawAOPass::RenderQuad::pixelShader</definition>
+      <memberdef kind="variable" id="d6/d5a/a04720_1a84eee77307ab6fd4e41074c36d817fe8" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SssProfileBuffer::Data::y</definition>
         <argsstring></argsstring>
-        <name>pixelShader</name>
+        <name>y</name>
+        <qualifiedname>castor3d::SssProfileBuffer::Data::y</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="118" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="118" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="30" column="7" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="30" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d5a/a04720_1a202327f23525358a4777123165bb1a48" prot="public" static="no" mutable="no">
-        <type><ref refid="df/d64/a05544" kindref="compound">SsaoConfigUbo</ref> &amp;</type>
-        <definition>SsaoConfigUbo&amp; castor3d::SsaoRawAOPass::RenderQuad::m_ssaoConfigUbo</definition>
+      <memberdef kind="variable" id="d6/d5a/a04720_1aa49697620d9aa4205ca2aec8bd84c0c3" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SssProfileBuffer::Data::z</definition>
         <argsstring></argsstring>
-        <name>m_ssaoConfigUbo</name>
+        <name>z</name>
+        <qualifiedname>castor3d::SssProfileBuffer::Data::z</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="120" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="120" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="31" column="7" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="31" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d5a/a04720_1abf855bbede66733387049f41b0b566c4" prot="public" static="no" mutable="no">
-        <type><ref refid="d1/d22/a05464" kindref="compound">GpInfoUbo</ref> const  &amp;</type>
-        <definition>GpInfoUbo const&amp; castor3d::SsaoRawAOPass::RenderQuad::m_gpInfoUbo</definition>
+      <memberdef kind="variable" id="d6/d5a/a04720_1af04dfbdb9c52bf7040f9545196da58a3" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SssProfileBuffer::Data::w</definition>
         <argsstring></argsstring>
-        <name>m_gpInfoUbo</name>
+        <name>w</name>
+        <qualifiedname>castor3d::SssProfileBuffer::Data::w</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="121" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="121" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d6/d5a/a04720_1a6ed0d0dea88529c2a008e1d3bcabee8f" prot="public" static="no" mutable="no">
-        <type>ashes::ImageView const  *</type>
-        <definition>ashes::ImageView const* castor3d::SsaoRawAOPass::RenderQuad::m_depthView</definition>
-        <argsstring></argsstring>
-        <name>m_depthView</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="122" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="122" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d6/d5a/a04720_1a1964983e18e8ea4ba3657dbb7316abd9" prot="public" static="no" mutable="no">
-        <type>SamplerSPtr</type>
-        <definition>SamplerSPtr castor3d::SsaoRawAOPass::RenderQuad::m_depthSampler</definition>
-        <argsstring></argsstring>
-        <name>m_depthSampler</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="123" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="123" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d6/d5a/a04720_1aeec30bec22f9c7a7d3de7351b6d34def" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::SsaoRawAOPass::RenderQuad::RenderQuad</definition>
-        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, ashes::RenderPass const &amp;renderPass, VkExtent2D const &amp;size, SsaoConfigUbo &amp;ssaoConfigUbo, GpInfoUbo const &amp;gpInfoUbo, TextureUnit const &amp;depth, ashes::ImageView const *normals)</argsstring>
-        <name>RenderQuad</name>
-        <param>
-          <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>ashes::RenderPass const &amp;</type>
-          <declname>renderPass</declname>
-        </param>
-        <param>
-          <type>VkExtent2D const &amp;</type>
-          <declname>size</declname>
-        </param>
-        <param>
-          <type><ref refid="df/d64/a05544" kindref="compound">SsaoConfigUbo</ref> &amp;</type>
-          <declname>ssaoConfigUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/d22/a05464" kindref="compound">GpInfoUbo</ref> const &amp;</type>
-          <declname>gpInfoUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="d6/d18/a02664" kindref="compound">TextureUnit</ref> const &amp;</type>
-          <declname>depth</declname>
-        </param>
-        <param>
-          <type>ashes::ImageView const *</type>
-          <declname>normals</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="108" column="1"/>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="32" column="7" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="32" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="4231">
-        <label>castor3d::RenderQuad</label>
-        <link refid="d4/d45/a04456"/>
-        <childnode refid="4232" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4232">
-        <label>Named</label>
-      </node>
-      <node id="4230">
-        <label>castor3d::SsaoRawAOPass::RenderQuad</label>
-        <childnode refid="4231" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="4236">
-        <label>castor3d::RenderSystem</label>
-        <link refid="d9/d38/a04624"/>
-        <childnode refid="4237" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4234">
-        <label>castor3d::RenderQuad</label>
-        <link refid="d4/d45/a04456"/>
-        <childnode refid="4235" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4236" relation="usage">
-          <edgelabel>m_renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="4238" relation="usage">
-          <edgelabel>m_device</edgelabel>
-        </childnode>
-      </node>
-      <node id="4241">
-        <label>T</label>
-      </node>
-      <node id="4243">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="4241" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="4240">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="4241" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="4242">
-        <label>std::vector&lt; ashes::CommandPoolPtr &gt;</label>
-        <childnode refid="4243" relation="template-instance">
-          <edgelabel>&lt; ashes::CommandPoolPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4239">
-        <label>std::array&lt; uint32_t, 4u &gt;</label>
-        <childnode refid="4240" relation="template-instance">
-          <edgelabel>&lt; uint32_t, 4u &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4248">
-        <label>std::unique_ptr&lt; T &gt;</label>
-        <childnode refid="4241" relation="usage">
-          <edgelabel>ptr</edgelabel>
-        </childnode>
-      </node>
-      <node id="4235">
-        <label>Named</label>
-      </node>
-      <node id="4250">
-        <label>std::basic_string&lt; char &gt;</label>
-      </node>
-      <node id="4247">
-        <label>std::unique_ptr&lt; ast::Shader &gt;</label>
-        <childnode refid="4248" relation="template-instance">
-          <edgelabel>&lt; ast::Shader &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4237">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="4233">
-        <label>castor3d::SsaoRawAOPass::RenderQuad</label>
-        <childnode refid="4234" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4244" relation="usage">
-          <edgelabel>m_gpInfoUbo</edgelabel>
-        </childnode>
-        <childnode refid="4245" relation="usage">
-          <edgelabel>m_ssaoConfigUbo</edgelabel>
-        </childnode>
-        <childnode refid="4246" relation="usage">
-          <edgelabel>pixelShader</edgelabel>
-          <edgelabel>vertexShader</edgelabel>
-        </childnode>
-      </node>
-      <node id="4244">
-        <label>castor3d::GpInfoUbo</label>
-        <link refid="d1/d22/a05464"/>
-      </node>
-      <node id="4245">
-        <label>castor3d::SsaoConfigUbo</label>
-        <link refid="df/d64/a05544"/>
-      </node>
-      <node id="4238">
-        <label>castor3d::RenderDevice</label>
-        <link refid="d1/def/a04512"/>
-        <childnode refid="4239" relation="usage">
-          <edgelabel>queueFamiliesIndex</edgelabel>
-        </childnode>
-        <childnode refid="4236" relation="usage">
-          <edgelabel>renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="4242" relation="usage">
-          <edgelabel>commandPools</edgelabel>
-        </childnode>
-      </node>
-      <node id="4246">
-        <label>castor3d::ShaderModule</label>
-        <link refid="d7/d32/a05312"/>
-        <childnode refid="4247" relation="usage">
-          <edgelabel>shader</edgelabel>
-        </childnode>
-        <childnode refid="4249" relation="usage">
-          <edgelabel>source</edgelabel>
-          <edgelabel>name</edgelabel>
-        </childnode>
-      </node>
-      <node id="4249">
-        <label>std::string</label>
-        <childnode refid="4250" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Render/Ssao/SsaoRawAOPass.hpp" line="107" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="105" bodyend="124"/>
+    <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="27" column="1" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="28" bodyend="33"/>
     <listofallmembers>
-      <member refid="d4/d45/a04456_1ab31f1f028639e2280dc81a5207c19361" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>cleanup</name></member>
-      <member refid="d4/d45/a04456_1a2d8f7fe31e95ec7563ab7e49d47f847f" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>createPipeline</name></member>
-      <member refid="d4/d45/a04456_1a9eed2ab1f518d2d215e10f79dd66b980" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>createPipelineAndPass</name></member>
-      <member refid="d4/d45/a04456_1a208ae566cd29dc14e874ec5381a40676" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>getDevice</name></member>
-      <member refid="d4/d45/a04456_1adf3b0cdd23bb9558df6d7f1b87b74ac6" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>getRenderSystem</name></member>
-      <member refid="d4/d45/a04456_1a2b4ea1f81bda3deace1e6f5b159f90db" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>getSampler</name></member>
-      <member refid="d4/d45/a04456_1a434520ea0e0f0a1ae885e7c9e19306a8" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>initialisePasses</name></member>
-      <member refid="d4/d45/a04456_1ac07074df6fa0bb86ec6e9c76bf23f867" prot="protected" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>m_config</name></member>
-      <member refid="d6/d5a/a04720_1a1964983e18e8ea4ba3657dbb7316abd9" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>m_depthSampler</name></member>
-      <member refid="d6/d5a/a04720_1a6ed0d0dea88529c2a008e1d3bcabee8f" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>m_depthView</name></member>
-      <member refid="d4/d45/a04456_1a0e0d911b83650f310a1d773e6774788c" prot="protected" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>m_device</name></member>
-      <member refid="d6/d5a/a04720_1abf855bbede66733387049f41b0b566c4" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>m_gpInfoUbo</name></member>
-      <member refid="d4/d45/a04456_1a67e531e63c3eef4d22c89cd5dcf26d39" prot="protected" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>m_renderSystem</name></member>
-      <member refid="d4/d45/a04456_1ac424bcc12b49f4788b6a78e181e7d8c9" prot="protected" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>m_sampler</name></member>
-      <member refid="d6/d5a/a04720_1a202327f23525358a4777123165bb1a48" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>m_ssaoConfigUbo</name></member>
-      <member refid="d4/d45/a04456_1aba30b821ed0f043349148de3f91e1e28" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d4/d45/a04456_1abb76aa593ad380a88d949bd26fea0202" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d4/d45/a04456_1a612d681d62631e6bb92d9601c660b48e" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d4/d45/a04456_1af64b5bc8b9a9a3013e46accb200156f5" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d4/d45/a04456_1a43bab20a96e9bea365bc98d8667c977e" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d4/d45/a04456_1afacd916c61c3a5b315a0d3e94a8ba84d" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d4/d45/a04456_1a046a2ac1ba39bbd6114dfe87d4aaaf11" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d6/d5a/a04720_1a3678a80c542db812208a033af0bf15e8" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>pixelShader</name></member>
-      <member refid="d4/d45/a04456_1ac0cf400425c8050429e895099c971715" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>registerPass</name></member>
-      <member refid="d4/d45/a04456_1a62f21f0ecc9017c47eb029d0bc19e396" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>registerPass</name></member>
-      <member refid="d4/d45/a04456_1a367adcd9b6cc6ac6b1c68a28b2580eb2" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>registerPassInputs</name></member>
-      <member refid="d6/d5a/a04720_1aeec30bec22f9c7a7d3de7351b6d34def" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>RenderQuad</name></member>
-      <member refid="d4/d45/a04456_1a48a49fffd036c545328e87e1449e141d" prot="protected" virt="non-virtual" ambiguityscope="castor3d::RenderQuad::"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>RenderQuad</name></member>
-      <member refid="d4/d45/a04456_1aeaeeae8d7065de723f0a710360bab119" prot="public" virt="non-virtual" ambiguityscope="castor3d::RenderQuad::"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>RenderQuad</name></member>
-      <member refid="d6/d5a/a04720_1a3b86cc7f5750eb51665c4767640cb3e4" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>vertexShader</name></member>
-      <member refid="d4/d45/a04456_1a8a01faf0243638f02d6f052ff9e85b4b" prot="public" virt="virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>~RenderQuad</name></member>
+      <member refid="d6/d5a/a04720_1af04dfbdb9c52bf7040f9545196da58a3" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer::Data</scope><name>w</name></member>
+      <member refid="d6/d5a/a04720_1a80a1b77623e0252bed6b54c53f247512" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer::Data</scope><name>x</name></member>
+      <member refid="d6/d5a/a04720_1a84eee77307ab6fd4e41074c36d817fe8" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer::Data</scope><name>y</name></member>
+      <member refid="d6/d5a/a04720_1aa49697620d9aa4205ca2aec8bd84c0c3" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer::Data</scope><name>z</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

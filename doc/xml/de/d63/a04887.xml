@@ -1,358 +1,224 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="de/d63/a04887" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::RsmGIPass</compoundname>
-    <basecompoundref refid="da/d95/a04435" prot="public" virt="non-virtual">castor3d::RenderQuad</basecompoundref>
-    <includes local="no">RsmGIPass.hpp</includes>
+    <compoundname>castor3d::GpInfoUbo</compoundname>
+    <includes local="no">GpInfoUbo.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="de/d63/a04887_1adfd9d07dfced9b1ab9727c898ca457e4" prot="public" static="no">
+        <type><ref refid="d7/d3c/a05003" kindref="compound">GpInfoUboConfiguration</ref></type>
+        <definition>using castor3d::GpInfoUbo::Configuration =  GpInfoUboConfiguration</definition>
+        <argsstring></argsstring>
+        <name>Configuration</name>
+        <qualifiedname>castor3d::GpInfoUbo::Configuration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="65" column="1" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="de/d63/a04887_1a2ef2c83335133c3ecd325223d3df6b9a" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <definition>C3D_API const castor::String castor3d::GpInfoUbo::BufferGPInfo</definition>
+        <argsstring></argsstring>
+        <name>BufferGPInfo</name>
+        <qualifiedname>castor3d::GpInfoUbo::BufferGPInfo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="96" column="37" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d63/a04887_1a88e9127de3cce5001220d1fbae7c357e" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <definition>C3D_API const castor::String castor3d::GpInfoUbo::GPInfoData</definition>
+        <argsstring></argsstring>
+        <name>GPInfoData</name>
+        <qualifiedname>castor3d::GpInfoUbo::GPInfoData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="97" column="37" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="de/d63/a04887_1a4839229de503e57c4e4299437b24b173" prot="private" static="no" mutable="no">
-        <type><ref refid="d7/dd1/a01458_1a563d137a64a10483b6a4ba4b5174d05d" kindref="member">LightCache</ref> const  &amp;</type>
-        <definition>LightCache const&amp; castor3d::RsmGIPass::m_lightCache</definition>
+      <memberdef kind="variable" id="de/d63/a04887_1a378533119a29339ecb90607968b8c1c5" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::GpInfoUbo::m_device</definition>
         <argsstring></argsstring>
-        <name>m_lightCache</name>
+        <name>m_device</name>
+        <qualifiedname>castor3d::GpInfoUbo::m_device</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="93" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="93" bodyend="-1"/>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="100" column="21" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="100" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="de/d63/a04887_1a2564ab95c1caaf5c3e3ef8b48937d971" prot="private" static="no" mutable="no">
-        <type><ref refid="da/d9f/a04859" kindref="compound">OpaquePassResult</ref> const  &amp;</type>
-        <definition>OpaquePassResult const&amp; castor3d::RsmGIPass::m_gpResult</definition>
+      <memberdef kind="variable" id="de/d63/a04887_1af5100d0f99e459b0866122f055f30f36" prot="private" static="no" mutable="no">
+        <type><ref refid="d0/d01/a02511" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="de/d63/a04887_1adfd9d07dfced9b1ab9727c898ca457e4" kindref="member">Configuration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::GpInfoUbo::m_ubo</definition>
         <argsstring></argsstring>
-        <name>m_gpResult</name>
+        <name>m_ubo</name>
+        <qualifiedname>castor3d::GpInfoUbo::m_ubo</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="94" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="94" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/d63/a04887_1a598f054c0f3641cbc57c3a02476ab61c" prot="private" static="no" mutable="no">
-        <type><ref refid="db/dc1/a04671" kindref="compound">ShadowMapResult</ref> const  &amp;</type>
-        <definition>ShadowMapResult const&amp; castor3d::RsmGIPass::m_smResult</definition>
-        <argsstring></argsstring>
-        <name>m_smResult</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="95" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="95" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/d63/a04887_1ada7033eda9ce20bf16ea1a0195650a63" prot="private" static="no" mutable="no">
-        <type><ref refid="dd/d83/a05443" kindref="compound">GpInfoUbo</ref> const  &amp;</type>
-        <definition>GpInfoUbo const&amp; castor3d::RsmGIPass::m_gpInfo</definition>
-        <argsstring></argsstring>
-        <name>m_gpInfo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="96" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="96" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/d63/a04887_1a20388fad15423b23e26f04edd3f8a804" prot="private" static="no" mutable="no">
-        <type>TextureUnitArray</type>
-        <definition>TextureUnitArray castor3d::RsmGIPass::m_result</definition>
-        <argsstring></argsstring>
-        <name>m_result</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="97" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="97" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/d63/a04887_1ae61c71fda608abc251abd3be4f4f4e3d" prot="private" static="no" mutable="no">
-        <type><ref refid="d7/dd1/a01458_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
-        <definition>LightType castor3d::RsmGIPass::m_lightType</definition>
-        <argsstring></argsstring>
-        <name>m_lightType</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="98" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="98" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/d63/a04887_1a04047247b747e9ac31706aec268102a6" prot="private" static="no" mutable="no">
-        <type><ref refid="d8/dbd/a05291" kindref="compound">ShaderModule</ref></type>
-        <definition>ShaderModule castor3d::RsmGIPass::m_vertexShader</definition>
-        <argsstring></argsstring>
-        <name>m_vertexShader</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="99" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="99" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/d63/a04887_1a0ef9e0ce817b5c2072d6e7dc171b228d" prot="private" static="no" mutable="no">
-        <type><ref refid="d8/dbd/a05291" kindref="compound">ShaderModule</ref></type>
-        <definition>ShaderModule castor3d::RsmGIPass::m_pixelShader</definition>
-        <argsstring></argsstring>
-        <name>m_pixelShader</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="100" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="100" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/d63/a04887_1ae2fd027906456fea4ee485b9199dbf39" prot="private" static="no" mutable="no">
-        <type><ref refid="d6/d15/a05503" kindref="compound">RsmConfigUbo</ref></type>
-        <definition>RsmConfigUbo castor3d::RsmGIPass::m_rsmConfigUbo</definition>
-        <argsstring></argsstring>
-        <name>m_rsmConfigUbo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="101" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="101" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/d63/a04887_1a341eac59e762e3e73ebeef540165ecaf" prot="private" static="no" mutable="no">
-        <type>ashes::BufferPtr&lt; castor::Point2f &gt;</type>
-        <definition>ashes::BufferPtr&lt; castor::Point2f &gt; castor3d::RsmGIPass::m_rsmSamplesSsbo</definition>
-        <argsstring></argsstring>
-        <name>m_rsmSamplesSsbo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="102" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="102" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/d63/a04887_1a93d159757b1efc5b35407b8a7a31ece4" prot="private" static="no" mutable="no">
-        <type>ashes::RenderPassPtr</type>
-        <definition>ashes::RenderPassPtr castor3d::RsmGIPass::m_renderPass</definition>
-        <argsstring></argsstring>
-        <name>m_renderPass</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="103" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="103" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/d63/a04887_1a08da460846748fee93d1a8e427846a7e" prot="private" static="no" mutable="no">
-        <type>ashes::FrameBufferPtr</type>
-        <definition>ashes::FrameBufferPtr castor3d::RsmGIPass::m_frameBuffer</definition>
-        <argsstring></argsstring>
-        <name>m_frameBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="104" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="104" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/d63/a04887_1a87bf688320dcb26f1ff9674f49c6696e" prot="private" static="no" mutable="no">
-        <type>RenderPassTimerSPtr</type>
-        <definition>RenderPassTimerSPtr castor3d::RsmGIPass::m_timer</definition>
-        <argsstring></argsstring>
-        <name>m_timer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="105" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="105" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/d63/a04887_1ad186662c922d04d64a6439a04402e8ce" prot="private" static="no" mutable="no">
-        <type><ref refid="dd/d20/a04359" kindref="compound">CommandsSemaphore</ref></type>
-        <definition>CommandsSemaphore castor3d::RsmGIPass::m_commands</definition>
-        <argsstring></argsstring>
-        <name>m_commands</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="106" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="106" bodyend="-1"/>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="101" column="22" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="101" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="de/d63/a04887_1a040d654edd84d5bfa60e95f1f3e04a2b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="de/d63/a04887_1a772f431c5477bb82188c3914ab436022" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::RsmGIPass::RsmGIPass</definition>
-        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, LightCache const &amp;lightCache, LightType lightType, VkExtent2D const &amp;size, GpInfoUbo const &amp;gpInfo, OpaquePassResult const &amp;gpResult, ShadowMapResult const &amp;smResult, TextureUnitArray const &amp;downscaleResult)</argsstring>
-        <name>RsmGIPass</name>
+        <definition>C3D_API castor3d::GpInfoUbo::GpInfoUbo</definition>
+        <argsstring>(GpInfoUbo const &amp;rhs)=delete</argsstring>
+        <name>GpInfoUbo</name>
+        <qualifiedname>castor3d::GpInfoUbo::GpInfoUbo</qualifiedname>
         <param>
-          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
+          <type><ref refid="de/d63/a04887" kindref="compound">GpInfoUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
         </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="68" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d63/a04887_1a121ac884b845ecc42078299100713e4d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="de/d63/a04887" kindref="compound">GpInfoUbo</ref> &amp;</type>
+        <definition>C3D_API GpInfoUbo &amp; castor3d::GpInfoUbo::operator=</definition>
+        <argsstring>(GpInfoUbo const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::GpInfoUbo::operator=</qualifiedname>
         <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <type><ref refid="de/d63/a04887" kindref="compound">GpInfoUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="69" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d63/a04887_1a6fbd85568219ab6fffa53d99dfc755d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::GpInfoUbo::GpInfoUbo</definition>
+        <argsstring>(GpInfoUbo &amp;&amp;rhs)=default</argsstring>
+        <name>GpInfoUbo</name>
+        <qualifiedname>castor3d::GpInfoUbo::GpInfoUbo</qualifiedname>
+        <param>
+          <type><ref refid="de/d63/a04887" kindref="compound">GpInfoUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="70" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d63/a04887_1aeddb7cac9f31e360fc0227793e4a5b0a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="de/d63/a04887" kindref="compound">GpInfoUbo</ref> &amp;</type>
+        <definition>C3D_API GpInfoUbo &amp; castor3d::GpInfoUbo::operator=</definition>
+        <argsstring>(GpInfoUbo &amp;&amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::GpInfoUbo::operator=</qualifiedname>
+        <param>
+          <type><ref refid="de/d63/a04887" kindref="compound">GpInfoUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="71" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d63/a04887_1a9300d8e1c0ea20d7dfe280193014000a" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::GpInfoUbo::GpInfoUbo</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>GpInfoUbo</name>
+        <qualifiedname>castor3d::GpInfoUbo::GpInfoUbo</qualifiedname>
+        <param>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
           <declname>device</declname>
         </param>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1a563d137a64a10483b6a4ba4b5174d05d" kindref="member">LightCache</ref> const &amp;</type>
-          <declname>lightCache</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
-          <declname>lightType</declname>
-        </param>
-        <param>
-          <type>VkExtent2D const &amp;</type>
-          <declname>size</declname>
-        </param>
-        <param>
-          <type><ref refid="dd/d83/a05443" kindref="compound">GpInfoUbo</ref> const &amp;</type>
-          <declname>gpInfo</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d9f/a04859" kindref="compound">OpaquePassResult</ref> const &amp;</type>
-          <declname>gpResult</declname>
-        </param>
-        <param>
-          <type><ref refid="db/dc1/a04671" kindref="compound">ShadowMapResult</ref> const &amp;</type>
-          <declname>smResult</declname>
-        </param>
-        <param>
-          <type>TextureUnitArray const &amp;</type>
-          <declname>downscaleResult</declname>
-        </param>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">engine</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The engine. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">lightCache</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The lights cache. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">lightType</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The light source type. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">size</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render area dimensions. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">gpInfo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GBuffer configuration UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">gpResult</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GBuffer. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">smResult</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The shadow map. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">downscaleResult</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The downscaled result. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="51" column="1"/>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="72" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="de/d63/a04887_1a9c9ca728e3e8d51935d8c30fe307af45" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Semaphore const  &amp;</type>
-        <definition>C3D_API ashes::Semaphore const&amp; castor3d::RsmGIPass::compute</definition>
-        <argsstring>(ashes::Semaphore const &amp;toWait) const</argsstring>
-        <name>compute</name>
-        <param>
-          <type>ashes::Semaphore const &amp;</type>
-          <declname>toWait</declname>
-        </param>
+      <memberdef kind="function" id="de/d63/a04887_1a62cc92f509ad0d222c1e79aab6291da4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::GpInfoUbo::~GpInfoUbo</definition>
+        <argsstring>()</argsstring>
+        <name>~GpInfoUbo</name>
+        <qualifiedname>castor3d::GpInfoUbo::~GpInfoUbo</qualifiedname>
         <briefdescription>
-<para>Renders the pass. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">toWait</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The semaphore from the previous render pass. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="68" column="1"/>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="73" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="de/d63/a04887_1af4baac2546e19469035ca2a102b59cbb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dd/d20/a04359" kindref="compound">CommandsSemaphore</ref></type>
-        <definition>C3D_API CommandsSemaphore castor3d::RsmGIPass::getCommands</definition>
-        <argsstring>(RenderPassTimer const &amp;timer, uint32_t index) const</argsstring>
-        <name>getCommands</name>
+      <memberdef kind="function" id="de/d63/a04887_1aad50a1fefda242429daea5370f2e6be6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::GpInfoUbo::cpuUpdate</definition>
+        <argsstring>(castor::Size const &amp;renderSize, Camera const &amp;camera)</argsstring>
+        <name>cpuUpdate</name>
+        <qualifiedname>castor3d::GpInfoUbo::cpuUpdate</qualifiedname>
         <param>
-          <type><ref refid="d7/db9/a04591" kindref="compound">RenderPassTimer</ref> const &amp;</type>
-          <declname>timer</declname>
+          <type>castor::Size const &amp;</type>
+          <declname>renderSize</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/dd6/a04479" kindref="compound">Camera</ref> const &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="75" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d63/a04887_1a4c3a0dc2043fc6bf77d896da9a3f00e8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::GpInfoUbo::createPassBinding</definition>
+        <argsstring>(crg::FramePass &amp;pass, uint32_t binding) const</argsstring>
+        <name>createPassBinding</name>
+        <qualifiedname>castor3d::GpInfoUbo::createPassBinding</qualifiedname>
+        <param>
+          <type>crg::FramePass &amp;</type>
+          <declname>pass</declname>
         </param>
         <param>
           <type>uint32_t</type>
-          <declname>index</declname>
+          <declname>binding</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -360,44 +226,22 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="69" column="1"/>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="78" column="6" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="78" bodyend="82"/>
+        <references refid="d0/d01/a02511_1ae2c055477d81767157b9832b18baa027" compoundref="dc/d57/a00194" startline="86" endline="94">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createPassBinding</references>
       </memberdef>
-      <memberdef kind="function" id="de/d63/a04887_1a24ee1daf8f0d4e087a92166dcc13ea4f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RsmGIPass::accept</definition>
-        <argsstring>(PipelineVisitorBase &amp;visitor)</argsstring>
-        <name>accept</name>
+      <memberdef kind="function" id="de/d63/a04887_1a5d2c9c7da7669ef53a90758a44b7619c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::GpInfoUbo::createSizedBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</argsstring>
+        <name>createSizedBinding</name>
+        <qualifiedname>castor3d::GpInfoUbo::createSizedBinding</qualifiedname>
         <param>
-          <type><ref refid="d7/dab/a03815" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
-          <declname>visitor</declname>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
         </param>
-        <briefdescription>
-<para>Visitor acceptance function. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername>visitor</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The ... visitor. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="74" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d63/a04887_1a8950d10d3fcc3bc46f27837dbe2e63a6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RsmGIPass::update</definition>
-        <argsstring>(Light const &amp;light)</argsstring>
-        <name>update</name>
         <param>
-          <type><ref refid="df/dc5/a05151" kindref="compound">Light</ref> const &amp;</type>
-          <declname>light</declname>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>layoutBinding</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -405,189 +249,45 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="75" column="1"/>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="84" column="6" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="84" bodyend="88"/>
+        <references refid="d0/d01/a02511_1a2c6ad146d4910651544564c25ca7dccd" compoundref="dc/d57/a00194" startline="96" endline="105">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</references>
       </memberdef>
-      <memberdef kind="function" id="de/d63/a04887_1aa866e32c5bfe4cf9c20477c73859fead" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>TextureUnitArray const  &amp;</type>
-        <definition>TextureUnitArray const&amp; castor3d::RsmGIPass::getResult</definition>
+      <memberdef kind="function" id="de/d63/a04887_1a031ca38f0799e1c80cc92716977e7b89" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d0/d01/a02511" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="de/d63/a04887_1adfd9d07dfced9b1ab9727c898ca457e4" kindref="member">Configuration</ref> &gt; const &amp;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; const  &amp; castor3d::GpInfoUbo::getUbo</definition>
         <argsstring>() const</argsstring>
-        <name>getResult</name>
+        <name>getUbo</name>
+        <qualifiedname>castor3d::GpInfoUbo::getUbo</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="77" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="77" bodyend="80"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d63/a04887_1adec8c2db828d1b5f6229c281b9964cab" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d6/d15/a05503" kindref="compound">RsmConfigUbo</ref> const  &amp;</type>
-        <definition>RsmConfigUbo const&amp; castor3d::RsmGIPass::getConfigUbo</definition>
-        <argsstring>() const</argsstring>
-        <name>getConfigUbo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="82" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="82" bodyend="85"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d63/a04887_1a28521fecc6a807c53fc04c3f33e20bbf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::Buffer&lt; castor::Point2f &gt; const  &amp;</type>
-        <definition>ashes::Buffer&lt; castor::Point2f &gt; const&amp; castor3d::RsmGIPass::getSamplesSsbo</definition>
-        <argsstring>() const</argsstring>
-        <name>getSamplesSsbo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="87" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="87" bodyend="90"/>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="90" column="29" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="90" bodyend="93"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="3192">
-        <label>castor3d::RenderQuad</label>
-        <link refid="da/d95/a04435"/>
-        <childnode refid="3193" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3193">
-        <label>Named</label>
-      </node>
-      <node id="3191">
-        <label>castor3d::RsmGIPass</label>
-        <link refid="de/d63/a04887"/>
-        <childnode refid="3192" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="3197">
-        <label>castor3d::RenderSystem</label>
-        <link refid="d6/d55/a04603"/>
-        <childnode refid="3198" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3195">
-        <label>castor3d::RenderQuad</label>
-        <link refid="da/d95/a04435"/>
-        <childnode refid="3196" relation="public-inheritance">
-        </childnode>
-        <childnode refid="3197" relation="usage">
-          <edgelabel>m_renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="3199" relation="usage">
-          <edgelabel>m_device</edgelabel>
-        </childnode>
-      </node>
-      <node id="3202">
-        <label>T</label>
-      </node>
-      <node id="3204">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="3202" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="3201">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="3202" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="3203">
-        <label>std::vector&lt; ashes::CommandPoolPtr &gt;</label>
-        <childnode refid="3204" relation="template-instance">
-          <edgelabel>&lt; ashes::CommandPoolPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3200">
-        <label>std::array&lt; uint32_t, 4u &gt;</label>
-        <childnode refid="3201" relation="template-instance">
-          <edgelabel>&lt; uint32_t, 4u &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3196">
-        <label>Named</label>
-      </node>
-      <node id="3198">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="3199">
-        <label>castor3d::RenderDevice</label>
-        <link refid="de/ddb/a04491"/>
-        <childnode refid="3200" relation="usage">
-          <edgelabel>queueFamiliesIndex</edgelabel>
-        </childnode>
-        <childnode refid="3197" relation="usage">
-          <edgelabel>renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="3203" relation="usage">
-          <edgelabel>commandPools</edgelabel>
-        </childnode>
-      </node>
-      <node id="3194">
-        <label>castor3d::RsmGIPass</label>
-        <link refid="de/d63/a04887"/>
-        <childnode refid="3195" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="25" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="23" bodyend="107"/>
+    <location file="Shader/Ubos/GpInfoUbo.hpp" line="62" column="1" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="63" bodyend="102"/>
     <listofallmembers>
-      <member refid="de/d63/a04887_1a24ee1daf8f0d4e087a92166dcc13ea4f" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>accept</name></member>
-      <member refid="da/d95/a04435_1ab31f1f028639e2280dc81a5207c19361" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>cleanup</name></member>
-      <member refid="de/d63/a04887_1a9c9ca728e3e8d51935d8c30fe307af45" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>compute</name></member>
-      <member refid="da/d95/a04435_1a2d8f7fe31e95ec7563ab7e49d47f847f" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>createPipeline</name></member>
-      <member refid="da/d95/a04435_1a9eed2ab1f518d2d215e10f79dd66b980" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>createPipelineAndPass</name></member>
-      <member refid="de/d63/a04887_1af4baac2546e19469035ca2a102b59cbb" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>getCommands</name></member>
-      <member refid="de/d63/a04887_1adec8c2db828d1b5f6229c281b9964cab" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>getConfigUbo</name></member>
-      <member refid="da/d95/a04435_1a208ae566cd29dc14e874ec5381a40676" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>getDevice</name></member>
-      <member refid="da/d95/a04435_1adf3b0cdd23bb9558df6d7f1b87b74ac6" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>getRenderSystem</name></member>
-      <member refid="de/d63/a04887_1aa866e32c5bfe4cf9c20477c73859fead" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>getResult</name></member>
-      <member refid="da/d95/a04435_1a2b4ea1f81bda3deace1e6f5b159f90db" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>getSampler</name></member>
-      <member refid="de/d63/a04887_1a28521fecc6a807c53fc04c3f33e20bbf" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>getSamplesSsbo</name></member>
-      <member refid="da/d95/a04435_1a434520ea0e0f0a1ae885e7c9e19306a8" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>initialisePasses</name></member>
-      <member refid="de/d63/a04887_1ad186662c922d04d64a6439a04402e8ce" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_commands</name></member>
-      <member refid="da/d95/a04435_1ac07074df6fa0bb86ec6e9c76bf23f867" prot="protected" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_config</name></member>
-      <member refid="da/d95/a04435_1a0e0d911b83650f310a1d773e6774788c" prot="protected" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_device</name></member>
-      <member refid="de/d63/a04887_1a08da460846748fee93d1a8e427846a7e" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_frameBuffer</name></member>
-      <member refid="de/d63/a04887_1ada7033eda9ce20bf16ea1a0195650a63" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_gpInfo</name></member>
-      <member refid="de/d63/a04887_1a2564ab95c1caaf5c3e3ef8b48937d971" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_gpResult</name></member>
-      <member refid="de/d63/a04887_1a4839229de503e57c4e4299437b24b173" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_lightCache</name></member>
-      <member refid="de/d63/a04887_1ae61c71fda608abc251abd3be4f4f4e3d" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_lightType</name></member>
-      <member refid="de/d63/a04887_1a0ef9e0ce817b5c2072d6e7dc171b228d" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_pixelShader</name></member>
-      <member refid="de/d63/a04887_1a93d159757b1efc5b35407b8a7a31ece4" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_renderPass</name></member>
-      <member refid="da/d95/a04435_1a67e531e63c3eef4d22c89cd5dcf26d39" prot="protected" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_renderSystem</name></member>
-      <member refid="de/d63/a04887_1a20388fad15423b23e26f04edd3f8a804" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_result</name></member>
-      <member refid="de/d63/a04887_1ae2fd027906456fea4ee485b9199dbf39" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_rsmConfigUbo</name></member>
-      <member refid="de/d63/a04887_1a341eac59e762e3e73ebeef540165ecaf" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_rsmSamplesSsbo</name></member>
-      <member refid="da/d95/a04435_1ac424bcc12b49f4788b6a78e181e7d8c9" prot="protected" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_sampler</name></member>
-      <member refid="de/d63/a04887_1a598f054c0f3641cbc57c3a02476ab61c" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_smResult</name></member>
-      <member refid="de/d63/a04887_1a87bf688320dcb26f1ff9674f49c6696e" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_timer</name></member>
-      <member refid="de/d63/a04887_1a04047247b747e9ac31706aec268102a6" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_vertexShader</name></member>
-      <member refid="da/d95/a04435_1aba30b821ed0f043349148de3f91e1e28" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1abb76aa593ad380a88d949bd26fea0202" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1a612d681d62631e6bb92d9601c660b48e" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1af64b5bc8b9a9a3013e46accb200156f5" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1a43bab20a96e9bea365bc98d8667c977e" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1afacd916c61c3a5b315a0d3e94a8ba84d" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1a046a2ac1ba39bbd6114dfe87d4aaaf11" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1ac0cf400425c8050429e895099c971715" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>registerPass</name></member>
-      <member refid="da/d95/a04435_1a62f21f0ecc9017c47eb029d0bc19e396" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>registerPass</name></member>
-      <member refid="da/d95/a04435_1a367adcd9b6cc6ac6b1c68a28b2580eb2" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>registerPassInputs</name></member>
-      <member refid="da/d95/a04435_1a48a49fffd036c545328e87e1449e141d" prot="protected" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>RenderQuad</name></member>
-      <member refid="da/d95/a04435_1aeaeeae8d7065de723f0a710360bab119" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>RenderQuad</name></member>
-      <member refid="de/d63/a04887_1a040d654edd84d5bfa60e95f1f3e04a2b" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>RsmGIPass</name></member>
-      <member refid="de/d63/a04887_1a8950d10d3fcc3bc46f27837dbe2e63a6" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>update</name></member>
-      <member refid="da/d95/a04435_1a8a01faf0243638f02d6f052ff9e85b4b" prot="public" virt="virtual"><scope>castor3d::RsmGIPass</scope><name>~RenderQuad</name></member>
+      <member refid="de/d63/a04887_1a2ef2c83335133c3ecd325223d3df6b9a" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>BufferGPInfo</name></member>
+      <member refid="de/d63/a04887_1adfd9d07dfced9b1ab9727c898ca457e4" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>Configuration</name></member>
+      <member refid="de/d63/a04887_1aad50a1fefda242429daea5370f2e6be6" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>cpuUpdate</name></member>
+      <member refid="de/d63/a04887_1a4c3a0dc2043fc6bf77d896da9a3f00e8" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>createPassBinding</name></member>
+      <member refid="de/d63/a04887_1a5d2c9c7da7669ef53a90758a44b7619c" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>createSizedBinding</name></member>
+      <member refid="de/d63/a04887_1a031ca38f0799e1c80cc92716977e7b89" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>getUbo</name></member>
+      <member refid="de/d63/a04887_1a88e9127de3cce5001220d1fbae7c357e" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>GPInfoData</name></member>
+      <member refid="de/d63/a04887_1a772f431c5477bb82188c3914ab436022" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>GpInfoUbo</name></member>
+      <member refid="de/d63/a04887_1a6fbd85568219ab6fffa53d99dfc755d7" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>GpInfoUbo</name></member>
+      <member refid="de/d63/a04887_1a9300d8e1c0ea20d7dfe280193014000a" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>GpInfoUbo</name></member>
+      <member refid="de/d63/a04887_1a378533119a29339ecb90607968b8c1c5" prot="private" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>m_device</name></member>
+      <member refid="de/d63/a04887_1af5100d0f99e459b0866122f055f30f36" prot="private" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>m_ubo</name></member>
+      <member refid="de/d63/a04887_1a121ac884b845ecc42078299100713e4d" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>operator=</name></member>
+      <member refid="de/d63/a04887_1aeddb7cac9f31e360fc0227793e4a5b0a" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>operator=</name></member>
+      <member refid="de/d63/a04887_1a62cc92f509ad0d222c1e79aab6291da4" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>~GpInfoUbo</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,7 +1,7 @@
 Les fichiers CSCN sont au format texte et sont donc modifiables assez facilement (pour peu que l'on comprenne quelque chose à la syntaxe :P)
 
 
-# **Types de données**
+# Types de données
 
 Les types de données qui apparaissent dans les fichiers de scène sont les suivants :
 * _entier_ : un entier tout con.
@@ -17,9 +17,9 @@ Les types de données qui apparaissent dans les fichiers de scène sont les suiv
 * _dossier_ : chaîne de caractères représentant un chemin d'accès à un dossier, entourée de guillemets ( " ).
 
 
-# **Sections**
+# Sections
 
-## **Description**
+## Description
 
 Le fichier est décomposé en sections décrites de la manière suivante :
 <pre>
@@ -54,7 +54,7 @@ material "Bronze"
 </pre>
 
 
-## **Liste des sections**
+## Liste des sections
 
 Les différentes sections possibles sont les suivantes :
 

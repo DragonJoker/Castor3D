@@ -1,44 +1,96 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dc/d66/a05014" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::Voxel</compoundname>
-    <includes local="no">VoxelizeModule.hpp</includes>
+    <compoundname>castor3d::LpvLightConfigUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="dc/d66/a05014_1a500e862acbbc63ac0d82aecf2d8c6070" prot="public" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::Voxel::colorMask</definition>
+      <memberdef kind="variable" id="dc/d66/a05014_1a111aad9bb757c9e6d293f8ed997109df" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::LpvLightConfigUboConfiguration::lightView</definition>
         <argsstring></argsstring>
-        <name>colorMask</name>
+        <name>lightView</name>
+        <qualifiedname>castor3d::LpvLightConfigUboConfiguration::lightView</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Voxelize/VoxelizeModule.hpp" line="72" column="1" bodyfile="Render/Voxelize/VoxelizeModule.hpp" bodystart="72" bodyend="-1"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="161" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="161" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dc/d66/a05014_1a11d74878f633a4332b99aeea8810ad51" prot="public" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::Voxel::normalMask</definition>
+      <memberdef kind="variable" id="dc/d66/a05014_1aaac1e714c96e2c99feff3ac68ecc1f07" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::LpvLightConfigUboConfiguration::texelAreaModifier</definition>
         <argsstring></argsstring>
-        <name>normalMask</name>
+        <name>texelAreaModifier</name>
+        <qualifiedname>castor3d::LpvLightConfigUboConfiguration::texelAreaModifier</qualifiedname>
+        <initializer>= 1.0f</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Voxelize/VoxelizeModule.hpp" line="73" column="1" bodyfile="Render/Voxelize/VoxelizeModule.hpp" bodystart="73" bodyend="-1"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="162" column="7" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="162" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d66/a05014_1aa7de5c5ad2d095eafd8637cc226b5b03" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::LpvLightConfigUboConfiguration::tanFovXHalf</definition>
+        <argsstring></argsstring>
+        <name>tanFovXHalf</name>
+        <qualifiedname>castor3d::LpvLightConfigUboConfiguration::tanFovXHalf</qualifiedname>
+        <initializer>= 1.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="163" column="7" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="163" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d66/a05014_1ab3b28b23fbc9c272295cd8ab7d525b6a" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::LpvLightConfigUboConfiguration::tanFovYHalf</definition>
+        <argsstring></argsstring>
+        <name>tanFovYHalf</name>
+        <qualifiedname>castor3d::LpvLightConfigUboConfiguration::tanFovYHalf</qualifiedname>
+        <initializer>= 1.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="164" column="7" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="164" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d66/a05014_1ab90c3db4ccdc9369e67307c2bb1230bc" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::LpvLightConfigUboConfiguration::lightIndex</definition>
+        <argsstring></argsstring>
+        <name>lightIndex</name>
+        <qualifiedname>castor3d::LpvLightConfigUboConfiguration::lightIndex</qualifiedname>
+        <initializer>= 0.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="165" column="7" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="165" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para><ref refid="d7/dba/a04502" kindref="compound">Light</ref> propagation data. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Voxelize/VoxelizeModule.hpp" line="71" column="1" bodyfile="Render/Voxelize/VoxelizeModule.hpp" bodystart="70" bodyend="74"/>
+    <location file="Shader/Ubos/UbosModule.hpp" line="159" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="160" bodyend="166"/>
     <listofallmembers>
-      <member refid="dc/d66/a05014_1a500e862acbbc63ac0d82aecf2d8c6070" prot="public" virt="non-virtual"><scope>castor3d::Voxel</scope><name>colorMask</name></member>
-      <member refid="dc/d66/a05014_1a11d74878f633a4332b99aeea8810ad51" prot="public" virt="non-virtual"><scope>castor3d::Voxel</scope><name>normalMask</name></member>
+      <member refid="dc/d66/a05014_1ab90c3db4ccdc9369e67307c2bb1230bc" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUboConfiguration</scope><name>lightIndex</name></member>
+      <member refid="dc/d66/a05014_1a111aad9bb757c9e6d293f8ed997109df" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUboConfiguration</scope><name>lightView</name></member>
+      <member refid="dc/d66/a05014_1aa7de5c5ad2d095eafd8637cc226b5b03" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUboConfiguration</scope><name>tanFovXHalf</name></member>
+      <member refid="dc/d66/a05014_1ab3b28b23fbc9c272295cd8ab7d525b6a" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUboConfiguration</scope><name>tanFovYHalf</name></member>
+      <member refid="dc/d66/a05014_1aaac1e714c96e2c99feff3ac68ecc1f07" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUboConfiguration</scope><name>texelAreaModifier</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

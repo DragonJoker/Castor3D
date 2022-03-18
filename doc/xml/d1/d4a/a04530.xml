@@ -1,38 +1,101 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d1/d4a/a04530" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::RenderLoopSync</compoundname>
-    <basecompoundref refid="d1/d24/a04514" prot="public" virt="non-virtual">castor3d::RenderLoop</basecompoundref>
-    <includes local="no">RenderLoopSync.hpp</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d1/d4a/a04530_1af16062cd1f23b0dacd38209aa79ceecb" prot="private" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::RenderLoopSync::m_active</definition>
+    <compoundname>castor3d::MovableObject</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Scene &gt;</basecompoundref>
+    <basecompoundref prot="public" virt="non-virtual">castor::Named</basecompoundref>
+    <derivedcompoundref refid="d1/d6c/a04478" prot="public" virt="non-virtual">castor3d::BillboardList</derivedcompoundref>
+    <derivedcompoundref refid="d7/d2e/a04482" prot="public" virt="non-virtual">castor3d::Camera</derivedcompoundref>
+    <derivedcompoundref refid="d5/d47/a04490" prot="public" virt="non-virtual">castor3d::Geometry</derivedcompoundref>
+    <derivedcompoundref refid="d7/dba/a04502" prot="public" virt="non-virtual">castor3d::Light</derivedcompoundref>
+    <derivedcompoundref refid="d5/d03/a04582" prot="public" virt="non-virtual">castor3d::ParticleSystem</derivedcompoundref>
+    <includes local="no">MovableObject.hpp</includes>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d1/d4a/a04530_1acf6726e80bb3098468fe1fcd5a1f720e" prot="protected" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a3b295abad3147d934a7378cad0a0ebca" kindref="member">MovableType</ref></type>
+        <definition>MovableType castor3d::MovableObject::m_type</definition>
         <argsstring></argsstring>
-        <name>m_active</name>
+        <name>m_type</name>
+        <qualifiedname>castor3d::MovableObject::m_type</qualifiedname>
         <briefdescription>
-<para>Tells if the render loop is active. </para>
         </briefdescription>
         <detaileddescription>
+<para>Movable object type. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderLoopSync.hpp" line="64" column="1" bodyfile="Render/RenderLoopSync.hpp" bodystart="64" bodyend="-1"/>
+        <location file="Scene/MovableObject.hpp" line="92" column="13" bodyfile="Scene/MovableObject.hpp" bodystart="92" bodyend="-1"/>
+        <referencedby refid="d1/d4a/a04530_1acf2dafd94427b63121981ac18ac652a7" compoundref="d1/dfa/a01097" startline="84" endline="87">getType</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d4a/a04530_1ab9493ad12e9af9b47db11e76d372a156" prot="protected" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::MovableObject::m_strNodeName</definition>
+        <argsstring></argsstring>
+        <name>m_strNodeName</name>
+        <qualifiedname>castor3d::MovableObject::m_strNodeName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The parent node name. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/MovableObject.hpp" line="95" column="16" bodyfile="Scene/MovableObject.hpp" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d4a/a04530_1aa058c86365c45c7d4b85a04ce56a9d22" prot="protected" static="no" mutable="no">
+        <type><ref refid="dd/d6a/a04642" kindref="compound">SceneNode</ref> *</type>
+        <definition>SceneNode* castor3d::MovableObject::m_sceneNode</definition>
+        <argsstring></argsstring>
+        <name>m_sceneNode</name>
+        <qualifiedname>castor3d::MovableObject::m_sceneNode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The parent scene node. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/MovableObject.hpp" line="98" column="12" bodyfile="Scene/MovableObject.hpp" bodystart="98" bodyend="-1"/>
+        <referencedby refid="d1/d4a/a04530_1a19af4c363050397777f59c30b451be05" compoundref="d1/dfa/a01097" startline="79" endline="82">getParent</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d4a/a04530_1a8385c7c8fd9aee20a3c6de804cb09514" prot="protected" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a93966e91ef2aff33b2963e1e8101cb3e" kindref="member">OnSceneNodeChangedConnection</ref></type>
+        <definition>OnSceneNodeChangedConnection castor3d::MovableObject::m_notifyIndex</definition>
+        <argsstring></argsstring>
+        <name>m_notifyIndex</name>
+        <qualifiedname>castor3d::MovableObject::m_notifyIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The node change notification index. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/MovableObject.hpp" line="101" column="30" bodyfile="Scene/MovableObject.hpp" bodystart="101" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d1/d4a/a04530_1ac020f68f41bd51da5f2b8e4b3a7aabb2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::RenderLoopSync::RenderLoopSync</definition>
-        <argsstring>(Engine &amp;engine, uint32_t wantedFPS)</argsstring>
-        <name>RenderLoopSync</name>
+      <memberdef kind="function" id="d1/d4a/a04530_1a40b0fe7602fb945cb5b89de71a8cf4d8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MovableObject::MovableObject</definition>
+        <argsstring>(castor::String const &amp;name, Scene &amp;scene, MovableType type, SceneNode &amp;node)</argsstring>
+        <name>MovableObject</name>
+        <qualifiedname>castor3d::MovableObject::MovableObject</qualifiedname>
         <param>
-          <type><ref refid="df/d9b/a02514" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
         </param>
         <param>
-          <type>uint32_t</type>
-          <declname>wantedFPS</declname>
+          <type><ref refid="d6/d71/a04598" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a3b295abad3147d934a7378cad0a0ebca" kindref="member">MovableType</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d6a/a04642" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>node</declname>
         </param>
         <briefdescription>
 <para>Constructor. </para>
@@ -40,18 +103,34 @@
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">engine</parametername>
+<parametername direction="in">name</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The engine. </para>
+<para>The name </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">wantedFPS</parametername>
+<parametername direction="in">scene</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The wanted FPS count. </para>
+<para>The parent scene </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">node</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Parent node </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="d1/d4a/a04530" kindref="compound">MovableObject</ref> type </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -59,13 +138,67 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderLoopSync.hpp" line="25" column="1"/>
+        <location file="Scene/MovableObject.hpp" line="36" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d4a/a04530_1a5a44aafde0fe3fcb86ee8dc229dd66e5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::RenderLoopSync::~RenderLoopSync</definition>
+      <memberdef kind="function" id="d1/d4a/a04530_1acf7517058566afbb2290a7856fc9dfee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MovableObject::MovableObject</definition>
+        <argsstring>(castor::String const &amp;name, Scene &amp;scene, MovableType type)</argsstring>
+        <name>MovableObject</name>
+        <qualifiedname>castor3d::MovableObject::MovableObject</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d71/a04598" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a3b295abad3147d934a7378cad0a0ebca" kindref="member">MovableType</ref></type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent scene </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="d1/d4a/a04530" kindref="compound">MovableObject</ref> type </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/MovableObject.hpp" line="52" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d4a/a04530_1a05bd8e8940d26cb4361fccfa67733b03" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::MovableObject::~MovableObject</definition>
         <argsstring>()</argsstring>
-        <name>~RenderLoopSync</name>
+        <name>~MovableObject</name>
+        <qualifiedname>castor3d::MovableObject::~MovableObject</qualifiedname>
         <briefdescription>
 <para>Destructor. </para>
         </briefdescription>
@@ -73,142 +206,88 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderLoopSync.hpp" line="33" column="1"/>
+        <location file="Scene/MovableObject.hpp" line="61" column="17"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d4a/a04530_1ac849b8aea69ba1e907d697d8d6fec1a9" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderLoopSync::beginRendering</definition>
-        <argsstring>() override</argsstring>
-        <name>beginRendering</name>
-        <reimplements refid="d1/d24/a04514_1a7842a7d67f402edcc24be8fd09973818">beginRendering</reimplements>
+      <memberdef kind="function" id="d1/d4a/a04530_1afbef8194f2a0b9e15c9cc483221a08ee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::MovableObject::detach</definition>
+        <argsstring>()</argsstring>
+        <name>detach</name>
+        <qualifiedname>castor3d::MovableObject::detach</qualifiedname>
         <briefdescription>
-<para>Starts threaded render loop. </para>
+<para>Detaches the movable object from it&apos;s parent. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderLoopSync.hpp" line="37" column="1"/>
+        <location file="Scene/MovableObject.hpp" line="68" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d4a/a04530_1ae5926ec23f7697887648816bc68ed00c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderLoopSync::renderSyncFrame</definition>
-        <argsstring>(castor::Milliseconds tslf) override</argsstring>
-        <name>renderSyncFrame</name>
-        <reimplements refid="d1/d24/a04514_1aabd4de0429c0e2659058545c6ec1bad2">renderSyncFrame</reimplements>
+      <memberdef kind="function" id="d1/d4a/a04530_1ab2169299d3e08b4e50066e400d1d86dc" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::MovableObject::attachTo</definition>
+        <argsstring>(SceneNode &amp;node)</argsstring>
+        <name>attachTo</name>
+        <qualifiedname>castor3d::MovableObject::attachTo</qualifiedname>
+        <reimplementedby refid="d1/d6c/a04478_1a9dd2ca096fbcf603036aedb7c67d0a20">attachTo</reimplementedby>
+        <reimplementedby refid="d7/d2e/a04482_1a080f008a2f6e09cb5600032f72c2701d">attachTo</reimplementedby>
+        <reimplementedby refid="d7/dba/a04502_1a9e4a42449c5a4edf82d6536d1e7ccc80">attachTo</reimplementedby>
         <param>
-          <type>castor::Milliseconds</type>
-          <declname>tslf</declname>
+          <type><ref refid="dd/d6a/a04642" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>node</declname>
         </param>
         <briefdescription>
-<para>Renders one frame, only if not in render loop. </para>
+<para>Attaches the movable object to a node. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">tslf</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The time elapsed since last frame. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderLoopSync.hpp" line="41" column="1"/>
+        <location file="Scene/MovableObject.hpp" line="75" column="22"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d4a/a04530_1aa8e92d2a1df7dbd0a8d5881af5d4bc24" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderLoopSync::pause</definition>
-        <argsstring>() override</argsstring>
-        <name>pause</name>
-        <reimplements refid="d1/d24/a04514_1afbc75c36ac22821c05f284e6fee155af">pause</reimplements>
+      <memberdef kind="function" id="d1/d4a/a04530_1aa6c7b745273530f44b2fe2b2a2603e8d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> EngineRPtr</type>
+        <definition>C3D_API EngineRPtr castor3d::MovableObject::getEngine</definition>
+        <argsstring>() const</argsstring>
+        <name>getEngine</name>
+        <qualifiedname>castor3d::MovableObject::getEngine</qualifiedname>
         <briefdescription>
-<para>Pauses the render loop. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderLoopSync.hpp" line="45" column="1"/>
+        <location file="Scene/MovableObject.hpp" line="77" column="20"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d4a/a04530_1a59027889dfb53d02becb6189b482fda9" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderLoopSync::resume</definition>
-        <argsstring>() override</argsstring>
-        <name>resume</name>
-        <reimplements refid="d1/d24/a04514_1ae909f2e21ba004087428391048d8db86">resume</reimplements>
+      <memberdef kind="function" id="d1/d4a/a04530_1a19af4c363050397777f59c30b451be05" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/d6a/a04642" kindref="compound">SceneNode</ref> *</type>
+        <definition>SceneNode * castor3d::MovableObject::getParent</definition>
+        <argsstring>() const</argsstring>
+        <name>getParent</name>
+        <qualifiedname>castor3d::MovableObject::getParent</qualifiedname>
         <briefdescription>
-<para>Resumes the render loop. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderLoopSync.hpp" line="49" column="1"/>
+        <location file="Scene/MovableObject.hpp" line="79" column="13" bodyfile="Scene/MovableObject.hpp" bodystart="79" bodyend="82"/>
+        <references refid="d1/d4a/a04530_1aa058c86365c45c7d4b85a04ce56a9d22" compoundref="d1/dfa/a01097" startline="98">m_sceneNode</references>
       </memberdef>
-      <memberdef kind="function" id="d1/d4a/a04530_1a3976c0787f2b3fd8c413b15f601aae48" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderLoopSync::endRendering</definition>
-        <argsstring>() override</argsstring>
-        <name>endRendering</name>
-        <reimplements refid="d1/d24/a04514_1ad9ec6cf47938ab0fb37512d0cf177a51">endRendering</reimplements>
+      <memberdef kind="function" id="d1/d4a/a04530_1acf2dafd94427b63121981ac18ac652a7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dc/df4/a01401_1a3b295abad3147d934a7378cad0a0ebca" kindref="member">MovableType</ref></type>
+        <definition>MovableType castor3d::MovableObject::getType</definition>
+        <argsstring>() const</argsstring>
+        <name>getType</name>
+        <qualifiedname>castor3d::MovableObject::getType</qualifiedname>
         <briefdescription>
-<para>Ends the render, cleans up engine. </para>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="remark"><para>Ends the threaded render loop, if any. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderLoopSync.hpp" line="53" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d1/d4a/a04530_1a0afd74edfd87a42f348b3124004082ea" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> RenderDeviceSPtr</type>
-        <definition>C3D_API RenderDeviceSPtr castor3d::RenderLoopSync::doCreateMainDevice</definition>
-        <argsstring>(ashes::WindowHandle handle, RenderWindow &amp;window) override</argsstring>
-        <name>doCreateMainDevice</name>
-        <reimplements refid="d1/d24/a04514_1a9054d6b667a9b1a08c53a68ec83e3ee2">doCreateMainDevice</reimplements>
-        <param>
-          <type>ashes::WindowHandle</type>
-          <declname>handle</declname>
-        </param>
-        <param>
-          <type><ref refid="d0/dad/a04630" kindref="compound">RenderWindow</ref> &amp;</type>
-          <declname>window</declname>
-        </param>
-        <briefdescription>
-<para>Asks for main render context creation. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">handle</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The native window handle. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">window</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render window used to initialise the render context, receives the context. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopSync.hpp" line="59" column="1"/>
+        <location file="Scene/MovableObject.hpp" line="84" column="13" bodyfile="Scene/MovableObject.hpp" bodystart="84" bodyend="87"/>
+        <references refid="d1/d4a/a04530_1acf6726e80bb3098468fe1fcd5a1f720e" compoundref="d1/dfa/a01097" startline="92">m_type</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -216,138 +295,145 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="2967">
-        <label>castor3d::RenderLoop</label>
-        <link refid="d1/d24/a04514"/>
-        <childnode refid="2968" relation="public-inheritance">
+      <node id="4">
+        <label>castor3d::BillboardList</label>
+        <link refid="d1/d6c/a04478"/>
+        <childnode refid="1" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="2966">
-        <label>castor3d::RenderLoopSync</label>
+      <node id="5">
+        <label>castor3d::Camera</label>
+        <link refid="d7/d2e/a04482"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::Geometry</label>
+        <link refid="d5/d47/a04490"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::Light</label>
+        <link refid="d7/dba/a04502"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::MovableObject</label>
         <link refid="d1/d4a/a04530"/>
-        <childnode refid="2967" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="2968">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      <node id="8">
+        <label>castor3d::ParticleSystem</label>
+        <link refid="d5/d03/a04582"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="2972">
-        <label>std::array&lt; castor3d::RenderLoop::UploadResources, 2u &gt;</label>
-        <childnode refid="2973" relation="usage">
-          <edgelabel>elements</edgelabel>
+      <node id="6">
+        <label>Animable</label>
+        <link refid="d6/d41/a02222"/>
+        <childnode refid="7" relation="public-inheritance">
         </childnode>
-        <childnode refid="2975" relation="template-instance">
-          <edgelabel>&lt; castor3d::RenderLoop::UploadResources, 2u &gt;</edgelabel>
+        <childnode refid="8" relation="usage">
+          <edgelabel>m_animations</edgelabel>
         </childnode>
-      </node>
-      <node id="2977">
-        <label>castor3d::RenderSystem</label>
-        <link refid="d1/d9a/a04618"/>
-        <childnode refid="2971" relation="public-inheritance">
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="2976">
+      <node id="10">
+        <label>K</label>
+      </node>
+      <node id="11">
         <label>T</label>
       </node>
-      <node id="2975">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="2976" relation="usage">
-          <edgelabel>elements</edgelabel>
+      <node id="12">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d6/d41/a02222"/>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>m_animations</edgelabel>
         </childnode>
       </node>
-      <node id="2970">
-        <label>castor3d::RenderLoop</label>
-        <link refid="d1/d24/a04514"/>
-        <childnode refid="2971" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2972" relation="usage">
-          <edgelabel>m_uploadResources</edgelabel>
-        </childnode>
-        <childnode refid="2977" relation="usage">
-          <edgelabel>m_renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="2978" relation="usage">
-          <edgelabel>m_debugOverlays</edgelabel>
-        </childnode>
-      </node>
-      <node id="2980">
-        <label>std::unique_ptr&lt; T &gt;</label>
-        <childnode refid="2976" relation="usage">
-          <edgelabel>ptr</edgelabel>
-        </childnode>
-      </node>
-      <node id="2978">
-        <label>std::unique_ptr&lt; castor3d::DebugOverlays &gt;</label>
-        <childnode refid="2979" relation="usage">
-          <edgelabel>ptr</edgelabel>
-        </childnode>
-        <childnode refid="2980" relation="template-instance">
-          <edgelabel>&lt; castor3d::DebugOverlays &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2969">
-        <label>castor3d::RenderLoopSync</label>
+      <node id="1">
+        <label>castor3d::MovableObject</label>
         <link refid="d1/d4a/a04530"/>
-        <childnode refid="2970" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
         </childnode>
       </node>
-      <node id="2973">
-        <label>castor3d::RenderLoop::UploadResources</label>
-        <link refid="d8/d1c/a04522"/>
-        <childnode refid="2974" relation="usage">
-          <edgelabel>commands</edgelabel>
+      <node id="4">
+        <label>castor3d::SceneNode</label>
+        <link refid="dd/d6a/a04642"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="2971">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      <node id="3">
+        <label>castor::Named</label>
       </node>
-      <node id="2974">
-        <label>castor3d::CommandsSemaphore</label>
-        <link refid="db/da9/a04374"/>
+      <node id="13">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
       </node>
-      <node id="2979">
-        <label>castor3d::DebugOverlays</label>
-        <link refid="dc/d64/a04058"/>
-        <childnode refid="2971" relation="public-inheritance">
+      <node id="7">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="8">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
+      </node>
+      <node id="9">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="10" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>elements</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Render/RenderLoopSync.hpp" line="13" column="1" bodyfile="Render/RenderLoopSync.hpp" bodystart="11" bodyend="65"/>
+    <location file="Scene/MovableObject.hpp" line="17" column="1" bodyfile="Scene/MovableObject.hpp" bodystart="20" bodyend="102"/>
     <listofallmembers>
-      <member refid="d1/d4a/a04530_1ac849b8aea69ba1e907d697d8d6fec1a9" prot="public" virt="virtual"><scope>castor3d::RenderLoopSync</scope><name>beginRendering</name></member>
-      <member refid="d1/d24/a04514_1ad8988f97407d38c23b3f7ab1c5aa6c91" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>cleanup</name></member>
-      <member refid="d1/d24/a04514_1a680de530d55207b6c3135752b81b4cb6" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>createDevice</name></member>
-      <member refid="d1/d24/a04514_1abbe1eafae9da8783185ad55a228ed003" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>doCreateDevice</name></member>
-      <member refid="d1/d4a/a04530_1a0afd74edfd87a42f348b3124004082ea" prot="private" virt="virtual"><scope>castor3d::RenderLoopSync</scope><name>doCreateMainDevice</name></member>
-      <member refid="d1/d24/a04514_1adb8cd1592c293d4f956365f0e958e92d" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>doRenderFrame</name></member>
-      <member refid="d1/d24/a04514_1a9920fa7ccc5a06415b08e238e1f4754f" prot="public" virt="virtual"><scope>castor3d::RenderLoopSync</scope><name>enableVSync</name></member>
-      <member refid="d1/d4a/a04530_1a3976c0787f2b3fd8c413b15f601aae48" prot="public" virt="virtual"><scope>castor3d::RenderLoopSync</scope><name>endRendering</name></member>
-      <member refid="d1/d24/a04514_1ab0cce3459fd96396758d47675c0d0f45" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>flushEvents</name></member>
-      <member refid="d1/d24/a04514_1a79f739c91870a843cf239047d461e15b" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>getFrameTime</name></member>
-      <member refid="d1/d24/a04514_1ad15d465d0c3cdf48c0bd198d9df85501" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>getLastFrameTime</name></member>
-      <member refid="d1/d24/a04514_1a59d11c13fd374d43d0f7e22bd541938b" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>getWantedFps</name></member>
-      <member refid="d1/d24/a04514_1a60b8176ab5eb5ca6b25663f955780e3e" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>hasDebugOverlays</name></member>
-      <member refid="d1/d4a/a04530_1af16062cd1f23b0dacd38209aa79ceecb" prot="private" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_active</name></member>
-      <member refid="d1/d24/a04514_1a03f6c7a9ec87f3e1e24dfc1bf8868b89" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_currentUpdate</name></member>
-      <member refid="d1/d24/a04514_1a3df1d0d853b8d30a64f9491ba2b64206" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_debugOverlays</name></member>
-      <member refid="d1/d24/a04514_1a3fdea4c3d454da13b6874d71d031772a" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_frameTime</name></member>
-      <member refid="d1/d24/a04514_1aadd20893be5df0f0a8bdfe52b5f4d148" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_lastFrameTime</name></member>
-      <member refid="d1/d24/a04514_1a33d74cb1c3112d6c39a16b56af7dee3c" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_queueUpdater</name></member>
-      <member refid="d1/d24/a04514_1a12c0e4650d67b30b6d3d8af64a6fdea6" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_renderSystem</name></member>
-      <member refid="d1/d24/a04514_1a110d978875d737faa37572c0d01417f3" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_uploadResources</name></member>
-      <member refid="d1/d24/a04514_1aca51dfa60d759d003d2e706b33124933" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_wantedFPS</name></member>
-      <member refid="d1/d4a/a04530_1aa8e92d2a1df7dbd0a8d5881af5d4bc24" prot="public" virt="virtual"><scope>castor3d::RenderLoopSync</scope><name>pause</name></member>
-      <member refid="d1/d24/a04514_1a8d80e8cd7f7e9764c3398da5e31e2a0a" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>registerTimer</name></member>
-      <member refid="d1/d24/a04514_1a92f9f97a35dd1d47e537f6e6024952b7" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>RenderLoop</name></member>
-      <member refid="d1/d4a/a04530_1ac020f68f41bd51da5f2b8e4b3a7aabb2" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>RenderLoopSync</name></member>
-      <member refid="d1/d4a/a04530_1ae5926ec23f7697887648816bc68ed00c" prot="public" virt="virtual"><scope>castor3d::RenderLoopSync</scope><name>renderSyncFrame</name></member>
-      <member refid="d1/d4a/a04530_1a59027889dfb53d02becb6189b482fda9" prot="public" virt="virtual"><scope>castor3d::RenderLoopSync</scope><name>resume</name></member>
-      <member refid="d1/d24/a04514_1aebff987d3a1a626374752685dff11c05" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>showDebugOverlays</name></member>
-      <member refid="d1/d24/a04514_1a7d7f637bbf69880081916acac9dc08f2" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>unregisterTimer</name></member>
-      <member refid="d1/d24/a04514_1a98370f8e34e7f81f1c9277129c71b718" prot="public" virt="virtual"><scope>castor3d::RenderLoopSync</scope><name>~RenderLoop</name></member>
-      <member refid="d1/d4a/a04530_1a5a44aafde0fe3fcb86ee8dc229dd66e5" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>~RenderLoopSync</name></member>
+      <member refid="d1/d4a/a04530_1ab2169299d3e08b4e50066e400d1d86dc" prot="public" virt="virtual"><scope>castor3d::MovableObject</scope><name>attachTo</name></member>
+      <member refid="d1/d4a/a04530_1afbef8194f2a0b9e15c9cc483221a08ee" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>detach</name></member>
+      <member refid="d1/d4a/a04530_1aa6c7b745273530f44b2fe2b2a2603e8d" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>getEngine</name></member>
+      <member refid="d1/d4a/a04530_1a19af4c363050397777f59c30b451be05" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>getParent</name></member>
+      <member refid="d1/d4a/a04530_1acf2dafd94427b63121981ac18ac652a7" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>getType</name></member>
+      <member refid="d1/d4a/a04530_1a8385c7c8fd9aee20a3c6de804cb09514" prot="protected" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>m_notifyIndex</name></member>
+      <member refid="d1/d4a/a04530_1aa058c86365c45c7d4b85a04ce56a9d22" prot="protected" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>m_sceneNode</name></member>
+      <member refid="d1/d4a/a04530_1ab9493ad12e9af9b47db11e76d372a156" prot="protected" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>m_strNodeName</name></member>
+      <member refid="d1/d4a/a04530_1acf6726e80bb3098468fe1fcd5a1f720e" prot="protected" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>m_type</name></member>
+      <member refid="d1/d4a/a04530_1a40b0fe7602fb945cb5b89de71a8cf4d8" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>MovableObject</name></member>
+      <member refid="d1/d4a/a04530_1acf7517058566afbb2290a7856fc9dfee" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>MovableObject</name></member>
+      <member refid="d1/d4a/a04530_1a05bd8e8940d26cb4361fccfa67733b03" prot="public" virt="virtual"><scope>castor3d::MovableObject</scope><name>~MovableObject</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

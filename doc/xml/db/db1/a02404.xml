@@ -1,69 +1,119 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="db/db1/a02404" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::CacheTraits&lt; Plugin, KeyType &gt;</compoundname>
-    <includes local="no">CacheModule.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="db/db1/a02404" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BinaryWriter&lt; SkeletonAnimationBone &gt;</compoundname>
+    <basecompoundref refid="d3/d9c/a02336" prot="public" virt="non-virtual">castor3d::BinaryWriterBase&lt; SkeletonAnimationBone &gt;</basecompoundref>
+    <includes local="no">BinarySkeletonAnimationBone.hpp</includes>
     <templateparamlist>
-      <param>
-        <type>typename KeyType</type>
-      </param>
     </templateparamlist>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="db/db1/a02404_1a31cbf77e507a5846034a15a32279c3d3" prot="public" static="no">
-        <type>std::function&lt; std::shared_ptr&lt; <ref refid="db/d33/a04192" kindref="compound">Plugin</ref> &gt;(KeyType const &amp;, <ref refid="da/d1e/a01479_1aecf8304db7dd49c874ec216f139e5f67" kindref="member">PluginType</ref>, castor::DynamicLibrarySPtr) &gt;</type>
-        <definition>using castor3d::CacheTraits&lt; Plugin, KeyType &gt;::Producer =  std::function&lt; std::shared_ptr&lt; Plugin &gt;( KeyType const &amp;, PluginType, castor::DynamicLibrarySPtr ) &gt;</definition>
-        <argsstring></argsstring>
-        <name>Producer</name>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="db/db1/a02404_1a9c7bcfd9f05bec9febc9a200c1e14792" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BinaryWriter&lt; SkeletonAnimationBone &gt;::doWrite</definition>
+        <argsstring>(SkeletonAnimationBone const &amp;obj) override</argsstring>
+        <name>doWrite</name>
+        <qualifiedname>castor3d::BinaryWriter&lt; SkeletonAnimationBone &gt;::doWrite</qualifiedname>
+        <reimplements refid="d3/d9c/a02336_1a720ab792b3e53c6556c3cb4e5b0e2d06">doWrite</reimplements>
+        <param>
+          <type><ref refid="df/d89/a03440" kindref="compound">SkeletonAnimationBone</ref> const &amp;</type>
+          <declname>obj</declname>
+        </param>
         <briefdescription>
+<para>Function used to fill the chunk from specific data. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to write. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/CacheModule.hpp" line="202" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="202" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="db/db1/a02404_1a8ec6004b397327c2c35a737f0c367732" prot="public" static="no">
-        <type>std::function&lt; void(<ref refid="df/d46/a02376" kindref="compound">CacheBase</ref>&lt; <ref refid="db/d33/a04192" kindref="compound">Plugin</ref>, KeyType &gt; const &amp;, castor::Collection&lt; <ref refid="db/d33/a04192" kindref="compound">Plugin</ref>, KeyType &gt; &amp;, std::shared_ptr&lt; <ref refid="db/d33/a04192" kindref="compound">Plugin</ref> &gt;) &gt;</type>
-        <definition>using castor3d::CacheTraits&lt; Plugin, KeyType &gt;::Merger =  std::function&lt; void( CacheBase&lt; Plugin, KeyType &gt; const &amp; , castor::Collection&lt; Plugin, KeyType &gt; &amp; , std::shared_ptr&lt; Plugin &gt; ) &gt;</definition>
-        <argsstring></argsstring>
-        <name>Merger</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/CacheModule.hpp" line="203" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="205" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="db/db1/a02404_1a3b87c390fcfadf896405ab8f68143efd" prot="public" static="yes" mutable="no">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
-        <definition>C3D_API const castor::String castor3d::CacheTraits&lt; Plugin, KeyType &gt;::Name</definition>
-        <argsstring></argsstring>
-        <name>Name</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/CacheModule.hpp" line="201" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="201" bodyend="-1"/>
+        <location file="Binary/BinarySkeletonAnimationBone.hpp" line="54" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Helper structure to specialise a cache behaviour. </para>
+<para>MovingBone binary loader. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="remark"><para>Specialisation for <ref refid="db/d33/a04192" kindref="compound">Plugin</ref>. </para>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
 </simplesect>
-</para>
+<simplesect kind="version"><para>0.8.0 </para>
+</simplesect>
+<simplesect kind="date"><para>26/01/2016</para>
+</simplesect>
+Loader binaire de MovingBone. </para>
     </detaileddescription>
-    <location file="Cache/CacheModule.hpp" line="200" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="199" bodyend="206"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::BinaryWriterBase&lt; SkeletonAnimationBone &gt;</label>
+        <link refid="d3/d9c/a02336"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationBone &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryWriter&lt; SkeletonAnimationBone &gt;</label>
+        <link refid="db/db1/a02404"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::BinaryWriterBase&lt; TWritten &gt;</label>
+        <link refid="d3/d9c/a02336"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::BinaryWriterBase&lt; SkeletonAnimationBone &gt;</label>
+        <link refid="d3/d9c/a02336"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationBone &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::BinaryChunk</label>
+        <link refid="dc/d1a/a02288"/>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryWriter&lt; SkeletonAnimationBone &gt;</label>
+        <link refid="db/db1/a02404"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::BinaryWriterBase&lt; TWritten &gt;</label>
+        <link refid="d3/d9c/a02336"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Binary/BinarySkeletonAnimationBone.hpp" line="40" column="1" bodyfile="Binary/BinarySkeletonAnimationBone.hpp" bodystart="42" bodyend="55"/>
     <listofallmembers>
-      <member refid="db/db1/a02404_1a8ec6004b397327c2c35a737f0c367732" prot="public" virt="non-virtual"><scope>castor3d::CacheTraits&lt; Plugin, KeyType &gt;</scope><name>Merger</name></member>
-      <member refid="db/db1/a02404_1a3b87c390fcfadf896405ab8f68143efd" prot="public" virt="non-virtual"><scope>castor3d::CacheTraits&lt; Plugin, KeyType &gt;</scope><name>Name</name></member>
-      <member refid="db/db1/a02404_1a31cbf77e507a5846034a15a32279c3d3" prot="public" virt="non-virtual"><scope>castor3d::CacheTraits&lt; Plugin, KeyType &gt;</scope><name>Producer</name></member>
+      <member refid="db/db1/a02404_1a9c7bcfd9f05bec9febc9a200c1e14792" prot="private" virt="virtual"><scope>castor3d::BinaryWriter&lt; SkeletonAnimationBone &gt;</scope><name>doWrite</name></member>
+      <member refid="d3/d9c/a02336_1a95685db95521fe46169767620976688c" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SkeletonAnimationBone &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d3/d9c/a02336_1ac978d1019caf2d37ad181911c78dde33" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SkeletonAnimationBone &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d3/d9c/a02336_1a5eef4da7e3bbce50e00c878bd7b32516" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SkeletonAnimationBone &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d3/d9c/a02336_1a5b782961d4526354e5d0e84e78c6bbbb" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SkeletonAnimationBone &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d3/d9c/a02336_1a3bd1cb047e1f2872668a4397496bd7c4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SkeletonAnimationBone &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d3/d9c/a02336_1a7bdb655caf767fdde8a4267602e06191" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SkeletonAnimationBone &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d3/d9c/a02336_1a8828d359b7a61ea2b657d5aada2dd87b" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SkeletonAnimationBone &gt;</scope><name>doWriteHeader</name></member>
+      <member refid="d3/d9c/a02336_1ad6c66bdde51dd57ab2b27f4ddc8db513" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SkeletonAnimationBone &gt;</scope><name>m_chunk</name></member>
+      <member refid="d3/d9c/a02336_1a21e7985d2f99ff20a6056d198aac07c5" prot="public" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SkeletonAnimationBone &gt;</scope><name>write</name></member>
+      <member refid="d3/d9c/a02336_1a3b4ae75e6ecd0bdf9f5dc26381633dab" prot="public" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SkeletonAnimationBone &gt;</scope><name>write</name></member>
+      <member refid="d3/d9c/a02336_1a455d885b04ddaed4d650461bbef1711c" prot="public" virt="virtual"><scope>castor3d::BinaryWriter&lt; SkeletonAnimationBone &gt;</scope><name>~BinaryWriterBase</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

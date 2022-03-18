@@ -1,59 +1,99 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d2/dd6/a04528" kind="struct" language="C++" prot="protected">
-    <compoundname>castor3d::RenderLoop::UploadResources</compoundname>
-    <includes local="no">RenderLoop.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d2/dd6/a04528_1a3256790fc4ca73c472ea54741399c8f1" prot="public" static="no" mutable="no">
-        <type><ref refid="d1/da6/a04380" kindref="compound">CommandsSemaphore</ref></type>
-        <definition>CommandsSemaphore castor3d::RenderLoop::UploadResources::commands</definition>
-        <argsstring></argsstring>
-        <name>commands</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d2/dd6/a04528" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::MovableMergerT</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::Named</basecompoundref>
+    <includes local="no">MovableObject.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename CacheT</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/dd6/a04528_1a89ad440bdd6da1d4eb366c282b7fb530" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::MovableMergerT&lt; CacheT &gt;::MovableMergerT</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>MovableMergerT</name>
+        <qualifiedname>castor3d::MovableMergerT::MovableMergerT</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The command buffer and semaphore used for UBO uploads. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderLoop.hpp" line="266" column="1" bodyfile="Render/RenderLoop.hpp" bodystart="266" bodyend="-1"/>
+        <location file="Scene/MovableObject.hpp" line="108" column="10" bodyfile="Scene/MovableObject.hpp" bodystart="108" bodyend="111"/>
       </memberdef>
-      <memberdef kind="variable" id="d2/dd6/a04528_1a393a05e19e5313dc0158a20344363ee6" prot="public" static="no" mutable="no">
-        <type>ashes::FencePtr</type>
-        <definition>ashes::FencePtr castor3d::RenderLoop::UploadResources::fence</definition>
-        <argsstring></argsstring>
-        <name>fence</name>
+      <memberdef kind="function" id="d2/dd6/a04528_1ab5f54f84f282fa5f12a8ecd5f9b2b4de" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::MovableMergerT&lt; CacheT &gt;::operator()</definition>
+        <argsstring>(typename CacheT::ElementObjectCacheT const &amp;source, typename CacheT::ElementContT &amp;destination, typename CacheT::ElementPtrT element, SceneNodeSPtr rootCameraNode, SceneNodeSPtr rootObjectNode) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor3d::MovableMergerT::operator()</qualifiedname>
+        <param>
+          <type>typename CacheT::ElementObjectCacheT const &amp;</type>
+          <declname>source</declname>
+        </param>
+        <param>
+          <type>typename CacheT::ElementContT &amp;</type>
+          <declname>destination</declname>
+        </param>
+        <param>
+          <type>typename CacheT::ElementPtrT</type>
+          <declname>element</declname>
+        </param>
+        <param>
+          <type>SceneNodeSPtr</type>
+          <declname>rootCameraNode</declname>
+        </param>
+        <param>
+          <type>SceneNodeSPtr</type>
+          <declname>rootObjectNode</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The fence and semaphore used for UBO uploads. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderLoop.hpp" line="269" column="1" bodyfile="Render/RenderLoop.hpp" bodystart="269" bodyend="-1"/>
+        <location file="Scene/MovableObject.hpp" line="113" column="6" bodyfile="Scene/MovableObject.hpp" bodystart="113" bodyend="143"/>
+        <references refid="d2/df5/a01395_1a5691da845a89609231c90071fccdfc20">castor3d::getName</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="2949">
-        <label>castor3d::RenderLoop::UploadResources</label>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::MovableMergerT&lt; CacheT &gt;</label>
         <link refid="d2/dd6/a04528"/>
-        <childnode refid="2950" relation="usage">
-          <edgelabel>commands</edgelabel>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="2950">
-        <label>castor3d::CommandsSemaphore</label>
-        <link refid="d1/da6/a04380"/>
+      <node id="2">
+        <label>castor::Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::MovableMergerT&lt; CacheT &gt;</label>
+        <link refid="d2/dd6/a04528"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
       </node>
     </collaborationgraph>
-    <location file="Render/RenderLoop.hpp" line="263" column="1" bodyfile="Render/RenderLoop.hpp" bodystart="262" bodyend="270"/>
+    <location file="Scene/MovableObject.hpp" line="105" column="1" bodyfile="Scene/MovableObject.hpp" bodystart="107" bodyend="144"/>
     <listofallmembers>
-      <member refid="d2/dd6/a04528_1a3256790fc4ca73c472ea54741399c8f1" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop::UploadResources</scope><name>commands</name></member>
-      <member refid="d2/dd6/a04528_1a393a05e19e5313dc0158a20344363ee6" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop::UploadResources</scope><name>fence</name></member>
+      <member refid="d2/dd6/a04528_1a89ad440bdd6da1d4eb366c282b7fb530" prot="public" virt="non-virtual"><scope>castor3d::MovableMergerT</scope><name>MovableMergerT</name></member>
+      <member refid="d2/dd6/a04528_1ab5f54f84f282fa5f12a8ecd5f9b2b4de" prot="public" virt="non-virtual"><scope>castor3d::MovableMergerT</scope><name>operator()</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

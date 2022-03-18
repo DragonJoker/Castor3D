@@ -1,33 +1,745 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="de/de0/a03814" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPhysicalDeviceCooperativeMatrixPropertiesNV &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="de/de0/a03814_1a3ccb5cd1781dcb8ddd050a0f2d95b0c8" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPhysicalDeviceCooperativeMatrixPropertiesNV &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="de/de0/a03814" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BackgroundRenderer</compoundname>
+    <includes local="no">BackgroundPass.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="de/de0/a03814_1a8e2e9aff6153e4fcdb37f22a766c0b69" prot="private" static="no" mutable="no">
+        <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::BackgroundRenderer::m_device</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_COOPERATIVE_MATRIX_PROPERTIES_NV</initializer>
+        <name>m_device</name>
+        <qualifiedname>castor3d::BackgroundRenderer::m_device</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="366" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="366" bodyend="-1"/>
+        <location file="Render/Passes/BackgroundPass.hpp" line="372" column="21" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="372" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/de0/a03814_1af7833b55557c5b5d000ea5cbb4763845" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d8f/a04930" kindref="compound">MatrixUbo</ref></type>
+        <definition>MatrixUbo castor3d::BackgroundRenderer::m_matrixUbo</definition>
+        <argsstring></argsstring>
+        <name>m_matrixUbo</name>
+        <qualifiedname>castor3d::BackgroundRenderer::m_matrixUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="373" column="11" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="373" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/de0/a03814_1a7d5d50cb55e39fee88ed5eaa6c375a68" prot="private" static="no" mutable="no">
+        <type><ref refid="df/d9b/a02514" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d2/df7/a05026" kindref="compound">ModelBufferConfiguration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; ModelBufferConfiguration &gt; castor3d::BackgroundRenderer::m_modelUbo</definition>
+        <argsstring></argsstring>
+        <name>m_modelUbo</name>
+        <qualifiedname>castor3d::BackgroundRenderer::m_modelUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="374" column="22" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="374" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/de0/a03814_1a97d4d63e8e5f76e68bc6fe9dd8dfea8b" prot="private" static="no" mutable="no">
+        <type>crg::FramePass const  *</type>
+        <definition>crg::FramePass const* castor3d::BackgroundRenderer::m_backgroundPassDesc</definition>
+        <argsstring></argsstring>
+        <name>m_backgroundPassDesc</name>
+        <qualifiedname>castor3d::BackgroundRenderer::m_backgroundPassDesc</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="375" column="23" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="375" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/de0/a03814_1ab6506468cd3bc7769d211da097457e53" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d30/a03798" kindref="compound">BackgroundPass</ref> *</type>
+        <definition>BackgroundPass* castor3d::BackgroundRenderer::m_backgroundPass</definition>
+        <argsstring></argsstring>
+        <name>m_backgroundPass</name>
+        <qualifiedname>castor3d::BackgroundRenderer::m_backgroundPass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="376" column="17" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="376" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="de/de0/a03814_1ae0525d3b52e473146345b70840f78030" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::BackgroundRenderer::BackgroundRenderer</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePassArray previousPasses, RenderDevice const &amp;device, ProgressBar *progress, castor::String const &amp;name, SceneBackground &amp;background, HdrConfigUbo const &amp;hdrConfigUbo, SceneUbo const &amp;sceneUbo, crg::ImageViewId const &amp;colour, bool clearColour, crg::ImageViewId const *depth)</argsstring>
+        <name>BackgroundRenderer</name>
+        <qualifiedname>castor3d::BackgroundRenderer::BackgroundRenderer</qualifiedname>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePassArray</type>
+          <declname>previousPasses</declname>
+        </param>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="da/deb/a03274" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d1f/a04450" kindref="compound">SceneBackground</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dd2/a04898" kindref="compound">HdrConfigUbo</ref> const &amp;</type>
+          <declname>hdrConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="db/db8/a04970" kindref="compound">SceneUbo</ref> const &amp;</type>
+          <declname>sceneUbo</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>clearColour</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const *</type>
+          <declname>depth</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="121" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="de/de0/a03814_1ae49b15b32d99d091c6f46e24cc8291b2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass const &amp;</type>
+        <definition>crg::FramePass const  &amp; castor3d::BackgroundRenderer::doCreatePass</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePassArray previousPasses, castor::String const &amp;name, SceneBackground &amp;background, HdrConfigUbo const &amp;hdrConfigUbo, SceneUbo const &amp;sceneUbo, crg::ImageViewId const &amp;colour, bool clearColour, crg::ImageViewId const *depth, ProgressBar *progress)</argsstring>
+        <name>doCreatePass</name>
+        <qualifiedname>castor3d::BackgroundRenderer::doCreatePass</qualifiedname>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePassArray</type>
+          <declname>previousPasses</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d1f/a04450" kindref="compound">SceneBackground</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dd2/a04898" kindref="compound">HdrConfigUbo</ref> const &amp;</type>
+          <declname>hdrConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="db/db8/a04970" kindref="compound">SceneUbo</ref> const &amp;</type>
+          <declname>sceneUbo</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>clearColour</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const *</type>
+          <declname>depth</declname>
+        </param>
+        <param>
+          <type><ref refid="da/deb/a03274" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="360" column="23"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/de0/a03814_1a68cad6951cb58e7138bbfc206058070f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::BackgroundRenderer::BackgroundRenderer</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePass const *previousPass, RenderDevice const &amp;device, ProgressBar *progress, castor::String const &amp;name, SceneBackground &amp;background, HdrConfigUbo const &amp;hdrConfigUbo, SceneUbo const &amp;sceneUbo, crg::ImageViewId const &amp;colour, bool clearColour=true)</argsstring>
+        <name>BackgroundRenderer</name>
+        <qualifiedname>castor3d::BackgroundRenderer::BackgroundRenderer</qualifiedname>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const *</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="da/deb/a03274" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d1f/a04450" kindref="compound">SceneBackground</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dd2/a04898" kindref="compound">HdrConfigUbo</ref> const &amp;</type>
+          <declname>hdrConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="db/db8/a04970" kindref="compound">SceneUbo</ref> const &amp;</type>
+          <declname>sceneUbo</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>clearColour</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="134" column="1" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="134" bodyend="158"/>
+      </memberdef>
+      <memberdef kind="function" id="de/de0/a03814_1a252e0f9a675ebffbc9125a102c103d43" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::BackgroundRenderer::BackgroundRenderer</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePass const *previousPass, RenderDevice const &amp;device, ProgressBar *progress, castor::String const &amp;name, SceneBackground &amp;background, HdrConfigUbo const &amp;hdrConfigUbo, SceneUbo const &amp;sceneUbo, crg::ImageViewId const &amp;colour, bool clearColour, crg::ImageViewId const &amp;depth)</argsstring>
+        <name>BackgroundRenderer</name>
+        <qualifiedname>castor3d::BackgroundRenderer::BackgroundRenderer</qualifiedname>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const *</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="da/deb/a03274" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d1f/a04450" kindref="compound">SceneBackground</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dd2/a04898" kindref="compound">HdrConfigUbo</ref> const &amp;</type>
+          <declname>hdrConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="db/db8/a04970" kindref="compound">SceneUbo</ref> const &amp;</type>
+          <declname>sceneUbo</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>clearColour</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>depth</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="160" column="1" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="160" bodyend="185"/>
+      </memberdef>
+      <memberdef kind="function" id="de/de0/a03814_1a99bd93d494cdba34aa8142461d686f0b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::BackgroundRenderer::BackgroundRenderer</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePass const *previousPass, RenderDevice const &amp;device, castor::String const &amp;name, SceneBackground &amp;background, HdrConfigUbo const &amp;hdrConfigUbo, SceneUbo const &amp;sceneUbo, crg::ImageViewId const &amp;colour, bool clearColour=true)</argsstring>
+        <name>BackgroundRenderer</name>
+        <qualifiedname>castor3d::BackgroundRenderer::BackgroundRenderer</qualifiedname>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const *</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d1f/a04450" kindref="compound">SceneBackground</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dd2/a04898" kindref="compound">HdrConfigUbo</ref> const &amp;</type>
+          <declname>hdrConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="db/db8/a04970" kindref="compound">SceneUbo</ref> const &amp;</type>
+          <declname>sceneUbo</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>clearColour</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="187" column="1" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="187" bodyend="210"/>
+      </memberdef>
+      <memberdef kind="function" id="de/de0/a03814_1ae58fcffee219aa37bd6fef464826225f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::BackgroundRenderer::BackgroundRenderer</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePass const *previousPass, RenderDevice const &amp;device, castor::String const &amp;name, SceneBackground &amp;background, HdrConfigUbo const &amp;hdrConfigUbo, SceneUbo const &amp;sceneUbo, crg::ImageViewId const &amp;colour, bool clearColour, crg::ImageViewId const &amp;depth)</argsstring>
+        <name>BackgroundRenderer</name>
+        <qualifiedname>castor3d::BackgroundRenderer::BackgroundRenderer</qualifiedname>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const *</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d1f/a04450" kindref="compound">SceneBackground</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dd2/a04898" kindref="compound">HdrConfigUbo</ref> const &amp;</type>
+          <declname>hdrConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="db/db8/a04970" kindref="compound">SceneUbo</ref> const &amp;</type>
+          <declname>sceneUbo</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>clearColour</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>depth</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="212" column="1" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="212" bodyend="236"/>
+      </memberdef>
+      <memberdef kind="function" id="de/de0/a03814_1abebbc47ebb14b63738a11b0da1b961df" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::BackgroundRenderer::BackgroundRenderer</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePassArray previousPasses, RenderDevice const &amp;device, ProgressBar *progress, castor::String const &amp;name, SceneBackground &amp;background, HdrConfigUbo const &amp;hdrConfigUbo, SceneUbo const &amp;sceneUbo, crg::ImageViewId const &amp;colour, bool clearColour=true)</argsstring>
+        <name>BackgroundRenderer</name>
+        <qualifiedname>castor3d::BackgroundRenderer::BackgroundRenderer</qualifiedname>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePassArray</type>
+          <declname>previousPasses</declname>
+        </param>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="da/deb/a03274" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d1f/a04450" kindref="compound">SceneBackground</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dd2/a04898" kindref="compound">HdrConfigUbo</ref> const &amp;</type>
+          <declname>hdrConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="db/db8/a04970" kindref="compound">SceneUbo</ref> const &amp;</type>
+          <declname>sceneUbo</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>clearColour</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="238" column="1" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="238" bodyend="260"/>
+      </memberdef>
+      <memberdef kind="function" id="de/de0/a03814_1a54d7798db3113208d7b5777ed53e8f4d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::BackgroundRenderer::BackgroundRenderer</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePassArray previousPasses, RenderDevice const &amp;device, ProgressBar *progress, castor::String const &amp;name, SceneBackground &amp;background, HdrConfigUbo const &amp;hdrConfigUbo, SceneUbo const &amp;sceneUbo, crg::ImageViewId const &amp;colour, bool clearColour, crg::ImageViewId const &amp;depth)</argsstring>
+        <name>BackgroundRenderer</name>
+        <qualifiedname>castor3d::BackgroundRenderer::BackgroundRenderer</qualifiedname>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePassArray</type>
+          <declname>previousPasses</declname>
+        </param>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="da/deb/a03274" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d1f/a04450" kindref="compound">SceneBackground</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dd2/a04898" kindref="compound">HdrConfigUbo</ref> const &amp;</type>
+          <declname>hdrConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="db/db8/a04970" kindref="compound">SceneUbo</ref> const &amp;</type>
+          <declname>sceneUbo</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>clearColour</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>depth</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="262" column="1" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="262" bodyend="285"/>
+      </memberdef>
+      <memberdef kind="function" id="de/de0/a03814_1ad11daf4009ff6420fc144638afc816e6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::BackgroundRenderer::BackgroundRenderer</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePassArray previousPasses, RenderDevice const &amp;device, castor::String const &amp;name, SceneBackground &amp;background, HdrConfigUbo const &amp;hdrConfigUbo, SceneUbo const &amp;sceneUbo, crg::ImageViewId const &amp;colour, bool clearColour=true)</argsstring>
+        <name>BackgroundRenderer</name>
+        <qualifiedname>castor3d::BackgroundRenderer::BackgroundRenderer</qualifiedname>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePassArray</type>
+          <declname>previousPasses</declname>
+        </param>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d1f/a04450" kindref="compound">SceneBackground</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dd2/a04898" kindref="compound">HdrConfigUbo</ref> const &amp;</type>
+          <declname>hdrConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="db/db8/a04970" kindref="compound">SceneUbo</ref> const &amp;</type>
+          <declname>sceneUbo</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>clearColour</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="287" column="1" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="287" bodyend="308"/>
+      </memberdef>
+      <memberdef kind="function" id="de/de0/a03814_1a9572e26c0429da92462259b6c69bfb3b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::BackgroundRenderer::BackgroundRenderer</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePassArray previousPasses, RenderDevice const &amp;device, castor::String const &amp;name, SceneBackground &amp;background, HdrConfigUbo const &amp;hdrConfigUbo, SceneUbo const &amp;sceneUbo, crg::ImageViewId const &amp;colour, bool clearColour, crg::ImageViewId const &amp;depth)</argsstring>
+        <name>BackgroundRenderer</name>
+        <qualifiedname>castor3d::BackgroundRenderer::BackgroundRenderer</qualifiedname>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePassArray</type>
+          <declname>previousPasses</declname>
+        </param>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d1f/a04450" kindref="compound">SceneBackground</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dd2/a04898" kindref="compound">HdrConfigUbo</ref> const &amp;</type>
+          <declname>hdrConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="db/db8/a04970" kindref="compound">SceneUbo</ref> const &amp;</type>
+          <declname>sceneUbo</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>clearColour</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>depth</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="310" column="1" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="310" bodyend="332"/>
+      </memberdef>
+      <memberdef kind="function" id="de/de0/a03814_1a7f2159c23110f490b4dd8ada5a7470e5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::BackgroundRenderer::~BackgroundRenderer</definition>
+        <argsstring>()</argsstring>
+        <name>~BackgroundRenderer</name>
+        <qualifiedname>castor3d::BackgroundRenderer::~BackgroundRenderer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="334" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="de/de0/a03814_1a3541a7297a03c2b940d820ee2e8ed5be" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BackgroundRenderer::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::BackgroundRenderer::update</qualifiedname>
+        <param>
+          <type><ref refid="d3/d14/a04046" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, CPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="343" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/de0/a03814_1aec8523deb3d9dcc6c8d059c2ca366795" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BackgroundRenderer::update</definition>
+        <argsstring>(GpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::BackgroundRenderer::update</qualifiedname>
+        <param>
+          <type><ref refid="dd/daf/a04050" kindref="compound">GpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, GPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="352" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/de0/a03814_1a1ac7f6c26a6b62981ff73c14ca9e09da" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>crg::FramePass const &amp;</type>
+        <definition>crg::FramePass const  &amp; castor3d::BackgroundRenderer::getPass</definition>
+        <argsstring>() const</argsstring>
+        <name>getPass</name>
+        <qualifiedname>castor3d::BackgroundRenderer::getPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="354" column="23" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="354" bodyend="357"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="366" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="366" bodyend="366"/>
+    <location file="Render/Passes/BackgroundPass.hpp" line="118" column="1" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="119" bodyend="377"/>
     <listofallmembers>
-      <member refid="de/de0/a03814_1a3ccb5cd1781dcb8ddd050a0f2d95b0c8" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPhysicalDeviceCooperativeMatrixPropertiesNV &gt;</scope><name>value</name></member>
+      <member refid="de/de0/a03814_1ae0525d3b52e473146345b70840f78030" prot="private" virt="non-virtual"><scope>castor3d::BackgroundRenderer</scope><name>BackgroundRenderer</name></member>
+      <member refid="de/de0/a03814_1a68cad6951cb58e7138bbfc206058070f" prot="public" virt="non-virtual"><scope>castor3d::BackgroundRenderer</scope><name>BackgroundRenderer</name></member>
+      <member refid="de/de0/a03814_1a252e0f9a675ebffbc9125a102c103d43" prot="public" virt="non-virtual"><scope>castor3d::BackgroundRenderer</scope><name>BackgroundRenderer</name></member>
+      <member refid="de/de0/a03814_1a99bd93d494cdba34aa8142461d686f0b" prot="public" virt="non-virtual"><scope>castor3d::BackgroundRenderer</scope><name>BackgroundRenderer</name></member>
+      <member refid="de/de0/a03814_1ae58fcffee219aa37bd6fef464826225f" prot="public" virt="non-virtual"><scope>castor3d::BackgroundRenderer</scope><name>BackgroundRenderer</name></member>
+      <member refid="de/de0/a03814_1abebbc47ebb14b63738a11b0da1b961df" prot="public" virt="non-virtual"><scope>castor3d::BackgroundRenderer</scope><name>BackgroundRenderer</name></member>
+      <member refid="de/de0/a03814_1a54d7798db3113208d7b5777ed53e8f4d" prot="public" virt="non-virtual"><scope>castor3d::BackgroundRenderer</scope><name>BackgroundRenderer</name></member>
+      <member refid="de/de0/a03814_1ad11daf4009ff6420fc144638afc816e6" prot="public" virt="non-virtual"><scope>castor3d::BackgroundRenderer</scope><name>BackgroundRenderer</name></member>
+      <member refid="de/de0/a03814_1a9572e26c0429da92462259b6c69bfb3b" prot="public" virt="non-virtual"><scope>castor3d::BackgroundRenderer</scope><name>BackgroundRenderer</name></member>
+      <member refid="de/de0/a03814_1ae49b15b32d99d091c6f46e24cc8291b2" prot="private" virt="non-virtual"><scope>castor3d::BackgroundRenderer</scope><name>doCreatePass</name></member>
+      <member refid="de/de0/a03814_1a1ac7f6c26a6b62981ff73c14ca9e09da" prot="public" virt="non-virtual"><scope>castor3d::BackgroundRenderer</scope><name>getPass</name></member>
+      <member refid="de/de0/a03814_1ab6506468cd3bc7769d211da097457e53" prot="private" virt="non-virtual"><scope>castor3d::BackgroundRenderer</scope><name>m_backgroundPass</name></member>
+      <member refid="de/de0/a03814_1a97d4d63e8e5f76e68bc6fe9dd8dfea8b" prot="private" virt="non-virtual"><scope>castor3d::BackgroundRenderer</scope><name>m_backgroundPassDesc</name></member>
+      <member refid="de/de0/a03814_1a8e2e9aff6153e4fcdb37f22a766c0b69" prot="private" virt="non-virtual"><scope>castor3d::BackgroundRenderer</scope><name>m_device</name></member>
+      <member refid="de/de0/a03814_1af7833b55557c5b5d000ea5cbb4763845" prot="private" virt="non-virtual"><scope>castor3d::BackgroundRenderer</scope><name>m_matrixUbo</name></member>
+      <member refid="de/de0/a03814_1a7d5d50cb55e39fee88ed5eaa6c375a68" prot="private" virt="non-virtual"><scope>castor3d::BackgroundRenderer</scope><name>m_modelUbo</name></member>
+      <member refid="de/de0/a03814_1a3541a7297a03c2b940d820ee2e8ed5be" prot="public" virt="non-virtual"><scope>castor3d::BackgroundRenderer</scope><name>update</name></member>
+      <member refid="de/de0/a03814_1aec8523deb3d9dcc6c8d059c2ca366795" prot="public" virt="non-virtual"><scope>castor3d::BackgroundRenderer</scope><name>update</name></member>
+      <member refid="de/de0/a03814_1a7f2159c23110f490b4dd8ada5a7470e5" prot="public" virt="non-virtual"><scope>castor3d::BackgroundRenderer</scope><name>~BackgroundRenderer</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

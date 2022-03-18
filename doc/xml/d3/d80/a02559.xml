@@ -1,741 +1,15 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d3/d80/a02559" kind="class" language="C++" prot="public" abstract="yes">
-    <compoundname>castor3d::UserInputListener</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
-    <derivedcompoundref refid="df/d53/a04623" prot="public" virt="non-virtual">castor3d::RenderWindow::InputListener</derivedcompoundref>
-    <includes local="no">UserInputListener.hpp</includes>
-      <sectiondef kind="user-defined">
-      <header>General</header>
-      <memberdef kind="function" id="d3/d80/a02559_1a2e599855c97483e2a2bb2dfd920bcd38" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::UserInputListener::UserInputListener</definition>
-        <argsstring>(Engine &amp;engine, castor::String const &amp;name)</argsstring>
-        <name>UserInputListener</name>
-        <param>
-          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
-        </param>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="35" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1ad3b5d5fdb26b3aa274f62e2d5265859f" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>virtual C3D_API castor3d::UserInputListener::~UserInputListener</definition>
-        <argsstring>()</argsstring>
-        <name>~UserInputListener</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="43" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1a2c91f11f8c5c099e6a1c4bff1f548dfa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::UserInputListener::initialise</definition>
-        <argsstring>()</argsstring>
-        <name>initialise</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="52" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1aa8ce17bc77eb834003cced1abea4e322" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::UserInputListener::cleanup</definition>
-        <argsstring>()</argsstring>
-        <name>cleanup</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="59" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1a379f777bd2ac75e703449c874388f46e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::UserInputListener::processEvents</definition>
-        <argsstring>()</argsstring>
-        <name>processEvents</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="66" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1ad6384b2ce2ae06856376a534a748d8ca" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>virtual C3D_API bool castor3d::UserInputListener::doInitialise</definition>
-        <argsstring>()=0</argsstring>
-        <name>doInitialise</name>
-        <reimplementedby refid="df/d53/a04623_1abbbb75d95950160cd0440bc9ef3b7b71">doInitialise</reimplementedby>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>copydoc castor3d::UserInputListener::Initialise </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="446" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1acdcb049d9f91d0e0d02aea6f5aa7f4cb" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>virtual C3D_API void castor3d::UserInputListener::doCleanup</definition>
-        <argsstring>()=0</argsstring>
-        <name>doCleanup</name>
-        <reimplementedby refid="df/d53/a04623_1a2f8b0433b4927cc103cdd9a1216fc8b7">doCleanup</reimplementedby>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>copydoc castor3d::UserInputListener::Cleanup </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="450" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="user-defined">
-      <header>Getters</header>
-      <memberdef kind="function" id="d3/d80/a02559_1a8f2f3e6202e7c077a169ae4f177e4ef5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::Position const  &amp;</type>
-        <definition>castor::Position const&amp; castor3d::UserInputListener::getMousePosition</definition>
-        <argsstring>() const</argsstring>
-        <name>getMousePosition</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="72" column="1" bodyfile="Event/UserInput/UserInputListener.hpp" bodystart="72" bodyend="75"/>
-        <references refid="d8/d1b/a02555_1adbdf5d0b354c06a50c13d2d4528828ef" compoundref="db/d7b/a00296" startline="291">castor3d::MouseState::position</references>
-      </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1a8d27e97742054812014327826301a54f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>EventHandlerSPtr</type>
-        <definition>EventHandlerSPtr castor3d::UserInputListener::getActiveControl</definition>
-        <argsstring>() const</argsstring>
-        <name>getActiveControl</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="77" column="1" bodyfile="Event/UserInput/UserInputListener.hpp" bodystart="77" bodyend="80"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1aa90c7452fadcea8ef8b6a3dbee2c3690" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>EventHandlerSPtr</type>
-        <definition>EventHandlerSPtr castor3d::UserInputListener::getFocusedControl</definition>
-        <argsstring>() const</argsstring>
-        <name>getFocusedControl</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="82" column="1" bodyfile="Event/UserInput/UserInputListener.hpp" bodystart="82" bodyend="85"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1ac107da35b210cc627f2eabe6b2a40703" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d0/d01/a02511" kindref="compound">FrameListener</ref> &amp;</type>
-        <definition>FrameListener&amp; castor3d::UserInputListener::getFrameListener</definition>
-        <argsstring>() const</argsstring>
-        <name>getFrameListener</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="87" column="1" bodyfile="Event/UserInput/UserInputListener.hpp" bodystart="87" bodyend="90"/>
-        <references refid="d3/d80/a02559_1acc06fa4f80f9ee1dc7dfe6ee82716d3a" compoundref="df/d95/a00299" startline="463">m_frameListener</references>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="user-defined">
-      <header>Output events</header>
-      <memberdef kind="function" id="d3/d80/a02559_1a3d8e41ec70a24b238be398712012e036" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::UserInputListener::registerMouseMoveAction</definition>
-        <argsstring>(castor::String const &amp;handler, OnMouseMoveActionFunction function)</argsstring>
-        <name>registerMouseMoveAction</name>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>handler</declname>
-        </param>
-        <param>
-          <type><ref refid="d3/d80/a02559_1a52d763b318a9f016a4d88c53d83f62d0" kindref="member">OnMouseMoveActionFunction</ref></type>
-          <declname>function</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="104" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1adbbdf0b7d4e151079b73152f007416f2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::UserInputListener::registerClickAction</definition>
-        <argsstring>(castor::String const &amp;handler, OnClickActionFunction function)</argsstring>
-        <name>registerClickAction</name>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>handler</declname>
-        </param>
-        <param>
-          <type><ref refid="d3/d80/a02559_1a7c733341f9ef3967065ab8feb49d8e00" kindref="member">OnClickActionFunction</ref></type>
-          <declname>function</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="114" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1a7eef9892848ee17099bca6e3da6c22d5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::UserInputListener::registerSelectAction</definition>
-        <argsstring>(castor::String const &amp;handler, OnSelectActionFunction function)</argsstring>
-        <name>registerSelectAction</name>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>handler</declname>
-        </param>
-        <param>
-          <type><ref refid="d3/d80/a02559_1ad5d9e022473b5d9b3d6a5927c35e5f51" kindref="member">OnSelectActionFunction</ref></type>
-          <declname>function</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="126" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1a89b3c690479c7ecfd64cbaf0a08af8f0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::UserInputListener::registerTextAction</definition>
-        <argsstring>(castor::String const &amp;handler, OnTextActionFunction function)</argsstring>
-        <name>registerTextAction</name>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>handler</declname>
-        </param>
-        <param>
-          <type><ref refid="d3/d80/a02559_1ae38f783614c6d5b1a9b280c9da06d9fe" kindref="member">OnTextActionFunction</ref></type>
-          <declname>function</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="138" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1ae5529141ea9f1ab6c7966572a7aa3de5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::UserInputListener::unregisterMouseMoveAction</definition>
-        <argsstring>(castor::String const &amp;handler)</argsstring>
-        <name>unregisterMouseMoveAction</name>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>handler</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="148" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1a99ba659903d1199e03b8e8323c1381dc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::UserInputListener::unregisterClickAction</definition>
-        <argsstring>(castor::String const &amp;handler)</argsstring>
-        <name>unregisterClickAction</name>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>handler</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="157" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1a827e0cee29d7653f69a5e55e572f7cb6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::UserInputListener::unregisterSelectAction</definition>
-        <argsstring>(castor::String const &amp;handler)</argsstring>
-        <name>unregisterSelectAction</name>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>handler</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="168" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1a30252abfab5f2d0de99b28c030a4c029" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::UserInputListener::unregisterTextAction</definition>
-        <argsstring>(castor::String const &amp;handler)</argsstring>
-        <name>unregisterTextAction</name>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>handler</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="179" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1ae048f6c9f2f338906bee940ebd50d242" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::UserInputListener::onMouseMoveAction</definition>
-        <argsstring>(castor::String const &amp;handler)</argsstring>
-        <name>onMouseMoveAction</name>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>handler</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="188" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1a98b74cd02355d3a53585d8931202f528" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::UserInputListener::onClickAction</definition>
-        <argsstring>(castor::String const &amp;handler)</argsstring>
-        <name>onClickAction</name>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>handler</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="197" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1ae2a8df47bad10127fefa5ca741a12cd1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::UserInputListener::onSelectAction</definition>
-        <argsstring>(castor::String const &amp;handler, int index)</argsstring>
-        <name>onSelectAction</name>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>handler</declname>
-        </param>
-        <param>
-          <type>int</type>
-          <declname>index</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="208" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1aa87608ed163f722c73195d1b29e9575d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::UserInputListener::onTextAction</definition>
-        <argsstring>(castor::String const &amp;handler, castor::String const &amp;text)</argsstring>
-        <name>onTextAction</name>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>handler</declname>
-        </param>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>text</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="220" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="user-defined">
-      <header>Mouse input events</header>
-      <memberdef kind="function" id="d3/d80/a02559_1a42b6aaaf3ba8dc8e93dd7d64c142e761" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::UserInputListener::fireMouseMove</definition>
-        <argsstring>(castor::Position const &amp;position)</argsstring>
-        <name>fireMouseMove</name>
-        <param>
-          <type>castor::Position const &amp;</type>
-          <declname>position</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="237" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1a0e5ed7ad9ebb7cee817d9c48974799b0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::UserInputListener::fireMouseButtonPushed</definition>
-        <argsstring>(MouseButton button)</argsstring>
-        <name>fireMouseButtonPushed</name>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1a087f824502cd45431879fc5c96607682" kindref="member">MouseButton</ref></type>
-          <declname>button</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="248" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1a242c52d3786e691d502ae1b6efaefe20" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::UserInputListener::fireMouseButtonReleased</definition>
-        <argsstring>(MouseButton button)</argsstring>
-        <name>fireMouseButtonReleased</name>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1a087f824502cd45431879fc5c96607682" kindref="member">MouseButton</ref></type>
-          <declname>button</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="259" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1a6652b67aa24bf5db3360f58adc0ec0ce" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::UserInputListener::fireMouseWheel</definition>
-        <argsstring>(castor::Position const &amp;offsets)</argsstring>
-        <name>fireMouseWheel</name>
-        <param>
-          <type>castor::Position const &amp;</type>
-          <declname>offsets</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="270" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="user-defined">
-      <header>Keyboard input events</header>
-      <memberdef kind="function" id="d3/d80/a02559_1a89850c36d4d11cce55f6fda961889f65" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::UserInputListener::fireKeydown</definition>
-        <argsstring>(KeyboardKey key, bool ctrl, bool alt, bool shift)</argsstring>
-        <name>fireKeydown</name>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1ad372dd0cc65f28ad7f558f07c78becb7" kindref="member">KeyboardKey</ref></type>
-          <declname>key</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>ctrl</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>alt</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>shift</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="292" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1a5134c0c3c4ec8f16a38f3688e51b56f5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::UserInputListener::fireKeyUp</definition>
-        <argsstring>(KeyboardKey key, bool ctrl, bool alt, bool shift)</argsstring>
-        <name>fireKeyUp</name>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1ad372dd0cc65f28ad7f558f07c78becb7" kindref="member">KeyboardKey</ref></type>
-          <declname>key</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>ctrl</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>alt</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>shift</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="312" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1a679c1de2c60f8d2ecda306283a58844e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::UserInputListener::fireChar</definition>
-        <argsstring>(KeyboardKey key, castor::String const &amp;c)</argsstring>
-        <name>fireChar</name>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1ad372dd0cc65f28ad7f558f07c78becb7" kindref="member">KeyboardKey</ref></type>
-          <declname>key</declname>
-        </param>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>c</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="328" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="user-defined">
-      <header>Overlay events</header>
-      <memberdef kind="function" id="d3/d80/a02559_1a7e808866796994953605a9c6ff49899b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>virtual C3D_API bool castor3d::UserInputListener::fireMaterialEvent</definition>
-        <argsstring>(castor::String const &amp;overlay, castor::String const &amp;material)</argsstring>
-        <name>fireMaterialEvent</name>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>overlay</declname>
-        </param>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>material</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="347" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1ae71695db66c2d286d4a570ad30920c99" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>virtual C3D_API bool castor3d::UserInputListener::fireTextEvent</definition>
-        <argsstring>(castor::String const &amp;overlay, castor::String const &amp;caption)</argsstring>
-        <name>fireTextEvent</name>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>overlay</declname>
-        </param>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>caption</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="362" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="d3/d80/a02559_1a7c733341f9ef3967065ab8feb49d8e00" prot="public" static="no">
-        <type>std::function&lt; void() &gt;</type>
-        <definition>using castor3d::UserInputListener::OnClickActionFunction =  std::function&lt; void() &gt;</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d3/d80/a02559" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ObjectBufferOffset</compoundname>
+    <includes local="no">ObjectBufferOffset.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/d80/a02559_1aa45f214669f52c76b1ee4afd10445097" prot="public" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1a7616d1d27aba8f61289a44545c397f8d" kindref="member">GpuPackedBuffer</ref> *</type>
+        <definition>GpuPackedBuffer* castor3d::ObjectBufferOffset::vtxBuffer</definition>
         <argsstring></argsstring>
-        <name>OnClickActionFunction</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="16" column="1" bodyfile="Event/UserInput/UserInputListener.hpp" bodystart="16" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d3/d80/a02559_1a52d763b318a9f016a4d88c53d83f62d0" prot="public" static="no">
-        <type>std::function&lt; void(castor::Position const &amp;) &gt;</type>
-        <definition>using castor3d::UserInputListener::OnMouseMoveActionFunction =  std::function&lt; void( castor::Position const &amp; ) &gt;</definition>
-        <argsstring></argsstring>
-        <name>OnMouseMoveActionFunction</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="17" column="1" bodyfile="Event/UserInput/UserInputListener.hpp" bodystart="17" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d3/d80/a02559_1ad5d9e022473b5d9b3d6a5927c35e5f51" prot="public" static="no">
-        <type>std::function&lt; void(int) &gt;</type>
-        <definition>using castor3d::UserInputListener::OnSelectActionFunction =  std::function&lt; void( int ) &gt;</definition>
-        <argsstring></argsstring>
-        <name>OnSelectActionFunction</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="18" column="1" bodyfile="Event/UserInput/UserInputListener.hpp" bodystart="18" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d3/d80/a02559_1ae38f783614c6d5b1a9b280c9da06d9fe" prot="public" static="no">
-        <type>std::function&lt; void(castor::String const &amp;) &gt;</type>
-        <definition>using castor3d::UserInputListener::OnTextActionFunction =  std::function&lt; void( castor::String const &amp; ) &gt;</definition>
-        <argsstring></argsstring>
-        <name>OnTextActionFunction</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="19" column="1" bodyfile="Event/UserInput/UserInputListener.hpp" bodystart="19" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="protected-attrib">
-      <memberdef kind="variable" id="d3/d80/a02559_1a53ff879a2f749355cbd0cdd9ab96a351" prot="protected" static="no" mutable="yes">
-        <type>std::mutex</type>
-        <definition>std::mutex castor3d::UserInputListener::m_mutexHandlers</definition>
-        <argsstring></argsstring>
-        <name>m_mutexHandlers</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The mutex used to protect the handlers array. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="457" column="1" bodyfile="Event/UserInput/UserInputListener.hpp" bodystart="457" bodyend="-1"/>
-        <referencedby refid="d3/d80/a02559_1a0ff688cf74711da0d076a1361aa7b862" compoundref="df/d95/a00299" startline="400" endline="410">doAddHandler</referencedby>
-        <referencedby refid="d3/d80/a02559_1ab7206437bfb11e1419fcb30a973359a4" compoundref="df/d95/a00299" startline="374" endline="378">doGetHandlers</referencedby>
-        <referencedby refid="d3/d80/a02559_1a3b2f2515b1c768ab6c5fa88b8ff0109d" compoundref="df/d95/a00299" startline="385" endline="389">doHasHandlers</referencedby>
-        <referencedby refid="d3/d80/a02559_1ada1c1e27fbb15e39100937c5bf222c16" compoundref="df/d95/a00299" startline="421" endline="425">doRemoveHandler</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d80/a02559_1a73ffe829733458db38b70865ca6f4d95" prot="protected" static="no" mutable="no">
-        <type>std::vector&lt; EventHandlerSPtr &gt;</type>
-        <definition>std::vector&lt; EventHandlerSPtr &gt; castor3d::UserInputListener::m_handlers</definition>
-        <argsstring></argsstring>
-        <name>m_handlers</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The handlers array. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="460" column="1" bodyfile="Event/UserInput/UserInputListener.hpp" bodystart="460" bodyend="-1"/>
-        <referencedby refid="d3/d80/a02559_1a0ff688cf74711da0d076a1361aa7b862" compoundref="df/d95/a00299" startline="400" endline="410">doAddHandler</referencedby>
-        <referencedby refid="d3/d80/a02559_1ab7206437bfb11e1419fcb30a973359a4" compoundref="df/d95/a00299" startline="374" endline="378">doGetHandlers</referencedby>
-        <referencedby refid="d3/d80/a02559_1a3b2f2515b1c768ab6c5fa88b8ff0109d" compoundref="df/d95/a00299" startline="385" endline="389">doHasHandlers</referencedby>
-        <referencedby refid="d3/d80/a02559_1ada1c1e27fbb15e39100937c5bf222c16" compoundref="df/d95/a00299" startline="421" endline="425">doRemoveHandler</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d80/a02559_1acc06fa4f80f9ee1dc7dfe6ee82716d3a" prot="protected" static="no" mutable="no">
-        <type>FrameListenerSPtr</type>
-        <definition>FrameListenerSPtr castor3d::UserInputListener::m_frameListener</definition>
-        <argsstring></argsstring>
-        <name>m_frameListener</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The associated frame listener. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="463" column="1" bodyfile="Event/UserInput/UserInputListener.hpp" bodystart="463" bodyend="-1"/>
-        <referencedby refid="d3/d80/a02559_1ac107da35b210cc627f2eabe6b2a40703" compoundref="df/d95/a00299" startline="87" endline="90">getFrameListener</referencedby>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d3/d80/a02559_1a2214124379a932a9770d357cad0ac8ba" prot="private" static="no" mutable="no">
-        <type><ref refid="d8/d1b/a02555" kindref="compound">MouseState</ref></type>
-        <definition>MouseState castor3d::UserInputListener::m_mouse</definition>
-        <argsstring></argsstring>
-        <name>m_mouse</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="466" column="1" bodyfile="Event/UserInput/UserInputListener.hpp" bodystart="466" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d80/a02559_1a7ade36a32fa7227bab796782e08f9b4b" prot="private" static="no" mutable="no">
-        <type><ref refid="db/df2/a02551" kindref="compound">KeyboardState</ref></type>
-        <definition>KeyboardState castor3d::UserInputListener::m_keyboard</definition>
-        <argsstring></argsstring>
-        <name>m_keyboard</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="467" column="1" bodyfile="Event/UserInput/UserInputListener.hpp" bodystart="467" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d80/a02559_1a8aae7fabed5b23aafd0a6ac090dab9a8" prot="private" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::UserInputListener::m_enabled</definition>
-        <argsstring></argsstring>
-        <name>m_enabled</name>
+        <name>vtxBuffer</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::vtxBuffer</qualifiedname>
         <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
@@ -743,132 +17,513 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="468" column="1" bodyfile="Event/UserInput/UserInputListener.hpp" bodystart="468" bodyend="-1"/>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="17" column="18" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="17" bodyend="-1"/>
+        <referencedby refid="d3/d80/a02559_1a801f606247b1560fabe21f575381a268" compoundref="db/dd9/a00179" startline="34" endline="37">getVertexBuffer</referencedby>
+        <referencedby refid="d3/d80/a02559_1a812844899cb02530ed9556969353e02c" compoundref="db/dd9/a00179" startline="68" endline="73">getVertexData</referencedby>
+        <referencedby refid="d3/d80/a02559_1a1de8378b29ce99d89dd43b2438907f95" compoundref="db/dd9/a00179" startline="144" endline="151">markVertexDirty</referencedby>
+        <referencedby refid="d3/d80/a02559_1a4abab85ee83943b53c1c3ff3bb6c04ac" compoundref="db/dd9/a00179" startline="24" endline="27">operator bool</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="d3/d80/a02559_1a1f2b6135d1b9de4e15e3d51851546e2f" prot="private" static="no" mutable="no">
-        <type>EventHandlerWPtr</type>
-        <definition>EventHandlerWPtr castor3d::UserInputListener::m_activeHandler</definition>
+      <memberdef kind="variable" id="d3/d80/a02559_1aa991ea046fe6d575c94f844e17d40452" prot="public" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1a7616d1d27aba8f61289a44545c397f8d" kindref="member">GpuPackedBuffer</ref> *</type>
+        <definition>GpuPackedBuffer* castor3d::ObjectBufferOffset::idxBuffer</definition>
         <argsstring></argsstring>
-        <name>m_activeHandler</name>
+        <name>idxBuffer</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::idxBuffer</qualifiedname>
+        <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="469" column="1" bodyfile="Event/UserInput/UserInputListener.hpp" bodystart="469" bodyend="-1"/>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="18" column="18" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="18" bodyend="-1"/>
+        <referencedby refid="d3/d80/a02559_1a13f508b50ff059287380d597539b586d" compoundref="db/dd9/a00179" startline="29" endline="32">getIndexBuffer</referencedby>
+        <referencedby refid="d3/d80/a02559_1a61bc3e37e6a74ec6fd084ac0342cdda9" compoundref="db/dd9/a00179" startline="60" endline="65">getIndexData</referencedby>
+        <referencedby refid="d3/d80/a02559_1a49454eb5619d9141d118bd3e0730d518" compoundref="db/dd9/a00179" startline="153" endline="160">markIndexDirty</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="d3/d80/a02559_1a8b985abce18e6794a2181f4a9acec9ad" prot="private" static="no" mutable="no">
-        <type>EventHandlerWPtr</type>
-        <definition>EventHandlerWPtr castor3d::UserInputListener::m_lastMouseTarget</definition>
+      <memberdef kind="variable" id="d3/d80/a02559_1af964043ec7868b1fd0c43be0ad2ae41c" prot="public" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1a7616d1d27aba8f61289a44545c397f8d" kindref="member">GpuPackedBuffer</ref> *</type>
+        <definition>GpuPackedBuffer* castor3d::ObjectBufferOffset::bonBuffer</definition>
         <argsstring></argsstring>
-        <name>m_lastMouseTarget</name>
+        <name>bonBuffer</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::bonBuffer</qualifiedname>
+        <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="470" column="1" bodyfile="Event/UserInput/UserInputListener.hpp" bodystart="470" bodyend="-1"/>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="19" column="18" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="19" bodyend="-1"/>
+        <referencedby refid="d3/d80/a02559_1a78ff41feec92e694e8f44141e6e06b0b" compoundref="db/dd9/a00179" startline="75" endline="80">getBoneData</referencedby>
+        <referencedby refid="d3/d80/a02559_1abd2a18b67e20307f0b946a0bc16e0f2b" compoundref="db/dd9/a00179" startline="39" endline="42">getBonesBuffer</referencedby>
+        <referencedby refid="d3/d80/a02559_1a57a1562087eb0cec6b650c6dbebb7c17" compoundref="db/dd9/a00179" startline="162" endline="169">markBonesDirty</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="d3/d80/a02559_1a920a8a17570f84e438384b5915f0fea0" prot="private" static="no" mutable="no">
-        <type>std::map&lt; castor::String, <ref refid="d3/d80/a02559_1a52d763b318a9f016a4d88c53d83f62d0" kindref="member">OnMouseMoveActionFunction</ref> &gt;</type>
-        <definition>std::map&lt; castor::String, OnMouseMoveActionFunction &gt; castor3d::UserInputListener::m_onMouseMoveActions</definition>
+      <memberdef kind="variable" id="d3/d80/a02559_1a59f8d59689cc4de0650a79bd63fb51dd" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dce/a02519" kindref="compound">MemChunk</ref></type>
+        <definition>MemChunk castor3d::ObjectBufferOffset::vtxChunk</definition>
         <argsstring></argsstring>
-        <name>m_onMouseMoveActions</name>
+        <name>vtxChunk</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::vtxChunk</qualifiedname>
+        <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="471" column="1" bodyfile="Event/UserInput/UserInputListener.hpp" bodystart="471" bodyend="-1"/>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="20" column="10" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="20" bodyend="-1"/>
+        <referencedby refid="d3/d80/a02559_1ad19f83829fabe87220a22feed65921f7" compoundref="db/dd9/a00179" startline="118" endline="121">getVertexOffset</referencedby>
+        <referencedby refid="d3/d80/a02559_1a591a91670083d2547df3868afa985da2" compoundref="db/dd9/a00179" startline="87" endline="90">getVertexSize</referencedby>
+        <referencedby refid="d3/d80/a02559_1a64672cd7440e38a42592c26fb1928c2b" compoundref="db/dd9/a00179" startline="49" endline="52">hasVertices</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="d3/d80/a02559_1a0c3894373d3934d477f9a10202879e50" prot="private" static="no" mutable="no">
-        <type>std::map&lt; castor::String, <ref refid="d3/d80/a02559_1a7c733341f9ef3967065ab8feb49d8e00" kindref="member">OnClickActionFunction</ref> &gt;</type>
-        <definition>std::map&lt; castor::String, OnClickActionFunction &gt; castor3d::UserInputListener::m_onClickActions</definition>
+      <memberdef kind="variable" id="d3/d80/a02559_1aaaed4098407a14b7264f14d02e7207f3" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dce/a02519" kindref="compound">MemChunk</ref></type>
+        <definition>MemChunk castor3d::ObjectBufferOffset::idxChunk</definition>
         <argsstring></argsstring>
-        <name>m_onClickActions</name>
+        <name>idxChunk</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::idxChunk</qualifiedname>
+        <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="472" column="1" bodyfile="Event/UserInput/UserInputListener.hpp" bodystart="472" bodyend="-1"/>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="21" column="10" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="21" bodyend="-1"/>
+        <referencedby refid="d3/d80/a02559_1a61bc3e37e6a74ec6fd084ac0342cdda9" compoundref="db/dd9/a00179" startline="60" endline="65">getIndexData</referencedby>
+        <referencedby refid="d3/d80/a02559_1a002ec5ae64c21e2c9190ea4cad309aee" compoundref="db/dd9/a00179" startline="113" endline="116">getIndexOffset</referencedby>
+        <referencedby refid="d3/d80/a02559_1af19e7ffc551f44b60e46f4e6a59e2e0f" compoundref="db/dd9/a00179" startline="82" endline="85">getIndexSize</referencedby>
+        <referencedby refid="d3/d80/a02559_1a5c1738643933256b574cd135984b907f" compoundref="db/dd9/a00179" startline="44" endline="47">hasIndices</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="d3/d80/a02559_1a027699525f1b45e5512e26d6fceb8fb8" prot="private" static="no" mutable="no">
-        <type>std::map&lt; castor::String, <ref refid="d3/d80/a02559_1ad5d9e022473b5d9b3d6a5927c35e5f51" kindref="member">OnSelectActionFunction</ref> &gt;</type>
-        <definition>std::map&lt; castor::String, OnSelectActionFunction &gt; castor3d::UserInputListener::m_onSelectActions</definition>
+      <memberdef kind="variable" id="d3/d80/a02559_1ae56799d39b9b4e5f864654c8b04d2ef0" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dce/a02519" kindref="compound">MemChunk</ref></type>
+        <definition>MemChunk castor3d::ObjectBufferOffset::bonChunk</definition>
         <argsstring></argsstring>
-        <name>m_onSelectActions</name>
+        <name>bonChunk</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::bonChunk</qualifiedname>
+        <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="473" column="1" bodyfile="Event/UserInput/UserInputListener.hpp" bodystart="473" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d80/a02559_1a13dff1a4e33066338bee09b3abcd410c" prot="private" static="no" mutable="no">
-        <type>std::map&lt; castor::String, <ref refid="d3/d80/a02559_1ae38f783614c6d5b1a9b280c9da06d9fe" kindref="member">OnTextActionFunction</ref> &gt;</type>
-        <definition>std::map&lt; castor::String, OnTextActionFunction &gt; castor3d::UserInputListener::m_onTextActions</definition>
-        <argsstring></argsstring>
-        <name>m_onTextActions</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="474" column="1" bodyfile="Event/UserInput/UserInputListener.hpp" bodystart="474" bodyend="-1"/>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="22" column="10" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="22" bodyend="-1"/>
+        <referencedby refid="d3/d80/a02559_1ae0ecc43b9a8ae40265e2d8626a5fe670" compoundref="db/dd9/a00179" startline="123" endline="126">getBonesOffset</referencedby>
+        <referencedby refid="d3/d80/a02559_1abda4e1ee0e76478fb211f837add9d494" compoundref="db/dd9/a00179" startline="92" endline="95">getBonesSize</referencedby>
+        <referencedby refid="d3/d80/a02559_1ae06b0fff9a30187995ec76507e85143b" compoundref="db/dd9/a00179" startline="54" endline="57">hasBones</referencedby>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="protected-func">
-      <memberdef kind="function" id="d3/d80/a02559_1ab7206437bfb11e1419fcb30a973359a4" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>std::vector&lt; EventHandlerSPtr &gt;</type>
-        <definition>std::vector&lt; EventHandlerSPtr &gt; castor3d::UserInputListener::doGetHandlers</definition>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d80/a02559_1a4abab85ee83943b53c1c3ff3bb6c04ac" prot="public" static="no" const="yes" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ObjectBufferOffset::operator bool</definition>
         <argsstring>() const</argsstring>
-        <name>doGetHandlers</name>
+        <name>operator bool</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::operator bool</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The handlers, in a thread-safe way. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="374" column="1" bodyfile="Event/UserInput/UserInputListener.hpp" bodystart="374" bodyend="378"/>
-        <references refid="d3/d80/a02559_1a73ffe829733458db38b70865ca6f4d95" compoundref="df/d95/a00299" startline="460">m_handlers</references>
-        <references refid="d3/d80/a02559_1a53ff879a2f749355cbd0cdd9ab96a351" compoundref="df/d95/a00299" startline="457">m_mutexHandlers</references>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="24" column="10" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="24" bodyend="27"/>
+        <references refid="d3/d80/a02559_1aa45f214669f52c76b1ee4afd10445097" compoundref="db/dd9/a00179" startline="17">vtxBuffer</references>
       </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1a3b2f2515b1c768ab6c5fa88b8ff0109d" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="d3/d80/a02559_1a13f508b50ff059287380d597539b586d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::BufferBase const &amp;</type>
+        <definition>ashes::BufferBase const  &amp; castor3d::ObjectBufferOffset::getIndexBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>getIndexBuffer</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getIndexBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="29" column="26" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="29" bodyend="32"/>
+        <references refid="d7/d7d/a02527_1a2e96ae884d0c9c48a92282e0c9d1b816" compoundref="d6/d7d/a00161" startline="122" endline="125">castor3d::GpuBufferBase::getBuffer</references>
+        <references refid="d3/d80/a02559_1aa991ea046fe6d575c94f844e17d40452" compoundref="db/dd9/a00179" startline="18">idxBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/d80/a02559_1a801f606247b1560fabe21f575381a268" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::BufferBase const &amp;</type>
+        <definition>ashes::BufferBase const  &amp; castor3d::ObjectBufferOffset::getVertexBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>getVertexBuffer</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getVertexBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="34" column="26" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="34" bodyend="37"/>
+        <references refid="d7/d7d/a02527_1a2e96ae884d0c9c48a92282e0c9d1b816" compoundref="d6/d7d/a00161" startline="122" endline="125">castor3d::GpuBufferBase::getBuffer</references>
+        <references refid="d3/d80/a02559_1aa45f214669f52c76b1ee4afd10445097" compoundref="db/dd9/a00179" startline="17">vtxBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/d80/a02559_1abd2a18b67e20307f0b946a0bc16e0f2b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::BufferBase const &amp;</type>
+        <definition>ashes::BufferBase const  &amp; castor3d::ObjectBufferOffset::getBonesBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>getBonesBuffer</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getBonesBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="39" column="26" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="39" bodyend="42"/>
+        <references refid="d3/d80/a02559_1af964043ec7868b1fd0c43be0ad2ae41c" compoundref="db/dd9/a00179" startline="19">bonBuffer</references>
+        <references refid="d7/d7d/a02527_1a2e96ae884d0c9c48a92282e0c9d1b816" compoundref="d6/d7d/a00161" startline="122" endline="125">castor3d::GpuBufferBase::getBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/d80/a02559_1a5c1738643933256b574cd135984b907f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
-        <definition>bool castor3d::UserInputListener::doHasHandlers</definition>
+        <definition>bool castor3d::ObjectBufferOffset::hasIndices</definition>
         <argsstring>() const</argsstring>
-        <name>doHasHandlers</name>
+        <name>hasIndices</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::hasIndices</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if there are handlers. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="385" column="1" bodyfile="Event/UserInput/UserInputListener.hpp" bodystart="385" bodyend="389"/>
-        <references refid="d3/d80/a02559_1a73ffe829733458db38b70865ca6f4d95" compoundref="df/d95/a00299" startline="460">m_handlers</references>
-        <references refid="d3/d80/a02559_1a53ff879a2f749355cbd0cdd9ab96a351" compoundref="df/d95/a00299" startline="457">m_mutexHandlers</references>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="44" column="6" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="44" bodyend="47"/>
+        <references refid="d9/dce/a02519_1a5f876cf7f1c47c40d002bb5e9f962510" compoundref="d3/df8/a00155" startline="208">castor3d::MemChunk::askedSize</references>
+        <references refid="d3/d80/a02559_1aaaed4098407a14b7264f14d02e7207f3" compoundref="db/dd9/a00179" startline="21">idxChunk</references>
+        <referencedby refid="d3/d80/a02559_1a61bc3e37e6a74ec6fd084ac0342cdda9" compoundref="db/dd9/a00179" startline="60" endline="65">getIndexData</referencedby>
       </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1a0ff688cf74711da0d076a1361aa7b862" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="d3/d80/a02559_1a64672cd7440e38a42592c26fb1928c2b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ObjectBufferOffset::hasVertices</definition>
+        <argsstring>() const</argsstring>
+        <name>hasVertices</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::hasVertices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="49" column="6" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="49" bodyend="52"/>
+        <references refid="d9/dce/a02519_1a5f876cf7f1c47c40d002bb5e9f962510" compoundref="d3/df8/a00155" startline="208">castor3d::MemChunk::askedSize</references>
+        <references refid="d3/d80/a02559_1a59f8d59689cc4de0650a79bd63fb51dd" compoundref="db/dd9/a00179" startline="20">vtxChunk</references>
+        <referencedby refid="d3/d80/a02559_1a812844899cb02530ed9556969353e02c" compoundref="db/dd9/a00179" startline="68" endline="73">getVertexData</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d3/d80/a02559_1ae06b0fff9a30187995ec76507e85143b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ObjectBufferOffset::hasBones</definition>
+        <argsstring>() const</argsstring>
+        <name>hasBones</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::hasBones</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="54" column="6" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="54" bodyend="57"/>
+        <references refid="d9/dce/a02519_1a5f876cf7f1c47c40d002bb5e9f962510" compoundref="d3/df8/a00155" startline="208">castor3d::MemChunk::askedSize</references>
+        <references refid="d3/d80/a02559_1ae56799d39b9b4e5f864654c8b04d2ef0" compoundref="db/dd9/a00179" startline="22">bonChunk</references>
+        <referencedby refid="d3/d80/a02559_1a78ff41feec92e694e8f44141e6e06b0b" compoundref="db/dd9/a00179" startline="75" endline="80">getBoneData</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d3/d80/a02559_1a61bc3e37e6a74ec6fd084ac0342cdda9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename IndexT</type>
+          </param>
+        </templateparamlist>
+        <type>castor::ArrayView&lt; IndexT &gt;</type>
+        <definition>castor::ArrayView&lt; IndexT &gt; castor3d::ObjectBufferOffset::getIndexData</definition>
+        <argsstring>() const</argsstring>
+        <name>getIndexData</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getIndexData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="60" column="19" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="60" bodyend="65"/>
+        <references refid="d9/dce/a02519_1a5f876cf7f1c47c40d002bb5e9f962510" compoundref="d3/df8/a00155" startline="208">castor3d::MemChunk::askedSize</references>
+        <references refid="d7/d7d/a02527_1ae81d18fb4565a12c2d525b775cb4e27f" compoundref="d6/d7d/a00161" startline="188" endline="191">castor3d::GpuBufferBase::getDatas</references>
+        <references refid="d3/d80/a02559_1a002ec5ae64c21e2c9190ea4cad309aee" compoundref="db/dd9/a00179" startline="113" endline="116">getIndexOffset</references>
+        <references refid="d3/d80/a02559_1a5c1738643933256b574cd135984b907f" compoundref="db/dd9/a00179" startline="44" endline="47">hasIndices</references>
+        <references refid="d3/d80/a02559_1aa991ea046fe6d575c94f844e17d40452" compoundref="db/dd9/a00179" startline="18">idxBuffer</references>
+        <references refid="d3/d80/a02559_1aaaed4098407a14b7264f14d02e7207f3" compoundref="db/dd9/a00179" startline="21">idxChunk</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/d80/a02559_1a812844899cb02530ed9556969353e02c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename VertexT</type>
+          </param>
+        </templateparamlist>
+        <type>castor::ArrayView&lt; VertexT &gt;</type>
+        <definition>castor::ArrayView&lt; VertexT &gt; castor3d::ObjectBufferOffset::getVertexData</definition>
+        <argsstring>() const</argsstring>
+        <name>getVertexData</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getVertexData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="68" column="19" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="68" bodyend="73"/>
+        <references refid="d7/d7d/a02527_1ae81d18fb4565a12c2d525b775cb4e27f" compoundref="d6/d7d/a00161" startline="188" endline="191">castor3d::GpuBufferBase::getDatas</references>
+        <references refid="d3/d80/a02559_1ad19f83829fabe87220a22feed65921f7" compoundref="db/dd9/a00179" startline="118" endline="121">getVertexOffset</references>
+        <references refid="d3/d80/a02559_1a64672cd7440e38a42592c26fb1928c2b" compoundref="db/dd9/a00179" startline="49" endline="52">hasVertices</references>
+        <references refid="d3/d80/a02559_1aa45f214669f52c76b1ee4afd10445097" compoundref="db/dd9/a00179" startline="17">vtxBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/d80/a02559_1a78ff41feec92e694e8f44141e6e06b0b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::ArrayView&lt; <ref refid="d7/db0/a03467" kindref="compound">VertexBoneData</ref> &gt;</type>
+        <definition>castor::ArrayView&lt; VertexBoneData &gt; castor3d::ObjectBufferOffset::getBoneData</definition>
+        <argsstring>() const</argsstring>
+        <name>getBoneData</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getBoneData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="75" column="19" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="75" bodyend="80"/>
+        <references refid="d3/d80/a02559_1af964043ec7868b1fd0c43be0ad2ae41c" compoundref="db/dd9/a00179" startline="19">bonBuffer</references>
+        <references refid="d3/d80/a02559_1a85f10f2832948308bc2805e00badb3bf" compoundref="db/dd9/a00179" startline="108" endline="111">getBonesCount</references>
+        <references refid="d3/d80/a02559_1ae0ecc43b9a8ae40265e2d8626a5fe670" compoundref="db/dd9/a00179" startline="123" endline="126">getBonesOffset</references>
+        <references refid="d7/d7d/a02527_1ae81d18fb4565a12c2d525b775cb4e27f" compoundref="d6/d7d/a00161" startline="188" endline="191">castor3d::GpuBufferBase::getDatas</references>
+        <references refid="d3/d80/a02559_1ae06b0fff9a30187995ec76507e85143b" compoundref="db/dd9/a00179" startline="54" endline="57">hasBones</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/d80/a02559_1af19e7ffc551f44b60e46f4e6a59e2e0f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectBufferOffset::getIndexSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getIndexSize</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getIndexSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="82" column="10" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="82" bodyend="85"/>
+        <references refid="d9/dce/a02519_1a5f876cf7f1c47c40d002bb5e9f962510" compoundref="d3/df8/a00155" startline="208">castor3d::MemChunk::askedSize</references>
+        <references refid="d3/d80/a02559_1aaaed4098407a14b7264f14d02e7207f3" compoundref="db/dd9/a00179" startline="21">idxChunk</references>
+        <referencedby refid="d3/d80/a02559_1a14dee16a57de2055d90b8bb8078ec018" compoundref="db/dd9/a00179" startline="97" endline="100">getIndexCount</referencedby>
+        <referencedby refid="d3/d80/a02559_1a49454eb5619d9141d118bd3e0730d518" compoundref="db/dd9/a00179" startline="153" endline="160">markIndexDirty</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d3/d80/a02559_1a591a91670083d2547df3868afa985da2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectBufferOffset::getVertexSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getVertexSize</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getVertexSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="87" column="10" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="87" bodyend="90"/>
+        <references refid="d9/dce/a02519_1a5f876cf7f1c47c40d002bb5e9f962510" compoundref="d3/df8/a00155" startline="208">castor3d::MemChunk::askedSize</references>
+        <references refid="d3/d80/a02559_1a59f8d59689cc4de0650a79bd63fb51dd" compoundref="db/dd9/a00179" startline="20">vtxChunk</references>
+        <referencedby refid="d3/d80/a02559_1a43c1bcf1de99e225cb117ee99ba221a5" compoundref="db/dd9/a00179" startline="103" endline="106">getVertexCount</referencedby>
+        <referencedby refid="d3/d80/a02559_1a1de8378b29ce99d89dd43b2438907f95" compoundref="db/dd9/a00179" startline="144" endline="151">markVertexDirty</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d3/d80/a02559_1abda4e1ee0e76478fb211f837add9d494" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectBufferOffset::getBonesSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getBonesSize</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getBonesSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="92" column="10" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="92" bodyend="95"/>
+        <references refid="d9/dce/a02519_1a5f876cf7f1c47c40d002bb5e9f962510" compoundref="d3/df8/a00155" startline="208">castor3d::MemChunk::askedSize</references>
+        <references refid="d3/d80/a02559_1ae56799d39b9b4e5f864654c8b04d2ef0" compoundref="db/dd9/a00179" startline="22">bonChunk</references>
+        <referencedby refid="d3/d80/a02559_1a85f10f2832948308bc2805e00badb3bf" compoundref="db/dd9/a00179" startline="108" endline="111">getBonesCount</referencedby>
+        <referencedby refid="d3/d80/a02559_1a57a1562087eb0cec6b650c6dbebb7c17" compoundref="db/dd9/a00179" startline="162" endline="169">markBonesDirty</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d3/d80/a02559_1a14dee16a57de2055d90b8bb8078ec018" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectBufferOffset::getIndexCount</definition>
+        <argsstring>() const</argsstring>
+        <name>getIndexCount</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getIndexCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="97" column="10" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="97" bodyend="100"/>
+        <references refid="d3/d80/a02559_1af19e7ffc551f44b60e46f4e6a59e2e0f" compoundref="db/dd9/a00179" startline="82" endline="85">getIndexSize</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/d80/a02559_1a43c1bcf1de99e225cb117ee99ba221a5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename VertexT</type>
+          </param>
+        </templateparamlist>
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectBufferOffset::getVertexCount</definition>
+        <argsstring>() const</argsstring>
+        <name>getVertexCount</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getVertexCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="103" column="10" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="103" bodyend="106"/>
+        <references refid="d3/d80/a02559_1a591a91670083d2547df3868afa985da2" compoundref="db/dd9/a00179" startline="87" endline="90">getVertexSize</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/d80/a02559_1a85f10f2832948308bc2805e00badb3bf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectBufferOffset::getBonesCount</definition>
+        <argsstring>() const</argsstring>
+        <name>getBonesCount</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getBonesCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="108" column="10" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="108" bodyend="111"/>
+        <references refid="d3/d80/a02559_1abda4e1ee0e76478fb211f837add9d494" compoundref="db/dd9/a00179" startline="92" endline="95">getBonesSize</references>
+        <referencedby refid="d3/d80/a02559_1a78ff41feec92e694e8f44141e6e06b0b" compoundref="db/dd9/a00179" startline="75" endline="80">getBoneData</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d3/d80/a02559_1a002ec5ae64c21e2c9190ea4cad309aee" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::ObjectBufferOffset::getIndexOffset</definition>
+        <argsstring>() const</argsstring>
+        <name>getIndexOffset</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getIndexOffset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="113" column="14" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="113" bodyend="116"/>
+        <references refid="d3/d80/a02559_1aaaed4098407a14b7264f14d02e7207f3" compoundref="db/dd9/a00179" startline="21">idxChunk</references>
+        <references refid="d9/dce/a02519_1ae4819cf2e478269cde2e24ff1e187765" compoundref="d3/df8/a00155" startline="206">castor3d::MemChunk::offset</references>
+        <referencedby refid="d3/d80/a02559_1a34df6ddb3102d1662e9d38146e54cfe4" compoundref="db/dd9/a00179" startline="128" endline="131">getFirstIndex</referencedby>
+        <referencedby refid="d3/d80/a02559_1a61bc3e37e6a74ec6fd084ac0342cdda9" compoundref="db/dd9/a00179" startline="60" endline="65">getIndexData</referencedby>
+        <referencedby refid="d3/d80/a02559_1a49454eb5619d9141d118bd3e0730d518" compoundref="db/dd9/a00179" startline="153" endline="160">markIndexDirty</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d3/d80/a02559_1ad19f83829fabe87220a22feed65921f7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::ObjectBufferOffset::getVertexOffset</definition>
+        <argsstring>() const</argsstring>
+        <name>getVertexOffset</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getVertexOffset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="118" column="14" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="118" bodyend="121"/>
+        <references refid="d9/dce/a02519_1ae4819cf2e478269cde2e24ff1e187765" compoundref="d3/df8/a00155" startline="206">castor3d::MemChunk::offset</references>
+        <references refid="d3/d80/a02559_1a59f8d59689cc4de0650a79bd63fb51dd" compoundref="db/dd9/a00179" startline="20">vtxChunk</references>
+        <referencedby refid="d3/d80/a02559_1aa589c47a2d6f7559de3f806209dc8094" compoundref="db/dd9/a00179" startline="134" endline="137">getFirstVertex</referencedby>
+        <referencedby refid="d3/d80/a02559_1a812844899cb02530ed9556969353e02c" compoundref="db/dd9/a00179" startline="68" endline="73">getVertexData</referencedby>
+        <referencedby refid="d3/d80/a02559_1a1de8378b29ce99d89dd43b2438907f95" compoundref="db/dd9/a00179" startline="144" endline="151">markVertexDirty</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d3/d80/a02559_1ae0ecc43b9a8ae40265e2d8626a5fe670" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::ObjectBufferOffset::getBonesOffset</definition>
+        <argsstring>() const</argsstring>
+        <name>getBonesOffset</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getBonesOffset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="123" column="14" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="123" bodyend="126"/>
+        <references refid="d3/d80/a02559_1ae56799d39b9b4e5f864654c8b04d2ef0" compoundref="db/dd9/a00179" startline="22">bonChunk</references>
+        <references refid="d9/dce/a02519_1ae4819cf2e478269cde2e24ff1e187765" compoundref="d3/df8/a00155" startline="206">castor3d::MemChunk::offset</references>
+        <referencedby refid="d3/d80/a02559_1a78ff41feec92e694e8f44141e6e06b0b" compoundref="db/dd9/a00179" startline="75" endline="80">getBoneData</referencedby>
+        <referencedby refid="d3/d80/a02559_1a5422ae93da19b4766b8312ebd656b00c" compoundref="db/dd9/a00179" startline="139" endline="142">getFirstBone</referencedby>
+        <referencedby refid="d3/d80/a02559_1a57a1562087eb0cec6b650c6dbebb7c17" compoundref="db/dd9/a00179" startline="162" endline="169">markBonesDirty</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d3/d80/a02559_1a34df6ddb3102d1662e9d38146e54cfe4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectBufferOffset::getFirstIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>getFirstIndex</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getFirstIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="128" column="10" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="128" bodyend="131"/>
+        <references refid="d3/d80/a02559_1a002ec5ae64c21e2c9190ea4cad309aee" compoundref="db/dd9/a00179" startline="113" endline="116">getIndexOffset</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/d80/a02559_1aa589c47a2d6f7559de3f806209dc8094" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename VertexT</type>
+          </param>
+        </templateparamlist>
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectBufferOffset::getFirstVertex</definition>
+        <argsstring>() const</argsstring>
+        <name>getFirstVertex</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getFirstVertex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="134" column="10" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="134" bodyend="137"/>
+        <references refid="d3/d80/a02559_1ad19f83829fabe87220a22feed65921f7" compoundref="db/dd9/a00179" startline="118" endline="121">getVertexOffset</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/d80/a02559_1a5422ae93da19b4766b8312ebd656b00c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectBufferOffset::getFirstBone</definition>
+        <argsstring>() const</argsstring>
+        <name>getFirstBone</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getFirstBone</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="139" column="10" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="139" bodyend="142"/>
+        <references refid="d3/d80/a02559_1ae0ecc43b9a8ae40265e2d8626a5fe670" compoundref="db/dd9/a00179" startline="123" endline="126">getBonesOffset</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/d80/a02559_1a1de8378b29ce99d89dd43b2438907f95" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::UserInputListener::doAddHandler</definition>
-        <argsstring>(EventHandlerSPtr handler)</argsstring>
-        <name>doAddHandler</name>
+        <definition>void castor3d::ObjectBufferOffset::markVertexDirty</definition>
+        <argsstring>(VkAccessFlags dstAccessFlags=VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, VkPipelineStageFlags dstPipelineFlags=VK_PIPELINE_STAGE_VERTEX_INPUT_BIT) const</argsstring>
+        <name>markVertexDirty</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::markVertexDirty</qualifiedname>
         <param>
-          <type>EventHandlerSPtr</type>
-          <declname>handler</declname>
+          <type>VkAccessFlags</type>
+          <declname>dstAccessFlags</declname>
+          <defval>VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT</defval>
+        </param>
+        <param>
+          <type>VkPipelineStageFlags</type>
+          <declname>dstPipelineFlags</declname>
+          <defval>VK_PIPELINE_STAGE_VERTEX_INPUT_BIT</defval>
         </param>
         <briefdescription>
         </briefdescription>
@@ -876,18 +531,27 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="400" column="1" bodyfile="Event/UserInput/UserInputListener.hpp" bodystart="400" bodyend="410"/>
-        <references refid="d3/d80/a02559_1a73ffe829733458db38b70865ca6f4d95" compoundref="df/d95/a00299" startline="460">m_handlers</references>
-        <references refid="d3/d80/a02559_1a53ff879a2f749355cbd0cdd9ab96a351" compoundref="df/d95/a00299" startline="457">m_mutexHandlers</references>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="144" column="6" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="144" bodyend="151"/>
+        <references refid="d3/d80/a02559_1ad19f83829fabe87220a22feed65921f7" compoundref="db/dd9/a00179" startline="118" endline="121">getVertexOffset</references>
+        <references refid="d3/d80/a02559_1a591a91670083d2547df3868afa985da2" compoundref="db/dd9/a00179" startline="87" endline="90">getVertexSize</references>
+        <references refid="d7/d7d/a02527_1a06f1c510406ae4dd17d134022e94a497">castor3d::GpuBufferBase::markDirty</references>
+        <references refid="d3/d80/a02559_1aa45f214669f52c76b1ee4afd10445097" compoundref="db/dd9/a00179" startline="17">vtxBuffer</references>
       </memberdef>
-      <memberdef kind="function" id="d3/d80/a02559_1ada1c1e27fbb15e39100937c5bf222c16" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="d3/d80/a02559_1a49454eb5619d9141d118bd3e0730d518" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::UserInputListener::doRemoveHandler</definition>
-        <argsstring>(EventHandlerSPtr handler)</argsstring>
-        <name>doRemoveHandler</name>
+        <definition>void castor3d::ObjectBufferOffset::markIndexDirty</definition>
+        <argsstring>(VkAccessFlags dstAccessFlags=VK_ACCESS_INDEX_READ_BIT, VkPipelineStageFlags dstPipelineFlags=VK_PIPELINE_STAGE_VERTEX_INPUT_BIT) const</argsstring>
+        <name>markIndexDirty</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::markIndexDirty</qualifiedname>
         <param>
-          <type>EventHandlerSPtr</type>
-          <declname>handler</declname>
+          <type>VkAccessFlags</type>
+          <declname>dstAccessFlags</declname>
+          <defval>VK_ACCESS_INDEX_READ_BIT</defval>
+        </param>
+        <param>
+          <type>VkPipelineStageFlags</type>
+          <declname>dstPipelineFlags</declname>
+          <defval>VK_PIPELINE_STAGE_VERTEX_INPUT_BIT</defval>
         </param>
         <briefdescription>
         </briefdescription>
@@ -895,21 +559,27 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="421" column="1" bodyfile="Event/UserInput/UserInputListener.hpp" bodystart="421" bodyend="425"/>
-        <references refid="d3/d80/a02559_1a73ffe829733458db38b70865ca6f4d95" compoundref="df/d95/a00299" startline="460">m_handlers</references>
-        <references refid="d3/d80/a02559_1a53ff879a2f749355cbd0cdd9ab96a351" compoundref="df/d95/a00299" startline="457">m_mutexHandlers</references>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="153" column="6" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="153" bodyend="160"/>
+        <references refid="d3/d80/a02559_1a002ec5ae64c21e2c9190ea4cad309aee" compoundref="db/dd9/a00179" startline="113" endline="116">getIndexOffset</references>
+        <references refid="d3/d80/a02559_1af19e7ffc551f44b60e46f4e6a59e2e0f" compoundref="db/dd9/a00179" startline="82" endline="85">getIndexSize</references>
+        <references refid="d3/d80/a02559_1aa991ea046fe6d575c94f844e17d40452" compoundref="db/dd9/a00179" startline="18">idxBuffer</references>
+        <references refid="d7/d7d/a02527_1a06f1c510406ae4dd17d134022e94a497">castor3d::GpuBufferBase::markDirty</references>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d3/d80/a02559_1a001c44f0c2e165ac333769abf2911444" prot="private" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> EventHandlerSPtr</type>
-        <definition>virtual C3D_API EventHandlerSPtr castor3d::UserInputListener::doGetMouseTargetableHandler</definition>
-        <argsstring>(castor::Position const &amp;position) const =0</argsstring>
-        <name>doGetMouseTargetableHandler</name>
-        <reimplementedby refid="df/d53/a04623_1a6866a2e9172e2071bae74de5c8c01068">doGetMouseTargetableHandler</reimplementedby>
+      <memberdef kind="function" id="d3/d80/a02559_1a57a1562087eb0cec6b650c6dbebb7c17" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ObjectBufferOffset::markBonesDirty</definition>
+        <argsstring>(VkAccessFlags dstAccessFlags=VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, VkPipelineStageFlags dstPipelineFlags=VK_PIPELINE_STAGE_VERTEX_INPUT_BIT) const</argsstring>
+        <name>markBonesDirty</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::markBonesDirty</qualifiedname>
         <param>
-          <type>castor::Position const &amp;</type>
-          <declname>position</declname>
+          <type>VkAccessFlags</type>
+          <declname>dstAccessFlags</declname>
+          <defval>VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT</defval>
+        </param>
+        <param>
+          <type>VkPipelineStageFlags</type>
+          <declname>dstPipelineFlags</declname>
+          <defval>VK_PIPELINE_STAGE_VERTEX_INPUT_BIT</defval>
         </param>
         <briefdescription>
         </briefdescription>
@@ -917,114 +587,80 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/UserInputListener.hpp" line="438" column="1"/>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="162" column="6" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="162" bodyend="169"/>
+        <references refid="d3/d80/a02559_1af964043ec7868b1fd0c43be0ad2ae41c" compoundref="db/dd9/a00179" startline="19">bonBuffer</references>
+        <references refid="d3/d80/a02559_1ae0ecc43b9a8ae40265e2d8626a5fe670" compoundref="db/dd9/a00179" startline="123" endline="126">getBonesOffset</references>
+        <references refid="d3/d80/a02559_1abda4e1ee0e76478fb211f837add9d494" compoundref="db/dd9/a00179" startline="92" endline="95">getBonesSize</references>
+        <references refid="d7/d7d/a02527_1a06f1c510406ae4dd17d134022e94a497">castor3d::GpuBufferBase::markDirty</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="4639">
-        <label>castor3d::UserInputListener</label>
-        <link refid="d3/d80/a02559"/>
-        <childnode refid="4640" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4641">
-        <label>castor3d::RenderWindow::InputListener</label>
-        <link refid="df/d53/a04623"/>
-        <childnode refid="4639" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4640">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-    </inheritancegraph>
     <collaborationgraph>
-      <node id="4646">
-        <label>T</label>
+      <node id="3">
+        <label>castor3d::GpuBufferBase</label>
+        <link refid="d7/d7d/a02527"/>
       </node>
-      <node id="4645">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="4646" relation="usage">
-          <edgelabel>elements</edgelabel>
+      <node id="2">
+        <label>castor3d::GpuBufferT&lt; AllocatorT &gt;</label>
+        <link refid="d0/d7c/a02499"/>
+        <childnode refid="3" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="4642">
-        <label>castor3d::UserInputListener</label>
+      <node id="4">
+        <label>castor3d::MemChunk</label>
+        <link refid="d9/dce/a02519"/>
+      </node>
+      <node id="1">
+        <label>castor3d::ObjectBufferOffset</label>
         <link refid="d3/d80/a02559"/>
-        <childnode refid="4643" relation="public-inheritance">
+        <childnode refid="2" relation="usage">
+          <edgelabel>bonBuffer</edgelabel>
+          <edgelabel>idxBuffer</edgelabel>
+          <edgelabel>vtxBuffer</edgelabel>
         </childnode>
-        <childnode refid="4644" relation="usage">
-          <edgelabel>m_handlers</edgelabel>
-        </childnode>
-      </node>
-      <node id="4643">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="4644">
-        <label>std::vector&lt; EventHandlerSPtr &gt;</label>
-        <childnode refid="4645" relation="template-instance">
-          <edgelabel>&lt; EventHandlerSPtr &gt;</edgelabel>
+        <childnode refid="4" relation="usage">
+          <edgelabel>bonChunk</edgelabel>
+          <edgelabel>idxChunk</edgelabel>
+          <edgelabel>vtxChunk</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Event/UserInput/UserInputListener.hpp" line="14" column="1" bodyfile="Event/UserInput/UserInputListener.hpp" bodystart="12" bodyend="475"/>
+    <location file="Buffer/ObjectBufferOffset.hpp" line="14" column="1" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="15" bodyend="170"/>
     <listofallmembers>
-      <member refid="d3/d80/a02559_1aa8ce17bc77eb834003cced1abea4e322" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>cleanup</name></member>
-      <member refid="d3/d80/a02559_1a0ff688cf74711da0d076a1361aa7b862" prot="protected" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>doAddHandler</name></member>
-      <member refid="d3/d80/a02559_1acdcb049d9f91d0e0d02aea6f5aa7f4cb" prot="private" virt="pure-virtual"><scope>castor3d::UserInputListener</scope><name>doCleanup</name></member>
-      <member refid="d3/d80/a02559_1ab7206437bfb11e1419fcb30a973359a4" prot="protected" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>doGetHandlers</name></member>
-      <member refid="d3/d80/a02559_1a001c44f0c2e165ac333769abf2911444" prot="private" virt="pure-virtual"><scope>castor3d::UserInputListener</scope><name>doGetMouseTargetableHandler</name></member>
-      <member refid="d3/d80/a02559_1a3b2f2515b1c768ab6c5fa88b8ff0109d" prot="protected" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>doHasHandlers</name></member>
-      <member refid="d3/d80/a02559_1ad6384b2ce2ae06856376a534a748d8ca" prot="private" virt="pure-virtual"><scope>castor3d::UserInputListener</scope><name>doInitialise</name></member>
-      <member refid="d3/d80/a02559_1ada1c1e27fbb15e39100937c5bf222c16" prot="protected" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>doRemoveHandler</name></member>
-      <member refid="d3/d80/a02559_1a679c1de2c60f8d2ecda306283a58844e" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>fireChar</name></member>
-      <member refid="d3/d80/a02559_1a89850c36d4d11cce55f6fda961889f65" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>fireKeydown</name></member>
-      <member refid="d3/d80/a02559_1a5134c0c3c4ec8f16a38f3688e51b56f5" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>fireKeyUp</name></member>
-      <member refid="d3/d80/a02559_1a7e808866796994953605a9c6ff49899b" prot="public" virt="virtual"><scope>castor3d::UserInputListener</scope><name>fireMaterialEvent</name></member>
-      <member refid="d3/d80/a02559_1a0e5ed7ad9ebb7cee817d9c48974799b0" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>fireMouseButtonPushed</name></member>
-      <member refid="d3/d80/a02559_1a242c52d3786e691d502ae1b6efaefe20" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>fireMouseButtonReleased</name></member>
-      <member refid="d3/d80/a02559_1a42b6aaaf3ba8dc8e93dd7d64c142e761" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>fireMouseMove</name></member>
-      <member refid="d3/d80/a02559_1a6652b67aa24bf5db3360f58adc0ec0ce" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>fireMouseWheel</name></member>
-      <member refid="d3/d80/a02559_1ae71695db66c2d286d4a570ad30920c99" prot="public" virt="virtual"><scope>castor3d::UserInputListener</scope><name>fireTextEvent</name></member>
-      <member refid="d3/d80/a02559_1a8d27e97742054812014327826301a54f" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>getActiveControl</name></member>
-      <member refid="d3/d80/a02559_1aa90c7452fadcea8ef8b6a3dbee2c3690" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>getFocusedControl</name></member>
-      <member refid="d3/d80/a02559_1ac107da35b210cc627f2eabe6b2a40703" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>getFrameListener</name></member>
-      <member refid="d3/d80/a02559_1a8f2f3e6202e7c077a169ae4f177e4ef5" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>getMousePosition</name></member>
-      <member refid="d3/d80/a02559_1a2c91f11f8c5c099e6a1c4bff1f548dfa" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>initialise</name></member>
-      <member refid="d3/d80/a02559_1a1f2b6135d1b9de4e15e3d51851546e2f" prot="private" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_activeHandler</name></member>
-      <member refid="d3/d80/a02559_1a8aae7fabed5b23aafd0a6ac090dab9a8" prot="private" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_enabled</name></member>
-      <member refid="d3/d80/a02559_1acc06fa4f80f9ee1dc7dfe6ee82716d3a" prot="protected" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_frameListener</name></member>
-      <member refid="d3/d80/a02559_1a73ffe829733458db38b70865ca6f4d95" prot="protected" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_handlers</name></member>
-      <member refid="d3/d80/a02559_1a7ade36a32fa7227bab796782e08f9b4b" prot="private" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_keyboard</name></member>
-      <member refid="d3/d80/a02559_1a8b985abce18e6794a2181f4a9acec9ad" prot="private" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_lastMouseTarget</name></member>
-      <member refid="d3/d80/a02559_1a2214124379a932a9770d357cad0ac8ba" prot="private" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_mouse</name></member>
-      <member refid="d3/d80/a02559_1a53ff879a2f749355cbd0cdd9ab96a351" prot="protected" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_mutexHandlers</name></member>
-      <member refid="d3/d80/a02559_1a0c3894373d3934d477f9a10202879e50" prot="private" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_onClickActions</name></member>
-      <member refid="d3/d80/a02559_1a920a8a17570f84e438384b5915f0fea0" prot="private" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_onMouseMoveActions</name></member>
-      <member refid="d3/d80/a02559_1a027699525f1b45e5512e26d6fceb8fb8" prot="private" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_onSelectActions</name></member>
-      <member refid="d3/d80/a02559_1a13dff1a4e33066338bee09b3abcd410c" prot="private" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_onTextActions</name></member>
-      <member refid="d3/d80/a02559_1a98b74cd02355d3a53585d8931202f528" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>onClickAction</name></member>
-      <member refid="d3/d80/a02559_1a7c733341f9ef3967065ab8feb49d8e00" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>OnClickActionFunction</name></member>
-      <member refid="d3/d80/a02559_1ae048f6c9f2f338906bee940ebd50d242" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>onMouseMoveAction</name></member>
-      <member refid="d3/d80/a02559_1a52d763b318a9f016a4d88c53d83f62d0" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>OnMouseMoveActionFunction</name></member>
-      <member refid="d3/d80/a02559_1ae2a8df47bad10127fefa5ca741a12cd1" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>onSelectAction</name></member>
-      <member refid="d3/d80/a02559_1ad5d9e022473b5d9b3d6a5927c35e5f51" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>OnSelectActionFunction</name></member>
-      <member refid="d3/d80/a02559_1aa87608ed163f722c73195d1b29e9575d" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>onTextAction</name></member>
-      <member refid="d3/d80/a02559_1ae38f783614c6d5b1a9b280c9da06d9fe" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>OnTextActionFunction</name></member>
-      <member refid="d3/d80/a02559_1a379f777bd2ac75e703449c874388f46e" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>processEvents</name></member>
-      <member refid="d3/d80/a02559_1adbbdf0b7d4e151079b73152f007416f2" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>registerClickAction</name></member>
-      <member refid="d3/d80/a02559_1a3d8e41ec70a24b238be398712012e036" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>registerMouseMoveAction</name></member>
-      <member refid="d3/d80/a02559_1a7eef9892848ee17099bca6e3da6c22d5" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>registerSelectAction</name></member>
-      <member refid="d3/d80/a02559_1a89b3c690479c7ecfd64cbaf0a08af8f0" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>registerTextAction</name></member>
-      <member refid="d3/d80/a02559_1a99ba659903d1199e03b8e8323c1381dc" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>unregisterClickAction</name></member>
-      <member refid="d3/d80/a02559_1ae5529141ea9f1ab6c7966572a7aa3de5" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>unregisterMouseMoveAction</name></member>
-      <member refid="d3/d80/a02559_1a827e0cee29d7653f69a5e55e572f7cb6" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>unregisterSelectAction</name></member>
-      <member refid="d3/d80/a02559_1a30252abfab5f2d0de99b28c030a4c029" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>unregisterTextAction</name></member>
-      <member refid="d3/d80/a02559_1a2e599855c97483e2a2bb2dfd920bcd38" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>UserInputListener</name></member>
-      <member refid="d3/d80/a02559_1ad3b5d5fdb26b3aa274f62e2d5265859f" prot="public" virt="virtual"><scope>castor3d::UserInputListener</scope><name>~UserInputListener</name></member>
+      <member refid="d3/d80/a02559_1af964043ec7868b1fd0c43be0ad2ae41c" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>bonBuffer</name></member>
+      <member refid="d3/d80/a02559_1ae56799d39b9b4e5f864654c8b04d2ef0" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>bonChunk</name></member>
+      <member refid="d3/d80/a02559_1a78ff41feec92e694e8f44141e6e06b0b" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getBoneData</name></member>
+      <member refid="d3/d80/a02559_1abd2a18b67e20307f0b946a0bc16e0f2b" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getBonesBuffer</name></member>
+      <member refid="d3/d80/a02559_1a85f10f2832948308bc2805e00badb3bf" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getBonesCount</name></member>
+      <member refid="d3/d80/a02559_1ae0ecc43b9a8ae40265e2d8626a5fe670" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getBonesOffset</name></member>
+      <member refid="d3/d80/a02559_1abda4e1ee0e76478fb211f837add9d494" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getBonesSize</name></member>
+      <member refid="d3/d80/a02559_1a5422ae93da19b4766b8312ebd656b00c" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getFirstBone</name></member>
+      <member refid="d3/d80/a02559_1a34df6ddb3102d1662e9d38146e54cfe4" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getFirstIndex</name></member>
+      <member refid="d3/d80/a02559_1aa589c47a2d6f7559de3f806209dc8094" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getFirstVertex</name></member>
+      <member refid="d3/d80/a02559_1a13f508b50ff059287380d597539b586d" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getIndexBuffer</name></member>
+      <member refid="d3/d80/a02559_1a14dee16a57de2055d90b8bb8078ec018" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getIndexCount</name></member>
+      <member refid="d3/d80/a02559_1a61bc3e37e6a74ec6fd084ac0342cdda9" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getIndexData</name></member>
+      <member refid="d3/d80/a02559_1a002ec5ae64c21e2c9190ea4cad309aee" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getIndexOffset</name></member>
+      <member refid="d3/d80/a02559_1af19e7ffc551f44b60e46f4e6a59e2e0f" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getIndexSize</name></member>
+      <member refid="d3/d80/a02559_1a801f606247b1560fabe21f575381a268" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getVertexBuffer</name></member>
+      <member refid="d3/d80/a02559_1a43c1bcf1de99e225cb117ee99ba221a5" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getVertexCount</name></member>
+      <member refid="d3/d80/a02559_1a812844899cb02530ed9556969353e02c" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getVertexData</name></member>
+      <member refid="d3/d80/a02559_1ad19f83829fabe87220a22feed65921f7" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getVertexOffset</name></member>
+      <member refid="d3/d80/a02559_1a591a91670083d2547df3868afa985da2" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getVertexSize</name></member>
+      <member refid="d3/d80/a02559_1ae06b0fff9a30187995ec76507e85143b" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>hasBones</name></member>
+      <member refid="d3/d80/a02559_1a5c1738643933256b574cd135984b907f" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>hasIndices</name></member>
+      <member refid="d3/d80/a02559_1a64672cd7440e38a42592c26fb1928c2b" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>hasVertices</name></member>
+      <member refid="d3/d80/a02559_1aa991ea046fe6d575c94f844e17d40452" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>idxBuffer</name></member>
+      <member refid="d3/d80/a02559_1aaaed4098407a14b7264f14d02e7207f3" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>idxChunk</name></member>
+      <member refid="d3/d80/a02559_1a57a1562087eb0cec6b650c6dbebb7c17" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>markBonesDirty</name></member>
+      <member refid="d3/d80/a02559_1a49454eb5619d9141d118bd3e0730d518" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>markIndexDirty</name></member>
+      <member refid="d3/d80/a02559_1a1de8378b29ce99d89dd43b2438907f95" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>markVertexDirty</name></member>
+      <member refid="d3/d80/a02559_1a4abab85ee83943b53c1c3ff3bb6c04ac" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>operator bool</name></member>
+      <member refid="d3/d80/a02559_1aa45f214669f52c76b1ee4afd10445097" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>vtxBuffer</name></member>
+      <member refid="d3/d80/a02559_1a59f8d59689cc4de0650a79bd63fb51dd" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>vtxChunk</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

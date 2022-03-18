@@ -1,58 +1,32 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d2/da6/a04086" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::DebugOverlays::CategoryOverlays::TimeOverlays</compoundname>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d2/da6/a04086" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::DebugConfig</compoundname>
+    <includes local="no">RenderWindow.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d2/da6/a04086_1a58b8dd4fc3854530938d82b78bebd576" prot="public" static="no" mutable="no">
-        <type>castor::Nanoseconds</type>
-        <definition>castor::Nanoseconds castor3d::DebugOverlays::CategoryOverlays::TimeOverlays::time</definition>
+      <memberdef kind="variable" id="d2/da6/a04086_1a65f9da86f5db5c8b46be51d7c3ae83c0" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::DebugConfig::debugIndex</definition>
         <argsstring></argsstring>
-        <name>time</name>
-        <initializer>{ 0_ns }</initializer>
+        <name>debugIndex</name>
+        <qualifiedname>castor3d::DebugConfig::debugIndex</qualifiedname>
+        <initializer>{ 0u }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="268" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="268" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/da6/a04086_1a48e25c217413b7bf91a6fdce3b9be12b" prot="public" static="no" mutable="no">
-        <type>TextOverlaySPtr</type>
-        <definition>TextOverlaySPtr castor3d::DebugOverlays::CategoryOverlays::TimeOverlays::name</definition>
-        <argsstring></argsstring>
-        <name>name</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="269" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="269" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/da6/a04086_1a6f047f75e189c91bf759a3e656407dde" prot="public" static="no" mutable="no">
-        <type>TextOverlaySPtr</type>
-        <definition>TextOverlaySPtr castor3d::DebugOverlays::CategoryOverlays::TimeOverlays::value</definition>
-        <argsstring></argsstring>
-        <name>value</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="270" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="270" bodyend="-1"/>
+        <location file="Render/RenderWindow.hpp" line="38" column="10" bodyfile="Render/RenderWindow.hpp" bodystart="38" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Overlay/DebugOverlays.hpp" line="267" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="266" bodyend="271"/>
+    <location file="Render/RenderWindow.hpp" line="36" column="1" bodyfile="Render/RenderWindow.hpp" bodystart="37" bodyend="39"/>
     <listofallmembers>
-      <member refid="d2/da6/a04086_1a48e25c217413b7bf91a6fdce3b9be12b" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays::TimeOverlays</scope><name>name</name></member>
-      <member refid="d2/da6/a04086_1a58b8dd4fc3854530938d82b78bebd576" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays::TimeOverlays</scope><name>time</name></member>
-      <member refid="d2/da6/a04086_1a6f047f75e189c91bf759a3e656407dde" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays::TimeOverlays</scope><name>value</name></member>
+      <member refid="d2/da6/a04086_1a65f9da86f5db5c8b46be51d7c3ae83c0" prot="public" virt="non-virtual"><scope>castor3d::DebugConfig</scope><name>debugIndex</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

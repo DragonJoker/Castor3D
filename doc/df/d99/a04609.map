@@ -1,4 +1,5 @@
-<map id="castor3d::RenderPipeline" name="castor3d::RenderPipeline">
-<area shape="rect" id="node1" title=" " alt="" coords="28,95,195,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,217,47"/>
+<map id="castor3d::SceneFileParser" name="castor3d::SceneFileParser">
+<area shape="rect" id="node1" title=" " alt="" coords="100,80,276,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,192,32"/>
+<area shape="rect" id="node3" title=" " alt="" coords="216,5,341,32"/>
 </map>

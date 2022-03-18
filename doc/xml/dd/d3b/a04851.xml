@@ -1,279 +1,646 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dd/d3b/a04851" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::LightVolumeGIPass</compoundname>
-    <basecompoundref refid="da/d95/a04435" prot="public" virt="non-virtual">castor3d::RenderQuad</basecompoundref>
-    <includes local="no">LightVolumeGIPass.hpp</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="dd/d3b/a04851_1a5defc334ac31c491f33ece249bca7fd8" prot="private" static="no" mutable="no">
-        <type><ref refid="da/d9f/a04859" kindref="compound">OpaquePassResult</ref> const  &amp;</type>
-        <definition>OpaquePassResult const&amp; castor3d::LightVolumeGIPass::m_gpResult</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dd/d3b/a04851" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::TextureConfigData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">GlslTextureConfiguration.hpp</includes>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="dd/d3b/a04851_1ad91886d82073ccf5412baef156f66d9e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class TextureConfigurations</definition>
         <argsstring></argsstring>
-        <name>m_gpResult</name>
+        <name>TextureConfigurations</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::TextureConfigurations</qualifiedname>
+        <param>
+          <type><ref refid="d9/d87/a04855" kindref="compound">TextureConfigurations</ref></type>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp" line="79" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp" bodystart="79" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="50" column="14" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="50" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dd/d3b/a04851_1abd00f81a73bdca8b8d5f810b5198dd5a" prot="private" static="no" mutable="no">
-        <type><ref refid="d8/dbd/a05291" kindref="compound">ShaderModule</ref></type>
-        <definition>ShaderModule castor3d::LightVolumeGIPass::m_vertexShader</definition>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dd/d3b/a04851_1a0c13aa2eea9a1512df37c347de2e155c" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::TextureConfigData::colOpa</definition>
         <argsstring></argsstring>
-        <name>m_vertexShader</name>
+        <name>colOpa</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::colOpa</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp" line="80" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp" bodystart="80" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="253" column="11" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="253" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dd/d3b/a04851_1a4ac57de2220fff600452e8689325c0ba" prot="private" static="no" mutable="no">
-        <type><ref refid="d8/dbd/a05291" kindref="compound">ShaderModule</ref></type>
-        <definition>ShaderModule castor3d::LightVolumeGIPass::m_pixelShader</definition>
+      <memberdef kind="variable" id="dd/d3b/a04851_1a56cbba11e8a56bdcc7e6669192b842fe" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::TextureConfigData::spcShn</definition>
         <argsstring></argsstring>
-        <name>m_pixelShader</name>
+        <name>spcShn</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::spcShn</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp" line="81" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp" bodystart="81" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="254" column="11" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="254" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dd/d3b/a04851_1a252b6a9f29684b2b6433109a6321296c" prot="private" static="no" mutable="no">
-        <type>ashes::RenderPassPtr</type>
-        <definition>ashes::RenderPassPtr castor3d::LightVolumeGIPass::m_renderPass</definition>
+      <memberdef kind="variable" id="dd/d3b/a04851_1a0925b75d596d9e7007fde5da49599f91" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::TextureConfigData::metRgh</definition>
         <argsstring></argsstring>
-        <name>m_renderPass</name>
+        <name>metRgh</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::metRgh</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp" line="82" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp" bodystart="82" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="255" column="11" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="255" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dd/d3b/a04851_1aa24027617595bf2b31bcd8570e3503bf" prot="private" static="no" mutable="no">
-        <type>ashes::FrameBufferPtr</type>
-        <definition>ashes::FrameBufferPtr castor3d::LightVolumeGIPass::m_frameBuffer</definition>
+      <memberdef kind="variable" id="dd/d3b/a04851_1ad3c7bef52967e3223c44cec39346ba78" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::TextureConfigData::emsOcc</definition>
         <argsstring></argsstring>
-        <name>m_frameBuffer</name>
+        <name>emsOcc</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::emsOcc</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp" line="83" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp" bodystart="83" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="256" column="11" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="256" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dd/d3b/a04851_1a0d76a918e1550aab5502f66b619a4386" prot="private" static="no" mutable="no">
-        <type>RenderPassTimerSPtr</type>
-        <definition>RenderPassTimerSPtr castor3d::LightVolumeGIPass::m_timer</definition>
+      <memberdef kind="variable" id="dd/d3b/a04851_1a2da10d317b56ff0a0f099ca32a485f77" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::TextureConfigData::trsDum</definition>
         <argsstring></argsstring>
-        <name>m_timer</name>
+        <name>trsDum</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::trsDum</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp" line="84" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp" bodystart="84" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="257" column="11" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="257" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dd/d3b/a04851_1af4eede604d35b33cb0c42138a7ebad80" prot="private" static="no" mutable="no">
-        <type><ref refid="dd/d20/a04359" kindref="compound">CommandsSemaphore</ref></type>
-        <definition>CommandsSemaphore castor3d::LightVolumeGIPass::m_commands</definition>
+      <memberdef kind="variable" id="dd/d3b/a04851_1a2850ea3cb7f8429680419cfbdadee70c" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::TextureConfigData::nmlFcr</definition>
         <argsstring></argsstring>
-        <name>m_commands</name>
+        <name>nmlFcr</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::nmlFcr</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp" line="85" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp" bodystart="85" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="258" column="11" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="258" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1a399ca67f84f9d96cef8b998c41d507c6" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::TextureConfigData::hgtFcr</definition>
+        <argsstring></argsstring>
+        <name>hgtFcr</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::hgtFcr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="259" column="11" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="259" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1ac4bc5d82a9ddf5edb97cf1d119caabba" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::TextureConfigData::mscVls</definition>
+        <argsstring></argsstring>
+        <name>mscVls</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::mscVls</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="260" column="11" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="260" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1a476ce7b97c0d30a511067a4c2af09e0a" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::TextureConfigData::texTrn</definition>
+        <argsstring></argsstring>
+        <name>texTrn</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::texTrn</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="261" column="11" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="261" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1a7f8547447349a794398f001a1dbba390" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::TextureConfigData::texRot</definition>
+        <argsstring></argsstring>
+        <name>texRot</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::texRot</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="262" column="11" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="262" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1a814136dbca1c47c6d8a023042f0ed921" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::TextureConfigData::texScl</definition>
+        <argsstring></argsstring>
+        <name>texScl</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::texScl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="263" column="11" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="263" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1ae3db352e037e98838e0329c61a6bce4f" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::TextureConfigData::tleSet</definition>
+        <argsstring></argsstring>
+        <name>tleSet</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::tleSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="264" column="11" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="264" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1a3d66e08d8952b6ed2125b47a5e171d2c" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::colEnbl</definition>
+        <argsstring></argsstring>
+        <name>colEnbl</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::colEnbl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="267" column="12" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="267" bodyend="-1"/>
+        <referencedby refid="dd/d3b/a04851_1a9701e6d11f57322b6013a0012db9804b" compoundref="d5/d32/a01214" startline="160" endline="163">isAlbedo</referencedby>
+        <referencedby refid="dd/d3b/a04851_1a5380a19e68f70fdfa6edb894b4d23f6a" compoundref="d5/d32/a01214" startline="155" endline="158">isDiffuse</referencedby>
+        <referencedby refid="dd/d3b/a04851_1ab66551fcf6db9841e9b4d0e16dee9ba4" compoundref="d5/d32/a01214" startline="227" endline="237">isGeometryOnly</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1ad3d7d6241b9d31fdf1bfe746c45d0c88" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::colMask</definition>
+        <argsstring></argsstring>
+        <name>colMask</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::colMask</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="268" column="12" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="268" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1a13f0a21a3bab89ff74c3edee57f84d9c" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::opaEnbl</definition>
+        <argsstring></argsstring>
+        <name>opaEnbl</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::opaEnbl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="269" column="12" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="269" bodyend="-1"/>
+        <referencedby refid="dd/d3b/a04851_1abd4c7639e6dc62952707f1cfa0a202ed" compoundref="d5/d32/a01214" startline="220" endline="225">isGeometry</referencedby>
+        <referencedby refid="dd/d3b/a04851_1af7597ca6712aa6f2c95ce29003dec823" compoundref="d5/d32/a01214" startline="205" endline="208">isOpacity</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1a16087d91a6c47a65930b7d0cd44754aa" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::opaMask</definition>
+        <argsstring></argsstring>
+        <name>opaMask</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::opaMask</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="270" column="12" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="270" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1ad9d7f6250dc978005c65fa3687617595" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::spcEnbl</definition>
+        <argsstring></argsstring>
+        <name>spcEnbl</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::spcEnbl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="271" column="12" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="271" bodyend="-1"/>
+        <referencedby refid="dd/d3b/a04851_1ab66551fcf6db9841e9b4d0e16dee9ba4" compoundref="d5/d32/a01214" startline="227" endline="237">isGeometryOnly</referencedby>
+        <referencedby refid="dd/d3b/a04851_1ae4a627848bde92c1df04668d90ff2424" compoundref="d5/d32/a01214" startline="170" endline="173">isSpecular</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1a0aa1683d3f599e60e6eb19499cf1e22a" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::spcMask</definition>
+        <argsstring></argsstring>
+        <name>spcMask</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::spcMask</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="272" column="12" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="272" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1aee6cac89ff790d8faec4e0a4dfdd7f4e" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::shnEnbl</definition>
+        <argsstring></argsstring>
+        <name>shnEnbl</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::shnEnbl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="273" column="12" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="273" bodyend="-1"/>
+        <referencedby refid="dd/d3b/a04851_1ab66551fcf6db9841e9b4d0e16dee9ba4" compoundref="d5/d32/a01214" startline="227" endline="237">isGeometryOnly</referencedby>
+        <referencedby refid="dd/d3b/a04851_1af6ad2171760ce8dca837a8d7769c55de" compoundref="d5/d32/a01214" startline="185" endline="188">isGlossiness</referencedby>
+        <referencedby refid="dd/d3b/a04851_1a1f572ac2df87f2c38be8dc0c9a248024" compoundref="d5/d32/a01214" startline="180" endline="183">isShininess</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1a194e6738fa5b81ada86785c009c39e28" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::shnMask</definition>
+        <argsstring></argsstring>
+        <name>shnMask</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::shnMask</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="274" column="12" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="274" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1af17443604ce9eae6db0cc1836936b1b5" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::metEnbl</definition>
+        <argsstring></argsstring>
+        <name>metEnbl</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::metEnbl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="275" column="12" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="275" bodyend="-1"/>
+        <referencedby refid="dd/d3b/a04851_1ab66551fcf6db9841e9b4d0e16dee9ba4" compoundref="d5/d32/a01214" startline="227" endline="237">isGeometryOnly</referencedby>
+        <referencedby refid="dd/d3b/a04851_1ad834d236946e9b917cbcd69fbc68c499" compoundref="d5/d32/a01214" startline="175" endline="178">isMetalness</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1a6bf0ce19578a329cd05004a427db047f" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::metMask</definition>
+        <argsstring></argsstring>
+        <name>metMask</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::metMask</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="276" column="12" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="276" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1ad972e2ea6d0e0a64518e495be03f31e0" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::rghEnbl</definition>
+        <argsstring></argsstring>
+        <name>rghEnbl</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::rghEnbl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="277" column="12" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="277" bodyend="-1"/>
+        <referencedby refid="dd/d3b/a04851_1ab66551fcf6db9841e9b4d0e16dee9ba4" compoundref="d5/d32/a01214" startline="227" endline="237">isGeometryOnly</referencedby>
+        <referencedby refid="dd/d3b/a04851_1ae389d58cd705a717336f78288fd20eb5" compoundref="d5/d32/a01214" startline="190" endline="193">isRoughness</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1ad345e5676edd0f07fd7952064551a0f7" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::rghMask</definition>
+        <argsstring></argsstring>
+        <name>rghMask</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::rghMask</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="278" column="12" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="278" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1a862c8346ce6db91b04e83197490e5a91" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::emsEnbl</definition>
+        <argsstring></argsstring>
+        <name>emsEnbl</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::emsEnbl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="279" column="12" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="279" bodyend="-1"/>
+        <referencedby refid="dd/d3b/a04851_1aacbfb53d3e6608c419e8fa049da59221" compoundref="d5/d32/a01214" startline="165" endline="168">isEmissive</referencedby>
+        <referencedby refid="dd/d3b/a04851_1ab66551fcf6db9841e9b4d0e16dee9ba4" compoundref="d5/d32/a01214" startline="227" endline="237">isGeometryOnly</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1a1410bf8f7d37a1ba9d426b78ffc83f17" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::emsMask</definition>
+        <argsstring></argsstring>
+        <name>emsMask</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::emsMask</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="280" column="12" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="280" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1ac37cafcba9e16c14deed303a22bd93e6" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::occEnbl</definition>
+        <argsstring></argsstring>
+        <name>occEnbl</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::occEnbl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="281" column="12" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="281" bodyend="-1"/>
+        <referencedby refid="dd/d3b/a04851_1ab66551fcf6db9841e9b4d0e16dee9ba4" compoundref="d5/d32/a01214" startline="227" endline="237">isGeometryOnly</referencedby>
+        <referencedby refid="dd/d3b/a04851_1ac28c1efae2a6ef005b783bc54d13adb3" compoundref="d5/d32/a01214" startline="195" endline="198">isOcclusion</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1a81681ccfcf255b47fb2722d15eb2e0ed" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::occMask</definition>
+        <argsstring></argsstring>
+        <name>occMask</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::occMask</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="282" column="12" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="282" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1a8cba5bf13949facea89686a6b92a8713" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::trsEnbl</definition>
+        <argsstring></argsstring>
+        <name>trsEnbl</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::trsEnbl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="283" column="12" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="283" bodyend="-1"/>
+        <referencedby refid="dd/d3b/a04851_1ab66551fcf6db9841e9b4d0e16dee9ba4" compoundref="d5/d32/a01214" startline="227" endline="237">isGeometryOnly</referencedby>
+        <referencedby refid="dd/d3b/a04851_1a2e1ad2bc7c2632cd924378687f09e516" compoundref="d5/d32/a01214" startline="200" endline="203">isTransmittance</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1aecfa48b5db1801b1a63b69f637b3a7fc" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::trsMask</definition>
+        <argsstring></argsstring>
+        <name>trsMask</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::trsMask</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="284" column="12" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="284" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1ae546121cd2ff3477480271e2e2a4c5f0" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::nmlEnbl</definition>
+        <argsstring></argsstring>
+        <name>nmlEnbl</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::nmlEnbl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="285" column="12" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="285" bodyend="-1"/>
+        <referencedby refid="dd/d3b/a04851_1abd4c7639e6dc62952707f1cfa0a202ed" compoundref="d5/d32/a01214" startline="220" endline="225">isGeometry</referencedby>
+        <referencedby refid="dd/d3b/a04851_1a69c62a606dde3268c67c111f8be1a642" compoundref="d5/d32/a01214" startline="210" endline="213">isNormal</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1a569107358878c66f2fa4ee674e411d4c" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::nmlMask</definition>
+        <argsstring></argsstring>
+        <name>nmlMask</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::nmlMask</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="286" column="12" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="286" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1a50d74dba3a3a6ba0aa64f69581dcd0a5" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::nmlFact</definition>
+        <argsstring></argsstring>
+        <name>nmlFact</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::nmlFact</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="287" column="12" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="287" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1a9065b0f8bf774cb093cb68cc7f4934df" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::nmlGMul</definition>
+        <argsstring></argsstring>
+        <name>nmlGMul</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::nmlGMul</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="288" column="12" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="288" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1a23b263504f8d79d115b05c1cb286f0f0" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::hgtEnbl</definition>
+        <argsstring></argsstring>
+        <name>hgtEnbl</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::hgtEnbl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="289" column="12" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="289" bodyend="-1"/>
+        <referencedby refid="dd/d3b/a04851_1abd4c7639e6dc62952707f1cfa0a202ed" compoundref="d5/d32/a01214" startline="220" endline="225">isGeometry</referencedby>
+        <referencedby refid="dd/d3b/a04851_1a8a3d751c7233e8491f258b49eb8e5f16" compoundref="d5/d32/a01214" startline="215" endline="218">isHeight</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1acde77bc4f63aecac218096b2a5ab921c" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::hgtMask</definition>
+        <argsstring></argsstring>
+        <name>hgtMask</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::hgtMask</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="290" column="12" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="290" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1a690299a86104bcbe44412433db5fd181" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::hgtFact</definition>
+        <argsstring></argsstring>
+        <name>hgtFact</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::hgtFact</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="291" column="12" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="291" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1ae2c2ec97a088e3e0bde7214e923c1f11" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::fneedYI</definition>
+        <argsstring></argsstring>
+        <name>fneedYI</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::fneedYI</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="292" column="12" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="292" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1ac53ec7e5aeea37588eeb3395d9c16ba8" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::TextureConfigData::needsYI</definition>
+        <argsstring></argsstring>
+        <name>needsYI</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::needsYI</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="293" column="11" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="293" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1ad01b00132cfb1a6559c00f15a089e05c" prot="public" static="no" mutable="no">
+        <type>sdw::Boolean</type>
+        <definition>sdw::Boolean castor3d::shader::TextureConfigData::isTrnfAnim</definition>
+        <argsstring></argsstring>
+        <name>isTrnfAnim</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::isTrnfAnim</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="294" column="14" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="294" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3b/a04851_1a64128e1226c04655eeff6ead58f8374c" prot="public" static="no" mutable="no">
+        <type>sdw::Boolean</type>
+        <definition>sdw::Boolean castor3d::shader::TextureConfigData::isTileAnim</definition>
+        <argsstring></argsstring>
+        <name>isTileAnim</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::isTileAnim</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="295" column="14" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="295" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="dd/d3b/a04851_1a07fc2c38bfc4d6346f593971ba7b31ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="dd/d3b/a04851_1a5c21c5fb72ee6991e7fd9a5238023fcb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::LightVolumeGIPass::LightVolumeGIPass</definition>
-        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, castor::String const &amp;prefix, LightType lightType, GpInfoUbo const &amp;gpInfo, LpvGridConfigUbo const &amp;lpvGridConfigUbo, OpaquePassResult const &amp;gpResult, LightVolumePassResult const &amp;lpvResult, TextureUnit const &amp;dst, BlendMode blendMode)</argsstring>
-        <name>LightVolumeGIPass</name>
+        <definition>C3D_API castor3d::shader::TextureConfigData::TextureConfigData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>TextureConfigData</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::TextureConfigData</qualifiedname>
         <param>
-          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
         </param>
         <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
         </param>
         <param>
-          <type>castor::String const &amp;</type>
-          <declname>prefix</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
-          <declname>lightType</declname>
-        </param>
-        <param>
-          <type><ref refid="dd/d83/a05443" kindref="compound">GpInfoUbo</ref> const &amp;</type>
-          <declname>gpInfo</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d34/a05463" kindref="compound">LpvGridConfigUbo</ref> const &amp;</type>
-          <declname>lpvGridConfigUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d9f/a04859" kindref="compound">OpaquePassResult</ref> const &amp;</type>
-          <declname>gpResult</declname>
-        </param>
-        <param>
-          <type><ref refid="dc/d23/a04275" kindref="compound">LightVolumePassResult</ref> const &amp;</type>
-          <declname>lpvResult</declname>
-        </param>
-        <param>
-          <type><ref refid="d8/dd7/a02643" kindref="compound">TextureUnit</ref> const &amp;</type>
-          <declname>dst</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
-          <declname>blendMode</declname>
-        </param>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">engine</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The engine. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">prefix</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pass name&apos;s prefix. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">lightType</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The light type. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">gpInfo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GBuffer configuration UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">lpvGridConfigUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The LPV grid configuration UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">gpResult</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GBuffer. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">lpvResult</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The LPV result. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">dst</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GI result. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">blendMode</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The blend mode. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp" line="52" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d3b/a04851_1a9fdee971246b781c932c8fb71410ffba" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Semaphore const  &amp;</type>
-        <definition>C3D_API ashes::Semaphore const&amp; castor3d::LightVolumeGIPass::compute</definition>
-        <argsstring>(ashes::Semaphore const &amp;toWait) const</argsstring>
-        <name>compute</name>
-        <param>
-          <type>ashes::Semaphore const &amp;</type>
-          <declname>toWait</declname>
-        </param>
-        <briefdescription>
-<para>Renders the pass. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">toWait</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The semaphore from the previous render pass. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp" line="70" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d3b/a04851_1aa5341faefd5d905f38bb778683ceb19e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dd/d20/a04359" kindref="compound">CommandsSemaphore</ref></type>
-        <definition>C3D_API CommandsSemaphore castor3d::LightVolumeGIPass::getCommands</definition>
-        <argsstring>(RenderPassTimer const &amp;timer, uint32_t index) const</argsstring>
-        <name>getCommands</name>
-        <param>
-          <type><ref refid="d7/db9/a04591" kindref="compound">RenderPassTimer</ref> const &amp;</type>
-          <declname>timer</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
+          <type>bool</type>
+          <declname>enabled</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -281,35 +648,1057 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp" line="71" column="1"/>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="53" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="dd/d3b/a04851_1a9aaefdeb5ba560055e5150e28ae0e157" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="dd/d3b/a04851_1a4cf9d81e3e336dea27809a8a30bd82e4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::TextureConfigData::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, TextureConfigData)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        </param>
+        <param>
+          <type><ref refid="dd/d3b/a04851" kindref="compound">TextureConfigData</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="56" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1a5f12d1017dfdaf1e2c20f43cdd94f8a6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::LightVolumeGIPass::accept</definition>
-        <argsstring>(PipelineVisitorBase &amp;visitor)</argsstring>
-        <name>accept</name>
+        <definition>C3D_API void castor3d::shader::TextureConfigData::computeGeometryMapContribution</definition>
+        <argsstring>(Utils &amp;utils, PassFlags const &amp;passFlags, TextureFlags const &amp;textureFlags, std::string const &amp;name, shader::TextureAnimData const &amp;anim, sdw::CombinedImage2DRgba32 const &amp;map, sdw::Vec3 &amp;texCoords, sdw::Float &amp;opacity, sdw::Vec3 &amp;normal, sdw::Vec3 &amp;tangent, sdw::Vec3 &amp;bitangent, sdw::Vec3 &amp;tangentSpaceViewPosition, sdw::Vec3 &amp;tangentSpaceFragPosition)</argsstring>
+        <name>computeGeometryMapContribution</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::computeGeometryMapContribution</qualifiedname>
         <param>
-          <type><ref refid="d7/dab/a03815" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
-          <declname>visitor</declname>
+          <type><ref refid="da/d9f/a04859" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref> const &amp;</type>
+          <declname>passFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref> const &amp;</type>
+          <declname>textureFlags</declname>
+        </param>
+        <param>
+          <type>std::string const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d06/a04843" kindref="compound">shader::TextureAnimData</ref> const &amp;</type>
+          <declname>anim</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>map</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>texCoords</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>opacity</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>normal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>tangent</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>bitangent</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>tangentSpaceViewPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>tangentSpaceFragPosition</declname>
         </param>
         <briefdescription>
-<para>Visitor acceptance function. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername>visitor</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The ... visitor. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp" line="76" column="1"/>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="60" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1a946157e747d11c1a252225223bb86c39" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::TextureConfigData::computeCommonMapContribution</definition>
+        <argsstring>(Utils &amp;utils, PassFlags const &amp;passFlags, TextureFlags const &amp;textureFlags, std::string const &amp;name, shader::TextureAnimData const &amp;anim, sdw::CombinedImage2DRgba32 const &amp;map, sdw::Vec3 const &amp;texCoords, sdw::Vec3 &amp;emissive, sdw::Float &amp;opacity, sdw::Float &amp;occlusion, sdw::Float &amp;transmittance, sdw::Vec3 &amp;normal, sdw::Vec3 &amp;tangent, sdw::Vec3 &amp;bitangent, sdw::Vec3 &amp;tangentSpaceViewPosition, sdw::Vec3 &amp;tangentSpaceFragPosition)</argsstring>
+        <name>computeCommonMapContribution</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::computeCommonMapContribution</qualifiedname>
+        <param>
+          <type><ref refid="da/d9f/a04859" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref> const &amp;</type>
+          <declname>passFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref> const &amp;</type>
+          <declname>textureFlags</declname>
+        </param>
+        <param>
+          <type>std::string const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d06/a04843" kindref="compound">shader::TextureAnimData</ref> const &amp;</type>
+          <declname>anim</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>map</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>texCoords</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>emissive</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>opacity</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>occlusion</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>transmittance</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>normal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>tangent</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>bitangent</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>tangentSpaceViewPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>tangentSpaceFragPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="73" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1afec2af770710067815b81efed378e5f1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::TextureConfigData::computeCommonMapVoxelContribution</definition>
+        <argsstring>(PassFlags const &amp;passFlags, TextureFlags const &amp;textureFlags, std::string const &amp;name, shader::TextureAnimData const &amp;anim, sdw::CombinedImage2DRgba32 const &amp;map, sdw::Vec3 const &amp;texCoords, sdw::Vec3 &amp;emissive, sdw::Float &amp;opacity, sdw::Float &amp;occlusion)</argsstring>
+        <name>computeCommonMapVoxelContribution</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::computeCommonMapVoxelContribution</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref> const &amp;</type>
+          <declname>passFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref> const &amp;</type>
+          <declname>textureFlags</declname>
+        </param>
+        <param>
+          <type>std::string const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d06/a04843" kindref="compound">shader::TextureAnimData</ref> const &amp;</type>
+          <declname>anim</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>map</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>texCoords</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>emissive</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>opacity</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>occlusion</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="89" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1a9da7b870c3f71772ee0a94d558f30782" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::TextureConfigData::transformUV</definition>
+        <argsstring>(TextureAnimData const &amp;config, sdw::Vec2 &amp;uv) const</argsstring>
+        <name>transformUV</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::transformUV</qualifiedname>
+        <param>
+          <type><ref refid="d4/d06/a04843" kindref="compound">TextureAnimData</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 &amp;</type>
+          <declname>uv</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="99" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1ab021ba7e826dde0917b0e7c329df1f09" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::TextureConfigData::transformUVW</definition>
+        <argsstring>(TextureAnimData const &amp;config, sdw::Vec3 &amp;uvw) const</argsstring>
+        <name>transformUVW</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::transformUVW</qualifiedname>
+        <param>
+          <type><ref refid="d4/d06/a04843" kindref="compound">TextureAnimData</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="101" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1a880572a4543211112bd454754337a039" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>C3D_API sdw::Float castor3d::shader::TextureConfigData::getGlossiness</definition>
+        <argsstring>(sdw::Vec4 const &amp;sampled, sdw::Float const &amp;glossiness) const</argsstring>
+        <name>getGlossiness</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::getGlossiness</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>sampled</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>glossiness</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="104" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1a77a8ddcd39e95e7d176272c784bca825" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::TextureConfigData::getColour</definition>
+        <argsstring>(sdw::Vec4 const &amp;sampled, sdw::Vec3 const &amp;colour) const</argsstring>
+        <name>getColour</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::getColour</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>sampled</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="106" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1a79dc931ce170f4b3fc061d96d91e78cd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>C3D_API sdw::Float castor3d::shader::TextureConfigData::getOpacity</definition>
+        <argsstring>(sdw::Vec4 const &amp;sampled, sdw::Float const &amp;opacity) const</argsstring>
+        <name>getOpacity</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::getOpacity</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>sampled</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>opacity</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="108" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1a60e71101ab7213ae612a4a1f826c9459" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::TextureConfigData::applyDiffuse</definition>
+        <argsstring>(TextureFlags const &amp;textureFlags, sdw::Vec4 const &amp;sampled, sdw::Vec3 &amp;diffuse) const</argsstring>
+        <name>applyDiffuse</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::applyDiffuse</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref> const &amp;</type>
+          <declname>textureFlags</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>sampled</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>diffuse</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="111" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1a2fcd4ecb40b9b373656f7f73b8098013" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::TextureConfigData::applyAlbedo</definition>
+        <argsstring>(TextureFlags const &amp;textureFlags, sdw::Vec4 const &amp;sampled, sdw::Vec3 &amp;diffuse) const</argsstring>
+        <name>applyAlbedo</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::applyAlbedo</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref> const &amp;</type>
+          <declname>textureFlags</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>sampled</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>diffuse</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="114" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1aecf951d738d578764efdbe6d93eb87a9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::TextureConfigData::applyEmissive</definition>
+        <argsstring>(TextureFlags const &amp;textureFlags, sdw::Vec4 const &amp;sampled, sdw::Vec3 &amp;emissive) const</argsstring>
+        <name>applyEmissive</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::applyEmissive</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref> const &amp;</type>
+          <declname>textureFlags</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>sampled</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>emissive</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="117" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1ad1e34aef7fe67799de2fd3cf71ba7162" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::TextureConfigData::applySpecular</definition>
+        <argsstring>(TextureFlags const &amp;textureFlags, sdw::Vec4 const &amp;sampled, sdw::Vec3 &amp;specular) const</argsstring>
+        <name>applySpecular</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::applySpecular</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref> const &amp;</type>
+          <declname>textureFlags</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>sampled</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>specular</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="120" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1a106041450e3e908590e4fba4d5052270" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::TextureConfigData::applyMetalness</definition>
+        <argsstring>(TextureFlags const &amp;textureFlags, sdw::Vec4 const &amp;sampled, sdw::Float &amp;metalness) const</argsstring>
+        <name>applyMetalness</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::applyMetalness</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref> const &amp;</type>
+          <declname>textureFlags</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>sampled</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>metalness</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="123" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1aae0c03ff183f10f08cdf7bac24b620b3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::TextureConfigData::applyShininess</definition>
+        <argsstring>(TextureFlags const &amp;textureFlags, sdw::Vec4 const &amp;sampled, sdw::Float &amp;shininess) const</argsstring>
+        <name>applyShininess</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::applyShininess</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref> const &amp;</type>
+          <declname>textureFlags</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>sampled</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>shininess</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="126" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1a9cd7943f674b2cddebb40a0a127be015" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::TextureConfigData::applyRoughness</definition>
+        <argsstring>(TextureFlags const &amp;textureFlags, sdw::Vec4 const &amp;sampled, sdw::Float &amp;roughness) const</argsstring>
+        <name>applyRoughness</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::applyRoughness</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref> const &amp;</type>
+          <declname>textureFlags</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>sampled</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>roughness</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="129" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1a05ac9730493c79c4ffbc17f330d49df3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::TextureConfigData::applyOpacity</definition>
+        <argsstring>(TextureFlags const &amp;textureFlags, sdw::Vec4 const &amp;sampled, sdw::Float &amp;opacity) const</argsstring>
+        <name>applyOpacity</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::applyOpacity</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref> const &amp;</type>
+          <declname>textureFlags</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>sampled</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>opacity</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="132" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1a8d967bf5afc7d5f357490f34803c6d23" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::TextureConfigData::applyNormal</definition>
+        <argsstring>(TextureFlags const &amp;textureFlags, sdw::Vec4 const &amp;sampled, sdw::Mat3 const &amp;tbn, sdw::Vec3 &amp;normal) const</argsstring>
+        <name>applyNormal</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::applyNormal</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref> const &amp;</type>
+          <declname>textureFlags</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>sampled</declname>
+        </param>
+        <param>
+          <type>sdw::Mat3 const &amp;</type>
+          <declname>tbn</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>normal</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="135" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1a702e9bc9e983f959adb5727d5d978a56" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::TextureConfigData::applyNormal</definition>
+        <argsstring>(TextureFlags const &amp;textureFlags, sdw::Vec4 const &amp;sampled, sdw::Vec3 const &amp;normal, sdw::Vec3 const &amp;tangent, sdw::Vec3 const &amp;bitangent, sdw::Vec3 &amp;result) const</argsstring>
+        <name>applyNormal</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::applyNormal</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref> const &amp;</type>
+          <declname>textureFlags</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>sampled</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>normal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>tangent</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>bitangent</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="139" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1a46191cbae6d44133d15379ac1a0b99e6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::TextureConfigData::applyHeight</definition>
+        <argsstring>(TextureFlags const &amp;textureFlags, sdw::Vec4 const &amp;sampled, sdw::Float &amp;height) const</argsstring>
+        <name>applyHeight</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::applyHeight</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref> const &amp;</type>
+          <declname>textureFlags</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>sampled</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>height</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="145" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1a84f968d521cb018d25bf6af573e494a8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::TextureConfigData::applyOcclusion</definition>
+        <argsstring>(TextureFlags const &amp;textureFlags, sdw::Vec4 const &amp;sampled, sdw::Float &amp;occlusion) const</argsstring>
+        <name>applyOcclusion</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::applyOcclusion</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref> const &amp;</type>
+          <declname>textureFlags</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>sampled</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>occlusion</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="148" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1a1cc5fbeacecddbf299e02a58af0469c0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::TextureConfigData::applyTransmittance</definition>
+        <argsstring>(TextureFlags const &amp;textureFlags, sdw::Vec4 const &amp;sampled, sdw::Float &amp;transmittance) const</argsstring>
+        <name>applyTransmittance</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::applyTransmittance</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref> const &amp;</type>
+          <declname>textureFlags</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>sampled</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>transmittance</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="151" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1a5380a19e68f70fdfa6edb894b4d23f6a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Boolean</type>
+        <definition>sdw::Boolean castor3d::shader::TextureConfigData::isDiffuse</definition>
+        <argsstring>() const</argsstring>
+        <name>isDiffuse</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::isDiffuse</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="155" column="14" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="155" bodyend="158"/>
+        <references refid="dd/d3b/a04851_1a3d66e08d8952b6ed2125b47a5e171d2c" compoundref="d5/d32/a01214" startline="267">colEnbl</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1a9701e6d11f57322b6013a0012db9804b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Boolean</type>
+        <definition>sdw::Boolean castor3d::shader::TextureConfigData::isAlbedo</definition>
+        <argsstring>() const</argsstring>
+        <name>isAlbedo</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::isAlbedo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="160" column="14" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="160" bodyend="163"/>
+        <references refid="dd/d3b/a04851_1a3d66e08d8952b6ed2125b47a5e171d2c" compoundref="d5/d32/a01214" startline="267">colEnbl</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1aacbfb53d3e6608c419e8fa049da59221" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Boolean</type>
+        <definition>sdw::Boolean castor3d::shader::TextureConfigData::isEmissive</definition>
+        <argsstring>() const</argsstring>
+        <name>isEmissive</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::isEmissive</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="165" column="14" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="165" bodyend="168"/>
+        <references refid="dd/d3b/a04851_1a862c8346ce6db91b04e83197490e5a91" compoundref="d5/d32/a01214" startline="279">emsEnbl</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1ae4a627848bde92c1df04668d90ff2424" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Boolean</type>
+        <definition>sdw::Boolean castor3d::shader::TextureConfigData::isSpecular</definition>
+        <argsstring>() const</argsstring>
+        <name>isSpecular</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::isSpecular</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="170" column="14" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="170" bodyend="173"/>
+        <references refid="dd/d3b/a04851_1ad9d7f6250dc978005c65fa3687617595" compoundref="d5/d32/a01214" startline="271">spcEnbl</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1ad834d236946e9b917cbcd69fbc68c499" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Boolean</type>
+        <definition>sdw::Boolean castor3d::shader::TextureConfigData::isMetalness</definition>
+        <argsstring>() const</argsstring>
+        <name>isMetalness</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::isMetalness</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="175" column="14" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="175" bodyend="178"/>
+        <references refid="dd/d3b/a04851_1af17443604ce9eae6db0cc1836936b1b5" compoundref="d5/d32/a01214" startline="275">metEnbl</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1a1f572ac2df87f2c38be8dc0c9a248024" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Boolean</type>
+        <definition>sdw::Boolean castor3d::shader::TextureConfigData::isShininess</definition>
+        <argsstring>() const</argsstring>
+        <name>isShininess</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::isShininess</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="180" column="14" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="180" bodyend="183"/>
+        <references refid="dd/d3b/a04851_1aee6cac89ff790d8faec4e0a4dfdd7f4e" compoundref="d5/d32/a01214" startline="273">shnEnbl</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1af6ad2171760ce8dca837a8d7769c55de" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Boolean</type>
+        <definition>sdw::Boolean castor3d::shader::TextureConfigData::isGlossiness</definition>
+        <argsstring>() const</argsstring>
+        <name>isGlossiness</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::isGlossiness</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="185" column="14" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="185" bodyend="188"/>
+        <references refid="dd/d3b/a04851_1aee6cac89ff790d8faec4e0a4dfdd7f4e" compoundref="d5/d32/a01214" startline="273">shnEnbl</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1ae389d58cd705a717336f78288fd20eb5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Boolean</type>
+        <definition>sdw::Boolean castor3d::shader::TextureConfigData::isRoughness</definition>
+        <argsstring>() const</argsstring>
+        <name>isRoughness</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::isRoughness</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="190" column="14" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="190" bodyend="193"/>
+        <references refid="dd/d3b/a04851_1ad972e2ea6d0e0a64518e495be03f31e0" compoundref="d5/d32/a01214" startline="277">rghEnbl</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1ac28c1efae2a6ef005b783bc54d13adb3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Boolean</type>
+        <definition>sdw::Boolean castor3d::shader::TextureConfigData::isOcclusion</definition>
+        <argsstring>() const</argsstring>
+        <name>isOcclusion</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::isOcclusion</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="195" column="14" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="195" bodyend="198"/>
+        <references refid="dd/d3b/a04851_1ac37cafcba9e16c14deed303a22bd93e6" compoundref="d5/d32/a01214" startline="281">occEnbl</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1a2e1ad2bc7c2632cd924378687f09e516" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Boolean</type>
+        <definition>sdw::Boolean castor3d::shader::TextureConfigData::isTransmittance</definition>
+        <argsstring>() const</argsstring>
+        <name>isTransmittance</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::isTransmittance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="200" column="14" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="200" bodyend="203"/>
+        <references refid="dd/d3b/a04851_1a8cba5bf13949facea89686a6b92a8713" compoundref="d5/d32/a01214" startline="283">trsEnbl</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1af7597ca6712aa6f2c95ce29003dec823" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Boolean</type>
+        <definition>sdw::Boolean castor3d::shader::TextureConfigData::isOpacity</definition>
+        <argsstring>() const</argsstring>
+        <name>isOpacity</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::isOpacity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="205" column="14" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="205" bodyend="208"/>
+        <references refid="dd/d3b/a04851_1a13f0a21a3bab89ff74c3edee57f84d9c" compoundref="d5/d32/a01214" startline="269">opaEnbl</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1a69c62a606dde3268c67c111f8be1a642" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Boolean</type>
+        <definition>sdw::Boolean castor3d::shader::TextureConfigData::isNormal</definition>
+        <argsstring>() const</argsstring>
+        <name>isNormal</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::isNormal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="210" column="14" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="210" bodyend="213"/>
+        <references refid="dd/d3b/a04851_1ae546121cd2ff3477480271e2e2a4c5f0" compoundref="d5/d32/a01214" startline="285">nmlEnbl</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1a8a3d751c7233e8491f258b49eb8e5f16" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Boolean</type>
+        <definition>sdw::Boolean castor3d::shader::TextureConfigData::isHeight</definition>
+        <argsstring>() const</argsstring>
+        <name>isHeight</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::isHeight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="215" column="14" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="215" bodyend="218"/>
+        <references refid="dd/d3b/a04851_1a23b263504f8d79d115b05c1cb286f0f0" compoundref="d5/d32/a01214" startline="289">hgtEnbl</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1abd4c7639e6dc62952707f1cfa0a202ed" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Boolean</type>
+        <definition>sdw::Boolean castor3d::shader::TextureConfigData::isGeometry</definition>
+        <argsstring>() const</argsstring>
+        <name>isGeometry</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::isGeometry</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="220" column="14" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="220" bodyend="225"/>
+        <references refid="dd/d3b/a04851_1a23b263504f8d79d115b05c1cb286f0f0" compoundref="d5/d32/a01214" startline="289">hgtEnbl</references>
+        <references refid="dd/d3b/a04851_1ae546121cd2ff3477480271e2e2a4c5f0" compoundref="d5/d32/a01214" startline="285">nmlEnbl</references>
+        <references refid="dd/d3b/a04851_1a13f0a21a3bab89ff74c3edee57f84d9c" compoundref="d5/d32/a01214" startline="269">opaEnbl</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1ab66551fcf6db9841e9b4d0e16dee9ba4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Boolean</type>
+        <definition>sdw::Boolean castor3d::shader::TextureConfigData::isGeometryOnly</definition>
+        <argsstring>() const</argsstring>
+        <name>isGeometryOnly</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::isGeometryOnly</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="227" column="14" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="227" bodyend="237"/>
+        <references refid="dd/d3b/a04851_1a3d66e08d8952b6ed2125b47a5e171d2c" compoundref="d5/d32/a01214" startline="267">colEnbl</references>
+        <references refid="dd/d3b/a04851_1a862c8346ce6db91b04e83197490e5a91" compoundref="d5/d32/a01214" startline="279">emsEnbl</references>
+        <references refid="dd/d3b/a04851_1af17443604ce9eae6db0cc1836936b1b5" compoundref="d5/d32/a01214" startline="275">metEnbl</references>
+        <references refid="dd/d3b/a04851_1ac37cafcba9e16c14deed303a22bd93e6" compoundref="d5/d32/a01214" startline="281">occEnbl</references>
+        <references refid="dd/d3b/a04851_1ad972e2ea6d0e0a64518e495be03f31e0" compoundref="d5/d32/a01214" startline="277">rghEnbl</references>
+        <references refid="dd/d3b/a04851_1aee6cac89ff790d8faec4e0a4dfdd7f4e" compoundref="d5/d32/a01214" startline="273">shnEnbl</references>
+        <references refid="dd/d3b/a04851_1ad9d7f6250dc978005c65fa3687617595" compoundref="d5/d32/a01214" startline="271">spcEnbl</references>
+        <references refid="dd/d3b/a04851_1a8cba5bf13949facea89686a6b92a8713" compoundref="d5/d32/a01214" startline="283">trsEnbl</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="dd/d3b/a04851_1aead085a8f9d37dc392b7c1343c96418e" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::TextureConfigData::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::declare</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="58" column="32"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1a0348fc0eb1c9ad18dddc5b81286b985e" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
+        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::TextureConfigData::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="59" column="41"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="dd/d3b/a04851_1ab47f6962b1cfb4092f36f1f508448045" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::TextureConfigData::convertUV</definition>
+        <argsstring>(sdw::Vec2 &amp;uv) const</argsstring>
+        <name>convertUV</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::convertUV</qualifiedname>
+        <param>
+          <type>sdw::Vec2 &amp;</type>
+          <declname>uv</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="240" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1aa91ef9ddffc68ef86d3fda633f3c9ca6" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::TextureConfigData::convertUVW</definition>
+        <argsstring>(sdw::Vec3 &amp;uvw) const</argsstring>
+        <name>convertUVW</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::convertUVW</qualifiedname>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="241" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1af9bd8105d1366788cb0b192db22c70ff" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::TextureConfigData::convertToTile</definition>
+        <argsstring>(sdw::Vec2 &amp;uv) const</argsstring>
+        <name>convertToTile</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::convertToTile</qualifiedname>
+        <param>
+          <type>sdw::Vec2 &amp;</type>
+          <declname>uv</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="242" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1ab6c7e6e07e60044d7619eaa2a0defba5" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::TextureConfigData::getFloat</definition>
+        <argsstring>(sdw::Vec4 const &amp;sampled, sdw::Float const &amp;mask) const</argsstring>
+        <name>getFloat</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::getFloat</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>sampled</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>mask</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="243" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a04851_1a4200cbd4efc2a3d0bde67adbee3a87f5" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::TextureConfigData::getVec3</definition>
+        <argsstring>(sdw::Vec4 const &amp;sampled, sdw::Float const &amp;mask) const</argsstring>
+        <name>getVec3</name>
+        <qualifiedname>castor3d::shader::TextureConfigData::getVec3</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>sampled</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>mask</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="245" column="11"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -317,131 +1706,116 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="1751">
-        <label>castor3d::RenderQuad</label>
-        <link refid="da/d95/a04435"/>
-        <childnode refid="1752" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1752">
-        <label>Named</label>
-      </node>
-      <node id="1750">
-        <label>castor3d::LightVolumeGIPass</label>
+      <node id="1">
+        <label>castor3d::shader::TextureConfigData</label>
         <link refid="dd/d3b/a04851"/>
-        <childnode refid="1751" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="1756">
-        <label>castor3d::RenderSystem</label>
-        <link refid="d6/d55/a04603"/>
-        <childnode refid="1757" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1754">
-        <label>castor3d::RenderQuad</label>
-        <link refid="da/d95/a04435"/>
-        <childnode refid="1755" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1756" relation="usage">
-          <edgelabel>m_renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="1758" relation="usage">
-          <edgelabel>m_device</edgelabel>
-        </childnode>
-      </node>
-      <node id="1761">
-        <label>T</label>
-      </node>
-      <node id="1763">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="1761" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="1760">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="1761" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="1762">
-        <label>std::vector&lt; ashes::CommandPoolPtr &gt;</label>
-        <childnode refid="1763" relation="template-instance">
-          <edgelabel>&lt; ashes::CommandPoolPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1759">
-        <label>std::array&lt; uint32_t, 4u &gt;</label>
-        <childnode refid="1760" relation="template-instance">
-          <edgelabel>&lt; uint32_t, 4u &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1755">
-        <label>Named</label>
-      </node>
-      <node id="1757">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="1758">
-        <label>castor3d::RenderDevice</label>
-        <link refid="de/ddb/a04491"/>
-        <childnode refid="1759" relation="usage">
-          <edgelabel>queueFamiliesIndex</edgelabel>
-        </childnode>
-        <childnode refid="1756" relation="usage">
-          <edgelabel>renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="1762" relation="usage">
-          <edgelabel>commandPools</edgelabel>
-        </childnode>
-      </node>
-      <node id="1753">
-        <label>castor3d::LightVolumeGIPass</label>
+      <node id="1">
+        <label>castor3d::shader::TextureConfigData</label>
         <link refid="dd/d3b/a04851"/>
-        <childnode refid="1754" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </collaborationgraph>
-    <location file="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp" line="24" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp" bodystart="22" bodyend="86"/>
+    <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="47" column="1" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="49" bodyend="296"/>
     <listofallmembers>
-      <member refid="dd/d3b/a04851_1a9aaefdeb5ba560055e5150e28ae0e157" prot="public" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>accept</name></member>
-      <member refid="da/d95/a04435_1ab31f1f028639e2280dc81a5207c19361" prot="public" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>cleanup</name></member>
-      <member refid="dd/d3b/a04851_1a9fdee971246b781c932c8fb71410ffba" prot="public" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>compute</name></member>
-      <member refid="da/d95/a04435_1a2d8f7fe31e95ec7563ab7e49d47f847f" prot="public" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>createPipeline</name></member>
-      <member refid="da/d95/a04435_1a9eed2ab1f518d2d215e10f79dd66b980" prot="public" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>createPipelineAndPass</name></member>
-      <member refid="dd/d3b/a04851_1aa5341faefd5d905f38bb778683ceb19e" prot="public" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>getCommands</name></member>
-      <member refid="da/d95/a04435_1a208ae566cd29dc14e874ec5381a40676" prot="public" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>getDevice</name></member>
-      <member refid="da/d95/a04435_1adf3b0cdd23bb9558df6d7f1b87b74ac6" prot="public" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>getRenderSystem</name></member>
-      <member refid="da/d95/a04435_1a2b4ea1f81bda3deace1e6f5b159f90db" prot="public" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>getSampler</name></member>
-      <member refid="da/d95/a04435_1a434520ea0e0f0a1ae885e7c9e19306a8" prot="public" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>initialisePasses</name></member>
-      <member refid="dd/d3b/a04851_1a07fc2c38bfc4d6346f593971ba7b31ad" prot="public" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>LightVolumeGIPass</name></member>
-      <member refid="dd/d3b/a04851_1af4eede604d35b33cb0c42138a7ebad80" prot="private" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>m_commands</name></member>
-      <member refid="da/d95/a04435_1ac07074df6fa0bb86ec6e9c76bf23f867" prot="protected" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>m_config</name></member>
-      <member refid="da/d95/a04435_1a0e0d911b83650f310a1d773e6774788c" prot="protected" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>m_device</name></member>
-      <member refid="dd/d3b/a04851_1aa24027617595bf2b31bcd8570e3503bf" prot="private" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>m_frameBuffer</name></member>
-      <member refid="dd/d3b/a04851_1a5defc334ac31c491f33ece249bca7fd8" prot="private" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>m_gpResult</name></member>
-      <member refid="dd/d3b/a04851_1a4ac57de2220fff600452e8689325c0ba" prot="private" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>m_pixelShader</name></member>
-      <member refid="dd/d3b/a04851_1a252b6a9f29684b2b6433109a6321296c" prot="private" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>m_renderPass</name></member>
-      <member refid="da/d95/a04435_1a67e531e63c3eef4d22c89cd5dcf26d39" prot="protected" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>m_renderSystem</name></member>
-      <member refid="da/d95/a04435_1ac424bcc12b49f4788b6a78e181e7d8c9" prot="protected" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>m_sampler</name></member>
-      <member refid="dd/d3b/a04851_1a0d76a918e1550aab5502f66b619a4386" prot="private" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>m_timer</name></member>
-      <member refid="dd/d3b/a04851_1abd00f81a73bdca8b8d5f810b5198dd5a" prot="private" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>m_vertexShader</name></member>
-      <member refid="da/d95/a04435_1aba30b821ed0f043349148de3f91e1e28" prot="public" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1abb76aa593ad380a88d949bd26fea0202" prot="public" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1a612d681d62631e6bb92d9601c660b48e" prot="public" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1af64b5bc8b9a9a3013e46accb200156f5" prot="public" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1a43bab20a96e9bea365bc98d8667c977e" prot="public" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1afacd916c61c3a5b315a0d3e94a8ba84d" prot="public" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1a046a2ac1ba39bbd6114dfe87d4aaaf11" prot="public" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1ac0cf400425c8050429e895099c971715" prot="public" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>registerPass</name></member>
-      <member refid="da/d95/a04435_1a62f21f0ecc9017c47eb029d0bc19e396" prot="public" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>registerPass</name></member>
-      <member refid="da/d95/a04435_1a367adcd9b6cc6ac6b1c68a28b2580eb2" prot="public" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>registerPassInputs</name></member>
-      <member refid="da/d95/a04435_1a48a49fffd036c545328e87e1449e141d" prot="protected" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>RenderQuad</name></member>
-      <member refid="da/d95/a04435_1aeaeeae8d7065de723f0a710360bab119" prot="public" virt="non-virtual"><scope>castor3d::LightVolumeGIPass</scope><name>RenderQuad</name></member>
-      <member refid="da/d95/a04435_1a8a01faf0243638f02d6f052ff9e85b4b" prot="public" virt="virtual"><scope>castor3d::LightVolumeGIPass</scope><name>~RenderQuad</name></member>
+      <member refid="dd/d3b/a04851_1a2fcd4ecb40b9b373656f7f73b8098013" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>applyAlbedo</name></member>
+      <member refid="dd/d3b/a04851_1a60e71101ab7213ae612a4a1f826c9459" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>applyDiffuse</name></member>
+      <member refid="dd/d3b/a04851_1aecf951d738d578764efdbe6d93eb87a9" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>applyEmissive</name></member>
+      <member refid="dd/d3b/a04851_1a46191cbae6d44133d15379ac1a0b99e6" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>applyHeight</name></member>
+      <member refid="dd/d3b/a04851_1a106041450e3e908590e4fba4d5052270" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>applyMetalness</name></member>
+      <member refid="dd/d3b/a04851_1a8d967bf5afc7d5f357490f34803c6d23" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>applyNormal</name></member>
+      <member refid="dd/d3b/a04851_1a702e9bc9e983f959adb5727d5d978a56" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>applyNormal</name></member>
+      <member refid="dd/d3b/a04851_1a84f968d521cb018d25bf6af573e494a8" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>applyOcclusion</name></member>
+      <member refid="dd/d3b/a04851_1a05ac9730493c79c4ffbc17f330d49df3" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>applyOpacity</name></member>
+      <member refid="dd/d3b/a04851_1a9cd7943f674b2cddebb40a0a127be015" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>applyRoughness</name></member>
+      <member refid="dd/d3b/a04851_1aae0c03ff183f10f08cdf7bac24b620b3" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>applyShininess</name></member>
+      <member refid="dd/d3b/a04851_1ad1e34aef7fe67799de2fd3cf71ba7162" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>applySpecular</name></member>
+      <member refid="dd/d3b/a04851_1a1cc5fbeacecddbf299e02a58af0469c0" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>applyTransmittance</name></member>
+      <member refid="dd/d3b/a04851_1a3d66e08d8952b6ed2125b47a5e171d2c" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>colEnbl</name></member>
+      <member refid="dd/d3b/a04851_1ad3d7d6241b9d31fdf1bfe746c45d0c88" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>colMask</name></member>
+      <member refid="dd/d3b/a04851_1a0c13aa2eea9a1512df37c347de2e155c" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>colOpa</name></member>
+      <member refid="dd/d3b/a04851_1a946157e747d11c1a252225223bb86c39" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>computeCommonMapContribution</name></member>
+      <member refid="dd/d3b/a04851_1afec2af770710067815b81efed378e5f1" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>computeCommonMapVoxelContribution</name></member>
+      <member refid="dd/d3b/a04851_1a5f12d1017dfdaf1e2c20f43cdd94f8a6" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>computeGeometryMapContribution</name></member>
+      <member refid="dd/d3b/a04851_1af9bd8105d1366788cb0b192db22c70ff" prot="private" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>convertToTile</name></member>
+      <member refid="dd/d3b/a04851_1ab47f6962b1cfb4092f36f1f508448045" prot="private" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>convertUV</name></member>
+      <member refid="dd/d3b/a04851_1aa91ef9ddffc68ef86d3fda633f3c9ca6" prot="private" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>convertUVW</name></member>
+      <member refid="dd/d3b/a04851_1aead085a8f9d37dc392b7c1343c96418e" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>declare</name></member>
+      <member refid="dd/d3b/a04851_1a862c8346ce6db91b04e83197490e5a91" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>emsEnbl</name></member>
+      <member refid="dd/d3b/a04851_1a1410bf8f7d37a1ba9d426b78ffc83f17" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>emsMask</name></member>
+      <member refid="dd/d3b/a04851_1ad3c7bef52967e3223c44cec39346ba78" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>emsOcc</name></member>
+      <member refid="dd/d3b/a04851_1ae2c2ec97a088e3e0bde7214e923c1f11" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>fneedYI</name></member>
+      <member refid="dd/d3b/a04851_1a77a8ddcd39e95e7d176272c784bca825" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>getColour</name></member>
+      <member refid="dd/d3b/a04851_1ab6c7e6e07e60044d7619eaa2a0defba5" prot="private" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>getFloat</name></member>
+      <member refid="dd/d3b/a04851_1a880572a4543211112bd454754337a039" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>getGlossiness</name></member>
+      <member refid="dd/d3b/a04851_1a79dc931ce170f4b3fc061d96d91e78cd" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>getOpacity</name></member>
+      <member refid="dd/d3b/a04851_1a4200cbd4efc2a3d0bde67adbee3a87f5" prot="private" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>getVec3</name></member>
+      <member refid="dd/d3b/a04851_1a23b263504f8d79d115b05c1cb286f0f0" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>hgtEnbl</name></member>
+      <member refid="dd/d3b/a04851_1a690299a86104bcbe44412433db5fd181" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>hgtFact</name></member>
+      <member refid="dd/d3b/a04851_1a399ca67f84f9d96cef8b998c41d507c6" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>hgtFcr</name></member>
+      <member refid="dd/d3b/a04851_1acde77bc4f63aecac218096b2a5ab921c" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>hgtMask</name></member>
+      <member refid="dd/d3b/a04851_1a9701e6d11f57322b6013a0012db9804b" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>isAlbedo</name></member>
+      <member refid="dd/d3b/a04851_1a5380a19e68f70fdfa6edb894b4d23f6a" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>isDiffuse</name></member>
+      <member refid="dd/d3b/a04851_1aacbfb53d3e6608c419e8fa049da59221" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>isEmissive</name></member>
+      <member refid="dd/d3b/a04851_1abd4c7639e6dc62952707f1cfa0a202ed" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>isGeometry</name></member>
+      <member refid="dd/d3b/a04851_1ab66551fcf6db9841e9b4d0e16dee9ba4" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>isGeometryOnly</name></member>
+      <member refid="dd/d3b/a04851_1af6ad2171760ce8dca837a8d7769c55de" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>isGlossiness</name></member>
+      <member refid="dd/d3b/a04851_1a8a3d751c7233e8491f258b49eb8e5f16" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>isHeight</name></member>
+      <member refid="dd/d3b/a04851_1ad834d236946e9b917cbcd69fbc68c499" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>isMetalness</name></member>
+      <member refid="dd/d3b/a04851_1a69c62a606dde3268c67c111f8be1a642" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>isNormal</name></member>
+      <member refid="dd/d3b/a04851_1ac28c1efae2a6ef005b783bc54d13adb3" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>isOcclusion</name></member>
+      <member refid="dd/d3b/a04851_1af7597ca6712aa6f2c95ce29003dec823" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>isOpacity</name></member>
+      <member refid="dd/d3b/a04851_1ae389d58cd705a717336f78288fd20eb5" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>isRoughness</name></member>
+      <member refid="dd/d3b/a04851_1a1f572ac2df87f2c38be8dc0c9a248024" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>isShininess</name></member>
+      <member refid="dd/d3b/a04851_1ae4a627848bde92c1df04668d90ff2424" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>isSpecular</name></member>
+      <member refid="dd/d3b/a04851_1a64128e1226c04655eeff6ead58f8374c" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>isTileAnim</name></member>
+      <member refid="dd/d3b/a04851_1a2e1ad2bc7c2632cd924378687f09e516" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>isTransmittance</name></member>
+      <member refid="dd/d3b/a04851_1ad01b00132cfb1a6559c00f15a089e05c" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>isTrnfAnim</name></member>
+      <member refid="dd/d3b/a04851_1a0348fc0eb1c9ad18dddc5b81286b985e" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>makeType</name></member>
+      <member refid="dd/d3b/a04851_1af17443604ce9eae6db0cc1836936b1b5" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>metEnbl</name></member>
+      <member refid="dd/d3b/a04851_1a6bf0ce19578a329cd05004a427db047f" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>metMask</name></member>
+      <member refid="dd/d3b/a04851_1a0925b75d596d9e7007fde5da49599f91" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>metRgh</name></member>
+      <member refid="dd/d3b/a04851_1ac4bc5d82a9ddf5edb97cf1d119caabba" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>mscVls</name></member>
+      <member refid="dd/d3b/a04851_1ac53ec7e5aeea37588eeb3395d9c16ba8" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>needsYI</name></member>
+      <member refid="dd/d3b/a04851_1ae546121cd2ff3477480271e2e2a4c5f0" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>nmlEnbl</name></member>
+      <member refid="dd/d3b/a04851_1a50d74dba3a3a6ba0aa64f69581dcd0a5" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>nmlFact</name></member>
+      <member refid="dd/d3b/a04851_1a2850ea3cb7f8429680419cfbdadee70c" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>nmlFcr</name></member>
+      <member refid="dd/d3b/a04851_1a9065b0f8bf774cb093cb68cc7f4934df" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>nmlGMul</name></member>
+      <member refid="dd/d3b/a04851_1a569107358878c66f2fa4ee674e411d4c" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>nmlMask</name></member>
+      <member refid="dd/d3b/a04851_1ac37cafcba9e16c14deed303a22bd93e6" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>occEnbl</name></member>
+      <member refid="dd/d3b/a04851_1a81681ccfcf255b47fb2722d15eb2e0ed" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>occMask</name></member>
+      <member refid="dd/d3b/a04851_1a13f0a21a3bab89ff74c3edee57f84d9c" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>opaEnbl</name></member>
+      <member refid="dd/d3b/a04851_1a16087d91a6c47a65930b7d0cd44754aa" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>opaMask</name></member>
+      <member refid="dd/d3b/a04851_1ad972e2ea6d0e0a64518e495be03f31e0" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>rghEnbl</name></member>
+      <member refid="dd/d3b/a04851_1ad345e5676edd0f07fd7952064551a0f7" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>rghMask</name></member>
+      <member refid="dd/d3b/a04851_1a4cf9d81e3e336dea27809a8a30bd82e4" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="dd/d3b/a04851_1aee6cac89ff790d8faec4e0a4dfdd7f4e" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>shnEnbl</name></member>
+      <member refid="dd/d3b/a04851_1a194e6738fa5b81ada86785c009c39e28" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>shnMask</name></member>
+      <member refid="dd/d3b/a04851_1ad9d7f6250dc978005c65fa3687617595" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>spcEnbl</name></member>
+      <member refid="dd/d3b/a04851_1a0aa1683d3f599e60e6eb19499cf1e22a" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>spcMask</name></member>
+      <member refid="dd/d3b/a04851_1a56cbba11e8a56bdcc7e6669192b842fe" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>spcShn</name></member>
+      <member refid="dd/d3b/a04851_1a7f8547447349a794398f001a1dbba390" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>texRot</name></member>
+      <member refid="dd/d3b/a04851_1a814136dbca1c47c6d8a023042f0ed921" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>texScl</name></member>
+      <member refid="dd/d3b/a04851_1a476ce7b97c0d30a511067a4c2af09e0a" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>texTrn</name></member>
+      <member refid="dd/d3b/a04851_1a5c21c5fb72ee6991e7fd9a5238023fcb" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>TextureConfigData</name></member>
+      <member refid="dd/d3b/a04851_1ad91886d82073ccf5412baef156f66d9e" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>TextureConfigurations</name></member>
+      <member refid="dd/d3b/a04851_1ae3db352e037e98838e0329c61a6bce4f" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>tleSet</name></member>
+      <member refid="dd/d3b/a04851_1a9da7b870c3f71772ee0a94d558f30782" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>transformUV</name></member>
+      <member refid="dd/d3b/a04851_1ab021ba7e826dde0917b0e7c329df1f09" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>transformUVW</name></member>
+      <member refid="dd/d3b/a04851_1a2da10d317b56ff0a0f099ca32a485f77" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>trsDum</name></member>
+      <member refid="dd/d3b/a04851_1a8cba5bf13949facea89686a6b92a8713" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>trsEnbl</name></member>
+      <member refid="dd/d3b/a04851_1aecfa48b5db1801b1a63b69f637b3a7fc" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigData</scope><name>trsMask</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

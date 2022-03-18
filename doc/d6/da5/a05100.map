@@ -1,5 +1,4 @@
-<map id="castor3d::SceneBackground::Cube" name="castor3d::SceneBackground::Cube">
-<area shape="rect" id="node1" title=" " alt="" coords="5,213,192,255"/>
-<area shape="rect" id="node2" href="$d1/ddb/a05106.html" title=" " alt="" coords="5,109,192,151"/>
-<area shape="rect" id="node3" href="$db/da9/a05110.html" title=" " alt="" coords="5,5,192,47"/>
+<map id="castor::TextWriter&lt; castor3d::HdrConfig &gt;" name="castor::TextWriter&lt; castor3d::HdrConfig &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="5,95,165,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="10,5,161,47"/>
 </map>

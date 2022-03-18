@@ -1,33 +1,58 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d4/dd6/a03364" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkHdrMetadataEXT &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d4/dd6/a03364_1a651a0465ff6f3c91120cd599d7e1df53" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkHdrMetadataEXT &gt;::value</definition>
+    <compoundname>castor3d::FaceIndices</compoundname>
+    <includes local="no">FaceIndices.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/dd6/a03364_1adf8426df8bab8f2e89269aad090a1d01" prot="public" static="no" mutable="no">
+        <type>std::array&lt; uint32_t, 3 &gt;</type>
+        <definition>std::array&lt; uint32_t, 3 &gt; castor3d::FaceIndices::m_index</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_HDR_METADATA_EXT</initializer>
+        <name>m_index</name>
+        <qualifiedname>castor3d::FaceIndices::m_index</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The indices. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="252" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="252" bodyend="-1"/>
+        <location file="Model/Mesh/Submesh/Component/FaceIndices.hpp" line="17" column="12" bodyfile="Model/Mesh/Submesh/Component/FaceIndices.hpp" bodystart="17" bodyend="-1"/>
+        <referencedby refid="d6/da3/a03360_1a9eabd49da77fe21c77805a5047bc0753" compoundref="d4/ddf/a00488" startline="33" endline="37">castor3d::Face::operator[]</referencedby>
+        <referencedby refid="d2/df5/a01395_1a4bf10f2f11fde3269c70845bbc572fbf" compoundref="d5/db1/a00140" startline="1283" endline="1291">castor3d::prepareChunkData</referencedby>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="252" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="252" bodyend="252"/>
+    <collaborationgraph>
+      <node id="4">
+        <label>T</label>
+      </node>
+      <node id="2">
+        <label>std::array&lt; uint32_t, 3 &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; uint32_t, 3 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::FaceIndices</label>
+        <link refid="d4/dd6/a03364"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_index</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/Submesh/Component/FaceIndices.hpp" line="13" column="1" bodyfile="Model/Mesh/Submesh/Component/FaceIndices.hpp" bodystart="14" bodyend="18"/>
     <listofallmembers>
-      <member refid="d4/dd6/a03364_1a651a0465ff6f3c91120cd599d7e1df53" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkHdrMetadataEXT &gt;</scope><name>value</name></member>
+      <member refid="d4/dd6/a03364_1adf8426df8bab8f2e89269aad090a1d01" prot="public" virt="non-virtual"><scope>castor3d::FaceIndices</scope><name>m_index</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

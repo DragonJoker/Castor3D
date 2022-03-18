@@ -1,5 +1,4 @@
-<map id="castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;" name="castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;">
-<area shape="rect" id="node1" title="SkeletonAnimationObject binary loader." alt="" coords="5,200,199,241"/>
-<area shape="rect" id="node2" href="$d2/d08/a02148.html" title=" " alt="" coords="5,109,199,151"/>
-<area shape="rect" id="node3" href="$d2/d08/a02148.html" title="Binary data chunk reader base class." alt="" coords="9,5,195,47"/>
+<map id="castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;" name="castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;">
+<area shape="rect" id="node1" title="Partial specialisation of InterpolatorT, for InterpolatorType::eNearest." alt="" coords="5,95,173,151"/>
+<area shape="rect" id="node2" href="$de/dfd/a02228.html" title="Template class which handles the interpolations, would it be quaternion, point, real,..." alt="" coords="17,5,161,47"/>
 </map>

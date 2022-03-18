@@ -1,5 +1,8 @@
-<map id="castor3d::RenderGrid" name="castor3d::RenderGrid">
-<area shape="rect" id="node1" title=" " alt="" coords="36,80,181,107"/>
-<area shape="rect" id="node3" href="$da/dfb/a04274.html" title=" " alt="" coords="5,155,212,181"/>
-<area shape="rect" id="node2" title=" " alt="" coords="77,5,140,32"/>
+<map id="castor3d::SkeletonAnimationInstanceBone" name="castor3d::SkeletonAnimationInstanceBone">
+<area shape="rect" id="node1" title=" " alt="" coords="851,31,1040,72"/>
+<area shape="rect" id="node2" href="$d8/d3a/a04439.html" title=" " alt="" coords="612,31,801,72"/>
+<area shape="rect" id="node3" title=" " alt="" coords="259,5,445,47"/>
+<area shape="rect" id="node4" href="$d2/d67/a03455.html" title=" " alt="" coords="257,71,447,112"/>
+<area shape="rect" id="node5" title=" " alt="" coords="14,33,199,75"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,99,208,155"/>
 </map>

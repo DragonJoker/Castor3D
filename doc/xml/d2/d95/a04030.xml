@@ -1,238 +1,360 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d2/d95/a04030" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VertexBoneData</compoundname>
-    <includes local="no">VertexBoneData.hpp</includes>
-    <innerclass refid="d9/d85/a04034" prot="public">castor3d::VertexBoneData::Ids</innerclass>
-    <innerclass refid="d9/d2c/a04042" prot="public">castor3d::VertexBoneData::Weights</innerclass>
+    <compoundname>castor3d::PipelineFlags</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d2/d95/a04030_1af2bf0195342cc4a6ff82b71cc5455545" prot="public" static="no" mutable="no">
-        <type><ref refid="d9/d85/a04034" kindref="compound">Ids</ref></type>
-        <definition>Ids castor3d::VertexBoneData::m_ids</definition>
+      <memberdef kind="variable" id="d2/d95/a04030_1aab051b1ee46ace763681dfea200198d2" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
+        <definition>BlendMode castor3d::PipelineFlags::colourBlendMode</definition>
         <argsstring></argsstring>
-        <name>m_ids</name>
+        <name>colourBlendMode</name>
+        <qualifiedname>castor3d::PipelineFlags::colourBlendMode</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="100" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="100" bodyend="-1"/>
-        <referencedby refid="de/d13/a01473_1a770ba5e8e6c80ebb02e90284327877d0" compoundref="de/d76/a00134" startline="1319" endline="1340">castor3d::prepareChunkData</referencedby>
+        <location file="Render/RenderModule.hpp" line="350" column="11" bodyfile="Render/RenderModule.hpp" bodystart="350" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d2/d95/a04030_1a3f15c9548718093815e7e1c2214089c7" prot="public" static="no" mutable="no">
-        <type><ref refid="d9/d2c/a04042" kindref="compound">Weights</ref></type>
-        <definition>Weights castor3d::VertexBoneData::m_weights</definition>
+      <memberdef kind="variable" id="d2/d95/a04030_1a0831b5262611024fcac18f42f7a29f92" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
+        <definition>BlendMode castor3d::PipelineFlags::alphaBlendMode</definition>
         <argsstring></argsstring>
-        <name>m_weights</name>
+        <name>alphaBlendMode</name>
+        <qualifiedname>castor3d::PipelineFlags::alphaBlendMode</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="169" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="169" bodyend="-1"/>
-        <referencedby refid="de/d13/a01473_1a770ba5e8e6c80ebb02e90284327877d0" compoundref="de/d76/a00134" startline="1319" endline="1340">castor3d::prepareChunkData</referencedby>
+        <location file="Render/RenderModule.hpp" line="351" column="11" bodyfile="Render/RenderModule.hpp" bodystart="351" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d95/a04030_1add12a9fda8077540029ee2482cb3dd31" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref></type>
+        <definition>PassFlags castor3d::PipelineFlags::passFlags</definition>
+        <argsstring></argsstring>
+        <name>passFlags</name>
+        <qualifiedname>castor3d::PipelineFlags::passFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="352" column="11" bodyfile="Render/RenderModule.hpp" bodystart="352" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d95/a04030_1a98434d111c8a331f820f9e1366c15ca8" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a567298c1844e69d8252f0b8c14206f60" kindref="member">RenderPassTypeID</ref></type>
+        <definition>RenderPassTypeID castor3d::PipelineFlags::renderPassType</definition>
+        <argsstring></argsstring>
+        <name>renderPassType</name>
+        <qualifiedname>castor3d::PipelineFlags::renderPassType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="353" column="18" bodyfile="Render/RenderModule.hpp" bodystart="353" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d95/a04030_1a5bd12d6aaf76be33b2d561a02357683b" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a773fcfeb825d3fe54eb4a3dce23bca11" kindref="member">PassTypeID</ref></type>
+        <definition>PassTypeID castor3d::PipelineFlags::passType</definition>
+        <argsstring></argsstring>
+        <name>passType</name>
+        <qualifiedname>castor3d::PipelineFlags::passType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="354" column="12" bodyfile="Render/RenderModule.hpp" bodystart="354" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d95/a04030_1a84af70d15122942aac813f3e8aecddaa" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::PipelineFlags::heightMapIndex</definition>
+        <argsstring></argsstring>
+        <name>heightMapIndex</name>
+        <qualifiedname>castor3d::PipelineFlags::heightMapIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="355" column="10" bodyfile="Render/RenderModule.hpp" bodystart="355" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d95/a04030_1aa3db54fd73e1d41fa2e66989fea924c1" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
+        <definition>ProgramFlags castor3d::PipelineFlags::programFlags</definition>
+        <argsstring></argsstring>
+        <name>programFlags</name>
+        <qualifiedname>castor3d::PipelineFlags::programFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="356" column="14" bodyfile="Render/RenderModule.hpp" bodystart="356" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d95/a04030_1a8572e6b81c50a0a8a39d0104ecdad193" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref></type>
+        <definition>SceneFlags castor3d::PipelineFlags::sceneFlags</definition>
+        <argsstring></argsstring>
+        <name>sceneFlags</name>
+        <qualifiedname>castor3d::PipelineFlags::sceneFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="357" column="12" bodyfile="Render/RenderModule.hpp" bodystart="357" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d95/a04030_1a82e267d99f0d0f3103eb76e4ab1a22b2" prot="public" static="no" mutable="no">
+        <type>VkPrimitiveTopology</type>
+        <definition>VkPrimitiveTopology castor3d::PipelineFlags::topology</definition>
+        <argsstring></argsstring>
+        <name>topology</name>
+        <qualifiedname>castor3d::PipelineFlags::topology</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="358" column="21" bodyfile="Render/RenderModule.hpp" bodystart="358" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d95/a04030_1a0d59a3d9de048c7a8b6a9c6e3b1f49ca" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::PipelineFlags::patchVertices</definition>
+        <argsstring></argsstring>
+        <name>patchVertices</name>
+        <qualifiedname>castor3d::PipelineFlags::patchVertices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="359" column="10" bodyfile="Render/RenderModule.hpp" bodystart="359" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d95/a04030_1a8eaf995825164170240006c2402e4997" prot="public" static="no" mutable="no">
+        <type>VkCompareOp</type>
+        <definition>VkCompareOp castor3d::PipelineFlags::alphaFunc</definition>
+        <argsstring></argsstring>
+        <name>alphaFunc</name>
+        <qualifiedname>castor3d::PipelineFlags::alphaFunc</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="360" column="13" bodyfile="Render/RenderModule.hpp" bodystart="360" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d95/a04030_1acae901eee417fb91f2194403bf759c20" prot="public" static="no" mutable="no">
+        <type>VkCompareOp</type>
+        <definition>VkCompareOp castor3d::PipelineFlags::blendAlphaFunc</definition>
+        <argsstring></argsstring>
+        <name>blendAlphaFunc</name>
+        <qualifiedname>castor3d::PipelineFlags::blendAlphaFunc</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="361" column="13" bodyfile="Render/RenderModule.hpp" bodystart="361" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d95/a04030_1a62246d4d0ff4e40f9c38229b202af418" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1afa51b269ca00eaeff4f95f361bf2208f" kindref="member">TextureFlagsArray</ref></type>
+        <definition>TextureFlagsArray castor3d::PipelineFlags::textures</definition>
+        <argsstring></argsstring>
+        <name>textures</name>
+        <qualifiedname>castor3d::PipelineFlags::textures</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="362" column="19" bodyfile="Render/RenderModule.hpp" bodystart="362" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d95/a04030_1a6b531356772b3895871068b0b1d292c4" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref></type>
+        <definition>TextureFlags castor3d::PipelineFlags::texturesFlags</definition>
+        <argsstring></argsstring>
+        <name>texturesFlags</name>
+        <qualifiedname>castor3d::PipelineFlags::texturesFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="363" column="14" bodyfile="Render/RenderModule.hpp" bodystart="363" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d95/a04030_1a5d246fc53a1d1d33294fa5627779e619" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::PipelineFlags::layerIndex</definition>
+        <argsstring></argsstring>
+        <name>layerIndex</name>
+        <qualifiedname>castor3d::PipelineFlags::layerIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="364" column="10" bodyfile="Render/RenderModule.hpp" bodystart="364" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d2/d95/a04030_1a40fdbc15048563fcb19452216882be3a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::VertexBoneData::VertexBoneData</definition>
-        <argsstring>()</argsstring>
-        <name>VertexBoneData</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="13" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d95/a04030_1a122796e0267e3c3d5a0d91e840ce9df7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::VertexBoneData::VertexBoneData</definition>
-        <argsstring>(VertexBoneData const &amp;rhs)</argsstring>
-        <name>VertexBoneData</name>
+      <memberdef kind="function" id="d2/d95/a04030_1aa8c6ce591fe0a647829f86479ed7ba10" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::PipelineFlags::PipelineFlags</definition>
+        <argsstring>(BlendMode colourBlendMode=BlendMode::eNoBlend, BlendMode alphaBlendMode=BlendMode::eNoBlend, PassFlags passFlags=PassFlag::eNone, RenderPassTypeID renderPassType=0u, PassTypeID passType=0u, uint32_t heightMapIndex=InvalidIndex, ProgramFlags programFlags=ProgramFlag::eNone, SceneFlags sceneFlags=SceneFlag::eNone, VkPrimitiveTopology topology=VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, uint32_t patchVertices=3u, VkCompareOp alphaFunc=VK_COMPARE_OP_ALWAYS, VkCompareOp blendAlphaFunc=VK_COMPARE_OP_ALWAYS, TextureFlagsArray textures={}, uint32_t layerIndex={})</argsstring>
+        <name>PipelineFlags</name>
+        <qualifiedname>castor3d::PipelineFlags::PipelineFlags</qualifiedname>
         <param>
-          <type><ref refid="d2/d95/a04030" kindref="compound">VertexBoneData</ref> const &amp;</type>
-          <declname>rhs</declname>
+          <type><ref refid="dc/df4/a01401_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
+          <declname>colourBlendMode</declname>
+          <defval><ref refid="dc/df4/a01401_1a840ab6fd50c1a08fcc1b6dc3f98d90faa12c10e6e0388d587340cfbe98b5045ae" kindref="member">BlendMode::eNoBlend</ref></defval>
         </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="14" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d95/a04030_1a62713228eb58663dbbdd22cd72ef873c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::VertexBoneData::VertexBoneData</definition>
-        <argsstring>(VertexBoneData &amp;&amp;rhs) noexcept</argsstring>
-        <name>VertexBoneData</name>
         <param>
-          <type><ref refid="d2/d95/a04030" kindref="compound">VertexBoneData</ref> &amp;&amp;</type>
-          <declname>rhs</declname>
+          <type><ref refid="dc/df4/a01401_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
+          <declname>alphaBlendMode</declname>
+          <defval><ref refid="dc/df4/a01401_1a840ab6fd50c1a08fcc1b6dc3f98d90faa12c10e6e0388d587340cfbe98b5045ae" kindref="member">BlendMode::eNoBlend</ref></defval>
         </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="15" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d95/a04030_1a930d623bb836aaf4cfd6381e9afa2de7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::VertexBoneData::~VertexBoneData</definition>
-        <argsstring>()</argsstring>
-        <name>~VertexBoneData</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="16" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d95/a04030_1a97c012e289b5297600e3b8736622c0a6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/d95/a04030" kindref="compound">VertexBoneData</ref> &amp;</type>
-        <definition>C3D_API VertexBoneData&amp; castor3d::VertexBoneData::operator=</definition>
-        <argsstring>(VertexBoneData const &amp;rhs)</argsstring>
-        <name>operator=</name>
         <param>
-          <type><ref refid="d2/d95/a04030" kindref="compound">VertexBoneData</ref> const &amp;</type>
-          <declname>rhs</declname>
+          <type><ref refid="dc/df4/a01401_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref></type>
+          <declname>passFlags</declname>
+          <defval><ref refid="dc/df4/a01401_1a043cb84a97fa62d2b78e9f4ec3238f70abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">PassFlag::eNone</ref></defval>
         </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="17" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d95/a04030_1abbb32d9eaeaa0b47940032b6824c3712" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/d95/a04030" kindref="compound">VertexBoneData</ref> &amp;</type>
-        <definition>C3D_API VertexBoneData&amp; castor3d::VertexBoneData::operator=</definition>
-        <argsstring>(VertexBoneData &amp;&amp;rhs) noexcept</argsstring>
-        <name>operator=</name>
         <param>
-          <type><ref refid="d2/d95/a04030" kindref="compound">VertexBoneData</ref> &amp;&amp;</type>
-          <declname>rhs</declname>
+          <type><ref refid="dc/df4/a01401_1a567298c1844e69d8252f0b8c14206f60" kindref="member">RenderPassTypeID</ref></type>
+          <declname>renderPassType</declname>
+          <defval>0u</defval>
         </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="18" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d95/a04030_1a7fed1a962f0411e51ac3c17083f8a720" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::VertexBoneData::addBoneData</definition>
-        <argsstring>(uint32_t boneId, float weight)</argsstring>
-        <name>addBoneData</name>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a773fcfeb825d3fe54eb4a3dce23bca11" kindref="member">PassTypeID</ref></type>
+          <declname>passType</declname>
+          <defval>0u</defval>
+        </param>
         <param>
           <type>uint32_t</type>
-          <declname>boneId</declname>
+          <declname>heightMapIndex</declname>
+          <defval><ref refid="dc/df4/a01401_1a2533c48f44e5f343ab52f930f7fec110" kindref="member">InvalidIndex</ref></defval>
         </param>
         <param>
-          <type>float</type>
-          <declname>weight</declname>
+          <type><ref refid="dc/df4/a01401_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
+          <declname>programFlags</declname>
+          <defval><ref refid="dc/df4/a01401_1a6dbeb5480c4a424e0c24ace65835778babe988781e4e1de1c6a36fb698afbbe1f" kindref="member">ProgramFlag::eNone</ref></defval>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref></type>
+          <declname>sceneFlags</declname>
+          <defval><ref refid="dc/df4/a01401_1a0282168ae87222228c5a154c419deb51abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">SceneFlag::eNone</ref></defval>
+        </param>
+        <param>
+          <type>VkPrimitiveTopology</type>
+          <declname>topology</declname>
+          <defval>VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>patchVertices</declname>
+          <defval>3u</defval>
+        </param>
+        <param>
+          <type>VkCompareOp</type>
+          <declname>alphaFunc</declname>
+          <defval>VK_COMPARE_OP_ALWAYS</defval>
+        </param>
+        <param>
+          <type>VkCompareOp</type>
+          <declname>blendAlphaFunc</declname>
+          <defval>VK_COMPARE_OP_ALWAYS</defval>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1afa51b269ca00eaeff4f95f361bf2208f" kindref="member">TextureFlagsArray</ref></type>
+          <declname>textures</declname>
+          <defval>{}</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>layerIndex</declname>
+          <defval>{}</defval>
         </param>
         <briefdescription>
-<para>adds bone informations to the vertex </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">boneId</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The bone ID </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">weight</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The bone weight </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="29" column="1"/>
+        <location file="Render/RenderModule.hpp" line="318" column="1" bodyfile="Render/RenderModule.hpp" bodystart="318" bodyend="348"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>Pipeline flags. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
     <collaborationgraph>
-      <node id="4660">
-        <label>std::array&lt; uint32_t, MaxBonesPerVertex &gt;</label>
-        <childnode refid="4657" relation="template-instance">
-          <edgelabel>&lt; uint32_t, MaxBonesPerVertex &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4655">
-        <label>castor3d::VertexBoneData::Weights</label>
-        <link refid="d9/d2c/a04042"/>
-        <childnode refid="4656" relation="usage">
-          <edgelabel>data</edgelabel>
-        </childnode>
-      </node>
-      <node id="4658">
+      <node id="5">
         <label>T</label>
       </node>
-      <node id="4657">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="4658" relation="usage">
+      <node id="1">
+        <label>castor3d::PipelineFlags</label>
+        <link refid="d2/d95/a04030"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>textures</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::TextureFlagsId</label>
+        <link refid="d5/dd8/a02802"/>
+      </node>
+      <node id="4">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="5" relation="usage">
           <edgelabel>elements</edgelabel>
         </childnode>
       </node>
-      <node id="4659">
-        <label>castor3d::VertexBoneData::Ids</label>
-        <link refid="d9/d85/a04034"/>
-        <childnode refid="4660" relation="usage">
-          <edgelabel>data</edgelabel>
+      <node id="2">
+        <label>std::vector&lt; TextureFlagsId &gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>elements</edgelabel>
         </childnode>
-      </node>
-      <node id="4656">
-        <label>std::array&lt; float, MaxBonesPerVertex &gt;</label>
-        <childnode refid="4657" relation="template-instance">
-          <edgelabel>&lt; float, MaxBonesPerVertex &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4654">
-        <label>castor3d::VertexBoneData</label>
-        <link refid="d2/d95/a04030"/>
-        <childnode refid="4655" relation="usage">
-          <edgelabel>m_weights</edgelabel>
-        </childnode>
-        <childnode refid="4659" relation="usage">
-          <edgelabel>m_ids</edgelabel>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; TextureFlagsId &gt;</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Model/Skeleton/VertexBoneData.hpp" line="12" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="11" bodyend="170"/>
+    <location file="Render/RenderModule.hpp" line="316" column="1" bodyfile="Render/RenderModule.hpp" bodystart="317" bodyend="365"/>
     <listofallmembers>
-      <member refid="d2/d95/a04030_1a7fed1a962f0411e51ac3c17083f8a720" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData</scope><name>addBoneData</name></member>
-      <member refid="d2/d95/a04030_1af2bf0195342cc4a6ff82b71cc5455545" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData</scope><name>m_ids</name></member>
-      <member refid="d2/d95/a04030_1a3f15c9548718093815e7e1c2214089c7" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData</scope><name>m_weights</name></member>
-      <member refid="d2/d95/a04030_1a97c012e289b5297600e3b8736622c0a6" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData</scope><name>operator=</name></member>
-      <member refid="d2/d95/a04030_1abbb32d9eaeaa0b47940032b6824c3712" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData</scope><name>operator=</name></member>
-      <member refid="d2/d95/a04030_1a40fdbc15048563fcb19452216882be3a" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData</scope><name>VertexBoneData</name></member>
-      <member refid="d2/d95/a04030_1a122796e0267e3c3d5a0d91e840ce9df7" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData</scope><name>VertexBoneData</name></member>
-      <member refid="d2/d95/a04030_1a62713228eb58663dbbdd22cd72ef873c" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData</scope><name>VertexBoneData</name></member>
-      <member refid="d2/d95/a04030_1a930d623bb836aaf4cfd6381e9afa2de7" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData</scope><name>~VertexBoneData</name></member>
+      <member refid="d2/d95/a04030_1a0831b5262611024fcac18f42f7a29f92" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>alphaBlendMode</name></member>
+      <member refid="d2/d95/a04030_1a8eaf995825164170240006c2402e4997" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>alphaFunc</name></member>
+      <member refid="d2/d95/a04030_1acae901eee417fb91f2194403bf759c20" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>blendAlphaFunc</name></member>
+      <member refid="d2/d95/a04030_1aab051b1ee46ace763681dfea200198d2" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>colourBlendMode</name></member>
+      <member refid="d2/d95/a04030_1a84af70d15122942aac813f3e8aecddaa" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>heightMapIndex</name></member>
+      <member refid="d2/d95/a04030_1a5d246fc53a1d1d33294fa5627779e619" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>layerIndex</name></member>
+      <member refid="d2/d95/a04030_1add12a9fda8077540029ee2482cb3dd31" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>passFlags</name></member>
+      <member refid="d2/d95/a04030_1a5bd12d6aaf76be33b2d561a02357683b" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>passType</name></member>
+      <member refid="d2/d95/a04030_1a0d59a3d9de048c7a8b6a9c6e3b1f49ca" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>patchVertices</name></member>
+      <member refid="d2/d95/a04030_1aa8c6ce591fe0a647829f86479ed7ba10" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>PipelineFlags</name></member>
+      <member refid="d2/d95/a04030_1aa3db54fd73e1d41fa2e66989fea924c1" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>programFlags</name></member>
+      <member refid="d2/d95/a04030_1a98434d111c8a331f820f9e1366c15ca8" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>renderPassType</name></member>
+      <member refid="d2/d95/a04030_1a8572e6b81c50a0a8a39d0104ecdad193" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>sceneFlags</name></member>
+      <member refid="d2/d95/a04030_1a62246d4d0ff4e40f9c38229b202af418" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>textures</name></member>
+      <member refid="d2/d95/a04030_1a6b531356772b3895871068b0b1d292c4" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>texturesFlags</name></member>
+      <member refid="d2/d95/a04030_1a82e267d99f0d0f3103eb76e4ab1a22b2" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>topology</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

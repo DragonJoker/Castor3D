@@ -1,35 +1,38 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d9/dce/a04386" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::GaussianBlur</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
-    <includes local="no">GaussianBlur.hpp</includes>
-    <innerclass refid="dd/d9b/a04398" prot="public">castor3d::GaussianBlur::BlurPass</innerclass>
-    <innerclass refid="d5/de5/a04390" prot="public">castor3d::GaussianBlur::Configuration</innerclass>
-    <innerclass refid="d5/d22/a04394" prot="public">castor3d::GaussianBlur::RenderQuad</innerclass>
+    <compoundname>castor3d::AnimatedSkeleton</compoundname>
+    <basecompoundref refid="db/da9/a04374" prot="public" virt="non-virtual">castor3d::AnimatedObject</basecompoundref>
+    <includes local="no">AnimatedSkeleton.hpp</includes>
       <sectiondef kind="user-defined">
-      <memberdef kind="function" id="d9/dce/a04386_1a1d48068a862272678f4107eb73f422b7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::RenderPass const  &amp;</type>
-        <definition>ashes::RenderPass const&amp; castor3d::GaussianBlur::getRenderPass</definition>
-        <argsstring>() const</argsstring>
-        <name>getRenderPass</name>
+      <memberdef kind="function" id="d9/dce/a04386_1a66bf0916da892b4e92d058c1f3730198" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::AnimatedSkeleton::AnimatedSkeleton</definition>
+        <argsstring>(AnimatedSkeleton &amp;&amp;rhs)=default</argsstring>
+        <name>AnimatedSkeleton</name>
+        <qualifiedname>castor3d::AnimatedSkeleton::AnimatedSkeleton</qualifiedname>
+        <param>
+          <type><ref refid="d9/dce/a04386" kindref="compound">AnimatedSkeleton</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>name Getters. </para>
+<para>name Copy / Move. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="98" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="98" bodyend="102"/>
+        <location file="Scene/Animation/AnimatedSkeleton.hpp" line="26" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d9/dce/a04386_1acb166aea353879479965061be0445df1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::FrameBuffer const  &amp;</type>
-        <definition>ashes::FrameBuffer const&amp; castor3d::GaussianBlur::getBlurXFrameBuffer</definition>
-        <argsstring>(uint32_t level) const</argsstring>
-        <name>getBlurXFrameBuffer</name>
+      <memberdef kind="function" id="d9/dce/a04386_1a209fbd347bad23a0e5b8c9009bae7e15" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/dce/a04386" kindref="compound">AnimatedSkeleton</ref> &amp;</type>
+        <definition>C3D_API AnimatedSkeleton &amp; castor3d::AnimatedSkeleton::operator=</definition>
+        <argsstring>(AnimatedSkeleton &amp;&amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::AnimatedSkeleton::operator=</qualifiedname>
         <param>
-          <type>uint32_t</type>
-          <declname>level</declname>
+          <type><ref refid="d9/dce/a04386" kindref="compound">AnimatedSkeleton</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -37,21 +40,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="104" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="104" bodyend="110"/>
-        <references refid="dd/d9b/a04398_1a844d46bcbaa6708a602e279d56a367e4" compoundref="df/df7/a00731" startline="220">castor3d::GaussianBlur::BlurPass::fbos</references>
+        <location file="Scene/Animation/AnimatedSkeleton.hpp" line="27" column="27"/>
       </memberdef>
-      <memberdef kind="function" id="d9/dce/a04386_1a0f7571831be49563c0551cb9c6a948d8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::FrameBuffer const  &amp;</type>
-        <definition>ashes::FrameBuffer const&amp; castor3d::GaussianBlur::getBlurYFrameBuffer</definition>
-        <argsstring>(uint32_t layer, uint32_t level) const</argsstring>
-        <name>getBlurYFrameBuffer</name>
+      <memberdef kind="function" id="d9/dce/a04386_1a8ae6caff62b163b6f0de6ade8ee1a993" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::AnimatedSkeleton::AnimatedSkeleton</definition>
+        <argsstring>(AnimatedSkeleton const &amp;rhs)=delete</argsstring>
+        <name>AnimatedSkeleton</name>
+        <qualifiedname>castor3d::AnimatedSkeleton::AnimatedSkeleton</qualifiedname>
         <param>
-          <type>uint32_t</type>
-          <declname>layer</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>level</declname>
+          <type><ref refid="d9/dce/a04386" kindref="compound">AnimatedSkeleton</ref> const &amp;</type>
+          <declname>rhs</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -59,407 +58,128 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="112" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="112" bodyend="118"/>
-        <references refid="dd/d9b/a04398_1a844d46bcbaa6708a602e279d56a367e4" compoundref="df/df7/a00731" startline="220">castor3d::GaussianBlur::BlurPass::fbos</references>
+        <location file="Scene/Animation/AnimatedSkeleton.hpp" line="28" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d9/dce/a04386_1a5fb27fac250192aa377acdd24f2a2002" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::CommandBuffer const  &amp;</type>
-        <definition>ashes::CommandBuffer const&amp; castor3d::GaussianBlur::getBlurXCommandBuffer</definition>
-        <argsstring>() const</argsstring>
-        <name>getBlurXCommandBuffer</name>
+      <memberdef kind="function" id="d9/dce/a04386_1ac69836f8bcdb15f10e44e3407300eccf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/dce/a04386" kindref="compound">AnimatedSkeleton</ref> &amp;</type>
+        <definition>C3D_API AnimatedSkeleton &amp; castor3d::AnimatedSkeleton::operator=</definition>
+        <argsstring>(AnimatedSkeleton const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::AnimatedSkeleton::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d9/dce/a04386" kindref="compound">AnimatedSkeleton</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="120" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="120" bodyend="123"/>
-        <references refid="dd/d9b/a04398_1ab728812496205f228d0e4879244154e7" compoundref="df/df7/a00731" startline="221">castor3d::GaussianBlur::BlurPass::commandBuffer</references>
-      </memberdef>
-      <memberdef kind="function" id="d9/dce/a04386_1a939393764820e8e1da82b9ae8be492b1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::CommandBuffer const  &amp;</type>
-        <definition>ashes::CommandBuffer const&amp; castor3d::GaussianBlur::getBlurYCommandBuffer</definition>
-        <argsstring>() const</argsstring>
-        <name>getBlurYCommandBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="125" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="125" bodyend="128"/>
-        <references refid="dd/d9b/a04398_1ab728812496205f228d0e4879244154e7" compoundref="df/df7/a00731" startline="221">castor3d::GaussianBlur::BlurPass::commandBuffer</references>
-      </memberdef>
-      <memberdef kind="function" id="d9/dce/a04386_1a518fd6bd60564a0c69daad429d7bb1fc" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d2/d63/a05306" kindref="compound">ShaderModule</ref> const  &amp;</type>
-        <definition>ShaderModule const&amp; castor3d::GaussianBlur::getBlurXVertexModule</definition>
-        <argsstring>() const</argsstring>
-        <name>getBlurXVertexModule</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="130" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="130" bodyend="133"/>
-        <references refid="dd/d9b/a04398_1a26951ffe5908c6bb60f945c8a114f169" compoundref="df/df7/a00731" startline="215">castor3d::GaussianBlur::BlurPass::vertexShader</references>
-      </memberdef>
-      <memberdef kind="function" id="d9/dce/a04386_1ab9b5490989fcb8d1fb60951c78ee8334" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d2/d63/a05306" kindref="compound">ShaderModule</ref> const  &amp;</type>
-        <definition>ShaderModule const&amp; castor3d::GaussianBlur::getBlurXPixelModule</definition>
-        <argsstring>() const</argsstring>
-        <name>getBlurXPixelModule</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="135" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="135" bodyend="138"/>
-        <references refid="dd/d9b/a04398_1a1a47b44af1813d40ae3d153abdfb2dd1" compoundref="df/df7/a00731" startline="216">castor3d::GaussianBlur::BlurPass::pixelShader</references>
-      </memberdef>
-      <memberdef kind="function" id="d9/dce/a04386_1a326cad064f8bb32fa17a4cc7d77365fa" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d2/d63/a05306" kindref="compound">ShaderModule</ref> const  &amp;</type>
-        <definition>ShaderModule const&amp; castor3d::GaussianBlur::getBlurYVertexModule</definition>
-        <argsstring>() const</argsstring>
-        <name>getBlurYVertexModule</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="140" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="140" bodyend="143"/>
-        <references refid="dd/d9b/a04398_1a26951ffe5908c6bb60f945c8a114f169" compoundref="df/df7/a00731" startline="215">castor3d::GaussianBlur::BlurPass::vertexShader</references>
-      </memberdef>
-      <memberdef kind="function" id="d9/dce/a04386_1afda1b18f557d93224e94f778175456e3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d2/d63/a05306" kindref="compound">ShaderModule</ref> const  &amp;</type>
-        <definition>ShaderModule const&amp; castor3d::GaussianBlur::getBlurYPixelModule</definition>
-        <argsstring>() const</argsstring>
-        <name>getBlurYPixelModule</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="145" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="145" bodyend="148"/>
-        <references refid="dd/d9b/a04398_1a1a47b44af1813d40ae3d153abdfb2dd1" compoundref="df/df7/a00731" startline="216">castor3d::GaussianBlur::BlurPass::pixelShader</references>
-      </memberdef>
-      <memberdef kind="function" id="d9/dce/a04386_1a7fce110d1483e1b8f4a8c9b6cdbae06c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ast::Shader const  &amp;</type>
-        <definition>ast::Shader const&amp; castor3d::GaussianBlur::getBlurXVertexShader</definition>
-        <argsstring>() const</argsstring>
-        <name>getBlurXVertexShader</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="150" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="150" bodyend="154"/>
-        <references refid="d2/d63/a05306_1ae7377c33dfa458a5065bf2f5e93f1b6c" compoundref="d9/d31/a01208" startline="49">castor3d::ShaderModule::shader</references>
-        <references refid="dd/d9b/a04398_1a26951ffe5908c6bb60f945c8a114f169" compoundref="df/df7/a00731" startline="215">castor3d::GaussianBlur::BlurPass::vertexShader</references>
-      </memberdef>
-      <memberdef kind="function" id="d9/dce/a04386_1a144f25716d6fe59c84c701441092a949" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ast::Shader const  &amp;</type>
-        <definition>ast::Shader const&amp; castor3d::GaussianBlur::getBlurXPixelShader</definition>
-        <argsstring>() const</argsstring>
-        <name>getBlurXPixelShader</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="156" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="156" bodyend="160"/>
-        <references refid="dd/d9b/a04398_1a1a47b44af1813d40ae3d153abdfb2dd1" compoundref="df/df7/a00731" startline="216">castor3d::GaussianBlur::BlurPass::pixelShader</references>
-        <references refid="d2/d63/a05306_1ae7377c33dfa458a5065bf2f5e93f1b6c" compoundref="d9/d31/a01208" startline="49">castor3d::ShaderModule::shader</references>
-      </memberdef>
-      <memberdef kind="function" id="d9/dce/a04386_1ad5e5c81365fcb7e303600f7b88ac171a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ast::Shader const  &amp;</type>
-        <definition>ast::Shader const&amp; castor3d::GaussianBlur::getBlurYVertexShader</definition>
-        <argsstring>() const</argsstring>
-        <name>getBlurYVertexShader</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="162" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="162" bodyend="166"/>
-        <references refid="d2/d63/a05306_1ae7377c33dfa458a5065bf2f5e93f1b6c" compoundref="d9/d31/a01208" startline="49">castor3d::ShaderModule::shader</references>
-        <references refid="dd/d9b/a04398_1a26951ffe5908c6bb60f945c8a114f169" compoundref="df/df7/a00731" startline="215">castor3d::GaussianBlur::BlurPass::vertexShader</references>
-      </memberdef>
-      <memberdef kind="function" id="d9/dce/a04386_1a1174a88f9531dafe7fe70b82a6761559" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ast::Shader const  &amp;</type>
-        <definition>ast::Shader const&amp; castor3d::GaussianBlur::getBlurYPixelShader</definition>
-        <argsstring>() const</argsstring>
-        <name>getBlurYPixelShader</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="168" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="168" bodyend="172"/>
-        <references refid="dd/d9b/a04398_1a1a47b44af1813d40ae3d153abdfb2dd1" compoundref="df/df7/a00731" startline="216">castor3d::GaussianBlur::BlurPass::pixelShader</references>
-        <references refid="d2/d63/a05306_1ae7377c33dfa458a5065bf2f5e93f1b6c" compoundref="d9/d31/a01208" startline="49">castor3d::ShaderModule::shader</references>
+        <location file="Scene/Animation/AnimatedSkeleton.hpp" line="29" column="27"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="d9/dce/a04386_1a59a7384ce9be813bbec639d19ef7fbd6" prot="public" static="no">
-        <type>std::unique_ptr&lt; <ref refid="d5/d22/a04394" kindref="compound">RenderQuad</ref> &gt;</type>
-        <definition>using castor3d::GaussianBlur::RenderQuadPtr =  std::unique_ptr&lt; RenderQuad &gt;</definition>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d9/dce/a04386_1a057053a0856e6842abbe019259121f84" prot="protected" static="no" mutable="no">
+        <type><ref refid="d7/db0/a03466" kindref="compound">Skeleton</ref> &amp;</type>
+        <definition>Skeleton&amp; castor3d::AnimatedSkeleton::m_skeleton</definition>
         <argsstring></argsstring>
-        <name>RenderQuadPtr</name>
+        <name>m_skeleton</name>
+        <qualifiedname>castor3d::AnimatedSkeleton::m_skeleton</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="211" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="211" bodyend="-1"/>
+        <location file="Scene/Animation/AnimatedSkeleton.hpp" line="109" column="11" bodyfile="Scene/Animation/AnimatedSkeleton.hpp" bodystart="109" bodyend="-1"/>
+        <referencedby refid="d9/dce/a04386_1a36de9d5c3a44da7e81abb698a3bb270d" compoundref="d9/d9a/a00998" startline="77" endline="80">getSkeleton</referencedby>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d9/dce/a04386_1ad4e5e92fc3459d70640cdc903ecc179b" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
-        <definition>C3D_API castor::String const castor3d::GaussianBlur::Config</definition>
+      <memberdef kind="variable" id="d9/dce/a04386_1a3d2b424fce39d204278d67c9386a5591" prot="protected" static="no" mutable="no">
+        <type><ref refid="dd/dc8/a03342" kindref="compound">Mesh</ref> &amp;</type>
+        <definition>Mesh&amp; castor3d::AnimatedSkeleton::m_mesh</definition>
         <argsstring></argsstring>
-        <name>Config</name>
+        <name>m_mesh</name>
+        <qualifiedname>castor3d::AnimatedSkeleton::m_mesh</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="176" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="176" bodyend="-1"/>
+        <location file="Scene/Animation/AnimatedSkeleton.hpp" line="110" column="7" bodyfile="Scene/Animation/AnimatedSkeleton.hpp" bodystart="110" bodyend="-1"/>
+        <referencedby refid="d9/dce/a04386_1a2aa2cc73711a3d0d806bada44d565c49" compoundref="d9/d9a/a00998" startline="82" endline="85">getMesh</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="d9/dce/a04386_1a3ea0db3cb529a51262383c2989e1db5b" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
-        <definition>C3D_API castor::String const castor3d::GaussianBlur::Coefficients</definition>
+      <memberdef kind="variable" id="d9/dce/a04386_1a6cd9a5a17cb19a5830ff868086f7032a" prot="protected" static="no" mutable="no">
+        <type><ref refid="d5/d47/a04490" kindref="compound">Geometry</ref> &amp;</type>
+        <definition>Geometry&amp; castor3d::AnimatedSkeleton::m_geometry</definition>
         <argsstring></argsstring>
-        <name>Coefficients</name>
+        <name>m_geometry</name>
+        <qualifiedname>castor3d::AnimatedSkeleton::m_geometry</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="177" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="177" bodyend="-1"/>
+        <location file="Scene/Animation/AnimatedSkeleton.hpp" line="111" column="11" bodyfile="Scene/Animation/AnimatedSkeleton.hpp" bodystart="111" bodyend="-1"/>
+        <referencedby refid="d9/dce/a04386_1a92f5037e780206603e3a36ad5300ec7a" compoundref="d9/d9a/a00998" startline="87" endline="90">getGeometry</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="d9/dce/a04386_1ad4e5e21985b62833eb4f0dbf94a7626d" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
-        <definition>C3D_API castor::String const castor3d::GaussianBlur::CoefficientsCount</definition>
+      <memberdef kind="variable" id="d9/dce/a04386_1ade8a6b35778fac9aded3b56d3d8b0924" prot="protected" static="no" mutable="no">
+        <type>SkeletonAnimationInstanceArray</type>
+        <definition>SkeletonAnimationInstanceArray castor3d::AnimatedSkeleton::m_playingAnimations</definition>
         <argsstring></argsstring>
-        <name>CoefficientsCount</name>
+        <name>m_playingAnimations</name>
+        <qualifiedname>castor3d::AnimatedSkeleton::m_playingAnimations</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="178" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="178" bodyend="-1"/>
+        <location file="Scene/Animation/AnimatedSkeleton.hpp" line="112" column="32" bodyfile="Scene/Animation/AnimatedSkeleton.hpp" bodystart="112" bodyend="-1"/>
+        <referencedby refid="d9/dce/a04386_1a25cd572ba964740c47b53110261cca3f" compoundref="d9/d9a/a00998" startline="72" endline="75">isPlayingAnimation</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="d9/dce/a04386_1ab2202e518ace50ccc9e2d3330396db0b" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
-        <definition>C3D_API castor::String const castor3d::GaussianBlur::TextureSize</definition>
+      <memberdef kind="variable" id="d9/dce/a04386_1ad8a17416b3ef2c6f273b1f477eee9e8e" prot="protected" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::AnimatedSkeleton::m_id</definition>
         <argsstring></argsstring>
-        <name>TextureSize</name>
+        <name>m_id</name>
+        <qualifiedname>castor3d::AnimatedSkeleton::m_id</qualifiedname>
+        <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="179" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="179" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/dce/a04386_1af2348a695a12bfe432775545bf4838d3" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> constexpr uint32_t</type>
-        <definition>C3D_API constexpr uint32_t castor3d::GaussianBlur::MaxCoefficients</definition>
-        <argsstring></argsstring>
-        <name>MaxCoefficients</name>
-        <initializer>{ 60u }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="180" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="180" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d9/dce/a04386_1abd66185471dc3f5417940e9ac1a71401" prot="private" static="no" mutable="no">
-        <type><ref refid="d3/dd0/a02662" kindref="compound">TextureView</ref> const  &amp;</type>
-        <definition>TextureView const&amp; castor3d::GaussianBlur::m_source</definition>
-        <argsstring></argsstring>
-        <name>m_source</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="244" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="244" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/dce/a04386_1ab30654eaf6f1313920c4e73b7f740379" prot="private" static="no" mutable="no">
-        <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const  &amp;</type>
-        <definition>RenderDevice const&amp; castor3d::GaussianBlur::m_device</definition>
-        <argsstring></argsstring>
-        <name>m_device</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="245" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="245" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/dce/a04386_1a1913346dc6541fd391ac9c55610966c1" prot="private" static="no" mutable="no">
-        <type>castor::String</type>
-        <definition>castor::String castor3d::GaussianBlur::m_prefix</definition>
-        <argsstring></argsstring>
-        <name>m_prefix</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="246" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="246" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/dce/a04386_1a4a3efe193043cbf7963ad5c8de9739e4" prot="private" static="no" mutable="no">
-        <type>VkExtent2D</type>
-        <definition>VkExtent2D castor3d::GaussianBlur::m_size</definition>
-        <argsstring></argsstring>
-        <name>m_size</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="247" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="247" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/dce/a04386_1a8d2b56bb09601c8fb3697b292ccbe1d0" prot="private" static="no" mutable="no">
-        <type>VkFormat</type>
-        <definition>VkFormat castor3d::GaussianBlur::m_format</definition>
-        <argsstring></argsstring>
-        <name>m_format</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="248" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="248" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/dce/a04386_1aa32e6eb896e05deae2f2bbf75982c200" prot="private" static="no" mutable="no">
-        <type><ref refid="df/d14/a02658" kindref="compound">TextureUnit</ref></type>
-        <definition>TextureUnit castor3d::GaussianBlur::m_intermediate</definition>
-        <argsstring></argsstring>
-        <name>m_intermediate</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="249" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="249" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/dce/a04386_1a3a99213da95ae675ea921ce923a9dae2" prot="private" static="no" mutable="no">
-        <type>ashes::RenderPassPtr</type>
-        <definition>ashes::RenderPassPtr castor3d::GaussianBlur::m_renderPass</definition>
-        <argsstring></argsstring>
-        <name>m_renderPass</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="250" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="250" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/dce/a04386_1a757e0e97a10cd6401ca91bbea7e69973" prot="private" static="no" mutable="no">
-        <type><ref refid="dd/dae/a02294" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d5/de5/a04390" kindref="compound">Configuration</ref> &gt;</type>
-        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::GaussianBlur::m_blurUbo</definition>
-        <argsstring></argsstring>
-        <name>m_blurUbo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="251" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="251" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/dce/a04386_1a203f1d1f86b229ade84bc64c486dbe78" prot="private" static="no" mutable="no">
-        <type>std::vector&lt; float &gt;</type>
-        <definition>std::vector&lt; float &gt; castor3d::GaussianBlur::m_kernel</definition>
-        <argsstring></argsstring>
-        <name>m_kernel</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="252" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="252" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/dce/a04386_1a815089b039c4183a82e68f91787e2a74" prot="private" static="no" mutable="no">
-        <type><ref refid="dd/d9b/a04398" kindref="compound">BlurPass</ref></type>
-        <definition>BlurPass castor3d::GaussianBlur::m_blurX</definition>
-        <argsstring></argsstring>
-        <name>m_blurX</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="253" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="253" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/dce/a04386_1a81298668e40eace13c027c1900fd85db" prot="private" static="no" mutable="no">
-        <type><ref refid="dd/d9b/a04398" kindref="compound">BlurPass</ref></type>
-        <definition>BlurPass castor3d::GaussianBlur::m_blurY</definition>
-        <argsstring></argsstring>
-        <name>m_blurY</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="254" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="254" bodyend="-1"/>
+        <location file="Scene/Animation/AnimatedSkeleton.hpp" line="113" column="10" bodyfile="Scene/Animation/AnimatedSkeleton.hpp" bodystart="113" bodyend="-1"/>
+        <referencedby refid="d9/dce/a04386_1aa3a3170286adf829a0a8d97d4eac6a98" compoundref="d9/d9a/a00998" startline="92" endline="95">getId</referencedby>
+        <referencedby refid="d9/dce/a04386_1a5b1a91b15503b61b8694c9ee314f130c" compoundref="d9/d9a/a00998" startline="97" endline="100">setId</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d9/dce/a04386_1aa0d73b262d4acb2b62491e0bbdbf559b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::GaussianBlur::GaussianBlur</definition>
-        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, castor::String const &amp;prefix, TextureView const &amp;view, uint32_t kernelSize)</argsstring>
-        <name>GaussianBlur</name>
-        <param>
-          <type><ref refid="df/d9b/a02514" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
-        </param>
-        <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
+      <memberdef kind="function" id="d9/dce/a04386_1adb084e51156f8ab62831c865abf706c1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::AnimatedSkeleton::AnimatedSkeleton</definition>
+        <argsstring>(castor::String const &amp;name, Skeleton &amp;skeleton, Mesh &amp;mesh, Geometry &amp;geometry)</argsstring>
+        <name>AnimatedSkeleton</name>
+        <qualifiedname>castor3d::AnimatedSkeleton::AnimatedSkeleton</qualifiedname>
         <param>
           <type>castor::String const &amp;</type>
-          <declname>prefix</declname>
+          <declname>name</declname>
         </param>
         <param>
-          <type><ref refid="d3/dd0/a02662" kindref="compound">TextureView</ref> const &amp;</type>
-          <declname>view</declname>
+          <type><ref refid="d7/db0/a03466" kindref="compound">Skeleton</ref> &amp;</type>
+          <declname>skeleton</declname>
         </param>
         <param>
-          <type>uint32_t</type>
-          <declname>kernelSize</declname>
+          <type><ref refid="dd/dc8/a03342" kindref="compound">Mesh</ref> &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d47/a04490" kindref="compound">Geometry</ref> &amp;</type>
+          <declname>geometry</declname>
         </param>
         <briefdescription>
 <para>Constructor. </para>
@@ -467,42 +187,34 @@
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">engine</parametername>
+<parametername direction="in">name</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The engine. </para>
+<para>The object name. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">device</parametername>
+<parametername direction="in">skeleton</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The GPU device. </para>
+<para>The skeleton. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">prefix</parametername>
+<parametername direction="in">mesh</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The pass name&apos;s prefix. </para>
+<para>The mesh to which the skeleton is bound. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">view</parametername>
+<parametername direction="in">geometry</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The texture. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">kernelSize</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The kernel coefficients count. </para>
+<para>The geometry instantiating the mesh. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -510,27 +222,28 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="44" column="1"/>
+        <location file="Scene/Animation/AnimatedSkeleton.hpp" line="45" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d9/dce/a04386_1a13ee9723dd849bfaec7e17249a3b6c82" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Semaphore const  &amp;</type>
-        <definition>C3D_API ashes::Semaphore const&amp; castor3d::GaussianBlur::blur</definition>
-        <argsstring>(ashes::Semaphore const &amp;toWait)</argsstring>
-        <name>blur</name>
+      <memberdef kind="function" id="d9/dce/a04386_1a668401b47ce986e168e820181bc42fb6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::AnimatedSkeleton::fillShader</definition>
+        <argsstring>(SkinningTransformsConfiguration *variable) const</argsstring>
+        <name>fillShader</name>
+        <qualifiedname>castor3d::AnimatedSkeleton::fillShader</qualifiedname>
         <param>
-          <type>ashes::Semaphore const &amp;</type>
-          <declname>toWait</declname>
+          <type><ref refid="da/df4/a05050" kindref="compound">SkinningTransformsConfiguration</ref> *</type>
+          <declname>variable</declname>
         </param>
         <briefdescription>
-<para>Blurs given texture. </para>
+<para>Fills a shader variable with this object&apos;s skeleton transforms. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">toWait</parametername>
+<parametername direction="out">variable</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The semaphore to wait for. </para>
+<para>Receives the transforms. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -538,124 +251,188 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="57" column="1"/>
+        <location file="Scene/Animation/AnimatedSkeleton.hpp" line="57" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d9/dce/a04386_1a796ba1dece1f4a89e56265de63af18b5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="db/da9/a04374" kindref="compound">CommandsSemaphore</ref></type>
-        <definition>C3D_API CommandsSemaphore castor3d::GaussianBlur::getCommands</definition>
-        <argsstring>(bool generateMipmaps=false, uint32_t layer=0u) const</argsstring>
-        <name>getCommands</name>
+      <memberdef kind="function" id="d9/dce/a04386_1a1263585b51c3e6f6e09d6f7115cea4ec" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedSkeleton::fillBuffer</definition>
+        <argsstring>(uint8_t *buffer) const</argsstring>
+        <name>fillBuffer</name>
+        <qualifiedname>castor3d::AnimatedSkeleton::fillBuffer</qualifiedname>
         <param>
-          <type>bool</type>
-          <declname>generateMipmaps</declname>
-          <defval>false</defval>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>layer</declname>
-          <defval>0u</defval>
+          <type>uint8_t *</type>
+          <declname>buffer</declname>
         </param>
         <briefdescription>
+<para>Fills a buffer with this object&apos;s skeleton transforms. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">generateMipmaps</parametername>
+<parametername direction="out">buffer</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>Tells if mipmaps generation is to be executed after blur. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">layer</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The layer to blur. </para>
+<para>Receives the transforms. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>The commands used to render the pass. </para>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedSkeleton.hpp" line="66" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/dce/a04386_1adbab6fc37b52041715d727bfc0d0a602" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedSkeleton::update</definition>
+        <argsstring>(castor::Milliseconds const &amp;elapsed) override</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::AnimatedSkeleton::update</qualifiedname>
+        <reimplements refid="db/da9/a04374_1aa1ecac49a3faba10459c8089911216df">update</reimplements>
+        <param>
+          <type>castor::Milliseconds const &amp;</type>
+          <declname>elapsed</declname>
+        </param>
+        <briefdescription>
+<para>Updates the animations of the object, given the time since the last frame. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">elapsed</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time elapsed since the last frame </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedSkeleton.hpp" line="70" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/dce/a04386_1a25cd572ba964740c47b53110261cca3f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>bool</type>
+        <definition>bool castor3d::AnimatedSkeleton::isPlayingAnimation</definition>
+        <argsstring>() const override</argsstring>
+        <name>isPlayingAnimation</name>
+        <qualifiedname>castor3d::AnimatedSkeleton::isPlayingAnimation</qualifiedname>
+        <reimplements refid="db/da9/a04374_1a1c375eacf4a34296dca2ca8f490761d0">isPlayingAnimation</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if the object is playing an animation. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="68" column="1"/>
+        <location file="Scene/Animation/AnimatedSkeleton.hpp" line="72" column="6" bodyfile="Scene/Animation/AnimatedSkeleton.hpp" bodystart="72" bodyend="75"/>
+        <references refid="d9/dce/a04386_1ade8a6b35778fac9aded3b56d3d8b0924" compoundref="d9/d9a/a00998" startline="112">m_playingAnimations</references>
       </memberdef>
-      <memberdef kind="function" id="d9/dce/a04386_1aebc1e9a26168832de3b8575ac9106d5a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="db/da9/a04374" kindref="compound">CommandsSemaphore</ref></type>
-        <definition>C3D_API CommandsSemaphore castor3d::GaussianBlur::getCommands</definition>
-        <argsstring>(RenderPassTimer const &amp;timer, uint32_t layer, bool generateMipmaps=false) const</argsstring>
-        <name>getCommands</name>
-        <param>
-          <type><ref refid="d6/d76/a04606" kindref="compound">RenderPassTimer</ref> const &amp;</type>
-          <declname>timer</declname>
-        </param>
+      <memberdef kind="function" id="d9/dce/a04386_1a36de9d5c3a44da7e81abb698a3bb270d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d7/db0/a03466" kindref="compound">Skeleton</ref> &amp;</type>
+        <definition>Skeleton &amp; castor3d::AnimatedSkeleton::getSkeleton</definition>
+        <argsstring>() const</argsstring>
+        <name>getSkeleton</name>
+        <qualifiedname>castor3d::AnimatedSkeleton::getSkeleton</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedSkeleton.hpp" line="77" column="11" bodyfile="Scene/Animation/AnimatedSkeleton.hpp" bodystart="77" bodyend="80"/>
+        <references refid="d9/dce/a04386_1a057053a0856e6842abbe019259121f84" compoundref="d9/d9a/a00998" startline="109">m_skeleton</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/dce/a04386_1a2aa2cc73711a3d0d806bada44d565c49" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/dc8/a03342" kindref="compound">Mesh</ref> &amp;</type>
+        <definition>Mesh &amp; castor3d::AnimatedSkeleton::getMesh</definition>
+        <argsstring>() const</argsstring>
+        <name>getMesh</name>
+        <qualifiedname>castor3d::AnimatedSkeleton::getMesh</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedSkeleton.hpp" line="82" column="7" bodyfile="Scene/Animation/AnimatedSkeleton.hpp" bodystart="82" bodyend="85"/>
+        <references refid="d9/dce/a04386_1a3d2b424fce39d204278d67c9386a5591" compoundref="d9/d9a/a00998" startline="110">m_mesh</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/dce/a04386_1a92f5037e780206603e3a36ad5300ec7a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d47/a04490" kindref="compound">Geometry</ref> &amp;</type>
+        <definition>Geometry &amp; castor3d::AnimatedSkeleton::getGeometry</definition>
+        <argsstring>() const</argsstring>
+        <name>getGeometry</name>
+        <qualifiedname>castor3d::AnimatedSkeleton::getGeometry</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedSkeleton.hpp" line="87" column="11" bodyfile="Scene/Animation/AnimatedSkeleton.hpp" bodystart="87" bodyend="90"/>
+        <references refid="d9/dce/a04386_1a6cd9a5a17cb19a5830ff868086f7032a" compoundref="d9/d9a/a00998" startline="111">m_geometry</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/dce/a04386_1aa3a3170286adf829a0a8d97d4eac6a98" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::AnimatedSkeleton::getId</definition>
+        <argsstring>() const</argsstring>
+        <name>getId</name>
+        <qualifiedname>castor3d::AnimatedSkeleton::getId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedSkeleton.hpp" line="92" column="10" bodyfile="Scene/Animation/AnimatedSkeleton.hpp" bodystart="92" bodyend="95"/>
+        <references refid="d9/dce/a04386_1ad8a17416b3ef2c6f273b1f477eee9e8e" compoundref="d9/d9a/a00998" startline="113">m_id</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/dce/a04386_1a5b1a91b15503b61b8694c9ee314f130c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::AnimatedSkeleton::setId</definition>
+        <argsstring>(uint32_t id)</argsstring>
+        <name>setId</name>
+        <qualifiedname>castor3d::AnimatedSkeleton::setId</qualifiedname>
         <param>
           <type>uint32_t</type>
-          <declname>layer</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>generateMipmaps</declname>
-          <defval>false</defval>
+          <declname>id</declname>
         </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">timer</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render timer. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">layer</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The layer to blur. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">generateMipmaps</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if mipmaps generation is to be executed after blur. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The commands used to render the pass. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="82" column="1"/>
+        <location file="Scene/Animation/AnimatedSkeleton.hpp" line="97" column="6" bodyfile="Scene/Animation/AnimatedSkeleton.hpp" bodystart="97" bodyend="100"/>
+        <references refid="d9/dce/a04386_1ad8a17416b3ef2c6f273b1f477eee9e8e" compoundref="d9/d9a/a00998" startline="113">m_id</references>
       </memberdef>
-      <memberdef kind="function" id="d9/dce/a04386_1af2e216aa9efeb3c908b1545ed2579a98" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::GaussianBlur::accept</definition>
-        <argsstring>(PipelineVisitorBase &amp;visitor)</argsstring>
-        <name>accept</name>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d9/dce/a04386_1a3e6cb742ae1d185d2385c2b8b908546a" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::AnimatedSkeleton::doAddAnimation</definition>
+        <argsstring>(castor::String const &amp;name) override</argsstring>
+        <name>doAddAnimation</name>
+        <qualifiedname>castor3d::AnimatedSkeleton::doAddAnimation</qualifiedname>
+        <reimplements refid="db/da9/a04374_1a2c7ed6f3a0ba8312617894ac212bf88c">doAddAnimation</reimplements>
         <param>
-          <type><ref refid="d5/de2/a03830" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
-          <declname>visitor</declname>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
         </param>
         <briefdescription>
-<para>Visitor acceptance function. </para>
+<para>adds the animation to the list </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername>visitor</parametername>
+<parametername direction="in">name</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The ... visitor. </para>
+<para>The animation to add </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -663,7 +440,83 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="88" column="1"/>
+        <location file="Scene/Animation/AnimatedSkeleton.hpp" line="103" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/dce/a04386_1aa46820ab994e78786247a1a20192e4df" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::AnimatedSkeleton::doStartAnimation</definition>
+        <argsstring>(AnimationInstance &amp;animation) override</argsstring>
+        <name>doStartAnimation</name>
+        <qualifiedname>castor3d::AnimatedSkeleton::doStartAnimation</qualifiedname>
+        <reimplements refid="db/da9/a04374_1a596f9c943daffeb70db5a29de2606c7d">doStartAnimation</reimplements>
+        <param>
+          <type><ref refid="d5/d22/a04394" kindref="compound">AnimationInstance</ref> &amp;</type>
+          <declname>animation</declname>
+        </param>
+        <briefdescription>
+<para>Starts the given animation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">animation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedSkeleton.hpp" line="104" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/dce/a04386_1af2f25831a75645aba46ef700ce11a68a" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::AnimatedSkeleton::doStopAnimation</definition>
+        <argsstring>(AnimationInstance &amp;animation) override</argsstring>
+        <name>doStopAnimation</name>
+        <qualifiedname>castor3d::AnimatedSkeleton::doStopAnimation</qualifiedname>
+        <reimplements refid="db/da9/a04374_1ab4296cdec28662f6241d2bf774f90a20">doStopAnimation</reimplements>
+        <param>
+          <type><ref refid="d5/d22/a04394" kindref="compound">AnimationInstance</ref> &amp;</type>
+          <declname>animation</declname>
+        </param>
+        <briefdescription>
+<para>Stops the given animation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">animation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedSkeleton.hpp" line="105" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/dce/a04386_1a5abae22fdd3577ece9b53161838bf622" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::AnimatedSkeleton::doClearAnimations</definition>
+        <argsstring>() override</argsstring>
+        <name>doClearAnimations</name>
+        <qualifiedname>castor3d::AnimatedSkeleton::doClearAnimations</qualifiedname>
+        <reimplements refid="db/da9/a04374_1adc5a40387c363ce020fbd743598c645c">doClearAnimations</reimplements>
+        <briefdescription>
+<para>Stops all animations. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedSkeleton.hpp" line="106" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -671,64 +524,197 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="1225">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="1224">
-        <label>castor3d::GaussianBlur</label>
-        <link refid="d9/dce/a04386"/>
-        <childnode refid="1225" relation="public-inheritance">
+      <node id="2">
+        <label>castor3d::AnimatedObject</label>
+        <link refid="db/da9/a04374"/>
+        <childnode refid="3" relation="public-inheritance">
         </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::AnimatedSkeleton</label>
+        <link refid="d9/dce/a04386"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="1227">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      <node id="5">
+        <label>Animable</label>
+        <link refid="d6/d41/a02222"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
       </node>
-      <node id="1226">
-        <label>castor3d::GaussianBlur</label>
+      <node id="9">
+        <label>K</label>
+      </node>
+      <node id="10">
+        <label>T</label>
+      </node>
+      <node id="11">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d6/d41/a02222"/>
+        <childnode refid="12" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::AnimatedObject</label>
+        <link refid="db/da9/a04374"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::AnimatedSkeleton</label>
         <link refid="d9/dce/a04386"/>
-        <childnode refid="1227" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_skeleton</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>m_mesh</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>m_geometry</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::Geometry</label>
+        <link refid="d5/d47/a04490"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+        <childnode refid="19" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::Mesh</label>
+        <link refid="dd/dc8/a03342"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::MovableObject</label>
+        <link refid="d1/d4a/a04530"/>
+        <childnode refid="16" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor3d::RenderedObject</label>
+        <link refid="d0/d7e/a04594"/>
+        <childnode refid="20" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::SceneNode</label>
+        <link refid="dd/d6a/a04642"/>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::Skeleton</label>
+        <link refid="d7/db0/a03466"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+      <node id="12">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="6">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="16">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="7">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>std::enable_shared_from_this&lt; RenderedObject &gt;</label>
+      </node>
+      <node id="18">
+        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
+      </node>
+      <node id="8">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>elements</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Render/Passes/GaussianBlur.hpp" line="26" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="24" bodyend="255"/>
+    <location file="Scene/Animation/AnimatedSkeleton.hpp" line="15" column="1" bodyfile="Scene/Animation/AnimatedSkeleton.hpp" bodystart="17" bodyend="114"/>
     <listofallmembers>
-      <member refid="d9/dce/a04386_1af2e216aa9efeb3c908b1545ed2579a98" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>accept</name></member>
-      <member refid="d9/dce/a04386_1a13ee9723dd849bfaec7e17249a3b6c82" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>blur</name></member>
-      <member refid="d9/dce/a04386_1a3ea0db3cb529a51262383c2989e1db5b" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>Coefficients</name></member>
-      <member refid="d9/dce/a04386_1ad4e5e21985b62833eb4f0dbf94a7626d" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>CoefficientsCount</name></member>
-      <member refid="d9/dce/a04386_1ad4e5e92fc3459d70640cdc903ecc179b" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>Config</name></member>
-      <member refid="d9/dce/a04386_1aa0d73b262d4acb2b62491e0bbdbf559b" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>GaussianBlur</name></member>
-      <member refid="d9/dce/a04386_1a5fb27fac250192aa377acdd24f2a2002" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>getBlurXCommandBuffer</name></member>
-      <member refid="d9/dce/a04386_1acb166aea353879479965061be0445df1" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>getBlurXFrameBuffer</name></member>
-      <member refid="d9/dce/a04386_1ab9b5490989fcb8d1fb60951c78ee8334" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>getBlurXPixelModule</name></member>
-      <member refid="d9/dce/a04386_1a144f25716d6fe59c84c701441092a949" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>getBlurXPixelShader</name></member>
-      <member refid="d9/dce/a04386_1a518fd6bd60564a0c69daad429d7bb1fc" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>getBlurXVertexModule</name></member>
-      <member refid="d9/dce/a04386_1a7fce110d1483e1b8f4a8c9b6cdbae06c" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>getBlurXVertexShader</name></member>
-      <member refid="d9/dce/a04386_1a939393764820e8e1da82b9ae8be492b1" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>getBlurYCommandBuffer</name></member>
-      <member refid="d9/dce/a04386_1a0f7571831be49563c0551cb9c6a948d8" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>getBlurYFrameBuffer</name></member>
-      <member refid="d9/dce/a04386_1afda1b18f557d93224e94f778175456e3" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>getBlurYPixelModule</name></member>
-      <member refid="d9/dce/a04386_1a1174a88f9531dafe7fe70b82a6761559" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>getBlurYPixelShader</name></member>
-      <member refid="d9/dce/a04386_1a326cad064f8bb32fa17a4cc7d77365fa" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>getBlurYVertexModule</name></member>
-      <member refid="d9/dce/a04386_1ad5e5c81365fcb7e303600f7b88ac171a" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>getBlurYVertexShader</name></member>
-      <member refid="d9/dce/a04386_1a796ba1dece1f4a89e56265de63af18b5" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>getCommands</name></member>
-      <member refid="d9/dce/a04386_1aebc1e9a26168832de3b8575ac9106d5a" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>getCommands</name></member>
-      <member refid="d9/dce/a04386_1a1d48068a862272678f4107eb73f422b7" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>getRenderPass</name></member>
-      <member refid="d9/dce/a04386_1a757e0e97a10cd6401ca91bbea7e69973" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_blurUbo</name></member>
-      <member refid="d9/dce/a04386_1a815089b039c4183a82e68f91787e2a74" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_blurX</name></member>
-      <member refid="d9/dce/a04386_1a81298668e40eace13c027c1900fd85db" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_blurY</name></member>
-      <member refid="d9/dce/a04386_1ab30654eaf6f1313920c4e73b7f740379" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_device</name></member>
-      <member refid="d9/dce/a04386_1a8d2b56bb09601c8fb3697b292ccbe1d0" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_format</name></member>
-      <member refid="d9/dce/a04386_1aa32e6eb896e05deae2f2bbf75982c200" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_intermediate</name></member>
-      <member refid="d9/dce/a04386_1a203f1d1f86b229ade84bc64c486dbe78" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_kernel</name></member>
-      <member refid="d9/dce/a04386_1a1913346dc6541fd391ac9c55610966c1" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_prefix</name></member>
-      <member refid="d9/dce/a04386_1a3a99213da95ae675ea921ce923a9dae2" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_renderPass</name></member>
-      <member refid="d9/dce/a04386_1a4a3efe193043cbf7963ad5c8de9739e4" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_size</name></member>
-      <member refid="d9/dce/a04386_1abd66185471dc3f5417940e9ac1a71401" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_source</name></member>
-      <member refid="d9/dce/a04386_1af2348a695a12bfe432775545bf4838d3" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>MaxCoefficients</name></member>
-      <member refid="d9/dce/a04386_1a59a7384ce9be813bbec639d19ef7fbd6" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>RenderQuadPtr</name></member>
-      <member refid="d9/dce/a04386_1ab2202e518ace50ccc9e2d3330396db0b" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>TextureSize</name></member>
+      <member refid="db/da9/a04374_1ac19f279d240afe5d9aaee8ab764eb260" prot="public" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>addAnimation</name></member>
+      <member refid="db/da9/a04374_1a5fcebbda75e25b1806d1b5c2141a2924" prot="public" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>AnimatedObject</name></member>
+      <member refid="db/da9/a04374_1af2eccff6842dec84ce84d0e0c599f38c" prot="public" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>AnimatedObject</name></member>
+      <member refid="db/da9/a04374_1a1e050f4dc3a1962ca4cf375d9b16b89b" prot="public" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>AnimatedObject</name></member>
+      <member refid="d9/dce/a04386_1a66bf0916da892b4e92d058c1f3730198" prot="public" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>AnimatedSkeleton</name></member>
+      <member refid="d9/dce/a04386_1a8ae6caff62b163b6f0de6ade8ee1a993" prot="public" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>AnimatedSkeleton</name></member>
+      <member refid="d9/dce/a04386_1adb084e51156f8ab62831c865abf706c1" prot="public" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>AnimatedSkeleton</name></member>
+      <member refid="d9/dce/a04386_1a3e6cb742ae1d185d2385c2b8b908546a" prot="private" virt="virtual"><scope>castor3d::AnimatedSkeleton</scope><name>doAddAnimation</name></member>
+      <member refid="d9/dce/a04386_1a5abae22fdd3577ece9b53161838bf622" prot="private" virt="virtual"><scope>castor3d::AnimatedSkeleton</scope><name>doClearAnimations</name></member>
+      <member refid="d9/dce/a04386_1aa46820ab994e78786247a1a20192e4df" prot="private" virt="virtual"><scope>castor3d::AnimatedSkeleton</scope><name>doStartAnimation</name></member>
+      <member refid="d9/dce/a04386_1af2f25831a75645aba46ef700ce11a68a" prot="private" virt="virtual"><scope>castor3d::AnimatedSkeleton</scope><name>doStopAnimation</name></member>
+      <member refid="d9/dce/a04386_1a1263585b51c3e6f6e09d6f7115cea4ec" prot="public" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>fillBuffer</name></member>
+      <member refid="d9/dce/a04386_1a668401b47ce986e168e820181bc42fb6" prot="public" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>fillShader</name></member>
+      <member refid="db/da9/a04374_1a779fc1e97feca6c7b48c9148f18901e5" prot="public" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>getAnimation</name></member>
+      <member refid="db/da9/a04374_1a2b7f1dcedebd594dd1f02ce399d06e59" prot="public" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>getAnimations</name></member>
+      <member refid="d9/dce/a04386_1a92f5037e780206603e3a36ad5300ec7a" prot="public" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>getGeometry</name></member>
+      <member refid="d9/dce/a04386_1aa3a3170286adf829a0a8d97d4eac6a98" prot="public" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>getId</name></member>
+      <member refid="db/da9/a04374_1aa371efe8253bc63995bf46f238c2a1d8" prot="public" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>getKind</name></member>
+      <member refid="d9/dce/a04386_1a2aa2cc73711a3d0d806bada44d565c49" prot="public" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>getMesh</name></member>
+      <member refid="d9/dce/a04386_1a36de9d5c3a44da7e81abb698a3bb270d" prot="public" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>getSkeleton</name></member>
+      <member refid="db/da9/a04374_1ab2df0c8e698bcfdb593900ad8c146266" prot="public" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>hasAnimation</name></member>
+      <member refid="d9/dce/a04386_1a25cd572ba964740c47b53110261cca3f" prot="public" virt="virtual"><scope>castor3d::AnimatedSkeleton</scope><name>isPlayingAnimation</name></member>
+      <member refid="db/da9/a04374_1a28e41bc599481520db66d3b41ec73a2d" prot="protected" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>m_animations</name></member>
+      <member refid="d9/dce/a04386_1a6cd9a5a17cb19a5830ff868086f7032a" prot="protected" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>m_geometry</name></member>
+      <member refid="d9/dce/a04386_1ad8a17416b3ef2c6f273b1f477eee9e8e" prot="protected" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>m_id</name></member>
+      <member refid="d9/dce/a04386_1a3d2b424fce39d204278d67c9386a5591" prot="protected" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>m_mesh</name></member>
+      <member refid="d9/dce/a04386_1ade8a6b35778fac9aded3b56d3d8b0924" prot="protected" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>m_playingAnimations</name></member>
+      <member refid="d9/dce/a04386_1a057053a0856e6842abbe019259121f84" prot="protected" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>m_skeleton</name></member>
+      <member refid="d9/dce/a04386_1a209fbd347bad23a0e5b8c9009bae7e15" prot="public" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>operator=</name></member>
+      <member refid="d9/dce/a04386_1ac69836f8bcdb15f10e44e3407300eccf" prot="public" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>operator=</name></member>
+      <member refid="db/da9/a04374_1a4fae64cf33b1a473e421691f2037f723" prot="public" virt="non-virtual" ambiguityscope="castor3d::AnimatedObject::"><scope>castor3d::AnimatedSkeleton</scope><name>operator=</name></member>
+      <member refid="db/da9/a04374_1a681a62403a76ff582f254ff7c43d3c10" prot="public" virt="non-virtual" ambiguityscope="castor3d::AnimatedObject::"><scope>castor3d::AnimatedSkeleton</scope><name>operator=</name></member>
+      <member refid="db/da9/a04374_1abdbb6424aa1619e85ef330dcab9ce2a0" prot="public" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>pauseAllAnimations</name></member>
+      <member refid="db/da9/a04374_1a7660dd415cda3afa98031e4fdc194944" prot="public" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>pauseAnimation</name></member>
+      <member refid="d9/dce/a04386_1a5b1a91b15503b61b8694c9ee314f130c" prot="public" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>setId</name></member>
+      <member refid="db/da9/a04374_1a21fa4e1c150e3f1829fd698e10dc5d74" prot="public" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>startAllAnimations</name></member>
+      <member refid="db/da9/a04374_1a6ccec881b1147baafaa43c5ee286e0c7" prot="public" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>startAnimation</name></member>
+      <member refid="db/da9/a04374_1af7a31c3fd0ac07fcb49df40e4cbc1f9f" prot="public" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>stopAllAnimations</name></member>
+      <member refid="db/da9/a04374_1af9cdab619fab70599c9568167075b9ac" prot="public" virt="non-virtual"><scope>castor3d::AnimatedSkeleton</scope><name>stopAnimation</name></member>
+      <member refid="d9/dce/a04386_1adbab6fc37b52041715d727bfc0d0a602" prot="public" virt="virtual"><scope>castor3d::AnimatedSkeleton</scope><name>update</name></member>
+      <member refid="db/da9/a04374_1ab7b23d33b93065511e6eccd2201410f1" prot="public" virt="virtual"><scope>castor3d::AnimatedSkeleton</scope><name>~AnimatedObject</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

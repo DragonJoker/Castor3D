@@ -1,5 +1,6 @@
-<map id="castor3d::MetallicRoughnessPbrPass" name="castor3d::MetallicRoughnessPbrPass">
-<area shape="rect" id="node1" title=" " alt="" coords="6,155,197,196"/>
-<area shape="rect" id="node2" href="$df/d57/a02590.html" title=" " alt="" coords="46,80,157,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,197,32"/>
+<map id="castor3d::SkinnedObjectBufferPool::ModelBuffers" name="castor3d::SkinnedObjectBufferPool::ModelBuffers">
+<area shape="rect" id="node1" title=" " alt="" coords="5,319,204,360"/>
+<area shape="rect" id="node2" href="$db/d09/a02502.html" title=" " alt="" coords="5,185,204,227"/>
+<area shape="rect" id="node3" href="$d3/d41/a02530.html" title=" " alt="" coords="35,5,201,32"/>
+<area shape="rect" id="node4" href="$db/d09/a02502.html" title="A GPU buffer, that uses a buddy allocator to allocate sub&#45;buffers." alt="" coords="121,81,265,123"/>
 </map>

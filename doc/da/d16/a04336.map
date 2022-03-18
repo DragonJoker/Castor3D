@@ -1,4 +1,11 @@
-<map id="castor3d::RenderNodesT&lt; NodeType, MapType &gt;" name="castor3d::RenderNodesT&lt; NodeType, MapType &gt;">
-<area shape="rect" id="node1" title="The render nodes for a specific scene." alt="" coords="5,109,171,151"/>
-<area shape="rect" id="node2" title=" " alt="" coords="51,5,125,32"/>
+<map id="castor3d::EquirectangularToCube" name="castor3d::EquirectangularToCube">
+<area shape="rect" id="node1" title=" " alt="" coords="121,439,292,480"/>
+<area shape="rect" id="node2" href="$d7/d74/a04346.html" title=" " alt="" coords="131,363,282,389"/>
+<area shape="rect" id="node3" href="$df/de5/a03966.html" title=" " alt="" coords="127,273,286,300"/>
+<area shape="rect" id="node4" href="$d7/d34/a04078.html" title=" " alt="" coords="15,184,182,211"/>
+<area shape="rect" id="node5" title=" " alt="" coords="5,95,192,121"/>
+<area shape="rect" id="node6" title=" " alt="" coords="207,184,385,211"/>
+<area shape="rect" id="node7" href="$de/d88/a03958.html" title=" " alt="" coords="217,95,369,121"/>
+<area shape="rect" id="node8" title=" " alt="" coords="394,95,507,121"/>
+<area shape="rect" id="node9" title=" " alt="" coords="431,5,470,32"/>
 </map>

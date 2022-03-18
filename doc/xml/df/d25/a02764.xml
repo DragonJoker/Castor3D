@@ -1,33 +1,138 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="df/d25/a02764" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPipelineCacheCreateInfo &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="df/d25/a02764_1a192db5357fafa49dab3a84efe22c0549" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPipelineCacheCreateInfo &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="df/d25/a02764" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::HandlerEvent</compoundname>
+    <basecompoundref refid="d5/dba/a02776" prot="public" virt="non-virtual">castor3d::UserInputEvent</basecompoundref>
+    <includes local="no">HandlerEvent.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="df/d25/a02764_1a7a1264f88ed54dc69add3361b768c8ef" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/df5/a01395_1ad02e1e0fa1e7f38c3bd24f851e63355b" kindref="member">HandlerEventType</ref> const</type>
+        <definition>HandlerEventType const castor3d::HandlerEvent::m_handlerEventType</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO</initializer>
+        <name>m_handlerEventType</name>
+        <qualifiedname>castor3d::HandlerEvent::m_handlerEventType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The handler event type. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/HandlerEvent.hpp" line="56" column="24" bodyfile="Event/UserInput/HandlerEvent.hpp" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d25/a02764_1aa0660fc951d925d53fb64b17722b3c97" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d3d/a02752" kindref="compound">EventHandler</ref> *const</type>
+        <definition>EventHandler* const castor3d::HandlerEvent::m_handler</definition>
+        <argsstring></argsstring>
+        <name>m_handler</name>
+        <qualifiedname>castor3d::HandlerEvent::m_handler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The handler. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/HandlerEvent.hpp" line="59" column="21" bodyfile="Event/UserInput/HandlerEvent.hpp" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d25/a02764_1a5de93215a60e8412ecb5d7338d0aa74d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::HandlerEvent::HandlerEvent</definition>
+        <argsstring>(HandlerEventType type, EventHandler *handler)</argsstring>
+        <name>HandlerEvent</name>
+        <qualifiedname>castor3d::HandlerEvent::HandlerEvent</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1ad02e1e0fa1e7f38c3bd24f851e63355b" kindref="member">HandlerEventType</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d3d/a02752" kindref="compound">EventHandler</ref> *</type>
+          <declname>handler</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="31" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="31" bodyend="-1"/>
+        <location file="Event/UserInput/HandlerEvent.hpp" line="25" column="1" bodyfile="Event/UserInput/HandlerEvent.hpp" bodystart="25" bodyend="31"/>
+        <references refid="d2/df5/a01395_1abdf15c31ed466fee351daf42b2b45ad5a17f345f51ad179e6811fb83bfe25f057">castor3d::eHandler</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d25/a02764_1a36385c1ffa3c9b02b5a1ebf7cde23684" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/df5/a01395_1ad02e1e0fa1e7f38c3bd24f851e63355b" kindref="member">HandlerEventType</ref></type>
+        <definition>HandlerEventType castor3d::HandlerEvent::getHandlerEventType</definition>
+        <argsstring>() const</argsstring>
+        <name>getHandlerEventType</name>
+        <qualifiedname>castor3d::HandlerEvent::getHandlerEventType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The handler event type. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/HandlerEvent.hpp" line="38" column="18" bodyfile="Event/UserInput/HandlerEvent.hpp" bodystart="38" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d25/a02764_1a1e199a4a3c61c620dc0aae8002574aca" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dc/d3d/a02752" kindref="compound">EventHandler</ref> *</type>
+        <definition>EventHandler * castor3d::HandlerEvent::getHandler</definition>
+        <argsstring>() const</argsstring>
+        <name>getHandler</name>
+        <qualifiedname>castor3d::HandlerEvent::getHandler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The handler. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/HandlerEvent.hpp" line="48" column="15" bodyfile="Event/UserInput/HandlerEvent.hpp" bodystart="48" bodyend="51"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="31" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="31" bodyend="31"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::HandlerEvent</label>
+        <link refid="df/d25/a02764"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::UserInputEvent</label>
+        <link refid="d5/dba/a02776"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::HandlerEvent</label>
+        <link refid="df/d25/a02764"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::UserInputEvent</label>
+        <link refid="d5/dba/a02776"/>
+      </node>
+    </collaborationgraph>
+    <location file="Event/UserInput/HandlerEvent.hpp" line="11" column="1" bodyfile="Event/UserInput/HandlerEvent.hpp" bodystart="13" bodyend="60"/>
     <listofallmembers>
-      <member refid="df/d25/a02764_1a192db5357fafa49dab3a84efe22c0549" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPipelineCacheCreateInfo &gt;</scope><name>value</name></member>
+      <member refid="d5/dba/a02776_1ab45ab37b6687ae9a35165ea5b18f0a71" prot="public" virt="non-virtual"><scope>castor3d::HandlerEvent</scope><name>getEventType</name></member>
+      <member refid="df/d25/a02764_1a1e199a4a3c61c620dc0aae8002574aca" prot="public" virt="non-virtual"><scope>castor3d::HandlerEvent</scope><name>getHandler</name></member>
+      <member refid="df/d25/a02764_1a36385c1ffa3c9b02b5a1ebf7cde23684" prot="public" virt="non-virtual"><scope>castor3d::HandlerEvent</scope><name>getHandlerEventType</name></member>
+      <member refid="df/d25/a02764_1a5de93215a60e8412ecb5d7338d0aa74d" prot="public" virt="non-virtual"><scope>castor3d::HandlerEvent</scope><name>HandlerEvent</name></member>
+      <member refid="df/d25/a02764_1aa0660fc951d925d53fb64b17722b3c97" prot="private" virt="non-virtual"><scope>castor3d::HandlerEvent</scope><name>m_handler</name></member>
+      <member refid="df/d25/a02764_1a7a1264f88ed54dc69add3361b768c8ef" prot="private" virt="non-virtual"><scope>castor3d::HandlerEvent</scope><name>m_handlerEventType</name></member>
+      <member refid="d5/dba/a02776_1a1d946a77fa49158379ee4e5dfb84a556" prot="public" virt="non-virtual"><scope>castor3d::HandlerEvent</scope><name>UserInputEvent</name></member>
+      <member refid="d5/dba/a02776_1aeb147bea0593ab4b7e1ad4217d383948" prot="public" virt="virtual"><scope>castor3d::HandlerEvent</scope><name>~UserInputEvent</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

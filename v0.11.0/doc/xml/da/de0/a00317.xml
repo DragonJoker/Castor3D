@@ -1,0 +1,184 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="da/de0/a00317" kind="file" language="C++">
+    <compoundname>UserInputEventModule.hpp</compoundname>
+    <includes refid="d5/d35/a00266" local="yes">Castor3D/Castor3DModule.hpp</includes>
+    <includes local="no">CastorUtils/Graphics/Position.hpp</includes>
+    <includes local="no">array</includes>
+    <includedby refid="d3/d5e/a00275" local="yes">Engine.hpp</includedby>
+    <includedby refid="d0/d39/a00314" local="yes">Event/UserInput/UserInputEvent.hpp</includedby>
+    <incdepgraph>
+      <node id="5499">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="5502">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="5503">
+        <label>cstdint</label>
+      </node>
+      <node id="5501">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="5494">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="5495" relation="include">
+        </childnode>
+        <childnode refid="5496" relation="include">
+        </childnode>
+        <childnode refid="5497" relation="include">
+        </childnode>
+        <childnode refid="5498" relation="include">
+        </childnode>
+        <childnode refid="5499" relation="include">
+        </childnode>
+        <childnode refid="5500" relation="include">
+        </childnode>
+        <childnode refid="5501" relation="include">
+        </childnode>
+        <childnode refid="5502" relation="include">
+        </childnode>
+        <childnode refid="5503" relation="include">
+        </childnode>
+        <childnode refid="5504" relation="include">
+        </childnode>
+        <childnode refid="5505" relation="include">
+        </childnode>
+        <childnode refid="5506" relation="include">
+        </childnode>
+      </node>
+      <node id="5505">
+        <label>string</label>
+      </node>
+      <node id="5498">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="5495">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="5507">
+        <label>CastorUtils/Graphics/Position.hpp</label>
+      </node>
+      <node id="5497">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="5496">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="5506">
+        <label>vector</label>
+      </node>
+      <node id="5500">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="5508">
+        <label>array</label>
+      </node>
+      <node id="5493">
+        <label>Event/UserInput/UserInputEventModule.hpp</label>
+        <link refid="da/de0/a00317"/>
+        <childnode refid="5494" relation="include">
+        </childnode>
+        <childnode refid="5507" relation="include">
+        </childnode>
+        <childnode refid="5508" relation="include">
+        </childnode>
+      </node>
+      <node id="5504">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="5521">
+        <label>Event/UserInput/MouseEvent.hpp</label>
+        <link refid="d1/d5d/a00311"/>
+        <childnode refid="5516" relation="include">
+        </childnode>
+      </node>
+      <node id="5514">
+        <label>Castor3DPch.hpp</label>
+        <link refid="d5/d42/a00269"/>
+      </node>
+      <node id="5519">
+        <label>Text/TextRenderWindow.hpp</label>
+        <link refid="db/d78/a01427"/>
+      </node>
+      <node id="5520">
+        <label>Event/UserInput/KeyboardEvent.hpp</label>
+        <link refid="d5/d0f/a00308"/>
+        <childnode refid="5516" relation="include">
+        </childnode>
+      </node>
+      <node id="5510">
+        <label>Engine.hpp</label>
+        <link refid="d3/d5e/a00275"/>
+        <childnode refid="5511" relation="include">
+        </childnode>
+      </node>
+      <node id="5516">
+        <label>Event/UserInput/EventHandler.hpp</label>
+        <link refid="d0/d61/a00302"/>
+        <childnode refid="5517" relation="include">
+        </childnode>
+      </node>
+      <node id="5518">
+        <label>Render/RenderWindow.hpp</label>
+        <link refid="dc/d1b/a00827"/>
+        <childnode refid="5519" relation="include">
+        </childnode>
+      </node>
+      <node id="5517">
+        <label>Event/UserInput/UserInputListener.hpp</label>
+        <link refid="dd/de2/a00320"/>
+        <childnode refid="5518" relation="include">
+        </childnode>
+      </node>
+      <node id="5515">
+        <label>Event/UserInput/HandlerEvent.hpp</label>
+        <link refid="d3/d07/a00305"/>
+        <childnode refid="5516" relation="include">
+        </childnode>
+      </node>
+      <node id="5509">
+        <label>Event/UserInput/UserInputEventModule.hpp</label>
+        <link refid="da/de0/a00317"/>
+        <childnode refid="5510" relation="include">
+        </childnode>
+        <childnode refid="5512" relation="include">
+        </childnode>
+      </node>
+      <node id="5513">
+        <label>Castor3DPrerequisites.hpp</label>
+        <link refid="d9/dd6/a00272"/>
+        <childnode refid="5514" relation="include">
+        </childnode>
+      </node>
+      <node id="5512">
+        <label>Event/UserInput/UserInputEvent.hpp</label>
+        <link refid="d0/d39/a00314"/>
+        <childnode refid="5513" relation="include">
+        </childnode>
+        <childnode refid="5515" relation="include">
+        </childnode>
+        <childnode refid="5520" relation="include">
+        </childnode>
+        <childnode refid="5521" relation="include">
+        </childnode>
+      </node>
+      <node id="5511">
+        <label>Render/Node/RenderNode_Render.hpp</label>
+        <link refid="d4/d6a/a00704"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="d9/de7/a02572" prot="public">castor3d::KeyboardState</innerclass>
+    <innerclass refid="d0/df5/a02576" prot="public">castor3d::MouseState</innerclass>
+    <innerclass refid="da/dc4/a02548" prot="public">castor3d::NonClientEventHandler</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Event/UserInput/UserInputEventModule.hpp"/>
+  </compounddef>
+</doxygen>

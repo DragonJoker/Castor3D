@@ -1,33 +1,438 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d0/dee/a02870" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkImageMemoryBarrier &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d0/dee/a02870" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BlinnPhongPass</compoundname>
+    <basecompoundref refid="d2/d80/a02874" prot="public" virt="non-virtual">castor3d::PhongPass</basecompoundref>
+    <includes local="no">BlinnPhongPass.hpp</includes>
       <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d0/dee/a02870_1aa246cebb99ce99dfd6c6dd5020d4f879" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkImageMemoryBarrier &gt;::value</definition>
+      <memberdef kind="variable" id="d0/dee/a02870_1ae3d812a1bc03ae5c86bc931713f75748" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::BlinnPhongPass::Type</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER</initializer>
+        <name>Type</name>
+        <qualifiedname>castor3d::BlinnPhongPass::Type</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="59" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="59" bodyend="-1"/>
+        <location file="Material/Pass/Phong/BlinnPhongPass.hpp" line="65" column="37" bodyfile="Material/Pass/Phong/BlinnPhongPass.hpp" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dee/a02870_1a5171802314da4ad0d1d43880cdf976f3" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::BlinnPhongPass::LightingModel</definition>
+        <argsstring></argsstring>
+        <name>LightingModel</name>
+        <qualifiedname>castor3d::BlinnPhongPass::LightingModel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/BlinnPhongPass.hpp" line="66" column="37" bodyfile="Material/Pass/Phong/BlinnPhongPass.hpp" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/dee/a02870_1a261f18bf5ee74db9c3415ee250b4c0fe" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::BlinnPhongPass::BlinnPhongPass</definition>
+        <argsstring>(Material &amp;parent, PassFlags initialFlags=PassFlag::eNone)</argsstring>
+        <name>BlinnPhongPass</name>
+        <qualifiedname>castor3d::BlinnPhongPass::BlinnPhongPass</qualifiedname>
+        <param>
+          <type><ref refid="d9/da4/a02798" kindref="compound">Material</ref> &amp;</type>
+          <declname>parent</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref></type>
+          <declname>initialFlags</declname>
+          <defval><ref refid="dc/df4/a01401_1a043cb84a97fa62d2b78e9f4ec3238f70abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">PassFlag::eNone</ref></defval>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent material. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">initialFlags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass initial flags. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/BlinnPhongPass.hpp" line="29" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dee/a02870_1a9794917e853b2801968319c9042807c8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::BlinnPhongPass::BlinnPhongPass</definition>
+        <argsstring>(Material &amp;parent, PassTypeID typeID, PassFlags initialFlags=PassFlag::eNone)</argsstring>
+        <name>BlinnPhongPass</name>
+        <qualifiedname>castor3d::BlinnPhongPass::BlinnPhongPass</qualifiedname>
+        <param>
+          <type><ref refid="d9/da4/a02798" kindref="compound">Material</ref> &amp;</type>
+          <declname>parent</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a773fcfeb825d3fe54eb4a3dce23bca11" kindref="member">PassTypeID</ref></type>
+          <declname>typeID</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref></type>
+          <declname>initialFlags</declname>
+          <defval><ref refid="dc/df4/a01401_1a043cb84a97fa62d2b78e9f4ec3238f70abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">PassFlag::eNone</ref></defval>
+        </param>
+        <briefdescription>
+<para>Constructor, from derived classes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent material. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">typeID</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass real type ID. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">initialFlags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass initial flags. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/BlinnPhongPass.hpp" line="43" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dee/a02870_1a3137f8f292d68cfe3aed366c10bad23d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::BlinnPhongPass::getPassSectionID</definition>
+        <argsstring>() const override</argsstring>
+        <name>getPassSectionID</name>
+        <qualifiedname>castor3d::BlinnPhongPass::getPassSectionID</qualifiedname>
+        <reimplements refid="d6/d59/a02810_1a58047c95c7de86848c7483cfd4dddd3c">getPassSectionID</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The scene file section ID used for the pass effective type. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/BlinnPhongPass.hpp" line="58" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dee/a02870_1a1065cb3e361c0f5def94c78d6a1a261b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::BlinnPhongPass::getTextureSectionID</definition>
+        <argsstring>() const override</argsstring>
+        <name>getTextureSectionID</name>
+        <qualifiedname>castor3d::BlinnPhongPass::getTextureSectionID</qualifiedname>
+        <reimplements refid="d6/d59/a02810_1a6f8dad34893c846c9d3ee60541520014">getTextureSectionID</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The scene file section ID used for the pass&apos; textures effective type. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/BlinnPhongPass.hpp" line="62" column="18"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d0/dee/a02870_1ae569411827e7d986ad2c468bb9a94350" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> PassSPtr</type>
+        <definition>static C3D_API PassSPtr castor3d::BlinnPhongPass::create</definition>
+        <argsstring>(Material &amp;parent)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::BlinnPhongPass::create</qualifiedname>
+        <param>
+          <type><ref refid="d9/da4/a02798" kindref="compound">Material</ref> &amp;</type>
+          <declname>parent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/BlinnPhongPass.hpp" line="47" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dee/a02870_1a5ce3cc083ebee7611ed5d5c1a7a93345" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::AttributeParsers</type>
+        <definition>static C3D_API castor::AttributeParsers castor3d::BlinnPhongPass::createParsers</definition>
+        <argsstring>()</argsstring>
+        <name>createParsers</name>
+        <qualifiedname>castor3d::BlinnPhongPass::createParsers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/BlinnPhongPass.hpp" line="48" column="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dee/a02870_1afa5a9e9b88bcc7f58527ce93e1be378a" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::AttributeParsers</type>
+        <definition>static C3D_API castor::AttributeParsers castor3d::BlinnPhongPass::createParsers</definition>
+        <argsstring>(uint32_t mtlSectionID, uint32_t texSectionID, uint32_t remapSectionID, castor::String const &amp;texRemapSectionName, uint32_t remapChannelSectionID)</argsstring>
+        <name>createParsers</name>
+        <qualifiedname>castor3d::BlinnPhongPass::createParsers</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>mtlSectionID</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>texSectionID</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>remapSectionID</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>texRemapSectionName</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>remapChannelSectionID</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/BlinnPhongPass.hpp" line="49" column="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dee/a02870_1af9b7578b2342756ea755a268a78b7b9e" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::StrUInt32Map</type>
+        <definition>static C3D_API castor::StrUInt32Map castor3d::BlinnPhongPass::createSections</definition>
+        <argsstring>()</argsstring>
+        <name>createSections</name>
+        <qualifiedname>castor3d::BlinnPhongPass::createSections</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/BlinnPhongPass.hpp" line="54" column="37"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="59" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="59" bodyend="59"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::BlinnPhongPass</label>
+        <link refid="d0/dee/a02870"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::Pass</label>
+        <link refid="d6/d59/a02810"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::PhongPass</label>
+        <link refid="d2/d80/a02874"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Material &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::BlinnPhongPass</label>
+        <link refid="d0/dee/a02870"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::Pass</label>
+        <link refid="d6/d59/a02810"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::PhongPass</label>
+        <link refid="d2/d80/a02874"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Material &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/Phong/BlinnPhongPass.hpp" line="15" column="1" bodyfile="Material/Pass/Phong/BlinnPhongPass.hpp" bodystart="17" bodyend="67"/>
     <listofallmembers>
-      <member refid="d0/dee/a02870_1aa246cebb99ce99dfd6c6dd5020d4f879" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkImageMemoryBarrier &gt;</scope><name>value</name></member>
+      <member refid="d6/d59/a02810_1afb6e1a78c07eac9f5bad602d0387d553" prot="public" virt="virtual"><scope>castor3d::BlinnPhongPass</scope><name>accept</name></member>
+      <member refid="d6/d59/a02810_1a9aa6a44814492f2e3f276c3e47dc9e8f" prot="protected" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>addCommonParsers</name></member>
+      <member refid="d6/d59/a02810_1a797094ff515f760290884fcd202ba9ad" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>addParser</name></member>
+      <member refid="d6/d59/a02810_1adb6026c634eebbfaa26fa25973fafcda" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>begin</name></member>
+      <member refid="d6/d59/a02810_1a609f35aed9e87d4bc64a3158f6b9208f" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>begin</name></member>
+      <member refid="d0/dee/a02870_1a261f18bf5ee74db9c3415ee250b4c0fe" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>BlinnPhongPass</name></member>
+      <member refid="d0/dee/a02870_1a9794917e853b2801968319c9042807c8" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>BlinnPhongPass</name></member>
+      <member refid="d6/d59/a02810_1ad88707e47153d55ec3a87a12a6259787" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>cleanup</name></member>
+      <member refid="d0/dee/a02870_1ae569411827e7d986ad2c468bb9a94350" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>create</name></member>
+      <member refid="d0/dee/a02870_1a5ce3cc083ebee7611ed5d5c1a7a93345" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>createParsers</name></member>
+      <member refid="d0/dee/a02870_1afa5a9e9b88bcc7f58527ce93e1be378a" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>createParsers</name></member>
+      <member refid="d0/dee/a02870_1af9b7578b2342756ea755a268a78b7b9e" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>createSections</name></member>
+      <member refid="d2/d80/a02874_1a0944cb586ed4e31f5df9e0bf41bbc327" prot="protected" virt="virtual"><scope>castor3d::BlinnPhongPass</scope><name>doAccept</name></member>
+      <member refid="d2/d80/a02874_1ac9c651bd418c9a0c06134cff33629161" prot="protected" virt="virtual"><scope>castor3d::BlinnPhongPass</scope><name>doAccept</name></member>
+      <member refid="d6/d59/a02810_1adfb7fa2d6d7b490d545059e1dcc4b9ef" prot="protected" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>doFillData</name></member>
+      <member refid="d6/d59/a02810_1afb2c50a5cfbcd1c6b0c23c97c1d1cce6" prot="protected" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>doJoinDifOpa</name></member>
+      <member refid="d6/d59/a02810_1ad1cd92558a9ccee9a98341d36805f1c3" prot="protected" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>doMergeImages</name></member>
+      <member refid="d6/d59/a02810_1adbc8acc6b46d3c5cefedf2c5ecf1ac21" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>enableEdges</name></member>
+      <member refid="d6/d59/a02810_1ab4dcba9a142c236d4a5f54f926202af6" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>enableLighting</name></member>
+      <member refid="d6/d59/a02810_1a824ea4260b7bbe6062185209d52088fa" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>enablePicking</name></member>
+      <member refid="d6/d59/a02810_1aecf9d2ec66d6fbc7819a7e888d3fedc6" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>enableReflections</name></member>
+      <member refid="d6/d59/a02810_1a4a7e36dd120a22b62dbf898654f43ab9" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>enableRefractions</name></member>
+      <member refid="d6/d59/a02810_1a747b9e8172704065f32c2c0b22c12eea" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>end</name></member>
+      <member refid="d6/d59/a02810_1a819275bac67ba6e090bbcbd72bb0b86b" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>end</name></member>
+      <member refid="d2/d80/a02874_1a2bf35d907ad69a6038d5a98517363e4a" prot="public" virt="virtual"><scope>castor3d::BlinnPhongPass</scope><name>fillBuffer</name></member>
+      <member refid="d6/d59/a02810_1ad0ee7f042c7ab25022651b0fac0fa2fd" prot="public" virt="virtual"><scope>castor3d::BlinnPhongPass</scope><name>fillConfig</name></member>
+      <member refid="d6/d59/a02810_1a36fe1d2c8a32642bef47a793a3b3c0f3" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>fillSssProfileBuffer</name></member>
+      <member refid="d6/d59/a02810_1abab03a36cc4743c6908c5796aa2cfaf5" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getAlphaBlendMode</name></member>
+      <member refid="d6/d59/a02810_1a5008debebdf91b98a449bcfe03791f65" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getAlphaFunc</name></member>
+      <member refid="d6/d59/a02810_1a7ccad1e806e125101e2277999982fcb1" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getAlphaValue</name></member>
+      <member refid="d2/d80/a02874_1a703d38156553e7197156cafcbc68a088" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getAmbient</name></member>
+      <member refid="d6/d59/a02810_1a8ff323435e81437067613de160de04fa" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getBlendAlphaFunc</name></member>
+      <member refid="d6/d59/a02810_1a94afee54948f71d056e8aa3d51f50464" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getBWAccumulationOperator</name></member>
+      <member refid="d2/d80/a02874_1ab1752dc11d4f704537bba202def52f55" prot="public" virt="virtual"><scope>castor3d::BlinnPhongPass</scope><name>getColour</name></member>
+      <member refid="d6/d59/a02810_1aed61df74f8931cd420104e7f3d468f89" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getColourBlendMode</name></member>
+      <member refid="d6/d59/a02810_1a92e500619d7aba9b65415305a167c4c2" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getDepthFactor</name></member>
+      <member refid="d2/d80/a02874_1a9129b9a911322680e36782782175049d" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getDiffuse</name></member>
+      <member refid="d2/d80/a02874_1a9b42c31efe8401a73cd13441081205a7" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getDiffuse</name></member>
+      <member refid="d6/d59/a02810_1a6ab7c537f582f0c5959f92955486e107" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getEdgeColour</name></member>
+      <member refid="d6/d59/a02810_1af25df8bb8c984beef3473dadab5e625b" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getEdgeWidth</name></member>
+      <member refid="d6/d59/a02810_1a11d2d9dd2ec12a119e70adcd56ffd76e" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getEmissive</name></member>
+      <member refid="d6/d59/a02810_1aef76e51c5f621a5245cc0bab4342ae68" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getHeightTextureIndex</name></member>
+      <member refid="d6/d59/a02810_1a791c432d1d906eb14ff32a882c3f9633" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getId</name></member>
+      <member refid="d6/d59/a02810_1a9ab7deb2a96e0962c27e10c7d2613da5" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getIndex</name></member>
+      <member refid="d6/d59/a02810_1a48d669c1cbe52f7287028e54369cd3b5" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getNormalFactor</name></member>
+      <member refid="d6/d59/a02810_1a97bc6aa02865345681c5a8627e5f8ce5" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getObjectFactor</name></member>
+      <member refid="d6/d59/a02810_1a66390e7dc9648f56a538b8b2b14569ed" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getOpacity</name></member>
+      <member refid="d6/d59/a02810_1a537cf487cb3b1633611ad23d67a87d23" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getParallaxOcclusion</name></member>
+      <member refid="d6/d59/a02810_1a362c719ff6af42aa94550a526bd554a8" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getPassFlags</name></member>
+      <member refid="d0/dee/a02870_1a3137f8f292d68cfe3aed366c10bad23d" prot="public" virt="virtual"><scope>castor3d::BlinnPhongPass</scope><name>getPassSectionID</name></member>
+      <member refid="d6/d59/a02810_1a46a166f8c07114d7a538f54fc358f555" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getRefractionRatio</name></member>
+      <member refid="d6/d59/a02810_1a4abef87099b62a733e079f282f7e7440" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getRenderPassInfo</name></member>
+      <member refid="d2/d80/a02874_1ae40123a4b1e8440fa6ee5e644e7cd3e1" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getShininess</name></member>
+      <member refid="d6/d59/a02810_1a46e08abdb9f8376da91884af5388e16b" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getSources</name></member>
+      <member refid="d2/d80/a02874_1a08e3954446c7d22e9f47cb1772eb8c42" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getSpecular</name></member>
+      <member refid="d2/d80/a02874_1ad414a2bac7410dddaa8d4469ecf5c3d0" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getSpecular</name></member>
+      <member refid="d6/d59/a02810_1ae75b91d63f7e073422b6b2759961ca7d" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getSssProfileId</name></member>
+      <member refid="d6/d59/a02810_1a4e351ae82d035c909573e7a62c4114a4" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getSubsurfaceScattering</name></member>
+      <member refid="d6/d59/a02810_1aadd8377ef3ce5a24d6071cfd4cedbdcb" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getTextures</name></member>
+      <member refid="d0/dee/a02870_1a1065cb3e361c0f5def94c78d6a1a261b" prot="public" virt="virtual"><scope>castor3d::BlinnPhongPass</scope><name>getTextureSectionID</name></member>
+      <member refid="d6/d59/a02810_1abad30600c40e1d5f5a3564e764992a6d" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getTexturesMask</name></member>
+      <member refid="d6/d59/a02810_1a97ceb48b79e58532c774f19336671bfc" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getTextureUnit</name></member>
+      <member refid="d6/d59/a02810_1a8a35b30ce4e90a506a77d3cbaa9d0439" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getTextureUnits</name></member>
+      <member refid="d6/d59/a02810_1aef7e358ffc5cec246f4f15484e2925f0" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getTextureUnitsCount</name></member>
+      <member refid="d6/d59/a02810_1a1e4a27f33f80c5163f1a6d8a3af3c8e8" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getTransmission</name></member>
+      <member refid="d6/d59/a02810_1af67bff21cb6e95c3bb1b730c6736a163" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>getTypeID</name></member>
+      <member refid="d6/d59/a02810_1ae87ec5c3a8297d7d27f4d28071173629" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>hasAlphaBlending</name></member>
+      <member refid="d6/d59/a02810_1abb555c3683dda21b77bace58ae285350" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>hasAlphaTest</name></member>
+      <member refid="d6/d59/a02810_1ac79b5fc42779ef6c26d94d9aa8624d8e" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>hasAutomaticShader</name></member>
+      <member refid="d6/d59/a02810_1aa9363539342e8b9c58365d608fb6ef14" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>hasBlendAlphaTest</name></member>
+      <member refid="d6/d59/a02810_1a906a851eaef40c7716b164e7a8f094c7" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>hasEdges</name></member>
+      <member refid="d6/d59/a02810_1ae656ac3132fb4e95fa30f28381d5e421" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>hasEnvironmentMapping</name></member>
+      <member refid="d6/d59/a02810_1a605430ba0d3435ae3c8e72a9447c2b4a" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>hasIBL</name></member>
+      <member refid="d6/d59/a02810_1a05ba158e94fc4945ca6e17af1b9bbab2" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>hasLighting</name></member>
+      <member refid="d6/d59/a02810_1a4e81f24dd6d3dc1b776aa0823423fa37" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>hasOnlyAlphaBlending</name></member>
+      <member refid="d6/d59/a02810_1af46d3754344dcf544ab178901c28e1af" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>hasParallaxOcclusion</name></member>
+      <member refid="d6/d59/a02810_1aa3955ee04b630768804e3b781f1fe16a" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>hasReflections</name></member>
+      <member refid="d6/d59/a02810_1ab485b377665e57615dd8e9b208469335" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>hasRefraction</name></member>
+      <member refid="d6/d59/a02810_1ae6d7fc739a401207ae97464165cab915" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>hasSubsurfaceScattering</name></member>
+      <member refid="d6/d59/a02810_1a63e2c701877fa38033b6ef2b3ea01eed" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>initialise</name></member>
+      <member refid="d6/d59/a02810_1aefef1849fa24ccbdef9905e161b687d2" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>isImplicit</name></member>
+      <member refid="d6/d59/a02810_1a81a6f05668f306b5fc1ac9f9ebdfab1d" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>isTwoSided</name></member>
+      <member refid="d0/dee/a02870_1a5171802314da4ad0d1d43880cdf976f3" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>LightingModel</name></member>
+      <member refid="d6/d59/a02810_1a30f74cf5976024cadd53885932a383e4" prot="protected" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>m_dirty</name></member>
+      <member refid="d6/d59/a02810_1a323eebc249a5582d456f95c941cc360e" prot="protected" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>m_sssDirty</name></member>
+      <member refid="d6/d59/a02810_1a91797306a2bf5aa8bd177aed3b165852" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>MaxEdgeWidth</name></member>
+      <member refid="d2/d80/a02874_1aa5d7ef38c2ef3c7e8b0d44f3020c5395" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>MaxShininess</name></member>
+      <member refid="d6/d59/a02810_1a1ab323d9aef01c9b8804e66d42fbfd4c" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>MinEdgeWidth</name></member>
+      <member refid="d6/d59/a02810_1a154a1a87af6ead5a4b90e42579155906" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>needsAlphaProcessing</name></member>
+      <member refid="d6/d59/a02810_1af9b53724c4861cdbcc9d122c2b9b8908" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>onChanged</name></member>
+      <member refid="d6/d59/a02810_1a37c903c84ca7392f282afa8772c34fa8" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>onSssProfileChanged</name></member>
+      <member refid="d6/d59/a02810_1a227224424945c986adb2c64fad90b376" prot="protected" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>parseError</name></member>
+      <member refid="d6/d59/a02810_1ac9081361671a0247703ea6099a6fcf57" prot="protected" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>Pass</name></member>
+      <member refid="d2/d80/a02874_1a92f0aa4070ee409ea6b66ff33344fe57" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>PhongPass</name></member>
+      <member refid="d2/d80/a02874_1aba1b2264f368500cfb9267717ec36a79" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>PhongPass</name></member>
+      <member refid="d6/d59/a02810_1a2e62df25714263fa6f73b50e5cd645e3" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>prepareTextures</name></member>
+      <member refid="d6/d59/a02810_1a8adcd7d8951a0f1a8c530aa52dbe39ca" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>registerTexture</name></member>
+      <member refid="d6/d59/a02810_1aed051c8eb5ba659a29a05c51b7df045d" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>registerTexture</name></member>
+      <member refid="d6/d59/a02810_1a738fce61c1af78f26005129969b128ea" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>resetTexture</name></member>
+      <member refid="d6/d59/a02810_1af32c96d71f12e20feffd9823299cbfa6" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>setAlphaBlendMode</name></member>
+      <member refid="d6/d59/a02810_1afd5267eb88bff6d35f87054df9c1ee9a" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>setAlphaFunc</name></member>
+      <member refid="d6/d59/a02810_1a95c2f58fedf1951fcb9261ac31ed6412" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>setAlphaValue</name></member>
+      <member refid="d2/d80/a02874_1a1974c39d6f5b3020078c70636e3643be" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>setAmbient</name></member>
+      <member refid="d6/d59/a02810_1ada0f7daf307e0f4fd4dd8e14aafc2a8c" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>setBlendAlphaFunc</name></member>
+      <member refid="d6/d59/a02810_1a28958958c6c7efbfcd76431a4cc02302" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>setBWAccumulationOperator</name></member>
+      <member refid="d2/d80/a02874_1af925f5eb3e5f2de70f0456232953d6a2" prot="public" virt="virtual"><scope>castor3d::BlinnPhongPass</scope><name>setColour</name></member>
+      <member refid="d6/d59/a02810_1a3b1fe1655d4a0ed0fcec79e095bf503f" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>setColourBlendMode</name></member>
+      <member refid="d6/d59/a02810_1ae409e1d79fd1e1788e55811a93bf3e72" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>setDepthFactor</name></member>
+      <member refid="d2/d80/a02874_1ad9bc36888288dbc32a9b6d154a2c5716" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>setDiffuse</name></member>
+      <member refid="d6/d59/a02810_1a049b836e2fbae3a7165857e03c8e5697" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>setEdgeColour</name></member>
+      <member refid="d6/d59/a02810_1a7181adbfe9fafc0019131b7d7f2953e9" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>setEdgeWidth</name></member>
+      <member refid="d6/d59/a02810_1a9260376e612bb8e9e608649c2e2bdd8b" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>setEmissive</name></member>
+      <member refid="d6/d59/a02810_1a1452b05883e625b72284ee291f6b975c" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>setId</name></member>
+      <member refid="d6/d59/a02810_1a6bc2b7550799348f5ebc673c5c54144e" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>setImplicit</name></member>
+      <member refid="d6/d59/a02810_1af2b3eded53c8c5a3c67236db53c4a6ae" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>setNormalFactor</name></member>
+      <member refid="d6/d59/a02810_1afb5f7772d93e635589e8d5b1e3cab1fc" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>setObjectFactor</name></member>
+      <member refid="d6/d59/a02810_1a4144dbf8c545566e2567e4b685c332c1" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>setOpacity</name></member>
+      <member refid="d6/d59/a02810_1acb44524ddbe5e27b131a2a79819cfd68" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>setParallaxOcclusion</name></member>
+      <member refid="d6/d59/a02810_1a3d937f0261b447dd91d89aa43037c960" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>setRefractionRatio</name></member>
+      <member refid="d2/d80/a02874_1a2a6c58df4250faed5a5cbc1792098198" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>setShininess</name></member>
+      <member refid="d2/d80/a02874_1a5a433167c2bdb00750b03b8b1f9a8e9a" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>setSpecular</name></member>
+      <member refid="d6/d59/a02810_1aaec182d2900d8456cabb4997e4c3ea27" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>setSssProfileId</name></member>
+      <member refid="d6/d59/a02810_1aa7ba059a9ca150b6701d1dd533256dee" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>setSubsurfaceScattering</name></member>
+      <member refid="d6/d59/a02810_1a4f3b1f8a5b24e9921abeace0407221d3" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>setTransmission</name></member>
+      <member refid="d6/d59/a02810_1a21496a3f31507920af9fce21254458ae" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>setTwoSided</name></member>
+      <member refid="d0/dee/a02870_1ae3d812a1bc03ae5c86bc931713f75748" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>Type</name></member>
+      <member refid="d6/d59/a02810_1ace39fcf93f25996d5c351d0df276b811" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>unregisterTexture</name></member>
+      <member refid="d6/d59/a02810_1a3dfb0b475cb6d2c1950912eeeb20b6c4" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>update</name></member>
+      <member refid="d6/d59/a02810_1a9a893a531f865d286b9b37d3e30fe635" prot="public" virt="non-virtual"><scope>castor3d::BlinnPhongPass</scope><name>updateConfig</name></member>
+      <member refid="d2/d80/a02874_1a01a98eecea95c87476865ad705b00367" prot="public" virt="virtual"><scope>castor3d::BlinnPhongPass</scope><name>writeText</name></member>
+      <member refid="d6/d59/a02810_1a9ce759078be0e176c0b5e7fc7dee98b4" prot="protected" virt="virtual"><scope>castor3d::BlinnPhongPass</scope><name>~Pass</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

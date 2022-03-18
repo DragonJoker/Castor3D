@@ -1,166 +1,79 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d0/de6/a04814" kind="struct" language="C++" prot="protected">
-    <compoundname>castor3d::SpotLightPass::Program</compoundname>
-    <basecompoundref refid="de/d4c/a04794" prot="public" virt="non-virtual">castor3d::MeshLightPass::Program</basecompoundref>
-    <includes local="no">SpotLightPass.hpp</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d0/de6/a04814_1a9419702e4a089a9b431c741cc67f7b41" prot="private" static="no" mutable="no">
-        <type><ref refid="de/d85/a04810" kindref="compound">SpotLightPass</ref> &amp;</type>
-        <definition>SpotLightPass&amp; castor3d::SpotLightPass::Program::m_lightPass</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d0/de6/a04814" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::SssProfiles</compoundname>
+    <includes local="no">GlslMaterial.hpp</includes>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d0/de6/a04814_1a58bb45c4bf87c0635321f3994c3530a7" prot="protected" static="no" mutable="no">
+        <type>sdw::ShaderWriter &amp;</type>
+        <definition>sdw::ShaderWriter&amp; castor3d::shader::SssProfiles::m_writer</definition>
         <argsstring></argsstring>
-        <name>m_lightPass</name>
+        <name>m_writer</name>
+        <qualifiedname>castor3d::shader::SssProfiles::m_writer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="69" column="1" bodyfile="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" bodystart="69" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="120" column="20" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/de6/a04814_1a20d4d4a50d800dfa1b08b0122137c107" prot="protected" static="no" mutable="no">
+        <type>std::unique_ptr&lt; sdw::ArraySsboT&lt; <ref refid="de/d85/a04810" kindref="compound">SssProfile</ref> &gt; &gt;</type>
+        <definition>std::unique_ptr&lt; sdw::ArraySsboT&lt; SssProfile &gt; &gt; castor3d::shader::SssProfiles::m_ssbo</definition>
+        <argsstring></argsstring>
+        <name>m_ssbo</name>
+        <qualifiedname>castor3d::shader::SssProfiles::m_ssbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="121" column="17" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="121" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d0/de6/a04814_1a59d71eb9b4de0bfee46bc8d8b3e53927" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::SpotLightPass::Program::Program</definition>
-        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, SpotLightPass &amp;lightPass, ShaderModule const &amp;vtx, ShaderModule const &amp;pxl, bool hasShadows=false, bool hasVoxels=false, bool generatesIndirect=false)</argsstring>
-        <name>Program</name>
+      <memberdef kind="function" id="d0/de6/a04814_1a2c5099c58d11a13b11f92ad0c68a34b5" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::SssProfiles::SssProfiles</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>SssProfiles</name>
+        <qualifiedname>castor3d::shader::SssProfiles::SssProfiles</qualifiedname>
         <param>
-          <type><ref refid="df/d9b/a02514" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
-        </param>
-        <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type><ref refid="de/d85/a04810" kindref="compound">SpotLightPass</ref> &amp;</type>
-          <declname>lightPass</declname>
-        </param>
-        <param>
-          <type><ref refid="d2/d63/a05306" kindref="compound">ShaderModule</ref> const &amp;</type>
-          <declname>vtx</declname>
-        </param>
-        <param>
-          <type><ref refid="d2/d63/a05306" kindref="compound">ShaderModule</ref> const &amp;</type>
-          <declname>pxl</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>hasShadows</declname>
-          <defval>false</defval>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>hasVoxels</declname>
-          <defval>false</defval>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>generatesIndirect</declname>
-          <defval>false</defval>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">engine</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The engine. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">lightPass</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The light pass. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">vtx</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The vertex shader source. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">pxl</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The fragment shader source. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">hasShadows</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if this program uses shadow map. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">hasVoxels</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if this program uses voxellisation result. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">generatesIndirect</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if this program generates indirect lighting. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="49" column="1"/>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="110" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d0/de6/a04814_1acaca8fd5bdb9e0f55fd425113b6959c9" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type></type>
-        <definition>virtual castor3d::SpotLightPass::Program::~Program</definition>
-        <argsstring>()</argsstring>
-        <name>~Program</name>
-        <reimplements refid="de/d4c/a04794_1a133ea9bcedef3fabee18a11d638f591a">~Program</reimplements>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="63" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d0/de6/a04814_1a6b85bc2409d590aa9a5c5c464ef158b0" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::SpotLightPass::Program::doBind</definition>
-        <argsstring>(Light const &amp;light) override</argsstring>
-        <name>doBind</name>
-        <reimplements refid="de/df1/a04758_1a8490c1cfa85a383de04fb235f22ea40e">doBind</reimplements>
+      <memberdef kind="function" id="d0/de6/a04814_1a34ae09771843f9086979464d7dd4a233" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::SssProfiles::SssProfiles</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, uint32_t binding, uint32_t set, bool enable=true)</argsstring>
+        <name>SssProfiles</name>
+        <qualifiedname>castor3d::shader::SssProfiles::SssProfiles</qualifiedname>
         <param>
-          <type><ref refid="d4/d69/a05166" kindref="compound">Light</ref> const &amp;</type>
-          <declname>light</declname>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enable</declname>
+          <defval>true</defval>
         </param>
         <briefdescription>
         </briefdescription>
@@ -168,154 +81,85 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="66" column="1"/>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="111" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/de6/a04814_1a965a9b2ae19bc4eae529f918d1c67daf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::SssProfiles::declare</definition>
+        <argsstring>(uint32_t binding, uint32_t set)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::SssProfiles::declare</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="115" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/de6/a04814_1a73c5730e1d304b6b235c852084f5fd7f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="de/d85/a04810" kindref="compound">SssProfile</ref></type>
+        <definition>C3D_API SssProfile castor3d::shader::SssProfiles::getProfile</definition>
+        <argsstring>(sdw::UInt const &amp;index) const</argsstring>
+        <name>getProfile</name>
+        <qualifiedname>castor3d::shader::SssProfiles::getProfile</qualifiedname>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="117" column="20"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Spot light pass program. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="4187">
-        <label>castor3d::MeshLightPass::Program</label>
-        <link refid="de/d4c/a04794"/>
-        <childnode refid="4188" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4189">
-        <label>Named</label>
-      </node>
-      <node id="4188">
-        <label>castor3d::LightPass::Program</label>
-        <link refid="de/df1/a04758"/>
-        <childnode refid="4189" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4186">
-        <label>castor3d::SpotLightPass::Program</label>
-        <link refid="d0/de6/a04814"/>
-        <childnode refid="4187" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
     <collaborationgraph>
-      <node id="4200">
-        <label>castor3d::RenderSystem</label>
-        <link refid="d1/d9a/a04618"/>
-        <childnode refid="4201" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4199">
+      <node id="4">
         <label>T</label>
       </node>
-      <node id="4203">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="4199" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="4198">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="4199" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="4202">
-        <label>std::vector&lt; ashes::CommandPoolPtr &gt;</label>
-        <childnode refid="4203" relation="template-instance">
-          <edgelabel>&lt; ashes::CommandPoolPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4197">
-        <label>std::array&lt; uint32_t, 4u &gt;</label>
-        <childnode refid="4198" relation="template-instance">
-          <edgelabel>&lt; uint32_t, 4u &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4191">
-        <label>castor3d::MeshLightPass::Program</label>
-        <link refid="de/d4c/a04794"/>
-        <childnode refid="4192" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4193">
-        <label>Named</label>
-      </node>
-      <node id="4195">
-        <label>castor::Unique&lt; Engine &gt;</label>
-      </node>
-      <node id="4201">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="4192">
-        <label>castor3d::LightPass::Program</label>
-        <link refid="de/df1/a04758"/>
-        <childnode refid="4193" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4194" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="4196" relation="usage">
-          <edgelabel>m_device</edgelabel>
-        </childnode>
-      </node>
-      <node id="4194">
-        <label>castor3d::Engine</label>
-        <link refid="df/d9b/a02514"/>
-        <childnode refid="4195" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4196">
-        <label>castor3d::RenderDevice</label>
-        <link refid="d8/d4c/a04506"/>
-        <childnode refid="4197" relation="usage">
-          <edgelabel>queueFamiliesIndex</edgelabel>
-        </childnode>
-        <childnode refid="4200" relation="usage">
-          <edgelabel>renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="4202" relation="usage">
-          <edgelabel>commandPools</edgelabel>
-        </childnode>
-      </node>
-      <node id="4190">
-        <label>castor3d::SpotLightPass::Program</label>
+      <node id="1">
+        <label>castor3d::shader::SssProfiles</label>
         <link refid="d0/de6/a04814"/>
-        <childnode refid="4191" relation="public-inheritance">
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_ssbo</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::unique_ptr&lt; sdw::ArraySsboT&lt; castor3d::shader::SssProfile &gt; &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; sdw::ArraySsboT&lt; castor3d::shader::SssProfile &gt; &gt;</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="25" column="1" bodyfile="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" bodystart="23" bodyend="70"/>
+    <location file="Shader/Shaders/GlslMaterial.hpp" line="107" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="108" bodyend="122"/>
     <listofallmembers>
-      <member refid="de/df1/a04758_1a56ae01d65b01883f5ce0118daf64690c" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>bind</name></member>
-      <member refid="de/df1/a04758_1ab598c54b90bcd66c546c754af0851d90" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>cleanup</name></member>
-      <member refid="d0/de6/a04814_1a6b85bc2409d590aa9a5c5c464ef158b0" prot="private" virt="virtual"><scope>castor3d::SpotLightPass::Program</scope><name>doBind</name></member>
-      <member refid="de/df1/a04758_1aaa746a9a99bcd0198ee554c3ab69659e" prot="protected" virt="virtual"><scope>castor3d::SpotLightPass::Program</scope><name>doRender</name></member>
-      <member refid="de/df1/a04758_1aee4b36aedabffd104d41e37c53f5a941" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>getPipelineLayout</name></member>
-      <member refid="de/df1/a04758_1a4750cb3a226efed78fc75d73b1e1d66a" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>getTextureDescriptorLayout</name></member>
-      <member refid="de/df1/a04758_1adc6a0d70291a75c8685b58f74c1d051d" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>getTextureDescriptorPool</name></member>
-      <member refid="de/df1/a04758_1abc2748c3e65cfc9e4c431e908c561dd0" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>getUboDescriptorLayout</name></member>
-      <member refid="de/df1/a04758_1a8316aee9157855bdf8893f1554aff8bf" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>getUboDescriptorPool</name></member>
-      <member refid="de/df1/a04758_1a132d6370f071a2cb266aac2881f7ecf7" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>initialise</name></member>
-      <member refid="de/df1/a04758_1a54eaf135f9b1b974d00a93dea2db533c" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_blendPipeline</name></member>
-      <member refid="de/df1/a04758_1a37c0b2cded3354383db9d9cd359c99fc" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_device</name></member>
-      <member refid="de/df1/a04758_1a62a9586b46c1be6ffbd51cb7775953f0" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_engine</name></member>
-      <member refid="de/df1/a04758_1af3308b8669402be33760c617119aa3f8" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_firstPipeline</name></member>
-      <member refid="de/df1/a04758_1a0e77f08bb3f9f9e1bc13b7d60ea50d29" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_generatesIndirect</name></member>
-      <member refid="d0/de6/a04814_1a9419702e4a089a9b431c741cc67f7b41" prot="private" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_lightPass</name></member>
-      <member refid="de/df1/a04758_1a112df3e757b429a123f4935a339fa4b6" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_pipelineLayout</name></member>
-      <member refid="de/df1/a04758_1a315224ba3f2ea81ccf95774e5bc39b2f" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_program</name></member>
-      <member refid="de/df1/a04758_1a56c94264c585da624967063f72a1ae8a" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_shadows</name></member>
-      <member refid="de/df1/a04758_1af9fef7d04765b65116ef087761c8584c" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_textureDescriptorLayout</name></member>
-      <member refid="de/df1/a04758_1a00d14bb14ae6bc413c9b29f42f5cb40f" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_textureDescriptorPool</name></member>
-      <member refid="de/df1/a04758_1aee516c4a94abe87058cfc9f4248a6ef8" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_uboDescriptorLayout</name></member>
-      <member refid="de/df1/a04758_1a1d562428e80aec816dad9255fb988568" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_uboDescriptorPool</name></member>
-      <member refid="de/df1/a04758_1afdde2c7c935db702388ce72f4e87422f" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_voxels</name></member>
-      <member refid="d0/de6/a04814_1a59d71eb9b4de0bfee46bc8d8b3e53927" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>Program</name></member>
-      <member refid="de/d4c/a04794_1acc4bf419371c31f1db0571bbea310987" prot="public" virt="non-virtual" ambiguityscope="castor3d::MeshLightPass::Program::"><scope>castor3d::SpotLightPass::Program</scope><name>Program</name></member>
-      <member refid="de/df1/a04758_1a8a4da088de05ee41c00ba7cb17bc5178" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>render</name></member>
-      <member refid="d0/de6/a04814_1acaca8fd5bdb9e0f55fd425113b6959c9" prot="public" virt="virtual"><scope>castor3d::SpotLightPass::Program</scope><name>~Program</name></member>
+      <member refid="d0/de6/a04814_1a965a9b2ae19bc4eae529f918d1c67daf" prot="public" virt="non-virtual"><scope>castor3d::shader::SssProfiles</scope><name>declare</name></member>
+      <member refid="d0/de6/a04814_1a73c5730e1d304b6b235c852084f5fd7f" prot="public" virt="non-virtual"><scope>castor3d::shader::SssProfiles</scope><name>getProfile</name></member>
+      <member refid="d0/de6/a04814_1a20d4d4a50d800dfa1b08b0122137c107" prot="protected" virt="non-virtual"><scope>castor3d::shader::SssProfiles</scope><name>m_ssbo</name></member>
+      <member refid="d0/de6/a04814_1a58bb45c4bf87c0635321f3994c3530a7" prot="protected" virt="non-virtual"><scope>castor3d::shader::SssProfiles</scope><name>m_writer</name></member>
+      <member refid="d0/de6/a04814_1a2c5099c58d11a13b11f92ad0c68a34b5" prot="public" virt="non-virtual"><scope>castor3d::shader::SssProfiles</scope><name>SssProfiles</name></member>
+      <member refid="d0/de6/a04814_1a34ae09771843f9086979464d7dd4a233" prot="public" virt="non-virtual"><scope>castor3d::shader::SssProfiles</scope><name>SssProfiles</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

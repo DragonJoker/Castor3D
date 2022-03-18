@@ -1,33 +1,379 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d4/d7d/a03702" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPhysicalDeviceDepthStencilResolvePropertiesKHR &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d4/d7d/a03702_1a35ed48b7cc2182bba71f084ab0af02c7" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPhysicalDeviceDepthStencilResolvePropertiesKHR &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d4/d7d/a03702" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::LayeredLightPropagationVolumesBase::LightLpv</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/d7d/a03702_1ae5b5a4d934978e77ec2a627e46b8b327" prot="public" static="no" mutable="no">
+        <type>LpvLightConfigUboArray</type>
+        <definition>LpvLightConfigUboArray castor3d::LayeredLightPropagationVolumesBase::LightLpv::lpvLightConfigUbos</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DEPTH_STENCIL_RESOLVE_PROPERTIES_KHR</initializer>
+        <name>lpvLightConfigUbos</name>
+        <qualifiedname>castor3d::LayeredLightPropagationVolumesBase::LightLpv::lpvLightConfigUbos</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="338" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="338" bodyend="-1"/>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="97" column="24" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d7d/a03702_1a4800dd82597e0633eed5132a35705282" prot="public" static="no" mutable="no">
+        <type>crg::FramePass const  *</type>
+        <definition>crg::FramePass const* castor3d::LayeredLightPropagationVolumesBase::LightLpv::lastLightPass</definition>
+        <argsstring></argsstring>
+        <name>lastLightPass</name>
+        <qualifiedname>castor3d::LayeredLightPropagationVolumesBase::LightLpv::lastLightPass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="98" column="23" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d7d/a03702_1a45787592e4f725fc26faca7473a43f6d" prot="public" static="no" mutable="no">
+        <type>crg::FramePass const  *</type>
+        <definition>crg::FramePass const* castor3d::LayeredLightPropagationVolumesBase::LightLpv::lastGeomPass</definition>
+        <argsstring></argsstring>
+        <name>lastGeomPass</name>
+        <qualifiedname>castor3d::LayeredLightPropagationVolumesBase::LightLpv::lastGeomPass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="99" column="23" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d7d/a03702_1a5196a9b7c388f90fdeb1061e3422d5cf" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d5/d46/a03710" kindref="compound">LightInjectionPass</ref> * &gt;</type>
+        <definition>std::vector&lt; LightInjectionPass * &gt; castor3d::LayeredLightPropagationVolumesBase::LightLpv::lightInjectionPasses</definition>
+        <argsstring></argsstring>
+        <name>lightInjectionPasses</name>
+        <qualifiedname>castor3d::LayeredLightPropagationVolumesBase::LightLpv::lightInjectionPasses</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="100" column="13" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d7d/a03702_1a4c46beb37fa3346b430df43278662d76" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; crg::FramePass * &gt;</type>
+        <definition>std::vector&lt; crg::FramePass * &gt; castor3d::LayeredLightPropagationVolumesBase::LightLpv::lightInjectionPassesDesc</definition>
+        <argsstring></argsstring>
+        <name>lightInjectionPassesDesc</name>
+        <qualifiedname>castor3d::LayeredLightPropagationVolumesBase::LightLpv::lightInjectionPassesDesc</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="101" column="13" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d7d/a03702_1a7a621f8042f846dc6585681cc843b62f" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="df/d6d/a03690" kindref="compound">GeometryInjectionPass</ref> * &gt;</type>
+        <definition>std::vector&lt; GeometryInjectionPass * &gt; castor3d::LayeredLightPropagationVolumesBase::LightLpv::geometryInjectionPasses</definition>
+        <argsstring></argsstring>
+        <name>geometryInjectionPasses</name>
+        <qualifiedname>castor3d::LayeredLightPropagationVolumesBase::LightLpv::geometryInjectionPasses</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="102" column="13" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d7d/a03702_1a30cb0525ade32ba8f34be7e537e29afc" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; crg::FramePass * &gt;</type>
+        <definition>std::vector&lt; crg::FramePass * &gt; castor3d::LayeredLightPropagationVolumesBase::LightLpv::geometryInjectionPassesDesc</definition>
+        <argsstring></argsstring>
+        <name>geometryInjectionPassesDesc</name>
+        <qualifiedname>castor3d::LayeredLightPropagationVolumesBase::LightLpv::geometryInjectionPassesDesc</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="103" column="13" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/d7d/a03702_1a856af5bc11c5a915e0dc257dfa7bb2d8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::LayeredLightPropagationVolumesBase::LightLpv::LightLpv</definition>
+        <argsstring>(crg::FrameGraph &amp;graph, crg::FramePass const &amp;previousPass, RenderDevice const &amp;device, castor::String const &amp;name, LightCache const &amp;lightCache, LightType lightType, ShadowMapResult const &amp;smResult, LpvGridConfigUboArray const &amp;lpvGridConfigUbos, std::vector&lt; LightVolumePassResult &gt; const &amp;injection, TextureArray const *geometry)</argsstring>
+        <name>LightLpv</name>
+        <qualifiedname>castor3d::LayeredLightPropagationVolumesBase::LightLpv::LightLpv</qualifiedname>
+        <param>
+          <type>crg::FrameGraph &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a3bfbec2138a36dd26b425971c62d1248" kindref="member">LightCache</ref> const &amp;</type>
+          <declname>lightCache</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>lightType</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/ddd/a04146" kindref="compound">ShadowMapResult</ref> const &amp;</type>
+          <declname>smResult</declname>
+        </param>
+        <param>
+          <type>LpvGridConfigUboArray const &amp;</type>
+          <declname>lpvGridConfigUbos</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; <ref refid="dd/ddd/a03738" kindref="compound">LightVolumePassResult</ref> &gt; const &amp;</type>
+          <declname>injection</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a6d52e18d7b3bd01ecab19a6f87d7a6ad" kindref="member">TextureArray</ref> const *</type>
+          <declname>geometry</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="84" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d7d/a03702_1ac50a0c02a690485c9e8d5e3b3a626cfd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::LayeredLightPropagationVolumesBase::LightLpv::update</definition>
+        <argsstring>(CpuUpdater &amp;updater, std::vector&lt; float &gt; const &amp;lpvCellSizes)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::LayeredLightPropagationVolumesBase::LightLpv::update</qualifiedname>
+        <param>
+          <type><ref refid="d3/d14/a04046" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; float &gt; const &amp;</type>
+          <declname>lpvCellSizes</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="94" column="6"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d4/d7d/a03702_1adcedaca0449f587438f561290412cb54" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::LayeredLightPropagationVolumesBase::LightLpv::doCreateInjectionPass</definition>
+        <argsstring>(crg::FrameGraph &amp;graph, RenderDevice const &amp;device, castor::String const &amp;name, LightCache const &amp;lightCache, LightType lightType, ShadowMapResult const &amp;smResult, LpvGridConfigUboArray const &amp;lpvGridConfigUbos, std::vector&lt; LightVolumePassResult &gt; const &amp;injection, uint32_t cascade)</argsstring>
+        <name>doCreateInjectionPass</name>
+        <qualifiedname>castor3d::LayeredLightPropagationVolumesBase::LightLpv::doCreateInjectionPass</qualifiedname>
+        <param>
+          <type>crg::FrameGraph &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a3bfbec2138a36dd26b425971c62d1248" kindref="member">LightCache</ref> const &amp;</type>
+          <declname>lightCache</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>lightType</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/ddd/a04146" kindref="compound">ShadowMapResult</ref> const &amp;</type>
+          <declname>smResult</declname>
+        </param>
+        <param>
+          <type>LpvGridConfigUboArray const &amp;</type>
+          <declname>lpvGridConfigUbos</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; <ref refid="dd/ddd/a03738" kindref="compound">LightVolumePassResult</ref> &gt; const &amp;</type>
+          <declname>injection</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>cascade</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="106" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d7d/a03702_1ac0616809dad614909ad582aa6ef65b07" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::LayeredLightPropagationVolumesBase::LightLpv::doCreateGeometryPass</definition>
+        <argsstring>(crg::FrameGraph &amp;graph, RenderDevice const &amp;device, castor::String const &amp;name, LightCache const &amp;lightCache, LightType lightType, ShadowMapResult const &amp;smResult, LpvGridConfigUboArray const &amp;lpvGridConfigUbos, TextureArray const &amp;geometry, uint32_t cascade)</argsstring>
+        <name>doCreateGeometryPass</name>
+        <qualifiedname>castor3d::LayeredLightPropagationVolumesBase::LightLpv::doCreateGeometryPass</qualifiedname>
+        <param>
+          <type>crg::FrameGraph &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a3bfbec2138a36dd26b425971c62d1248" kindref="member">LightCache</ref> const &amp;</type>
+          <declname>lightCache</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>lightType</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/ddd/a04146" kindref="compound">ShadowMapResult</ref> const &amp;</type>
+          <declname>smResult</declname>
+        </param>
+        <param>
+          <type>LpvGridConfigUboArray const &amp;</type>
+          <declname>lpvGridConfigUbos</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a6d52e18d7b3bd01ecab19a6f87d7a6ad" kindref="member">TextureArray</ref> const &amp;</type>
+          <declname>geometry</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>cascade</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="115" column="17"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="338" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="338" bodyend="338"/>
+    <collaborationgraph>
+      <node id="7">
+        <label>T</label>
+      </node>
+      <node id="10">
+        <label>castor3d::GeometryInjectionPass</label>
+        <link refid="df/d6d/a03690"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::LayeredLightPropagationVolumesBase::LightLpv</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>lightInjectionPasses</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>geometryInjectionPassesDesc</edgelabel>
+          <edgelabel>lightInjectionPassesDesc</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>geometryInjectionPasses</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::LightInjectionPass</label>
+        <link refid="d5/d46/a03710"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
+      </node>
+      <node id="5">
+        <label>crg::RenderPass</label>
+      </node>
+      <node id="6">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>std::vector&lt; castor3d::GeometryInjectionPass * &gt;</label>
+        <childnode refid="10" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; castor3d::GeometryInjectionPass * &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::vector&lt; castor3d::LightInjectionPass * &gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; castor3d::LightInjectionPass * &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::vector&lt; crg::FramePass * &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; crg::FramePass * &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="82" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="83" bodyend="124"/>
     <listofallmembers>
-      <member refid="d4/d7d/a03702_1a35ed48b7cc2182bba71f084ab0af02c7" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPhysicalDeviceDepthStencilResolvePropertiesKHR &gt;</scope><name>value</name></member>
+      <member refid="d4/d7d/a03702_1ac0616809dad614909ad582aa6ef65b07" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase::LightLpv</scope><name>doCreateGeometryPass</name></member>
+      <member refid="d4/d7d/a03702_1adcedaca0449f587438f561290412cb54" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase::LightLpv</scope><name>doCreateInjectionPass</name></member>
+      <member refid="d4/d7d/a03702_1a7a621f8042f846dc6585681cc843b62f" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase::LightLpv</scope><name>geometryInjectionPasses</name></member>
+      <member refid="d4/d7d/a03702_1a30cb0525ade32ba8f34be7e537e29afc" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase::LightLpv</scope><name>geometryInjectionPassesDesc</name></member>
+      <member refid="d4/d7d/a03702_1a45787592e4f725fc26faca7473a43f6d" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase::LightLpv</scope><name>lastGeomPass</name></member>
+      <member refid="d4/d7d/a03702_1a4800dd82597e0633eed5132a35705282" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase::LightLpv</scope><name>lastLightPass</name></member>
+      <member refid="d4/d7d/a03702_1a5196a9b7c388f90fdeb1061e3422d5cf" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase::LightLpv</scope><name>lightInjectionPasses</name></member>
+      <member refid="d4/d7d/a03702_1a4c46beb37fa3346b430df43278662d76" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase::LightLpv</scope><name>lightInjectionPassesDesc</name></member>
+      <member refid="d4/d7d/a03702_1a856af5bc11c5a915e0dc257dfa7bb2d8" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase::LightLpv</scope><name>LightLpv</name></member>
+      <member refid="d4/d7d/a03702_1ae5b5a4d934978e77ec2a627e46b8b327" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase::LightLpv</scope><name>lpvLightConfigUbos</name></member>
+      <member refid="d4/d7d/a03702_1ac50a0c02a690485c9e8d5e3b3a626cfd" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase::LightLpv</scope><name>update</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

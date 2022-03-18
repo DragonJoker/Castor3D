@@ -1,50 +1,302 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dd/d8c/a04151" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::DividerPlugin</compoundname>
-    <basecompoundref refid="d0/dca/a04171" prot="public" virt="non-virtual">castor3d::Plugin</basecompoundref>
-    <includes local="no">DividerPlugin.hpp</includes>
-      <sectiondef kind="friend">
-      <memberdef kind="friend" id="dd/d8c/a04151_1a6a6c1cc25d50ed6f67a2dc0fc546c5a3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>friend class</type>
-        <definition>friend class Plugin</definition>
-        <argsstring></argsstring>
-        <name>Plugin</name>
+    <compoundname>castor3d::SsaoBlurPass</compoundname>
+    <includes local="no">SsaoBlurPass.hpp</includes>
+    <innerclass refid="d1/d56/a04163" prot="private">castor3d::SsaoBlurPass::Configuration</innerclass>
+    <innerclass refid="d0/dd0/a04159" prot="private">castor3d::SsaoBlurPass::Program</innerclass>
+    <innerclass refid="d4/d0c/a04155" prot="private">castor3d::SsaoBlurPass::RenderQuad</innerclass>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="dd/d8c/a04151_1afe16371d454d7492f546e3bd6f85164d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::SsaoBlurPass::getResult</definition>
+        <argsstring>() const</argsstring>
+        <name>getResult</name>
+        <qualifiedname>castor3d::SsaoBlurPass::getResult</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>name Getters. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/DividerPlugin.hpp" line="15" column="1" bodyfile="Plugin/DividerPlugin.hpp" bodystart="15" bodyend="-1"/>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="101" column="16" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="101" bodyend="104"/>
       </memberdef>
-      <memberdef kind="friend" id="dd/d8c/a04151_1a3e1914489e4bed4f9f23cdeab34a43dc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>friend class</type>
-        <definition>friend class Engine</definition>
-        <argsstring></argsstring>
-        <name>Engine</name>
+      <memberdef kind="function" id="dd/d8c/a04151_1a35a2ab74539d85523a65aea57b8cbe2f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::SsaoBlurPass::getBentResult</definition>
+        <argsstring>() const</argsstring>
+        <name>getBentResult</name>
+        <qualifiedname>castor3d::SsaoBlurPass::getBentResult</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/DividerPlugin.hpp" line="16" column="1" bodyfile="Plugin/DividerPlugin.hpp" bodystart="16" bodyend="-1"/>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="106" column="16" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="106" bodyend="109"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d8c/a04151_1a22aabd45736fa51821782e34f3837f98" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>crg::FramePass const &amp;</type>
+        <definition>crg::FramePass const  &amp; castor3d::SsaoBlurPass::getLastPass</definition>
+        <argsstring>() const</argsstring>
+        <name>getLastPass</name>
+        <qualifiedname>castor3d::SsaoBlurPass::getLastPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="111" column="23" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="111" bodyend="114"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="dd/d8c/a04151_1a2780479f4dbdabe1c12ebda47d86ad06" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>VkFormat constexpr</type>
+        <definition>VkFormat constexpr castor3d::SsaoBlurPass::ResultFormat</definition>
+        <argsstring></argsstring>
+        <name>ResultFormat</name>
+        <qualifiedname>castor3d::SsaoBlurPass::ResultFormat</qualifiedname>
+        <initializer>= VK_FORMAT_R8G8B8A8_UNORM</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="118" column="27" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="118" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dd/d8c/a04151_1a343a08a767f7be8b47348c683a6f39d7" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::SsaoBlurPass::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::SsaoBlurPass::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="157" column="21" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="157" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d8c/a04151_1ae91b652bb1ece6605bd28766d272ab9d" prot="private" static="no" mutable="no">
+        <type>crg::FramePassGroup &amp;</type>
+        <definition>crg::FramePassGroup&amp; castor3d::SsaoBlurPass::m_graph</definition>
+        <argsstring></argsstring>
+        <name>m_graph</name>
+        <qualifiedname>castor3d::SsaoBlurPass::m_graph</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="158" column="22" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="158" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d8c/a04151_1ae2d5dfad82a7e054e5848a14c00cc729" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/da2/a04991" kindref="compound">SsaoConfigUbo</ref> &amp;</type>
+        <definition>SsaoConfigUbo&amp; castor3d::SsaoBlurPass::m_ssaoConfigUbo</definition>
+        <argsstring></argsstring>
+        <name>m_ssaoConfigUbo</name>
+        <qualifiedname>castor3d::SsaoBlurPass::m_ssaoConfigUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="159" column="16" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="159" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d8c/a04151_1a203db8e7065164772b0b22383dde3e1e" prot="private" static="no" mutable="no">
+        <type><ref refid="de/d63/a04887" kindref="compound">GpInfoUbo</ref> const  &amp;</type>
+        <definition>GpInfoUbo const&amp; castor3d::SsaoBlurPass::m_gpInfoUbo</definition>
+        <argsstring></argsstring>
+        <name>m_gpInfoUbo</name>
+        <qualifiedname>castor3d::SsaoBlurPass::m_gpInfoUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="160" column="18" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="160" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d8c/a04151_1afee16f0fe9f34789512c848e86031573" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref> const  &amp;</type>
+        <definition>Texture const&amp; castor3d::SsaoBlurPass::m_bentInput</definition>
+        <argsstring></argsstring>
+        <name>m_bentInput</name>
+        <qualifiedname>castor3d::SsaoBlurPass::m_bentInput</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="161" column="16" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="161" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d8c/a04151_1a5e5b616c36a9abb4c749233704af8123" prot="private" static="no" mutable="no">
+        <type><ref refid="d6/d64/a04167" kindref="compound">SsaoConfig</ref> const  &amp;</type>
+        <definition>SsaoConfig const&amp; castor3d::SsaoBlurPass::m_config</definition>
+        <argsstring></argsstring>
+        <name>m_config</name>
+        <qualifiedname>castor3d::SsaoBlurPass::m_config</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="162" column="19" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="162" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d8c/a04151_1aa0044e0aa9968c20c4f80916f5445ada" prot="private" static="no" mutable="no">
+        <type>VkExtent2D</type>
+        <definition>VkExtent2D castor3d::SsaoBlurPass::m_size</definition>
+        <argsstring></argsstring>
+        <name>m_size</name>
+        <qualifiedname>castor3d::SsaoBlurPass::m_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="163" column="12" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="163" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d8c/a04151_1a4ca127f657bfbbfc2217ff34876fff2b" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref></type>
+        <definition>Texture castor3d::SsaoBlurPass::m_result</definition>
+        <argsstring></argsstring>
+        <name>m_result</name>
+        <qualifiedname>castor3d::SsaoBlurPass::m_result</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="164" column="9" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="164" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d8c/a04151_1a0d67ceb1dbafc89d083d352f255082c4" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref></type>
+        <definition>Texture castor3d::SsaoBlurPass::m_bentResult</definition>
+        <argsstring></argsstring>
+        <name>m_bentResult</name>
+        <qualifiedname>castor3d::SsaoBlurPass::m_bentResult</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="165" column="9" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="165" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d8c/a04151_1a640ab41322514bbb544f5695ae7caca1" prot="private" static="no" mutable="no">
+        <type><ref refid="d0/d01/a02511" kindref="compound">UniformBufferOffsetT</ref>&lt; Configuration &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::SsaoBlurPass::m_configurationUbo</definition>
+        <argsstring></argsstring>
+        <name>m_configurationUbo</name>
+        <qualifiedname>castor3d::SsaoBlurPass::m_configurationUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="166" column="22" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="166" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d8c/a04151_1afbe7a83a41604114414390b34af30919" prot="private" static="no" mutable="no">
+        <type>std::array&lt; Program, 2u &gt;</type>
+        <definition>std::array&lt; Program, 2u &gt; castor3d::SsaoBlurPass::m_programs</definition>
+        <argsstring></argsstring>
+        <name>m_programs</name>
+        <qualifiedname>castor3d::SsaoBlurPass::m_programs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="167" column="12" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="167" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d8c/a04151_1a2a2874230cd188d33f777690d205a43b" prot="private" static="no" mutable="no">
+        <type>crg::FramePass const  *</type>
+        <definition>crg::FramePass const* castor3d::SsaoBlurPass::m_lastPass</definition>
+        <argsstring></argsstring>
+        <name>m_lastPass</name>
+        <qualifiedname>castor3d::SsaoBlurPass::m_lastPass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="168" column="23" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="168" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="dd/d8c/a04151_1ac199c03d6c29ef6ed3278872d09481d5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="dd/d8c/a04151_1accbc592ff7d95830b9d8b051242a0359" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::DividerPlugin::DividerPlugin</definition>
-        <argsstring>(castor::DynamicLibrarySPtr library, Engine *engine)</argsstring>
-        <name>DividerPlugin</name>
+        <definition>C3D_API castor3d::SsaoBlurPass::SsaoBlurPass</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, RenderDevice const &amp;device, ProgressBar *progress, crg::FramePass const &amp;previousPass, castor::String const &amp;prefix, VkExtent2D const &amp;size, SsaoConfig const &amp;config, SsaoConfigUbo &amp;ssaoConfigUbo, GpInfoUbo const &amp;gpInfoUbo, castor::Point2i const &amp;axis, Texture const &amp;input, Texture const &amp;bentInput, Texture const &amp;normals)</argsstring>
+        <name>SsaoBlurPass</name>
+        <qualifiedname>castor3d::SsaoBlurPass::SsaoBlurPass</qualifiedname>
         <param>
-          <type>castor::DynamicLibrarySPtr</type>
-          <declname>library</declname>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
         </param>
         <param>
-          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> *</type>
-          <declname>engine</declname>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d13/a03271" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>prefix</declname>
+        </param>
+        <param>
+          <type>VkExtent2D const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d64/a04167" kindref="compound">SsaoConfig</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/da2/a04991" kindref="compound">SsaoConfigUbo</ref> &amp;</type>
+          <declname>ssaoConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d63/a04887" kindref="compound">GpInfoUbo</ref> const &amp;</type>
+          <declname>gpInfoUbo</declname>
+        </param>
+        <param>
+          <type>castor::Point2i const &amp;</type>
+          <declname>axis</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>input</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>bentInput</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>normals</declname>
         </param>
         <briefdescription>
 <para>Constructor. </para>
@@ -52,18 +304,106 @@
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">library</parametername>
+<parametername direction="in">graph</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The shared library holding the plug-in </para>
+<para>The render graph. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">engine</parametername>
+<parametername direction="in">device</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The engine </para>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">progress</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The progress bar. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">previousPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The previous frame pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">prefix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass name&apos;s prefix. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render area dimensions. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The SSAO configuration. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ssaoConfigUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The SSAO configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">gpInfoUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GBuffer configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">axis</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The axis to which the blur applies ({0, 1} for vertical, {1, 0} for horizontal). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">input</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The texture to blur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bentInput</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The bent normals texture to blur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">normals</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The normals buffer. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -71,85 +411,131 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/DividerPlugin.hpp" line="29" column="1"/>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="54" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="dd/d8c/a04151_1aa65b4dc6b43eb6239445a875da11ad27" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+      <memberdef kind="function" id="dd/d8c/a04151_1a98a0529561bc0bf44979d5337ca52b75" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>virtual C3D_API castor3d::DividerPlugin::~DividerPlugin</definition>
+        <definition>C3D_API castor3d::SsaoBlurPass::~SsaoBlurPass</definition>
         <argsstring>()</argsstring>
-        <name>~DividerPlugin</name>
+        <name>~SsaoBlurPass</name>
+        <qualifiedname>castor3d::SsaoBlurPass::~SsaoBlurPass</qualifiedname>
         <briefdescription>
-<para>Destructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/DividerPlugin.hpp" line="37" column="1"/>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="67" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d8c/a04151_1a361258db3cc953e178233549e3f8660a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SsaoBlurPass::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::SsaoBlurPass::update</qualifiedname>
+        <param>
+          <type><ref refid="d6/dae/a04043" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, CPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="76" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d8c/a04151_1a50d595f4d8f0b54829d68ea8a4fd6923" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SsaoBlurPass::accept</definition>
+        <argsstring>(bool horizontal, SsaoConfig &amp;config, PipelineVisitorBase &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::SsaoBlurPass::accept</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>horizontal</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d64/a04167" kindref="compound">SsaoConfig</ref> &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d38/a03259" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Accepts a visitor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">horizontal</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tells if the blur is horizontal. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The SSAO config. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="89" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="1054">
-        <label>castor3d::DividerPlugin</label>
-        <link refid="dd/d8c/a04151"/>
-        <childnode refid="1055" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1056">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="1055">
-        <label>castor3d::Plugin</label>
-        <link refid="d0/dca/a04171"/>
-        <childnode refid="1056" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="1057">
-        <label>castor3d::DividerPlugin</label>
-        <link refid="dd/d8c/a04151"/>
-        <childnode refid="1058" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1059">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="1058">
-        <label>castor3d::Plugin</label>
-        <link refid="d0/dca/a04171"/>
-        <childnode refid="1059" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Plugin/DividerPlugin.hpp" line="13" column="1" bodyfile="Plugin/DividerPlugin.hpp" bodystart="11" bodyend="38"/>
+    <location file="Render/Ssao/SsaoBlurPass.hpp" line="19" column="1" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="20" bodyend="170"/>
     <listofallmembers>
-      <member refid="dd/d8c/a04151_1ac199c03d6c29ef6ed3278872d09481d5" prot="public" virt="non-virtual"><scope>castor3d::DividerPlugin</scope><name>DividerPlugin</name></member>
-      <member refid="dd/d8c/a04151_1a3e1914489e4bed4f9f23cdeab34a43dc" prot="private" virt="non-virtual"><scope>castor3d::DividerPlugin</scope><name>Engine</name></member>
-      <member refid="d0/dca/a04171_1a76345cfa813957198ab5a735b3bf2c84" prot="public" virt="non-virtual"><scope>castor3d::DividerPlugin</scope><name>getName</name></member>
-      <member refid="d0/dca/a04171_1a21c697a5bb64dc09df8604a595ed4ef1" prot="public" virt="non-virtual"><scope>castor3d::DividerPlugin</scope><name>getRequiredVersion</name></member>
-      <member refid="d0/dca/a04171_1adfce87274549c3458e705ec6f49f2466" prot="public" virt="non-virtual"><scope>castor3d::DividerPlugin</scope><name>getType</name></member>
-      <member refid="d0/dca/a04171_1a6eee27fad0b4dc406af8dac993816e1e" prot="protected" virt="non-virtual"><scope>castor3d::DividerPlugin</scope><name>load</name></member>
-      <member refid="d0/dca/a04171_1ac89ef3325c33aebd3c45ff41a3912d25" prot="protected" virt="non-virtual"><scope>castor3d::DividerPlugin</scope><name>m_library</name></member>
-      <member refid="d0/dca/a04171_1a5b06730be035851689f1f52a9d37a839" prot="protected" virt="non-virtual"><scope>castor3d::DividerPlugin</scope><name>m_pfnGetName</name></member>
-      <member refid="d0/dca/a04171_1a3bbb683c98da8be6cb7eadd5ba677f18" prot="protected" virt="non-virtual"><scope>castor3d::DividerPlugin</scope><name>m_pfnGetRequiredVersion</name></member>
-      <member refid="d0/dca/a04171_1ae4b1c74ae527aef8847250d27eb3acf0" prot="protected" virt="non-virtual"><scope>castor3d::DividerPlugin</scope><name>m_pfnOnLoad</name></member>
-      <member refid="d0/dca/a04171_1a5d94afb97a6d885ed7d2885dafeda0dc" prot="protected" virt="non-virtual"><scope>castor3d::DividerPlugin</scope><name>m_pfnOnUnload</name></member>
-      <member refid="d0/dca/a04171_1ad988a5d361f28b80ba19dd2caac722e1" prot="protected" virt="non-virtual"><scope>castor3d::DividerPlugin</scope><name>m_type</name></member>
-      <member refid="d0/dca/a04171_1af3f82c3bbc1d49880fda39cdc7ea2015" prot="public" virt="non-virtual"><scope>castor3d::DividerPlugin</scope><name>PGetNameFunction</name></member>
-      <member refid="d0/dca/a04171_1a571d2dbc7a601aca467b1b5d8a62d997" prot="public" virt="non-virtual"><scope>castor3d::DividerPlugin</scope><name>PGetRequiredVersionFunction</name></member>
-      <member refid="d0/dca/a04171_1aa7caed7d5f2bd1d34409227a1e3b09bf" prot="public" virt="non-virtual"><scope>castor3d::DividerPlugin</scope><name>PGetTypeFunction</name></member>
-      <member refid="dd/d8c/a04151_1a6a6c1cc25d50ed6f67a2dc0fc546c5a3" prot="private" virt="non-virtual"><scope>castor3d::DividerPlugin</scope><name>Plugin</name></member>
-      <member refid="d0/dca/a04171_1ab1d7f300c810facf8bc08fceffff8c2b" prot="protected" virt="non-virtual" ambiguityscope="castor3d::Plugin::"><scope>castor3d::DividerPlugin</scope><name>Plugin</name></member>
-      <member refid="d0/dca/a04171_1a54268afa0fd4a75c485f0ba59f108e65" prot="public" virt="non-virtual"><scope>castor3d::DividerPlugin</scope><name>POnLoadFunction</name></member>
-      <member refid="d0/dca/a04171_1a186ebd8d8fe1eb8b52b7909347ce0fb4" prot="public" virt="non-virtual"><scope>castor3d::DividerPlugin</scope><name>POnUnloadFunction</name></member>
-      <member refid="d0/dca/a04171_1a1062d08432032ec7d502e7941b4e0df4" prot="protected" virt="non-virtual"><scope>castor3d::DividerPlugin</scope><name>unload</name></member>
-      <member refid="dd/d8c/a04151_1aa65b4dc6b43eb6239445a875da11ad27" prot="public" virt="virtual"><scope>castor3d::DividerPlugin</scope><name>~DividerPlugin</name></member>
-      <member refid="d0/dca/a04171_1af7f881d3d5d32c7044c1b93164754c64" prot="public" virt="pure-virtual"><scope>castor3d::DividerPlugin</scope><name>~Plugin</name></member>
+      <member refid="dd/d8c/a04151_1a50d595f4d8f0b54829d68ea8a4fd6923" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>accept</name></member>
+      <member refid="dd/d8c/a04151_1a35a2ab74539d85523a65aea57b8cbe2f" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>getBentResult</name></member>
+      <member refid="dd/d8c/a04151_1a22aabd45736fa51821782e34f3837f98" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>getLastPass</name></member>
+      <member refid="dd/d8c/a04151_1afe16371d454d7492f546e3bd6f85164d" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>getResult</name></member>
+      <member refid="dd/d8c/a04151_1afee16f0fe9f34789512c848e86031573" prot="private" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>m_bentInput</name></member>
+      <member refid="dd/d8c/a04151_1a0d67ceb1dbafc89d083d352f255082c4" prot="private" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>m_bentResult</name></member>
+      <member refid="dd/d8c/a04151_1a5e5b616c36a9abb4c749233704af8123" prot="private" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>m_config</name></member>
+      <member refid="dd/d8c/a04151_1a640ab41322514bbb544f5695ae7caca1" prot="private" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>m_configurationUbo</name></member>
+      <member refid="dd/d8c/a04151_1a343a08a767f7be8b47348c683a6f39d7" prot="private" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>m_device</name></member>
+      <member refid="dd/d8c/a04151_1a203db8e7065164772b0b22383dde3e1e" prot="private" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>m_gpInfoUbo</name></member>
+      <member refid="dd/d8c/a04151_1ae91b652bb1ece6605bd28766d272ab9d" prot="private" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>m_graph</name></member>
+      <member refid="dd/d8c/a04151_1a2a2874230cd188d33f777690d205a43b" prot="private" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>m_lastPass</name></member>
+      <member refid="dd/d8c/a04151_1afbe7a83a41604114414390b34af30919" prot="private" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>m_programs</name></member>
+      <member refid="dd/d8c/a04151_1a4ca127f657bfbbfc2217ff34876fff2b" prot="private" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>m_result</name></member>
+      <member refid="dd/d8c/a04151_1aa0044e0aa9968c20c4f80916f5445ada" prot="private" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>m_size</name></member>
+      <member refid="dd/d8c/a04151_1ae2d5dfad82a7e054e5848a14c00cc729" prot="private" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>m_ssaoConfigUbo</name></member>
+      <member refid="dd/d8c/a04151_1a2780479f4dbdabe1c12ebda47d86ad06" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>ResultFormat</name></member>
+      <member refid="dd/d8c/a04151_1accbc592ff7d95830b9d8b051242a0359" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>SsaoBlurPass</name></member>
+      <member refid="dd/d8c/a04151_1a361258db3cc953e178233549e3f8660a" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>update</name></member>
+      <member refid="dd/d8c/a04151_1a98a0529561bc0bf44979d5337ca52b75" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>~SsaoBlurPass</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

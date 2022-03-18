@@ -1,33 +1,22 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d8/d4a/a02703" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkBindSparseInfo &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
+    <compoundname>castor3d::PtrCacheTraitsT</compoundname>
     <templateparamlist>
+      <param>
+        <type>typename ResT</type>
+      </param>
+      <param>
+        <type>typename KeyT</type>
+      </param>
     </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d8/d4a/a02703_1a83b576a33499d7d4286e026fb41ca8e9" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkBindSparseInfo &gt;::value</definition>
-        <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_BIND_SPARSE_INFO</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="21" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="21" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
+<para>Helper structure to specialise a cache behaviour. </para>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="21" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="21" bodyend="21"/>
+    <location file="Castor3DModule.hpp" line="72" column="1" bodyfile="Castor3DModule.hpp" bodystart="72" bodyend="-1"/>
     <listofallmembers>
-      <member refid="d8/d4a/a02703_1a83b576a33499d7d4286e026fb41ca8e9" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkBindSparseInfo &gt;</scope><name>value</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

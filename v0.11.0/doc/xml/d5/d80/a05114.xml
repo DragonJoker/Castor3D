@@ -1,0 +1,156 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d5/d80/a05114" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BackgroundTextWriter</compoundname>
+    <basecompoundref refid="d5/d8c/a05130" prot="public" virt="non-virtual">castor3d::BackgroundVisitor</basecompoundref>
+    <includes local="no">BackgroundTextWriter.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d5/d80/a05114_1a7103d73fefc956b41d1f2361770885cc" prot="private" static="no" mutable="no">
+        <type>castor::TextFile &amp;</type>
+        <definition>castor::TextFile&amp; castor3d::BackgroundTextWriter::m_file</definition>
+        <argsstring></argsstring>
+        <name>m_file</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/BackgroundTextWriter.hpp" line="41" column="1" bodyfile="Scene/Background/BackgroundTextWriter.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d80/a05114_1af34ab5c1cf3615fd0043e56e7576aa9d" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::BackgroundTextWriter::m_tabs</definition>
+        <argsstring></argsstring>
+        <name>m_tabs</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/BackgroundTextWriter.hpp" line="42" column="1" bodyfile="Scene/Background/BackgroundTextWriter.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/d80/a05114_1a3f6f1d7eb058cf7e67df41c3b9dbe5c1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::BackgroundTextWriter::BackgroundTextWriter</definition>
+        <argsstring>(castor::TextFile &amp;file, castor::String const &amp;tabs)</argsstring>
+        <name>BackgroundTextWriter</name>
+        <param>
+          <type>castor::TextFile &amp;</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/BackgroundTextWriter.hpp" line="25" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d80/a05114_1aa3a7db97a7795a6197b9fb1ca203069d" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BackgroundTextWriter::visit</definition>
+        <argsstring>(ColourBackground &amp;background) override</argsstring>
+        <name>visit</name>
+        <reimplements refid="d5/d8c/a05130_1ad29638182ddf77a3a1f8652f12dc5d0c">visit</reimplements>
+        <param>
+          <type><ref refid="d5/d87/a05118" kindref="compound">ColourBackground</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <briefdescription>
+<para>Visits a colour background. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/BackgroundTextWriter.hpp" line="30" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d80/a05114_1a3c7a63e29f8ad50ad597265e458d6c2e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BackgroundTextWriter::visit</definition>
+        <argsstring>(SkyboxBackground &amp;background) override</argsstring>
+        <name>visit</name>
+        <reimplements refid="d5/d8c/a05130_1a0cf4b81b17c74c49364f0cab18567ef0">visit</reimplements>
+        <param>
+          <type><ref refid="dc/de6/a05126" kindref="compound">SkyboxBackground</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <briefdescription>
+<para>Visits a colour background. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/BackgroundTextWriter.hpp" line="34" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d80/a05114_1a738cbed54e5babeadea2e891bf67264c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BackgroundTextWriter::visit</definition>
+        <argsstring>(ImageBackground &amp;background) override</argsstring>
+        <name>visit</name>
+        <reimplements refid="d5/d8c/a05130_1a3c4bae12afffa3a4f2b08f4733f7c119">visit</reimplements>
+        <param>
+          <type><ref refid="dc/d0c/a05122" kindref="compound">ImageBackground</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <briefdescription>
+<para>Visits a colour background. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/BackgroundTextWriter.hpp" line="38" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="123">
+        <label>castor3d::BackgroundTextWriter</label>
+        <link refid="d5/d80/a05114"/>
+        <childnode refid="124" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="124">
+        <label>castor3d::BackgroundVisitor</label>
+        <link refid="d5/d8c/a05130"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="125">
+        <label>castor3d::BackgroundTextWriter</label>
+        <link refid="d5/d80/a05114"/>
+        <childnode refid="126" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="126">
+        <label>castor3d::BackgroundVisitor</label>
+        <link refid="d5/d8c/a05130"/>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/Background/BackgroundTextWriter.hpp" line="15" column="1" bodyfile="Scene/Background/BackgroundTextWriter.hpp" bodystart="13" bodyend="43"/>
+    <listofallmembers>
+      <member refid="d5/d80/a05114_1a3f6f1d7eb058cf7e67df41c3b9dbe5c1" prot="public" virt="non-virtual"><scope>castor3d::BackgroundTextWriter</scope><name>BackgroundTextWriter</name></member>
+      <member refid="d5/d8c/a05130_1af05ce31b5608cdd6b02f87ab1eadae6f" prot="public" virt="non-virtual"><scope>castor3d::BackgroundTextWriter</scope><name>BackgroundVisitor</name></member>
+      <member refid="d5/d80/a05114_1a7103d73fefc956b41d1f2361770885cc" prot="private" virt="non-virtual"><scope>castor3d::BackgroundTextWriter</scope><name>m_file</name></member>
+      <member refid="d5/d80/a05114_1af34ab5c1cf3615fd0043e56e7576aa9d" prot="private" virt="non-virtual"><scope>castor3d::BackgroundTextWriter</scope><name>m_tabs</name></member>
+      <member refid="d5/d80/a05114_1aa3a7db97a7795a6197b9fb1ca203069d" prot="public" virt="virtual"><scope>castor3d::BackgroundTextWriter</scope><name>visit</name></member>
+      <member refid="d5/d80/a05114_1a3c7a63e29f8ad50ad597265e458d6c2e" prot="public" virt="virtual"><scope>castor3d::BackgroundTextWriter</scope><name>visit</name></member>
+      <member refid="d5/d80/a05114_1a738cbed54e5babeadea2e891bf67264c" prot="public" virt="virtual"><scope>castor3d::BackgroundTextWriter</scope><name>visit</name></member>
+      <member refid="d5/d8c/a05130_1a575ad64b4b6f1bf1bd76adc9891ce58d" prot="public" virt="virtual"><scope>castor3d::BackgroundTextWriter</scope><name>~BackgroundVisitor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

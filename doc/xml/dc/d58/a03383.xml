@@ -1,33 +1,31 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dc/d58/a03383" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkFenceGetFdInfoKHR &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="dc/d58/a03383_1a2a5cb06fcb353634adc930594642da8b" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkFenceGetFdInfoKHR &gt;::value</definition>
+    <compoundname>castor3d::InstantiationData</compoundname>
+    <includes local="no">InstantiationComponent.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/d58/a03383_1a0c08893a40240a8e6e66d46e617790f3" prot="public" static="no" mutable="no">
+        <type>castor::Point4ui</type>
+        <definition>castor::Point4ui castor3d::InstantiationData::m_objectIDs</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_FENCE_GET_FD_INFO_KHR</initializer>
+        <name>m_objectIDs</name>
+        <qualifiedname>castor3d::InstantiationData::m_objectIDs</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="262" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="262" bodyend="-1"/>
+        <location file="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="18" column="18" bodyfile="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="18" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="262" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="262" bodyend="262"/>
+    <location file="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="16" column="1" bodyfile="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="17" bodyend="19"/>
     <listofallmembers>
-      <member refid="dc/d58/a03383_1a2a5cb06fcb353634adc930594642da8b" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkFenceGetFdInfoKHR &gt;</scope><name>value</name></member>
+      <member refid="dc/d58/a03383_1a0c08893a40240a8e6e66d46e617790f3" prot="public" virt="non-virtual"><scope>castor3d::InstantiationData</scope><name>m_objectIDs</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

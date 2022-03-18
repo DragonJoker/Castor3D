@@ -1,33 +1,22 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_47d4dc702f95fd3b4895cd578fa02d5a" kind="dir">
     <compoundname>Cache</compoundname>
-    <innerfile refid="da/d15/a00188">AnimatedObjectGroupCache.hpp</innerfile>
-    <innerfile refid="d9/dd0/a00191">BillboardCache.hpp</innerfile>
-    <innerfile refid="dc/d57/a00194">BillboardUboPools.hpp</innerfile>
-    <innerfile refid="de/db1/a00197">Cache.hpp</innerfile>
-    <innerfile refid="d3/db1/a00200">CacheBase.hpp</innerfile>
-    <innerfile refid="de/d79/a00203">CacheModule.hpp</innerfile>
-    <innerfile refid="d5/df1/a00206">CacheView.hpp</innerfile>
-    <innerfile refid="d3/de5/a00209">CameraCache.hpp</innerfile>
+    <innerfile refid="d3/db1/a00200">AnimatedObjectGroupCache.hpp</innerfile>
+    <innerfile refid="de/d79/a00203">BillboardCache.hpp</innerfile>
+    <innerfile refid="d5/df1/a00206">CacheModule.hpp</innerfile>
+    <innerfile refid="d3/de5/a00209">CacheView.hpp</innerfile>
     <innerfile refid="dd/dc1/a00212">ElementProducer.hpp</innerfile>
     <innerfile refid="d3/dd5/a00215">GeometryCache.hpp</innerfile>
     <innerfile refid="dc/d9a/a00218">LightCache.hpp</innerfile>
-    <innerfile refid="dd/d52/a00221">ListenerCache.hpp</innerfile>
-    <innerfile refid="d5/ddf/a00224">MaterialCache.hpp</innerfile>
-    <innerfile refid="d9/d01/a00227">MeshCache.hpp</innerfile>
-    <innerfile refid="d1/da8/a00230">ObjectCache.hpp</innerfile>
-    <innerfile refid="d6/de1/a00233">ObjectCacheBase.hpp</innerfile>
-    <innerfile refid="d7/d40/a00236">OverlayCache.hpp</innerfile>
-    <innerfile refid="d0/d27/a00239">ParticleSystemCache.hpp</innerfile>
-    <innerfile refid="d2/dc8/a00242">PluginCache.hpp</innerfile>
-    <innerfile refid="d6/d22/a00245">SamplerCache.hpp</innerfile>
-    <innerfile refid="dd/dd7/a00248">SceneCache.hpp</innerfile>
-    <innerfile refid="d3/d1a/a00251">SceneNodeCache.hpp</innerfile>
-    <innerfile refid="d7/d03/a00254">ShaderCache.hpp</innerfile>
-    <innerfile refid="d9/d39/a00257">TargetCache.hpp</innerfile>
-    <innerfile refid="dd/dd7/a00260">TechniqueCache.hpp</innerfile>
-    <innerfile refid="df/da9/a00263">WindowCache.hpp</innerfile>
+    <innerfile refid="dd/d52/a00221">MaterialCache.hpp</innerfile>
+    <innerfile refid="d5/ddf/a00224">ObjectCache.hpp</innerfile>
+    <innerfile refid="d9/d01/a00227">ObjectCacheBase.hpp</innerfile>
+    <innerfile refid="d1/da8/a00230">OverlayCache.hpp</innerfile>
+    <innerfile refid="d6/de1/a00233">PluginCache.hpp</innerfile>
+    <innerfile refid="d7/d40/a00236">ShaderCache.hpp</innerfile>
+    <innerfile refid="d0/d27/a00239">TargetCache.hpp</innerfile>
+    <innerfile refid="d2/dc8/a00242">TextureCache.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

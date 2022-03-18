@@ -1,116 +1,248 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="da/d47/a04824" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::SpotLightPass::Config</compoundname>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="da/d47/a04824_1ad8e254ecddf91496bd01ce9018a1f316" prot="public" static="no" mutable="no">
-        <type><ref refid="d0/d95/a04772" kindref="compound">LightPass::Config</ref></type>
-        <definition>LightPass::Config castor3d::SpotLightPass::Config::base</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="da/d47/a04824" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::SssTransmittance</compoundname>
+    <includes local="no">GlslSssTransmittance.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="da/d47/a04824_1a5b278a43b97ecb5fd36cc2ed4d7e47d4" prot="private" static="no" mutable="no">
+        <type>sdw::ShaderWriter &amp;</type>
+        <definition>sdw::ShaderWriter&amp; castor3d::shader::SssTransmittance::m_writer</definition>
         <argsstring></argsstring>
-        <name>base</name>
+        <name>m_writer</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::m_writer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="142" column="1" bodyfile="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" bodystart="142" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="36" column="20" bodyfile="Shader/Shaders/GlslSssTransmittance.hpp" bodystart="36" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="da/d47/a04824_1ad8d85443186a6013d409dc98173b3ab0" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::SpotLightPass::Config::position</definition>
+      <memberdef kind="variable" id="da/d47/a04824_1a2dcde58b66991fb45dbe46ddfdbeadbd" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d27/a04808" kindref="compound">SssProfiles</ref> const  &amp;</type>
+        <definition>SssProfiles const&amp; castor3d::shader::SssTransmittance::m_sssProfiles</definition>
         <argsstring></argsstring>
-        <name>position</name>
+        <name>m_sssProfiles</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::m_sssProfiles</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The variable containing the light position (RGB). </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="145" column="1" bodyfile="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" bodystart="145" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="37" column="20" bodyfile="Shader/Shaders/GlslSssTransmittance.hpp" bodystart="37" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="da/d47/a04824_1a56fbd30e4dbfe7089696505779862e98" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::SpotLightPass::Config::attenuation</definition>
+      <memberdef kind="variable" id="da/d47/a04824_1ad1873b9cc3d34b21f7a079ee364a096c" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::shader::SssTransmittance::m_shadowMap</definition>
         <argsstring></argsstring>
-        <name>attenuation</name>
+        <name>m_shadowMap</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::m_shadowMap</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The variable containing the light attenuation (RGB) and index (A). </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="148" column="1" bodyfile="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" bodystart="148" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="39" column="6" bodyfile="Shader/Shaders/GlslSssTransmittance.hpp" bodystart="39" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="da/d47/a04824_1af76a2d96499514cb22bef18b1cda3e98" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::SpotLightPass::Config::direction</definition>
+      <memberdef kind="variable" id="da/d47/a04824_1a047b94b31ab59f197b5ea171818b9359" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InFloat, sdw::InFloat, sdw::InUInt, sdw::InVec3, sdw::InFloat, sdw::InVec3, sdw::InFloat &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InFloat , sdw::InFloat , sdw::InUInt , sdw::InVec3 , sdw::InFloat , sdw::InVec3 , sdw::InFloat &gt; castor3d::shader::SssTransmittance::m_compute</definition>
         <argsstring></argsstring>
-        <name>direction</name>
+        <name>m_compute</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::m_compute</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The variable containing the light direction (RGB). </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="151" column="1" bodyfile="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" bodystart="151" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="48" column="2" bodyfile="Shader/Shaders/GlslSssTransmittance.hpp" bodystart="48" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="da/d47/a04824_1a1d677655b597dee9f505c8a9ac573edf" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::SpotLightPass::Config::exponentCutOff</definition>
+      <memberdef kind="variable" id="da/d47/a04824_1a6ca6b6309b57dc43bdecf1bd0aa1db73" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InUInt, sdw::InFloat, InDirectionalLight, InSurface &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InUInt , sdw::InFloat , InDirectionalLight , InSurface &gt; castor3d::shader::SssTransmittance::m_computeDirectional</definition>
         <argsstring></argsstring>
-        <name>exponentCutOff</name>
+        <name>m_computeDirectional</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::m_computeDirectional</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The variable containing the light exponent (R) and cutoff (G). </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="154" column="1" bodyfile="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" bodystart="154" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="53" column="2" bodyfile="Shader/Shaders/GlslSssTransmittance.hpp" bodystart="53" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="da/d47/a04824_1abb4a8be3cb2e6194a6da4668a5a16ceb" prot="public" static="no" mutable="no">
-        <type>castor::Matrix4x4f</type>
-        <definition>castor::Matrix4x4f castor3d::SpotLightPass::Config::transform</definition>
+      <memberdef kind="variable" id="da/d47/a04824_1a54c1f9ca0da73b24de8f24d4b8862b24" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InUInt, sdw::InFloat, InPointLight, InSurface &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InUInt , sdw::InFloat , InPointLight , InSurface &gt; castor3d::shader::SssTransmittance::m_computePoint</definition>
         <argsstring></argsstring>
-        <name>transform</name>
+        <name>m_computePoint</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::m_computePoint</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The variable containing the light space transformation matrix. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="157" column="1" bodyfile="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" bodystart="157" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="58" column="2" bodyfile="Shader/Shaders/GlslSssTransmittance.hpp" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d47/a04824_1a13e2eb573d14cb9cf8f6adfa16b5f148" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InUInt, sdw::InFloat, InSpotLight, InSurface &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InUInt , sdw::InFloat , InSpotLight , InSurface &gt; castor3d::shader::SssTransmittance::m_computeSpot</definition>
+        <argsstring></argsstring>
+        <name>m_computeSpot</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::m_computeSpot</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="63" column="2" bodyfile="Shader/Shaders/GlslSssTransmittance.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/d47/a04824_1a881e43f949336c4bffe8d852644a1b59" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::SssTransmittance::SssTransmittance</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ShadowOptions shadowOptions, SssProfiles const &amp;sssProfiles)</argsstring>
+        <name>SssTransmittance</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::SssTransmittance</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dea/a04864" kindref="compound">ShadowOptions</ref></type>
+          <declname>shadowOptions</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d27/a04808" kindref="compound">SssProfiles</ref> const &amp;</type>
+          <declname>sssProfiles</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="19" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d47/a04824_1af3766868d0e0f7331dacc2b53a417cb0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::SssTransmittance::compute</definition>
+        <argsstring>(shader::LightMaterial const &amp;material, shader::DirectionalLight const &amp;light, Surface const &amp;surface)</argsstring>
+        <name>compute</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::compute</qualifiedname>
+        <param>
+          <type><ref refid="d2/d5c/a04788" kindref="compound">shader::LightMaterial</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d2a/a04776" kindref="compound">shader::DirectionalLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d1c/a01397_1afa7e0e1d1dbce1333aa48253fd404bf4" kindref="member">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="23" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d47/a04824_1a37d7d8adc10ffe1d95bc55db125decce" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::SssTransmittance::compute</definition>
+        <argsstring>(shader::LightMaterial const &amp;material, shader::PointLight const &amp;light, Surface const &amp;surface)</argsstring>
+        <name>compute</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::compute</qualifiedname>
+        <param>
+          <type><ref refid="d2/d5c/a04788" kindref="compound">shader::LightMaterial</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/db2/a04780" kindref="compound">shader::PointLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d1c/a01397_1afa7e0e1d1dbce1333aa48253fd404bf4" kindref="member">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="26" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d47/a04824_1a0e0aa7ddd15defd89c3d23507cc74170" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::SssTransmittance::compute</definition>
+        <argsstring>(shader::LightMaterial const &amp;material, shader::SpotLight const &amp;light, Surface const &amp;surface)</argsstring>
+        <name>compute</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::compute</qualifiedname>
+        <param>
+          <type><ref refid="d2/d5c/a04788" kindref="compound">shader::LightMaterial</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d13/a04784" kindref="compound">shader::SpotLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d1c/a01397_1afa7e0e1d1dbce1333aa48253fd404bf4" kindref="member">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="29" column="19"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="da/d47/a04824_1a8d2d0129571dc2d1c3520a6f5bd7b5cf" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::SssTransmittance::doDeclare</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclare</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::doDeclare</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="34" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="4184">
-        <label>castor3d::SpotLightPass::Config</label>
-        <childnode refid="4185" relation="usage">
-          <edgelabel>base</edgelabel>
-        </childnode>
-      </node>
-      <node id="4185">
-        <label>castor3d::LightPass::Config</label>
-        <link refid="d0/d95/a04772"/>
-      </node>
-    </collaborationgraph>
-    <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="141" column="1" bodyfile="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" bodystart="140" bodyend="158"/>
+    <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="16" column="1" bodyfile="Shader/Shaders/GlslSssTransmittance.hpp" bodystart="17" bodyend="64"/>
     <listofallmembers>
-      <member refid="da/d47/a04824_1a56fbd30e4dbfe7089696505779862e98" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Config</scope><name>attenuation</name></member>
-      <member refid="da/d47/a04824_1ad8e254ecddf91496bd01ce9018a1f316" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Config</scope><name>base</name></member>
-      <member refid="da/d47/a04824_1af76a2d96499514cb22bef18b1cda3e98" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Config</scope><name>direction</name></member>
-      <member refid="da/d47/a04824_1a1d677655b597dee9f505c8a9ac573edf" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Config</scope><name>exponentCutOff</name></member>
-      <member refid="da/d47/a04824_1ad8d85443186a6013d409dc98173b3ab0" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Config</scope><name>position</name></member>
-      <member refid="da/d47/a04824_1abb4a8be3cb2e6194a6da4668a5a16ceb" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Config</scope><name>transform</name></member>
+      <member refid="da/d47/a04824_1af3766868d0e0f7331dacc2b53a417cb0" prot="public" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>compute</name></member>
+      <member refid="da/d47/a04824_1a37d7d8adc10ffe1d95bc55db125decce" prot="public" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>compute</name></member>
+      <member refid="da/d47/a04824_1a0e0aa7ddd15defd89c3d23507cc74170" prot="public" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>compute</name></member>
+      <member refid="da/d47/a04824_1a8d2d0129571dc2d1c3520a6f5bd7b5cf" prot="private" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>doDeclare</name></member>
+      <member refid="da/d47/a04824_1a047b94b31ab59f197b5ea171818b9359" prot="private" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>m_compute</name></member>
+      <member refid="da/d47/a04824_1a6ca6b6309b57dc43bdecf1bd0aa1db73" prot="private" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>m_computeDirectional</name></member>
+      <member refid="da/d47/a04824_1a54c1f9ca0da73b24de8f24d4b8862b24" prot="private" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>m_computePoint</name></member>
+      <member refid="da/d47/a04824_1a13e2eb573d14cb9cf8f6adfa16b5f148" prot="private" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>m_computeSpot</name></member>
+      <member refid="da/d47/a04824_1ad1873b9cc3d34b21f7a079ee364a096c" prot="private" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>m_shadowMap</name></member>
+      <member refid="da/d47/a04824_1a2dcde58b66991fb45dbe46ddfdbeadbd" prot="private" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>m_sssProfiles</name></member>
+      <member refid="da/d47/a04824_1a5b278a43b97ecb5fd36cc2ed4d7e47d4" prot="private" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>m_writer</name></member>
+      <member refid="da/d47/a04824_1a881e43f949336c4bffe8d852644a1b59" prot="public" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>SssTransmittance</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

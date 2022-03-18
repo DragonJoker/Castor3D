@@ -1,96 +1,166 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d8/dd5/a04396" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::GaussianBlur::Configuration</compoundname>
-    <includes local="no">GaussianBlur.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d8/dd5/a04396_1ac9c17b03167cc405fa7142669239b6c4" prot="public" static="no" mutable="no">
-        <type>castor::Point2f</type>
-        <definition>castor::Point2f castor3d::GaussianBlur::Configuration::textureSize</definition>
+    <compoundname>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</compoundname>
+    <basecompoundref refid="d6/dca/a02616" prot="public" virt="non-virtual">castor3d::PtrCacheTraitsBaseT&lt; AnimatedObjectGroup, castor::String &gt;</basecompoundref>
+    <includes local="no">AnimationModule.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d8/dd5/a04396_1ac5bce022e53c3362542b0482e8d253fb" prot="public" static="no">
+        <type><ref refid="de/d79/a04372" kindref="compound">AnimatedObjectGroup</ref></type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::ResT =  AnimatedObjectGroup</definition>
         <argsstring></argsstring>
-        <name>textureSize</name>
+        <name>ResT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::ResT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="184" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="184" bodyend="-1"/>
+        <location file="Scene/Animation/AnimationModule.hpp" line="161" column="1" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="161" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d8/dd5/a04396_1a50c8573932f8195cfdea8163aafcf041" prot="public" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::GaussianBlur::Configuration::blurCoeffsCount</definition>
+      <memberdef kind="typedef" id="d8/dd5/a04396_1ac566e1574a124f6ea278632f940bf1f5" prot="public" static="no">
+        <type>castor::String</type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::KeyT =  castor::String</definition>
         <argsstring></argsstring>
-        <name>blurCoeffsCount</name>
+        <name>KeyT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::KeyT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="185" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="185" bodyend="-1"/>
+        <location file="Scene/Animation/AnimationModule.hpp" line="162" column="1" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="162" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d8/dd5/a04396_1aa675748b11ce22d505c09ac77a9e0200" prot="public" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::GaussianBlur::Configuration::dump</definition>
+      <memberdef kind="typedef" id="d8/dd5/a04396_1af211257f2e4b8c8c03375bbd2f7636c7" prot="public" static="no">
+        <type><ref refid="d6/dca/a02616" kindref="compound">PtrCacheTraitsBaseT</ref>&lt; <ref refid="d8/dd5/a04396_1ac5bce022e53c3362542b0482e8d253fb" kindref="member">ResT</ref>, <ref refid="d8/dd5/a04396_1ac566e1574a124f6ea278632f940bf1f5" kindref="member">KeyT</ref> &gt;</type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::Base =  PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;</definition>
         <argsstring></argsstring>
-        <name>dump</name>
+        <name>Base</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::Base</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="186" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="186" bodyend="-1"/>
+        <location file="Scene/Animation/AnimationModule.hpp" line="163" column="1" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="163" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d8/dd5/a04396_1a0229b8b3c8457af2659f43bfcee26663" prot="public" static="no" mutable="no">
-        <type>std::array&lt; castor::Point4f, <ref refid="dd/d8e/a04392_1af2348a695a12bfe432775545bf4838d3" kindref="member">GaussianBlur::MaxCoefficients</ref>/4u &gt;</type>
-        <definition>std::array&lt; castor::Point4f, GaussianBlur::MaxCoefficients / 4u &gt; castor3d::GaussianBlur::Configuration::blurCoeffs</definition>
+      <memberdef kind="typedef" id="d8/dd5/a04396_1a9b57ef555b360858b24d4d0d87a5cc1a" prot="public" static="no">
+        <type>typename <ref refid="d6/dca/a02616_1a97fc821a6c93a6497ce29ef7ee81d091" kindref="member">Base::ElementT</ref></type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::ElementT =  typename Base::ElementT</definition>
         <argsstring></argsstring>
-        <name>blurCoeffs</name>
+        <name>ElementT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::ElementT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="187" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="187" bodyend="-1"/>
+        <location file="Scene/Animation/AnimationModule.hpp" line="164" column="1" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="164" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d8/dd5/a04396_1a0176a33900149da04187a86225e7f429" prot="public" static="no">
+        <type>typename <ref refid="d6/dca/a02616_1a1bb78b2e2efba448f1bab3f5714b9943" kindref="member">Base::ElementPtrT</ref></type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::ElementPtrT =  typename Base::ElementPtrT</definition>
+        <argsstring></argsstring>
+        <name>ElementPtrT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::ElementPtrT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationModule.hpp" line="165" column="1" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="165" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d8/dd5/a04396_1adec95b034d1c404e93ba33cf68b5db11" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <definition>C3D_API const castor::String castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::Name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationModule.hpp" line="167" column="37" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="167" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
+<para>Helper structure to specialise a cache behaviour. <simplesect kind="remark"><para>Specialisation for <ref refid="de/d79/a04372" kindref="compound">AnimatedObjectGroup</ref>. </para>
+</simplesect>
+</para>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="1251">
-        <label>T</label>
-      </node>
-      <node id="1250">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="1251" relation="usage">
-          <edgelabel>elements</edgelabel>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::PtrCacheTraitsBaseT&lt; AnimatedObjectGroup, castor::String &gt;</label>
+        <link refid="d6/dca/a02616"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; AnimatedObjectGroup, castor::String &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="1249">
-        <label>std::array&lt; castor::Point4f, GaussianBlur::MaxCoefficients/4u &gt;</label>
-        <childnode refid="1250" relation="template-instance">
-          <edgelabel>&lt; castor::Point4f, GaussianBlur::MaxCoefficients/4u &gt;</edgelabel>
-        </childnode>
+      <node id="3">
+        <label>castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;</label>
+        <link refid="d6/dca/a02616"/>
       </node>
-      <node id="1248">
-        <label>castor3d::GaussianBlur::Configuration</label>
+      <node id="1">
+        <label>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</label>
         <link refid="d8/dd5/a04396"/>
-        <childnode refid="1249" relation="usage">
-          <edgelabel>blurCoeffs</edgelabel>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::PtrCacheTraitsBaseT&lt; AnimatedObjectGroup, castor::String &gt;</label>
+        <link refid="d6/dca/a02616"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; AnimatedObjectGroup, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;</label>
+        <link refid="d6/dca/a02616"/>
+      </node>
+      <node id="1">
+        <label>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</label>
+        <link refid="d8/dd5/a04396"/>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Render/Passes/GaussianBlur.hpp" line="183" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="182" bodyend="188"/>
+    <location file="Scene/Animation/AnimationModule.hpp" line="158" column="1" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="160" bodyend="168"/>
     <listofallmembers>
-      <member refid="d8/dd5/a04396_1a0229b8b3c8457af2659f43bfcee26663" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::Configuration</scope><name>blurCoeffs</name></member>
-      <member refid="d8/dd5/a04396_1a50c8573932f8195cfdea8163aafcf041" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::Configuration</scope><name>blurCoeffsCount</name></member>
-      <member refid="d8/dd5/a04396_1aa675748b11ce22d505c09ac77a9e0200" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::Configuration</scope><name>dump</name></member>
-      <member refid="d8/dd5/a04396_1ac9c17b03167cc405fa7142669239b6c4" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::Configuration</scope><name>textureSize</name></member>
+      <member refid="d6/dca/a02616_1aad74680d04a777cf6e1a48f5335e5bba" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="d6/dca/a02616_1acc9650475bb6cfdd4b46f86662ee4d67" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="d6/dca/a02616_1aace6e188551a79fe4c617062a3987c34" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="d6/dca/a02616_1a604b98a8324764213e894ac5ff3192e4" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="d8/dd5/a04396_1af211257f2e4b8c8c03375bbd2f7636c7" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>Base</name></member>
+      <member refid="d6/dca/a02616_1a0606136714bd1cb7209313f2ece3f687" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementCacheT</name></member>
+      <member refid="d6/dca/a02616_1a021a9d07d6fb3fe77b7ef22b5d9fc7e8" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementCleanerT</name></member>
+      <member refid="d6/dca/a02616_1acbb5da0cf908b54ec0b238b4bf290498" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementContT</name></member>
+      <member refid="d6/dca/a02616_1af3b3d08e4639ccc06cbe81f6cb200a64" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementInitialiserT</name></member>
+      <member refid="d6/dca/a02616_1a37487aa6a3179e261c465a659e7e232d" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementKeyT</name></member>
+      <member refid="d6/dca/a02616_1a54c0975e844a33c1ef48f9284b13e984" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementMergerT</name></member>
+      <member refid="d6/dca/a02616_1aeeb13142ba14f28398dcf1b902e1d7df" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementObsT</name></member>
+      <member refid="d8/dd5/a04396_1a0176a33900149da04187a86225e7f429" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementPtrT</name></member>
+      <member refid="d8/dd5/a04396_1a9b57ef555b360858b24d4d0d87a5cc1a" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementT</name></member>
+      <member refid="d6/dca/a02616_1a97feed9b72e3c5d21e10571563ec56f5" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>isElementObsNull</name></member>
+      <member refid="d8/dd5/a04396_1ac566e1574a124f6ea278632f940bf1f5" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>KeyT</name></member>
+      <member refid="d6/dca/a02616_1a5f00547170a4e85ac4c706f0ac32f9aa" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>makeElement</name></member>
+      <member refid="d6/dca/a02616_1aba7dca15362049b6e793f1b99d419bb0" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>makeElementObs</name></member>
+      <member refid="d8/dd5/a04396_1adec95b034d1c404e93ba33cf68b5db11" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>Name</name></member>
+      <member refid="d8/dd5/a04396_1ac5bce022e53c3362542b0482e8d253fb" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ResT</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

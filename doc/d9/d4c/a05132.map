@@ -1,13 +1,4 @@
-<map id="castor3d::BillboardBase" name="castor3d::BillboardBase">
-<area shape="rect" id="node1" title=" " alt="" coords="596,110,756,137"/>
-<area shape="rect" id="node2" href="$d6/de6/a05234.html" title=" " alt="" coords="255,25,429,51"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,204,47"/>
-<area shape="rect" id="node4" href="$d3/d58/a02302.html" title=" " alt="" coords="253,86,431,113"/>
-<area shape="rect" id="node5" href="$d8/de7/a05250.html" title=" " alt="" coords="269,137,415,163"/>
-<area shape="rect" id="node6" title=" " alt="" coords="18,71,191,112"/>
-<area shape="rect" id="node7" title=" " alt="" coords="13,137,196,163"/>
-<area shape="rect" id="node8" title=" " alt="" coords="73,187,136,214"/>
-<area shape="rect" id="node9" href="$d6/d66/a05238.html" title=" " alt="" coords="283,229,401,255"/>
-<area shape="rect" id="node10" title=" " alt="" coords="33,239,176,280"/>
-<area shape="rect" id="node11" title=" " alt="" coords="11,305,198,331"/>
+<map id="castor::TextWriter&lt; castor3d::PanelOverlay &gt;" name="castor::TextWriter&lt; castor3d::PanelOverlay &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="5,95,185,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="20,5,171,47"/>
 </map>

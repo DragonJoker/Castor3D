@@ -1,133 +1,106 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d4/de4/a04834" kind="class" language="C++" prot="private">
-    <compoundname>castor3d::SubsurfaceScatteringPass::Blur</compoundname>
-    <basecompoundref refid="d8/d1f/a04450" prot="private" virt="non-virtual">castor3d::RenderQuad</basecompoundref>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d4/de4/a04834_1ab86fc3548e2f541dfe8500616171dd8d" prot="private" static="no" mutable="no">
-        <type><ref refid="d5/d8e/a04874" kindref="compound">OpaquePassResult</ref> const  &amp;</type>
-        <definition>OpaquePassResult const&amp; castor3d::SubsurfaceScatteringPass::Blur::m_geometryBufferResult</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d4/de4/a04834" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::SurfaceT</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">GlslSurface.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>ast::var::Flag</type>
+        <declname>FlagT</declname>
+        <defname>FlagT</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/de4/a04834_1abd8d2801932b0fd4f9d2e12c164025ad" prot="public" static="no" mutable="no">
+        <type>sdw::Vec2</type>
+        <definition>sdw::Vec2 castor3d::shader::SurfaceT&lt; FlagT &gt;::clipPosition</definition>
         <argsstring></argsstring>
-        <name>m_geometryBufferResult</name>
+        <name>clipPosition</name>
+        <qualifiedname>castor3d::shader::SurfaceT::clipPosition</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="141" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="141" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="40" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="40" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d4/de4/a04834_1a8c28fc8a4afb831cde55178cad8e6f32" prot="private" static="no" mutable="no">
-        <type><ref refid="de/d5f/a05458" kindref="compound">GpInfoUbo</ref> const  &amp;</type>
-        <definition>GpInfoUbo const&amp; castor3d::SubsurfaceScatteringPass::Blur::m_gpInfoUbo</definition>
+      <memberdef kind="variable" id="d4/de4/a04834_1a8092fc47898fa766498922f8eae72833" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::SurfaceT&lt; FlagT &gt;::viewPosition</definition>
         <argsstring></argsstring>
-        <name>m_gpInfoUbo</name>
+        <name>viewPosition</name>
+        <qualifiedname>castor3d::shader::SurfaceT::viewPosition</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="142" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="142" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="41" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="41" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d4/de4/a04834_1ae8831d0ebdfa1854067f7e305bee09b3" prot="private" static="no" mutable="no">
-        <type><ref refid="dc/d79/a05522" kindref="compound">SceneUbo</ref> &amp;</type>
-        <definition>SceneUbo&amp; castor3d::SubsurfaceScatteringPass::Blur::m_sceneUbo</definition>
+      <memberdef kind="variable" id="d4/de4/a04834_1a2e44e494e403dc84d590f4c80a3c0f19" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::SurfaceT&lt; FlagT &gt;::worldPosition</definition>
         <argsstring></argsstring>
-        <name>m_sceneUbo</name>
+        <name>worldPosition</name>
+        <qualifiedname>castor3d::shader::SurfaceT::worldPosition</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="143" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="143" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="42" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="42" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d4/de4/a04834_1a7bc1f33b06bd1ed7bf08c22612af3a54" prot="private" static="no" mutable="no">
-        <type><ref refid="dd/dae/a02294" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d6/df5/a04826" kindref="compound">BlurConfiguration</ref> &gt;</type>
-        <definition>UniformBufferOffsetT&lt; BlurConfiguration &gt; castor3d::SubsurfaceScatteringPass::Blur::m_blurUbo</definition>
+      <memberdef kind="variable" id="d4/de4/a04834_1aa3b277938602239d951bae72bb2a7262" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::SurfaceT&lt; FlagT &gt;::worldNormal</definition>
         <argsstring></argsstring>
-        <name>m_blurUbo</name>
+        <name>worldNormal</name>
+        <qualifiedname>castor3d::shader::SurfaceT::worldNormal</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="144" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="144" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="43" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="43" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d4/de4/a04834_1a11c13d6540cb3114e41b004c7bd36929" prot="private" static="no" mutable="no">
-        <type>ashes::RenderPassPtr</type>
-        <definition>ashes::RenderPassPtr castor3d::SubsurfaceScatteringPass::Blur::m_renderPass</definition>
+      <memberdef kind="variable" id="d4/de4/a04834_1a00782153bca6fad9eee77acff0f47173" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::SurfaceT&lt; FlagT &gt;::texCoord</definition>
         <argsstring></argsstring>
-        <name>m_renderPass</name>
+        <name>texCoord</name>
+        <qualifiedname>castor3d::shader::SurfaceT::texCoord</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="145" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="145" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/de4/a04834_1ac5fee80cd0133ed8af9da9343dfd9e97" prot="private" static="no" mutable="no">
-        <type>ashes::FrameBufferPtr</type>
-        <definition>ashes::FrameBufferPtr castor3d::SubsurfaceScatteringPass::Blur::m_frameBuffer</definition>
-        <argsstring></argsstring>
-        <name>m_frameBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="146" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="146" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="44" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="44" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d4/de4/a04834_1a7da26d0d7c68d264bb4cc20518af42f6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d4/de4/a04834_1a7e3f1e97c5465ee04389b3cf783fa0d5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
-        <definition>castor3d::SubsurfaceScatteringPass::Blur::Blur</definition>
-        <argsstring>(RenderSystem &amp;renderSystem, RenderDevice const &amp;device, castor::Size const &amp;size, GpInfoUbo const &amp;gpInfoUbo, SceneUbo &amp;sceneUbo, OpaquePassResult const &amp;gpResult, TextureUnit const &amp;source, TextureUnit const &amp;destination, bool isVertic, ashes::PipelineShaderStageCreateInfoArray const &amp;shaderStages)</argsstring>
-        <name>Blur</name>
+        <definition>castor3d::shader::SurfaceT&lt; FlagT &gt;::SurfaceT</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>SurfaceT</name>
+        <qualifiedname>castor3d::shader::SurfaceT::SurfaceT</qualifiedname>
         <param>
-          <type><ref refid="d1/d9a/a04618" kindref="compound">RenderSystem</ref> &amp;</type>
-          <declname>renderSystem</declname>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
         </param>
         <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>castor::Size const &amp;</type>
-          <declname>size</declname>
-        </param>
-        <param>
-          <type><ref refid="de/d5f/a05458" kindref="compound">GpInfoUbo</ref> const &amp;</type>
-          <declname>gpInfoUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="dc/d79/a05522" kindref="compound">SceneUbo</ref> &amp;</type>
-          <declname>sceneUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="d5/d8e/a04874" kindref="compound">OpaquePassResult</ref> const &amp;</type>
-          <declname>gpResult</declname>
-        </param>
-        <param>
-          <type><ref refid="df/d14/a02658" kindref="compound">TextureUnit</ref> const &amp;</type>
-          <declname>source</declname>
-        </param>
-        <param>
-          <type><ref refid="df/d14/a02658" kindref="compound">TextureUnit</ref> const &amp;</type>
-          <declname>destination</declname>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
         </param>
         <param>
           <type>bool</type>
-          <declname>isVertic</declname>
-        </param>
-        <param>
-          <type>ashes::PipelineShaderStageCreateInfoArray const &amp;</type>
-          <declname>shaderStages</declname>
+          <declname>enabled</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -135,16 +108,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="127" column="1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="20" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="d4/de4/a04834_1a237e95f299b10dcebc657e1a0e14d533" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d4/de4/a04834_1ad00df5fdb3a5427dee2ea8d4f67d4261" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
-        <definition>castor3d::SubsurfaceScatteringPass::Blur::Blur</definition>
-        <argsstring>(Blur &amp;&amp;rhs) noexcept</argsstring>
-        <name>Blur</name>
+        <definition>castor3d::shader::SurfaceT&lt; FlagT &gt;::SDW_DeclStructInstance</definition>
+        <argsstring>(, SurfaceT)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::SurfaceT::SDW_DeclStructInstance</qualifiedname>
         <param>
-          <type>Blur &amp;&amp;</type>
-          <declname>rhs</declname>
+          <type><ref refid="d4/de4/a04834" kindref="compound">SurfaceT</ref></type>
         </param>
         <briefdescription>
         </briefdescription>
@@ -152,16 +125,29 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="137" column="1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="23" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="d4/de4/a04834_1a42714913d8775fca3cc9cfa4f68db37b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d4/de4/a04834_1a5c18c0e3259887cd511e2bd70a6d4649" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::SubsurfaceScatteringPass::Blur::prepareFrame</definition>
-        <argsstring>(ashes::CommandBuffer &amp;commandBuffer) const</argsstring>
-        <name>prepareFrame</name>
+        <definition>void castor3d::shader::SurfaceT&lt; FlagT &gt;::create</definition>
+        <argsstring>(sdw::Vec2 clip, sdw::Vec3 view, sdw::Vec3 world, sdw::Vec3 normal)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::shader::SurfaceT::create</qualifiedname>
         <param>
-          <type>ashes::CommandBuffer &amp;</type>
-          <declname>commandBuffer</declname>
+          <type>sdw::Vec2</type>
+          <declname>clip</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>world</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>normal</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -169,7 +155,101 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="138" column="1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="25" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/de4/a04834_1abe17f0709ad86522381e4711b3730a7c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::SurfaceT&lt; FlagT &gt;::create</definition>
+        <argsstring>(sdw::Vec2 clip, sdw::Vec3 view, sdw::Vec3 world, sdw::Vec3 normal, sdw::Vec3 texCoord)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::shader::SurfaceT::create</qualifiedname>
+        <param>
+          <type>sdw::Vec2</type>
+          <declname>clip</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>world</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>normal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>texCoord</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="29" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/de4/a04834_1a4c57ec2dce5057c0d4eb17b7c3942d1a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::SurfaceT&lt; FlagT &gt;::create</definition>
+        <argsstring>(sdw::Vec3 world, sdw::Vec3 normal)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::shader::SurfaceT::create</qualifiedname>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>world</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>normal</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="34" column="6"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d4/de4/a04834_1adeabc2243ec8a9e6947783bffee16876" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ast::type::BaseStructPtr</type>
+        <definition>static ast::type::BaseStructPtr castor3d::shader::SurfaceT&lt; FlagT &gt;::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::SurfaceT::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="37" column="33"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/de4/a04834_1a25b7d5e03146b2932b3ab8c9bb3fead0" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::SurfaceT&lt; FlagT &gt;::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::SurfaceT::declare</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="38" column="24"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -177,127 +257,41 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="4315">
-        <label>castor3d::RenderQuad</label>
-        <link refid="d8/d1f/a04450"/>
-        <childnode refid="4316" relation="public-inheritance">
+      <node id="1">
+        <label>castor3d::shader::SurfaceT&lt; FlagT &gt;</label>
+        <link refid="d4/de4/a04834"/>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="4316">
-        <label>Named</label>
-      </node>
-      <node id="4314">
-        <label>castor3d::SubsurfaceScatteringPass::Blur</label>
-        <childnode refid="4315" relation="private-inheritance">
-        </childnode>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="4320">
-        <label>castor3d::RenderSystem</label>
-        <link refid="d1/d9a/a04618"/>
-        <childnode refid="4321" relation="public-inheritance">
+      <node id="1">
+        <label>castor3d::shader::SurfaceT&lt; FlagT &gt;</label>
+        <link refid="d4/de4/a04834"/>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="4318">
-        <label>castor3d::RenderQuad</label>
-        <link refid="d8/d1f/a04450"/>
-        <childnode refid="4319" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4320" relation="usage">
-          <edgelabel>m_renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="4322" relation="usage">
-          <edgelabel>m_device</edgelabel>
-        </childnode>
-      </node>
-      <node id="4325">
-        <label>T</label>
-      </node>
-      <node id="4327">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="4325" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="4324">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="4325" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="4326">
-        <label>std::vector&lt; ashes::CommandPoolPtr &gt;</label>
-        <childnode refid="4327" relation="template-instance">
-          <edgelabel>&lt; ashes::CommandPoolPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4323">
-        <label>std::array&lt; uint32_t, 4u &gt;</label>
-        <childnode refid="4324" relation="template-instance">
-          <edgelabel>&lt; uint32_t, 4u &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4319">
-        <label>Named</label>
-      </node>
-      <node id="4321">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="4317">
-        <label>castor3d::SubsurfaceScatteringPass::Blur</label>
-        <childnode refid="4318" relation="private-inheritance">
-        </childnode>
-      </node>
-      <node id="4322">
-        <label>castor3d::RenderDevice</label>
-        <link refid="d8/d4c/a04506"/>
-        <childnode refid="4323" relation="usage">
-          <edgelabel>queueFamiliesIndex</edgelabel>
-        </childnode>
-        <childnode refid="4320" relation="usage">
-          <edgelabel>renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="4326" relation="usage">
-          <edgelabel>commandPools</edgelabel>
-        </childnode>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </collaborationgraph>
-    <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="125" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="123" bodyend="147"/>
+    <location file="Shader/Shaders/GlslSurface.hpp" line="17" column="1" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="19" bodyend="49"/>
     <listofallmembers>
-      <member refid="d4/de4/a04834_1a7da26d0d7c68d264bb4cc20518af42f6" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>Blur</name></member>
-      <member refid="d4/de4/a04834_1a237e95f299b10dcebc657e1a0e14d533" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>Blur</name></member>
-      <member refid="d8/d1f/a04450_1ab31f1f028639e2280dc81a5207c19361" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>cleanup</name></member>
-      <member refid="d8/d1f/a04450_1a2d8f7fe31e95ec7563ab7e49d47f847f" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>createPipeline</name></member>
-      <member refid="d8/d1f/a04450_1a9eed2ab1f518d2d215e10f79dd66b980" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>createPipelineAndPass</name></member>
-      <member refid="d8/d1f/a04450_1a208ae566cd29dc14e874ec5381a40676" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>getDevice</name></member>
-      <member refid="d8/d1f/a04450_1adf3b0cdd23bb9558df6d7f1b87b74ac6" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>getRenderSystem</name></member>
-      <member refid="d8/d1f/a04450_1a2b4ea1f81bda3deace1e6f5b159f90db" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>getSampler</name></member>
-      <member refid="d8/d1f/a04450_1a434520ea0e0f0a1ae885e7c9e19306a8" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>initialisePasses</name></member>
-      <member refid="d4/de4/a04834_1a7bc1f33b06bd1ed7bf08c22612af3a54" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>m_blurUbo</name></member>
-      <member refid="d8/d1f/a04450_1ac07074df6fa0bb86ec6e9c76bf23f867" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>m_config</name></member>
-      <member refid="d8/d1f/a04450_1a0e0d911b83650f310a1d773e6774788c" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>m_device</name></member>
-      <member refid="d4/de4/a04834_1ac5fee80cd0133ed8af9da9343dfd9e97" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>m_frameBuffer</name></member>
-      <member refid="d4/de4/a04834_1ab86fc3548e2f541dfe8500616171dd8d" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>m_geometryBufferResult</name></member>
-      <member refid="d4/de4/a04834_1a8c28fc8a4afb831cde55178cad8e6f32" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>m_gpInfoUbo</name></member>
-      <member refid="d4/de4/a04834_1a11c13d6540cb3114e41b004c7bd36929" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>m_renderPass</name></member>
-      <member refid="d8/d1f/a04450_1a67e531e63c3eef4d22c89cd5dcf26d39" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>m_renderSystem</name></member>
-      <member refid="d8/d1f/a04450_1ac424bcc12b49f4788b6a78e181e7d8c9" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>m_sampler</name></member>
-      <member refid="d4/de4/a04834_1ae8831d0ebdfa1854067f7e305bee09b3" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>m_sceneUbo</name></member>
-      <member refid="d8/d1f/a04450_1aba30b821ed0f043349148de3f91e1e28" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d8/d1f/a04450_1abb76aa593ad380a88d949bd26fea0202" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d8/d1f/a04450_1a612d681d62631e6bb92d9601c660b48e" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d8/d1f/a04450_1af64b5bc8b9a9a3013e46accb200156f5" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d8/d1f/a04450_1a43bab20a96e9bea365bc98d8667c977e" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d8/d1f/a04450_1afacd916c61c3a5b315a0d3e94a8ba84d" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d8/d1f/a04450_1a046a2ac1ba39bbd6114dfe87d4aaaf11" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d4/de4/a04834_1a42714913d8775fca3cc9cfa4f68db37b" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>prepareFrame</name></member>
-      <member refid="d8/d1f/a04450_1ac0cf400425c8050429e895099c971715" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>registerPass</name></member>
-      <member refid="d8/d1f/a04450_1a62f21f0ecc9017c47eb029d0bc19e396" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>registerPass</name></member>
-      <member refid="d8/d1f/a04450_1a367adcd9b6cc6ac6b1c68a28b2580eb2" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>registerPassInputs</name></member>
-      <member refid="d8/d1f/a04450_1a48a49fffd036c545328e87e1449e141d" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>RenderQuad</name></member>
-      <member refid="d8/d1f/a04450_1aeaeeae8d7065de723f0a710360bab119" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>RenderQuad</name></member>
-      <member refid="d8/d1f/a04450_1a8a01faf0243638f02d6f052ff9e85b4b" prot="private" virt="virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>~RenderQuad</name></member>
+      <member refid="d4/de4/a04834_1abd8d2801932b0fd4f9d2e12c164025ad" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>clipPosition</name></member>
+      <member refid="d4/de4/a04834_1a5c18c0e3259887cd511e2bd70a6d4649" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>create</name></member>
+      <member refid="d4/de4/a04834_1abe17f0709ad86522381e4711b3730a7c" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>create</name></member>
+      <member refid="d4/de4/a04834_1a4c57ec2dce5057c0d4eb17b7c3942d1a" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>create</name></member>
+      <member refid="d4/de4/a04834_1a25b7d5e03146b2932b3ab8c9bb3fead0" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>declare</name></member>
+      <member refid="d4/de4/a04834_1adeabc2243ec8a9e6947783bffee16876" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>makeType</name></member>
+      <member refid="d4/de4/a04834_1ad00df5fdb3a5427dee2ea8d4f67d4261" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="d4/de4/a04834_1a7e3f1e97c5465ee04389b3cf783fa0d5" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>SurfaceT</name></member>
+      <member refid="d4/de4/a04834_1a00782153bca6fad9eee77acff0f47173" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>texCoord</name></member>
+      <member refid="d4/de4/a04834_1a8092fc47898fa766498922f8eae72833" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>viewPosition</name></member>
+      <member refid="d4/de4/a04834_1aa3b277938602239d951bae72bb2a7262" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>worldNormal</name></member>
+      <member refid="d4/de4/a04834_1a2e44e494e403dc84d590f4c80a3c0f19" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>worldPosition</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

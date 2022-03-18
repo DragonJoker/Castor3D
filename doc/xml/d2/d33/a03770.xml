@@ -1,33 +1,328 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d2/d33/a03770" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPhysicalDeviceMemoryBudgetPropertiesEXT &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d2/d33/a03770_1ad2e401a6a53414dae4be9913137a270e" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPhysicalDeviceMemoryBudgetPropertiesEXT &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d2/d33/a03770" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::VoxelSecondaryBounce</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">crg::RunnablePass</basecompoundref>
+    <includes local="no">VoxelSecondaryBounce.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/d33/a03770_1a1ec6e455969ca9a218ee4537de6939e2" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/da4/a03766" kindref="compound">VoxelSceneData</ref> const  &amp;</type>
+        <definition>VoxelSceneData const&amp; castor3d::VoxelSecondaryBounce::m_vctConfig</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MEMORY_BUDGET_PROPERTIES_EXT</initializer>
+        <name>m_vctConfig</name>
+        <qualifiedname>castor3d::VoxelSecondaryBounce::m_vctConfig</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="355" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="355" bodyend="-1"/>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp" line="61" column="23" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d33/a03770_1a4546517c1d25f131c5343556d5215260" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d64/a04750" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::VoxelSecondaryBounce::m_shader</definition>
+        <argsstring></argsstring>
+        <name>m_shader</name>
+        <qualifiedname>castor3d::VoxelSecondaryBounce::m_shader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp" line="62" column="14" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d33/a03770_1a2914247c22f6f8944dda075f136b287f" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetLayoutPtr</type>
+        <definition>ashes::DescriptorSetLayoutPtr castor3d::VoxelSecondaryBounce::m_descriptorSetLayout</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorSetLayout</name>
+        <qualifiedname>castor3d::VoxelSecondaryBounce::m_descriptorSetLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp" line="63" column="31" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d33/a03770_1aa04b33d89057322b71ce9dbd9a4557bb" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineLayoutPtr</type>
+        <definition>ashes::PipelineLayoutPtr castor3d::VoxelSecondaryBounce::m_pipelineLayout</definition>
+        <argsstring></argsstring>
+        <name>m_pipelineLayout</name>
+        <qualifiedname>castor3d::VoxelSecondaryBounce::m_pipelineLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp" line="64" column="26" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d33/a03770_1a3e8b46b40e63e41df1d3b070e2161eb8" prot="private" static="no" mutable="no">
+        <type>ashes::ComputePipelinePtr</type>
+        <definition>ashes::ComputePipelinePtr castor3d::VoxelSecondaryBounce::m_pipeline</definition>
+        <argsstring></argsstring>
+        <name>m_pipeline</name>
+        <qualifiedname>castor3d::VoxelSecondaryBounce::m_pipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp" line="65" column="27" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d33/a03770_1ab137c5b51b3f67d36724d881ec58dff5" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetPoolPtr</type>
+        <definition>ashes::DescriptorSetPoolPtr castor3d::VoxelSecondaryBounce::m_descriptorSetPool</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorSetPool</name>
+        <qualifiedname>castor3d::VoxelSecondaryBounce::m_descriptorSetPool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp" line="66" column="29" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d33/a03770_1a7e98edd07571c8e71907bc7cdfd6840c" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::VoxelSecondaryBounce::m_descriptorSet</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorSet</name>
+        <qualifiedname>castor3d::VoxelSecondaryBounce::m_descriptorSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp" line="67" column="25" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/d33/a03770_1a7655be5c7ddc1d3da855a55ed2ee006c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::VoxelSecondaryBounce::VoxelSecondaryBounce</definition>
+        <argsstring>(crg::FramePass const &amp;pass, crg::GraphContext &amp;context, crg::RunnableGraph &amp;graph, RenderDevice const &amp;device, VoxelSceneData const &amp;voxelConfig)</argsstring>
+        <name>VoxelSecondaryBounce</name>
+        <qualifiedname>castor3d::VoxelSecondaryBounce::VoxelSecondaryBounce</qualifiedname>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>crg::GraphContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>crg::RunnableGraph &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/da4/a03766" kindref="compound">VoxelSceneData</ref> const &amp;</type>
+          <declname>voxelConfig</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent frame pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">context</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The rendering context. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">graph</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The runnable graph. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">voxelConfig</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The voxelizer configuration. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp" line="42" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d33/a03770_1ade318b008f131dde20e91ac64f8d0a09" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::VoxelSecondaryBounce::accept</definition>
+        <argsstring>(RenderTechniqueVisitor &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::VoxelSecondaryBounce::accept</qualifiedname>
+        <param>
+          <type><ref refid="de/da2/a04294" kindref="compound">RenderTechniqueVisitor</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Visitor acceptance function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ... visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp" line="50" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d2/d33/a03770_1af7c40dce009bb62a5a48ac7f3dda1f0f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::VoxelSecondaryBounce::doInitialise</definition>
+        <argsstring>()</argsstring>
+        <name>doInitialise</name>
+        <qualifiedname>castor3d::VoxelSecondaryBounce::doInitialise</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp" line="53" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d33/a03770_1a4f4932ac262b76149d56da0ce6538264" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::VoxelSecondaryBounce::doRecordInto</definition>
+        <argsstring>(crg::RecordContext &amp;context, VkCommandBuffer commandBuffer, uint32_t index)</argsstring>
+        <name>doRecordInto</name>
+        <qualifiedname>castor3d::VoxelSecondaryBounce::doRecordInto</qualifiedname>
+        <param>
+          <type>crg::RecordContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>VkCommandBuffer</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp" line="54" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d33/a03770_1ae253b0a472338166fe819d462f4886ac" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>VkPipelineStageFlags</type>
+        <definition>VkPipelineStageFlags castor3d::VoxelSecondaryBounce::doGetSemaphoreWaitFlags</definition>
+        <argsstring>() const</argsstring>
+        <name>doGetSemaphoreWaitFlags</name>
+        <qualifiedname>castor3d::VoxelSecondaryBounce::doGetSemaphoreWaitFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp" line="57" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d33/a03770_1a2318dd1fff1f58ae8a199c7c66ee5ed7" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::VoxelSecondaryBounce::doIsComputePass</definition>
+        <argsstring>() const</argsstring>
+        <name>doIsComputePass</name>
+        <qualifiedname>castor3d::VoxelSecondaryBounce::doIsComputePass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp" line="58" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="355" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="355" bodyend="355"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::VoxelSecondaryBounce</label>
+        <link refid="d2/d33/a03770"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>crg::RunnablePass</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::VoxelSecondaryBounce</label>
+        <link refid="d2/d33/a03770"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>crg::RunnablePass</label>
+      </node>
+    </collaborationgraph>
+    <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp" line="22" column="1" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp" bodystart="24" bodyend="68"/>
     <listofallmembers>
-      <member refid="d2/d33/a03770_1ad2e401a6a53414dae4be9913137a270e" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPhysicalDeviceMemoryBudgetPropertiesEXT &gt;</scope><name>value</name></member>
+      <member refid="d2/d33/a03770_1ade318b008f131dde20e91ac64f8d0a09" prot="public" virt="non-virtual"><scope>castor3d::VoxelSecondaryBounce</scope><name>accept</name></member>
+      <member refid="d2/d33/a03770_1ae253b0a472338166fe819d462f4886ac" prot="private" virt="non-virtual"><scope>castor3d::VoxelSecondaryBounce</scope><name>doGetSemaphoreWaitFlags</name></member>
+      <member refid="d2/d33/a03770_1af7c40dce009bb62a5a48ac7f3dda1f0f" prot="private" virt="non-virtual"><scope>castor3d::VoxelSecondaryBounce</scope><name>doInitialise</name></member>
+      <member refid="d2/d33/a03770_1a2318dd1fff1f58ae8a199c7c66ee5ed7" prot="private" virt="non-virtual"><scope>castor3d::VoxelSecondaryBounce</scope><name>doIsComputePass</name></member>
+      <member refid="d2/d33/a03770_1a4f4932ac262b76149d56da0ce6538264" prot="private" virt="non-virtual"><scope>castor3d::VoxelSecondaryBounce</scope><name>doRecordInto</name></member>
+      <member refid="d2/d33/a03770_1a7e98edd07571c8e71907bc7cdfd6840c" prot="private" virt="non-virtual"><scope>castor3d::VoxelSecondaryBounce</scope><name>m_descriptorSet</name></member>
+      <member refid="d2/d33/a03770_1a2914247c22f6f8944dda075f136b287f" prot="private" virt="non-virtual"><scope>castor3d::VoxelSecondaryBounce</scope><name>m_descriptorSetLayout</name></member>
+      <member refid="d2/d33/a03770_1ab137c5b51b3f67d36724d881ec58dff5" prot="private" virt="non-virtual"><scope>castor3d::VoxelSecondaryBounce</scope><name>m_descriptorSetPool</name></member>
+      <member refid="d2/d33/a03770_1a3e8b46b40e63e41df1d3b070e2161eb8" prot="private" virt="non-virtual"><scope>castor3d::VoxelSecondaryBounce</scope><name>m_pipeline</name></member>
+      <member refid="d2/d33/a03770_1aa04b33d89057322b71ce9dbd9a4557bb" prot="private" virt="non-virtual"><scope>castor3d::VoxelSecondaryBounce</scope><name>m_pipelineLayout</name></member>
+      <member refid="d2/d33/a03770_1a4546517c1d25f131c5343556d5215260" prot="private" virt="non-virtual"><scope>castor3d::VoxelSecondaryBounce</scope><name>m_shader</name></member>
+      <member refid="d2/d33/a03770_1a1ec6e455969ca9a218ee4537de6939e2" prot="private" virt="non-virtual"><scope>castor3d::VoxelSecondaryBounce</scope><name>m_vctConfig</name></member>
+      <member refid="d2/d33/a03770_1a7655be5c7ddc1d3da855a55ed2ee006c" prot="public" virt="non-virtual"><scope>castor3d::VoxelSecondaryBounce</scope><name>VoxelSecondaryBounce</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,78 +1,205 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d0/db2/a03822" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::ParametersT</compoundname>
-    <includes local="no">Parameter.hpp</includes>
-    <templateparamlist>
-      <param>
-        <type>typename</type>
-        <declname>KeyT</declname>
-        <defname>KeyT</defname>
-      </param>
-    </templateparamlist>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d0/db2/a03822_1a0b6c14c5ab579f8725c3f0588987eda9" prot="private" static="no" mutable="no">
-        <type>ParamNameMap</type>
-        <definition>ParamNameMap castor3d::ParametersT&lt; KeyT &gt;::m_values</definition>
-        <argsstring></argsstring>
-        <name>m_values</name>
+    <compoundname>castor3d::ComputeDepthRange</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">crg::RunnablePass</basecompoundref>
+    <includes local="no">ComputeDepthRange.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="enum" id="d0/db2/a03822_1a9541371fc5b53aec2b0e0be97ec5f4fc" prot="public" static="no" strong="no">
+        <type>uint32_t</type>
+        <name>Bindings</name>
+        <qualifiedname>castor3d::ComputeDepthRange::Bindings</qualifiedname>
+        <enumvalue id="d0/db2/a03822_1a9541371fc5b53aec2b0e0be97ec5f4fcae095622c8c9700742d711f0392596d0d" prot="public">
+          <name>eInput</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/db2/a03822_1a9541371fc5b53aec2b0e0be97ec5f4fca30fdc102e33a5457ba6f94289fadfa4f" prot="public">
+          <name>eOutput</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="337" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="337" bodyend="-1"/>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="24" column="1" bodyfile="Render/Passes/ComputeDepthRange.hpp" bodystart="25" bodyend="28"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/db2/a03822_1a4ff749577d9658e362acfb1c117e7b57" prot="private" static="no" mutable="no">
+        <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::ComputeDepthRange::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::ComputeDepthRange::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="63" column="21" bodyfile="Render/Passes/ComputeDepthRange.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/db2/a03822_1a653d11a6b86ba6efe141415ddc8ab349" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetLayoutPtr</type>
+        <definition>ashes::DescriptorSetLayoutPtr castor3d::ComputeDepthRange::m_descriptorSetLayout</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorSetLayout</name>
+        <qualifiedname>castor3d::ComputeDepthRange::m_descriptorSetLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="64" column="31" bodyfile="Render/Passes/ComputeDepthRange.hpp" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/db2/a03822_1a2a558f58e99d794ffc7611081c743c7f" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineLayoutPtr</type>
+        <definition>ashes::PipelineLayoutPtr castor3d::ComputeDepthRange::m_pipelineLayout</definition>
+        <argsstring></argsstring>
+        <name>m_pipelineLayout</name>
+        <qualifiedname>castor3d::ComputeDepthRange::m_pipelineLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="65" column="26" bodyfile="Render/Passes/ComputeDepthRange.hpp" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/db2/a03822_1ab1bf2bcbc282ffef018f7523e12f9251" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d64/a04750" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::ComputeDepthRange::m_shader</definition>
+        <argsstring></argsstring>
+        <name>m_shader</name>
+        <qualifiedname>castor3d::ComputeDepthRange::m_shader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="66" column="14" bodyfile="Render/Passes/ComputeDepthRange.hpp" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/db2/a03822_1a681791c761ca484ebc1c0a9ec6519ede" prot="private" static="no" mutable="no">
+        <type>ashes::ComputePipelinePtr</type>
+        <definition>ashes::ComputePipelinePtr castor3d::ComputeDepthRange::m_pipeline</definition>
+        <argsstring></argsstring>
+        <name>m_pipeline</name>
+        <qualifiedname>castor3d::ComputeDepthRange::m_pipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="67" column="27" bodyfile="Render/Passes/ComputeDepthRange.hpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/db2/a03822_1a381e97bd1c638a05a6003dbbfb223740" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetPoolPtr</type>
+        <definition>ashes::DescriptorSetPoolPtr castor3d::ComputeDepthRange::m_descriptorSetPool</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorSetPool</name>
+        <qualifiedname>castor3d::ComputeDepthRange::m_descriptorSetPool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="68" column="29" bodyfile="Render/Passes/ComputeDepthRange.hpp" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/db2/a03822_1a715ef3513c13fd1092fcfb4bcb00ebff" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::ComputeDepthRange::m_descriptorSet</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorSet</name>
+        <qualifiedname>castor3d::ComputeDepthRange::m_descriptorSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="69" column="25" bodyfile="Render/Passes/ComputeDepthRange.hpp" bodystart="69" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d0/db2/a03822_1a3c87031795661b1ec12983dc1c1599fd" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::ParametersT&lt; KeyT &gt;::ParametersT</definition>
-        <argsstring>()</argsstring>
-        <name>ParametersT</name>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="25" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="25" bodyend="27"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/db2/a03822_1a60463ea4c2817dcf8633e73a7f307b48" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::ParametersT&lt; KeyT &gt;::~ParametersT</definition>
-        <argsstring>()</argsstring>
-        <name>~ParametersT</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="34" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="34" bodyend="36"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/db2/a03822_1a96cb2145223019c28b190229001f6be5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::ParametersT&lt; KeyT &gt;::parse</definition>
-        <argsstring>(castor::String const &amp;text)</argsstring>
-        <name>parse</name>
+      <memberdef kind="function" id="d0/db2/a03822_1a21cccffa3c9076a9d7f1299d7206acde" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ComputeDepthRange::ComputeDepthRange</definition>
+        <argsstring>(crg::FramePass const &amp;pass, crg::GraphContext &amp;context, crg::RunnableGraph &amp;graph, RenderDevice const &amp;device, bool &amp;enabled)</argsstring>
+        <name>ComputeDepthRange</name>
+        <qualifiedname>castor3d::ComputeDepthRange::ComputeDepthRange</qualifiedname>
         <param>
-          <type>castor::String const &amp;</type>
-          <declname>text</declname>
+          <type>crg::FramePass const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>crg::GraphContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>crg::RunnableGraph &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>bool &amp;</type>
+          <declname>enabled</declname>
         </param>
         <briefdescription>
-<para>Parses the given text into a parameters list. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">text</parametername>
+<parametername direction="in">pass</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The source text. </para>
+<para>The parent frame pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">context</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The rendering context. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">graph</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The runnable graph. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">enabled</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> to enable this pass. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -80,90 +207,28 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="45" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="45" bodyend="70"/>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="43" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d0/db2/a03822_1ad5db1be40b7fb695857dd9e36c1fcbff" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename ValueT</type>
-          </param>
-        </templateparamlist>
-        <type>bool</type>
-        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::add</definition>
-        <argsstring>(KeyT const &amp;name, ValueT *values, uint32_t count)</argsstring>
-        <name>add</name>
+      <memberdef kind="function" id="d0/db2/a03822_1a9f1e44f3e194c0334de51d4960940ec4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ComputeDepthRange::accept</definition>
+        <argsstring>(RenderTechniqueVisitor &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::ComputeDepthRange::accept</qualifiedname>
         <param>
-          <type>KeyT const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type>ValueT *</type>
-          <declname>values</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>count</declname>
+          <type><ref refid="de/da2/a04294" kindref="compound">RenderTechniqueVisitor</ref> &amp;</type>
+          <declname>visitor</declname>
         </param>
         <briefdescription>
-<para>adds a parameter </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="remark"><para>If a parameter with the given name already exists, nothing is done </para>
-</simplesect>
-<parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter name </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">values</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter values </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">count</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The values count </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if a parameter with the given name already exists </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="88" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="88" bodyend="104"/>
-        <referencedby refid="d0/db2/a03822_1a308156a2a8619c89a52f64b2c391efc3" compoundref="dc/dc9/a00389" startline="135" endline="139">castor3d::ParametersT&lt; castor::String &gt;::add</referencedby>
-        <referencedby refid="d0/db2/a03822_1a96cb2145223019c28b190229001f6be5" compoundref="dc/dc9/a00389" startline="45" endline="70">castor3d::ParametersT&lt; castor::String &gt;::parse</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="d0/db2/a03822_1a752ae446e1a04e0bc407260458af0ab8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::ParametersT&lt; KeyT &gt;::add</definition>
-        <argsstring>(ParametersT const &amp;parameters)</argsstring>
-        <name>add</name>
-        <param>
-          <type><ref refid="d0/db2/a03822" kindref="compound">ParametersT</ref> const &amp;</type>
-          <declname>parameters</declname>
-        </param>
-        <briefdescription>
-<para>adds a parameters list. </para>
+<para>Visitor acceptance function. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">parameters</parametername>
+<parametername>visitor</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The parameters list. </para>
+<para>The ... visitor. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -171,486 +236,41 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="113" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="113" bodyend="119"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/db2/a03822_1a308156a2a8619c89a52f64b2c391efc3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename ValueT</type>
-          </param>
-          <param>
-            <type>uint32_t</type>
-            <declname>N</declname>
-            <defname>N</defname>
-          </param>
-        </templateparamlist>
-        <type>bool</type>
-        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::add</definition>
-        <argsstring>(KeyT const &amp;name, ValueT const(&amp;values)[N])</argsstring>
-        <name>add</name>
-        <param>
-          <type>KeyT const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type>ValueT const(&amp;)</type>
-          <declname>values</declname>
-          <array>[N]</array>
-        </param>
-        <briefdescription>
-<para>adds a parameter </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="remark"><para>If a parameter with the given name already exists, nothing is done </para>
-</simplesect>
-<parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter name </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">values</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter values </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if a parameter with the given name already exists </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="135" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="135" bodyend="139"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/db2/a03822_1ae41f7406dafca84065a61cc27b6fc986" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename ValueT</type>
-          </param>
-        </templateparamlist>
-        <type>bool</type>
-        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::add</definition>
-        <argsstring>(KeyT const &amp;name, ValueT const &amp;value)</argsstring>
-        <name>add</name>
-        <param>
-          <type>KeyT const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type>ValueT const &amp;</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-<para>adds a parameter </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="remark"><para>If a parameter with the given name already exists, nothing is done </para>
-</simplesect>
-<parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter name </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter value </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if a parameter with the given name already exists </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="155" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="155" bodyend="159"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/db2/a03822_1aa632d31dbf2ec8449dc4ad022c2fac0c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::add</definition>
-        <argsstring>(KeyT const &amp;name, castor::String const &amp;value)</argsstring>
-        <name>add</name>
-        <param>
-          <type>KeyT const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-<para>adds a string parameter </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="remark"><para>If a parameter with the given name already exists, nothing is done </para>
-</simplesect>
-<parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter name </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter value </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if a parameter with the given name already exists </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="174" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="174" bodyend="190"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/db2/a03822_1a77dfeca82fa204f525df3fd314fbf9a9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename ValueT</type>
-          </param>
-        </templateparamlist>
-        <type>bool</type>
-        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::set</definition>
-        <argsstring>(KeyT const &amp;name, ValueT const &amp;value)</argsstring>
-        <name>set</name>
-        <param>
-          <type>KeyT const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type>ValueT const &amp;</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-<para>Sets a parameter value. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter name </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter value </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if there is no parameter with the given name </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="204" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="204" bodyend="217"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/db2/a03822_1ad96af3a75d355cbb66a288d3c5776117" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename ValueT</type>
-          </param>
-        </templateparamlist>
-        <type>bool</type>
-        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::get</definition>
-        <argsstring>(KeyT const &amp;name, ValueT *values, uint32_t count) const</argsstring>
-        <name>get</name>
-        <param>
-          <type>KeyT const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type>ValueT *</type>
-          <declname>values</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>count</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves a parameter value. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter name </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="out">values</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter values </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">count</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The values available count </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if there is no parameter with the given name </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="233" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="233" bodyend="250"/>
-        <referencedby refid="d0/db2/a03822_1ab2b2cb427182b47fde46cbbec82a2578" compoundref="dc/dc9/a00389" startline="264" endline="268">castor3d::ParametersT&lt; castor::String &gt;::get</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="d0/db2/a03822_1ab2b2cb427182b47fde46cbbec82a2578" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename ValueT</type>
-          </param>
-        </templateparamlist>
-        <type>bool</type>
-        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::get</definition>
-        <argsstring>(KeyT const &amp;name, ValueT &amp;value) const</argsstring>
-        <name>get</name>
-        <param>
-          <type>KeyT const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type>ValueT &amp;</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves a parameter value. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter name </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="out">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter value </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if there is no parameter with the given name </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="264" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="264" bodyend="268"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/db2/a03822_1a11ebc07545b4a4c273f4ee8f0c04d661" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename ValueT</type>
-          </param>
-          <param>
-            <type>uint32_t</type>
-            <declname>N</declname>
-            <defname>N</defname>
-          </param>
-        </templateparamlist>
-        <type>bool</type>
-        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::get</definition>
-        <argsstring>(KeyT const &amp;name, ValueT(&amp;values)[N]) const</argsstring>
-        <name>get</name>
-        <param>
-          <type>KeyT const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type>ValueT(&amp;)</type>
-          <declname>values</declname>
-          <array>[N]</array>
-        </param>
-        <briefdescription>
-<para>Retrieves a parameter value. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter name </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="out">values</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter values </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if there is no parameter with the given name </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="282" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="282" bodyend="286"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/db2/a03822_1ad29b8a638f6c203ca2198f6efebd990b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::get</definition>
-        <argsstring>(KeyT const &amp;name, castor::String &amp;value) const</argsstring>
-        <name>get</name>
-        <param>
-          <type>KeyT const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type>castor::String &amp;</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves a parameter value. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter name </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="out">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter value </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if there is no parameter with the given name </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="299" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="299" bodyend="312"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/db2/a03822_1ad57408a3beec0e65cac1ad1076c08e99" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename ValueT</type>
-          </param>
-        </templateparamlist>
-        <type>ValueT</type>
-        <definition>ValueT castor3d::ParametersT&lt; KeyT &gt;::get</definition>
-        <argsstring>(KeyT const &amp;name) const</argsstring>
-        <name>get</name>
-        <param>
-          <type>KeyT const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves a parameter value. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter name </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="322" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="322" bodyend="327"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/db2/a03822_1a788809b2719ae6bd194e186572157ccb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>size_t</type>
-        <definition>size_t castor3d::ParametersT&lt; KeyT &gt;::size</definition>
-        <argsstring>() const</argsstring>
-        <name>size</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="329" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="329" bodyend="332"/>
-        <referencedby refid="d0/db2/a03822_1aa632d31dbf2ec8449dc4ad022c2fac0c" compoundref="dc/dc9/a00389" startline="174" endline="190">castor3d::ParametersT&lt; castor::String &gt;::add</referencedby>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="51" column="14"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-func">
-      <memberdef kind="function" id="d0/db2/a03822_1a0a56400136af3687df2e576411636114" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::ParametersT&lt; KeyT &gt;::CU_DeclareVector</definition>
-        <argsstring>(uint8_t, Byte)</argsstring>
-        <name>CU_DeclareVector</name>
-        <param>
-          <type>uint8_t</type>
-        </param>
-        <param>
-          <type>Byte</type>
-        </param>
+      <memberdef kind="function" id="d0/db2/a03822_1a108f215087c503eaf1bc9511c46aee6d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ComputeDepthRange::doInitialise</definition>
+        <argsstring>()</argsstring>
+        <name>doInitialise</name>
+        <qualifiedname>castor3d::ComputeDepthRange::doInitialise</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="335" column="1"/>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="54" column="6"/>
       </memberdef>
-      <memberdef kind="function" id="d0/db2/a03822_1a0b812d32700f91d14897935f83d08015" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::ParametersT&lt; KeyT &gt;::CU_DeclareTemplateMap</definition>
-        <argsstring>(KeyT, ByteArray, ParamName)</argsstring>
-        <name>CU_DeclareTemplateMap</name>
+      <memberdef kind="function" id="d0/db2/a03822_1a98a60c5c59aaec99343a915bc8fc7076" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ComputeDepthRange::doRecordInto</definition>
+        <argsstring>(crg::RecordContext &amp;context, VkCommandBuffer commandBuffer, uint32_t index)</argsstring>
+        <name>doRecordInto</name>
+        <qualifiedname>castor3d::ComputeDepthRange::doRecordInto</qualifiedname>
         <param>
-          <type>KeyT</type>
+          <type>crg::RecordContext &amp;</type>
+          <declname>context</declname>
         </param>
         <param>
-          <type>ByteArray</type>
+          <type>VkCommandBuffer</type>
+          <declname>commandBuffer</declname>
         </param>
         <param>
-          <type>ParamName</type>
+          <type>uint32_t</type>
+          <declname>index</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -658,50 +278,96 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="336" column="1"/>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="55" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/db2/a03822_1a036c2c5f6b59af3b4a423a11a48d8d60" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>VkPipelineStageFlags</type>
+        <definition>VkPipelineStageFlags castor3d::ComputeDepthRange::doGetSemaphoreWaitFlags</definition>
+        <argsstring>() const</argsstring>
+        <name>doGetSemaphoreWaitFlags</name>
+        <qualifiedname>castor3d::ComputeDepthRange::doGetSemaphoreWaitFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="58" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/db2/a03822_1a122f8b80c1ebd0094d61284533e2fa48" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ComputeDepthRange::doGetPassIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>doGetPassIndex</name>
+        <qualifiedname>castor3d::ComputeDepthRange::doGetPassIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="59" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/db2/a03822_1adc69c38a23668b58848d9d7a60748111" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ComputeDepthRange::doIsComputePass</definition>
+        <argsstring>() const</argsstring>
+        <name>doIsComputePass</name>
+        <qualifiedname>castor3d::ComputeDepthRange::doIsComputePass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/ComputeDepthRange.hpp" line="60" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Configuration parameters. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="remark"><para>Pair of a name and binary data. </para>
-</simplesect>
-</para>
     </detaileddescription>
     <inheritancegraph>
-      <node id="2518">
-        <label>castor3d::ParametersT&lt; castor::String &gt;</label>
+      <node id="1">
+        <label>castor3d::ComputeDepthRange</label>
         <link refid="d0/db2/a03822"/>
-        <childnode refid="2517" relation="template-instance">
-          <edgelabel>&lt; castor::String &gt;</edgelabel>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="2517">
-        <label>castor3d::ParametersT&lt; KeyT &gt;</label>
-        <link refid="d0/db2/a03822"/>
+      <node id="2">
+        <label>crg::RunnablePass</label>
       </node>
     </inheritancegraph>
-    <location file="Miscellaneous/MiscellaneousModule.hpp" line="133" column="1" bodyfile="Miscellaneous/MiscellaneousModule.hpp" bodystart="133" bodyend="-1"/>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::ComputeDepthRange</label>
+        <link refid="d0/db2/a03822"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>crg::RunnablePass</label>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Passes/ComputeDepthRange.hpp" line="20" column="1" bodyfile="Render/Passes/ComputeDepthRange.hpp" bodystart="22" bodyend="70"/>
     <listofallmembers>
-      <member refid="d0/db2/a03822_1ad5db1be40b7fb695857dd9e36c1fcbff" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>add</name></member>
-      <member refid="d0/db2/a03822_1a752ae446e1a04e0bc407260458af0ab8" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>add</name></member>
-      <member refid="d0/db2/a03822_1a308156a2a8619c89a52f64b2c391efc3" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>add</name></member>
-      <member refid="d0/db2/a03822_1ae41f7406dafca84065a61cc27b6fc986" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>add</name></member>
-      <member refid="d0/db2/a03822_1aa632d31dbf2ec8449dc4ad022c2fac0c" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>add</name></member>
-      <member refid="d0/db2/a03822_1a0b812d32700f91d14897935f83d08015" prot="private" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>CU_DeclareTemplateMap</name></member>
-      <member refid="d0/db2/a03822_1a0a56400136af3687df2e576411636114" prot="private" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>CU_DeclareVector</name></member>
-      <member refid="d0/db2/a03822_1ad96af3a75d355cbb66a288d3c5776117" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>get</name></member>
-      <member refid="d0/db2/a03822_1ab2b2cb427182b47fde46cbbec82a2578" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>get</name></member>
-      <member refid="d0/db2/a03822_1a11ebc07545b4a4c273f4ee8f0c04d661" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>get</name></member>
-      <member refid="d0/db2/a03822_1ad29b8a638f6c203ca2198f6efebd990b" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>get</name></member>
-      <member refid="d0/db2/a03822_1ad57408a3beec0e65cac1ad1076c08e99" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>get</name></member>
-      <member refid="d0/db2/a03822_1a0b6c14c5ab579f8725c3f0588987eda9" prot="private" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>m_values</name></member>
-      <member refid="d0/db2/a03822_1a3c87031795661b1ec12983dc1c1599fd" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>ParametersT</name></member>
-      <member refid="d0/db2/a03822_1a96cb2145223019c28b190229001f6be5" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>parse</name></member>
-      <member refid="d0/db2/a03822_1a77dfeca82fa204f525df3fd314fbf9a9" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>set</name></member>
-      <member refid="d0/db2/a03822_1a788809b2719ae6bd194e186572157ccb" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>size</name></member>
-      <member refid="d0/db2/a03822_1a60463ea4c2817dcf8633e73a7f307b48" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>~ParametersT</name></member>
+      <member refid="d0/db2/a03822_1a9f1e44f3e194c0334de51d4960940ec4" prot="public" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>accept</name></member>
+      <member refid="d0/db2/a03822_1a9541371fc5b53aec2b0e0be97ec5f4fc" prot="public" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>Bindings</name></member>
+      <member refid="d0/db2/a03822_1a21cccffa3c9076a9d7f1299d7206acde" prot="public" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>ComputeDepthRange</name></member>
+      <member refid="d0/db2/a03822_1a122f8b80c1ebd0094d61284533e2fa48" prot="private" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>doGetPassIndex</name></member>
+      <member refid="d0/db2/a03822_1a036c2c5f6b59af3b4a423a11a48d8d60" prot="private" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>doGetSemaphoreWaitFlags</name></member>
+      <member refid="d0/db2/a03822_1a108f215087c503eaf1bc9511c46aee6d" prot="private" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>doInitialise</name></member>
+      <member refid="d0/db2/a03822_1adc69c38a23668b58848d9d7a60748111" prot="private" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>doIsComputePass</name></member>
+      <member refid="d0/db2/a03822_1a98a60c5c59aaec99343a915bc8fc7076" prot="private" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>doRecordInto</name></member>
+      <member refid="d0/db2/a03822_1a9541371fc5b53aec2b0e0be97ec5f4fcae095622c8c9700742d711f0392596d0d" prot="public" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>eInput</name></member>
+      <member refid="d0/db2/a03822_1a9541371fc5b53aec2b0e0be97ec5f4fca30fdc102e33a5457ba6f94289fadfa4f" prot="public" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>eOutput</name></member>
+      <member refid="d0/db2/a03822_1a715ef3513c13fd1092fcfb4bcb00ebff" prot="private" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>m_descriptorSet</name></member>
+      <member refid="d0/db2/a03822_1a653d11a6b86ba6efe141415ddc8ab349" prot="private" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>m_descriptorSetLayout</name></member>
+      <member refid="d0/db2/a03822_1a381e97bd1c638a05a6003dbbfb223740" prot="private" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>m_descriptorSetPool</name></member>
+      <member refid="d0/db2/a03822_1a4ff749577d9658e362acfb1c117e7b57" prot="private" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>m_device</name></member>
+      <member refid="d0/db2/a03822_1a681791c761ca484ebc1c0a9ec6519ede" prot="private" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>m_pipeline</name></member>
+      <member refid="d0/db2/a03822_1a2a558f58e99d794ffc7611081c743c7f" prot="private" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>m_pipelineLayout</name></member>
+      <member refid="d0/db2/a03822_1ab1bf2bcbc282ffef018f7523e12f9251" prot="private" virt="non-virtual"><scope>castor3d::ComputeDepthRange</scope><name>m_shader</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

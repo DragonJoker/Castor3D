@@ -1,72 +1,36 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="de/d41/a04734" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::DirectionalLightPass::Config</compoundname>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="de/d41/a04734" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SssProfileBuffer::SssProfileDataPtr</compoundname>
+    <includes local="no">SssProfileBuffer.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="de/d41/a04734_1a4331de25b6bc1fbecf49551b3a383f61" prot="public" static="no" mutable="no">
-        <type><ref refid="d3/d1e/a04766" kindref="compound">LightPass::Config</ref></type>
-        <definition>LightPass::Config castor3d::DirectionalLightPass::Config::base</definition>
+      <memberdef kind="variable" id="de/d41/a04734_1adb626454d387c63291614191d33efa8b" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/dea/a04726" kindref="compound">Data</ref> *</type>
+        <definition>Data* castor3d::SssProfileBuffer::SssProfileDataPtr::sssInfo</definition>
         <argsstring></argsstring>
-        <name>base</name>
+        <name>sssInfo</name>
+        <qualifiedname>castor3d::SssProfileBuffer::SssProfileDataPtr::sssInfo</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp" line="160" column="1" bodyfile="Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp" bodystart="160" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="43" column="7" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="43" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="de/d41/a04734_1a8870ac5d01d16988b845afa93482bedb" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::DirectionalLightPass::Config::direction</definition>
+      <memberdef kind="variable" id="de/d41/a04734_1a6cc38f085b0fac9df12dfebbee758a88" prot="public" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="d4/dea/a04726" kindref="compound">Data</ref>, 10u &gt; *</type>
+        <definition>std::array&lt; Data, 10u &gt;* castor3d::SssProfileBuffer::SssProfileDataPtr::transmittanceProfile</definition>
         <argsstring></argsstring>
-        <name>direction</name>
+        <name>transmittanceProfile</name>
+        <qualifiedname>castor3d::SssProfileBuffer::SssProfileDataPtr::transmittanceProfile</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp" line="161" column="1" bodyfile="Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp" bodystart="161" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/d41/a04734_1ac9a5c9441bb4c4f02193644231af545a" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::DirectionalLightPass::Config::splitDepths</definition>
-        <argsstring></argsstring>
-        <name>splitDepths</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp" line="162" column="1" bodyfile="Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp" bodystart="162" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/d41/a04734_1a9a78b5f762d8e405c4f559b5499755cf" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::DirectionalLightPass::Config::splitScales</definition>
-        <argsstring></argsstring>
-        <name>splitScales</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp" line="163" column="1" bodyfile="Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp" bodystart="163" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/d41/a04734_1ae1c7b4062d2b5916c5aa2b18dd0d4032" prot="public" static="no" mutable="no">
-        <type>std::array&lt; castor::Matrix4x4f, <ref refid="d8/d7b/a01478_1a1fcce99674136332281449dadf4505a9" kindref="member">shader::DirectionalMaxCascadesCount</ref> &gt;</type>
-        <definition>std::array&lt; castor::Matrix4x4f, shader::DirectionalMaxCascadesCount &gt; castor3d::DirectionalLightPass::Config::transform</definition>
-        <argsstring></argsstring>
-        <name>transform</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp" line="164" column="1" bodyfile="Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp" bodystart="164" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="44" column="13" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="44" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -74,42 +38,43 @@
     <detaileddescription>
     </detaileddescription>
     <collaborationgraph>
-      <node id="1030">
+      <node id="5">
         <label>T</label>
       </node>
-      <node id="1029">
+      <node id="3">
+        <label>std::array&lt; castor3d::SssProfileBuffer::Data, 10u &gt;</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; castor3d::SssProfileBuffer::Data, 10u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SssProfileBuffer::Data</label>
+        <link refid="d4/dea/a04726"/>
+      </node>
+      <node id="1">
+        <label>castor3d::SssProfileBuffer::SssProfileDataPtr</label>
+        <link refid="de/d41/a04734"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>sssInfo</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>transmittanceProfile</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
         <label>std::array&lt; T &gt;</label>
-        <childnode refid="1030" relation="usage">
+        <childnode refid="5" relation="usage">
           <edgelabel>elements</edgelabel>
         </childnode>
       </node>
-      <node id="1026">
-        <label>castor3d::DirectionalLightPass::Config</label>
-        <childnode refid="1027" relation="usage">
-          <edgelabel>base</edgelabel>
-        </childnode>
-        <childnode refid="1028" relation="usage">
-          <edgelabel>transform</edgelabel>
-        </childnode>
-      </node>
-      <node id="1028">
-        <label>std::array&lt; castor::Matrix4x4f, shader::DirectionalMaxCascadesCount &gt;</label>
-        <childnode refid="1029" relation="template-instance">
-          <edgelabel>&lt; castor::Matrix4x4f, shader::DirectionalMaxCascadesCount &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1027">
-        <label>castor3d::LightPass::Config</label>
-        <link refid="d3/d1e/a04766"/>
-      </node>
     </collaborationgraph>
-    <location file="Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp" line="159" column="1" bodyfile="Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp" bodystart="158" bodyend="165"/>
+    <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="41" column="1" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="42" bodyend="45"/>
     <listofallmembers>
-      <member refid="de/d41/a04734_1a4331de25b6bc1fbecf49551b3a383f61" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLightPass::Config</scope><name>base</name></member>
-      <member refid="de/d41/a04734_1a8870ac5d01d16988b845afa93482bedb" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLightPass::Config</scope><name>direction</name></member>
-      <member refid="de/d41/a04734_1ac9a5c9441bb4c4f02193644231af545a" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLightPass::Config</scope><name>splitDepths</name></member>
-      <member refid="de/d41/a04734_1a9a78b5f762d8e405c4f559b5499755cf" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLightPass::Config</scope><name>splitScales</name></member>
-      <member refid="de/d41/a04734_1ae1c7b4062d2b5916c5aa2b18dd0d4032" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLightPass::Config</scope><name>transform</name></member>
+      <member refid="de/d41/a04734_1adb626454d387c63291614191d33efa8b" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer::SssProfileDataPtr</scope><name>sssInfo</name></member>
+      <member refid="de/d41/a04734_1a6cc38f085b0fac9df12dfebbee758a88" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer::SssProfileDataPtr</scope><name>transmittanceProfile</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

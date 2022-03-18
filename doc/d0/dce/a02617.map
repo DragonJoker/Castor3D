@@ -1,6 +1,8 @@
-<map id="castor3d::MipView" name="castor3d::MipView">
-<area shape="rect" id="node1" title=" " alt="" coords="23,288,153,315"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,184,171,225"/>
-<area shape="rect" id="node3" title="STL class." alt="" coords="31,95,145,121"/>
-<area shape="rect" id="node4" title=" " alt="" coords="69,5,107,32"/>
+<map id="castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;" name="castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;">
+<area shape="rect" id="node1" title="BillboardList cache." alt="" coords="931,45,1133,101"/>
+<area shape="rect" id="node2" href="$d8/dab/a02638.html" title=" " alt="" coords="679,45,881,101"/>
+<area shape="rect" id="node3" title=" " alt="" coords="8,5,191,32"/>
+<area shape="rect" id="node5" href="$d8/dab/a02638.html" title=" " alt="" coords="253,53,439,94"/>
+<area shape="rect" id="node4" title=" " alt="" coords="243,119,449,175"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,61,193,102"/>
 </map>

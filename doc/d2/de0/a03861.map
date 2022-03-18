@@ -1,4 +1,7 @@
-<map id="castor3d::Cone" name="castor3d::Cone">
-<area shape="rect" id="node1" title=" " alt="" coords="35,80,145,107"/>
-<area shape="rect" id="node2" href="$d0/d0b/a03910.html" title=" " alt="" coords="5,5,175,32"/>
+<map id="castor3d::PickingPass" name="castor3d::PickingPass">
+<area shape="rect" id="node1" title=" " alt="" coords="193,155,346,181"/>
+<area shape="rect" id="node2" href="$dc/d64/a04058.html" title=" " alt="" coords="175,80,363,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,192,32"/>
+<area shape="rect" id="node4" title=" " alt="" coords="216,5,323,32"/>
+<area shape="rect" id="node5" title=" " alt="" coords="347,5,466,32"/>
 </map>

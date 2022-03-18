@@ -1,33 +1,46 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d8/deb/a02820" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkSamplerCreateInfo &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d8/deb/a02820_1a20c4ebb4085e3d30ffec19e8481cf691" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkSamplerCreateInfo &gt;::value</definition>
+    <compoundname>castor3d::PassVisitorBase::Config</compoundname>
+    <includes local="no">PassVisitor.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/deb/a02820_1a39d594ca0635247e1c7db34e37fcfb85" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::PassVisitorBase::Config::forceSubPassesVisit</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO</initializer>
+        <name>forceSubPassesVisit</name>
+        <qualifiedname>castor3d::PassVisitorBase::Config::forceSubPassesVisit</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="45" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="45" bodyend="-1"/>
+        <location file="Material/Pass/PassVisitor.hpp" line="21" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/deb/a02820_1ad77a396b7bfe98f0275397343ebb2761" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::PassVisitorBase::Config::forceMiplevelsVisit</definition>
+        <argsstring></argsstring>
+        <name>forceMiplevelsVisit</name>
+        <qualifiedname>castor3d::PassVisitorBase::Config::forceMiplevelsVisit</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="22" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="22" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="45" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="45" bodyend="45"/>
+    <location file="Material/Pass/PassVisitor.hpp" line="19" column="1" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="20" bodyend="23"/>
     <listofallmembers>
-      <member refid="d8/deb/a02820_1a20c4ebb4085e3d30ffec19e8481cf691" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkSamplerCreateInfo &gt;</scope><name>value</name></member>
+      <member refid="d8/deb/a02820_1ad77a396b7bfe98f0275397343ebb2761" prot="public" virt="non-virtual"><scope>castor3d::PassVisitorBase::Config</scope><name>forceMiplevelsVisit</name></member>
+      <member refid="d8/deb/a02820_1a39d594ca0635247e1c7db34e37fcfb85" prot="public" virt="non-virtual"><scope>castor3d::PassVisitorBase::Config</scope><name>forceSubPassesVisit</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

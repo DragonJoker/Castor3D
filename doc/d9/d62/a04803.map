@@ -1,6 +1,4 @@
-<map id="castor3d::PointLightPass" name="castor3d::PointLightPass">
-<area shape="rect" id="node1" title=" " alt="" coords="7,229,175,256"/>
-<area shape="rect" id="node2" href="$d8/dc6/a04796.html" title=" " alt="" coords="5,155,176,181"/>
-<area shape="rect" id="node3" href="$d8/dfa/a04756.html" title=" " alt="" coords="21,80,160,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="59,5,122,32"/>
+<map id="castor3d::shader::SssProfile" name="castor3d::shader::SssProfile">
+<area shape="rect" id="node1" title=" " alt="" coords="5,80,192,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="30,5,167,32"/>
 </map>

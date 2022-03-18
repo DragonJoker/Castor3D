@@ -1,5 +1,4 @@
-<map id="castor3d::RsmGIPass" name="castor3d::RsmGIPass">
-<area shape="rect" id="node1" title=" " alt="" coords="6,155,157,181"/>
-<area shape="rect" id="node2" href="$d2/d7a/a04384.html" title=" " alt="" coords="5,80,157,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="50,5,113,32"/>
+<map id="castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;" name="castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="5,80,188,121"/>
+<area shape="rect" id="node2" title=" " alt="" coords="28,5,165,32"/>
 </map>

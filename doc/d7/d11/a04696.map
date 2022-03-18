@@ -1,13 +1,9 @@
-<map id="castor3d::SsaoBlurPass" name="castor3d::SsaoBlurPass">
-<area shape="rect" id="node1" title=" " alt="" coords="1359,91,1521,118"/>
-<area shape="rect" id="node2" href="$d8/d1f/a04450.html" title=" " alt="" coords="1157,91,1309,118"/>
-<area shape="rect" id="node3" title=" " alt="" coords="940,41,1003,67"/>
-<area shape="rect" id="node4" href="$d1/d9a/a04618.html" title=" " alt="" coords="557,153,724,179"/>
-<area shape="rect" id="node6" href="$d8/d4c/a04506.html" title=" " alt="" coords="892,91,1051,118"/>
-<area shape="rect" id="node5" title=" " alt="" coords="149,153,336,179"/>
-<area shape="rect" id="node7" title=" " alt="" coords="579,5,703,47"/>
-<area shape="rect" id="node8" title="STL class." alt="" coords="189,15,297,42"/>
-<area shape="rect" id="node9" title=" " alt="" coords="5,43,44,70"/>
-<area shape="rect" id="node11" title="STL class." alt="" coords="186,73,299,99"/>
-<area shape="rect" id="node10" title=" " alt="" coords="569,71,713,112"/>
+<map id="castor3d::LightBuffer::LightData" name="castor3d::LightBuffer::LightData">
+<area shape="rect" id="node1" title=" " alt="" coords="5,585,147,627"/>
+<area shape="rect" id="node2" href="$d7/de4/a04674.html" title=" " alt="" coords="91,5,232,47"/>
+<area shape="rect" id="node3" href="$d3/d49/a04682.html" title=" " alt="" coords="145,481,287,523"/>
+<area shape="rect" id="node5" href="$d5/d2c/a04678.html" title=" " alt="" coords="200,153,341,195"/>
+<area shape="rect" id="node4" title=" " alt="" coords="354,361,537,403"/>
+<area shape="rect" id="node6" title=" " alt="" coords="391,161,499,187"/>
+<area shape="rect" id="node7" title=" " alt="" coords="426,13,465,39"/>
 </map>

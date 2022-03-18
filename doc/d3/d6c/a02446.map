@@ -1,4 +1,5 @@
-<map id="castor3d::Engine" name="castor3d::Engine">
-<area shape="rect" id="node1" title=" " alt="" coords="31,80,151,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,176,32"/>
+<map id="castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;" name="castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;">
+<area shape="rect" id="node1" title="SkeletonAnimationObject binary loader." alt="" coords="5,200,199,241"/>
+<area shape="rect" id="node2" href="$d5/d1b/a02331.html" title=" " alt="" coords="5,109,199,151"/>
+<area shape="rect" id="node3" href="$d5/d1b/a02331.html" title="Binary data chunk reader base class." alt="" coords="9,5,195,47"/>
 </map>

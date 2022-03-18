@@ -1,5 +1,5 @@
-<map id="castor3d::CacheBase&lt; ElementType, KeyType &gt;" name="castor3d::CacheBase&lt; ElementType, KeyType &gt;">
-<area shape="rect" id="node1" title="Base class for an element cache." alt="" coords="5,171,187,212"/>
-<area shape="rect" id="node2" href="$dc/dbb/a02520.html" title=" " alt="" coords="36,81,156,108"/>
-<area shape="rect" id="node3" title=" " alt="" coords="11,5,181,32"/>
+<map id="castor3d::BinaryParser&lt; SceneNodeAnimationKeyFrame &gt;" name="castor3d::BinaryParser&lt; SceneNodeAnimationKeyFrame &gt;">
+<area shape="rect" id="node1" title="SceneNodeAnimationKeyFrame binary loader." alt="" coords="5,200,236,241"/>
+<area shape="rect" id="node2" href="$d5/d1b/a02331.html" title=" " alt="" coords="5,109,236,151"/>
+<area shape="rect" id="node3" href="$d5/d1b/a02331.html" title="Binary data chunk reader base class." alt="" coords="28,5,213,47"/>
 </map>

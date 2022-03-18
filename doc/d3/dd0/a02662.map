@@ -1,11 +1,8 @@
-<map id="castor3d::TextureUnit" name="castor3d::TextureUnit">
-<area shape="rect" id="node1" title=" " alt="" coords="1296,64,1443,91"/>
-<area shape="rect" id="node2" href="$d7/db2/a02036.html" title=" " alt="" coords="1105,57,1247,98"/>
-<area shape="rect" id="node3" title=" " alt="" coords="801,5,988,32"/>
-<area shape="rect" id="node4" title=" " alt="" coords="491,110,657,151"/>
-<area shape="rect" id="node8" href="$d7/db2/a02036.html" title="Animable public interface." alt="" coords="823,57,967,98"/>
-<area shape="rect" id="node5" title="STL class." alt="" coords="149,117,271,144"/>
-<area shape="rect" id="node6" title=" " alt="" coords="5,92,44,119"/>
-<area shape="rect" id="node7" title=" " alt="" coords="5,143,44,169"/>
-<area shape="rect" id="node9" title=" " alt="" coords="480,38,668,79"/>
+<map id="castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;" name="castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;">
+<area shape="rect" id="node1" title="Light cache." alt="" coords="848,45,1011,101"/>
+<area shape="rect" id="node2" href="$d9/d07/a02635.html" title=" " alt="" coords="613,45,799,101"/>
+<area shape="rect" id="node3" title=" " alt="" coords="8,5,191,32"/>
+<area shape="rect" id="node5" href="$d9/d07/a02635.html" title=" " alt="" coords="244,53,429,94"/>
+<area shape="rect" id="node4" title=" " alt="" coords="243,119,431,175"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,61,193,102"/>
 </map>

@@ -1,4 +1,15 @@
-<map id="castor3d::RenderQueue" name="castor3d::RenderQueue">
-<area shape="rect" id="node1" title=" " alt="" coords="32,95,191,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,217,47"/>
+<map id="castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;" name="castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="5,197,192,238"/>
+<area shape="rect" id="node2" href="$de/d22/a04619.html" title=" " alt="" coords="414,5,601,61"/>
+<area shape="rect" id="node4" href="$de/d22/a04619.html" title=" " alt="" coords="400,86,615,127"/>
+<area shape="rect" id="node6" href="$de/d22/a04619.html" title=" " alt="" coords="414,152,601,208"/>
+<area shape="rect" id="node8" href="$de/d22/a04619.html" title=" " alt="" coords="409,233,606,274"/>
+<area shape="rect" id="node10" href="$de/d22/a04619.html" title=" " alt="" coords="405,299,609,355"/>
+<area shape="rect" id="node12" href="$de/d22/a04619.html" title=" " alt="" coords="414,379,601,435"/>
+<area shape="rect" id="node3" href="$df/d53/a04623.html" title=" " alt="" coords="674,5,861,61"/>
+<area shape="rect" id="node5" href="$d8/da0/a04627.html" title=" " alt="" coords="674,86,861,127"/>
+<area shape="rect" id="node7" href="$de/d65/a04631.html" title=" " alt="" coords="669,159,865,201"/>
+<area shape="rect" id="node9" href="$dc/da4/a04515.html" title=" " alt="" coords="674,233,861,274"/>
+<area shape="rect" id="node11" href="$d1/d48/a04575.html" title=" " alt="" coords="674,299,861,355"/>
+<area shape="rect" id="node13" href="$d5/d6d/a04635.html" title=" " alt="" coords="664,386,871,427"/>
 </map>

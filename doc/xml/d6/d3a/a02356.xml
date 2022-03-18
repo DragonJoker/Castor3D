@@ -1,220 +1,113 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d6/d3a/a02356" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::MeshPoolsEntry</compoundname>
-    <includes local="no">AnimatedObjectGroupCache.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d6/d3a/a02356_1a47531d748fa0cc67f1e366fcb559b6d4" prot="public" static="no" mutable="no">
-        <type><ref refid="d1/dc4/a05052" kindref="compound">AnimatedObjectGroup</ref> const  &amp;</type>
-        <definition>AnimatedObjectGroup const&amp; castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::MeshPoolsEntry::group</definition>
-        <argsstring></argsstring>
-        <name>group</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d6/d3a/a02356" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BinaryWriter&lt; SceneNodeAnimation &gt;</compoundname>
+    <basecompoundref refid="d3/d9c/a02336" prot="public" virt="non-virtual">castor3d::BinaryWriterBase&lt; SceneNodeAnimation &gt;</basecompoundref>
+    <includes local="no">BinarySceneNodeAnimation.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d6/d3a/a02356_1a79129ffffa96604b92951be6ad8d7973" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BinaryWriter&lt; SceneNodeAnimation &gt;::doWrite</definition>
+        <argsstring>(SceneNodeAnimation const &amp;obj) override</argsstring>
+        <name>doWrite</name>
+        <qualifiedname>castor3d::BinaryWriter&lt; SceneNodeAnimation &gt;::doWrite</qualifiedname>
+        <reimplements refid="d3/d9c/a02336_1a720ab792b3e53c6556c3cb4e5b0e2d06">doWrite</reimplements>
+        <param>
+          <type><ref refid="db/daf/a04412" kindref="compound">SceneNodeAnimation</ref> const &amp;</type>
+          <declname>obj</declname>
+        </param>
         <briefdescription>
+<para>Function used to fill the chunk from specific data. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to write. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="38" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="38" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d6/d3a/a02356_1ac3d4c4a4f5c1bd9ea0f0a8c819e21bb8" prot="public" static="no" mutable="no">
-        <type><ref refid="db/df9/a05044" kindref="compound">AnimatedMesh</ref> const  &amp;</type>
-        <definition>AnimatedMesh const&amp; castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::MeshPoolsEntry::mesh</definition>
-        <argsstring></argsstring>
-        <name>mesh</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="39" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="39" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d6/d3a/a02356_1a1361e30f1f32f7971a0571b72b56b4d4" prot="public" static="no" mutable="no">
-        <type><ref refid="d1/d47/a02300" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="dd/d8d/a05592" kindref="compound">MorphingUboConfiguration</ref> &gt;</type>
-        <definition>UniformBufferOffsetT&lt; MorphingUboConfiguration &gt; castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::MeshPoolsEntry::morphingUbo</definition>
-        <argsstring></argsstring>
-        <name>morphingUbo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="40" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="40" bodyend="-1"/>
+        <location file="Binary/BinarySceneNodeAnimation.hpp" line="48" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para><ref refid="db/daf/a04412" kindref="compound">SceneNodeAnimation</ref> binary loader. </para>
     </briefdescription>
     <detaileddescription>
+<para>Loader binaire de <ref refid="db/daf/a04412" kindref="compound">SceneNodeAnimation</ref>. </para>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="532">
-        <label>castor3d::Mesh</label>
-        <link refid="dc/dce/a03908"/>
-        <childnode refid="533" relation="public-inheritance">
-        </childnode>
-        <childnode refid="534" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="536">
-        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
-        <childnode refid="537" relation="template-instance">
-          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::BinaryWriterBase&lt; SceneNodeAnimation &gt;</label>
+        <link refid="d3/d9c/a02336"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; SceneNodeAnimation &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="538">
-        <label>K</label>
-      </node>
-      <node id="539">
-        <label>T</label>
-      </node>
-      <node id="540">
-        <label>castor3d::Geometry</label>
-        <link refid="df/df0/a05160"/>
-        <childnode refid="541" relation="public-inheritance">
-        </childnode>
-        <childnode refid="548" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="542">
-        <label>castor3d::SceneNode</label>
-        <link refid="da/d44/a05256"/>
-        <childnode refid="543" relation="public-inheritance">
-        </childnode>
-        <childnode refid="544" relation="public-inheritance">
-        </childnode>
-        <childnode refid="531" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="544">
-        <label>castor::OwnedBy&lt; Scene &gt;</label>
-      </node>
-      <node id="537">
-        <label>std::map&lt; K, T &gt;</label>
-        <childnode refid="538" relation="usage">
-          <edgelabel>keys</edgelabel>
-        </childnode>
-        <childnode refid="539" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="528">
-        <label>castor3d::UniformBufferOffsetT&lt; DataT &gt;</label>
-        <link refid="d1/d47/a02300"/>
-      </node>
-      <node id="543">
-        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
-      </node>
-      <node id="533">
-        <label>castor::Resource&lt; Mesh &gt;</label>
-      </node>
-      <node id="541">
-        <label>castor3d::MovableObject</label>
-        <link refid="d9/d4a/a05192"/>
-        <childnode refid="534" relation="public-inheritance">
-        </childnode>
-        <childnode refid="531" relation="public-inheritance">
-        </childnode>
-        <childnode refid="542" relation="usage">
-          <edgelabel>m_sceneNode</edgelabel>
-        </childnode>
-        <childnode refid="545" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-      </node>
-      <node id="531">
-        <label>Named</label>
-      </node>
-      <node id="548">
-        <label>castor3d::RenderedObject</label>
-        <link refid="d5/d47/a05240"/>
-        <childnode refid="549" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="526">
-        <label>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::MeshPoolsEntry</label>
+      <node id="1">
+        <label>castor3d::BinaryWriter&lt; SceneNodeAnimation &gt;</label>
         <link refid="d6/d3a/a02356"/>
-        <childnode refid="527" relation="usage">
-          <edgelabel>morphingUbo</edgelabel>
-        </childnode>
-        <childnode refid="529" relation="usage">
-          <edgelabel>mesh</edgelabel>
-        </childnode>
-        <childnode refid="550" relation="usage">
-          <edgelabel>group</edgelabel>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="530">
-        <label>castor3d::AnimatedObject</label>
-        <link refid="d0/d8b/a05048"/>
-        <childnode refid="531" relation="public-inheritance">
+      <node id="3">
+        <label>castor3d::BinaryWriterBase&lt; TWritten &gt;</label>
+        <link refid="d3/d9c/a02336"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::BinaryWriterBase&lt; SceneNodeAnimation &gt;</label>
+        <link refid="d3/d9c/a02336"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; SceneNodeAnimation &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="550">
-        <label>castor3d::AnimatedObjectGroup</label>
-        <link refid="d1/dc4/a05052"/>
-        <childnode refid="531" relation="public-inheritance">
-        </childnode>
-        <childnode refid="544" relation="public-inheritance">
+      <node id="3">
+        <label>castor3d::BinaryChunk</label>
+        <link refid="dc/d1a/a02288"/>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryWriter&lt; SceneNodeAnimation &gt;</label>
+        <link refid="d6/d3a/a02356"/>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="546">
-        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
-      </node>
-      <node id="534">
-        <label>Animable</label>
-        <link refid="d7/db2/a02036"/>
-        <childnode refid="535" relation="public-inheritance">
-        </childnode>
-        <childnode refid="536" relation="usage">
-          <edgelabel>m_animations</edgelabel>
-        </childnode>
-      </node>
-      <node id="535">
-        <label>castor::OwnedBy&lt; AnimableHanlerT &gt;</label>
-      </node>
-      <node id="547">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="527">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::MorphingUboConfiguration &gt;</label>
-        <link refid="d1/d47/a02300"/>
-        <childnode refid="528" relation="template-instance">
-          <edgelabel>&lt; castor3d::MorphingUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="529">
-        <label>castor3d::AnimatedMesh</label>
-        <link refid="db/df9/a05044"/>
-        <childnode refid="530" relation="public-inheritance">
-        </childnode>
-        <childnode refid="532" relation="usage">
-          <edgelabel>m_mesh</edgelabel>
-        </childnode>
-        <childnode refid="540" relation="usage">
-          <edgelabel>m_geometry</edgelabel>
-        </childnode>
-      </node>
-      <node id="549">
-        <label>std::enable_shared_from_this&lt; RenderedObject &gt;</label>
-      </node>
-      <node id="545">
-        <label>castor3d::Scene</label>
-        <link refid="d5/d76/a05244"/>
-        <childnode refid="546" relation="public-inheritance">
-        </childnode>
-        <childnode refid="547" relation="public-inheritance">
-        </childnode>
-        <childnode refid="531" relation="public-inheritance">
+      <node id="4">
+        <label>castor3d::BinaryWriterBase&lt; TWritten &gt;</label>
+        <link refid="d3/d9c/a02336"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Cache/AnimatedObjectGroupCache.hpp" line="37" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="36" bodyend="41"/>
+    <location file="Binary/BinarySceneNodeAnimation.hpp" line="34" column="1" bodyfile="Binary/BinarySceneNodeAnimation.hpp" bodystart="36" bodyend="49"/>
     <listofallmembers>
-      <member refid="d6/d3a/a02356_1a47531d748fa0cc67f1e366fcb559b6d4" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::MeshPoolsEntry</scope><name>group</name></member>
-      <member refid="d6/d3a/a02356_1ac3d4c4a4f5c1bd9ea0f0a8c819e21bb8" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::MeshPoolsEntry</scope><name>mesh</name></member>
-      <member refid="d6/d3a/a02356_1a1361e30f1f32f7971a0571b72b56b4d4" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::MeshPoolsEntry</scope><name>morphingUbo</name></member>
+      <member refid="d6/d3a/a02356_1a79129ffffa96604b92951be6ad8d7973" prot="private" virt="virtual"><scope>castor3d::BinaryWriter&lt; SceneNodeAnimation &gt;</scope><name>doWrite</name></member>
+      <member refid="d3/d9c/a02336_1a95685db95521fe46169767620976688c" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SceneNodeAnimation &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d3/d9c/a02336_1ac978d1019caf2d37ad181911c78dde33" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SceneNodeAnimation &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d3/d9c/a02336_1a5eef4da7e3bbce50e00c878bd7b32516" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SceneNodeAnimation &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d3/d9c/a02336_1a5b782961d4526354e5d0e84e78c6bbbb" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SceneNodeAnimation &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d3/d9c/a02336_1a3bd1cb047e1f2872668a4397496bd7c4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SceneNodeAnimation &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d3/d9c/a02336_1a7bdb655caf767fdde8a4267602e06191" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SceneNodeAnimation &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d3/d9c/a02336_1a8828d359b7a61ea2b657d5aada2dd87b" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SceneNodeAnimation &gt;</scope><name>doWriteHeader</name></member>
+      <member refid="d3/d9c/a02336_1ad6c66bdde51dd57ab2b27f4ddc8db513" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SceneNodeAnimation &gt;</scope><name>m_chunk</name></member>
+      <member refid="d3/d9c/a02336_1a21e7985d2f99ff20a6056d198aac07c5" prot="public" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SceneNodeAnimation &gt;</scope><name>write</name></member>
+      <member refid="d3/d9c/a02336_1a3b4ae75e6ecd0bdf9f5dc26381633dab" prot="public" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SceneNodeAnimation &gt;</scope><name>write</name></member>
+      <member refid="d3/d9c/a02336_1a455d885b04ddaed4d650461bbef1711c" prot="public" virt="virtual"><scope>castor3d::BinaryWriter&lt; SceneNodeAnimation &gt;</scope><name>~BinaryWriterBase</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

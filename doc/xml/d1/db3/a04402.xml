@@ -1,879 +1,166 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d1/db3/a04402" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::LineariseDepthPass</compoundname>
-    <includes local="no">LineariseDepthPass.hpp</includes>
-    <innerclass refid="d4/d61/a04406" prot="private">castor3d::LineariseDepthPass::Layout</innerclass>
-    <innerclass refid="d7/d20/a04410" prot="private">castor3d::LineariseDepthPass::MinifyConfiguration</innerclass>
-    <innerclass refid="da/d48/a04414" prot="private">castor3d::LineariseDepthPass::MinifyPipeline</innerclass>
-      <sectiondef kind="user-defined">
-      <memberdef kind="function" id="d1/db3/a04402_1a323271b56eb451dc8068f7fc15ab02d2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="df/d14/a02658" kindref="compound">TextureUnit</ref> const  &amp;</type>
-        <definition>TextureUnit const&amp; castor3d::LineariseDepthPass::getResult</definition>
-        <argsstring>() const</argsstring>
-        <name>getResult</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>name Getters. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="121" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="121" bodyend="124"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/db3/a04402_1a5aca56986de95edd785d4c2022f320f6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::CommandBuffer const  &amp;</type>
-        <definition>ashes::CommandBuffer const&amp; castor3d::LineariseDepthPass::getCommands</definition>
-        <argsstring>() const</argsstring>
-        <name>getCommands</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="126" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="126" bodyend="129"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="user-defined">
-      <memberdef kind="variable" id="d1/db3/a04402_1a434728e9e625b4c34d0be342e06cf5d8" prot="private" static="no" mutable="no">
-        <type><ref refid="d2/d63/a05306" kindref="compound">ShaderModule</ref></type>
-        <definition>ShaderModule castor3d::LineariseDepthPass::m_lineariseVertexShader</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d1/db3/a04402" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</compoundname>
+    <basecompoundref refid="dc/ddf/a02622" prot="public" virt="non-virtual">castor3d::PtrCacheTraitsBaseT&lt; AnimatedObjectGroup, castor::String &gt;</basecompoundref>
+    <includes local="no">AnimationModule.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d1/db3/a04402_1ac5bce022e53c3362542b0482e8d253fb" prot="public" static="no">
+        <type><ref refid="db/dc9/a04378" kindref="compound">AnimatedObjectGroup</ref></type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::ResT =  AnimatedObjectGroup</definition>
         <argsstring></argsstring>
-        <name>m_lineariseVertexShader</name>
+        <name>ResT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::ResT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>name Linearisation. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="177" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="177" bodyend="-1"/>
+        <location file="Scene/Animation/AnimationModule.hpp" line="161" column="1" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="161" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/db3/a04402_1a4df0fec0c9d063fc58ea8b965d9d88f3" prot="private" static="no" mutable="no">
-        <type><ref refid="d2/d63/a05306" kindref="compound">ShaderModule</ref></type>
-        <definition>ShaderModule castor3d::LineariseDepthPass::m_linearisePixelShader</definition>
+      <memberdef kind="typedef" id="d1/db3/a04402_1ac566e1574a124f6ea278632f940bf1f5" prot="public" static="no">
+        <type>castor::String</type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::KeyT =  castor::String</definition>
         <argsstring></argsstring>
-        <name>m_linearisePixelShader</name>
+        <name>KeyT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::KeyT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="178" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="178" bodyend="-1"/>
+        <location file="Scene/Animation/AnimationModule.hpp" line="162" column="1" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="162" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/db3/a04402_1a1e6763219103fe5ff10da6d6f36aeefb" prot="private" static="no" mutable="no">
-        <type>ashes::ImageView</type>
-        <definition>ashes::ImageView castor3d::LineariseDepthPass::m_linearisedView</definition>
+      <memberdef kind="typedef" id="d1/db3/a04402_1af211257f2e4b8c8c03375bbd2f7636c7" prot="public" static="no">
+        <type><ref refid="dc/ddf/a02622" kindref="compound">PtrCacheTraitsBaseT</ref>&lt; <ref refid="d1/db3/a04402_1ac5bce022e53c3362542b0482e8d253fb" kindref="member">ResT</ref>, <ref refid="d1/db3/a04402_1ac566e1574a124f6ea278632f940bf1f5" kindref="member">KeyT</ref> &gt;</type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::Base =  PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;</definition>
         <argsstring></argsstring>
-        <name>m_linearisedView</name>
+        <name>Base</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::Base</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="179" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="179" bodyend="-1"/>
+        <location file="Scene/Animation/AnimationModule.hpp" line="163" column="1" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="163" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/db3/a04402_1a3455f3914e87339be09cd5895f26aa52" prot="private" static="no" mutable="no">
-        <type>Layout</type>
-        <definition>Layout castor3d::LineariseDepthPass::m_lineariseLayout</definition>
+      <memberdef kind="typedef" id="d1/db3/a04402_1a9b57ef555b360858b24d4d0d87a5cc1a" prot="public" static="no">
+        <type>typename <ref refid="dc/ddf/a02622_1a97fc821a6c93a6497ce29ef7ee81d091" kindref="member">Base::ElementT</ref></type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::ElementT =  typename Base::ElementT</definition>
         <argsstring></argsstring>
-        <name>m_lineariseLayout</name>
+        <name>ElementT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::ElementT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="180" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="180" bodyend="-1"/>
+        <location file="Scene/Animation/AnimationModule.hpp" line="164" column="1" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="164" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/db3/a04402_1a960ab68d899a82e11faabfc130f4f576" prot="private" static="no" mutable="no">
-        <type>ashes::DescriptorSetPtr</type>
-        <definition>ashes::DescriptorSetPtr castor3d::LineariseDepthPass::m_lineariseDescriptor</definition>
+      <memberdef kind="typedef" id="d1/db3/a04402_1a0176a33900149da04187a86225e7f429" prot="public" static="no">
+        <type>typename <ref refid="dc/ddf/a02622_1a1bb78b2e2efba448f1bab3f5714b9943" kindref="member">Base::ElementPtrT</ref></type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::ElementPtrT =  typename Base::ElementPtrT</definition>
         <argsstring></argsstring>
-        <name>m_lineariseDescriptor</name>
+        <name>ElementPtrT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::ElementPtrT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="181" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="181" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/db3/a04402_1a7aa79d9e8019b0897a6260f0bb3998a1" prot="private" static="no" mutable="no">
-        <type>ashes::FrameBufferPtr</type>
-        <definition>ashes::FrameBufferPtr castor3d::LineariseDepthPass::m_lineariseFrameBuffer</definition>
-        <argsstring></argsstring>
-        <name>m_lineariseFrameBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="182" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="182" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/db3/a04402_1a16e864aee4085abbe1a586c6650c87d6" prot="private" static="no" mutable="no">
-        <type>ashes::GraphicsPipelinePtr</type>
-        <definition>ashes::GraphicsPipelinePtr castor3d::LineariseDepthPass::m_linearisePipeline</definition>
-        <argsstring></argsstring>
-        <name>m_linearisePipeline</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="183" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="183" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/db3/a04402_1a9524781339a577519e4a13fcb3fd3d2b" prot="private" static="no" mutable="no">
-        <type><ref refid="dd/dae/a02294" kindref="compound">UniformBufferOffsetT</ref>&lt; castor::Point3f &gt;</type>
-        <definition>UniformBufferOffsetT&lt; castor::Point3f &gt; castor3d::LineariseDepthPass::m_clipInfo</definition>
-        <argsstring></argsstring>
-        <name>m_clipInfo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="184" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="184" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/db3/a04402_1a6e166a13bd7dbbadf4e5677458bdcc87" prot="private" static="no" mutable="no">
-        <type>castor::ChangeTracked&lt; castor::Point3f &gt;</type>
-        <definition>castor::ChangeTracked&lt; castor::Point3f &gt; castor3d::LineariseDepthPass::m_clipInfoValue</definition>
-        <argsstring></argsstring>
-        <name>m_clipInfoValue</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="185" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="185" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="user-defined">
-      <memberdef kind="variable" id="d1/db3/a04402_1abd439a979db838e9d0603325312a7392" prot="private" static="no" mutable="no">
-        <type>std::vector&lt; <ref refid="dd/dae/a02294" kindref="compound">UniformBufferOffsetT</ref>&lt; MinifyConfiguration &gt; &gt;</type>
-        <definition>std::vector&lt; UniformBufferOffsetT&lt; MinifyConfiguration &gt; &gt; castor3d::LineariseDepthPass::m_previousLevel</definition>
-        <argsstring></argsstring>
-        <name>m_previousLevel</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="206" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="206" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/db3/a04402_1a363770e978adcc76772bb67d50f9a156" prot="private" static="no" mutable="no">
-        <type><ref refid="d2/d63/a05306" kindref="compound">ShaderModule</ref></type>
-        <definition>ShaderModule castor3d::LineariseDepthPass::m_minifyVertexShader</definition>
-        <argsstring></argsstring>
-        <name>m_minifyVertexShader</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="207" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="207" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/db3/a04402_1ae3836179c89f310fb843661aa154aa10" prot="private" static="no" mutable="no">
-        <type><ref refid="d2/d63/a05306" kindref="compound">ShaderModule</ref></type>
-        <definition>ShaderModule castor3d::LineariseDepthPass::m_minifyPixelShader</definition>
-        <argsstring></argsstring>
-        <name>m_minifyPixelShader</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="208" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="208" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/db3/a04402_1abb36a645ce20218774f61bc4c5514934" prot="private" static="no" mutable="no">
-        <type>Layout</type>
-        <definition>Layout castor3d::LineariseDepthPass::m_minifyLayout</definition>
-        <argsstring></argsstring>
-        <name>m_minifyLayout</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="209" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="209" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/db3/a04402_1a93122e5424c35a757ca52a10d94c84ec" prot="private" static="no" mutable="no">
-        <type>std::array&lt; MinifyPipeline, <ref refid="d1/db3/a04402_1a46cae55e5cf6add6dc3c62a8c14efb44" kindref="member">MaxMipLevel</ref> &gt;</type>
-        <definition>std::array&lt; MinifyPipeline, MaxMipLevel &gt; castor3d::LineariseDepthPass::m_minifyPipelines</definition>
-        <argsstring></argsstring>
-        <name>m_minifyPipelines</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="210" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="210" bodyend="-1"/>
+        <location file="Scene/Animation/AnimationModule.hpp" line="165" column="1" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="165" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d1/db3/a04402_1a46cae55e5cf6add6dc3c62a8c14efb44" prot="public" static="yes" mutable="no">
-        <type>constexpr uint32_t</type>
-        <definition>constexpr uint32_t castor3d::LineariseDepthPass::MaxMipLevel</definition>
+      <memberdef kind="variable" id="d1/db3/a04402_1adec95b034d1c404e93ba33cf68b5db11" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <definition>C3D_API const castor::String castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::Name</definition>
         <argsstring></argsstring>
-        <name>MaxMipLevel</name>
-        <initializer>= 5u</initializer>
+        <name>Name</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::Name</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="142" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="142" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d1/db3/a04402_1ae2899806e518518d8c1b7a9fae047bde" prot="private" static="no" mutable="no">
-        <type><ref refid="df/d9b/a02514" kindref="compound">Engine</ref> &amp;</type>
-        <definition>Engine&amp; castor3d::LineariseDepthPass::m_engine</definition>
-        <argsstring></argsstring>
-        <name>m_engine</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="145" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="145" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/db3/a04402_1a14272cbff4d0e90c7c8d1db34c4e6d82" prot="private" static="no" mutable="no">
-        <type>ashes::ImageView const  &amp;</type>
-        <definition>ashes::ImageView const&amp; castor3d::LineariseDepthPass::m_srcDepthBuffer</definition>
-        <argsstring></argsstring>
-        <name>m_srcDepthBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="146" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="146" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/db3/a04402_1a30f81c13bb5733798bfa10fcc3403e56" prot="private" static="no" mutable="no">
-        <type>ashes::ImageView</type>
-        <definition>ashes::ImageView castor3d::LineariseDepthPass::m_depthBuffer</definition>
-        <argsstring></argsstring>
-        <name>m_depthBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="147" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="147" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/db3/a04402_1ab1a8af79a30892a31c64e77de8483065" prot="private" static="no" mutable="no">
-        <type>castor::String</type>
-        <definition>castor::String castor3d::LineariseDepthPass::m_prefix</definition>
-        <argsstring></argsstring>
-        <name>m_prefix</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="148" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="148" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/db3/a04402_1aa04f913d4b4de65d84276eee8037ac07" prot="private" static="no" mutable="no">
-        <type>VkExtent2D</type>
-        <definition>VkExtent2D castor3d::LineariseDepthPass::m_size</definition>
-        <argsstring></argsstring>
-        <name>m_size</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="149" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="149" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/db3/a04402_1ad74eafaff1525c45f3a37c2bb52922a8" prot="private" static="no" mutable="no">
-        <type><ref refid="df/d14/a02658" kindref="compound">TextureUnit</ref></type>
-        <definition>TextureUnit castor3d::LineariseDepthPass::m_result</definition>
-        <argsstring></argsstring>
-        <name>m_result</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="150" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="150" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/db3/a04402_1ababf29be38f360c28411426e6ec26d23" prot="private" static="no" mutable="no">
-        <type>RenderPassTimerSPtr</type>
-        <definition>RenderPassTimerSPtr castor3d::LineariseDepthPass::m_timer</definition>
-        <argsstring></argsstring>
-        <name>m_timer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="151" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="151" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/db3/a04402_1a92ea218be5a66345dda7f1c9e0d199f9" prot="private" static="no" mutable="no">
-        <type>ashes::RenderPassPtr</type>
-        <definition>ashes::RenderPassPtr castor3d::LineariseDepthPass::m_renderPass</definition>
-        <argsstring></argsstring>
-        <name>m_renderPass</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="152" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="152" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/db3/a04402_1a4ea74bea2bf51ec5f6dc4ce2cd977adf" prot="private" static="no" mutable="no">
-        <type>ashes::VertexBufferPtr&lt; <ref refid="df/de9/a04534" kindref="compound">NonTexturedQuad</ref> &gt;</type>
-        <definition>ashes::VertexBufferPtr&lt; NonTexturedQuad &gt; castor3d::LineariseDepthPass::m_vertexBuffer</definition>
-        <argsstring></argsstring>
-        <name>m_vertexBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="153" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="153" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/db3/a04402_1a62980f6da5b91a877cbc28b1f10147cb" prot="private" static="no" mutable="no">
-        <type>ashes::PipelineVertexInputStateCreateInfoPtr</type>
-        <definition>ashes::PipelineVertexInputStateCreateInfoPtr castor3d::LineariseDepthPass::m_vertexLayout</definition>
-        <argsstring></argsstring>
-        <name>m_vertexLayout</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="154" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="154" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/db3/a04402_1a7c9650f87f0081e646d6bbc4837f9a3f" prot="private" static="no" mutable="no">
-        <type>ashes::SamplerPtr</type>
-        <definition>ashes::SamplerPtr castor3d::LineariseDepthPass::m_lineariseSampler</definition>
-        <argsstring></argsstring>
-        <name>m_lineariseSampler</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="155" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="155" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/db3/a04402_1a25e48ac34f055d316a68e065699b25bd" prot="private" static="no" mutable="no">
-        <type>ashes::SamplerPtr</type>
-        <definition>ashes::SamplerPtr castor3d::LineariseDepthPass::m_minifySampler</definition>
-        <argsstring></argsstring>
-        <name>m_minifySampler</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="156" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="156" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/db3/a04402_1a59ae29d7b3fa107d0a1a84d88838f6c4" prot="private" static="no" mutable="no">
-        <type>ashes::CommandBufferPtr</type>
-        <definition>ashes::CommandBufferPtr castor3d::LineariseDepthPass::m_commandBuffer</definition>
-        <argsstring></argsstring>
-        <name>m_commandBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="157" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="157" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/db3/a04402_1acb14be54689fe865506e0241ce2e723c" prot="private" static="no" mutable="no">
-        <type>ashes::SemaphorePtr</type>
-        <definition>ashes::SemaphorePtr castor3d::LineariseDepthPass::m_finished</definition>
-        <argsstring></argsstring>
-        <name>m_finished</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="158" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="158" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/db3/a04402_1a92b8f2593c6238e9893a041694a9e821" prot="private" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::LineariseDepthPass::m_initialised</definition>
-        <argsstring></argsstring>
-        <name>m_initialised</name>
-        <initializer>{ false }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="159" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="159" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d1/db3/a04402_1a43dfd264204dd2935be86da26acb5c5a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::LineariseDepthPass::LineariseDepthPass</definition>
-        <argsstring>(Engine &amp;engine, castor::String const &amp;prefix, castor::Size const &amp;size, ashes::ImageView const &amp;depthBuffer)</argsstring>
-        <name>LineariseDepthPass</name>
-        <param>
-          <type><ref refid="df/d9b/a02514" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
-        </param>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>prefix</declname>
-        </param>
-        <param>
-          <type>castor::Size const &amp;</type>
-          <declname>size</declname>
-        </param>
-        <param>
-          <type>ashes::ImageView const &amp;</type>
-          <declname>depthBuffer</declname>
-        </param>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">engine</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The engine. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">prefix</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pass name&apos;s prefix. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">size</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render area dimensions. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">depthBuffer</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The non linearised depth buffer. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="50" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/db3/a04402_1a4ac824e0cbb3f864b057f4b3952213e1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::LineariseDepthPass::~LineariseDepthPass</definition>
-        <argsstring>()=default</argsstring>
-        <name>~LineariseDepthPass</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="60" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/db3/a04402_1a091a4b683e2a7d011c2ef47a554e5af9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::LineariseDepthPass::initialise</definition>
-        <argsstring>(RenderDevice const &amp;device)</argsstring>
-        <name>initialise</name>
-        <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="61" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/db3/a04402_1ad60ada8c7c0965a970470547443874d2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::LineariseDepthPass::cleanup</definition>
-        <argsstring>(RenderDevice const &amp;device)</argsstring>
-        <name>cleanup</name>
-        <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="62" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/db3/a04402_1a90db6e0d9737e7f62101fd7ed3fd0339" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::LineariseDepthPass::update</definition>
-        <argsstring>(CpuUpdater &amp;updater)</argsstring>
-        <name>update</name>
-        <param>
-          <type><ref refid="d5/d03/a04582" kindref="compound">CpuUpdater</ref> &amp;</type>
-          <declname>updater</declname>
-        </param>
-        <briefdescription>
-<para>Updates the render pass, CPU wise. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="inout">updater</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The update data. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="71" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/db3/a04402_1aac254d534d6e5dd6c05f923fc31fd3f0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::LineariseDepthPass::update</definition>
-        <argsstring>(GpuUpdater &amp;updater)</argsstring>
-        <name>update</name>
-        <param>
-          <type><ref refid="df/dd7/a04586" kindref="compound">GpuUpdater</ref> &amp;</type>
-          <declname>updater</declname>
-        </param>
-        <briefdescription>
-<para>Updates the render pass, GPU wise. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="inout">updater</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The update data. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="80" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/db3/a04402_1ac13c0d980df8b4c6b419a943360a62b2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Semaphore const  &amp;</type>
-        <definition>C3D_API ashes::Semaphore const&amp; castor3d::LineariseDepthPass::linearise</definition>
-        <argsstring>(RenderDevice const &amp;device, ashes::Semaphore const &amp;toWait) const</argsstring>
-        <name>linearise</name>
-        <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>ashes::Semaphore const &amp;</type>
-          <declname>toWait</declname>
-        </param>
-        <briefdescription>
-<para>Linearises depth buffer. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">toWait</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The semaphore to wait for. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="91" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/db3/a04402_1a48f48aff524335ddc05afb9f71120ff2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="db/da9/a04374" kindref="compound">CommandsSemaphore</ref></type>
-        <definition>C3D_API CommandsSemaphore castor3d::LineariseDepthPass::getCommands</definition>
-        <argsstring>(RenderDevice const &amp;device, RenderPassTimer const &amp;timer, uint32_t index) const</argsstring>
-        <name>getCommands</name>
-        <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type><ref refid="d6/d76/a04606" kindref="compound">RenderPassTimer</ref> const &amp;</type>
-          <declname>timer</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">timer</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render timer. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">index</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render index </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The commands used to render the pass. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="105" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/db3/a04402_1a1fae43d3624765c2bd313ff1bbda1984" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::LineariseDepthPass::accept</definition>
-        <argsstring>(PipelineVisitorBase &amp;visitor)</argsstring>
-        <name>accept</name>
-        <param>
-          <type><ref refid="d5/de2/a03830" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
-          <declname>visitor</declname>
-        </param>
-        <briefdescription>
-<para>Visitor acceptance function. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername>visitor</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The ... visitor. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="111" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d1/db3/a04402_1a15004c6e922e3714e7fc2405d4ab33b8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::LineariseDepthPass::doInitialiseLinearisePass</definition>
-        <argsstring>(RenderDevice const &amp;device)</argsstring>
-        <name>doInitialiseLinearisePass</name>
-        <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="133" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/db3/a04402_1a74fcd6233bae2b365c650828d176a7b8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::LineariseDepthPass::doInitialiseMinifyPass</definition>
-        <argsstring>(RenderDevice const &amp;device)</argsstring>
-        <name>doInitialiseMinifyPass</name>
-        <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="134" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/db3/a04402_1a8154a6d185f77e01cb1de21104654c25" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::LineariseDepthPass::doCleanupLinearisePass</definition>
-        <argsstring>(RenderDevice const &amp;device)</argsstring>
-        <name>doCleanupLinearisePass</name>
-        <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="135" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/db3/a04402_1a3955c377ce308169812b9ca1da31b1f0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::LineariseDepthPass::doCleanupMinifyPass</definition>
-        <argsstring>(RenderDevice const &amp;device)</argsstring>
-        <name>doCleanupMinifyPass</name>
-        <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="136" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/db3/a04402_1a141281691616c7a762ee1943b1c57d7a" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::LineariseDepthPass::doPrepareFrame</definition>
-        <argsstring>(ashes::CommandBuffer &amp;cb, RenderPassTimer const &amp;timer, uint32_t index) const</argsstring>
-        <name>doPrepareFrame</name>
-        <param>
-          <type>ashes::CommandBuffer &amp;</type>
-          <declname>cb</declname>
-        </param>
-        <param>
-          <type><ref refid="d6/d76/a04606" kindref="compound">RenderPassTimer</ref> const &amp;</type>
-          <declname>timer</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="137" column="1"/>
+        <location file="Scene/Animation/AnimationModule.hpp" line="167" column="37" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="167" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
+<para>Helper structure to specialise a cache behaviour. <simplesect kind="remark"><para>Specialisation for <ref refid="db/dc9/a04378" kindref="compound">AnimatedObjectGroup</ref>. </para>
+</simplesect>
+</para>
     </detaileddescription>
-    <location file="Render/Passes/LineariseDepthPass.hpp" line="34" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="33" bodyend="213"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::PtrCacheTraitsBaseT&lt; AnimatedObjectGroup, castor::String &gt;</label>
+        <link refid="dc/ddf/a02622"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; AnimatedObjectGroup, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;</label>
+        <link refid="dc/ddf/a02622"/>
+      </node>
+      <node id="1">
+        <label>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</label>
+        <link refid="d1/db3/a04402"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::PtrCacheTraitsBaseT&lt; AnimatedObjectGroup, castor::String &gt;</label>
+        <link refid="dc/ddf/a02622"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; AnimatedObjectGroup, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;</label>
+        <link refid="dc/ddf/a02622"/>
+      </node>
+      <node id="1">
+        <label>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</label>
+        <link refid="d1/db3/a04402"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/Animation/AnimationModule.hpp" line="158" column="1" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="160" bodyend="168"/>
     <listofallmembers>
-      <member refid="d1/db3/a04402_1a1fae43d3624765c2bd313ff1bbda1984" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>accept</name></member>
-      <member refid="d1/db3/a04402_1ad60ada8c7c0965a970470547443874d2" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>cleanup</name></member>
-      <member refid="d1/db3/a04402_1a8154a6d185f77e01cb1de21104654c25" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>doCleanupLinearisePass</name></member>
-      <member refid="d1/db3/a04402_1a3955c377ce308169812b9ca1da31b1f0" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>doCleanupMinifyPass</name></member>
-      <member refid="d1/db3/a04402_1a15004c6e922e3714e7fc2405d4ab33b8" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>doInitialiseLinearisePass</name></member>
-      <member refid="d1/db3/a04402_1a74fcd6233bae2b365c650828d176a7b8" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>doInitialiseMinifyPass</name></member>
-      <member refid="d1/db3/a04402_1a141281691616c7a762ee1943b1c57d7a" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>doPrepareFrame</name></member>
-      <member refid="d1/db3/a04402_1a48f48aff524335ddc05afb9f71120ff2" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>getCommands</name></member>
-      <member refid="d1/db3/a04402_1a5aca56986de95edd785d4c2022f320f6" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>getCommands</name></member>
-      <member refid="d1/db3/a04402_1a323271b56eb451dc8068f7fc15ab02d2" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>getResult</name></member>
-      <member refid="d1/db3/a04402_1a091a4b683e2a7d011c2ef47a554e5af9" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>initialise</name></member>
-      <member refid="d1/db3/a04402_1ac13c0d980df8b4c6b419a943360a62b2" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>linearise</name></member>
-      <member refid="d1/db3/a04402_1a43dfd264204dd2935be86da26acb5c5a" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>LineariseDepthPass</name></member>
-      <member refid="d1/db3/a04402_1a9524781339a577519e4a13fcb3fd3d2b" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_clipInfo</name></member>
-      <member refid="d1/db3/a04402_1a6e166a13bd7dbbadf4e5677458bdcc87" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_clipInfoValue</name></member>
-      <member refid="d1/db3/a04402_1a59ae29d7b3fa107d0a1a84d88838f6c4" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_commandBuffer</name></member>
-      <member refid="d1/db3/a04402_1a30f81c13bb5733798bfa10fcc3403e56" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_depthBuffer</name></member>
-      <member refid="d1/db3/a04402_1ae2899806e518518d8c1b7a9fae047bde" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_engine</name></member>
-      <member refid="d1/db3/a04402_1acb14be54689fe865506e0241ce2e723c" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_finished</name></member>
-      <member refid="d1/db3/a04402_1a92b8f2593c6238e9893a041694a9e821" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_initialised</name></member>
-      <member refid="d1/db3/a04402_1a960ab68d899a82e11faabfc130f4f576" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_lineariseDescriptor</name></member>
-      <member refid="d1/db3/a04402_1a1e6763219103fe5ff10da6d6f36aeefb" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_linearisedView</name></member>
-      <member refid="d1/db3/a04402_1a7aa79d9e8019b0897a6260f0bb3998a1" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_lineariseFrameBuffer</name></member>
-      <member refid="d1/db3/a04402_1a3455f3914e87339be09cd5895f26aa52" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_lineariseLayout</name></member>
-      <member refid="d1/db3/a04402_1a16e864aee4085abbe1a586c6650c87d6" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_linearisePipeline</name></member>
-      <member refid="d1/db3/a04402_1a4df0fec0c9d063fc58ea8b965d9d88f3" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_linearisePixelShader</name></member>
-      <member refid="d1/db3/a04402_1a7c9650f87f0081e646d6bbc4837f9a3f" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_lineariseSampler</name></member>
-      <member refid="d1/db3/a04402_1a434728e9e625b4c34d0be342e06cf5d8" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_lineariseVertexShader</name></member>
-      <member refid="d1/db3/a04402_1abb36a645ce20218774f61bc4c5514934" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_minifyLayout</name></member>
-      <member refid="d1/db3/a04402_1a93122e5424c35a757ca52a10d94c84ec" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_minifyPipelines</name></member>
-      <member refid="d1/db3/a04402_1ae3836179c89f310fb843661aa154aa10" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_minifyPixelShader</name></member>
-      <member refid="d1/db3/a04402_1a25e48ac34f055d316a68e065699b25bd" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_minifySampler</name></member>
-      <member refid="d1/db3/a04402_1a363770e978adcc76772bb67d50f9a156" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_minifyVertexShader</name></member>
-      <member refid="d1/db3/a04402_1ab1a8af79a30892a31c64e77de8483065" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_prefix</name></member>
-      <member refid="d1/db3/a04402_1abd439a979db838e9d0603325312a7392" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_previousLevel</name></member>
-      <member refid="d1/db3/a04402_1a92ea218be5a66345dda7f1c9e0d199f9" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_renderPass</name></member>
-      <member refid="d1/db3/a04402_1ad74eafaff1525c45f3a37c2bb52922a8" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_result</name></member>
-      <member refid="d1/db3/a04402_1aa04f913d4b4de65d84276eee8037ac07" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_size</name></member>
-      <member refid="d1/db3/a04402_1a14272cbff4d0e90c7c8d1db34c4e6d82" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_srcDepthBuffer</name></member>
-      <member refid="d1/db3/a04402_1ababf29be38f360c28411426e6ec26d23" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_timer</name></member>
-      <member refid="d1/db3/a04402_1a4ea74bea2bf51ec5f6dc4ce2cd977adf" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_vertexBuffer</name></member>
-      <member refid="d1/db3/a04402_1a62980f6da5b91a877cbc28b1f10147cb" prot="private" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>m_vertexLayout</name></member>
-      <member refid="d1/db3/a04402_1a46cae55e5cf6add6dc3c62a8c14efb44" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>MaxMipLevel</name></member>
-      <member refid="d1/db3/a04402_1a90db6e0d9737e7f62101fd7ed3fd0339" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>update</name></member>
-      <member refid="d1/db3/a04402_1aac254d534d6e5dd6c05f923fc31fd3f0" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>update</name></member>
-      <member refid="d1/db3/a04402_1a4ac824e0cbb3f864b057f4b3952213e1" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass</scope><name>~LineariseDepthPass</name></member>
+      <member refid="dc/ddf/a02622_1aad74680d04a777cf6e1a48f5335e5bba" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="dc/ddf/a02622_1acc9650475bb6cfdd4b46f86662ee4d67" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="dc/ddf/a02622_1aace6e188551a79fe4c617062a3987c34" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="dc/ddf/a02622_1a604b98a8324764213e894ac5ff3192e4" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="d1/db3/a04402_1af211257f2e4b8c8c03375bbd2f7636c7" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>Base</name></member>
+      <member refid="dc/ddf/a02622_1a0606136714bd1cb7209313f2ece3f687" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementCacheT</name></member>
+      <member refid="dc/ddf/a02622_1a021a9d07d6fb3fe77b7ef22b5d9fc7e8" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementCleanerT</name></member>
+      <member refid="dc/ddf/a02622_1acbb5da0cf908b54ec0b238b4bf290498" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementContT</name></member>
+      <member refid="dc/ddf/a02622_1af3b3d08e4639ccc06cbe81f6cb200a64" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementInitialiserT</name></member>
+      <member refid="dc/ddf/a02622_1a37487aa6a3179e261c465a659e7e232d" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementKeyT</name></member>
+      <member refid="dc/ddf/a02622_1a54c0975e844a33c1ef48f9284b13e984" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementMergerT</name></member>
+      <member refid="dc/ddf/a02622_1aeeb13142ba14f28398dcf1b902e1d7df" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementObsT</name></member>
+      <member refid="d1/db3/a04402_1a0176a33900149da04187a86225e7f429" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementPtrT</name></member>
+      <member refid="d1/db3/a04402_1a9b57ef555b360858b24d4d0d87a5cc1a" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementT</name></member>
+      <member refid="dc/ddf/a02622_1a97feed9b72e3c5d21e10571563ec56f5" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>isElementObsNull</name></member>
+      <member refid="d1/db3/a04402_1ac566e1574a124f6ea278632f940bf1f5" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>KeyT</name></member>
+      <member refid="dc/ddf/a02622_1a5f00547170a4e85ac4c706f0ac32f9aa" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>makeElement</name></member>
+      <member refid="dc/ddf/a02622_1aba7dca15362049b6e793f1b99d419bb0" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>makeElementObs</name></member>
+      <member refid="d1/db3/a04402_1adec95b034d1c404e93ba33cf68b5db11" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>Name</name></member>
+      <member refid="d1/db3/a04402_1ac5bce022e53c3362542b0482e8d253fb" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ResT</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

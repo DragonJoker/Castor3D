@@ -1,33 +1,69 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d5/d74/a03596" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkAccelerationStructureCreateInfoNV &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d5/d74/a03596_1abe4c73204501d4f6b44ef3885d394196" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkAccelerationStructureCreateInfoNV &gt;::value</definition>
+    <compoundname>castor3d::TextOverlay::Vertex</compoundname>
+    <includes local="no">TextOverlay.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d5/d74/a03596_1a3b8b801aafd5932b736d54c022855c1d" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::TextOverlay::Vertex::coords</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_NV</initializer>
+        <name>coords</name>
+        <qualifiedname>castor3d::TextOverlay::Vertex::coords</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="310" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="310" bodyend="-1"/>
+        <location file="Overlay/TextOverlay.hpp" line="27" column="17" bodyfile="Overlay/TextOverlay.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d74/a03596_1a603017f4f9c61b272d2b07ea48a38a74" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::TextOverlay::Vertex::texture</definition>
+        <argsstring></argsstring>
+        <name>texture</name>
+        <qualifiedname>castor3d::TextOverlay::Vertex::texture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="28" column="17" bodyfile="Overlay/TextOverlay.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d74/a03596_1ac5b06728518a7945a3a23608cad5c30e" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::TextOverlay::Vertex::text</definition>
+        <argsstring></argsstring>
+        <name>text</name>
+        <qualifiedname>castor3d::TextOverlay::Vertex::text</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="29" column="17" bodyfile="Overlay/TextOverlay.hpp" bodystart="29" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>Holds specific vertex data for a <ref refid="d8/d1b/a03592" kindref="compound">TextOverlay</ref>. </para>
     </briefdescription>
     <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="date"><para>26/03/2016 </para>
+</simplesect>
+<simplesect kind="version"><para>0.8.0 </para>
+</simplesect>
+</para>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="310" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="310" bodyend="310"/>
+    <location file="Overlay/TextOverlay.hpp" line="25" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="26" bodyend="30"/>
     <listofallmembers>
-      <member refid="d5/d74/a03596_1abe4c73204501d4f6b44ef3885d394196" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkAccelerationStructureCreateInfoNV &gt;</scope><name>value</name></member>
+      <member refid="d5/d74/a03596_1a3b8b801aafd5932b736d54c022855c1d" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::Vertex</scope><name>coords</name></member>
+      <member refid="d5/d74/a03596_1ac5b06728518a7945a3a23608cad5c30e" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::Vertex</scope><name>text</name></member>
+      <member refid="d5/d74/a03596_1a603017f4f9c61b272d2b07ea48a38a74" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::Vertex</scope><name>texture</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

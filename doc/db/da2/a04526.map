@@ -1,4 +1,10 @@
-<map id="castor3d::RenderLoop::UploadResources" name="castor3d::RenderLoop::UploadResources">
-<area shape="rect" id="node1" title=" " alt="" coords="37,95,186,136"/>
-<area shape="rect" id="node2" href="$d1/da6/a04380.html" title=" " alt="" coords="5,5,217,32"/>
+<map id="castor3d::MovableObject" name="castor3d::MovableObject">
+<area shape="rect" id="node1" title=" " alt="" coords="236,107,401,133"/>
+<area shape="rect" id="node4" href="$d5/d8a/a04475.html" title=" " alt="" coords="459,5,609,32"/>
+<area shape="rect" id="node5" href="$d7/dd6/a04479.html" title=" " alt="" coords="471,56,597,83"/>
+<area shape="rect" id="node6" href="$d8/dc4/a04487.html" title=" " alt="" coords="465,107,603,133"/>
+<area shape="rect" id="node7" href="$da/dec/a04499.html" title=" " alt="" coords="480,157,588,184"/>
+<area shape="rect" id="node8" href="$d0/d61/a04579.html" title=" " alt="" coords="449,208,619,235"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,81,188,108"/>
+<area shape="rect" id="node3" title=" " alt="" coords="43,132,150,159"/>
 </map>

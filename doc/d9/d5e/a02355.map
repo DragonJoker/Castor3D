@@ -1,10 +1,5 @@
-<map id="castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;" name="castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;">
-<area shape="rect" id="node1" title="Base class for a scene element cache." alt="" coords="5,105,191,147"/>
-<area shape="rect" id="node2" href="$d3/d35/a02360.html" title="Base class for a scene element cache." alt="" coords="385,5,567,47"/>
-<area shape="rect" id="node3" href="$d6/d3a/a02356.html" title=" " alt="" coords="381,71,571,112"/>
-<area shape="rect" id="node5" href="$d6/d3a/a02356.html" title=" " alt="" coords="383,136,569,177"/>
-<area shape="rect" id="node7" href="$d6/d3a/a02356.html" title=" " alt="" coords="383,202,569,258"/>
-<area shape="rect" id="node4" href="$db/db1/a02404.html" title="Geometry cache." alt="" coords="620,71,809,112"/>
-<area shape="rect" id="node6" href="$d0/da6/a02412.html" title="Light cache." alt="" coords="635,136,795,177"/>
-<area shape="rect" id="node8" href="$dc/d1a/a02288.html" title="BillboardList cache." alt="" coords="637,202,792,258"/>
+<map id="castor3d::BinaryWriter&lt; SceneNodeAnimation &gt;" name="castor3d::BinaryWriter&lt; SceneNodeAnimation &gt;">
+<area shape="rect" id="node1" title="SceneNodeAnimation binary loader." alt="" coords="11,200,182,241"/>
+<area shape="rect" id="node2" href="$d3/d9c/a02336.html" title=" " alt="" coords="5,109,188,151"/>
+<area shape="rect" id="node3" href="$d3/d9c/a02336.html" title="Binary data chunk writer base class." alt="" coords="5,5,188,47"/>
 </map>

@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="db/dbc/a05116" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SceneBackground::Cube::Quad::Vertex</compoundname>
+    <includes local="no">Background.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/dbc/a05116_1a382bae0ba02a90e271cb26da8ddff14c" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::SceneBackground::Cube::Quad::Vertex::position</definition>
+        <argsstring></argsstring>
+        <name>position</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Background.hpp" line="39" column="1" bodyfile="Scene/Background/Background.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Scene/Background/Background.hpp" line="38" column="1" bodyfile="Scene/Background/Background.hpp" bodystart="37" bodyend="40"/>
+    <listofallmembers>
+      <member refid="db/dbc/a05116_1a382bae0ba02a90e271cb26da8ddff14c" prot="public" virt="non-virtual"><scope>castor3d::SceneBackground::Cube::Quad::Vertex</scope><name>position</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

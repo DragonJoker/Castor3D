@@ -1,19 +1,22 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_1f951589f8acf476d21b7aaa617ace7f" kind="dir">
     <compoundname>Buffer</compoundname>
-    <innerfile refid="d7/d9a/a00152">BufferModule.hpp</innerfile>
-    <innerfile refid="d3/df8/a00155">GeometryBuffers.hpp</innerfile>
-    <innerfile refid="d6/db8/a00158">GpuBuffer.hpp</innerfile>
-    <innerfile refid="d6/d7d/a00161">GpuBufferBuddyAllocator.hpp</innerfile>
-    <innerfile refid="db/ddf/a00164">GpuBufferOffset.hpp</innerfile>
-    <innerfile refid="dc/de6/a00167">GpuBufferPool.hpp</innerfile>
-    <innerfile refid="d5/dcb/a00170">PoolUniformBuffer.hpp</innerfile>
-    <innerfile refid="d7/d3f/a00173">UniformBuffer.hpp</innerfile>
-    <innerfile refid="d5/de9/a00176">UniformBufferBase.hpp</innerfile>
-    <innerfile refid="db/dd9/a00179">UniformBufferOffset.hpp</innerfile>
-    <innerfile refid="d7/d25/a00182">UniformBufferPool.hpp</innerfile>
-    <innerfile refid="de/df3/a00185">UniformBufferPools.hpp</innerfile>
+    <innerfile refid="d3/df8/a00155">BufferModule.hpp</innerfile>
+    <innerfile refid="d6/db8/a00158">GeometryBuffers.hpp</innerfile>
+    <innerfile refid="d6/d7d/a00161">GpuBuffer.hpp</innerfile>
+    <innerfile refid="db/ddf/a00164">GpuBufferBuddyAllocator.hpp</innerfile>
+    <innerfile refid="dc/de6/a00167">GpuBufferLinearAllocator.hpp</innerfile>
+    <innerfile refid="d5/dcb/a00170">GpuBufferOffset.hpp</innerfile>
+    <innerfile refid="d7/d3f/a00173">GpuBufferPackedAllocator.hpp</innerfile>
+    <innerfile refid="d5/de9/a00176">GpuBufferPool.hpp</innerfile>
+    <innerfile refid="db/dd9/a00179">ObjectBufferOffset.hpp</innerfile>
+    <innerfile refid="d7/d25/a00182">ObjectBufferPool.hpp</innerfile>
+    <innerfile refid="de/df3/a00185">PoolUniformBuffer.hpp</innerfile>
+    <innerfile refid="da/d15/a00188">UniformBuffer.hpp</innerfile>
+    <innerfile refid="d9/dd0/a00191">UniformBufferBase.hpp</innerfile>
+    <innerfile refid="dc/d57/a00194">UniformBufferOffset.hpp</innerfile>
+    <innerfile refid="de/db1/a00197">UniformBufferPool.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

@@ -1,11 +1,4 @@
-<map id="castor3d::MovableObject" name="castor3d::MovableObject">
-<area shape="rect" id="node1" title=" " alt="" coords="365,107,531,133"/>
-<area shape="rect" id="node5" href="$d5/d6d/a05142.html" title=" " alt="" coords="588,5,739,32"/>
-<area shape="rect" id="node6" href="$d2/d3d/a05146.html" title=" " alt="" coords="601,56,726,83"/>
-<area shape="rect" id="node7" href="$d9/dcb/a05154.html" title=" " alt="" coords="595,107,732,133"/>
-<area shape="rect" id="node8" href="$d4/d69/a05166.html" title=" " alt="" coords="609,157,717,184"/>
-<area shape="rect" id="node9" href="$d5/d9b/a05222.html" title=" " alt="" coords="579,208,748,235"/>
-<area shape="rect" id="node2" href="$d8/de7/a02030.html" title="Animable public interface." alt="" coords="241,81,317,108"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,74,193,115"/>
-<area shape="rect" id="node4" title=" " alt="" coords="248,132,311,159"/>
+<map id="castor::TextWriter&lt; castor3d::SpotLight &gt;" name="castor::TextWriter&lt; castor3d::SpotLight &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="5,95,164,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="9,5,160,47"/>
 </map>

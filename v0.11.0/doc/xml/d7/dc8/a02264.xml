@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d7/dc8/a02264" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ChunkParser&lt; castor::String &gt;</compoundname>
+    <basecompoundref refid="de/dc3/a02256" prot="public" virt="non-virtual">castor3d::ChunkParserBase</basecompoundref>
+    <includes local="no">ChunkParser.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d7/dc8/a02264_1acf5c3a4513e23e175339295361d35119" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool castor3d::ChunkParser&lt; castor::String &gt;::parse</definition>
+        <argsstring>(castor::String &amp;value, BinaryChunk &amp;chunk)</argsstring>
+        <name>parse</name>
+        <param>
+          <type>castor::String &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/dd8/a02108" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves a value from a chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the parsed value </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk containing the value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/ChunkParser.hpp" line="135" column="1" bodyfile="Binary/ChunkParser.hpp" bodystart="135" bodyend="155"/>
+        <references refid="d8/dd8/a02108_1af711032d94753cb2d482fe2bcf3afb17">castor3d::BinaryChunk::checkAvailable</references>
+        <references refid="d8/dd8/a02108_1a2819c7ddf95251296b5a61bf40435358">castor3d::BinaryChunk::getRemaining</references>
+        <references refid="de/dc3/a02256_1a062463121032ba679336be2382c508d0" compoundref="d7/dce/a00143" startline="30" endline="42">castor3d::ChunkParserBase::parse</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para><ref refid="dc/d18/a02260" kindref="compound">ChunkParser</ref> specialisation for castor::String. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="version"><para>0.7.0.0 </para>
+</simplesect>
+<simplesect kind="date"><para>08/04/2014 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="667">
+        <label>castor3d::ChunkParser&lt; castor::String &gt;</label>
+        <link refid="d7/dc8/a02264"/>
+        <childnode refid="668" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="668">
+        <label>castor3d::ChunkParserBase</label>
+        <link refid="de/dc3/a02256"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="669">
+        <label>castor3d::ChunkParser&lt; castor::String &gt;</label>
+        <link refid="d7/dc8/a02264"/>
+        <childnode refid="670" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="670">
+        <label>castor3d::ChunkParserBase</label>
+        <link refid="de/dc3/a02256"/>
+      </node>
+    </collaborationgraph>
+    <location file="Binary/ChunkParser.hpp" line="121" column="1" bodyfile="Binary/ChunkParser.hpp" bodystart="119" bodyend="156"/>
+    <listofallmembers>
+      <member refid="d7/dc8/a02264_1acf5c3a4513e23e175339295361d35119" prot="public" virt="non-virtual"><scope>castor3d::ChunkParser&lt; castor::String &gt;</scope><name>parse</name></member>
+      <member refid="de/dc3/a02256_1a062463121032ba679336be2382c508d0" prot="public" virt="non-virtual" ambiguityscope="castor3d::ChunkParserBase::"><scope>castor3d::ChunkParser&lt; castor::String &gt;</scope><name>parse</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

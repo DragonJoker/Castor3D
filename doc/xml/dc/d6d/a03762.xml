@@ -1,33 +1,776 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dc/d6d/a03762" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkRenderPassFragmentDensityMapCreateInfoEXT &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="dc/d6d/a03762_1a3963d565b8c694708456d029f7114222" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkRenderPassFragmentDensityMapCreateInfoEXT &gt;::value</definition>
-        <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_RENDER_PASS_FRAGMENT_DENSITY_MAP_CREATE_INFO_EXT</initializer>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dc/d6d/a03762" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Voxelizer</compoundname>
+    <includes local="no">Voxelizer.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="dc/d6d/a03762_1aeef57dd5623021f5e8e9c1aac2b30b91" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d8c/a04318" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::Voxelizer::getFirstBounce</definition>
+        <argsstring>() const</argsstring>
+        <name>getFirstBounce</name>
+        <qualifiedname>castor3d::Voxelizer::getFirstBounce</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="100" column="16" bodyfile="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" bodystart="100" bodyend="103"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d6d/a03762_1a400a55d6adac391131f7214053e40085" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d8c/a04318" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::Voxelizer::getSecondaryBounce</definition>
+        <argsstring>() const</argsstring>
+        <name>getSecondaryBounce</name>
+        <qualifiedname>castor3d::Voxelizer::getSecondaryBounce</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="353" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="353" bodyend="-1"/>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="105" column="16" bodyfile="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" bodystart="105" bodyend="108"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d6d/a03762_1aa02c6344ead301e5164e8f945408250e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>crg::FrameGraph const &amp;</type>
+        <definition>crg::FrameGraph const  &amp; castor3d::Voxelizer::getGraph</definition>
+        <argsstring>() const</argsstring>
+        <name>getGraph</name>
+        <qualifiedname>castor3d::Voxelizer::getGraph</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="110" column="24" bodyfile="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" bodystart="110" bodyend="113"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d6d/a03762_1ad11bea1955c43171ad636325a46496c1" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>static uint32_t castor3d::Voxelizer::countInitialisationSteps</definition>
+        <argsstring>()</argsstring>
+        <name>countInitialisationSteps</name>
+        <qualifiedname>castor3d::Voxelizer::countInitialisationSteps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="115" column="17" bodyfile="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" bodystart="115" bodyend="124"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dc/d6d/a03762_1ac1d131f253210cb5bd429c4bb4337094" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/d3c/a02714" kindref="compound">Engine</ref> &amp;</type>
+        <definition>Engine&amp; castor3d::Voxelizer::m_engine</definition>
+        <argsstring></argsstring>
+        <name>m_engine</name>
+        <qualifiedname>castor3d::Voxelizer::m_engine</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="140" column="9" bodyfile="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d6d/a03762_1a0b712ca24840bcea16e2422aba227305" prot="private" static="no" mutable="no">
+        <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::Voxelizer::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::Voxelizer::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="141" column="21" bodyfile="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d6d/a03762_1a22622960bf1fefacc7125b22a2d33f7e" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/da4/a03766" kindref="compound">VoxelSceneData</ref> const  &amp;</type>
+        <definition>VoxelSceneData const&amp; castor3d::Voxelizer::m_voxelConfig</definition>
+        <argsstring></argsstring>
+        <name>m_voxelConfig</name>
+        <qualifiedname>castor3d::Voxelizer::m_voxelConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="142" column="23" bodyfile="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d6d/a03762_1a94b8b4edcc9f2b5d4481f2d12f6e5ead" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::Voxelizer::m_prefix</definition>
+        <argsstring></argsstring>
+        <name>m_prefix</name>
+        <qualifiedname>castor3d::Voxelizer::m_prefix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="143" column="16" bodyfile="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" bodystart="143" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d6d/a03762_1ae2a00719bb0908ff6cd0e51a6b061664" prot="private" static="no" mutable="no">
+        <type>crg::FrameGraph</type>
+        <definition>crg::FrameGraph castor3d::Voxelizer::m_graph</definition>
+        <argsstring></argsstring>
+        <name>m_graph</name>
+        <qualifiedname>castor3d::Voxelizer::m_graph</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="144" column="17" bodyfile="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" bodystart="144" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d6d/a03762_1ac290865459e100785f74156fd9b9e3d9" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d7b/a03654" kindref="compound">DummyCuller</ref></type>
+        <definition>DummyCuller castor3d::Voxelizer::m_culler</definition>
+        <argsstring></argsstring>
+        <name>m_culler</name>
+        <qualifiedname>castor3d::Voxelizer::m_culler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="145" column="13" bodyfile="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" bodystart="145" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d6d/a03762_1abcf33010f11bb34b23cb132d4cd7cf52" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d8f/a04930" kindref="compound">MatrixUbo</ref></type>
+        <definition>MatrixUbo castor3d::Voxelizer::m_matrixUbo</definition>
+        <argsstring></argsstring>
+        <name>m_matrixUbo</name>
+        <qualifiedname>castor3d::Voxelizer::m_matrixUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="146" column="11" bodyfile="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" bodystart="146" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d6d/a03762_1aeb5b54ca952fafee5eab23eb17bca638" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d8c/a04318" kindref="compound">Texture</ref></type>
+        <definition>Texture castor3d::Voxelizer::m_firstBounce</definition>
+        <argsstring></argsstring>
+        <name>m_firstBounce</name>
+        <qualifiedname>castor3d::Voxelizer::m_firstBounce</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="147" column="9" bodyfile="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" bodystart="147" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d6d/a03762_1ae014f9c670bf47688c905601d32ee95f" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d8c/a04318" kindref="compound">Texture</ref></type>
+        <definition>Texture castor3d::Voxelizer::m_secondaryBounce</definition>
+        <argsstring></argsstring>
+        <name>m_secondaryBounce</name>
+        <qualifiedname>castor3d::Voxelizer::m_secondaryBounce</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="148" column="9" bodyfile="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" bodystart="148" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d6d/a03762_1aa81252858416c6e5cb0816d276e1992d" prot="private" static="no" mutable="no">
+        <type>ashes::BufferPtr&lt; <ref refid="d9/dae/a03754" kindref="compound">Voxel</ref> &gt;</type>
+        <definition>ashes::BufferPtr&lt; Voxel &gt; castor3d::Voxelizer::m_voxels</definition>
+        <argsstring></argsstring>
+        <name>m_voxels</name>
+        <qualifiedname>castor3d::Voxelizer::m_voxels</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="149" column="18" bodyfile="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" bodystart="149" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d6d/a03762_1ad925a74048b97bffff20b14681fd08a9" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/d59/a05062" kindref="compound">VoxelizerUbo</ref> &amp;</type>
+        <definition>VoxelizerUbo&amp; castor3d::Voxelizer::m_voxelizerUbo</definition>
+        <argsstring></argsstring>
+        <name>m_voxelizerUbo</name>
+        <qualifiedname>castor3d::Voxelizer::m_voxelizerUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="150" column="15" bodyfile="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" bodystart="150" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d6d/a03762_1a6bb169d10943439ae588aa078526b6e7" prot="private" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::Voxelizer::m_grid</definition>
+        <argsstring></argsstring>
+        <name>m_grid</name>
+        <qualifiedname>castor3d::Voxelizer::m_grid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="151" column="17" bodyfile="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" bodystart="151" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d6d/a03762_1a67a786cea42ea032a4b040c592572cb6" prot="private" static="no" mutable="no">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass&amp; castor3d::Voxelizer::m_voxelizePassDesc</definition>
+        <argsstring></argsstring>
+        <name>m_voxelizePassDesc</name>
+        <qualifiedname>castor3d::Voxelizer::m_voxelizePassDesc</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="152" column="17" bodyfile="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" bodystart="152" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d6d/a03762_1ac3a97901adb38dc569c89fc5256e16f5" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d85/a03758" kindref="compound">VoxelizePass</ref> *</type>
+        <definition>VoxelizePass* castor3d::Voxelizer::m_voxelizePass</definition>
+        <argsstring></argsstring>
+        <name>m_voxelizePass</name>
+        <qualifiedname>castor3d::Voxelizer::m_voxelizePass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="153" column="15" bodyfile="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" bodystart="153" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d6d/a03762_1aa44013f07450d11047610fe49c46bb6d" prot="private" static="no" mutable="no">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass&amp; castor3d::Voxelizer::m_voxelToTextureDesc</definition>
+        <argsstring></argsstring>
+        <name>m_voxelToTextureDesc</name>
+        <qualifiedname>castor3d::Voxelizer::m_voxelToTextureDesc</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="154" column="17" bodyfile="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" bodystart="154" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d6d/a03762_1af847b0d82e0a817d9ba79daf8796ca62" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/d4f/a03746" kindref="compound">VoxelBufferToTexture</ref> *</type>
+        <definition>VoxelBufferToTexture* castor3d::Voxelizer::m_voxelToTexture</definition>
+        <argsstring></argsstring>
+        <name>m_voxelToTexture</name>
+        <qualifiedname>castor3d::Voxelizer::m_voxelToTexture</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="155" column="23" bodyfile="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" bodystart="155" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d6d/a03762_1a3fa9d61d24f706304c5fd437da1b6df4" prot="private" static="no" mutable="no">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass&amp; castor3d::Voxelizer::m_voxelMipGen</definition>
+        <argsstring></argsstring>
+        <name>m_voxelMipGen</name>
+        <qualifiedname>castor3d::Voxelizer::m_voxelMipGen</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="156" column="17" bodyfile="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" bodystart="156" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d6d/a03762_1a88d2393f3e6d2be0b81f4d1960b594f0" prot="private" static="no" mutable="no">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass&amp; castor3d::Voxelizer::m_voxelSecondaryBounceDesc</definition>
+        <argsstring></argsstring>
+        <name>m_voxelSecondaryBounceDesc</name>
+        <qualifiedname>castor3d::Voxelizer::m_voxelSecondaryBounceDesc</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="157" column="17" bodyfile="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" bodystart="157" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d6d/a03762_1a6a5cc24a81d85ae3775fb59eb2ac9931" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/d33/a03770" kindref="compound">VoxelSecondaryBounce</ref> *</type>
+        <definition>VoxelSecondaryBounce* castor3d::Voxelizer::m_voxelSecondaryBounce</definition>
+        <argsstring></argsstring>
+        <name>m_voxelSecondaryBounce</name>
+        <qualifiedname>castor3d::Voxelizer::m_voxelSecondaryBounce</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="158" column="23" bodyfile="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" bodystart="158" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d6d/a03762_1a6666b6de7060974b14781352c6adacae" prot="private" static="no" mutable="no">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass&amp; castor3d::Voxelizer::m_voxelSecondaryMipGen</definition>
+        <argsstring></argsstring>
+        <name>m_voxelSecondaryMipGen</name>
+        <qualifiedname>castor3d::Voxelizer::m_voxelSecondaryMipGen</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="159" column="17" bodyfile="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" bodystart="159" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d6d/a03762_1a0844865df17267781b499b12c823ef75" prot="private" static="no" mutable="no">
+        <type>crg::RunnableGraphPtr</type>
+        <definition>crg::RunnableGraphPtr castor3d::Voxelizer::m_runnable</definition>
+        <argsstring></argsstring>
+        <name>m_runnable</name>
+        <qualifiedname>castor3d::Voxelizer::m_runnable</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="160" column="23" bodyfile="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" bodystart="160" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d6d/a03762_1a6d296dc169ee06562c180a58dbfc4220" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Voxelizer::Voxelizer</definition>
+        <argsstring>(crg::ResourceHandler &amp;handler, RenderDevice const &amp;device, ProgressBar *progress, castor::String const &amp;prefix, Scene &amp;scene, Camera &amp;camera, MatrixUbo &amp;matrixUbo, VoxelizerUbo &amp;voxelizerUbo, VoxelSceneData const &amp;voxelConfig)</argsstring>
+        <name>Voxelizer</name>
+        <qualifiedname>castor3d::Voxelizer::Voxelizer</qualifiedname>
+        <param>
+          <type>crg::ResourceHandler &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="da/deb/a03274" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>prefix</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d71/a04598" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d2e/a04482" kindref="compound">Camera</ref> &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d8f/a04930" kindref="compound">MatrixUbo</ref> &amp;</type>
+          <declname>matrixUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d59/a05062" kindref="compound">VoxelizerUbo</ref> &amp;</type>
+          <declname>voxelizerUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/da4/a03766" kindref="compound">VoxelSceneData</ref> const &amp;</type>
+          <declname>voxelConfig</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">handler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render graph resources handler. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">progress</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The optional progress bar. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">prefix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass name prefix. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The rendered scene. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">camera</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The camera viewing the scene. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">matrixUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene matrices UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">voxelizerUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The voxelizer configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">voxelConfig</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The voxelizer configuration. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="45" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d6d/a03762_1ae2e272587602a0fc9c4690c270e816f8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Voxelizer::~Voxelizer</definition>
+        <argsstring>()</argsstring>
+        <name>~Voxelizer</name>
+        <qualifiedname>castor3d::Voxelizer::~Voxelizer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="54" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d6d/a03762_1a549b33cf551c59c71928a681d0a1eb85" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Voxelizer::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::Voxelizer::update</qualifiedname>
+        <param>
+          <type><ref refid="d3/d14/a04046" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, CPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="63" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d6d/a03762_1a723727d18920e075675f0603b78c7af1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Voxelizer::update</definition>
+        <argsstring>(GpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::Voxelizer::update</qualifiedname>
+        <param>
+          <type><ref refid="dd/daf/a04050" kindref="compound">GpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, GPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="72" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d6d/a03762_1ae700c148f057f535b80f3d9bf7d2dc3d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Voxelizer::accept</definition>
+        <argsstring>(RenderTechniqueVisitor &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::Voxelizer::accept</qualifiedname>
+        <param>
+          <type><ref refid="de/da2/a04294" kindref="compound">RenderTechniqueVisitor</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Visitor acceptance function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ... visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="76" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d6d/a03762_1ac66408a668d0c79d69132ace1ffc82b8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> crg::SemaphoreWaitArray</type>
+        <definition>C3D_API crg::SemaphoreWaitArray castor3d::Voxelizer::render</definition>
+        <argsstring>(crg::SemaphoreWaitArray const &amp;toWait, ashes::Queue const &amp;queue)</argsstring>
+        <name>render</name>
+        <qualifiedname>castor3d::Voxelizer::render</qualifiedname>
+        <param>
+          <type>crg::SemaphoreWaitArray const &amp;</type>
+          <declname>toWait</declname>
+        </param>
+        <param>
+          <type>ashes::Queue const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <briefdescription>
+<para>Renders the voxels. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">toWait</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The semaphores to wait. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue receiving the render commands. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The semaphores signaled by this render. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="89" column="33"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="dc/d6d/a03762_1a4d64be52e575ec03caac044da4b47e34" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::Voxelizer::doCreateVoxelizePass</definition>
+        <argsstring>(ProgressBar *progress)</argsstring>
+        <name>doCreateVoxelizePass</name>
+        <qualifiedname>castor3d::Voxelizer::doCreateVoxelizePass</qualifiedname>
+        <param>
+          <type><ref refid="da/deb/a03274" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="128" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d6d/a03762_1a956e19705a2aecceb82faaf4e2eae2f3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::Voxelizer::doCreateVoxelToTexture</definition>
+        <argsstring>(crg::FramePass const &amp;previousPass, ProgressBar *progress)</argsstring>
+        <name>doCreateVoxelToTexture</name>
+        <qualifiedname>castor3d::Voxelizer::doCreateVoxelToTexture</qualifiedname>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type><ref refid="da/deb/a03274" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="129" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d6d/a03762_1aec489ef86419aae39b382a22c053eac7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::Voxelizer::doCreateVoxelMipGen</definition>
+        <argsstring>(crg::FramePass const &amp;previousPass, std::string const &amp;name, crg::ImageViewId const &amp;view, crg::RunnablePass::IsEnabledCallback isEnabled, ProgressBar *progress)</argsstring>
+        <name>doCreateVoxelMipGen</name>
+        <qualifiedname>castor3d::Voxelizer::doCreateVoxelMipGen</qualifiedname>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type>std::string const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>crg::RunnablePass::IsEnabledCallback</type>
+          <declname>isEnabled</declname>
+        </param>
+        <param>
+          <type><ref refid="da/deb/a03274" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="131" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d6d/a03762_1a21d9d6816c1d99ffa499c00ad25eae55" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::Voxelizer::doCreateVoxelSecondaryBounce</definition>
+        <argsstring>(crg::FramePass const &amp;previousPass, ProgressBar *progress)</argsstring>
+        <name>doCreateVoxelSecondaryBounce</name>
+        <qualifiedname>castor3d::Voxelizer::doCreateVoxelSecondaryBounce</qualifiedname>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type><ref refid="da/deb/a03274" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="136" column="17"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="353" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="353" bodyend="353"/>
+    <location file="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" line="18" column="1" bodyfile="Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp" bodystart="19" bodyend="161"/>
     <listofallmembers>
-      <member refid="dc/d6d/a03762_1a3963d565b8c694708456d029f7114222" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkRenderPassFragmentDensityMapCreateInfoEXT &gt;</scope><name>value</name></member>
+      <member refid="dc/d6d/a03762_1ae700c148f057f535b80f3d9bf7d2dc3d" prot="public" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>accept</name></member>
+      <member refid="dc/d6d/a03762_1ad11bea1955c43171ad636325a46496c1" prot="public" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>countInitialisationSteps</name></member>
+      <member refid="dc/d6d/a03762_1a4d64be52e575ec03caac044da4b47e34" prot="private" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>doCreateVoxelizePass</name></member>
+      <member refid="dc/d6d/a03762_1aec489ef86419aae39b382a22c053eac7" prot="private" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>doCreateVoxelMipGen</name></member>
+      <member refid="dc/d6d/a03762_1a21d9d6816c1d99ffa499c00ad25eae55" prot="private" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>doCreateVoxelSecondaryBounce</name></member>
+      <member refid="dc/d6d/a03762_1a956e19705a2aecceb82faaf4e2eae2f3" prot="private" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>doCreateVoxelToTexture</name></member>
+      <member refid="dc/d6d/a03762_1aeef57dd5623021f5e8e9c1aac2b30b91" prot="public" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>getFirstBounce</name></member>
+      <member refid="dc/d6d/a03762_1aa02c6344ead301e5164e8f945408250e" prot="public" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>getGraph</name></member>
+      <member refid="dc/d6d/a03762_1a400a55d6adac391131f7214053e40085" prot="public" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>getSecondaryBounce</name></member>
+      <member refid="dc/d6d/a03762_1ac290865459e100785f74156fd9b9e3d9" prot="private" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>m_culler</name></member>
+      <member refid="dc/d6d/a03762_1a0b712ca24840bcea16e2422aba227305" prot="private" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>m_device</name></member>
+      <member refid="dc/d6d/a03762_1ac1d131f253210cb5bd429c4bb4337094" prot="private" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>m_engine</name></member>
+      <member refid="dc/d6d/a03762_1aeb5b54ca952fafee5eab23eb17bca638" prot="private" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>m_firstBounce</name></member>
+      <member refid="dc/d6d/a03762_1ae2a00719bb0908ff6cd0e51a6b061664" prot="private" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>m_graph</name></member>
+      <member refid="dc/d6d/a03762_1a6bb169d10943439ae588aa078526b6e7" prot="private" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>m_grid</name></member>
+      <member refid="dc/d6d/a03762_1abcf33010f11bb34b23cb132d4cd7cf52" prot="private" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>m_matrixUbo</name></member>
+      <member refid="dc/d6d/a03762_1a94b8b4edcc9f2b5d4481f2d12f6e5ead" prot="private" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>m_prefix</name></member>
+      <member refid="dc/d6d/a03762_1a0844865df17267781b499b12c823ef75" prot="private" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>m_runnable</name></member>
+      <member refid="dc/d6d/a03762_1ae014f9c670bf47688c905601d32ee95f" prot="private" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>m_secondaryBounce</name></member>
+      <member refid="dc/d6d/a03762_1a22622960bf1fefacc7125b22a2d33f7e" prot="private" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>m_voxelConfig</name></member>
+      <member refid="dc/d6d/a03762_1ac3a97901adb38dc569c89fc5256e16f5" prot="private" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>m_voxelizePass</name></member>
+      <member refid="dc/d6d/a03762_1a67a786cea42ea032a4b040c592572cb6" prot="private" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>m_voxelizePassDesc</name></member>
+      <member refid="dc/d6d/a03762_1ad925a74048b97bffff20b14681fd08a9" prot="private" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>m_voxelizerUbo</name></member>
+      <member refid="dc/d6d/a03762_1a3fa9d61d24f706304c5fd437da1b6df4" prot="private" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>m_voxelMipGen</name></member>
+      <member refid="dc/d6d/a03762_1aa81252858416c6e5cb0816d276e1992d" prot="private" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>m_voxels</name></member>
+      <member refid="dc/d6d/a03762_1a6a5cc24a81d85ae3775fb59eb2ac9931" prot="private" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>m_voxelSecondaryBounce</name></member>
+      <member refid="dc/d6d/a03762_1a88d2393f3e6d2be0b81f4d1960b594f0" prot="private" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>m_voxelSecondaryBounceDesc</name></member>
+      <member refid="dc/d6d/a03762_1a6666b6de7060974b14781352c6adacae" prot="private" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>m_voxelSecondaryMipGen</name></member>
+      <member refid="dc/d6d/a03762_1af847b0d82e0a817d9ba79daf8796ca62" prot="private" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>m_voxelToTexture</name></member>
+      <member refid="dc/d6d/a03762_1aa44013f07450d11047610fe49c46bb6d" prot="private" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>m_voxelToTextureDesc</name></member>
+      <member refid="dc/d6d/a03762_1ac66408a668d0c79d69132ace1ffc82b8" prot="public" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>render</name></member>
+      <member refid="dc/d6d/a03762_1a549b33cf551c59c71928a681d0a1eb85" prot="public" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>update</name></member>
+      <member refid="dc/d6d/a03762_1a723727d18920e075675f0603b78c7af1" prot="public" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>update</name></member>
+      <member refid="dc/d6d/a03762_1a6d296dc169ee06562c180a58dbfc4220" prot="public" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>Voxelizer</name></member>
+      <member refid="dc/d6d/a03762_1ae2e272587602a0fc9c4690c270e816f8" prot="public" virt="non-virtual"><scope>castor3d::Voxelizer</scope><name>~Voxelizer</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

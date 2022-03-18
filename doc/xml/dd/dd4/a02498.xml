@@ -1,82 +1,280 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dd/dd4/a02498" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayCleaner</compoundname>
-    <includes local="no">OverlayCache.hpp</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="dd/dd4/a02498_1a55747507fa49a5305273475c97020092" prot="private" static="no" mutable="no">
-        <type><ref refid="de/d13/a01473_1a6573844f0848fb7a4664ac788b817e88" kindref="member">OverlayCategorySet</ref> &amp;</type>
-        <definition>OverlayCategorySet&amp; castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayCleaner::m_overlays</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dd/dd4/a02498" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::CmshImporter</compoundname>
+    <basecompoundref refid="d2/db9/a03334" prot="public" virt="non-virtual">castor3d::MeshImporter</basecompoundref>
+    <includes local="no">CmshImporter.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="dd/dd4/a02498_1a73e3402810b3dca59d24efe453062a43" prot="public" static="yes" mutable="no">
+        <type>castor::String const</type>
+        <definition>castor::String const castor3d::CmshImporter::Type</definition>
         <argsstring></argsstring>
-        <name>m_overlays</name>
+        <name>Type</name>
+        <qualifiedname>castor3d::CmshImporter::Type</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="80" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="80" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dd/dd4/a02498_1a45af74e73c10cfa8ebee9923a1dfbddc" prot="private" static="no" mutable="no">
-        <type>std::vector&lt; int &gt; &amp;</type>
-        <definition>std::vector&lt; int &gt;&amp; castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayCleaner::m_overlayCountPerLevel</definition>
-        <argsstring></argsstring>
-        <name>m_overlayCountPerLevel</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="81" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="81" bodyend="-1"/>
+        <location file="Binary/CmshImporter.hpp" line="50" column="29" bodyfile="Binary/CmshImporter.hpp" bodystart="50" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="dd/dd4/a02498_1a3939d3126001f69aa5358340d12d1e9b" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayCleaner::OverlayCleaner</definition>
-        <argsstring>(Cache&lt; Overlay, castor::String &gt; &amp;cache)</argsstring>
-        <name>OverlayCleaner</name>
+      <memberdef kind="function" id="dd/dd4/a02498_1ac512c60208151dcdbc11d51dc5fe5af3" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::CmshImporter::CmshImporter</definition>
+        <argsstring>(Engine &amp;engine)</argsstring>
+        <name>CmshImporter</name>
+        <qualifiedname>castor3d::CmshImporter::CmshImporter</qualifiedname>
         <param>
-          <type><ref refid="d9/d4f/a02366" kindref="compound">Cache</ref>&lt; <ref refid="df/d4e/a04094" kindref="compound">Overlay</ref>, castor::String &gt; &amp;</type>
-          <declname>cache</declname>
+          <type><ref refid="d1/d3c/a02714" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
         </param>
         <briefdescription>
+<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The core engine. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="76" column="1"/>
+        <location file="Binary/CmshImporter.hpp" line="25" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="dd/dd4/a02498_1af9863175f6a99f38ea15f4a42c63de65" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayCleaner::operator()</definition>
-        <argsstring>(OverlaySPtr element)</argsstring>
-        <name>operator()</name>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="dd/dd4/a02498_1acf84b34150a4808faf7b29da1037204c" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>MeshImporterUPtr</type>
+        <definition>static MeshImporterUPtr castor3d::CmshImporter::create</definition>
+        <argsstring>(Engine &amp;engine)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::CmshImporter::create</qualifiedname>
         <param>
-          <type>OverlaySPtr</type>
-          <declname>element</declname>
+          <type><ref refid="d1/d3c/a02714" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
         </param>
         <briefdescription>
+<para>Creator function. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The core engine. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="77" column="1"/>
+        <location file="Binary/CmshImporter.hpp" line="34" column="25"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="dd/dd4/a02498_1af85892cc57daf30d7a334c196de4eb37" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::CmshImporter::doImportMesh</definition>
+        <argsstring>(Mesh &amp;mesh) override</argsstring>
+        <name>doImportMesh</name>
+        <qualifiedname>castor3d::CmshImporter::doImportMesh</qualifiedname>
+        <reimplements refid="d2/db9/a03334_1a0eb9bc99966ced84853d1ff07fad8ce0">doImportMesh</reimplements>
+        <param>
+          <type><ref refid="dd/dc8/a03342" kindref="compound">Mesh</ref> &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <briefdescription>
+<para><ref refid="dd/dc8/a03342" kindref="compound">Mesh</ref> import Function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the imported data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any problem occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/CmshImporter.hpp" line="40" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dd4/a02498_1a3f8b0c6a043a13a3b0464fbab8c437f2" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::CmshImporter::doImportScene</definition>
+        <argsstring>(castor3d::Scene &amp;scene) override</argsstring>
+        <name>doImportScene</name>
+        <qualifiedname>castor3d::CmshImporter::doImportScene</qualifiedname>
+        <reimplements refid="d2/db9/a03334_1a91bc996fdf30720d6e9f4a2ff798f09d">doImportScene</reimplements>
+        <param>
+          <type><ref refid="d6/d71/a04598" kindref="compound">castor3d::Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <briefdescription>
+<para><ref refid="d6/d71/a04598" kindref="compound">Scene</ref> import Function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the imported data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any problem occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/CmshImporter.hpp" line="44" column="14" bodyfile="Binary/CmshImporter.hpp" bodystart="44" bodyend="47"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Cache/OverlayCache.hpp" line="75" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="74" bodyend="82"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::CmshImporter</label>
+        <link refid="dd/dd4/a02498"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::MeshImporter</label>
+        <link refid="d2/db9/a03334"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="10">
+        <label>K</label>
+      </node>
+      <node id="4">
+        <label>castor3d::ParametersT&lt; castor::String &gt;</label>
+        <link refid="d5/d08/a03254"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>T</label>
+      </node>
+      <node id="1">
+        <label>castor3d::CmshImporter</label>
+        <link refid="dd/dd4/a02498"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::MeshImporter</label>
+        <link refid="d2/db9/a03334"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_parameters</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_textureRemaps</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::ParametersT&lt; KeyT &gt;</label>
+        <link refid="d5/d08/a03254"/>
+      </node>
+      <node id="7">
+        <label>castor3d::TextureConfiguration</label>
+        <link refid="d4/db9/a02918"/>
+        <childnode refid="8" relation="usage">
+          <edgelabel>transform</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>AlbedoTexture</edgelabel>
+          <edgelabel>DiffuseTexture</edgelabel>
+          <edgelabel>EmissiveTexture</edgelabel>
+          <edgelabel>GlossinessTexture</edgelabel>
+          <edgelabel>HeightTexture</edgelabel>
+          <edgelabel>MetalnessTexture</edgelabel>
+          <edgelabel>NormalTexture</edgelabel>
+          <edgelabel>OcclusionTexture</edgelabel>
+          <edgelabel>OpacityTexture</edgelabel>
+          <edgelabel>RoughnessTexture</edgelabel>
+          <edgelabel>...</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::TextureTransform</label>
+        <link refid="d7/da7/a02914"/>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="6">
+        <label>std::map&lt; TextureFlag, castor3d::TextureConfiguration &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; TextureFlag, castor3d::TextureConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="10" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Binary/CmshImporter.hpp" line="13" column="1" bodyfile="Binary/CmshImporter.hpp" bodystart="15" bodyend="51"/>
     <listofallmembers>
-      <member refid="dd/dd4/a02498_1a45af74e73c10cfa8ebee9923a1dfbddc" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayCleaner</scope><name>m_overlayCountPerLevel</name></member>
-      <member refid="dd/dd4/a02498_1a55747507fa49a5305273475c97020092" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayCleaner</scope><name>m_overlays</name></member>
-      <member refid="dd/dd4/a02498_1af9863175f6a99f38ea15f4a42c63de65" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayCleaner</scope><name>operator()</name></member>
-      <member refid="dd/dd4/a02498_1a3939d3126001f69aa5358340d12d1e9b" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayCleaner</scope><name>OverlayCleaner</name></member>
+      <member refid="dd/dd4/a02498_1ac512c60208151dcdbc11d51dc5fe5af3" prot="public" virt="non-virtual"><scope>castor3d::CmshImporter</scope><name>CmshImporter</name></member>
+      <member refid="d2/db9/a03334_1a74050b6573a2ec186a19ab4a68df44a7" prot="public" virt="non-virtual"><scope>castor3d::CmshImporter</scope><name>convertToNormalMap</name></member>
+      <member refid="dd/dd4/a02498_1acf84b34150a4808faf7b29da1037204c" prot="public" virt="non-virtual"><scope>castor3d::CmshImporter</scope><name>create</name></member>
+      <member refid="dd/dd4/a02498_1af85892cc57daf30d7a334c196de4eb37" prot="protected" virt="virtual"><scope>castor3d::CmshImporter</scope><name>doImportMesh</name></member>
+      <member refid="dd/dd4/a02498_1a3f8b0c6a043a13a3b0464fbab8c437f2" prot="protected" virt="virtual"><scope>castor3d::CmshImporter</scope><name>doImportScene</name></member>
+      <member refid="d2/db9/a03334_1ac7a60af9fbfa9bc67f77133fd7fb1834" prot="public" virt="non-virtual"><scope>castor3d::CmshImporter</scope><name>import</name></member>
+      <member refid="d2/db9/a03334_1a19c30bbe412a0dc2edceb602d0972b70" prot="public" virt="non-virtual"><scope>castor3d::CmshImporter</scope><name>import</name></member>
+      <member refid="d2/db9/a03334_1ac9f75fc080c2272f28f705d65d1d38ca" prot="public" virt="non-virtual"><scope>castor3d::CmshImporter</scope><name>loadImage</name></member>
+      <member refid="d2/db9/a03334_1a78f081a519908407ac799708f0e5d1f7" prot="public" virt="non-virtual"><scope>castor3d::CmshImporter</scope><name>loadImage</name></member>
+      <member refid="d2/db9/a03334_1a1bcde466f3e3e4bf52b9b7fcf2c45b1c" prot="public" virt="non-virtual"><scope>castor3d::CmshImporter</scope><name>loadImage</name></member>
+      <member refid="d2/db9/a03334_1aa293369f1b6f93c3ac229e88e42e04e7" prot="public" virt="non-virtual"><scope>castor3d::CmshImporter</scope><name>loadTexture</name></member>
+      <member refid="d2/db9/a03334_1a1c3ed2d1e0b59e2e34823d2a8299d158" prot="public" virt="non-virtual"><scope>castor3d::CmshImporter</scope><name>loadTexture</name></member>
+      <member refid="d2/db9/a03334_1a7136a295e404160089dbe8f17c07deb5" prot="protected" virt="non-virtual"><scope>castor3d::CmshImporter</scope><name>m_fileName</name></member>
+      <member refid="d2/db9/a03334_1afc8f20d32bfd80444da60342617748ad" prot="protected" virt="non-virtual"><scope>castor3d::CmshImporter</scope><name>m_filePath</name></member>
+      <member refid="d2/db9/a03334_1a5dab227b4d20b86f974427433bbcf0e3" prot="protected" virt="non-virtual"><scope>castor3d::CmshImporter</scope><name>m_geometries</name></member>
+      <member refid="d2/db9/a03334_1a8023fdbac648fab9057efdd454af67c6" prot="protected" virt="non-virtual"><scope>castor3d::CmshImporter</scope><name>m_meshes</name></member>
+      <member refid="d2/db9/a03334_1ac9f3f2e9a1060842f42d2da135641de5" prot="protected" virt="non-virtual"><scope>castor3d::CmshImporter</scope><name>m_nodes</name></member>
+      <member refid="d2/db9/a03334_1afb5a24369d04781b9fa30b5d824307a2" prot="protected" virt="non-virtual"><scope>castor3d::CmshImporter</scope><name>m_parameters</name></member>
+      <member refid="d2/db9/a03334_1ae81e777e04b0fb5d395ad7c438e588c0" prot="protected" virt="non-virtual"><scope>castor3d::CmshImporter</scope><name>m_textureRemaps</name></member>
+      <member refid="d2/db9/a03334_1a045aa14041b53b76e24b6302849dcae4" prot="public" virt="non-virtual"><scope>castor3d::CmshImporter</scope><name>MeshImporter</name></member>
+      <member refid="dd/dd4/a02498_1a73e3402810b3dca59d24efe453062a43" prot="public" virt="non-virtual"><scope>castor3d::CmshImporter</scope><name>Type</name></member>
+      <member refid="d2/db9/a03334_1ab487a61ca9280ca08416a78209be114c" prot="public" virt="virtual"><scope>castor3d::CmshImporter</scope><name>~MeshImporter</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

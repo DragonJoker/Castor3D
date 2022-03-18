@@ -1,161 +1,71 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d3/df0/a05067" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::SkeletonAnimationInstanceKeyFrame</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; SkeletonAnimationInstance &gt;</basecompoundref>
-    <includes local="no">SkeletonAnimationInstanceKeyFrame.hpp</includes>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="d3/df0/a05067_1ae5d764bac8c9a1f42eda4721b9ddf6b2" prot="public" static="no">
-        <type>std::vector&lt; std::pair&lt; <ref refid="d6/d32/a05075" kindref="compound">SkeletonAnimationInstanceObject</ref> *, castor::Matrix4x4f &gt; &gt;</type>
-        <definition>using castor3d::SkeletonAnimationInstanceKeyFrame::ObjectArray =  std::vector&lt; std::pair&lt; SkeletonAnimationInstanceObject *, castor::Matrix4x4f &gt; &gt;</definition>
-        <argsstring></argsstring>
-        <name>ObjectArray</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" line="17" column="1" bodyfile="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" bodystart="17" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
+    <compoundname>castor::TextWriter&lt; castor3d::SceneBackground &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::SceneBackground &gt;</basecompoundref>
+    <includes local="no">TextBackground.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d3/df0/a05067_1a7b1c9dd539ca359bb13bb5c08f6265c3" prot="private" static="no" mutable="no">
-        <type><ref refid="d1/d9f/a05035" kindref="compound">AnimatedSkeleton</ref> &amp;</type>
-        <definition>AnimatedSkeleton&amp; castor3d::SkeletonAnimationInstanceKeyFrame::m_skeleton</definition>
+      <memberdef kind="variable" id="d3/df0/a05067_1a4e84f87cd86e2dc3720a7f4073264ae3" prot="private" static="no" mutable="no">
+        <type>Path</type>
+        <definition>Path castor::TextWriter&lt; castor3d::SceneBackground &gt;::m_folder</definition>
         <argsstring></argsstring>
-        <name>m_skeleton</name>
+        <name>m_folder</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::SceneBackground &gt;::m_folder</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" line="54" column="1" bodyfile="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" bodystart="54" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/df0/a05067_1a0ce94152cf8eacd9c8d432bb03e8589b" prot="private" static="no" mutable="no">
-        <type><ref refid="d9/d0d/a03995" kindref="compound">SkeletonAnimationKeyFrame</ref> const  &amp;</type>
-        <definition>SkeletonAnimationKeyFrame const&amp; castor3d::SkeletonAnimationInstanceKeyFrame::m_keyFrame</definition>
-        <argsstring></argsstring>
-        <name>m_keyFrame</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" line="55" column="1" bodyfile="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" bodystart="55" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/df0/a05067_1a3483568ca142666d67cf72fecdaa3be9" prot="private" static="no" mutable="no">
-        <type><ref refid="d3/df0/a05067_1ae5d764bac8c9a1f42eda4721b9ddf6b2" kindref="member">ObjectArray</ref></type>
-        <definition>ObjectArray castor3d::SkeletonAnimationInstanceKeyFrame::m_objects</definition>
-        <argsstring></argsstring>
-        <name>m_objects</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" line="56" column="1" bodyfile="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" bodystart="56" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/df0/a05067_1a91142f15b740115529bd55018e1d6c6f" prot="private" static="no" mutable="no">
-        <type><ref refid="d7/dd1/a01458_1ac45304de9c80b94acff3cef7b03302ba" kindref="member">SubmeshBoundingBoxList</ref></type>
-        <definition>SubmeshBoundingBoxList castor3d::SkeletonAnimationInstanceKeyFrame::m_boxes</definition>
-        <argsstring></argsstring>
-        <name>m_boxes</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" line="57" column="1" bodyfile="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" bodystart="57" bodyend="-1"/>
+        <location file="Text/TextBackground.hpp" line="24" column="6" bodyfile="Text/TextBackground.hpp" bodystart="24" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d3/df0/a05067_1a7fb50da8f0c7e1ebef7ea6503e179297" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d3/df0/a05067_1ad57fce506f8d08ce05ea8f15fb6484af" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::SkeletonAnimationInstanceKeyFrame::SkeletonAnimationInstanceKeyFrame</definition>
-        <argsstring>(SkeletonAnimationInstance &amp;skeletonAnimation, SkeletonAnimationKeyFrame const &amp;keyFrame, AnimatedSkeleton &amp;skeleton)</argsstring>
-        <name>SkeletonAnimationInstanceKeyFrame</name>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::SceneBackground &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs, Path const &amp;folder)</argsstring>
+        <name>TextWriter</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::SceneBackground &gt;::TextWriter</qualifiedname>
         <param>
-          <type><ref refid="d6/de9/a05059" kindref="compound">SkeletonAnimationInstance</ref> &amp;</type>
-          <declname>skeletonAnimation</declname>
+          <type>String const &amp;</type>
+          <declname>tabs</declname>
         </param>
         <param>
-          <type><ref refid="d9/d0d/a03995" kindref="compound">SkeletonAnimationKeyFrame</ref> const &amp;</type>
-          <declname>keyFrame</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/d9f/a05035" kindref="compound">AnimatedSkeleton</ref> &amp;</type>
-          <declname>skeleton</declname>
+          <type>Path const &amp;</type>
+          <declname>folder</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">skeletonAnimation</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The animation instance. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">keyFrame</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The animation keyframe. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">skeleton</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The target animated skeleton. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" line="32" column="1"/>
+        <location file="Text/TextBackground.hpp" line="18" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d3/df0/a05067_1a7455116789136814666e8e18cd1e4293" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SkeletonAnimationInstanceKeyFrame::apply</definition>
-        <argsstring>()</argsstring>
-        <name>apply</name>
+      <memberdef kind="function" id="d3/df0/a05067_1a4ddd3a5e80fb69df43c65dc9b0843b1e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::SceneBackground &gt;::operator()</definition>
+        <argsstring>(castor3d::SceneBackground const &amp;overlay, castor::StringStream &amp;file) override</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::SceneBackground &gt;::operator()</qualifiedname>
+        <param>
+          <type><ref refid="d6/df1/a04447" kindref="compound">castor3d::SceneBackground</ref> const &amp;</type>
+          <declname>overlay</declname>
+        </param>
+        <param>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
+        </param>
         <briefdescription>
-<para>Applies the keyframe. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" line="41" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/df0/a05067_1a74a63235a414569a606c9fe7479f1a7c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::Milliseconds const  &amp;</type>
-        <definition>castor::Milliseconds const&amp; castor3d::SkeletonAnimationInstanceKeyFrame::getTimeIndex</definition>
-        <argsstring>() const</argsstring>
-        <name>getTimeIndex</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The start time index. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" line="48" column="1" bodyfile="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" bodystart="48" bodyend="51"/>
-        <references refid="d6/d5d/a02023_1af7d64b424ad5d12f2a9970e134365a81" compoundref="d3/d8b/a00059" startline="50" endline="53">castor3d::AnimationKeyFrame::getTimeIndex</references>
+        <location file="Text/TextBackground.hpp" line="20" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -163,37 +73,32 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="3981">
-        <label>castor3d::SkeletonAnimationInstanceKeyFrame</label>
-        <link refid="d3/df0/a05067"/>
-        <childnode refid="3982" relation="public-inheritance">
-        </childnode>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::SceneBackground &gt;</label>
       </node>
-      <node id="3982">
-        <label>castor::OwnedBy&lt; SkeletonAnimationInstance &gt;</label>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::SceneBackground &gt;</label>
+        <link refid="d3/df0/a05067"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="3983">
-        <label>castor3d::SkeletonAnimationInstanceKeyFrame</label>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::SceneBackground &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::SceneBackground &gt;</label>
         <link refid="d3/df0/a05067"/>
-        <childnode refid="3984" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="3984">
-        <label>castor::OwnedBy&lt; SkeletonAnimationInstance &gt;</label>
-      </node>
     </collaborationgraph>
-    <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" line="15" column="1" bodyfile="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" bodystart="13" bodyend="58"/>
+    <location file="Text/TextBackground.hpp" line="14" column="1" bodyfile="Text/TextBackground.hpp" bodystart="16" bodyend="25"/>
     <listofallmembers>
-      <member refid="d3/df0/a05067_1a7455116789136814666e8e18cd1e4293" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceKeyFrame</scope><name>apply</name></member>
-      <member refid="d3/df0/a05067_1a74a63235a414569a606c9fe7479f1a7c" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceKeyFrame</scope><name>getTimeIndex</name></member>
-      <member refid="d3/df0/a05067_1a91142f15b740115529bd55018e1d6c6f" prot="private" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceKeyFrame</scope><name>m_boxes</name></member>
-      <member refid="d3/df0/a05067_1a0ce94152cf8eacd9c8d432bb03e8589b" prot="private" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceKeyFrame</scope><name>m_keyFrame</name></member>
-      <member refid="d3/df0/a05067_1a3483568ca142666d67cf72fecdaa3be9" prot="private" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceKeyFrame</scope><name>m_objects</name></member>
-      <member refid="d3/df0/a05067_1a7b1c9dd539ca359bb13bb5c08f6265c3" prot="private" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceKeyFrame</scope><name>m_skeleton</name></member>
-      <member refid="d3/df0/a05067_1ae5d764bac8c9a1f42eda4721b9ddf6b2" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceKeyFrame</scope><name>ObjectArray</name></member>
-      <member refid="d3/df0/a05067_1a7fb50da8f0c7e1ebef7ea6503e179297" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceKeyFrame</scope><name>SkeletonAnimationInstanceKeyFrame</name></member>
+      <member refid="d3/df0/a05067_1a4e84f87cd86e2dc3720a7f4073264ae3" prot="private" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::SceneBackground &gt;</scope><name>m_folder</name></member>
+      <member refid="d3/df0/a05067_1a4ddd3a5e80fb69df43c65dc9b0843b1e" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::SceneBackground &gt;</scope><name>operator()</name></member>
+      <member refid="d3/df0/a05067_1ad57fce506f8d08ce05ea8f15fb6484af" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::SceneBackground &gt;</scope><name>TextWriter</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

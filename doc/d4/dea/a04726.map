@@ -1,8 +1,7 @@
-<map id="castor3d::LightPassShadow&lt; LtType &gt;" name="castor3d::LightPassShadow&lt; LtType &gt;">
-<area shape="rect" id="node1" title="Base class for all light passes with shadow." alt="" coords="239,71,423,112"/>
-<area shape="rect" id="node3" href="$da/dbb/a04871.html" title="Base class for all light passes with reflective shadow maps." alt="" coords="639,5,832,47"/>
-<area shape="rect" id="node4" href="$d4/d10/a04839.html" title="Base class for all light passes with light propagation volumes." alt="" coords="632,71,839,112"/>
-<area shape="rect" id="node5" href="$dc/d43/a04727.html" title=" " alt="" coords="643,136,827,177"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,71,189,112"/>
-<area shape="rect" id="node6" href="$db/db4/a04835.html" title=" " alt="" coords="888,129,1076,185"/>
+<map id="castor3d::SssProfileBuffer::SssProfileDataPtr" name="castor3d::SssProfileBuffer::SssProfileDataPtr">
+<area shape="rect" id="node1" title=" " alt="" coords="865,16,1037,57"/>
+<area shape="rect" id="node2" href="$d6/d5a/a04720.html" title=" " alt="" coords="149,5,321,47"/>
+<area shape="rect" id="node3" title=" " alt="" coords="536,57,697,113"/>
+<area shape="rect" id="node4" title=" " alt="" coords="181,90,289,117"/>
+<area shape="rect" id="node5" title=" " alt="" coords="5,90,44,117"/>
 </map>

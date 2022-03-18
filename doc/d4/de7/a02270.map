@@ -1,4 +1,5 @@
-<map id="castor3d::UniformBufferPools" name="castor3d::UniformBufferPools">
-<area shape="rect" id="node1" title=" " alt="" coords="26,80,217,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,237,32"/>
+<map id="castor3d::BinaryWriter&lt; Bone &gt;" name="castor3d::BinaryWriter&lt; Bone &gt;">
+<area shape="rect" id="node1" title="Animable binary loader." alt="" coords="21,200,173,241"/>
+<area shape="rect" id="node2" href="$d2/da6/a02339.html" title=" " alt="" coords="5,109,188,151"/>
+<area shape="rect" id="node3" href="$d2/da6/a02339.html" title="Binary data chunk writer base class." alt="" coords="5,5,188,47"/>
 </map>

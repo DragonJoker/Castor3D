@@ -1,33 +1,63 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="df/dfc/a02908" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkMemoryAllocateFlagsInfo &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="df/dfc/a02908_1accda1c9888eff35ef32b77376a53e64a" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkMemoryAllocateFlagsInfo &gt;::value</definition>
+    <compoundname>castor3d::TextureTransform</compoundname>
+    <includes local="no">TextureConfiguration.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/dfc/a02908_1a8127887dc6125040ecaf43778ee30b39" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::TextureTransform::translate</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO</initializer>
+        <name>translate</name>
+        <qualifiedname>castor3d::TextureTransform::translate</qualifiedname>
+        <initializer>{ 0, 0, 0, 0 }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="67" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="67" bodyend="-1"/>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="21" column="17" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/dfc/a02908_1a7bc66a3312df82082daa05becc016dcb" prot="public" static="no" mutable="no">
+        <type>castor::Angle</type>
+        <definition>castor::Angle castor3d::TextureTransform::rotate</definition>
+        <argsstring></argsstring>
+        <name>rotate</name>
+        <qualifiedname>castor3d::TextureTransform::rotate</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="22" column="15" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/dfc/a02908_1a86522b8a269d777fcd3d0713433cc5d9" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::TextureTransform::scale</definition>
+        <argsstring></argsstring>
+        <name>scale</name>
+        <qualifiedname>castor3d::TextureTransform::scale</qualifiedname>
+        <initializer>{ 1, 1, 1, 0 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="23" column="17" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="23" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="67" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="67" bodyend="67"/>
+    <location file="Material/Texture/TextureConfiguration.hpp" line="19" column="1" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="20" bodyend="24"/>
     <listofallmembers>
-      <member refid="df/dfc/a02908_1accda1c9888eff35ef32b77376a53e64a" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkMemoryAllocateFlagsInfo &gt;</scope><name>value</name></member>
+      <member refid="df/dfc/a02908_1a7bc66a3312df82082daa05becc016dcb" prot="public" virt="non-virtual"><scope>castor3d::TextureTransform</scope><name>rotate</name></member>
+      <member refid="df/dfc/a02908_1a86522b8a269d777fcd3d0713433cc5d9" prot="public" virt="non-virtual"><scope>castor3d::TextureTransform</scope><name>scale</name></member>
+      <member refid="df/dfc/a02908_1a8127887dc6125040ecaf43778ee30b39" prot="public" virt="non-virtual"><scope>castor3d::TextureTransform</scope><name>translate</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

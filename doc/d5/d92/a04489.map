@@ -1,6 +1,8 @@
-<map id="castor3d::PickingPass" name="castor3d::PickingPass">
-<area shape="rect" id="node1" title=" " alt="" coords="97,155,250,181"/>
-<area shape="rect" id="node2" href="$d6/d1b/a04590.html" title=" " alt="" coords="79,80,267,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,192,32"/>
-<area shape="rect" id="node4" title=" " alt="" coords="217,5,279,32"/>
+<map id="castor3d::Geometry" name="castor3d::Geometry">
+<area shape="rect" id="node1" title=" " alt="" coords="473,84,611,111"/>
+<area shape="rect" id="node2" href="$d1/d4a/a04530.html" title=" " alt="" coords="256,56,421,83"/>
+<area shape="rect" id="node3" title=" " alt="" coords="13,5,196,32"/>
+<area shape="rect" id="node4" title=" " alt="" coords="51,56,158,83"/>
+<area shape="rect" id="node5" href="$d0/d7e/a04594.html" title=" " alt="" coords="252,111,425,137"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,107,204,149"/>
 </map>

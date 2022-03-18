@@ -1,0 +1,198 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dd/da4/a02295" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::GpuBufferBuddyAllocatorTraits</compoundname>
+    <includes local="no">GpuBufferBuddyAllocator.hpp</includes>
+    <innerclass refid="db/d90/a02299" prot="public">castor3d::GpuBufferBuddyAllocatorTraits::Block</innerclass>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dd/da4/a02295_1ad5aca6297e2f1509e1a9195e846f05ff" prot="public" static="no">
+        <type>VkDeviceSize</type>
+        <definition>using castor3d::GpuBufferBuddyAllocatorTraits::PointerType =  VkDeviceSize</definition>
+        <argsstring></argsstring>
+        <name>PointerType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferBuddyAllocator.hpp" line="13" column="1" bodyfile="Buffer/GpuBufferBuddyAllocator.hpp" bodystart="13" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dd/da4/a02295_1a94cac27b661b4dd57b6903dbe827f74a" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t castor3d::GpuBufferBuddyAllocatorTraits::m_allocatedSize</definition>
+        <argsstring></argsstring>
+        <name>m_allocatedSize</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferBuddyAllocator.hpp" line="91" column="1" bodyfile="Buffer/GpuBufferBuddyAllocator.hpp" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/da4/a02295_1a43bd14d8ea329bc90a1af0764aa6264c" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::GpuBufferBuddyAllocatorTraits::GpuBufferBuddyAllocatorTraits</definition>
+        <argsstring>(size_t size)</argsstring>
+        <name>GpuBufferBuddyAllocatorTraits</name>
+        <param>
+          <type>size_t</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The allocator size. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferBuddyAllocator.hpp" line="26" column="1" bodyfile="Buffer/GpuBufferBuddyAllocator.hpp" bodystart="26" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/da4/a02295_1a02ac77d52188f9642ea79fefc7832510" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor3d::GpuBufferBuddyAllocatorTraits::getSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getSize</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The allocator size. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferBuddyAllocator.hpp" line="36" column="1" bodyfile="Buffer/GpuBufferBuddyAllocator.hpp" bodystart="36" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/da4/a02295_1ae68ecde83c22b02c5ce41abc72186b87" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/da4/a02295_1ad5aca6297e2f1509e1a9195e846f05ff" kindref="member">PointerType</ref></type>
+        <definition>PointerType castor3d::GpuBufferBuddyAllocatorTraits::getPointer</definition>
+        <argsstring>(uint32_t offset)</argsstring>
+        <name>getPointer</name>
+        <param>
+          <type>uint32_t</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+<para>Creates a memory block. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The block memory offset. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The block. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferBuddyAllocator.hpp" line="50" column="1" bodyfile="Buffer/GpuBufferBuddyAllocator.hpp" bodystart="50" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/da4/a02295_1aacaef2fa74ac324eea6ba898a10d1b12" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor3d::GpuBufferBuddyAllocatorTraits::getOffset</definition>
+        <argsstring>(PointerType pointer) const</argsstring>
+        <name>getOffset</name>
+        <param>
+          <type><ref refid="dd/da4/a02295_1ad5aca6297e2f1509e1a9195e846f05ff" kindref="member">PointerType</ref></type>
+          <declname>pointer</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves the offset from a memory block. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pointer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The memory block. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The offset. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferBuddyAllocator.hpp" line="64" column="1" bodyfile="Buffer/GpuBufferBuddyAllocator.hpp" bodystart="64" bodyend="67"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/da4/a02295_1a7fb9bb2e57612f1ec88a56c0cc419ae6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d90/a02299" kindref="compound">Block</ref></type>
+        <definition>Block castor3d::GpuBufferBuddyAllocatorTraits::getNull</definition>
+        <argsstring>() const</argsstring>
+        <name>getNull</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The null memory block. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferBuddyAllocator.hpp" line="74" column="1" bodyfile="Buffer/GpuBufferBuddyAllocator.hpp" bodystart="74" bodyend="78"/>
+        <referencedby refid="dd/da4/a02295_1ad6e226481f38134632f4f82aa5c3aab1" compoundref="d5/db1/a00140" startline="85" endline="88">isNull</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/da4/a02295_1ad6e226481f38134632f4f82aa5c3aab1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::GpuBufferBuddyAllocatorTraits::isNull</definition>
+        <argsstring>(PointerType pointer) const</argsstring>
+        <name>isNull</name>
+        <param>
+          <type><ref refid="dd/da4/a02295_1ad5aca6297e2f1509e1a9195e846f05ff" kindref="member">PointerType</ref></type>
+          <declname>pointer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The null memory block. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferBuddyAllocator.hpp" line="85" column="1" bodyfile="Buffer/GpuBufferBuddyAllocator.hpp" bodystart="85" bodyend="88"/>
+        <references refid="db/d90/a02299_1a35b84f4c8e3c9cb893d72247a4c17631" compoundref="d5/db1/a00140" startline="16">castor3d::GpuBufferBuddyAllocatorTraits::Block::data</references>
+        <references refid="dd/da4/a02295_1a7fb9bb2e57612f1ec88a56c0cc419ae6" compoundref="d5/db1/a00140" startline="74" endline="78">getNull</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Buffer/GpuBufferBuddyAllocator.hpp" line="12" column="1" bodyfile="Buffer/GpuBufferBuddyAllocator.hpp" bodystart="11" bodyend="92"/>
+    <listofallmembers>
+      <member refid="dd/da4/a02295_1a7fb9bb2e57612f1ec88a56c0cc419ae6" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBuddyAllocatorTraits</scope><name>getNull</name></member>
+      <member refid="dd/da4/a02295_1aacaef2fa74ac324eea6ba898a10d1b12" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBuddyAllocatorTraits</scope><name>getOffset</name></member>
+      <member refid="dd/da4/a02295_1ae68ecde83c22b02c5ce41abc72186b87" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBuddyAllocatorTraits</scope><name>getPointer</name></member>
+      <member refid="dd/da4/a02295_1a02ac77d52188f9642ea79fefc7832510" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBuddyAllocatorTraits</scope><name>getSize</name></member>
+      <member refid="dd/da4/a02295_1a43bd14d8ea329bc90a1af0764aa6264c" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBuddyAllocatorTraits</scope><name>GpuBufferBuddyAllocatorTraits</name></member>
+      <member refid="dd/da4/a02295_1ad6e226481f38134632f4f82aa5c3aab1" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBuddyAllocatorTraits</scope><name>isNull</name></member>
+      <member refid="dd/da4/a02295_1a94cac27b661b4dd57b6903dbe827f74a" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferBuddyAllocatorTraits</scope><name>m_allocatedSize</name></member>
+      <member refid="dd/da4/a02295_1ad5aca6297e2f1509e1a9195e846f05ff" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBuddyAllocatorTraits</scope><name>PointerType</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

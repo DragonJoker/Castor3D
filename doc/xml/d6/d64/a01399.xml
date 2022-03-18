@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d6/d64/a01399" kind="namespace" language="C++">
+    <compoundname>castor</compoundname>
+    <innerclass refid="d8/dc9/a02671" prot="public">castor::OverlayCategorySort</innerclass>
+    <innerclass refid="d1/d23/a02603" prot="public">castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;</innerclass>
+    <innerclass refid="dc/d58/a02667" prot="public">castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</innerclass>
+    <innerclass refid="d8/d01/a02675" prot="public">castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;</innerclass>
+    <innerclass refid="de/dbb/a02679" prot="public">castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</innerclass>
+    <innerclass refid="da/d0f/a05063" prot="public">castor::TextWriter&lt; castor3d::AnimatedObjectGroup &gt;</innerclass>
+    <innerclass refid="db/d78/a05071" prot="public">castor::TextWriter&lt; castor3d::BillboardList &gt;</innerclass>
+    <innerclass refid="d6/d32/a05075" prot="public">castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;</innerclass>
+    <innerclass refid="dd/d78/a05079" prot="public">castor::TextWriter&lt; castor3d::Camera &gt;</innerclass>
+    <innerclass refid="d6/de9/a05083" prot="public">castor::TextWriter&lt; castor3d::ColourBackground &gt;</innerclass>
+    <innerclass refid="d2/d78/a05087" prot="public">castor::TextWriter&lt; castor3d::DirectionalLight &gt;</innerclass>
+    <innerclass refid="d9/de1/a05091" prot="public">castor::TextWriter&lt; castor3d::Fog &gt;</innerclass>
+    <innerclass refid="de/d11/a05095" prot="public">castor::TextWriter&lt; castor3d::Geometry &gt;</innerclass>
+    <innerclass refid="d3/d8f/a05099" prot="public">castor::TextWriter&lt; castor3d::HdrConfig &gt;</innerclass>
+    <innerclass refid="d8/d5e/a05103" prot="public">castor::TextWriter&lt; castor3d::ImageBackground &gt;</innerclass>
+    <innerclass refid="da/d41/a05107" prot="public">castor::TextWriter&lt; castor3d::Light &gt;</innerclass>
+    <innerclass refid="dd/df7/a05111" prot="public">castor::TextWriter&lt; castor3d::LpvConfig &gt;</innerclass>
+    <innerclass refid="df/d84/a05115" prot="public">castor::TextWriter&lt; castor3d::Material &gt;</innerclass>
+    <innerclass refid="d3/d91/a05119" prot="public">castor::TextWriter&lt; castor3d::Mesh &gt;</innerclass>
+    <innerclass refid="d0/d9d/a05123" prot="public">castor::TextWriter&lt; castor3d::Overlay &gt;</innerclass>
+    <innerclass refid="d0/d42/a05127" prot="public">castor::TextWriter&lt; castor3d::OverlayCategory &gt;</innerclass>
+    <innerclass refid="d0/dcf/a05131" prot="public">castor::TextWriter&lt; castor3d::PanelOverlay &gt;</innerclass>
+    <innerclass refid="dd/dce/a05135" prot="public">castor::TextWriter&lt; castor3d::ParticleSystem &gt;</innerclass>
+    <innerclass refid="db/d6b/a05139" prot="public">castor::TextWriter&lt; castor3d::Pass &gt;</innerclass>
+    <innerclass refid="db/d58/a05143" prot="public">castor::TextWriter&lt; castor3d::PointLight &gt;</innerclass>
+    <innerclass refid="df/dc5/a05151" prot="public">castor::TextWriter&lt; castor3d::RenderTarget &gt;</innerclass>
+    <innerclass refid="db/d92/a05155" prot="public">castor::TextWriter&lt; castor3d::RenderWindow &gt;</innerclass>
+    <innerclass refid="d1/d90/a05159" prot="public">castor::TextWriter&lt; castor3d::RsmConfig &gt;</innerclass>
+    <innerclass refid="d7/d05/a05163" prot="public">castor::TextWriter&lt; castor3d::Sampler &gt;</innerclass>
+    <innerclass refid="df/daa/a05167" prot="public">castor::TextWriter&lt; castor3d::Scene &gt;</innerclass>
+    <innerclass refid="d3/df0/a05067" prot="public">castor::TextWriter&lt; castor3d::SceneBackground &gt;</innerclass>
+    <innerclass refid="dc/d07/a05175" prot="public">castor::TextWriter&lt; castor3d::SceneNode &gt;</innerclass>
+    <innerclass refid="d2/d38/a05147" prot="public">castor::TextWriter&lt; castor3d::ShaderProgram &gt;</innerclass>
+    <innerclass refid="dc/daa/a05179" prot="public">castor::TextWriter&lt; castor3d::ShadowConfig &gt;</innerclass>
+    <innerclass refid="d7/d48/a05183" prot="public">castor::TextWriter&lt; castor3d::SkyboxBackground &gt;</innerclass>
+    <innerclass refid="db/d48/a05187" prot="public">castor::TextWriter&lt; castor3d::SpotLight &gt;</innerclass>
+    <innerclass refid="de/d61/a05191" prot="public">castor::TextWriter&lt; castor3d::SsaoConfig &gt;</innerclass>
+    <innerclass refid="dc/d65/a05195" prot="public">castor::TextWriter&lt; castor3d::SubsurfaceScattering &gt;</innerclass>
+    <innerclass refid="d4/ddd/a05199" prot="public">castor::TextWriter&lt; castor3d::TextOverlay &gt;</innerclass>
+    <innerclass refid="de/d1b/a05203" prot="public">castor::TextWriter&lt; castor3d::TextureConfiguration &gt;</innerclass>
+    <innerclass refid="d8/d42/a05207" prot="public">castor::TextWriter&lt; castor3d::TextureUnit &gt;</innerclass>
+    <innerclass refid="d1/d50/a05211" prot="public">castor::TextWriter&lt; castor3d::TextureView &gt;</innerclass>
+    <innerclass refid="d3/dd2/a05215" prot="public">castor::TextWriter&lt; castor3d::Viewport &gt;</innerclass>
+    <innerclass refid="d8/d9b/a05219" prot="public">castor::TextWriter&lt; castor3d::VoxelSceneData &gt;</innerclass>
+      <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="d6/d64/a01399_1a7010f4ef16215727e7d77584cdcbffac" prot="public" static="no">
+        <type>std::set&lt; castor3d::OverlayCategorySPtr, <ref refid="d8/dc9/a02671" kindref="compound">OverlayCategorySort</ref> &gt;</type>
+        <definition>using castor::OverlayCategorySet = typedef std::set&lt; castor3d::OverlayCategorySPtr, OverlayCategorySort &gt;</definition>
+        <argsstring></argsstring>
+        <name>OverlayCategorySet</name>
+        <qualifiedname>castor::OverlayCategorySet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/OverlayCache.hpp" line="40" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Cache/AnimatedObjectGroupCache.hpp" line="21" column="1"/>
+  </compounddef>
+</doxygen>

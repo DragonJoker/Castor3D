@@ -1,47 +1,186 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dc/d2b/a02486" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::OverlayCategorySort</compoundname>
-    <includes local="no">OverlayCache.hpp</includes>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="dc/d2b/a02486_1a080fb537036a1af050216e846955e7b7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dc/d2b/a02486" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ChunkWriter</compoundname>
+    <basecompoundref refid="d2/df5/a02482" prot="public" virt="non-virtual">castor3d::ChunkWriterBase</basecompoundref>
+    <includes local="no">ChunkWriter.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="dc/d2b/a02486_1ac4cf51584e348def2f360b81e6ec7a9a" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
-        <definition>bool castor3d::OverlayCategorySort::operator()</definition>
-        <argsstring>(OverlayCategorySPtr a, OverlayCategorySPtr b) const</argsstring>
-        <name>operator()</name>
+        <definition>static bool castor3d::ChunkWriter&lt; T &gt;::write</definition>
+        <argsstring>(T const *begin, T const *end, ChunkType type, BinaryChunk &amp;chunk)</argsstring>
+        <name>write</name>
+        <qualifiedname>castor3d::ChunkWriter::write</qualifiedname>
         <param>
-          <type>OverlayCategorySPtr</type>
-          <declname>a</declname>
+          <type>T const *</type>
+          <declname>begin</declname>
         </param>
         <param>
-          <type>OverlayCategorySPtr</type>
-          <declname>b</declname>
+          <type>T const *</type>
+          <declname>end</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dae/a02294" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
         </param>
         <briefdescription>
-<para>Comparison operator. </para>
+<para>Writes a subchunk value into a chunk. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">begin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The values begin </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">end</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The values end </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The subchunk type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="31" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="31" bodyend="34"/>
+        <location file="Binary/ChunkWriter.hpp" line="83" column="20" bodyfile="Binary/ChunkWriter.hpp" bodystart="83" bodyend="99"/>
+        <references refid="dc/df4/a01401_1a430f3de9071e7d03358bb1b39d07c2b8" compoundref="d1/d44/a00098" startline="131" endline="137">castor3d::prepareChunkData</references>
+        <references refid="d2/df5/a02482_1a6d5639d69c83f6b59094817e85f17398" compoundref="d7/d9a/a00152" startline="32" endline="51">castor3d::ChunkWriterBase::write</references>
+        <referencedby refid="d7/d54/a02342_1a95685db95521fe46169767620976688c" compoundref="d7/dce/a00143" startline="121" endline="127">castor3d::BinaryWriterBase&lt; TWritten &gt;::doWriteChunk</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dc/d2b/a02486_1a9d1fa6f341bb8c14ae9a7c2c1bfb184b" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool castor3d::ChunkWriter&lt; T &gt;::write</definition>
+        <argsstring>(T const &amp;value, ChunkType type, BinaryChunk &amp;chunk)</argsstring>
+        <name>write</name>
+        <qualifiedname>castor3d::ChunkWriter::write</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dae/a02294" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Writes a subchunk value into a chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The value </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The subchunk type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/ChunkWriter.hpp" line="114" column="20" bodyfile="Binary/ChunkWriter.hpp" bodystart="114" bodyend="123"/>
+        <references refid="dc/df4/a01401_1a8cc7a2dbcb06b7114a71b9c2bd403efa" compoundref="d9/db6/a00146" startline="47" endline="50">castor3d::getBuffer</references>
+        <references refid="dc/df4/a01401_1a0237c5eefd38c3d0de4466c3fbe0d713" compoundref="d9/db6/a00146" startline="384" endline="387">castor3d::getDataSize</references>
+        <references refid="dc/df4/a01401_1a430f3de9071e7d03358bb1b39d07c2b8" compoundref="d1/d44/a00098" startline="131" endline="137">castor3d::prepareChunkData</references>
+        <references refid="d2/df5/a02482_1a6d5639d69c83f6b59094817e85f17398" compoundref="d7/d9a/a00152" startline="32" endline="51">castor3d::ChunkWriterBase::write</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Structure used to sort overlays by order. </para>
+<para>Chunk data writer. </para>
     </briefdescription>
     <detaileddescription>
 <para><simplesect kind="author"><para>Sylvain DOREMUS </para>
 </simplesect>
-<simplesect kind="date"><para>03/10/2015 </para>
+<simplesect kind="version"><para>0.9.0 </para>
 </simplesect>
-<simplesect kind="version"><para>0.8.0 </para>
+<simplesect kind="date"><para>30/05/2016 </para>
 </simplesect>
 </para>
     </detaileddescription>
-    <location file="Cache/OverlayCache.hpp" line="24" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="23" bodyend="35"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::ChunkWriter&lt; T &gt;</label>
+        <link refid="dc/d2b/a02486"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ChunkWriterBase</label>
+        <link refid="d2/df5/a02482"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::ChunkWriter&lt; T &gt;</label>
+        <link refid="dc/d2b/a02486"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ChunkWriterBase</label>
+        <link refid="d2/df5/a02482"/>
+      </node>
+    </collaborationgraph>
+    <location file="Binary/ChunkWriter.hpp" line="63" column="1" bodyfile="Binary/ChunkWriter.hpp" bodystart="65" bodyend="124"/>
     <listofallmembers>
-      <member refid="dc/d2b/a02486_1a080fb537036a1af050216e846955e7b7" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategorySort</scope><name>operator()</name></member>
+      <member refid="dc/d2b/a02486_1ac4cf51584e348def2f360b81e6ec7a9a" prot="public" virt="non-virtual"><scope>castor3d::ChunkWriter</scope><name>write</name></member>
+      <member refid="dc/d2b/a02486_1a9d1fa6f341bb8c14ae9a7c2c1bfb184b" prot="public" virt="non-virtual"><scope>castor3d::ChunkWriter</scope><name>write</name></member>
+      <member refid="d2/df5/a02482_1a6d5639d69c83f6b59094817e85f17398" prot="public" virt="non-virtual" ambiguityscope="castor3d::ChunkWriterBase::"><scope>castor3d::ChunkWriter</scope><name>write</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,152 +1,41 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d5/dc3/a02674" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::GpuObjectTracker</compoundname>
-    <includes local="no">GpuObjectTracker.hpp</includes>
-    <innerclass refid="dc/d64/a02678" prot="public">castor3d::GpuObjectTracker::ObjectDeclaration</innerclass>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d5/dc3/a02674_1a9a72b89f740871ff55fa30e9e1310cc9" prot="private" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::GpuObjectTracker::m_id</definition>
-        <argsstring></argsstring>
-        <name>m_id</name>
-        <initializer>= 0</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/GpuObjectTracker.hpp" line="45" column="1" bodyfile="Miscellaneous/GpuObjectTracker.hpp" bodystart="45" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d5/dc3/a02674_1a6f66c7585a6f8e72bb6e27f2d108eef4" prot="private" static="no" mutable="no">
-        <type>std::list&lt; <ref refid="dc/d64/a02678" kindref="compound">ObjectDeclaration</ref> &gt;</type>
-        <definition>std::list&lt; ObjectDeclaration &gt; castor3d::GpuObjectTracker::m_allocated</definition>
-        <argsstring></argsstring>
-        <name>m_allocated</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/GpuObjectTracker.hpp" line="46" column="1" bodyfile="Miscellaneous/GpuObjectTracker.hpp" bodystart="46" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d5/dc3/a02674" kind="struct" language="C++" prot="public">
+    <compoundname>castor::OverlayCategorySort</compoundname>
+    <includes local="no">OverlayCache.hpp</includes>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d5/dc3/a02674_1a570d4b2a58acfa15011a438da2ffbc7e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::GpuObjectTracker::track</definition>
-        <argsstring>(void *object, std::string const &amp;type, std::string const &amp;file, int line, std::string &amp;name)</argsstring>
-        <name>track</name>
+      <memberdef kind="function" id="d5/dc3/a02674_1a40e4a26b5f15a5987cfa83554cba6ab5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::OverlayCategorySort::operator()</definition>
+        <argsstring>(castor3d::OverlayCategorySPtr a, castor3d::OverlayCategorySPtr b) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::OverlayCategorySort::operator()</qualifiedname>
         <param>
-          <type>void *</type>
-          <declname>object</declname>
+          <type>castor3d::OverlayCategorySPtr</type>
+          <declname>a</declname>
         </param>
         <param>
-          <type>std::string const &amp;</type>
-          <declname>type</declname>
-        </param>
-        <param>
-          <type>std::string const &amp;</type>
-          <declname>file</declname>
-        </param>
-        <param>
-          <type>int</type>
-          <declname>line</declname>
-        </param>
-        <param>
-          <type>std::string &amp;</type>
-          <declname>name</declname>
+          <type>castor3d::OverlayCategorySPtr</type>
+          <declname>b</declname>
         </param>
         <briefdescription>
+<para>Comparison operator. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/GpuObjectTracker.hpp" line="39" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/dc3/a02674_1a9aaccd1d5cf3ed6bb3a78ea65649caf9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::GpuObjectTracker::track</definition>
-        <argsstring>(castor::Named *object, std::string const &amp;type, std::string const &amp;file, int line, std::string &amp;name)</argsstring>
-        <name>track</name>
-        <param>
-          <type>castor::Named *</type>
-          <declname>object</declname>
-        </param>
-        <param>
-          <type>std::string const &amp;</type>
-          <declname>type</declname>
-        </param>
-        <param>
-          <type>std::string const &amp;</type>
-          <declname>file</declname>
-        </param>
-        <param>
-          <type>int</type>
-          <declname>line</declname>
-        </param>
-        <param>
-          <type>std::string &amp;</type>
-          <declname>name</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/GpuObjectTracker.hpp" line="40" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/dc3/a02674_1ac8f7e2a8f65577fd0e2b4287730b93e4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::GpuObjectTracker::untrack</definition>
-        <argsstring>(void *object, ObjectDeclaration &amp;declaration)</argsstring>
-        <name>untrack</name>
-        <param>
-          <type>void *</type>
-          <declname>object</declname>
-        </param>
-        <param>
-          <type><ref refid="dc/d64/a02678" kindref="compound">ObjectDeclaration</ref> &amp;</type>
-          <declname>declaration</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/GpuObjectTracker.hpp" line="41" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/dc3/a02674_1a87e5fbb0a7a47b6cd17ba9f03a1ba93b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::GpuObjectTracker::reportTracked</definition>
-        <argsstring>()</argsstring>
-        <name>reportTracked</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/GpuObjectTracker.hpp" line="42" column="1"/>
+        <location file="Cache/OverlayCache.hpp" line="33" column="13" bodyfile="Cache/OverlayCache.hpp" bodystart="33" bodyend="38"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>Structure used to sort overlays by order. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/GpuObjectTracker.hpp" line="26" column="1" bodyfile="Miscellaneous/GpuObjectTracker.hpp" bodystart="25" bodyend="47"/>
+    <location file="Cache/OverlayCache.hpp" line="25" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="26" bodyend="39"/>
     <listofallmembers>
-      <member refid="d5/dc3/a02674_1a6f66c7585a6f8e72bb6e27f2d108eef4" prot="private" virt="non-virtual"><scope>castor3d::GpuObjectTracker</scope><name>m_allocated</name></member>
-      <member refid="d5/dc3/a02674_1a9a72b89f740871ff55fa30e9e1310cc9" prot="private" virt="non-virtual"><scope>castor3d::GpuObjectTracker</scope><name>m_id</name></member>
-      <member refid="d5/dc3/a02674_1a87e5fbb0a7a47b6cd17ba9f03a1ba93b" prot="public" virt="non-virtual"><scope>castor3d::GpuObjectTracker</scope><name>reportTracked</name></member>
-      <member refid="d5/dc3/a02674_1a570d4b2a58acfa15011a438da2ffbc7e" prot="public" virt="non-virtual"><scope>castor3d::GpuObjectTracker</scope><name>track</name></member>
-      <member refid="d5/dc3/a02674_1a9aaccd1d5cf3ed6bb3a78ea65649caf9" prot="public" virt="non-virtual"><scope>castor3d::GpuObjectTracker</scope><name>track</name></member>
-      <member refid="d5/dc3/a02674_1ac8f7e2a8f65577fd0e2b4287730b93e4" prot="public" virt="non-virtual"><scope>castor3d::GpuObjectTracker</scope><name>untrack</name></member>
+      <member refid="d5/dc3/a02674_1a40e4a26b5f15a5987cfa83554cba6ab5" prot="public" virt="non-virtual"><scope>castor::OverlayCategorySort</scope><name>operator()</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

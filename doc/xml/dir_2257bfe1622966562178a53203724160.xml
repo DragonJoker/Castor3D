@@ -1,20 +1,13 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_2257bfe1622966562178a53203724160" kind="dir">
     <compoundname>Render/Node</compoundname>
-    <innerfile refid="df/d9e/a00686">BillboardRenderNode.hpp</innerfile>
-    <innerfile refid="d1/d87/a00689">DistanceRenderNode.hpp</innerfile>
-    <innerfile refid="d0/db6/a00692">MorphingRenderNode.hpp</innerfile>
-    <innerfile refid="d5/d5b/a00695">ObjectRenderNode.hpp</innerfile>
-    <innerfile refid="df/dbb/a00698">PassRenderNode.hpp</innerfile>
-    <innerfile refid="dd/d57/a00701">RenderNode.hpp</innerfile>
-    <innerfile refid="d4/d6a/a00704">RenderNode_Render.hpp</innerfile>
-    <innerfile refid="d1/d56/a00707">RenderNodeModule.hpp</innerfile>
-    <innerfile refid="d4/deb/a00710">SceneCulledRenderNodes.hpp</innerfile>
-    <innerfile refid="d1/d04/a00713">SceneRenderNode.hpp</innerfile>
-    <innerfile refid="d2/d94/a00716">SceneRenderNodes.hpp</innerfile>
-    <innerfile refid="dd/dd8/a00719">SkinningRenderNode.hpp</innerfile>
-    <innerfile refid="db/d7c/a00722">StaticRenderNode.hpp</innerfile>
+    <innerfile refid="d1/d04/a00713">BillboardRenderNode.hpp</innerfile>
+    <innerfile refid="d2/d94/a00716">QueueCulledRenderNodes.hpp</innerfile>
+    <innerfile refid="dd/dd8/a00719">QueueRenderNodes.hpp</innerfile>
+    <innerfile refid="db/d7c/a00722">RenderNodeModule.hpp</innerfile>
+    <innerfile refid="d8/db9/a00725">SceneRenderNodes.hpp</innerfile>
+    <innerfile refid="df/d3b/a00728">SubmeshRenderNode.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

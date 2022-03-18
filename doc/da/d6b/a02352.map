@@ -1,11 +1,7 @@
-<map id="castor3d::ObjectCache&lt; BillboardList, castor::String &gt;" name="castor3d::ObjectCache&lt; BillboardList, castor::String &gt;">
-<area shape="rect" id="node1" title="BillboardList cache." alt="" coords="1071,118,1225,174"/>
-<area shape="rect" id="node2" href="$d4/dde/a02422.html" title=" " alt="" coords="836,118,1021,174"/>
-<area shape="rect" id="node3" href="$df/d9b/a02514.html" title=" " alt="" coords="241,186,361,213"/>
-<area shape="rect" id="node9" href="$d4/dde/a02422.html" title="Base class for a scene element cache." alt="" coords="471,125,656,167"/>
-<area shape="rect" id="node4" title=" " alt="" coords="13,186,184,213"/>
-<area shape="rect" id="node5" href="$d6/d66/a05238.html" title=" " alt="" coords="243,71,360,98"/>
-<area shape="rect" id="node6" title=" " alt="" coords="27,5,170,47"/>
-<area shape="rect" id="node7" title=" " alt="" coords="5,71,192,98"/>
-<area shape="rect" id="node8" title=" " alt="" coords="67,122,130,149"/>
+<map id="castor3d::BinaryParser&lt; SceneNodeAnimation &gt;" name="castor3d::BinaryParser&lt; SceneNodeAnimation &gt;">
+<area shape="rect" id="node1" title="SceneNodeAnimation binary loader." alt="" coords="107,289,277,331"/>
+<area shape="rect" id="node2" href="$d7/df2/a02322.html" title=" " alt="" coords="99,199,285,240"/>
+<area shape="rect" id="node3" href="$d5/d49/a02282.html" title=" " alt="" coords="5,5,160,32"/>
+<area shape="rect" id="node5" href="$d7/df2/a02322.html" title="Binary data chunk reader base class." alt="" coords="131,95,317,136"/>
+<area shape="rect" id="node4" href="$dc/d77/a03270.html" title=" " alt="" coords="218,5,342,32"/>
 </map>

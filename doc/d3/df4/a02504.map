@@ -1,4 +1,5 @@
-<map id="castor3d::ShaderProgramCache" name="castor3d::ShaderProgramCache">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,212,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="15,5,202,32"/>
+<map id="castor3d::GpuBufferOffsetT&lt; DataT &gt;" name="castor3d::GpuBufferOffsetT&lt; DataT &gt;">
+<area shape="rect" id="node1" title="An offset and range of a GpuBuffer." alt="" coords="94,95,265,136"/>
+<area shape="rect" id="node2" href="$d3/d41/a02530.html" title=" " alt="" coords="5,5,172,32"/>
+<area shape="rect" id="node3" href="$d7/da8/a02522.html" title="A memory range, in bytes." alt="" coords="197,5,343,32"/>
 </map>

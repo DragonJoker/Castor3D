@@ -1,0 +1,657 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="df/d41/a00881" kind="file" language="C++">
+    <compoundname>LightingModule.hpp</compoundname>
+    <includes refid="df/de9/a00923" local="yes">Castor3D/Render/Technique/Opaque/OpaqueModule.hpp</includes>
+    <includes refid="d9/de4/a01346" local="yes">Castor3D/Shader/Ubos/UbosModule.hpp</includes>
+    <includes refid="d9/d5b/a01127" local="yes">Castor3D/Scene/Light/LightModule.hpp</includes>
+    <includes local="no">CastorUtils/Graphics/Size.hpp</includes>
+    <includedby refid="d3/d5e/a00275" local="yes">Engine.hpp</includedby>
+    <includedby refid="d5/d69/a00878" local="yes">Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp</includedby>
+    <includedby refid="dd/d08/a00884" local="yes">Render/Technique/Opaque/Lighting/LightPass.hpp</includedby>
+    <includedby refid="d7/d92/a00887" local="yes">Render/Technique/Opaque/Lighting/LightPassResult.hpp</includedby>
+    <includedby refid="d7/d46/a00890" local="yes">Render/Technique/Opaque/Lighting/LightPassShadow.hpp</includedby>
+    <includedby refid="dc/d2c/a00893" local="yes">Render/Technique/Opaque/Lighting/MeshLightPass.hpp</includedby>
+    <includedby refid="da/dd6/a00896" local="yes">Render/Technique/Opaque/Lighting/PointLightPass.hpp</includedby>
+    <includedby refid="d3/d8a/a00899" local="yes">Render/Technique/Opaque/Lighting/SpotLightPass.hpp</includedby>
+    <includedby refid="d5/dd3/a00902" local="yes">Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp</includedby>
+    <includedby refid="da/d5b/a00905" local="yes">Render/Technique/Opaque/LightingPass.hpp</includedby>
+    <includedby refid="d4/ddc/a00917" local="yes">Render/Technique/Opaque/LightVolumeGI/LightVolumeGIModule.hpp</includedby>
+    <includedby refid="d5/d54/a00938" local="yes">Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp</includedby>
+    <includedby refid="dc/dd9/a01328" local="yes">Shader/Ubos/RsmConfigUbo.hpp</includedby>
+    <incdepgraph>
+      <node id="18634">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="18643">
+        <label>Castor3D/Material/MaterialModule.hpp</label>
+        <link refid="d8/d23/a00326"/>
+        <childnode refid="18629" relation="include">
+        </childnode>
+        <childnode refid="18644" relation="include">
+        </childnode>
+      </node>
+      <node id="18669">
+        <label>ShaderWriter/BaseTypes/UInt.hpp</label>
+      </node>
+      <node id="18658">
+        <label>CastorUtils/Graphics/Size.hpp</label>
+      </node>
+      <node id="18627">
+        <label>Castor3D/Render/RenderModule.hpp</label>
+        <link refid="d5/d72/a00803"/>
+        <childnode refid="18628" relation="include">
+        </childnode>
+        <childnode refid="18642" relation="include">
+        </childnode>
+        <childnode refid="18651" relation="include">
+        </childnode>
+        <childnode refid="18652" relation="include">
+        </childnode>
+        <childnode refid="18653" relation="include">
+        </childnode>
+        <childnode refid="18654" relation="include">
+        </childnode>
+        <childnode refid="18657" relation="include">
+        </childnode>
+      </node>
+      <node id="18637">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="18650">
+        <label>CastorUtils/Graphics/BoundingSphere.hpp</label>
+      </node>
+      <node id="18638">
+        <label>cstdint</label>
+      </node>
+      <node id="18661">
+        <label>ShaderWriter/BaseTypes/Array.hpp</label>
+      </node>
+      <node id="18644">
+        <label>CastorUtils/Design/Signal.hpp</label>
+      </node>
+      <node id="18636">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="18662">
+        <label>ShaderWriter/BaseTypes/Bool.hpp</label>
+      </node>
+      <node id="18655">
+        <label>ShaderAST/Shader.hpp</label>
+      </node>
+      <node id="18629">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="18630" relation="include">
+        </childnode>
+        <childnode refid="18631" relation="include">
+        </childnode>
+        <childnode refid="18632" relation="include">
+        </childnode>
+        <childnode refid="18633" relation="include">
+        </childnode>
+        <childnode refid="18634" relation="include">
+        </childnode>
+        <childnode refid="18635" relation="include">
+        </childnode>
+        <childnode refid="18636" relation="include">
+        </childnode>
+        <childnode refid="18637" relation="include">
+        </childnode>
+        <childnode refid="18638" relation="include">
+        </childnode>
+        <childnode refid="18639" relation="include">
+        </childnode>
+        <childnode refid="18640" relation="include">
+        </childnode>
+        <childnode refid="18641" relation="include">
+        </childnode>
+      </node>
+      <node id="18667">
+        <label>ShaderWriter/BaseTypes/SampledImage.hpp</label>
+      </node>
+      <node id="18640">
+        <label>string</label>
+      </node>
+      <node id="18666">
+        <label>ShaderWriter/BaseTypes/Int.hpp</label>
+      </node>
+      <node id="18647">
+        <label>Castor3D/Model/ModelModule.hpp</label>
+        <link refid="d7/def/a00521"/>
+        <childnode refid="18629" relation="include">
+        </childnode>
+      </node>
+      <node id="18633">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="18630">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="18645">
+        <label>Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp</label>
+        <link refid="dc/d19/a00515"/>
+        <childnode refid="18646" relation="include">
+        </childnode>
+        <childnode refid="18649" relation="include">
+        </childnode>
+        <childnode refid="18650" relation="include">
+        </childnode>
+      </node>
+      <node id="18624">
+        <label>Render/Technique/Opaque/Lighting/LightingModule.hpp</label>
+        <link refid="df/d41/a00881"/>
+        <childnode refid="18625" relation="include">
+        </childnode>
+        <childnode refid="18659" relation="include">
+        </childnode>
+        <childnode refid="18651" relation="include">
+        </childnode>
+        <childnode refid="18658" relation="include">
+        </childnode>
+      </node>
+      <node id="18653">
+        <label>Castor3D/Material/Texture/TextureModule.hpp</label>
+        <link refid="de/dd7/a00362"/>
+        <childnode refid="18643" relation="include">
+        </childnode>
+        <childnode refid="18644" relation="include">
+        </childnode>
+      </node>
+      <node id="18665">
+        <label>ShaderWriter/BaseTypes/Image.hpp</label>
+      </node>
+      <node id="18649">
+        <label>CastorUtils/Graphics/BoundingBox.hpp</label>
+      </node>
+      <node id="18632">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="18628">
+        <label>Castor3D/Miscellaneous/MiscellaneousModule.hpp</label>
+        <link refid="d4/d27/a00392"/>
+        <childnode refid="18629" relation="include">
+        </childnode>
+      </node>
+      <node id="18642">
+        <label>Castor3D/Scene/SceneModule.hpp</label>
+        <link refid="de/db5/a01181"/>
+        <childnode refid="18643" relation="include">
+        </childnode>
+        <childnode refid="18645" relation="include">
+        </childnode>
+        <childnode refid="18644" relation="include">
+        </childnode>
+      </node>
+      <node id="18659">
+        <label>Castor3D/Shader/Ubos/UbosModule.hpp</label>
+        <link refid="d9/de4/a01346"/>
+        <childnode refid="18654" relation="include">
+        </childnode>
+        <childnode refid="18660" relation="include">
+        </childnode>
+        <childnode refid="18671" relation="include">
+        </childnode>
+      </node>
+      <node id="18651">
+        <label>Castor3D/Scene/Light/LightModule.hpp</label>
+        <link refid="d9/d5b/a01127"/>
+        <childnode refid="18642" relation="include">
+        </childnode>
+      </node>
+      <node id="18668">
+        <label>ShaderWriter/BaseTypes/Sampler.hpp</label>
+      </node>
+      <node id="18670">
+        <label>ShaderWriter/CompositeTypes/Function.hpp</label>
+      </node>
+      <node id="18625">
+        <label>Castor3D/Render/Technique/Opaque/OpaqueModule.hpp</label>
+        <link refid="df/de9/a00923"/>
+        <childnode refid="18626" relation="include">
+        </childnode>
+        <childnode refid="18658" relation="include">
+        </childnode>
+      </node>
+      <node id="18663">
+        <label>ShaderWriter/BaseTypes/Double.hpp</label>
+      </node>
+      <node id="18631">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="18646">
+        <label>Castor3D/Model/Mesh/MeshModule.hpp</label>
+        <link refid="d2/d9d/a00464"/>
+        <childnode refid="18647" relation="include">
+        </childnode>
+        <childnode refid="18648" relation="include">
+        </childnode>
+      </node>
+      <node id="18641">
+        <label>vector</label>
+      </node>
+      <node id="18635">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="18652">
+        <label>Castor3D/Material/Pass/PassModule.hpp</label>
+        <link refid="df/d91/a00335"/>
+        <childnode refid="18643" relation="include">
+        </childnode>
+        <childnode refid="18644" relation="include">
+        </childnode>
+      </node>
+      <node id="18626">
+        <label>Castor3D/Render/Technique/TechniqueModule.hpp</label>
+        <link refid="d3/dcd/a00965"/>
+        <childnode refid="18627" relation="include">
+        </childnode>
+      </node>
+      <node id="18657">
+        <label>ashespp/Image/ImageView.hpp</label>
+      </node>
+      <node id="18664">
+        <label>ShaderWriter/BaseTypes/Float.hpp</label>
+      </node>
+      <node id="18656">
+        <label>ShaderWriter/ShaderWriterPrerequisites.hpp</label>
+      </node>
+      <node id="18660">
+        <label>Castor3D/Shader/Shaders/SdwModule.hpp</label>
+        <link refid="de/d33/a01274"/>
+        <childnode refid="18654" relation="include">
+        </childnode>
+        <childnode refid="18652" relation="include">
+        </childnode>
+        <childnode refid="18642" relation="include">
+        </childnode>
+        <childnode refid="18651" relation="include">
+        </childnode>
+        <childnode refid="18661" relation="include">
+        </childnode>
+        <childnode refid="18662" relation="include">
+        </childnode>
+        <childnode refid="18663" relation="include">
+        </childnode>
+        <childnode refid="18664" relation="include">
+        </childnode>
+        <childnode refid="18665" relation="include">
+        </childnode>
+        <childnode refid="18666" relation="include">
+        </childnode>
+        <childnode refid="18667" relation="include">
+        </childnode>
+        <childnode refid="18668" relation="include">
+        </childnode>
+        <childnode refid="18669" relation="include">
+        </childnode>
+        <childnode refid="18670" relation="include">
+        </childnode>
+      </node>
+      <node id="18648">
+        <label>CastorUtils/Design/Factory.hpp</label>
+      </node>
+      <node id="18654">
+        <label>Castor3D/Shader/ShaderModule.hpp</label>
+        <link refid="d5/d32/a01214"/>
+        <childnode refid="18629" relation="include">
+        </childnode>
+        <childnode refid="18655" relation="include">
+        </childnode>
+        <childnode refid="18656" relation="include">
+        </childnode>
+        <childnode refid="18631" relation="include">
+        </childnode>
+      </node>
+      <node id="18639">
+        <label>memory</label>
+      </node>
+      <node id="18671">
+        <label>CastorUtils/Math/SquareMatrix.hpp</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="18686">
+        <label>Render/Technique/Opaque/DeferredRendering.hpp</label>
+        <link refid="d1/d93/a00875"/>
+      </node>
+      <node id="18706">
+        <label>Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp</label>
+        <link refid="d3/d29/a00947"/>
+        <childnode refid="18679" relation="include">
+        </childnode>
+      </node>
+      <node id="18701">
+        <label>Scene/Scene.hpp</label>
+        <link refid="d6/db6/a01172"/>
+        <childnode refid="18702" relation="include">
+        </childnode>
+        <childnode refid="18677" relation="include">
+        </childnode>
+        <childnode refid="18678" relation="include">
+        </childnode>
+        <childnode refid="18679" relation="include">
+        </childnode>
+        <childnode refid="18703" relation="include">
+        </childnode>
+      </node>
+      <node id="18694">
+        <label>Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp</label>
+        <link refid="d5/d54/a00938"/>
+        <childnode refid="18679" relation="include">
+        </childnode>
+        <childnode refid="18695" relation="include">
+        </childnode>
+        <childnode refid="18696" relation="include">
+        </childnode>
+        <childnode refid="18706" relation="include">
+        </childnode>
+        <childnode refid="18707" relation="include">
+        </childnode>
+        <childnode refid="18708" relation="include">
+        </childnode>
+      </node>
+      <node id="18696">
+        <label>Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp</label>
+        <link refid="d9/dce/a00944"/>
+        <childnode refid="18688" relation="include">
+        </childnode>
+        <childnode refid="18697" relation="include">
+        </childnode>
+        <childnode refid="18705" relation="include">
+        </childnode>
+      </node>
+      <node id="18691">
+        <label>Render/Technique/Opaque/LightVolumeGI/LightVolumeGIModule.hpp</label>
+        <link refid="d4/ddc/a00917"/>
+        <childnode refid="18692" relation="include">
+        </childnode>
+        <childnode refid="18677" relation="include">
+        </childnode>
+        <childnode refid="18678" relation="include">
+        </childnode>
+        <childnode refid="18693" relation="include">
+        </childnode>
+      </node>
+      <node id="18687">
+        <label>Render/Technique/Opaque/OpaqueResolvePass.hpp</label>
+        <link refid="d8/dbb/a00932"/>
+        <childnode refid="18686" relation="include">
+        </childnode>
+        <childnode refid="18688" relation="include">
+        </childnode>
+      </node>
+      <node id="18698">
+        <label>Scene/Light/Light.hpp</label>
+        <link refid="dd/d09/a01118"/>
+        <childnode refid="18676" relation="include">
+        </childnode>
+        <childnode refid="18677" relation="include">
+        </childnode>
+        <childnode refid="18699" relation="include">
+        </childnode>
+        <childnode refid="18700" relation="include">
+        </childnode>
+      </node>
+      <node id="18692">
+        <label>Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp</label>
+        <link refid="d0/d85/a00908"/>
+        <childnode refid="18677" relation="include">
+        </childnode>
+      </node>
+      <node id="18673">
+        <label>Engine.hpp</label>
+        <link refid="d3/d5e/a00275"/>
+        <childnode refid="18674" relation="include">
+        </childnode>
+      </node>
+      <node id="18682">
+        <label>Render/Technique/Opaque/Lighting/MeshLightPass.hpp</label>
+        <link refid="dc/d2c/a00893"/>
+        <childnode refid="18683" relation="include">
+        </childnode>
+        <childnode refid="18684" relation="include">
+        </childnode>
+      </node>
+      <node id="18709">
+        <label>Scene/Light/DirectionalLight.hpp</label>
+        <link refid="df/dd5/a01115"/>
+        <childnode refid="18677" relation="include">
+        </childnode>
+        <childnode refid="18678" relation="include">
+        </childnode>
+        <childnode refid="18710" relation="include">
+        </childnode>
+      </node>
+      <node id="18710">
+        <label>Text/TextDirectionalLight.hpp</label>
+        <link refid="d8/dbe/a01370"/>
+      </node>
+      <node id="18676">
+        <label>Render/Technique/Opaque/Lighting/LightPassShadow.hpp</label>
+        <link refid="d7/d46/a00890"/>
+        <childnode refid="18677" relation="include">
+        </childnode>
+        <childnode refid="18678" relation="include">
+        </childnode>
+        <childnode refid="18679" relation="include">
+        </childnode>
+      </node>
+      <node id="18672">
+        <label>Render/Technique/Opaque/Lighting/LightingModule.hpp</label>
+        <link refid="df/d41/a00881"/>
+        <childnode refid="18673" relation="include">
+        </childnode>
+        <childnode refid="18675" relation="include">
+        </childnode>
+        <childnode refid="18680" relation="include">
+        </childnode>
+        <childnode refid="18690" relation="include">
+        </childnode>
+        <childnode refid="18676" relation="include">
+        </childnode>
+        <childnode refid="18682" relation="include">
+        </childnode>
+        <childnode refid="18683" relation="include">
+        </childnode>
+        <childnode refid="18684" relation="include">
+        </childnode>
+        <childnode refid="18685" relation="include">
+        </childnode>
+        <childnode refid="18688" relation="include">
+        </childnode>
+        <childnode refid="18691" relation="include">
+        </childnode>
+        <childnode refid="18694" relation="include">
+        </childnode>
+        <childnode refid="18715" relation="include">
+        </childnode>
+      </node>
+      <node id="18713">
+        <label>Scene/Light/SpotLight.hpp</label>
+        <link refid="db/d28/a01133"/>
+        <childnode refid="18678" relation="include">
+        </childnode>
+        <childnode refid="18714" relation="include">
+        </childnode>
+      </node>
+      <node id="18714">
+        <label>Text/TextSpotLight.hpp</label>
+        <link refid="d3/dbc/a01451"/>
+      </node>
+      <node id="18708">
+        <label>Scene/Light/LightCategory.hpp</label>
+        <link refid="dd/de4/a01121"/>
+        <childnode refid="18709" relation="include">
+        </childnode>
+        <childnode refid="18698" relation="include">
+        </childnode>
+        <childnode refid="18711" relation="include">
+        </childnode>
+        <childnode refid="18713" relation="include">
+        </childnode>
+      </node>
+      <node id="18715">
+        <label>Shader/Ubos/RsmConfigUbo.hpp</label>
+        <link refid="dc/dd9/a01328"/>
+        <childnode refid="18706" relation="include">
+        </childnode>
+        <childnode refid="18707" relation="include">
+        </childnode>
+      </node>
+      <node id="18704">
+        <label>Text/TextShadow.hpp</label>
+        <link refid="d0/de2/a01442"/>
+      </node>
+      <node id="18711">
+        <label>Scene/Light/PointLight.hpp</label>
+        <link refid="d0/d61/a01130"/>
+        <childnode refid="18678" relation="include">
+        </childnode>
+        <childnode refid="18712" relation="include">
+        </childnode>
+      </node>
+      <node id="18675">
+        <label>Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp</label>
+        <link refid="d5/d69/a00878"/>
+        <childnode refid="18676" relation="include">
+        </childnode>
+      </node>
+      <node id="18707">
+        <label>Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp</label>
+        <link refid="df/d39/a00950"/>
+        <childnode refid="18679" relation="include">
+        </childnode>
+      </node>
+      <node id="18699">
+        <label>Scene/Light/LightFactory.hpp</label>
+        <link refid="d0/dc8/a01124"/>
+      </node>
+      <node id="18689">
+        <label>Render/Technique/Opaque/SsaoPass.hpp</label>
+        <link refid="d5/da3/a00953"/>
+        <childnode refid="18686" relation="include">
+        </childnode>
+      </node>
+      <node id="18678">
+        <label>Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp</label>
+        <link refid="d3/dd1/a00914"/>
+      </node>
+      <node id="18695">
+        <label>Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp</label>
+        <link refid="d6/dad/a00941"/>
+      </node>
+      <node id="18683">
+        <label>Render/Technique/Opaque/Lighting/PointLightPass.hpp</label>
+        <link refid="da/dd6/a00896"/>
+        <childnode refid="18676" relation="include">
+        </childnode>
+      </node>
+      <node id="18700">
+        <label>Text/TextLight.hpp</label>
+        <link refid="df/d68/a01385"/>
+      </node>
+      <node id="18684">
+        <label>Render/Technique/Opaque/Lighting/SpotLightPass.hpp</label>
+        <link refid="d3/d8a/a00899"/>
+        <childnode refid="18676" relation="include">
+        </childnode>
+      </node>
+      <node id="18693">
+        <label>Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp</label>
+        <link refid="d6/d82/a00920"/>
+        <childnode refid="18678" relation="include">
+        </childnode>
+      </node>
+      <node id="18677">
+        <label>Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp</label>
+        <link refid="d7/d12/a00911"/>
+      </node>
+      <node id="18702">
+        <label>Cache/SceneCache.hpp</label>
+        <link refid="dd/dd7/a00248"/>
+      </node>
+      <node id="18697">
+        <label>Scene/Shadow.hpp</label>
+        <link refid="dc/d70/a01187"/>
+        <childnode refid="18698" relation="include">
+        </childnode>
+        <childnode refid="18701" relation="include">
+        </childnode>
+        <childnode refid="18704" relation="include">
+        </childnode>
+      </node>
+      <node id="18679">
+        <label>Render/Technique/Opaque/ReflectiveShadowMapGI/LightPassReflectiveShadow.hpp</label>
+        <link refid="d8/d19/a00935"/>
+      </node>
+      <node id="18703">
+        <label>Text/TextScene.hpp</label>
+        <link refid="dc/d85/a01436"/>
+      </node>
+      <node id="18685">
+        <label>Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp</label>
+        <link refid="d5/dd3/a00902"/>
+        <childnode refid="18686" relation="include">
+        </childnode>
+      </node>
+      <node id="18680">
+        <label>Render/Technique/Opaque/Lighting/LightPass.hpp</label>
+        <link refid="dd/d08/a00884"/>
+        <childnode refid="18681" relation="include">
+        </childnode>
+        <childnode refid="18675" relation="include">
+        </childnode>
+        <childnode refid="18682" relation="include">
+        </childnode>
+        <childnode refid="18685" relation="include">
+        </childnode>
+        <childnode refid="18687" relation="include">
+        </childnode>
+        <childnode refid="18689" relation="include">
+        </childnode>
+      </node>
+      <node id="18688">
+        <label>Render/Technique/Opaque/LightingPass.hpp</label>
+        <link refid="da/d5b/a00905"/>
+        <childnode refid="18686" relation="include">
+        </childnode>
+      </node>
+      <node id="18674">
+        <label>Render/Node/RenderNode_Render.hpp</label>
+        <link refid="d4/d6a/a00704"/>
+      </node>
+      <node id="18681">
+        <label>Render/Ssao/SsaoRawAOPass.hpp</label>
+        <link refid="d3/db2/a00869"/>
+      </node>
+      <node id="18712">
+        <label>Text/TextPointLight.hpp</label>
+        <link refid="de/d70/a01415"/>
+      </node>
+      <node id="18690">
+        <label>Render/Technique/Opaque/Lighting/LightPassResult.hpp</label>
+        <link refid="d7/d92/a00887"/>
+        <childnode refid="18688" relation="include">
+        </childnode>
+        <childnode refid="18677" relation="include">
+        </childnode>
+        <childnode refid="18679" relation="include">
+        </childnode>
+      </node>
+      <node id="18705">
+        <label>Text/TextRsmConfig.hpp</label>
+        <link refid="d8/dd0/a01430"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="d8/d0e/a04744" prot="public">castor3d::LightPassShadowTraits</innerclass>
+    <innerclass refid="dc/d42/a04748" prot="public">castor3d::LightPassShadow</innerclass>
+    <innerclass refid="da/d0e/a04752" prot="public">castor3d::LightPassConfig</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Technique/Opaque/Lighting/LightingModule.hpp"/>
+  </compounddef>
+</doxygen>

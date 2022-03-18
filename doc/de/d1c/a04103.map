@@ -1,6 +1,5 @@
-<map id="castor3d::OverlayCategory" name="castor3d::OverlayCategory">
-<area shape="rect" id="node1" title=" " alt="" coords="215,5,390,32"/>
-<area shape="rect" id="node2" href="$d5/dbe/a04060.html" title=" " alt="" coords="5,80,200,107"/>
-<area shape="rect" id="node3" href="$d3/db3/a04152.html" title=" " alt="" coords="225,80,381,107"/>
-<area shape="rect" id="node4" href="$d3/db2/a04156.html" title=" " alt="" coords="405,80,553,107"/>
+<map id="castor3d::RenderWindow::InputListener" name="castor3d::RenderWindow::InputListener">
+<area shape="rect" id="node1" title=" " alt="" coords="15,155,182,196"/>
+<area shape="rect" id="node2" href="$dd/dbf/a02788.html" title=" " alt="" coords="8,80,189,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,192,32"/>
 </map>

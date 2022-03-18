@@ -1,43 +1,452 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d1/dc3/a04492" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::RadianceComputer::RenderPass</compoundname>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d1/dc3/a04492_1aeaff66f32b8bd6ce46871300b215a680" prot="public" static="no" mutable="no">
-        <type>ashes::ImageView</type>
-        <definition>ashes::ImageView castor3d::RadianceComputer::RenderPass::dstView</definition>
-        <argsstring></argsstring>
-        <name>dstView</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d1/dc3/a04492" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::DirectionalLight</compoundname>
+    <basecompoundref refid="da/d6e/a04500" prot="public" virt="non-virtual">castor3d::LightCategory</basecompoundref>
+    <includes local="no">DirectionalLight.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d1/dc3/a04492_1afc8bc5a4bc5aa07ba987f8266bb19cc1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point3f const &amp;</type>
+        <definition>castor::Point3f const  &amp; castor3d::DirectionalLight::getDirection</definition>
+        <argsstring>() const</argsstring>
+        <name>getDirection</name>
+        <qualifiedname>castor3d::DirectionalLight::getDirection</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>name Getters. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/RadianceComputer.hpp" line="78" column="1" bodyfile="Render/PBR/RadianceComputer.hpp" bodystart="78" bodyend="-1"/>
+        <location file="Scene/Light/DirectionalLight.hpp" line="86" column="24" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="86" bodyend="89"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/dc3/a04492_1aed4d3d28b57eeb0bbbe70969869f9a65" prot="public" static="no" mutable="no">
-        <type>ashes::FrameBufferPtr</type>
-        <definition>ashes::FrameBufferPtr castor3d::RadianceComputer::RenderPass::frameBuffer</definition>
-        <argsstring></argsstring>
-        <name>frameBuffer</name>
+      <memberdef kind="function" id="d1/dc3/a04492_1a16964c8af7adbd6f7cd38a4286ffa172" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::DirectionalLight::getSplitDepth</definition>
+        <argsstring>(uint32_t cascadeIndex) const</argsstring>
+        <name>getSplitDepth</name>
+        <qualifiedname>castor3d::DirectionalLight::getSplitDepth</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>cascadeIndex</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/RadianceComputer.hpp" line="79" column="1" bodyfile="Render/PBR/RadianceComputer.hpp" bodystart="79" bodyend="-1"/>
+        <location file="Scene/Light/DirectionalLight.hpp" line="91" column="7" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="91" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dc3/a04492_1a134d3523488fbb3abfed345007196d8b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::DirectionalLight::getSplitScale</definition>
+        <argsstring>(uint32_t cascadeIndex) const</argsstring>
+        <name>getSplitScale</name>
+        <qualifiedname>castor3d::DirectionalLight::getSplitScale</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>cascadeIndex</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/DirectionalLight.hpp" line="96" column="7" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="96" bodyend="99"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dc3/a04492_1a3e428cef52565aae7c970155ab566b77" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Matrix4x4f const &amp;</type>
+        <definition>castor::Matrix4x4f const  &amp; castor3d::DirectionalLight::getProjMatrix</definition>
+        <argsstring>(uint32_t cascadeIndex) const</argsstring>
+        <name>getProjMatrix</name>
+        <qualifiedname>castor3d::DirectionalLight::getProjMatrix</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>cascadeIndex</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/DirectionalLight.hpp" line="101" column="27" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="101" bodyend="104"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dc3/a04492_1a9041fc4433b38e6564ea8bd294e33eb7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Matrix4x4f const &amp;</type>
+        <definition>castor::Matrix4x4f const  &amp; castor3d::DirectionalLight::getViewMatrix</definition>
+        <argsstring>(uint32_t cascadeIndex) const</argsstring>
+        <name>getViewMatrix</name>
+        <qualifiedname>castor3d::DirectionalLight::getViewMatrix</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>cascadeIndex</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/DirectionalLight.hpp" line="106" column="27" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="106" bodyend="109"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dc3/a04492_1ab0e6f6834fe83a646a40842830eb3a9b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Matrix4x4f const &amp;</type>
+        <definition>castor::Matrix4x4f const  &amp; castor3d::DirectionalLight::getLightSpaceTransform</definition>
+        <argsstring>(uint32_t cascadeIndex) const</argsstring>
+        <name>getLightSpaceTransform</name>
+        <qualifiedname>castor3d::DirectionalLight::getLightSpaceTransform</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>cascadeIndex</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/DirectionalLight.hpp" line="111" column="27" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="111" bodyend="114"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d1/dc3/a04492_1a6382d8979823ee8e079f3361b205e9cd" prot="public" static="no">
+        <type><ref refid="de/d37/a04488" kindref="compound">DirectionalLightCascade</ref></type>
+        <definition>using castor3d::DirectionalLight::Cascade =  DirectionalLightCascade</definition>
+        <argsstring></argsstring>
+        <name>Cascade</name>
+        <qualifiedname>castor3d::DirectionalLight::Cascade</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/DirectionalLight.hpp" line="34" column="1" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="d1/dc3/a04492_1a032858ae1fe02d2d1170981c2af2d67c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class Scene</definition>
+        <argsstring></argsstring>
+        <name>Scene</name>
+        <qualifiedname>castor3d::DirectionalLight::Scene</qualifiedname>
+        <param>
+          <type><ref refid="da/d34/a04592" kindref="compound">Scene</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/DirectionalLight.hpp" line="37" column="14" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/dc3/a04492_1a53bd9cd8375b4ea6cbb3d57118438753" prot="private" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::DirectionalLight::m_direction</definition>
+        <argsstring></argsstring>
+        <name>m_direction</name>
+        <qualifiedname>castor3d::DirectionalLight::m_direction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/DirectionalLight.hpp" line="122" column="17" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dc3/a04492_1aedc8187746ddd7825191f2b83a21845a" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d1/dc3/a04492_1a6382d8979823ee8e079f3361b205e9cd" kindref="member">Cascade</ref> &gt;</type>
+        <definition>std::vector&lt; Cascade &gt; castor3d::DirectionalLight::m_cascades</definition>
+        <argsstring></argsstring>
+        <name>m_cascades</name>
+        <qualifiedname>castor3d::DirectionalLight::m_cascades</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/DirectionalLight.hpp" line="123" column="13" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="123" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dc3/a04492_1af6f5b9734c67278f207af113c3c64cd9" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d1/dc3/a04492_1a6382d8979823ee8e079f3361b205e9cd" kindref="member">Cascade</ref> &gt;</type>
+        <definition>std::vector&lt; Cascade &gt; castor3d::DirectionalLight::m_prvCascades</definition>
+        <argsstring></argsstring>
+        <name>m_prvCascades</name>
+        <qualifiedname>castor3d::DirectionalLight::m_prvCascades</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/DirectionalLight.hpp" line="124" column="13" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d1/dc3/a04492_1a5878004cdd4d52bce06d7c9f4c861d9a" prot="private" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::DirectionalLight::DirectionalLight</definition>
+        <argsstring>(Light &amp;light)</argsstring>
+        <name>DirectionalLight</name>
+        <qualifiedname>castor3d::DirectionalLight::DirectionalLight</qualifiedname>
+        <param>
+          <type><ref refid="d1/d55/a04496" kindref="compound">Light</ref> &amp;</type>
+          <declname>light</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">light</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent <ref refid="d1/d55/a04496" kindref="compound">Light</ref>. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/DirectionalLight.hpp" line="48" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dc3/a04492_1ab7d792085b39f49dad8d019ab15fd73b" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::DirectionalLight::updateNode</definition>
+        <argsstring>(SceneNode const &amp;node) override</argsstring>
+        <name>updateNode</name>
+        <qualifiedname>castor3d::DirectionalLight::updateNode</qualifiedname>
+        <reimplements refid="da/d6e/a04500_1a5c6bae82aa8c9c378b075c744ba546ef">updateNode</reimplements>
+        <param>
+          <type><ref refid="d4/d6d/a04636" kindref="compound">SceneNode</ref> const &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+<para>Updates the light source&apos;s informations related to the scene node. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">node</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene node. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/DirectionalLight.hpp" line="118" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dc3/a04492_1aa0760ad29f0509bb0b5f2a0644e02f5e" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::DirectionalLight::doFillBuffer</definition>
+        <argsstring>(LightBuffer::LightData &amp;data) const override</argsstring>
+        <name>doFillBuffer</name>
+        <qualifiedname>castor3d::DirectionalLight::doFillBuffer</qualifiedname>
+        <reimplements refid="da/d6e/a04500_1a59be298872379b939a10ac186392b222">doFillBuffer</reimplements>
+        <param>
+          <type><ref refid="d9/dcf/a04692" kindref="compound">LightBuffer::LightData</ref> &amp;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Puts the light source&apos;s type specific data into the given texture. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer that receives the light&apos;s data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/DirectionalLight.hpp" line="119" column="6"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d1/dc3/a04492_1a76bf0b2c8ad8fbb8ca771062ba529d59" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> LightCategoryUPtr</type>
+        <definition>static C3D_API LightCategoryUPtr castor3d::DirectionalLight::create</definition>
+        <argsstring>(Light &amp;light)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::DirectionalLight::create</qualifiedname>
+        <param>
+          <type><ref refid="d1/d55/a04496" kindref="compound">Light</ref> &amp;</type>
+          <declname>light</declname>
+        </param>
+        <briefdescription>
+<para>Creation function, used by Factory. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">light</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent <ref refid="d1/d55/a04496" kindref="compound">Light</ref>. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A light source. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/DirectionalLight.hpp" line="61" column="34"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/dc3/a04492_1a4aac08296c8c137f835e418d3276963f" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::DirectionalLight::update</definition>
+        <argsstring>() override</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::DirectionalLight::update</qualifiedname>
+        <reimplements refid="da/d6e/a04500_1a34386a8cdce8cddd885daa4e906ad4ba">update</reimplements>
+        <briefdescription>
+<para>Updates the light. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/DirectionalLight.hpp" line="65" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dc3/a04492_1a2cef2beb2ea78ee38fcf072ea4856b40" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::DirectionalLight::updateShadow</definition>
+        <argsstring>(Camera const &amp;sceneCamera)</argsstring>
+        <name>updateShadow</name>
+        <qualifiedname>castor3d::DirectionalLight::updateShadow</qualifiedname>
+        <param>
+          <type><ref refid="d1/d73/a04476" kindref="compound">Camera</ref> const &amp;</type>
+          <declname>sceneCamera</declname>
+        </param>
+        <briefdescription>
+<para>Updates the shadow cascades informations. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">sceneCamera</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The viewer camera. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if nothing changed. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/DirectionalLight.hpp" line="76" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/PBR/RadianceComputer.hpp" line="77" column="1" bodyfile="Render/PBR/RadianceComputer.hpp" bodystart="76" bodyend="80"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::DirectionalLight</label>
+        <link refid="d1/dc3/a04492"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::LightCategory</label>
+        <link refid="da/d6e/a04500"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::DirectionalLight</label>
+        <link refid="d1/dc3/a04492"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::LightCategory</label>
+        <link refid="da/d6e/a04500"/>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/Light/DirectionalLight.hpp" line="30" column="1" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="32" bodyend="125"/>
     <listofallmembers>
-      <member refid="d1/dc3/a04492_1aeaff66f32b8bd6ce46871300b215a680" prot="public" virt="non-virtual"><scope>castor3d::RadianceComputer::RenderPass</scope><name>dstView</name></member>
-      <member refid="d1/dc3/a04492_1aed4d3d28b57eeb0bbbe70969869f9a65" prot="public" virt="non-virtual"><scope>castor3d::RadianceComputer::RenderPass</scope><name>frameBuffer</name></member>
+      <member refid="d1/dc3/a04492_1a6382d8979823ee8e079f3361b205e9cd" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>Cascade</name></member>
+      <member refid="d1/dc3/a04492_1a76bf0b2c8ad8fbb8ca771062ba529d59" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>create</name></member>
+      <member refid="d1/dc3/a04492_1a5878004cdd4d52bce06d7c9f4c861d9a" prot="private" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>DirectionalLight</name></member>
+      <member refid="d1/dc3/a04492_1aa0760ad29f0509bb0b5f2a0644e02f5e" prot="private" virt="virtual"><scope>castor3d::DirectionalLight</scope><name>doFillBuffer</name></member>
+      <member refid="da/d6e/a04500_1a2e3bd07a31ad872b99c26b2b5f1f1cc9" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>fillBuffer</name></member>
+      <member refid="da/d6e/a04500_1a0de76278c61625bfd8fc05a9fd612970" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>getBoundingBox</name></member>
+      <member refid="da/d6e/a04500_1a1dd1f113237c1d296c0dbdbf06088800" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>getColour</name></member>
+      <member refid="da/d6e/a04500_1a67ab3b182b474ea5f4bf2b59d7d1344e" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>getColour</name></member>
+      <member refid="da/d6e/a04500_1a0e953d6e6965fb1ef782e3bdd6fe469d" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>getDiffuseIntensity</name></member>
+      <member refid="d1/dc3/a04492_1afc8bc5a4bc5aa07ba987f8266bb19cc1" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>getDirection</name></member>
+      <member refid="da/d6e/a04500_1ab6f2d4d170e620f0f84c642b45bcc0fd" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>getFarPlane</name></member>
+      <member refid="da/d6e/a04500_1a357763c66670a16d97628ee55b7739f6" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>getIntensity</name></member>
+      <member refid="da/d6e/a04500_1a3ed7681f80c08f39f442f45a1c976bc4" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>getIntensity</name></member>
+      <member refid="da/d6e/a04500_1acb29137feb5442673c0f39896c507fac" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>getLight</name></member>
+      <member refid="da/d6e/a04500_1a1f973301722581e083d5a8a2893ee88e" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>getLight</name></member>
+      <member refid="d1/dc3/a04492_1ab0e6f6834fe83a646a40842830eb3a9b" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>getLightSpaceTransform</name></member>
+      <member refid="da/d6e/a04500_1a64522c60f1f11b59f7ae2e9968140ab4" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>getLightType</name></member>
+      <member refid="da/d6e/a04500_1adcb072b802c78c888dad48607a603bf6" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>getLpvConfig</name></member>
+      <member refid="d1/dc3/a04492_1a3e428cef52565aae7c970155ab566b77" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>getProjMatrix</name></member>
+      <member refid="da/d6e/a04500_1ac46de7e96a04cf6d0dd8c34b17297ffc" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>getRsmConfig</name></member>
+      <member refid="da/d6e/a04500_1a1012a2f07cb70d5e2780a9990b02bd15" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>getShadowConfig</name></member>
+      <member refid="da/d6e/a04500_1a23f5abcfb09f64189d2f28a05f1f1cc4" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>getShadowPcfOffsets</name></member>
+      <member refid="da/d6e/a04500_1ad344cbddb177d6c50b8d9485513f17da" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>getShadowRawOffsets</name></member>
+      <member refid="da/d6e/a04500_1a26a8abdb227d0925732ec6c325192347" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>getShadowVariance</name></member>
+      <member refid="da/d6e/a04500_1a9189a1586f231e8bb99f7bdbaa432284" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>getSpecularIntensity</name></member>
+      <member refid="d1/dc3/a04492_1a16964c8af7adbd6f7cd38a4286ffa172" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>getSplitDepth</name></member>
+      <member refid="d1/dc3/a04492_1a134d3523488fbb3abfed345007196d8b" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>getSplitScale</name></member>
+      <member refid="d1/dc3/a04492_1a9041fc4433b38e6564ea8bd294e33eb7" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>getViewMatrix</name></member>
+      <member refid="da/d6e/a04500_1a4b0881f2bdcfa98c6e36aaeceb8f937a" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>getVolumetricScatteringFactor</name></member>
+      <member refid="da/d6e/a04500_1a1fdb3e7afdb8be2e8b3d1f5453cf72fc" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>getVolumetricSteps</name></member>
+      <member refid="da/d6e/a04500_1ac90799b0033274a99a53394753dc1f35" prot="protected" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>LightCategory</name></member>
+      <member refid="d1/dc3/a04492_1aedc8187746ddd7825191f2b83a21845a" prot="private" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>m_cascades</name></member>
+      <member refid="da/d6e/a04500_1a28a4f8b94fa6ff89c9aa57e2dae75672" prot="protected" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>m_cubeBox</name></member>
+      <member refid="d1/dc3/a04492_1a53bd9cd8375b4ea6cbb3d57118438753" prot="private" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>m_direction</name></member>
+      <member refid="da/d6e/a04500_1a510f474ea2102b2cdb6ea5683f165d66" prot="protected" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>m_farPlane</name></member>
+      <member refid="d1/dc3/a04492_1af6f5b9734c67278f207af113c3c64cd9" prot="private" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>m_prvCascades</name></member>
+      <member refid="da/d6e/a04500_1a5610c8434110c708f038cea4d565ff1f" prot="protected" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>m_shadowMapIndex</name></member>
+      <member refid="d1/dc3/a04492_1a032858ae1fe02d2d1170981c2af2d67c" prot="private" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>Scene</name></member>
+      <member refid="da/d6e/a04500_1aed6673624b672394258be181c447eb8a" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>setColour</name></member>
+      <member refid="da/d6e/a04500_1ab28a4cda00a38263af9d9bf743eab34b" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>setDiffuseIntensity</name></member>
+      <member refid="da/d6e/a04500_1ac031bef3179ebbec519eedcc0b192dbf" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>setIntensity</name></member>
+      <member refid="da/d6e/a04500_1ae0babdad467b1d890595403c7aa02065" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>setPcfMaxSlopeOffset</name></member>
+      <member refid="da/d6e/a04500_1abbb7ac4dd057bd9b5c809822d2600959" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>setPcfMinOffset</name></member>
+      <member refid="da/d6e/a04500_1a74565f5a3f7bdfdb7ebc0aee97a55960" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>setRawMaxSlopeOffset</name></member>
+      <member refid="da/d6e/a04500_1a4a20cb9dd9760352ebacffcbd8febaec" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>setRawMinOffset</name></member>
+      <member refid="da/d6e/a04500_1a525add2d3b3f08be7bb332b3f079b2db" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>setSpecularIntensity</name></member>
+      <member refid="da/d6e/a04500_1a540bf2d551c26998f6257cbf3862abe4" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>setVolumetricScatteringFactor</name></member>
+      <member refid="da/d6e/a04500_1a92e545bfabd12248ac2aa0409d9b1fee" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>setVolumetricSteps</name></member>
+      <member refid="da/d6e/a04500_1a16d5062cf84f27747c4ce162d67c9574" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>setVsmMaxVariance</name></member>
+      <member refid="da/d6e/a04500_1a4ea67513754e906298182d145da36aa0" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>setVsmVarianceBias</name></member>
+      <member refid="d1/dc3/a04492_1a4aac08296c8c137f835e418d3276963f" prot="public" virt="virtual"><scope>castor3d::DirectionalLight</scope><name>update</name></member>
+      <member refid="d1/dc3/a04492_1ab7d792085b39f49dad8d019ab15fd73b" prot="private" virt="virtual"><scope>castor3d::DirectionalLight</scope><name>updateNode</name></member>
+      <member refid="d1/dc3/a04492_1a2cef2beb2ea78ee38fcf072ea4856b40" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight</scope><name>updateShadow</name></member>
+      <member refid="da/d6e/a04500_1a27be1577394d8762a28400a2ed0b93f4" prot="public" virt="virtual"><scope>castor3d::DirectionalLight</scope><name>~LightCategory</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

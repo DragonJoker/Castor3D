@@ -1,27 +1,23 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_2b63c8c8a8bc0f17541f0115e68db690" kind="dir">
     <compoundname>Shader/Shaders</compoundname>
-    <innerfile refid="da/d19/a01217">GlslCookTorranceBRDF.hpp</innerfile>
-    <innerfile refid="db/d42/a01220">GlslFog.hpp</innerfile>
-    <innerfile refid="d7/ddd/a01223">GlslGlobalIllumination.hpp</innerfile>
-    <innerfile refid="dd/d9e/a01226">GlslLight.hpp</innerfile>
-    <innerfile refid="db/d1c/a01229">GlslLighting.hpp</innerfile>
-    <innerfile refid="d0/d67/a01232">GlslMaterial.hpp</innerfile>
-    <innerfile refid="dd/dad/a01235">GlslMetallicBrdfLighting.hpp</innerfile>
-    <innerfile refid="d8/ddf/a01238">GlslMetallicPbrReflection.hpp</innerfile>
-    <innerfile refid="d3/d07/a01241">GlslOutputComponents.hpp</innerfile>
-    <innerfile refid="d4/dd5/a01244">GlslPhongLighting.hpp</innerfile>
-    <innerfile refid="dd/d95/a01247">GlslPhongReflection.hpp</innerfile>
-    <innerfile refid="d4/d22/a01250">GlslShadow.hpp</innerfile>
-    <innerfile refid="d3/d0b/a01253">GlslSpecularBrdfLighting.hpp</innerfile>
-    <innerfile refid="d6/d0f/a01256">GlslSpecularPbrReflection.hpp</innerfile>
-    <innerfile refid="dd/d42/a01259">GlslSssTransmittance.hpp</innerfile>
-    <innerfile refid="d3/d53/a01262">GlslSurface.hpp</innerfile>
-    <innerfile refid="da/dd8/a01265">GlslTextureConfiguration.hpp</innerfile>
-    <innerfile refid="dc/dd9/a01268">GlslUtils.hpp</innerfile>
-    <innerfile refid="dd/d39/a01271">GlslVoxel.hpp</innerfile>
-    <innerfile refid="de/d33/a01274">SdwModule.hpp</innerfile>
+    <innerfile refid="d8/d11/a01178">GlslCookTorranceBRDF.hpp</innerfile>
+    <innerfile refid="de/db5/a01181">GlslFog.hpp</innerfile>
+    <innerfile refid="d1/d35/a01184">GlslGlobalIllumination.hpp</innerfile>
+    <innerfile refid="dc/d70/a01187">GlslLight.hpp</innerfile>
+    <innerfile refid="dc/d19/a01190">GlslLighting.hpp</innerfile>
+    <innerfile refid="dd/d43/a01193">GlslMaterial.hpp</innerfile>
+    <innerfile refid="d2/d22/a01196">GlslOutputComponents.hpp</innerfile>
+    <innerfile refid="d0/d5a/a01199">GlslReflection.hpp</innerfile>
+    <innerfile refid="d4/d5d/a01202">GlslShadow.hpp</innerfile>
+    <innerfile refid="de/d61/a01205">GlslSssTransmittance.hpp</innerfile>
+    <innerfile refid="d9/d31/a01208">GlslSurface.hpp</innerfile>
+    <innerfile refid="d1/d34/a01211">GlslTextureAnimation.hpp</innerfile>
+    <innerfile refid="d5/d32/a01214">GlslTextureConfiguration.hpp</innerfile>
+    <innerfile refid="da/d19/a01217">GlslUtils.hpp</innerfile>
+    <innerfile refid="db/d42/a01220">GlslVoxel.hpp</innerfile>
+    <innerfile refid="d7/ddd/a01223">SdwModule.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

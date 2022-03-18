@@ -1,33 +1,46 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d6/d49/a03472" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPhysicalDeviceInlineUniformBlockPropertiesEXT &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d6/d49/a03472_1a2dc47c5bd68ef8a22ef9e60189fe995d" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPhysicalDeviceInlineUniformBlockPropertiesEXT &gt;::value</definition>
+    <compoundname>castor3d::VertexBoneData::Ids::ids</compoundname>
+    <includes local="no">VertexBoneData.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/d49/a03472_1a7536e50be127b44b8bcbe4d960bd7f87" prot="public" static="no" mutable="no">
+        <type>castor::Point4ui</type>
+        <definition>castor::Point4ui castor3d::VertexBoneData::Ids::ids::id0</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_INLINE_UNIFORM_BLOCK_PROPERTIES_EXT</initializer>
+        <name>id0</name>
+        <qualifiedname>castor3d::VertexBoneData::Ids::ids::id0</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="279" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="279" bodyend="-1"/>
+        <location file="Model/Skeleton/VertexBoneData.hpp" line="38" column="18" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d49/a03472_1adfd4ecca8226ca3b10ab1115e17f1f85" prot="public" static="no" mutable="no">
+        <type>castor::Point4ui</type>
+        <definition>castor::Point4ui castor3d::VertexBoneData::Ids::ids::id1</definition>
+        <argsstring></argsstring>
+        <name>id1</name>
+        <qualifiedname>castor3d::VertexBoneData::Ids::ids::id1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/VertexBoneData.hpp" line="39" column="18" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="39" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="279" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="279" bodyend="279"/>
+    <location file="Model/Skeleton/VertexBoneData.hpp" line="36" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="37" bodyend="40"/>
     <listofallmembers>
-      <member refid="d6/d49/a03472_1a2dc47c5bd68ef8a22ef9e60189fe995d" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPhysicalDeviceInlineUniformBlockPropertiesEXT &gt;</scope><name>value</name></member>
+      <member refid="d6/d49/a03472_1a7536e50be127b44b8bcbe4d960bd7f87" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids::ids</scope><name>id0</name></member>
+      <member refid="d6/d49/a03472_1adfd4ecca8226ca3b10ab1115e17f1f85" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids::ids</scope><name>id1</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

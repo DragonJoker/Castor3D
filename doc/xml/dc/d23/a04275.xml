@@ -1,140 +1,105 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dc/d23/a04275" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::LightVolumePassResult</compoundname>
-    <basecompoundref refid="de/d93/a04235" prot="public" virt="non-virtual">castor3d::GBufferT&lt; LpvTexture &gt;</basecompoundref>
-    <includes local="no">LightVolumePassResult.hpp</includes>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="dc/d23/a04275_1a3b47c30373b1eb299b2893312eb3074c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::LightVolumePassResult::LightVolumePassResult</definition>
-        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, castor::String const &amp;prefix, uint32_t size)</argsstring>
-        <name>LightVolumePassResult</name>
-        <param>
-          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
-        </param>
-        <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>prefix</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>size</declname>
-        </param>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dc/d23/a04275" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::OpaqueResolvePass::Program</compoundname>
+    <includes local="no">OpaqueResolvePass.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/d23/a04275_1ad5e947282ef5b4e50172d20b6fda44f7" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/d1c/a04747" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::OpaqueResolvePass::Program::vertexShader</definition>
+        <argsstring></argsstring>
+        <name>vertexShader</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::Program::vertexShader</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp" line="17" column="1"/>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="29" column="14" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d23/a04275_1a667b786d6cfdeb78076e233b421dbd71" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/d1c/a04747" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::OpaqueResolvePass::Program::pixelShader</definition>
+        <argsstring></argsstring>
+        <name>pixelShader</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::Program::pixelShader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="30" column="14" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d23/a04275_1ae3ad00ae6e3f83711775d2f719ea45be" prot="public" static="no" mutable="no">
+        <type>ashes::PipelineShaderStageCreateInfoArray</type>
+        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::OpaqueResolvePass::Program::stages</definition>
+        <argsstring></argsstring>
+        <name>stages</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::Program::stages</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="31" column="43" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="31" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="1765">
-        <label>castor3d::GBufferT&lt; LpvTexture &gt;</label>
-        <link refid="de/d93/a04235"/>
-        <childnode refid="1766" relation="private-inheritance">
-        </childnode>
-        <childnode refid="1768" relation="template-instance">
-          <edgelabel>&lt; LpvTexture &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1767">
-        <label>Named</label>
-      </node>
-      <node id="1764">
-        <label>castor3d::LightVolumePassResult</label>
-        <link refid="dc/d23/a04275"/>
-        <childnode refid="1765" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1768">
-        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
-        <link refid="de/d93/a04235"/>
-        <childnode refid="1766" relation="private-inheritance">
-        </childnode>
-      </node>
-      <node id="1766">
-        <label>castor3d::GBufferBase</label>
-        <link refid="d7/da1/a04231"/>
-        <childnode refid="1767" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
     <collaborationgraph>
-      <node id="1770">
-        <label>castor3d::GBufferT&lt; LpvTexture &gt;</label>
-        <link refid="de/d93/a04235"/>
-        <childnode refid="1771" relation="private-inheritance">
-        </childnode>
-        <childnode refid="1773" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="1775" relation="template-instance">
-          <edgelabel>&lt; LpvTexture &gt;</edgelabel>
-        </childnode>
+      <node id="7">
+        <label>T</label>
       </node>
-      <node id="1772">
-        <label>Named</label>
-      </node>
-      <node id="1774">
-        <label>castor::Unique&lt; Engine &gt;</label>
-      </node>
-      <node id="1769">
-        <label>castor3d::LightVolumePassResult</label>
+      <node id="1">
+        <label>castor3d::OpaqueResolvePass::Program</label>
         <link refid="dc/d23/a04275"/>
-        <childnode refid="1770" relation="public-inheritance">
+        <childnode refid="2" relation="usage">
+          <edgelabel>pixelShader</edgelabel>
+          <edgelabel>vertexShader</edgelabel>
         </childnode>
       </node>
-      <node id="1773">
-        <label>castor3d::Engine</label>
-        <link refid="d0/d7c/a02499"/>
-        <childnode refid="1774" relation="public-inheritance">
+      <node id="2">
+        <label>castor3d::ShaderModule</label>
+        <link refid="d7/d1c/a04747"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>name</edgelabel>
+          <edgelabel>source</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>shader</edgelabel>
         </childnode>
       </node>
-      <node id="1775">
-        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
-        <link refid="de/d93/a04235"/>
-        <childnode refid="1771" relation="private-inheritance">
-        </childnode>
-        <childnode refid="1773" relation="usage">
-          <edgelabel>m_engine</edgelabel>
+      <node id="4">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="3">
+        <label>std::string</label>
+        <childnode refid="4" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="1771">
-        <label>castor3d::GBufferBase</label>
-        <link refid="d7/da1/a04231"/>
-        <childnode refid="1772" relation="public-inheritance">
+      <node id="6">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::unique_ptr&lt; ast::Shader &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; ast::Shader &gt;</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp" line="15" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp" bodystart="13" bodyend="21"/>
+    <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="27" column="1" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="28" bodyend="32"/>
     <listofallmembers>
-      <member refid="de/d93/a04235_1a07ee2a84c48f234617c05d6d5c4b6c33" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>begin</name></member>
-      <member refid="de/d93/a04235_1aa0de394aee0ba9d95e5c04da314a9cb4" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>begin</name></member>
-      <member refid="de/d93/a04235_1a77d65937285e0954c33bc1834b099dbf" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>cbegin</name></member>
-      <member refid="de/d93/a04235_1a0ca55ac3a4cfb4c27acbd6867f420a41" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>cend</name></member>
-      <member refid="de/d93/a04235_1a2dbf9ef234080f55751db9f2ced2db94" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>cleanup</name></member>
-      <member refid="de/d93/a04235_1a2ed3e0a1d7b905e8393d6f1e3b67f339" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>end</name></member>
-      <member refid="de/d93/a04235_1ad9a2382a1c40e83a016a77209bee05fd" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>end</name></member>
-      <member refid="de/d93/a04235_1afc858ac06674fbee5bcc31d1eb051f21" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>GBufferT</name></member>
-      <member refid="de/d93/a04235_1a48c1db122e270552414435855b31f23d" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>GBufferT</name></member>
-      <member refid="de/d93/a04235_1adbb549264af799a0ca09aafab55df3b8" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>initialise</name></member>
-      <member refid="dc/d23/a04275_1a3b47c30373b1eb299b2893312eb3074c" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>LightVolumePassResult</name></member>
-      <member refid="de/d93/a04235_1abfc84e342baf1448ab71cb739138f89b" prot="protected" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>m_engine</name></member>
-      <member refid="de/d93/a04235_1a1cd0629caecd95cfa73fc857e92be07a" prot="protected" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>m_owned</name></member>
-      <member refid="de/d93/a04235_1ac693f4659ea2014569d916d03013f68e" prot="protected" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>m_result</name></member>
-      <member refid="de/d93/a04235_1a55a704f02c3e73ede1b8ed6fb78e79d5" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>operator[]</name></member>
+      <member refid="dc/d23/a04275_1a667b786d6cfdeb78076e233b421dbd71" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::Program</scope><name>pixelShader</name></member>
+      <member refid="dc/d23/a04275_1ae3ad00ae6e3f83711775d2f719ea45be" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::Program</scope><name>stages</name></member>
+      <member refid="dc/d23/a04275_1ad5e947282ef5b4e50172d20b6fda44f7" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::Program</scope><name>vertexShader</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

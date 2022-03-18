@@ -1,115 +1,169 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d2/d9a/a02227" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::BinaryWriter&lt; Submesh &gt;</compoundname>
-    <basecompoundref refid="df/daa/a02135" prot="public" virt="non-virtual">castor3d::BinaryWriterBase&lt; Submesh &gt;</basecompoundref>
-    <includes local="no">BinarySubmesh.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d2/d9a/a02227_1a2e106060645a94fe21d58a6cd5735079" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::BinaryWriter&lt; Submesh &gt;::doWrite</definition>
-        <argsstring>(Submesh const &amp;obj) override</argsstring>
-        <name>doWrite</name>
-        <reimplements refid="df/daa/a02135_1a720ab792b3e53c6556c3cb4e5b0e2d06">doWrite</reimplements>
+    <compoundname>castor3d::AnimationKeyFrame</compoundname>
+    <derivedcompoundref refid="da/dbb/a03291" prot="public" virt="non-virtual">castor3d::MeshAnimationKeyFrame</derivedcompoundref>
+    <derivedcompoundref refid="d8/d38/a04419" prot="public" virt="non-virtual">castor3d::SceneNodeAnimationKeyFrame</derivedcompoundref>
+    <derivedcompoundref refid="db/d47/a03447" prot="public" virt="non-virtual">castor3d::SkeletonAnimationKeyFrame</derivedcompoundref>
+    <derivedcompoundref refid="dc/d44/a02899" prot="public" virt="non-virtual">castor3d::TextureAnimationKeyFrame</derivedcompoundref>
+    <includes local="no">AnimationKeyFrame.hpp</includes>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d2/d9a/a02227_1a093b74b56f13b6376ea4a51e28893db5" prot="protected" static="no" mutable="no">
+        <type>castor::Milliseconds</type>
+        <definition>castor::Milliseconds castor3d::AnimationKeyFrame::m_timeIndex</definition>
+        <argsstring></argsstring>
+        <name>m_timeIndex</name>
+        <qualifiedname>castor3d::AnimationKeyFrame::m_timeIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The start time index. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/AnimationKeyFrame.hpp" line="58" column="22" bodyfile="Animation/AnimationKeyFrame.hpp" bodystart="58" bodyend="-1"/>
+        <referencedby refid="d2/d9a/a02227_1a7b65d0aeb639d12908b9d17335702a17" compoundref="d1/d09/a00077" startline="50" endline="53">getTimeIndex</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d9a/a02227_1abc9e4e2a76ef5ec53fe3308add665082" prot="protected" static="no" mutable="no">
+        <type>castor::BoundingBox</type>
+        <definition>castor::BoundingBox castor3d::AnimationKeyFrame::m_boundingBox</definition>
+        <argsstring></argsstring>
+        <name>m_boundingBox</name>
+        <qualifiedname>castor3d::AnimationKeyFrame::m_boundingBox</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The bounding box. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/AnimationKeyFrame.hpp" line="61" column="21" bodyfile="Animation/AnimationKeyFrame.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/d9a/a02227_1a4c0d4b7afbe022ee8f9dcb9dc1ea54f0" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::AnimationKeyFrame::AnimationKeyFrame</definition>
+        <argsstring>(castor::Milliseconds const &amp;timeIndex=0_ms)</argsstring>
+        <name>AnimationKeyFrame</name>
+        <qualifiedname>castor3d::AnimationKeyFrame::AnimationKeyFrame</qualifiedname>
         <param>
-          <type><ref refid="d0/dce/a03971" kindref="compound">Submesh</ref> const &amp;</type>
-          <declname>obj</declname>
+          <type>castor::Milliseconds const &amp;</type>
+          <declname>timeIndex</declname>
+          <defval>0_ms</defval>
         </param>
         <briefdescription>
-<para>Function used to fill the chunk from specific data. </para>
+<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">obj</parametername>
+<parametername direction="in">timeIndex</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The object to write. </para>
+<para>When the key frame starts. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/AnimationKeyFrame.hpp" line="24" column="17" bodyfile="Animation/AnimationKeyFrame.hpp" bodystart="24" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d9a/a02227_1a0e38208bad19dd09708af045818c2f8d" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::AnimationKeyFrame::~AnimationKeyFrame</definition>
+        <argsstring>()=default</argsstring>
+        <name>~AnimationKeyFrame</name>
+        <qualifiedname>castor3d::AnimationKeyFrame::~AnimationKeyFrame</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/AnimationKeyFrame.hpp" line="34" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d9a/a02227_1a14d9b59106f5406a66f2b8af33367991" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::AnimationKeyFrame::initialise</definition>
+        <argsstring>()</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::AnimationKeyFrame::initialise</qualifiedname>
+        <reimplementedby refid="db/d47/a03447_1a6a7d31f9aedb17d0b8c29177e5a14918">initialise</reimplementedby>
+        <briefdescription>
+<para>Initialises the keyframe. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/AnimationKeyFrame.hpp" line="41" column="22" bodyfile="Animation/AnimationKeyFrame.hpp" bodystart="41" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d9a/a02227_1a7b65d0aeb639d12908b9d17335702a17" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Milliseconds const &amp;</type>
+        <definition>castor::Milliseconds const  &amp; castor3d::AnimationKeyFrame::getTimeIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>getTimeIndex</name>
+        <qualifiedname>castor3d::AnimationKeyFrame::getTimeIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The start time index. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Binary/BinarySubmesh.hpp" line="53" column="1"/>
+        <location file="Animation/AnimationKeyFrame.hpp" line="50" column="36" bodyfile="Animation/AnimationKeyFrame.hpp" bodystart="50" bodyend="53"/>
+        <references refid="d2/d9a/a02227_1a093b74b56f13b6376ea4a51e28893db5" compoundref="d1/d09/a00077" startline="58">m_timeIndex</references>
+        <referencedby refid="d1/dec/a04431_1a12fb6aeff71b5443b275bf0f3e792567" compoundref="db/d08/a01028" startline="48" endline="51">castor3d::SkeletonAnimationInstanceKeyFrame::getTimeIndex</referencedby>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para><ref refid="dc/d66/a05171" kindref="compound">MovableObject</ref> loader. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
-</simplesect>
-<simplesect kind="date"><para>14/02/2010</para>
-</simplesect>
-Loader de <ref refid="dc/d66/a05171" kindref="compound">MovableObject</ref> </para>
     </detaileddescription>
     <inheritancegraph>
-      <node id="449">
-        <label>castor3d::BinaryWriterBase&lt; TWritten &gt;</label>
-        <link refid="df/daa/a02135"/>
-      </node>
-      <node id="447">
-        <label>castor3d::BinaryWriter&lt; Submesh &gt;</label>
+      <node id="1">
+        <label>castor3d::AnimationKeyFrame</label>
         <link refid="d2/d9a/a02227"/>
-        <childnode refid="448" relation="public-inheritance">
+      </node>
+      <node id="2">
+        <label>castor3d::MeshAnimationKeyFrame</label>
+        <link refid="da/dbb/a03291"/>
+        <childnode refid="1" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="448">
-        <label>castor3d::BinaryWriterBase&lt; Submesh &gt;</label>
-        <link refid="df/daa/a02135"/>
-        <childnode refid="449" relation="template-instance">
-          <edgelabel>&lt; Submesh &gt;</edgelabel>
+      <node id="3">
+        <label>castor3d::SceneNodeAnimationKeyFrame</label>
+        <link refid="d8/d38/a04419"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::SkeletonAnimationKeyFrame</label>
+        <link refid="db/d47/a03447"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::TextureAnimationKeyFrame</label>
+        <link refid="dc/d44/a02899"/>
+        <childnode refid="1" relation="public-inheritance">
         </childnode>
       </node>
     </inheritancegraph>
-    <collaborationgraph>
-      <node id="453">
-        <label>castor3d::BinaryWriterBase&lt; TWritten &gt;</label>
-        <link refid="df/daa/a02135"/>
-        <childnode refid="452" relation="usage">
-          <edgelabel>m_chunk</edgelabel>
-        </childnode>
-      </node>
-      <node id="452">
-        <label>castor3d::BinaryChunk</label>
-        <link refid="d2/d31/a02087"/>
-      </node>
-      <node id="450">
-        <label>castor3d::BinaryWriter&lt; Submesh &gt;</label>
-        <link refid="d2/d9a/a02227"/>
-        <childnode refid="451" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="451">
-        <label>castor3d::BinaryWriterBase&lt; Submesh &gt;</label>
-        <link refid="df/daa/a02135"/>
-        <childnode refid="452" relation="usage">
-          <edgelabel>m_chunk</edgelabel>
-        </childnode>
-        <childnode refid="453" relation="template-instance">
-          <edgelabel>&lt; Submesh &gt;</edgelabel>
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Binary/BinarySubmesh.hpp" line="41" column="1" bodyfile="Binary/BinarySubmesh.hpp" bodystart="39" bodyend="54"/>
+    <location file="Animation/AnimationKeyFrame.hpp" line="13" column="1" bodyfile="Animation/AnimationKeyFrame.hpp" bodystart="14" bodyend="62"/>
     <listofallmembers>
-      <member refid="d2/d9a/a02227_1a2e106060645a94fe21d58a6cd5735079" prot="private" virt="virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWrite</name></member>
-      <member refid="df/daa/a02135_1a95685db95521fe46169767620976688c" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteChunk</name></member>
-      <member refid="df/daa/a02135_1ac978d1019caf2d37ad181911c78dde33" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteChunk</name></member>
-      <member refid="df/daa/a02135_1a5eef4da7e3bbce50e00c878bd7b32516" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteChunk</name></member>
-      <member refid="df/daa/a02135_1a5b782961d4526354e5d0e84e78c6bbbb" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteChunk</name></member>
-      <member refid="df/daa/a02135_1a3bd1cb047e1f2872668a4397496bd7c4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteChunk</name></member>
-      <member refid="df/daa/a02135_1a7bdb655caf767fdde8a4267602e06191" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteChunk</name></member>
-      <member refid="df/daa/a02135_1a8828d359b7a61ea2b657d5aada2dd87b" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteHeader</name></member>
-      <member refid="df/daa/a02135_1ad6c66bdde51dd57ab2b27f4ddc8db513" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>m_chunk</name></member>
-      <member refid="df/daa/a02135_1a21e7985d2f99ff20a6056d198aac07c5" prot="public" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>write</name></member>
-      <member refid="df/daa/a02135_1a3b4ae75e6ecd0bdf9f5dc26381633dab" prot="public" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>write</name></member>
+      <member refid="d2/d9a/a02227_1a4c0d4b7afbe022ee8f9dcb9dc1ea54f0" prot="public" virt="non-virtual"><scope>castor3d::AnimationKeyFrame</scope><name>AnimationKeyFrame</name></member>
+      <member refid="d2/d9a/a02227_1a7b65d0aeb639d12908b9d17335702a17" prot="public" virt="non-virtual"><scope>castor3d::AnimationKeyFrame</scope><name>getTimeIndex</name></member>
+      <member refid="d2/d9a/a02227_1a14d9b59106f5406a66f2b8af33367991" prot="public" virt="virtual"><scope>castor3d::AnimationKeyFrame</scope><name>initialise</name></member>
+      <member refid="d2/d9a/a02227_1abc9e4e2a76ef5ec53fe3308add665082" prot="protected" virt="non-virtual"><scope>castor3d::AnimationKeyFrame</scope><name>m_boundingBox</name></member>
+      <member refid="d2/d9a/a02227_1a093b74b56f13b6376ea4a51e28893db5" prot="protected" virt="non-virtual"><scope>castor3d::AnimationKeyFrame</scope><name>m_timeIndex</name></member>
+      <member refid="d2/d9a/a02227_1a0e38208bad19dd09708af045818c2f8d" prot="public" virt="virtual"><scope>castor3d::AnimationKeyFrame</scope><name>~AnimationKeyFrame</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

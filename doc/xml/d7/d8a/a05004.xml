@@ -1,43 +1,62 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d7/d8a/a05004" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::TextureProjectionToCube::FrameBuffer</compoundname>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d7/d8a/a05004" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::LpvGridConfigUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d7/d8a/a05004_1a9724e1806b129b53f1152fe30d67fb93" prot="public" static="no" mutable="no">
-        <type>ashes::ImageView</type>
-        <definition>ashes::ImageView castor3d::TextureProjectionToCube::FrameBuffer::view</definition>
+      <memberdef kind="variable" id="d7/d8a/a05004_1aa09ea15f7d4318b6db6e108b1133b548" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::LpvGridConfigUboConfiguration::minVolumeCorner</definition>
         <argsstring></argsstring>
-        <name>view</name>
+        <name>minVolumeCorner</name>
+        <qualifiedname>castor3d::LpvGridConfigUboConfiguration::minVolumeCorner</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/TextureProjectionToCube.hpp" line="28" column="1" bodyfile="Render/ToTexture/TextureProjectionToCube.hpp" bodystart="28" bodyend="-1"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="138" column="17" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="138" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d7/d8a/a05004_1a0542ce1a33fd2adcbc7d8528734b6e71" prot="public" static="no" mutable="no">
-        <type>ashes::FrameBufferPtr</type>
-        <definition>ashes::FrameBufferPtr castor3d::TextureProjectionToCube::FrameBuffer::frameBuffer</definition>
+      <memberdef kind="variable" id="d7/d8a/a05004_1acb7823dce229a794566065009fe54e2a" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::LpvGridConfigUboConfiguration::gridSizeAtt</definition>
         <argsstring></argsstring>
-        <name>frameBuffer</name>
+        <name>gridSizeAtt</name>
+        <qualifiedname>castor3d::LpvGridConfigUboConfiguration::gridSizeAtt</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/TextureProjectionToCube.hpp" line="29" column="1" bodyfile="Render/ToTexture/TextureProjectionToCube.hpp" bodystart="29" bodyend="-1"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="139" column="17" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="139" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d8a/a05004_1ac13d070a8a8e6098922d5158f6c842ab" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::LpvGridConfigUboConfiguration::cameraPos</definition>
+        <argsstring></argsstring>
+        <name>cameraPos</name>
+        <qualifiedname>castor3d::LpvGridConfigUboConfiguration::cameraPos</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="140" column="17" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="140" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para><ref refid="d1/d55/a04496" kindref="compound">Light</ref> propagation data. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/ToTexture/TextureProjectionToCube.hpp" line="27" column="1" bodyfile="Render/ToTexture/TextureProjectionToCube.hpp" bodystart="26" bodyend="30"/>
+    <location file="Shader/Ubos/UbosModule.hpp" line="136" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="137" bodyend="141"/>
     <listofallmembers>
-      <member refid="d7/d8a/a05004_1a0542ce1a33fd2adcbc7d8528734b6e71" prot="public" virt="non-virtual"><scope>castor3d::TextureProjectionToCube::FrameBuffer</scope><name>frameBuffer</name></member>
-      <member refid="d7/d8a/a05004_1a9724e1806b129b53f1152fe30d67fb93" prot="public" virt="non-virtual"><scope>castor3d::TextureProjectionToCube::FrameBuffer</scope><name>view</name></member>
+      <member refid="d7/d8a/a05004_1ac13d070a8a8e6098922d5158f6c842ab" prot="public" virt="non-virtual"><scope>castor3d::LpvGridConfigUboConfiguration</scope><name>cameraPos</name></member>
+      <member refid="d7/d8a/a05004_1acb7823dce229a794566065009fe54e2a" prot="public" virt="non-virtual"><scope>castor3d::LpvGridConfigUboConfiguration</scope><name>gridSizeAtt</name></member>
+      <member refid="d7/d8a/a05004_1aa09ea15f7d4318b6db6e108b1133b548" prot="public" virt="non-virtual"><scope>castor3d::LpvGridConfigUboConfiguration</scope><name>minVolumeCorner</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

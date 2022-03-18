@@ -1,786 +1,864 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d2/da6/a02339" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</compoundname>
-    <basecompoundref refid="d4/dad/a02407" prot="public" virt="non-virtual">castor3d::ObjectCacheBase&lt; BillboardList, castor::String &gt;</basecompoundref>
-    <includes local="no">BillboardCache.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d2/da6/a02339" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::BinaryWriterBase</compoundname>
+    <includes local="no">BinaryWriter.hpp</includes>
     <templateparamlist>
+      <param>
+        <type>class TWritten</type>
+      </param>
     </templateparamlist>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="d2/da6/a02339_1a41a6ddb328964af394340517a19ccbdb" prot="public" static="no">
-        <type><ref refid="d4/dad/a02407" kindref="compound">ObjectCacheBase</ref>&lt; <ref refid="d0/d42/a05127" kindref="compound">BillboardList</ref>, castor::String &gt;</type>
-        <definition>using castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::MyObjectCache =  ObjectCacheBase&lt; BillboardList, castor::String &gt;</definition>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d2/da6/a02339_1ad6c66bdde51dd57ab2b27f4ddc8db513" prot="protected" static="no" mutable="no">
+        <type><ref refid="dd/d3b/a02291" kindref="compound">BinaryChunk</ref></type>
+        <definition>BinaryChunk castor3d::BinaryWriterBase&lt; TWritten &gt;::m_chunk</definition>
         <argsstring></argsstring>
-        <name>MyObjectCache</name>
+        <name>m_chunk</name>
+        <qualifiedname>castor3d::BinaryWriterBase::m_chunk</qualifiedname>
+        <initializer>{ <ref refid="d4/d21/a02347" kindref="compound">ChunkTyper</ref>&lt; TWritten &gt;::Value }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The writer&apos;s chunk. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="27" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="27" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d2/da6/a02339_1a2c8e416d69bda1583151bc86f11c8742" prot="public" static="no">
-        <type>typename <ref refid="d4/dad/a02407_1aef5afe4f28d88051d0f84742a0d45b7f" kindref="member">MyObjectCacheType::MyObjectCacheTraits</ref></type>
-        <definition>using castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::MyObjectCacheTraits =  typename MyObjectCacheType::MyObjectCacheTraits</definition>
-        <argsstring></argsstring>
-        <name>MyObjectCacheTraits</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="28" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="28" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d2/da6/a02339_1ac0882208d8f90921965cb1d0913cb0c5" prot="public" static="no">
-        <type>typename <ref refid="d4/dad/a02407_1a2695fd8f7d4bef271326195ab84d6f86" kindref="member">MyObjectCacheType::Element</ref></type>
-        <definition>using castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::Element =  typename MyObjectCacheType::Element</definition>
-        <argsstring></argsstring>
-        <name>Element</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="29" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="29" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d2/da6/a02339_1a87a6c3bca60986a672fb9f30deccd476" prot="public" static="no">
-        <type>typename <ref refid="d4/dad/a02407_1a58aa6f84262945e82a965d654289ca22" kindref="member">MyObjectCacheType::Key</ref></type>
-        <definition>using castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::Key =  typename MyObjectCacheType::Key</definition>
-        <argsstring></argsstring>
-        <name>Key</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="30" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="30" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d2/da6/a02339_1aa82d7a578f20c248aa78e5b6bc6971ce" prot="public" static="no">
-        <type>typename <ref refid="d4/dad/a02407_1af44fe4e2622342b0256466f52d791869" kindref="member">MyObjectCacheType::Collection</ref></type>
-        <definition>using castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::Collection =  typename MyObjectCacheType::Collection</definition>
-        <argsstring></argsstring>
-        <name>Collection</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="31" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="31" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d2/da6/a02339_1a9f5188c98bc1fa5822a98563110e20f2" prot="public" static="no">
-        <type>typename <ref refid="d4/dad/a02407_1a6dbfb5d5c3648f477f8a366a88e41bc9" kindref="member">MyObjectCacheType::LockType</ref></type>
-        <definition>using castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::LockType =  typename MyObjectCacheType::LockType</definition>
-        <argsstring></argsstring>
-        <name>LockType</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="32" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="32" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d2/da6/a02339_1aae22a8c72e6c911cd78319f5242e0038" prot="public" static="no">
-        <type>typename <ref refid="d4/dad/a02407_1aaea33a6e2634758a9959a36d2d191adf" kindref="member">MyObjectCacheType::ElementPtr</ref></type>
-        <definition>using castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::ElementPtr =  typename MyObjectCacheType::ElementPtr</definition>
-        <argsstring></argsstring>
-        <name>ElementPtr</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="33" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="33" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d2/da6/a02339_1a615a151c5177295906a45e7d88629c32" prot="public" static="no">
-        <type>typename <ref refid="d4/dad/a02407_1a5273357e4b90c055f34dccaa0f18c1d9" kindref="member">MyObjectCacheType::Producer</ref></type>
-        <definition>using castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::Producer =  typename MyObjectCacheType::Producer</definition>
-        <argsstring></argsstring>
-        <name>Producer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="34" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="34" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d2/da6/a02339_1a37113c33060dd988ea369a567186080f" prot="public" static="no">
-        <type>typename <ref refid="d4/dad/a02407_1a709002f742a234401899e221db822a69" kindref="member">MyObjectCacheType::Initialiser</ref></type>
-        <definition>using castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::Initialiser =  typename MyObjectCacheType::Initialiser</definition>
-        <argsstring></argsstring>
-        <name>Initialiser</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="35" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="35" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d2/da6/a02339_1afc37c522f43039939d40b274a6882093" prot="public" static="no">
-        <type>typename <ref refid="d4/dad/a02407_1ae9d6a190e7471d9ee2fd8b23d35d084f" kindref="member">MyObjectCacheType::Cleaner</ref></type>
-        <definition>using castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::Cleaner =  typename MyObjectCacheType::Cleaner</definition>
-        <argsstring></argsstring>
-        <name>Cleaner</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="36" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="36" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d2/da6/a02339_1abbb80e5a9eb86f5b55163eb8aebfa3f2" prot="public" static="no">
-        <type>typename <ref refid="d4/dad/a02407_1adf465fa19aa985e191560d94fbfd0ddd" kindref="member">MyObjectCacheType::Merger</ref></type>
-        <definition>using castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::Merger =  typename MyObjectCacheType::Merger</definition>
-        <argsstring></argsstring>
-        <name>Merger</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="37" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="37" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d2/da6/a02339_1ad08d7478a4c8515015dc02c7bc921db9" prot="public" static="no">
-        <type>typename <ref refid="d4/dad/a02407_1acbd254e0f131c3ecd6d93ca42929daba" kindref="member">MyObjectCacheType::Attacher</ref></type>
-        <definition>using castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::Attacher =  typename MyObjectCacheType::Attacher</definition>
-        <argsstring></argsstring>
-        <name>Attacher</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="38" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="38" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d2/da6/a02339_1a7d86ff315f8d4543730930b5d7b391ce" prot="public" static="no">
-        <type>typename <ref refid="d4/dad/a02407_1adfa07c51d1421cbbd46d0c04e3213dc6" kindref="member">MyObjectCacheType::Detacher</ref></type>
-        <definition>using castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::Detacher =  typename MyObjectCacheType::Detacher</definition>
-        <argsstring></argsstring>
-        <name>Detacher</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="39" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="39" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d2/da6/a02339_1af2677a6ca3c7cde32cb5ab8151a4cac4" prot="private" static="no" mutable="no">
-        <type>BillboardUboPoolsSPtr</type>
-        <definition>BillboardUboPoolsSPtr castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::m_pools</definition>
-        <argsstring></argsstring>
-        <name>m_pools</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="163" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="163" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/da6/a02339_1aacdc1d0163b5986c2159f7c275937f31" prot="private" static="no" mutable="no">
-        <type>std::set&lt; <ref refid="d1/d48/a04575" kindref="compound">SceneRenderPass</ref> const * &gt;</type>
-        <definition>std::set&lt; SceneRenderPass const * &gt; castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::m_pendingPasses</definition>
-        <argsstring></argsstring>
-        <name>m_pendingPasses</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="164" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="164" bodyend="-1"/>
+        <location file="Binary/BinaryWriter.hpp" line="253" column="13" bodyfile="Binary/BinaryWriter.hpp" bodystart="253" bodyend="-1"/>
+        <referencedby refid="d2/da6/a02339_1a3b4ae75e6ecd0bdf9f5dc26381633dab" compoundref="d5/db1/a00140" startline="59" endline="71">castor3d::BinaryWriterBase&lt; TWritten &gt;::write</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d2/da6/a02339_1a6e9cf410e2fe70c53f1ebb552138cebe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::ObjectCache</definition>
-        <argsstring>(Engine &amp;engine, Scene &amp;scene, SceneNodeSPtr rootNode, SceneNodeSPtr rootCameraNode, SceneNodeSPtr rootObjectNode, Producer &amp;&amp;produce, Initialiser &amp;&amp;initialise=Initialiser{}, Cleaner &amp;&amp;clean=Cleaner{}, Merger &amp;&amp;merge=Merger{}, Attacher &amp;&amp;attach=Attacher{}, Detacher &amp;&amp;detach=Detacher{})</argsstring>
-        <name>ObjectCache</name>
+      <memberdef kind="function" id="d2/da6/a02339_1a455d885b04ddaed4d650461bbef1711c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual castor3d::BinaryWriterBase&lt; TWritten &gt;::~BinaryWriterBase</definition>
+        <argsstring>()=default</argsstring>
+        <name>~BinaryWriterBase</name>
+        <qualifiedname>castor3d::BinaryWriterBase::~BinaryWriterBase</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryWriter.hpp" line="16" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da6/a02339_1a21e7985d2f99ff20a6056d198aac07c5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BinaryWriterBase&lt; TWritten &gt;::write</definition>
+        <argsstring>(TWritten const &amp;obj, castor::BinaryFile &amp;file)</argsstring>
+        <name>write</name>
+        <qualifiedname>castor3d::BinaryWriterBase::write</qualifiedname>
         <param>
-          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
+          <type>TWritten const &amp;</type>
+          <declname>obj</declname>
         </param>
         <param>
-          <type><ref refid="d7/d00/a05223" kindref="compound">Scene</ref> &amp;</type>
-          <declname>scene</declname>
-        </param>
-        <param>
-          <type>SceneNodeSPtr</type>
-          <declname>rootNode</declname>
-        </param>
-        <param>
-          <type>SceneNodeSPtr</type>
-          <declname>rootCameraNode</declname>
-        </param>
-        <param>
-          <type>SceneNodeSPtr</type>
-          <declname>rootObjectNode</declname>
-        </param>
-        <param>
-          <type><ref refid="d2/da6/a02339_1a615a151c5177295906a45e7d88629c32" kindref="member">Producer</ref> &amp;&amp;</type>
-          <declname>produce</declname>
-        </param>
-        <param>
-          <type><ref refid="d2/da6/a02339_1a37113c33060dd988ea369a567186080f" kindref="member">Initialiser</ref> &amp;&amp;</type>
-          <declname>initialise</declname>
-          <defval><ref refid="d2/da6/a02339_1a37113c33060dd988ea369a567186080f" kindref="member">Initialiser</ref>{}</defval>
-        </param>
-        <param>
-          <type><ref refid="d2/da6/a02339_1afc37c522f43039939d40b274a6882093" kindref="member">Cleaner</ref> &amp;&amp;</type>
-          <declname>clean</declname>
-          <defval><ref refid="d2/da6/a02339_1afc37c522f43039939d40b274a6882093" kindref="member">Cleaner</ref>{}</defval>
-        </param>
-        <param>
-          <type><ref refid="d2/da6/a02339_1abbb80e5a9eb86f5b55163eb8aebfa3f2" kindref="member">Merger</ref> &amp;&amp;</type>
-          <declname>merge</declname>
-          <defval><ref refid="d2/da6/a02339_1abbb80e5a9eb86f5b55163eb8aebfa3f2" kindref="member">Merger</ref>{}</defval>
-        </param>
-        <param>
-          <type><ref refid="d2/da6/a02339_1ad08d7478a4c8515015dc02c7bc921db9" kindref="member">Attacher</ref> &amp;&amp;</type>
-          <declname>attach</declname>
-          <defval><ref refid="d2/da6/a02339_1ad08d7478a4c8515015dc02c7bc921db9" kindref="member">Attacher</ref>{}</defval>
-        </param>
-        <param>
-          <type><ref refid="d2/da6/a02339_1a7d86ff315f8d4543730930b5d7b391ce" kindref="member">Detacher</ref> &amp;&amp;</type>
-          <declname>detach</declname>
-          <defval><ref refid="d2/da6/a02339_1a7d86ff315f8d4543730930b5d7b391ce" kindref="member">Detacher</ref>{}</defval>
+          <type>castor::BinaryFile &amp;</type>
+          <declname>file</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
+<para>Writes an object to a file. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">engine</parametername>
+<parametername direction="in">obj</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The engine. </para>
+<para>The object to write. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">scene</parametername>
+<parametername direction="inout">file</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The scene. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">rootNode</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The root node. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">rootCameraNode</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The cameras root node. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">rootObjectNode</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The objects root node. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">produce</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element producer. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">initialise</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element initialiser. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">clean</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element cleaner. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">merge</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element collection merger. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">attach</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element attacher (to a scene node). </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">detach</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element detacher (from a scene node). </para>
+<para>The file. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="68" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/da6/a02339_1ad56ec6e31fc129f68c58799edc031dc3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::~ObjectCache</definition>
-        <argsstring>()</argsstring>
-        <name>~ObjectCache</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="85" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/da6/a02339_1af796e459edfb72482669db7f6d68c4cf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::registerPass</definition>
-        <argsstring>(SceneRenderPass const &amp;renderPass)</argsstring>
-        <name>registerPass</name>
-        <param>
-          <type><ref refid="d1/d48/a04575" kindref="compound">SceneRenderPass</ref> const &amp;</type>
-          <declname>renderPass</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="87" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/da6/a02339_1a6bf54c9634da0a8c9ee3428362b2c7c9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::unregisterPass</definition>
-        <argsstring>(SceneRenderPass const *renderPass, uint32_t instanceMult)</argsstring>
-        <name>unregisterPass</name>
-        <param>
-          <type><ref refid="d1/d48/a04575" kindref="compound">SceneRenderPass</ref> const *</type>
-          <declname>renderPass</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>instanceMult</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="88" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/da6/a02339_1ad08bc6ec97df43b2249c3d4e82e668df" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::initialise</definition>
-        <argsstring>(RenderDevice const &amp;device)</argsstring>
-        <name>initialise</name>
-        <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-<para>Initialises the UBO pools. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="98" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/da6/a02339_1a4c5ecf27d33710845ad36a85e58bb68e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::cleanup</definition>
-        <argsstring>(RenderDevice const &amp;device)</argsstring>
-        <name>cleanup</name>
-        <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-<para>Cleans up the UBO pools. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="107" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/da6/a02339_1afed71deff5d17b219093a027ee98fee6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::clear</definition>
-        <argsstring>()</argsstring>
-        <name>clear</name>
-        <briefdescription>
-<para>Flushes the collection. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="114" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/da6/a02339_1afa5fc7c04d145de022ec53e003fc6684" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::update</definition>
-        <argsstring>(CpuUpdater &amp;updater)</argsstring>
-        <name>update</name>
-        <param>
-          <type><ref refid="db/d82/a04567" kindref="compound">CpuUpdater</ref> &amp;</type>
-          <declname>updater</declname>
-        </param>
-        <briefdescription>
-<para>Updates the render pass, CPU wise. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="inout">updater</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The update data. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="123" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/da6/a02339_1aec80fdf1205397e86d373cb66adfc7f0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/da6/a02339_1aae22a8c72e6c911cd78319f5242e0038" kindref="member">ElementPtr</ref></type>
-        <definition>C3D_API ElementPtr castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::add</definition>
-        <argsstring>(Key const &amp;name, SceneNode &amp;parent)</argsstring>
-        <name>add</name>
-        <param>
-          <type><ref refid="d2/da6/a02339_1a87a6c3bca60986a672fb9f30deccd476" kindref="member">Key</ref> const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type><ref refid="d8/dd0/a05235" kindref="compound">SceneNode</ref> &amp;</type>
-          <declname>parent</declname>
-        </param>
-        <briefdescription>
-<para>Creates a new object and adds it to the collection. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The object name. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">parent</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parent scene node. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The created object. </para>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="136" column="1"/>
+        <location file="Binary/BinaryWriter.hpp" line="29" column="13" bodyfile="Binary/BinaryWriter.hpp" bodystart="29" bodyend="46"/>
+        <references refid="d2/da6/a02339_1a8828d359b7a61ea2b657d5aada2dd87b" compoundref="d5/db1/a00140" startline="84" endline="103">castor3d::BinaryWriterBase&lt; TWritten &gt;::doWriteHeader</references>
+        <references refid="da/de3/a01398_1a742783d4e4b7354fac3e375ae107414da3af707888e537c6e9dde81b11bf02959">castor3d::eCmshFile</references>
+        <references refid="d2/da6/a02339_1a21e7985d2f99ff20a6056d198aac07c5" compoundref="d5/db1/a00140" startline="29" endline="46">castor3d::BinaryWriterBase&lt; TWritten &gt;::write</references>
+        <referencedby refid="d2/da6/a02339_1a21e7985d2f99ff20a6056d198aac07c5" compoundref="d5/db1/a00140" startline="29" endline="46">castor3d::BinaryWriterBase&lt; TWritten &gt;::write</referencedby>
       </memberdef>
-      <memberdef kind="function" id="d2/da6/a02339_1a7dfdf443d0d966d5f68c096e38b2a21c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::add</definition>
-        <argsstring>(ElementPtr element)</argsstring>
-        <name>add</name>
+      <memberdef kind="function" id="d2/da6/a02339_1a3b4ae75e6ecd0bdf9f5dc26381633dab" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BinaryWriterBase&lt; TWritten &gt;::write</definition>
+        <argsstring>(TWritten const &amp;obj, BinaryChunk &amp;chunk)</argsstring>
+        <name>write</name>
+        <qualifiedname>castor3d::BinaryWriterBase::write</qualifiedname>
         <param>
-          <type><ref refid="d2/da6/a02339_1aae22a8c72e6c911cd78319f5242e0038" kindref="member">ElementPtr</ref></type>
-          <declname>element</declname>
+          <type>TWritten const &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d3b/a02291" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
         </param>
         <briefdescription>
-<para>Adds an existing object. </para>
+<para>To chunk writer function. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">element</parametername>
+<parametername direction="in">obj</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The object. </para>
+<para>The object to write. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="146" column="1"/>
+        <location file="Binary/BinaryWriter.hpp" line="59" column="13" bodyfile="Binary/BinaryWriter.hpp" bodystart="59" bodyend="71"/>
+        <references refid="dd/d3b/a02291_1a05ffb50a92f97be91612f8f91ceeed8e">castor3d::BinaryChunk::addSubChunk</references>
+        <references refid="dd/d3b/a02291_1abbed73a8f9ab118d0b9ba81219a919b6">castor3d::BinaryChunk::finalise</references>
+        <references refid="d2/da6/a02339_1ad6c66bdde51dd57ab2b27f4ddc8db513" compoundref="d5/db1/a00140" startline="253">castor3d::BinaryWriterBase&lt; TWritten &gt;::m_chunk</references>
       </memberdef>
-      <memberdef kind="function" id="d2/da6/a02339_1a28bbf4693ecab9ab46a26dc741843f3c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::remove</definition>
-        <argsstring>(Key const &amp;name)</argsstring>
-        <name>remove</name>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d2/da6/a02339_1a8828d359b7a61ea2b657d5aada2dd87b" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BinaryWriterBase&lt; TWritten &gt;::doWriteHeader</definition>
+        <argsstring>(BinaryChunk &amp;chunk) const</argsstring>
+        <name>doWriteHeader</name>
+        <qualifiedname>castor3d::BinaryWriterBase::doWriteHeader</qualifiedname>
         <param>
-          <type><ref refid="d2/da6/a02339_1a87a6c3bca60986a672fb9f30deccd476" kindref="member">Key</ref> const &amp;</type>
-          <declname>name</declname>
+          <type><ref refid="dd/d3b/a02291" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
         </param>
         <briefdescription>
-<para>Removes an object, given a name. </para>
+<para>Writes the header chunk. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">name</parametername>
+<parametername direction="inout">chunk</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The object name. </para>
+<para>The parent chunk. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="155" column="1"/>
+        <location file="Binary/BinaryWriter.hpp" line="84" column="13" bodyfile="Binary/BinaryWriter.hpp" bodystart="84" bodyend="103"/>
+        <references refid="dd/d3b/a02291_1a05ffb50a92f97be91612f8f91ceeed8e">castor3d::BinaryChunk::addSubChunk</references>
+        <references refid="da/de3/a01398_1abb378ab1c4b7208b4d80b496f3ad14bc" compoundref="d9/d77/a00095" startline="42">castor3d::CurrentCmshVersion</references>
+        <references refid="d2/da6/a02339_1a95685db95521fe46169767620976688c" compoundref="d5/db1/a00140" startline="121" endline="127">castor3d::BinaryWriterBase&lt; TWritten &gt;::doWriteChunk</references>
+        <references refid="da/de3/a01398_1a742783d4e4b7354fac3e375ae107414da9e33398324cc27f4d18d60ffe7436294">castor3d::eCmshHeader</references>
+        <references refid="da/de3/a01398_1a742783d4e4b7354fac3e375ae107414da52eafb299773df06313321e3eca83362">castor3d::eCmshVersion</references>
+        <references refid="da/de3/a01398_1a742783d4e4b7354fac3e375ae107414daa866af182acab9fffb643ecb752cd9e5">castor3d::eName</references>
+        <referencedby refid="d2/da6/a02339_1a21e7985d2f99ff20a6056d198aac07c5" compoundref="d5/db1/a00140" startline="29" endline="46">castor3d::BinaryWriterBase&lt; TWritten &gt;::write</referencedby>
       </memberdef>
-      <memberdef kind="function" id="d2/da6/a02339_1a658ba6abb7f1a70a038b89aad25d0296" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="da/db3/a02343" kindref="compound">BillboardUboPools</ref> &amp;</type>
-        <definition>BillboardUboPools&amp; castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::getUboPools</definition>
-        <argsstring>() const</argsstring>
-        <name>getUboPools</name>
+      <memberdef kind="function" id="d2/da6/a02339_1a95685db95521fe46169767620976688c" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::BinaryWriterBase&lt; TWritten &gt;::doWriteChunk</definition>
+        <argsstring>(T const *values, size_t count, ChunkType chunkType, BinaryChunk &amp;chunk) const</argsstring>
+        <name>doWriteChunk</name>
+        <qualifiedname>castor3d::BinaryWriterBase::doWriteChunk</qualifiedname>
+        <param>
+          <type>T const *</type>
+          <declname>values</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>count</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref></type>
+          <declname>chunkType</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d3b/a02291" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
         <briefdescription>
+<para>Writes a subchunk value into a chunk. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The values. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The values count. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunkType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The subchunk type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/BillboardCache.hpp" line="157" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="157" bodyend="160"/>
+        <location file="Binary/BinaryWriter.hpp" line="121" column="13" bodyfile="Binary/BinaryWriter.hpp" bodystart="121" bodyend="127"/>
+        <references refid="d3/de3/a02483_1ac4cf51584e348def2f360b81e6ec7a9a" compoundref="da/d1e/a00149" startline="83" endline="99">castor3d::ChunkWriter&lt; T &gt;::write</references>
+        <referencedby refid="d2/da6/a02339_1a8828d359b7a61ea2b657d5aada2dd87b" compoundref="d5/db1/a00140" startline="84" endline="103">castor3d::BinaryWriterBase&lt; TWritten &gt;::doWriteHeader</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d2/da6/a02339_1ac978d1019caf2d37ad181911c78dde33" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>size_t</type>
+            <declname>Count</declname>
+            <defname>Count</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::BinaryWriterBase&lt; TWritten &gt;::doWriteChunk</definition>
+        <argsstring>(T const(&amp;values)[Count], ChunkType chunkType, BinaryChunk &amp;chunk) const</argsstring>
+        <name>doWriteChunk</name>
+        <qualifiedname>castor3d::BinaryWriterBase::doWriteChunk</qualifiedname>
+        <param>
+          <type>T const(&amp;)</type>
+          <declname>values</declname>
+          <array>[Count]</array>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref></type>
+          <declname>chunkType</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d3b/a02291" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Writes a subchunk value into a chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The values. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunkType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The subchunk type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryWriter.hpp" line="143" column="13" bodyfile="Binary/BinaryWriter.hpp" bodystart="143" bodyend="148"/>
+        <references refid="d3/de3/a02483_1ac4cf51584e348def2f360b81e6ec7a9a" compoundref="da/d1e/a00149" startline="83" endline="99">castor3d::ChunkWriter&lt; T &gt;::write</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/da6/a02339_1a5eef4da7e3bbce50e00c878bd7b32516" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>size_t</type>
+            <declname>Count</declname>
+            <defname>Count</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::BinaryWriterBase&lt; TWritten &gt;::doWriteChunk</definition>
+        <argsstring>(std::array&lt; T, Count &gt; const &amp;values, ChunkType chunkType, BinaryChunk &amp;chunk) const</argsstring>
+        <name>doWriteChunk</name>
+        <qualifiedname>castor3d::BinaryWriterBase::doWriteChunk</qualifiedname>
+        <param>
+          <type>std::array&lt; T, Count &gt; const &amp;</type>
+          <declname>values</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref></type>
+          <declname>chunkType</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d3b/a02291" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Writes a subchunk value into a chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The values. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunkType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The subchunk type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryWriter.hpp" line="164" column="13" bodyfile="Binary/BinaryWriter.hpp" bodystart="164" bodyend="169"/>
+        <references refid="d3/de3/a02483_1ac4cf51584e348def2f360b81e6ec7a9a" compoundref="da/d1e/a00149" startline="83" endline="99">castor3d::ChunkWriter&lt; T &gt;::write</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/da6/a02339_1a5b782961d4526354e5d0e84e78c6bbbb" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::BinaryWriterBase&lt; TWritten &gt;::doWriteChunk</definition>
+        <argsstring>(std::vector&lt; T &gt; const &amp;values, ChunkType chunkType, BinaryChunk &amp;chunk) const</argsstring>
+        <name>doWriteChunk</name>
+        <qualifiedname>castor3d::BinaryWriterBase::doWriteChunk</qualifiedname>
+        <param>
+          <type>std::vector&lt; T &gt; const &amp;</type>
+          <declname>values</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref></type>
+          <declname>chunkType</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d3b/a02291" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Writes a subchunk value into a chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The values. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunkType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The subchunk type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryWriter.hpp" line="185" column="13" bodyfile="Binary/BinaryWriter.hpp" bodystart="185" bodyend="190"/>
+        <references refid="d3/de3/a02483_1ac4cf51584e348def2f360b81e6ec7a9a" compoundref="da/d1e/a00149" startline="83" endline="99">castor3d::ChunkWriter&lt; T &gt;::write</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/da6/a02339_1a3bd1cb047e1f2872668a4397496bd7c4" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::BinaryWriterBase&lt; TWritten &gt;::doWriteChunk</definition>
+        <argsstring>(T const *begin, T const *end, ChunkType chunkType, BinaryChunk &amp;chunk) const</argsstring>
+        <name>doWriteChunk</name>
+        <qualifiedname>castor3d::BinaryWriterBase::doWriteChunk</qualifiedname>
+        <param>
+          <type>T const *</type>
+          <declname>begin</declname>
+        </param>
+        <param>
+          <type>T const *</type>
+          <declname>end</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref></type>
+          <declname>chunkType</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d3b/a02291" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Writes a subchunk value into a chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">begin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The values begin. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">end</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The values end. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunkType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The subchunk type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryWriter.hpp" line="208" column="13" bodyfile="Binary/BinaryWriter.hpp" bodystart="208" bodyend="214"/>
+        <references refid="d3/de3/a02483_1ac4cf51584e348def2f360b81e6ec7a9a" compoundref="da/d1e/a00149" startline="83" endline="99">castor3d::ChunkWriter&lt; T &gt;::write</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/da6/a02339_1a7bdb655caf767fdde8a4267602e06191" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::BinaryWriterBase&lt; TWritten &gt;::doWriteChunk</definition>
+        <argsstring>(T const &amp;value, ChunkType chunkType, BinaryChunk &amp;chunk) const</argsstring>
+        <name>doWriteChunk</name>
+        <qualifiedname>castor3d::BinaryWriterBase::doWriteChunk</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref></type>
+          <declname>chunkType</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d3b/a02291" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Writes a subchunk value into a chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The value. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunkType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The subchunk type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryWriter.hpp" line="230" column="13" bodyfile="Binary/BinaryWriter.hpp" bodystart="230" bodyend="235"/>
+        <references refid="d3/de3/a02483_1ac4cf51584e348def2f360b81e6ec7a9a" compoundref="da/d1e/a00149" startline="83" endline="99">castor3d::ChunkWriter&lt; T &gt;::write</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d2/da6/a02339_1a720ab792b3e53c6556c3cb4e5b0e2d06" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::BinaryWriterBase&lt; TWritten &gt;::doWrite</definition>
+        <argsstring>(TWritten const &amp;obj)=0</argsstring>
+        <name>doWrite</name>
+        <qualifiedname>castor3d::BinaryWriterBase::doWrite</qualifiedname>
+        <reimplementedby refid="d3/d3a/a02259_1a5ffce8901dc926cff5e016a9a812fec2">doWrite</reimplementedby>
+        <reimplementedby refid="df/d39/a02271_1a79e827b4b6cd1b3bdde77021e05c3b99">doWrite</reimplementedby>
+        <reimplementedby refid="dd/d29/a02283_1acbb3503ccd9b5bb0e219168699b99f47">doWrite</reimplementedby>
+        <reimplementedby refid="db/d90/a02299_1af34cf38176f0875eadac43d1b31d0c43">doWrite</reimplementedby>
+        <reimplementedby refid="dd/d21/a02311_1ad372e4f97c60e8a32a7e05a15121b34c">doWrite</reimplementedby>
+        <reimplementedby refid="d7/d67/a02323_1a59746b2e811728c55f13f91034589d27">doWrite</reimplementedby>
+        <reimplementedby refid="d4/d8c/a02359_1a79129ffffa96604b92951be6ad8d7973">doWrite</reimplementedby>
+        <reimplementedby refid="d4/dcc/a02371_1a8226867d8615aeba5c2e1a0c07221ca4">doWrite</reimplementedby>
+        <reimplementedby refid="db/dd4/a02383_1a6da6fa4b3e42eb50878abd53c8cec1e0">doWrite</reimplementedby>
+        <reimplementedby refid="d3/d62/a02395_1a312b94b28345bb2a86e4a07116903f74">doWrite</reimplementedby>
+        <reimplementedby refid="d4/dad/a02407_1a9c7bcfd9f05bec9febc9a200c1e14792">doWrite</reimplementedby>
+        <reimplementedby refid="d8/d49/a02419_1ace650871bb057cf3320fa1234f30b30e">doWrite</reimplementedby>
+        <reimplementedby refid="d1/df1/a02431_1ae4cd3b1abadc82ee2c90960acdab1175">doWrite</reimplementedby>
+        <reimplementedby refid="d1/d04/a02443_1af3e623de8610408418aee0969210c196">doWrite</reimplementedby>
+        <reimplementedby refid="df/db6/a02455_1a2e106060645a94fe21d58a6cd5735079">doWrite</reimplementedby>
+        <param>
+          <type>TWritten const &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>Writes the object to the writer&apos;s chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to write. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryWriter.hpp" line="248" column="22"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para><ref refid="d0/d42/a05127" kindref="compound">BillboardList</ref> cache. </para>
+<para>Binary data chunk writer base class. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
-</simplesect>
-<simplesect kind="date"><para>24/04/2018 </para>
-</simplesect>
-<simplesect kind="version"><para>0.11.0 </para>
-</simplesect>
-</para>
     </detaileddescription>
     <inheritancegraph>
-      <node id="2236">
-        <label>castor3d::ObjectCacheBase&lt; BillboardList, castor::String &gt;</label>
-        <link refid="d4/dad/a02407"/>
-        <childnode refid="2237" relation="template-instance">
-          <edgelabel>&lt; BillboardList, castor::String &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2237">
-        <label>castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</label>
-        <link refid="d4/dad/a02407"/>
-      </node>
-      <node id="2235">
-        <label>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</label>
+      <node id="2">
+        <label>castor3d::BinaryWriterBase&lt; Animation &gt;</label>
         <link refid="d2/da6/a02339"/>
-        <childnode refid="2236" relation="public-inheritance">
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Animation &gt;</edgelabel>
         </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::BinaryWriterBase&lt; Bone &gt;</label>
+        <link refid="d2/da6/a02339"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Bone &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::BinaryWriterBase&lt; BonesComponent &gt;</label>
+        <link refid="d2/da6/a02339"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; BonesComponent &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::BinaryWriterBase&lt; Mesh &gt;</label>
+        <link refid="d2/da6/a02339"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Mesh &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::BinaryWriterBase&lt; MeshAnimation &gt;</label>
+        <link refid="d2/da6/a02339"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; MeshAnimation &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::BinaryWriterBase&lt; MeshAnimationKeyFrame &gt;</label>
+        <link refid="d2/da6/a02339"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; MeshAnimationKeyFrame &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::BinaryWriterBase&lt; SceneNodeAnimation &gt;</label>
+        <link refid="d2/da6/a02339"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SceneNodeAnimation &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor3d::BinaryWriterBase&lt; SceneNodeAnimationKeyFrame &gt;</label>
+        <link refid="d2/da6/a02339"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SceneNodeAnimationKeyFrame &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor3d::BinaryWriterBase&lt; Skeleton &gt;</label>
+        <link refid="d2/da6/a02339"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Skeleton &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor3d::BinaryWriterBase&lt; SkeletonAnimation &gt;</label>
+        <link refid="d2/da6/a02339"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimation &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>castor3d::BinaryWriterBase&lt; SkeletonAnimationBone &gt;</label>
+        <link refid="d2/da6/a02339"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationBone &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="24">
+        <label>castor3d::BinaryWriterBase&lt; SkeletonAnimationKeyFrame &gt;</label>
+        <link refid="d2/da6/a02339"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationKeyFrame &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="26">
+        <label>castor3d::BinaryWriterBase&lt; SkeletonAnimationNode &gt;</label>
+        <link refid="d2/da6/a02339"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationNode &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="28">
+        <label>castor3d::BinaryWriterBase&lt; SkeletonAnimationObject &gt;</label>
+        <link refid="d2/da6/a02339"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationObject &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="30">
+        <label>castor3d::BinaryWriterBase&lt; Submesh &gt;</label>
+        <link refid="d2/da6/a02339"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Submesh &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::BinaryWriter&lt; Animation &gt;</label>
+        <link refid="d3/d3a/a02259"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::BinaryWriter&lt; Bone &gt;</label>
+        <link refid="df/d39/a02271"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::BinaryWriter&lt; BonesComponent &gt;</label>
+        <link refid="dd/d29/a02283"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::BinaryWriter&lt; Mesh &gt;</label>
+        <link refid="db/d90/a02299"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor3d::BinaryWriter&lt; MeshAnimation &gt;</label>
+        <link refid="dd/d21/a02311"/>
+        <childnode refid="10" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::BinaryWriter&lt; MeshAnimationKeyFrame &gt;</label>
+        <link refid="d7/d67/a02323"/>
+        <childnode refid="12" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::BinaryWriter&lt; SceneNodeAnimation &gt;</label>
+        <link refid="d4/d8c/a02359"/>
+        <childnode refid="14" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::BinaryWriter&lt; SceneNodeAnimationKeyFrame &gt;</label>
+        <link refid="d4/dcc/a02371"/>
+        <childnode refid="16" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor3d::BinaryWriter&lt; Skeleton &gt;</label>
+        <link refid="db/dd4/a02383"/>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor3d::BinaryWriter&lt; SkeletonAnimation &gt;</label>
+        <link refid="d3/d62/a02395"/>
+        <childnode refid="20" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="23">
+        <label>castor3d::BinaryWriter&lt; SkeletonAnimationBone &gt;</label>
+        <link refid="d4/dad/a02407"/>
+        <childnode refid="22" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="25">
+        <label>castor3d::BinaryWriter&lt; SkeletonAnimationKeyFrame &gt;</label>
+        <link refid="d8/d49/a02419"/>
+        <childnode refid="24" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>castor3d::BinaryWriter&lt; SkeletonAnimationNode &gt;</label>
+        <link refid="d1/df1/a02431"/>
+        <childnode refid="26" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="29">
+        <label>castor3d::BinaryWriter&lt; SkeletonAnimationObject &gt;</label>
+        <link refid="d1/d04/a02443"/>
+        <childnode refid="28" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="31">
+        <label>castor3d::BinaryWriter&lt; Submesh &gt;</label>
+        <link refid="df/db6/a02455"/>
+        <childnode refid="30" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryWriterBase&lt; TWritten &gt;</label>
+        <link refid="d2/da6/a02339"/>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="2239">
-        <label>castor3d::ObjectCacheBase&lt; BillboardList, castor::String &gt;</label>
-        <link refid="d4/dad/a02407"/>
-        <childnode refid="2240" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="2242" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-        <childnode refid="2246" relation="template-instance">
-          <edgelabel>&lt; BillboardList, castor::String &gt;</edgelabel>
-        </childnode>
+      <node id="2">
+        <label>castor3d::BinaryChunk</label>
+        <link refid="dd/d3b/a02291"/>
       </node>
-      <node id="2245">
-        <label>Named</label>
-      </node>
-      <node id="2246">
-        <label>castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</label>
-        <link refid="d4/dad/a02407"/>
-        <childnode refid="2240" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="2242" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-      </node>
-      <node id="2241">
-        <label>castor::Unique&lt; Engine &gt;</label>
-      </node>
-      <node id="2238">
-        <label>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</label>
+      <node id="1">
+        <label>castor3d::BinaryWriterBase&lt; TWritten &gt;</label>
         <link refid="d2/da6/a02339"/>
-        <childnode refid="2239" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2243">
-        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
-      </node>
-      <node id="2244">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="2240">
-        <label>castor3d::Engine</label>
-        <link refid="d0/d7c/a02499"/>
-        <childnode refid="2241" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2242">
-        <label>castor3d::Scene</label>
-        <link refid="d7/d00/a05223"/>
-        <childnode refid="2243" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2244" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2245" relation="public-inheritance">
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Cache/BillboardCache.hpp" line="25" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="23" bodyend="165"/>
+    <location file="Binary/BinaryWriter.hpp" line="13" column="1" bodyfile="Binary/BinaryWriter.hpp" bodystart="14" bodyend="254"/>
     <listofallmembers>
-      <member refid="d2/da6/a02339_1aec80fdf1205397e86d373cb66adfc7f0" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>add</name></member>
-      <member refid="d2/da6/a02339_1a7dfdf443d0d966d5f68c096e38b2a21c" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>add</name></member>
-      <member refid="d4/dad/a02407_1af9759fea89bf19c68bc66e344d09186d" prot="public" virt="non-virtual" ambiguityscope="ObjectCacheBase&lt; BillboardList, castor::String &gt;::"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>add</name></member>
-      <member refid="d4/dad/a02407_1a90ebd9f168c722ea95d5f9304b9b1217" prot="public" virt="non-virtual" ambiguityscope="ObjectCacheBase&lt; BillboardList, castor::String &gt;::"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>add</name></member>
-      <member refid="d2/da6/a02339_1ad08d7478a4c8515015dc02c7bc921db9" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>Attacher</name></member>
-      <member refid="d4/dad/a02407_1a3739ff1bfab106c799abbb123b8b2c07" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>begin</name></member>
-      <member refid="d4/dad/a02407_1a0c0491f58f585ffd973ae19360aa75f1" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>begin</name></member>
-      <member refid="d2/da6/a02339_1afc37c522f43039939d40b274a6882093" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>Cleaner</name></member>
-      <member refid="d2/da6/a02339_1a4c5ecf27d33710845ad36a85e58bb68e" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>cleanup</name></member>
-      <member refid="d4/dad/a02407_1af2d19098583cd5ea5b54c904d755cd0b" prot="public" virt="non-virtual" ambiguityscope="ObjectCacheBase&lt; BillboardList, castor::String &gt;::"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>cleanup</name></member>
-      <member refid="d2/da6/a02339_1afed71deff5d17b219093a027ee98fee6" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>clear</name></member>
-      <member refid="d2/da6/a02339_1aa82d7a578f20c248aa78e5b6bc6971ce" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>Collection</name></member>
-      <member refid="d2/da6/a02339_1a7d86ff315f8d4543730930b5d7b391ce" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>Detacher</name></member>
-      <member refid="d4/dad/a02407_1ab405bfd99e69c230efc69ab4b095d540" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>doReportCreation</name></member>
-      <member refid="d4/dad/a02407_1ade6b95376020032814e329727ac80f99" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>doReportDuplicate</name></member>
-      <member refid="d4/dad/a02407_1a4237b4fb13d344ea69cfb591cf56f503" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>doReportNull</name></member>
-      <member refid="d2/da6/a02339_1ac0882208d8f90921965cb1d0913cb0c5" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>Element</name></member>
-      <member refid="d2/da6/a02339_1aae22a8c72e6c911cd78319f5242e0038" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>ElementPtr</name></member>
-      <member refid="d4/dad/a02407_1a3e06a8ce082e6930a431e01facb08e3a" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>end</name></member>
-      <member refid="d4/dad/a02407_1ade3bc57cb192566db4dae322c85365d8" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>end</name></member>
-      <member refid="d4/dad/a02407_1a14387c5f23e7fd0815bd4c33af7614d4" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>find</name></member>
-      <member refid="d4/dad/a02407_1a85b6e3f4e4c70c809d4d008ac4d98949" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>forEach</name></member>
-      <member refid="d4/dad/a02407_1a443b919cff2e2228029093f393b3fe82" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>forEach</name></member>
-      <member refid="d4/dad/a02407_1ae6ddf773f8add1142811092ccd36b9df" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>getEngine</name></member>
-      <member refid="d4/dad/a02407_1a3d40eb7457663d6cbc86a058bb045058" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>getObjectCount</name></member>
-      <member refid="d4/dad/a02407_1ac269d479bb39d6a5e00a6e6880d171fa" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>getObjectTypeName</name></member>
-      <member refid="d4/dad/a02407_1a2587657f54febcb8b004bcee9a6c92ab" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>getScene</name></member>
-      <member refid="d2/da6/a02339_1a658ba6abb7f1a70a038b89aad25d0296" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>getUboPools</name></member>
-      <member refid="d4/dad/a02407_1a3bc5af869c9083396d70b1828d3d209b" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>has</name></member>
-      <member refid="d2/da6/a02339_1ad08bc6ec97df43b2249c3d4e82e668df" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>initialise</name></member>
-      <member refid="d2/da6/a02339_1a37113c33060dd988ea369a567186080f" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>Initialiser</name></member>
-      <member refid="d4/dad/a02407_1a0439587c305aa796b9cafedd3f2369bd" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>isEmpty</name></member>
-      <member refid="d2/da6/a02339_1a87a6c3bca60986a672fb9f30deccd476" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>Key</name></member>
-      <member refid="d4/dad/a02407_1aa3ba76b0fbe1ad271523bbe9671d1faa" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>lock</name></member>
-      <member refid="d2/da6/a02339_1a9f5188c98bc1fa5822a98563110e20f2" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>LockType</name></member>
-      <member refid="d4/dad/a02407_1ac3f72c525786dc253c29e6674cb6978c" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_attach</name></member>
-      <member refid="d4/dad/a02407_1a9de051c43f5b9c441cfa9381ecd91d28" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_clean</name></member>
-      <member refid="d4/dad/a02407_1a4c9ee09ca33c7ec6307e2f2bebf2980d" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_detach</name></member>
-      <member refid="d4/dad/a02407_1aa11fe5cbfb29bcf3e319ca694f8f5603" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_elements</name></member>
-      <member refid="d4/dad/a02407_1ad748056662bca1881dd32be9fbfb1447" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_engine</name></member>
-      <member refid="d4/dad/a02407_1a50f47a48272ca0230e17b675738ea13b" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_initialise</name></member>
-      <member refid="d4/dad/a02407_1a8d5730d90d8167deadf9052777cd1b15" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_merge</name></member>
-      <member refid="d2/da6/a02339_1aacdc1d0163b5986c2159f7c275937f31" prot="private" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_pendingPasses</name></member>
-      <member refid="d2/da6/a02339_1af2677a6ca3c7cde32cb5ab8151a4cac4" prot="private" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_pools</name></member>
-      <member refid="d4/dad/a02407_1aafb61e38ec9b4f8cb99fb35b533c1b30" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_produce</name></member>
-      <member refid="d4/dad/a02407_1a07c88851e111e9f40f3f7c37c28eca0d" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_rootCameraNode</name></member>
-      <member refid="d4/dad/a02407_1a44b6a6b909cadf254335686a41faf7d9" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_rootNode</name></member>
-      <member refid="d4/dad/a02407_1a122965a381ff816b8e7b2a1ce509175e" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_rootObjectNode</name></member>
-      <member refid="d4/dad/a02407_1abc0e272ee55045d8715814844c846074" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_scene</name></member>
-      <member refid="d4/dad/a02407_1a90a3f6b831e5328972c33503869194ea" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>mergeInto</name></member>
-      <member refid="d2/da6/a02339_1abbb80e5a9eb86f5b55163eb8aebfa3f2" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>Merger</name></member>
-      <member refid="d2/da6/a02339_1a41a6ddb328964af394340517a19ccbdb" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>MyObjectCache</name></member>
-      <member refid="d2/da6/a02339_1a2c8e416d69bda1583151bc86f11c8742" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>MyObjectCacheTraits</name></member>
-      <member refid="d4/dad/a02407_1a04425b77112bcd2a88ab266f46825054" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>MyObjectCacheType</name></member>
-      <member refid="d2/da6/a02339_1a6e9cf410e2fe70c53f1ebb552138cebe" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>ObjectCache</name></member>
-      <member refid="d4/dad/a02407_1a87b6ff3ae10c416c825c84a50b9b90fa" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>ObjectCacheBase</name></member>
-      <member refid="d4/dad/a02407_1a2f0b42b4fd8d962bf259ff02a34a0f40" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>onChanged</name></member>
-      <member refid="d4/dad/a02407_1a2ff465c4a26af4220dd2ca96e5ebb826" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>OnChanged</name></member>
-      <member refid="d4/dad/a02407_1a2e158cd273db210c3168334dfca4d38f" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>OnChangedFunction</name></member>
-      <member refid="d2/da6/a02339_1a615a151c5177295906a45e7d88629c32" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>Producer</name></member>
-      <member refid="d2/da6/a02339_1af796e459edfb72482669db7f6d68c4cf" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>registerPass</name></member>
-      <member refid="d2/da6/a02339_1a28bbf4693ecab9ab46a26dc741843f3c" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>remove</name></member>
-      <member refid="d4/dad/a02407_1ae34ecf5dbaca1411e7adb6b895a99698" prot="public" virt="non-virtual" ambiguityscope="ObjectCacheBase&lt; BillboardList, castor::String &gt;::"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>remove</name></member>
-      <member refid="d4/dad/a02407_1a6f639f5f995c02d63be3ec8d5df66b22" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>unlock</name></member>
-      <member refid="d2/da6/a02339_1a6bf54c9634da0a8c9ee3428362b2c7c9" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>unregisterPass</name></member>
-      <member refid="d2/da6/a02339_1afa5fc7c04d145de022ec53e003fc6684" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>update</name></member>
-      <member refid="d2/da6/a02339_1ad56ec6e31fc129f68c58799edc031dc3" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>~ObjectCache</name></member>
-      <member refid="d4/dad/a02407_1a101827b877ba6ec9adef7a35ece78ce6" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>~ObjectCacheBase</name></member>
+      <member refid="d2/da6/a02339_1a720ab792b3e53c6556c3cb4e5b0e2d06" prot="private" virt="pure-virtual"><scope>castor3d::BinaryWriterBase</scope><name>doWrite</name></member>
+      <member refid="d2/da6/a02339_1a95685db95521fe46169767620976688c" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriterBase</scope><name>doWriteChunk</name></member>
+      <member refid="d2/da6/a02339_1ac978d1019caf2d37ad181911c78dde33" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriterBase</scope><name>doWriteChunk</name></member>
+      <member refid="d2/da6/a02339_1a5eef4da7e3bbce50e00c878bd7b32516" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriterBase</scope><name>doWriteChunk</name></member>
+      <member refid="d2/da6/a02339_1a5b782961d4526354e5d0e84e78c6bbbb" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriterBase</scope><name>doWriteChunk</name></member>
+      <member refid="d2/da6/a02339_1a3bd1cb047e1f2872668a4397496bd7c4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriterBase</scope><name>doWriteChunk</name></member>
+      <member refid="d2/da6/a02339_1a7bdb655caf767fdde8a4267602e06191" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriterBase</scope><name>doWriteChunk</name></member>
+      <member refid="d2/da6/a02339_1a8828d359b7a61ea2b657d5aada2dd87b" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriterBase</scope><name>doWriteHeader</name></member>
+      <member refid="d2/da6/a02339_1ad6c66bdde51dd57ab2b27f4ddc8db513" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriterBase</scope><name>m_chunk</name></member>
+      <member refid="d2/da6/a02339_1a21e7985d2f99ff20a6056d198aac07c5" prot="public" virt="non-virtual"><scope>castor3d::BinaryWriterBase</scope><name>write</name></member>
+      <member refid="d2/da6/a02339_1a3b4ae75e6ecd0bdf9f5dc26381633dab" prot="public" virt="non-virtual"><scope>castor3d::BinaryWriterBase</scope><name>write</name></member>
+      <member refid="d2/da6/a02339_1a455d885b04ddaed4d650461bbef1711c" prot="public" virt="virtual"><scope>castor3d::BinaryWriterBase</scope><name>~BinaryWriterBase</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

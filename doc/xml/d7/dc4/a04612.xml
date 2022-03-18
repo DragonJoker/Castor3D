@@ -1,554 +1,166 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d7/dc4/a04612" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::RenderPassTimer</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">Named</basecompoundref>
-    <includes local="no">RenderPassTimer.hpp</includes>
-      <sectiondef kind="user-defined">
-      <memberdef kind="function" id="d7/dc4/a04612_1ac634163924de061deecaa675e3262ddf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::Nanoseconds</type>
-        <definition>castor::Nanoseconds castor3d::RenderPassTimer::getCpuTime</definition>
-        <argsstring>() const</argsstring>
-        <name>getCpuTime</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>name Getters. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="139" column="1" bodyfile="Render/RenderPassTimer.hpp" bodystart="139" bodyend="142"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/dc4/a04612_1a4314b67df27c636e0629ea89244c1d4d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::Nanoseconds</type>
-        <definition>castor::Nanoseconds castor3d::RenderPassTimer::getGpuTime</definition>
-        <argsstring>() const</argsstring>
-        <name>getGpuTime</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="144" column="1" bodyfile="Render/RenderPassTimer.hpp" bodystart="144" bodyend="147"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/dc4/a04612_1ad7515adfb508d1af75bf7ba03ceb50fc" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::RenderPassTimer::getCount</definition>
-        <argsstring>() const</argsstring>
-        <name>getCount</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="149" column="1" bodyfile="Render/RenderPassTimer.hpp" bodystart="149" bodyend="152"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/dc4/a04612_1a39deaed87cbf2b66880e8fcaed53f05b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::String const  &amp;</type>
-        <definition>castor::String const&amp; castor3d::RenderPassTimer::getCategory</definition>
-        <argsstring>() const</argsstring>
-        <name>getCategory</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="154" column="1" bodyfile="Render/RenderPassTimer.hpp" bodystart="154" bodyend="157"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="friend">
-      <memberdef kind="friend" id="d7/dc4/a04612_1a669dcd3ef524995c3a4f9ae9f93e6386" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>friend class</type>
-        <definition>friend class RenderPassTimerBlock</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d7/dc4/a04612" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;</compoundname>
+    <basecompoundref refid="dc/d64/a02620" prot="public" virt="non-virtual">castor3d::CUPtrCacheTraitsBaseT&lt; Scene, castor::String &gt;</basecompoundref>
+    <includes local="no">SceneModule.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d7/dc4/a04612_1ad6410966cdc6788021151d97f5c7bf01" prot="public" static="no">
+        <type><ref refid="da/d34/a04592" kindref="compound">Scene</ref></type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;::ResT =  Scene</definition>
         <argsstring></argsstring>
-        <name>RenderPassTimerBlock</name>
+        <name>ResT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;::ResT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="36" column="1" bodyfile="Render/RenderPassTimer.hpp" bodystart="36" bodyend="-1"/>
+        <location file="Scene/SceneModule.hpp" line="414" column="1" bodyfile="Scene/SceneModule.hpp" bodystart="414" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d7/dc4/a04612_1ab8b42378248503dd5a333088685f1abc" prot="private" static="no" mutable="no">
-        <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> &amp;</type>
-        <definition>Engine&amp; castor3d::RenderPassTimer::m_engine</definition>
-        <argsstring></argsstring>
-        <name>m_engine</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="164" column="1" bodyfile="Render/RenderPassTimer.hpp" bodystart="164" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/dc4/a04612_1aeb03da27f07b8bb5081460d00709bbae" prot="private" static="no" mutable="no">
-        <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const  &amp;</type>
-        <definition>RenderDevice const&amp; castor3d::RenderPassTimer::m_device</definition>
-        <argsstring></argsstring>
-        <name>m_device</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="165" column="1" bodyfile="Render/RenderPassTimer.hpp" bodystart="165" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/dc4/a04612_1aba3bd58d166abaef2b890741fe396dca" prot="private" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::RenderPassTimer::m_passesCount</definition>
-        <argsstring></argsstring>
-        <name>m_passesCount</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="166" column="1" bodyfile="Render/RenderPassTimer.hpp" bodystart="166" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/dc4/a04612_1a7aeb39b25d91277af8258dce6e3eef69" prot="private" static="no" mutable="no">
+      <memberdef kind="typedef" id="d7/dc4/a04612_1a3f04edd5a3dd68d2fcee5cfc3da46400" prot="public" static="no">
         <type>castor::String</type>
-        <definition>castor::String castor3d::RenderPassTimer::m_category</definition>
+        <definition>using castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;::KeyT =  castor::String</definition>
         <argsstring></argsstring>
-        <name>m_category</name>
+        <name>KeyT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;::KeyT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="167" column="1" bodyfile="Render/RenderPassTimer.hpp" bodystart="167" bodyend="-1"/>
+        <location file="Scene/SceneModule.hpp" line="415" column="1" bodyfile="Scene/SceneModule.hpp" bodystart="415" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d7/dc4/a04612_1a992c6df3c7ecda06e5b57251a2dcbd78" prot="private" static="no" mutable="no">
-        <type>castor::PreciseTimer</type>
-        <definition>castor::PreciseTimer castor3d::RenderPassTimer::m_cpuTimer</definition>
+      <memberdef kind="typedef" id="d7/dc4/a04612_1a2db12340c7a6a6458c94baf93d0789fa" prot="public" static="no">
+        <type><ref refid="dc/d64/a02620" kindref="compound">CUPtrCacheTraitsBaseT</ref>&lt; <ref refid="d7/dc4/a04612_1ad6410966cdc6788021151d97f5c7bf01" kindref="member">ResT</ref>, <ref refid="d7/dc4/a04612_1a3f04edd5a3dd68d2fcee5cfc3da46400" kindref="member">KeyT</ref> &gt;</type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;::Base =  CUPtrCacheTraitsBaseT&lt; ResT, KeyT &gt;</definition>
         <argsstring></argsstring>
-        <name>m_cpuTimer</name>
+        <name>Base</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;::Base</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="168" column="1" bodyfile="Render/RenderPassTimer.hpp" bodystart="168" bodyend="-1"/>
+        <location file="Scene/SceneModule.hpp" line="416" column="1" bodyfile="Scene/SceneModule.hpp" bodystart="416" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d7/dc4/a04612_1afda0809750bae92f97af3826c5107a70" prot="private" static="no" mutable="no">
-        <type>castor::Nanoseconds</type>
-        <definition>castor::Nanoseconds castor3d::RenderPassTimer::m_cpuTime</definition>
+      <memberdef kind="typedef" id="d7/dc4/a04612_1a0e6196d621f4199ed814c02368d5f5aa" prot="public" static="no">
+        <type>typename <ref refid="dc/d64/a02620_1a27c7ed8bc85b003039787a8e5e97ef32" kindref="member">Base::ElementT</ref></type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;::ElementT =  typename Base::ElementT</definition>
         <argsstring></argsstring>
-        <name>m_cpuTime</name>
+        <name>ElementT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;::ElementT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="169" column="1" bodyfile="Render/RenderPassTimer.hpp" bodystart="169" bodyend="-1"/>
+        <location file="Scene/SceneModule.hpp" line="417" column="1" bodyfile="Scene/SceneModule.hpp" bodystart="417" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d7/dc4/a04612_1a738e7e2e88cd4e60a1b10200473d329a" prot="private" static="no" mutable="no">
-        <type>castor::Nanoseconds</type>
-        <definition>castor::Nanoseconds castor3d::RenderPassTimer::m_gpuTime</definition>
+      <memberdef kind="typedef" id="d7/dc4/a04612_1a592a3aa50154cfeb90bf80dbb4427c37" prot="public" static="no">
+        <type>typename <ref refid="dc/d64/a02620_1ae026b2229e7408b9ab90ed84c9b45235" kindref="member">Base::ElementPtrT</ref></type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;::ElementPtrT =  typename Base::ElementPtrT</definition>
         <argsstring></argsstring>
-        <name>m_gpuTime</name>
+        <name>ElementPtrT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;::ElementPtrT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="170" column="1" bodyfile="Render/RenderPassTimer.hpp" bodystart="170" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/dc4/a04612_1a15a6221647eb35749c47c6611e5376b2" prot="private" static="no" mutable="no">
-        <type>castor::Nanoseconds</type>
-        <definition>castor::Nanoseconds castor3d::RenderPassTimer::m_subtracteGpuTime</definition>
-        <argsstring></argsstring>
-        <name>m_subtracteGpuTime</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="171" column="1" bodyfile="Render/RenderPassTimer.hpp" bodystart="171" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/dc4/a04612_1ab08ce4d72f935f8e171803bd590f794e" prot="private" static="no" mutable="no">
-        <type>ashes::QueryPoolPtr</type>
-        <definition>ashes::QueryPoolPtr castor3d::RenderPassTimer::m_timerQuery</definition>
-        <argsstring></argsstring>
-        <name>m_timerQuery</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="172" column="1" bodyfile="Render/RenderPassTimer.hpp" bodystart="172" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/dc4/a04612_1a2551156e815d1feee2291d6ea34d159b" prot="private" static="no" mutable="no">
-        <type>std::vector&lt; std::pair&lt; bool, bool &gt; &gt;</type>
-        <definition>std::vector&lt; std::pair&lt; bool, bool &gt; &gt; castor3d::RenderPassTimer::m_startedPasses</definition>
-        <argsstring></argsstring>
-        <name>m_startedPasses</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="173" column="1" bodyfile="Render/RenderPassTimer.hpp" bodystart="173" bodyend="-1"/>
+        <location file="Scene/SceneModule.hpp" line="418" column="1" bodyfile="Scene/SceneModule.hpp" bodystart="418" bodyend="-1"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d7/dc4/a04612_1af1a67f7103e55013f680150154738838" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::RenderPassTimer::RenderPassTimer</definition>
-        <argsstring>(RenderDevice const &amp;device, castor::String const &amp;category, castor::String const &amp;name, uint32_t passesCount=1u)</argsstring>
-        <name>RenderPassTimer</name>
-        <param>
-          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>category</declname>
-        </param>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>passesCount</declname>
-          <defval>1u</defval>
-        </param>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">category</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render pass category. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The timer name. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">passesCount</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The number of render passes. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="53" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/dc4/a04612_1a615f617f9e164535b4f8c251b9d6c5d0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::RenderPassTimer::~RenderPassTimer</definition>
-        <argsstring>()</argsstring>
-        <name>~RenderPassTimer</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="63" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/dc4/a04612_1ab6f3d0cf7a8b834020e09fd15aef928a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/dba/a04608" kindref="compound">RenderPassTimerBlock</ref></type>
-        <definition>C3D_API RenderPassTimerBlock castor3d::RenderPassTimer::start</definition>
-        <argsstring>()</argsstring>
-        <name>start</name>
-        <briefdescription>
-<para>Starts the CPU timer, resets GPU time. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="70" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/dc4/a04612_1ac450eb0d2980bbea4edfea78605784e6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderPassTimer::notifyPassRender</definition>
-        <argsstring>(uint32_t passIndex=0u, bool subtractGpuFromCpu=false)</argsstring>
-        <name>notifyPassRender</name>
-        <param>
-          <type>uint32_t</type>
-          <declname>passIndex</declname>
-          <defval>0u</defval>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>subtractGpuFromCpu</declname>
-          <defval>false</defval>
-        </param>
-        <briefdescription>
-<para>Notifies the given pass render. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">passIndex</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pass index. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">subtractGpuFromCpu</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if the GPU time should be subtracted from CPU time (in case of fence wait). </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="81" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/dc4/a04612_1ad4229b2c2f8885b5f215aed801867810" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderPassTimer::reset</definition>
-        <argsstring>()</argsstring>
-        <name>reset</name>
-        <briefdescription>
-<para>Reset the timer&apos;s times. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="89" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/dc4/a04612_1af15a7f8b2f658cf9a3521dd643772627" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderPassTimer::beginPass</definition>
-        <argsstring>(ashes::CommandBuffer const &amp;cmd, uint32_t passIndex=0u) const</argsstring>
-        <name>beginPass</name>
-        <param>
-          <type>ashes::CommandBuffer const &amp;</type>
-          <declname>cmd</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>passIndex</declname>
-          <defval>0u</defval>
-        </param>
-        <briefdescription>
-<para>Writes the timestamp for the beginning of the pass. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">cmd</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The command buffer used to record the begin timestamp. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">passIndex</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pass index. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="100" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/dc4/a04612_1ac7773d0878c22c6bc25f7b2524ab0b7f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderPassTimer::endPass</definition>
-        <argsstring>(ashes::CommandBuffer const &amp;cmd, uint32_t passIndex=0u) const</argsstring>
-        <name>endPass</name>
-        <param>
-          <type>ashes::CommandBuffer const &amp;</type>
-          <declname>cmd</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>passIndex</declname>
-          <defval>0u</defval>
-        </param>
-        <briefdescription>
-<para>Writes the timestamp for the end of the pass. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">cmd</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The command buffer used to record the end timestamp. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">passIndex</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pass index. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="112" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/dc4/a04612_1a1bfe48cb8a277f82467f019a8a831f9c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderPassTimer::retrieveGpuTime</definition>
-        <argsstring>()</argsstring>
-        <name>retrieveGpuTime</name>
-        <briefdescription>
-<para>Retrieves GPU time from the query. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="120" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/dc4/a04612_1a2d9f262e37e7d8de6f801b8b2ad27cd1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderPassTimer::updateCount</definition>
-        <argsstring>(uint32_t count)</argsstring>
-        <name>updateCount</name>
-        <param>
-          <type>uint32_t</type>
-          <declname>count</declname>
-        </param>
-        <briefdescription>
-<para>Updates the passes count to the given value. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">count</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The number of render passes. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="129" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d7/dc4/a04612_1aa7ae5fabe4725e484fa9c79500166963" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::RenderPassTimer::stop</definition>
-        <argsstring>()</argsstring>
-        <name>stop</name>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d7/dc4/a04612_1a93df7088aa906658106632c886955364" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <definition>C3D_API const castor::String castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;::Name</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="161" column="1"/>
+        <location file="Scene/SceneModule.hpp" line="420" column="37" bodyfile="Scene/SceneModule.hpp" bodystart="420" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
+<para>Helper structure to specialise a cache behaviour. <simplesect kind="remark"><para>Specialisation for <ref refid="da/d34/a04592" kindref="compound">Scene</ref>. </para>
+</simplesect>
+</para>
     </detaileddescription>
     <inheritancegraph>
-      <node id="2997">
-        <label>Named</label>
+      <node id="2">
+        <label>castor3d::CUPtrCacheTraitsBaseT&lt; Scene, castor::String &gt;</label>
+        <link refid="dc/d64/a02620"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Scene, castor::String &gt;</edgelabel>
+        </childnode>
       </node>
-      <node id="2996">
-        <label>castor3d::RenderPassTimer</label>
+      <node id="3">
+        <label>castor3d::CUPtrCacheTraitsBaseT&lt; ResT, KeyT &gt;</label>
+        <link refid="dc/d64/a02620"/>
+      </node>
+      <node id="1">
+        <label>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;</label>
         <link refid="d7/dc4/a04612"/>
-        <childnode refid="2997" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="2999">
-        <label>Named</label>
+      <node id="2">
+        <label>castor3d::CUPtrCacheTraitsBaseT&lt; Scene, castor::String &gt;</label>
+        <link refid="dc/d64/a02620"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Scene, castor::String &gt;</edgelabel>
+        </childnode>
       </node>
-      <node id="2998">
-        <label>castor3d::RenderPassTimer</label>
+      <node id="3">
+        <label>castor3d::CUPtrCacheTraitsBaseT&lt; ResT, KeyT &gt;</label>
+        <link refid="dc/d64/a02620"/>
+      </node>
+      <node id="1">
+        <label>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;</label>
         <link refid="d7/dc4/a04612"/>
-        <childnode refid="2999" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Render/RenderPassTimer.hpp" line="35" column="1" bodyfile="Render/RenderPassTimer.hpp" bodystart="33" bodyend="174"/>
+    <location file="Scene/SceneModule.hpp" line="411" column="1" bodyfile="Scene/SceneModule.hpp" bodystart="413" bodyend="421"/>
     <listofallmembers>
-      <member refid="d7/dc4/a04612_1af15a7f8b2f658cf9a3521dd643772627" prot="public" virt="non-virtual"><scope>castor3d::RenderPassTimer</scope><name>beginPass</name></member>
-      <member refid="d7/dc4/a04612_1ac7773d0878c22c6bc25f7b2524ab0b7f" prot="public" virt="non-virtual"><scope>castor3d::RenderPassTimer</scope><name>endPass</name></member>
-      <member refid="d7/dc4/a04612_1a39deaed87cbf2b66880e8fcaed53f05b" prot="public" virt="non-virtual"><scope>castor3d::RenderPassTimer</scope><name>getCategory</name></member>
-      <member refid="d7/dc4/a04612_1ad7515adfb508d1af75bf7ba03ceb50fc" prot="public" virt="non-virtual"><scope>castor3d::RenderPassTimer</scope><name>getCount</name></member>
-      <member refid="d7/dc4/a04612_1ac634163924de061deecaa675e3262ddf" prot="public" virt="non-virtual"><scope>castor3d::RenderPassTimer</scope><name>getCpuTime</name></member>
-      <member refid="d7/dc4/a04612_1a4314b67df27c636e0629ea89244c1d4d" prot="public" virt="non-virtual"><scope>castor3d::RenderPassTimer</scope><name>getGpuTime</name></member>
-      <member refid="d7/dc4/a04612_1a7aeb39b25d91277af8258dce6e3eef69" prot="private" virt="non-virtual"><scope>castor3d::RenderPassTimer</scope><name>m_category</name></member>
-      <member refid="d7/dc4/a04612_1afda0809750bae92f97af3826c5107a70" prot="private" virt="non-virtual"><scope>castor3d::RenderPassTimer</scope><name>m_cpuTime</name></member>
-      <member refid="d7/dc4/a04612_1a992c6df3c7ecda06e5b57251a2dcbd78" prot="private" virt="non-virtual"><scope>castor3d::RenderPassTimer</scope><name>m_cpuTimer</name></member>
-      <member refid="d7/dc4/a04612_1aeb03da27f07b8bb5081460d00709bbae" prot="private" virt="non-virtual"><scope>castor3d::RenderPassTimer</scope><name>m_device</name></member>
-      <member refid="d7/dc4/a04612_1ab8b42378248503dd5a333088685f1abc" prot="private" virt="non-virtual"><scope>castor3d::RenderPassTimer</scope><name>m_engine</name></member>
-      <member refid="d7/dc4/a04612_1a738e7e2e88cd4e60a1b10200473d329a" prot="private" virt="non-virtual"><scope>castor3d::RenderPassTimer</scope><name>m_gpuTime</name></member>
-      <member refid="d7/dc4/a04612_1aba3bd58d166abaef2b890741fe396dca" prot="private" virt="non-virtual"><scope>castor3d::RenderPassTimer</scope><name>m_passesCount</name></member>
-      <member refid="d7/dc4/a04612_1a2551156e815d1feee2291d6ea34d159b" prot="private" virt="non-virtual"><scope>castor3d::RenderPassTimer</scope><name>m_startedPasses</name></member>
-      <member refid="d7/dc4/a04612_1a15a6221647eb35749c47c6611e5376b2" prot="private" virt="non-virtual"><scope>castor3d::RenderPassTimer</scope><name>m_subtracteGpuTime</name></member>
-      <member refid="d7/dc4/a04612_1ab08ce4d72f935f8e171803bd590f794e" prot="private" virt="non-virtual"><scope>castor3d::RenderPassTimer</scope><name>m_timerQuery</name></member>
-      <member refid="d7/dc4/a04612_1ac450eb0d2980bbea4edfea78605784e6" prot="public" virt="non-virtual"><scope>castor3d::RenderPassTimer</scope><name>notifyPassRender</name></member>
-      <member refid="d7/dc4/a04612_1af1a67f7103e55013f680150154738838" prot="public" virt="non-virtual"><scope>castor3d::RenderPassTimer</scope><name>RenderPassTimer</name></member>
-      <member refid="d7/dc4/a04612_1a669dcd3ef524995c3a4f9ae9f93e6386" prot="private" virt="non-virtual"><scope>castor3d::RenderPassTimer</scope><name>RenderPassTimerBlock</name></member>
-      <member refid="d7/dc4/a04612_1ad4229b2c2f8885b5f215aed801867810" prot="public" virt="non-virtual"><scope>castor3d::RenderPassTimer</scope><name>reset</name></member>
-      <member refid="d7/dc4/a04612_1a1bfe48cb8a277f82467f019a8a831f9c" prot="public" virt="non-virtual"><scope>castor3d::RenderPassTimer</scope><name>retrieveGpuTime</name></member>
-      <member refid="d7/dc4/a04612_1ab6f3d0cf7a8b834020e09fd15aef928a" prot="public" virt="non-virtual"><scope>castor3d::RenderPassTimer</scope><name>start</name></member>
-      <member refid="d7/dc4/a04612_1aa7ae5fabe4725e484fa9c79500166963" prot="private" virt="non-virtual"><scope>castor3d::RenderPassTimer</scope><name>stop</name></member>
-      <member refid="d7/dc4/a04612_1a2d9f262e37e7d8de6f801b8b2ad27cd1" prot="public" virt="non-virtual"><scope>castor3d::RenderPassTimer</scope><name>updateCount</name></member>
-      <member refid="d7/dc4/a04612_1a615f617f9e164535b4f8c251b9d6c5d0" prot="public" virt="non-virtual"><scope>castor3d::RenderPassTimer</scope><name>~RenderPassTimer</name></member>
+      <member refid="dc/d64/a02620_1a1fe69fca9e9859620b3db4638acf621a" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="dc/d64/a02620_1a5365f8b8218a23e501ad70b281b7727a" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="dc/d64/a02620_1a6b32c278bc57d4a79dbef9882f90333e" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="dc/d64/a02620_1a7a5686db2a32185467c7a56d556f19c4" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="d7/dc4/a04612_1a2db12340c7a6a6458c94baf93d0789fa" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;</scope><name>Base</name></member>
+      <member refid="dc/d64/a02620_1aee480eb090c4083e33f92f75d289bb95" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;</scope><name>ElementCacheT</name></member>
+      <member refid="dc/d64/a02620_1a454139ca51089404d3a4ab6bd1da890e" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;</scope><name>ElementCleanerT</name></member>
+      <member refid="dc/d64/a02620_1a2d8532ba06a6ed3ae0430afe09320043" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;</scope><name>ElementContT</name></member>
+      <member refid="dc/d64/a02620_1a0396af85058b372700c93d1780a01188" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;</scope><name>ElementInitialiserT</name></member>
+      <member refid="dc/d64/a02620_1a1b779d8be385d959ebb4e7e34ad3be01" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;</scope><name>ElementKeyT</name></member>
+      <member refid="dc/d64/a02620_1acfb4a405ed858a8f33503e355d684a6c" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;</scope><name>ElementMergerT</name></member>
+      <member refid="dc/d64/a02620_1a81bcc5ef2a84fb55af37d39e9ce0074a" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;</scope><name>ElementObsT</name></member>
+      <member refid="d7/dc4/a04612_1a592a3aa50154cfeb90bf80dbb4427c37" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;</scope><name>ElementPtrT</name></member>
+      <member refid="d7/dc4/a04612_1a0e6196d621f4199ed814c02368d5f5aa" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;</scope><name>ElementT</name></member>
+      <member refid="dc/d64/a02620_1a893ee3f9316185d511ffdf7e471656c6" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;</scope><name>isElementObsNull</name></member>
+      <member refid="d7/dc4/a04612_1a3f04edd5a3dd68d2fcee5cfc3da46400" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;</scope><name>KeyT</name></member>
+      <member refid="dc/d64/a02620_1a053a1183e5f3a1b73a1567a67ba87e02" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;</scope><name>makeElement</name></member>
+      <member refid="dc/d64/a02620_1ae045b77062812440a65b6c4b57c23677" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;</scope><name>makeElementObs</name></member>
+      <member refid="d7/dc4/a04612_1a93df7088aa906658106632c886955364" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;</scope><name>Name</name></member>
+      <member refid="d7/dc4/a04612_1ad6410966cdc6788021151d97f5c7bf01" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;</scope><name>ResT</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

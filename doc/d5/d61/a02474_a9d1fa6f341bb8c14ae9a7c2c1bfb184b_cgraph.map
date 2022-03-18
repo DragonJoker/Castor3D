@@ -1,0 +1,9 @@
+<map id="castor3d::ChunkWriter::write" name="castor3d::ChunkWriter::write">
+<area shape="rect" id="node1" title="Writes a subchunk value into a chunk." alt="" coords="5,74,157,115"/>
+<area shape="rect" id="node2" href="$d0/d95/a01389.html#a8cc7a2dbcb06b7114a71b9c2bd403efa" title="Retrieves the beginning of the buffer for given value." alt="" coords="233,5,364,32"/>
+<area shape="rect" id="node3" href="$d0/d95/a01389.html#a0237c5eefd38c3d0de4466c3fbe0d713" title="Retrieves the value binary size." alt="" coords="223,56,374,83"/>
+<area shape="rect" id="node4" href="$d0/d95/a01389.html#a430f3de9071e7d03358bb1b39d07c2b8" title="Sets given value to big endian." alt="" coords="205,107,392,133"/>
+<area shape="rect" id="node5" href="$df/ddf/a02470.html#a6d5639d69c83f6b59094817e85f17398" title="Writes a subchunk value into a chunk." alt="" coords="207,158,390,199"/>
+<area shape="rect" id="node6" href="$d5/d49/a02282.html#a05ffb50a92f97be91612f8f91ceeed8e" title="Writes a subchunk into a chunk." alt="" coords="440,125,595,166"/>
+<area shape="rect" id="node7" href="$d5/d49/a02282.html#aa21722c40ca9e697b02b6612e81e41c9" title="Sets the chunk&#39;s data." alt="" coords="440,190,595,231"/>
+</map>

@@ -1,74 +1,31 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dd/deb/a04304" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::BillboardRenderNode</compoundname>
-    <basecompoundref refid="df/da8/a04320" prot="public" virt="non-virtual">castor3d::ObjectRenderNode&lt; BillboardBase, BillboardBase &gt;</basecompoundref>
-    <includes local="no">BillboardRenderNode.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="dd/deb/a04304_1a687880736c5a2f069611e222cc7cffd3" prot="public" static="no" mutable="no">
-        <type><ref refid="d1/d47/a02300" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d5/d8d/a05556" kindref="compound">BillboardUboConfiguration</ref> &gt;</type>
-        <definition>UniformBufferOffsetT&lt; BillboardUboConfiguration &gt; castor3d::BillboardRenderNode::billboardUbo</definition>
-        <argsstring></argsstring>
-        <name>billboardUbo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The billboard UBO. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Node/BillboardRenderNode.hpp" line="30" column="1" bodyfile="Render/Node/BillboardRenderNode.hpp" bodystart="30" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dd/deb/a04304" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::TransparentPassResult</compoundname>
+    <basecompoundref refid="df/d98/a03680" prot="public" virt="non-virtual">castor3d::GBufferT&lt; WbTexture &gt;</basecompoundref>
+    <includes local="no">TransparentPassResult.hpp</includes>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="dd/deb/a04304_1ab7f1d9687e08a8f3a67ea929419ecfc1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::BillboardRenderNode::BillboardRenderNode</definition>
-        <argsstring>(RenderPipeline &amp;pipeline, PassRenderNode &amp;&amp;passNode, UniformBufferOffsetT&lt; ModelMatrixUboConfiguration &gt; modelMatrixBuffer, UniformBufferOffsetT&lt; ModelUboConfiguration &gt; modelBuffer, UniformBufferOffsetT&lt; PickingUboConfiguration &gt; pickingBuffer, UniformBufferOffsetT&lt; BillboardUboConfiguration &gt; billboardBuffer, UniformBufferOffsetT&lt; TexturesUboConfiguration &gt; texturesBuffer, UniformBufferOffsetT&lt; ModelInstancesUboConfiguration &gt; modelInstancesBuffer, GeometryBuffers const &amp;buffers, SceneNode &amp;sceneNode, BillboardBase &amp;data)</argsstring>
-        <name>BillboardRenderNode</name>
+      <memberdef kind="function" id="dd/deb/a04304_1ab618b645b72d1ce4c2b02297f5e2a62a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::TransparentPassResult::TransparentPassResult</definition>
+        <argsstring>(crg::ResourceHandler &amp;handler, RenderDevice const &amp;device, TexturePtr depthTexture, TexturePtr velocityTexture)</argsstring>
+        <name>TransparentPassResult</name>
+        <qualifiedname>castor3d::TransparentPassResult::TransparentPassResult</qualifiedname>
         <param>
-          <type><ref refid="de/dfb/a04616" kindref="compound">RenderPipeline</ref> &amp;</type>
-          <declname>pipeline</declname>
+          <type>crg::ResourceHandler &amp;</type>
+          <declname>handler</declname>
         </param>
         <param>
-          <type><ref refid="d4/d85/a04324" kindref="compound">PassRenderNode</ref> &amp;&amp;</type>
-          <declname>passNode</declname>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
         </param>
         <param>
-          <type><ref refid="d1/d47/a02300" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="da/d9f/a05584" kindref="compound">ModelMatrixUboConfiguration</ref> &gt;</type>
-          <declname>modelMatrixBuffer</declname>
+          <type><ref refid="d2/df5/a01395_1a174cedaf5dfc3b47caa264f344279af2" kindref="member">TexturePtr</ref></type>
+          <declname>depthTexture</declname>
         </param>
         <param>
-          <type><ref refid="d1/d47/a02300" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d0/d38/a05588" kindref="compound">ModelUboConfiguration</ref> &gt;</type>
-          <declname>modelBuffer</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/d47/a02300" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d9/dcd/a05600" kindref="compound">PickingUboConfiguration</ref> &gt;</type>
-          <declname>pickingBuffer</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/d47/a02300" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d5/d8d/a05556" kindref="compound">BillboardUboConfiguration</ref> &gt;</type>
-          <declname>billboardBuffer</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/d47/a02300" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d3/d9a/a05620" kindref="compound">TexturesUboConfiguration</ref> &gt;</type>
-          <declname>texturesBuffer</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/d47/a02300" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d4/d33/a05580" kindref="compound">ModelInstancesUboConfiguration</ref> &gt;</type>
-          <declname>modelInstancesBuffer</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/d67/a02308" kindref="compound">GeometryBuffers</ref> const &amp;</type>
-          <declname>buffers</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d44/a05256" kindref="compound">SceneNode</ref> &amp;</type>
-          <declname>sceneNode</declname>
-        </param>
-        <param>
-          <type><ref refid="d3/dc0/a05140" kindref="compound">BillboardBase</ref> &amp;</type>
-          <declname>data</declname>
+          <type><ref refid="d2/df5/a01395_1a174cedaf5dfc3b47caa264f344279af2" kindref="member">TexturePtr</ref></type>
+          <declname>velocityTexture</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -76,7 +33,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Node/BillboardRenderNode.hpp" line="16" column="1"/>
+        <location file="Render/Technique/Transparent/TransparentPassResult.hpp" line="17" column="9"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -84,177 +41,153 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="175">
-        <label>BillboardListRenderNode</label>
-        <link refid="df/da8/a04320"/>
-      </node>
-      <node id="174">
-        <label>castor3d::BillboardRenderNode</label>
-        <link refid="dd/deb/a04304"/>
-        <childnode refid="175" relation="public-inheritance">
+      <node id="2">
+        <label>castor3d::GBufferT&lt; WbTexture &gt;</label>
+        <link refid="df/d98/a03680"/>
+        <childnode refid="3" relation="private-inheritance">
         </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; WbTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::GBufferBase</label>
+        <link refid="d9/d94/a03676"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="df/d98/a03680"/>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::TransparentPassResult</label>
+        <link refid="dd/deb/a04304"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="183">
-        <label>castor::OwnedBy&lt; Material &gt;</label>
-      </node>
-      <node id="189">
-        <label>castor3d::SceneNode</label>
-        <link refid="da/d44/a05256"/>
-        <childnode refid="190" relation="public-inheritance">
+      <node id="2">
+        <label>castor3d::GBufferT&lt; WbTexture &gt;</label>
+        <link refid="df/d98/a03680"/>
+        <childnode refid="3" relation="private-inheritance">
         </childnode>
-        <childnode refid="191" relation="public-inheritance">
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_result</edgelabel>
         </childnode>
-        <childnode refid="192" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="188">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelUboConfiguration &gt;</label>
-        <link refid="d1/d47/a02300"/>
-        <childnode refid="180" relation="template-instance">
-          <edgelabel>&lt; castor3d::ModelUboConfiguration &gt;</edgelabel>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; WbTexture &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="186">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::PickingUboConfiguration &gt;</label>
-        <link refid="d1/d47/a02300"/>
-        <childnode refid="180" relation="template-instance">
-          <edgelabel>&lt; castor3d::PickingUboConfiguration &gt;</edgelabel>
+      <node id="11">
+        <label>T</label>
+      </node>
+      <node id="3">
+        <label>castor3d::GBufferBase</label>
+        <link refid="d9/d94/a03676"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_device</edgelabel>
         </childnode>
       </node>
-      <node id="191">
-        <label>castor::OwnedBy&lt; Scene &gt;</label>
-      </node>
-      <node id="185">
-        <label>castor::OwnedBy&lt; SceneRenderPass &gt;</label>
-      </node>
-      <node id="180">
-        <label>castor3d::UniformBufferOffsetT&lt; DataT &gt;</label>
-        <link refid="d1/d47/a02300"/>
-      </node>
-      <node id="190">
-        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
-      </node>
-      <node id="192">
-        <label>Named</label>
-      </node>
-      <node id="193">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelInstancesUboConfiguration &gt;</label>
-        <link refid="d1/d47/a02300"/>
-        <childnode refid="180" relation="template-instance">
-          <edgelabel>&lt; castor3d::ModelInstancesUboConfiguration &gt;</edgelabel>
+      <node id="14">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="df/d98/a03680"/>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_result</edgelabel>
         </childnode>
       </node>
-      <node id="177">
-        <label>BillboardListRenderNode</label>
-        <link refid="df/da8/a04320"/>
-        <childnode refid="178" relation="usage">
-          <edgelabel>buffers</edgelabel>
+      <node id="9">
+        <label>castor3d::QueuesData</label>
+        <link refid="d3/d70/a03952"/>
+      </node>
+      <node id="5">
+        <label>castor3d::RenderDevice</label>
+        <link refid="d2/df2/a03960"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
         </childnode>
-        <childnode refid="179" relation="usage">
-          <edgelabel>modelMatrixUbo</edgelabel>
-        </childnode>
-        <childnode refid="181" relation="usage">
-          <edgelabel>passNode</edgelabel>
-        </childnode>
-        <childnode refid="184" relation="usage">
-          <edgelabel>pipeline</edgelabel>
-        </childnode>
-        <childnode refid="186" relation="usage">
-          <edgelabel>pickingUbo</edgelabel>
-        </childnode>
-        <childnode refid="187" relation="usage">
-          <edgelabel>texturesUbo</edgelabel>
-        </childnode>
-        <childnode refid="188" relation="usage">
-          <edgelabel>modelUbo</edgelabel>
-        </childnode>
-        <childnode refid="189" relation="usage">
-          <edgelabel>sceneNode</edgelabel>
-        </childnode>
-        <childnode refid="193" relation="usage">
-          <edgelabel>modelInstancesUbo</edgelabel>
+        <childnode refid="8" relation="usage">
+          <edgelabel>queueFamilies</edgelabel>
         </childnode>
       </node>
-      <node id="194">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::BillboardUboConfiguration &gt;</label>
-        <link refid="d1/d47/a02300"/>
-        <childnode refid="180" relation="template-instance">
-          <edgelabel>&lt; castor3d::BillboardUboConfiguration &gt;</edgelabel>
+      <node id="6">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d2/dbb/a04072"/>
+        <childnode refid="7" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="179">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelMatrixUboConfiguration &gt;</label>
-        <link refid="d1/d47/a02300"/>
-        <childnode refid="180" relation="template-instance">
-          <edgelabel>&lt; castor3d::ModelMatrixUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="178">
-        <label>castor3d::GeometryBuffers</label>
-        <link refid="d7/d67/a02308"/>
-      </node>
-      <node id="182">
-        <label>castor3d::Pass</label>
-        <link refid="df/d5d/a02596"/>
-        <childnode refid="183" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="184">
-        <label>castor3d::RenderPipeline</label>
-        <link refid="de/dfb/a04616"/>
-        <childnode refid="185" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="176">
-        <label>castor3d::BillboardRenderNode</label>
+      <node id="1">
+        <label>castor3d::TransparentPassResult</label>
         <link refid="dd/deb/a04304"/>
-        <childnode refid="177" relation="public-inheritance">
-        </childnode>
-        <childnode refid="194" relation="usage">
-          <edgelabel>billboardUbo</edgelabel>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="181">
-        <label>castor3d::PassRenderNode</label>
-        <link refid="d4/d85/a04324"/>
-        <childnode refid="182" relation="usage">
-          <edgelabel>pass</edgelabel>
+      <node id="4">
+        <label>castor::Named</label>
+      </node>
+      <node id="7">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="13">
+        <label>std::shared_ptr&lt; T &gt;</label>
+        <childnode refid="11" relation="usage">
+          <edgelabel>ptr</edgelabel>
         </childnode>
       </node>
-      <node id="187">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::TexturesUboConfiguration &gt;</label>
-        <link refid="d1/d47/a02300"/>
-        <childnode refid="180" relation="template-instance">
-          <edgelabel>&lt; castor3d::TexturesUboConfiguration &gt;</edgelabel>
+      <node id="10">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="11" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::vector&lt; QueuesData &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; QueuesData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>std::vector&lt; TexturePtr &gt;</label>
+        <childnode refid="13" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; TexturePtr &gt;</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Render/Node/BillboardRenderNode.hpp" line="15" column="1" bodyfile="Render/Node/BillboardRenderNode.hpp" bodystart="13" bodyend="31"/>
+    <location file="Render/Technique/Transparent/TransparentPassResult.hpp" line="13" column="1" bodyfile="Render/Technique/Transparent/TransparentPassResult.hpp" bodystart="15" bodyend="21"/>
     <listofallmembers>
-      <member refid="dd/deb/a04304_1ab7f1d9687e08a8f3a67ea929419ecfc1" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>BillboardRenderNode</name></member>
-      <member refid="dd/deb/a04304_1a687880736c5a2f069611e222cc7cffd3" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>billboardUbo</name></member>
-      <member refid="df/da8/a04320_1a255ba78335d0f74d664f226339c29450" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>buffers</name></member>
-      <member refid="df/da8/a04320_1ac681909d031a28cfae6906b915b41d28" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>data</name></member>
-      <member refid="df/da8/a04320_1ac978b6ccff4e9775582dcafd1399dc2e" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>DataType</name></member>
-      <member refid="df/da8/a04320_1a06e411bd5fd7949c61eecb155ed01faf" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>instance</name></member>
-      <member refid="df/da8/a04320_1aee832b75502f22fbf4b9a886f2b11487" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>InstanceType</name></member>
-      <member refid="df/da8/a04320_1ae95cccedfb7320b95deed2662a0121ab" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>modelInstancesUbo</name></member>
-      <member refid="df/da8/a04320_1a6d24c32231b61a32cb31deae21dee74d" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>modelMatrixUbo</name></member>
-      <member refid="df/da8/a04320_1a9d1dba37b0ef889fb3a8f19ef7d9488e" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>modelUbo</name></member>
-      <member refid="df/da8/a04320_1a5a57f8e86f0be7bd7db41380961bb670" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>ObjectRenderNode</name></member>
-      <member refid="df/da8/a04320_1a336e57376fdc842314baf596b26b9334" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>ObjectRenderNode</name></member>
-      <member refid="df/da8/a04320_1aee731fd52a1af46ece31c023b85a2680" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>ObjectRenderNode</name></member>
-      <member refid="df/da8/a04320_1ac20c1daa2684bf81e39d76a40ece6c81" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>operator=</name></member>
-      <member refid="df/da8/a04320_1acc1593a55eb5d814e132c85e14bc72a3" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>operator=</name></member>
-      <member refid="df/da8/a04320_1ac4131c5f2757aa2c624b2fb286bfe316" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>passNode</name></member>
-      <member refid="df/da8/a04320_1a3f68f6599e5724288b23d12793346010" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>pickingUbo</name></member>
-      <member refid="df/da8/a04320_1a5dc38e49cff2eb5cdea2446b978f047f" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>pipeline</name></member>
-      <member refid="df/da8/a04320_1a79244663521a4e43b1e025764bd59815" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>sceneNode</name></member>
-      <member refid="df/da8/a04320_1a3465b01cb839a12f604d1e65530a676f" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>texDescriptorSet</name></member>
-      <member refid="df/da8/a04320_1aa4539c98bce1d3e94e4ad471e3eb8487" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>texturesUbo</name></member>
-      <member refid="df/da8/a04320_1a35ac48ae1cc8b7d679465d822a324cdc" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>uboDescriptorSet</name></member>
+      <member refid="df/d98/a03680_1a794584976030474106bba3b69f4a7f80" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>begin</name></member>
+      <member refid="df/d98/a03680_1ae8ca53c58a918901635ec3492d4e064d" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>begin</name></member>
+      <member refid="df/d98/a03680_1ad184cb851604a0fdad0f1f8136ea6457" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>cbegin</name></member>
+      <member refid="df/d98/a03680_1a53d2fc5d9e1c83c50823f591a9650095" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>cend</name></member>
+      <member refid="df/d98/a03680_1a8939bb90032a1e4ec33e7840cb71c6c4" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>create</name></member>
+      <member refid="df/d98/a03680_1a54feb2c94b179d3ae6e16284d05a124c" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>end</name></member>
+      <member refid="df/d98/a03680_1a12e053e63b5593edca663b4a01962d6d" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>end</name></member>
+      <member refid="df/d98/a03680_1a67a677fc6cbdb36e74fa6b74a65c5015" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>GBufferT</name></member>
+      <member refid="df/d98/a03680_1a1ab6068973c95bddb3229dc2d9b1cc39" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>GBufferT</name></member>
+      <member refid="df/d98/a03680_1a1bb04fa8833cb8e9df999784c3f4e72d" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>GBufferT</name></member>
+      <member refid="df/d98/a03680_1aad84cb58cfbead8aa670554e5b015e54" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>GBufferT</name></member>
+      <member refid="df/d98/a03680_1ab53983ea6cfcc95da08034abb5e20d6b" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>m_result</name></member>
+      <member refid="df/d98/a03680_1aa803d666fd91abf546fa7bb32507b038" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>operator=</name></member>
+      <member refid="df/d98/a03680_1a8c693c6743416a4b36022e98193e3aa3" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>operator=</name></member>
+      <member refid="df/d98/a03680_1afc570eab10faf45040bd5ecafcc39104" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>operator[]</name></member>
+      <member refid="dd/deb/a04304_1ab618b645b72d1ce4c2b02297f5e2a62a" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>TransparentPassResult</name></member>
+      <member refid="df/d98/a03680_1a84462bb3e4892ec0bb69d310bf08a7c3" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>~GBufferT</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,33 +1,934 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d1/d39/a02859" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkMemoryBarrier &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d1/d39/a02859_1a5ef7afb1da07eb297284bd50d9c4dc8c" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkMemoryBarrier &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d1/d39/a02859" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::PbrReflectionModel</compoundname>
+    <basecompoundref refid="d6/d6f/a04819" prot="public" virt="non-virtual">castor3d::shader::ReflectionModel</basecompoundref>
+    <includes local="no">GlslPbrReflection.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/d39/a02859_1ae9fc1b6bf405e7808080920214340968" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, InSurface, InPbrLightMaterial, sdw::InVec3, sdw::InCombinedImageCubeRgba32, sdw::InCombinedImageCubeRgba32, sdw::InCombinedImage2DRgba32 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , InSurface , InPbrLightMaterial , sdw::InVec3 , sdw::InCombinedImageCubeRgba32 , sdw::InCombinedImageCubeRgba32 , sdw::InCombinedImage2DRgba32 &gt; castor3d::shader::PbrReflectionModel::m_computeIBL</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_MEMORY_BARRIER</initializer>
+        <name>m_computeIBL</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::m_computeIBL</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="60" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="60" bodyend="-1"/>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="129" column="2" bodyfile="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d39/a02859_1a42a1ebd7ca0ec1fee0c9b4842668fd65" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3, sdw::InVec3, sdw::InCombinedImageCubeRgba32, InPbrLightMaterial &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InVec3 , sdw::InVec3 , sdw::InCombinedImageCubeRgba32 , InPbrLightMaterial &gt; castor3d::shader::PbrReflectionModel::m_computeReflEnvMap</definition>
+        <argsstring></argsstring>
+        <name>m_computeReflEnvMap</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::m_computeReflEnvMap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="134" column="2" bodyfile="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" bodystart="134" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d39/a02859_1abeedffcbd8df6dc9933a4850322ab92b" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3, sdw::InVec3, sdw::InCombinedImageCubeRgba32, sdw::InFloat, sdw::InVec3, InPbrLightMaterial &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InVec3 , sdw::InVec3 , sdw::InCombinedImageCubeRgba32 , sdw::InFloat , sdw::InVec3 , InPbrLightMaterial &gt; castor3d::shader::PbrReflectionModel::m_computeRefrEnvMap</definition>
+        <argsstring></argsstring>
+        <name>m_computeRefrEnvMap</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::m_computeRefrEnvMap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="141" column="2" bodyfile="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d39/a02859_1adddf70cf68560d1c7284abc1d4558096" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Void, sdw::InVec3, sdw::InVec3, sdw::InCombinedImageCubeRgba32, sdw::InFloat, sdw::InVec3, InPbrLightMaterial, sdw::InOutVec3, sdw::OutVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , sdw::InVec3 , sdw::InVec3 , sdw::InCombinedImageCubeRgba32 , sdw::InFloat , sdw::InVec3 , InPbrLightMaterial , sdw::InOutVec3 , sdw::OutVec3 &gt; castor3d::shader::PbrReflectionModel::m_computeMergeRefrEnvMap</definition>
+        <argsstring></argsstring>
+        <name>m_computeMergeRefrEnvMap</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::m_computeMergeRefrEnvMap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="150" column="2" bodyfile="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" bodystart="150" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d39/a02859_1a1bcd65f06808e5ab52242cc81aad965b" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3, sdw::InVec3, sdw::InCombinedImageCubeRgba32, sdw::InFloat, sdw::InVec3, InPbrLightMaterial &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InVec3 , sdw::InVec3 , sdw::InCombinedImageCubeRgba32 , sdw::InFloat , sdw::InVec3 , InPbrLightMaterial &gt; castor3d::shader::PbrReflectionModel::m_computeRefrSkybox</definition>
+        <argsstring></argsstring>
+        <name>m_computeRefrSkybox</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::m_computeRefrSkybox</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="157" column="2" bodyfile="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" bodystart="157" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d39/a02859_1ae2f0b4f57392ee73e859424d16c9059a" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Void, sdw::InVec3, sdw::InVec3, sdw::InCombinedImageCubeRgba32, sdw::InFloat, sdw::InVec3, InPbrLightMaterial, sdw::InOutVec3, sdw::OutVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , sdw::InVec3 , sdw::InVec3 , sdw::InCombinedImageCubeRgba32 , sdw::InFloat , sdw::InVec3 , InPbrLightMaterial , sdw::InOutVec3 , sdw::OutVec3 &gt; castor3d::shader::PbrReflectionModel::m_computeMergeRefrSkybox</definition>
+        <argsstring></argsstring>
+        <name>m_computeMergeRefrSkybox</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::m_computeMergeRefrSkybox</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="166" column="2" bodyfile="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" bodystart="166" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d39/a02859_1a11c4b885efe700c826fb665642efad9f" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3, sdw::InVec3, sdw::InCombinedImageCubeArrayRgba32, sdw::InInt, InPbrLightMaterial &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InVec3 , sdw::InVec3 , sdw::InCombinedImageCubeArrayRgba32 , sdw::InInt , InPbrLightMaterial &gt; castor3d::shader::PbrReflectionModel::m_computeReflEnvMaps</definition>
+        <argsstring></argsstring>
+        <name>m_computeReflEnvMaps</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::m_computeReflEnvMaps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="172" column="2" bodyfile="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" bodystart="172" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d39/a02859_1a15015289b349728dc1f3e1853a6acf3d" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3, sdw::InVec3, sdw::InCombinedImageCubeArrayRgba32, sdw::InInt, sdw::InFloat, sdw::InVec3, InPbrLightMaterial &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InVec3 , sdw::InVec3 , sdw::InCombinedImageCubeArrayRgba32 , sdw::InInt , sdw::InFloat , sdw::InVec3 , InPbrLightMaterial &gt; castor3d::shader::PbrReflectionModel::m_computeRefrEnvMaps</definition>
+        <argsstring></argsstring>
+        <name>m_computeRefrEnvMaps</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::m_computeRefrEnvMaps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="180" column="2" bodyfile="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" bodystart="180" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d39/a02859_1a0144277bab88360f19667383124c7f3a" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Void, sdw::InVec3, sdw::InVec3, sdw::InCombinedImageCubeArrayRgba32, sdw::InInt, sdw::InFloat, sdw::InVec3, InPbrLightMaterial, sdw::InOutVec3, sdw::OutVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , sdw::InVec3 , sdw::InVec3 , sdw::InCombinedImageCubeArrayRgba32 , sdw::InInt , sdw::InFloat , sdw::InVec3 , InPbrLightMaterial , sdw::InOutVec3 , sdw::OutVec3 &gt; castor3d::shader::PbrReflectionModel::m_computeMergeRefrEnvMaps</definition>
+        <argsstring></argsstring>
+        <name>m_computeMergeRefrEnvMaps</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::m_computeMergeRefrEnvMaps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="190" column="2" bodyfile="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" bodystart="190" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d39/a02859_1afa13d6087c85a6406d89dd2f39297126" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::PbrReflectionModel::PbrReflectionModel</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Utils &amp;utils, uint32_t &amp;envMapBinding, uint32_t envMapSet)</argsstring>
+        <name>PbrReflectionModel</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::PbrReflectionModel</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d9f/a04859" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>envMapBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>envMapSet</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="18" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d39/a02859_1ad4cf467ce1cff2ddea392e24ee4e3c6e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::PbrReflectionModel::computeDeferred</definition>
+        <argsstring>(LightMaterial &amp;material, Surface const &amp;surface, SceneData const &amp;sceneData, sdw::Int envMapIndex, sdw::Int const &amp;reflection, sdw::Int const &amp;refraction, sdw::Float const &amp;refractionRatio, sdw::Vec3 const &amp;transmission, sdw::Vec3 &amp;ambient, sdw::Vec3 &amp;reflected, sdw::Vec3 &amp;refracted) override</argsstring>
+        <name>computeDeferred</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::computeDeferred</qualifiedname>
+        <reimplements refid="d6/d6f/a04819_1afb423e26805f3626a36dd3b062c21e6c">computeDeferred</reimplements>
+        <param>
+          <type><ref refid="db/d92/a04791" kindref="compound">LightMaterial</ref> &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d35/a01400_1afa7e0e1d1dbce1333aa48253fd404bf4" kindref="member">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d18/a04963" kindref="compound">SceneData</ref> const &amp;</type>
+          <declname>sceneData</declname>
+        </param>
+        <param>
+          <type>sdw::Int</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>reflection</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>refraction</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>transmission</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>ambient</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflected</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>refracted</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="22" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d39/a02859_1a47a539b678d401e4b8e51dddd9393c69" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::PbrReflectionModel::computeForward</definition>
+        <argsstring>(LightMaterial &amp;material, Surface const &amp;surface, SceneData const &amp;sceneData) override</argsstring>
+        <name>computeForward</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::computeForward</qualifiedname>
+        <reimplements refid="d6/d6f/a04819_1aaef84e59f33340c7dfca92ffe9c23daf">computeForward</reimplements>
+        <param>
+          <type><ref refid="db/d92/a04791" kindref="compound">LightMaterial</ref> &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d35/a01400_1afa7e0e1d1dbce1333aa48253fd404bf4" kindref="member">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d18/a04963" kindref="compound">SceneData</ref> const &amp;</type>
+          <declname>sceneData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="33" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d39/a02859_1a44291837ed0a47e35c047c17cb51409a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::PbrReflectionModel::computeForward</definition>
+        <argsstring>(LightMaterial &amp;material, Surface const &amp;surface, SceneData const &amp;sceneData, sdw::Float const &amp;refractionRatio, sdw::Vec3 const &amp;transmission) override</argsstring>
+        <name>computeForward</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::computeForward</qualifiedname>
+        <reimplements refid="d6/d6f/a04819_1a9d149fd79dbb80ab68e17d7fe9ddb7e0">computeForward</reimplements>
+        <param>
+          <type><ref refid="db/d92/a04791" kindref="compound">LightMaterial</ref> &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d35/a01400_1afa7e0e1d1dbce1333aa48253fd404bf4" kindref="member">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d18/a04963" kindref="compound">SceneData</ref> const &amp;</type>
+          <declname>sceneData</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>transmission</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="36" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d39/a02859_1afd1ffa739b4801d3d2733a4345fc38f3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::PbrReflectionModel::computeForward</definition>
+        <argsstring>(LightMaterial &amp;material, Surface const &amp;surface, SceneData const &amp;sceneData, sdw::Float const &amp;refractionRatio, sdw::Vec3 const &amp;transmission, sdw::Vec3 &amp;ambient, sdw::Vec3 &amp;reflected, sdw::Vec3 &amp;refracted) override</argsstring>
+        <name>computeForward</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::computeForward</qualifiedname>
+        <reimplements refid="d6/d6f/a04819_1a222f0fbe46b7f3f9b9223b703d5abf99">computeForward</reimplements>
+        <param>
+          <type><ref refid="db/d92/a04791" kindref="compound">LightMaterial</ref> &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d35/a01400_1afa7e0e1d1dbce1333aa48253fd404bf4" kindref="member">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d18/a04963" kindref="compound">SceneData</ref> const &amp;</type>
+          <declname>sceneData</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>transmission</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>ambient</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflected</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>refracted</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="41" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d1/d39/a02859_1a0415267b64cfc7d8a67623bcd0b5c38e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::PbrReflectionModel::computeIBL</definition>
+        <argsstring>(Surface surface, PbrLightMaterial const &amp;material, sdw::Vec3 const &amp;worldEye, sdw::CombinedImageCubeRgba32 const &amp;irradiance, sdw::CombinedImageCubeRgba32 const &amp;prefiltered, sdw::CombinedImage2DRgba32 const &amp;brdf)</argsstring>
+        <name>computeIBL</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::computeIBL</qualifiedname>
+        <param>
+          <type><ref refid="dc/d35/a01400_1afa7e0e1d1dbce1333aa48253fd404bf4" kindref="member">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d24/a02847" kindref="compound">PbrLightMaterial</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImageCubeRgba32 const &amp;</type>
+          <declname>irradiance</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImageCubeRgba32 const &amp;</type>
+          <declname>prefiltered</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>brdf</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="51" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d39/a02859_1afb50ddebfe08b564a2ee7e1494c4ccc5" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::PbrReflectionModel::computeIncident</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsPosition, sdw::Vec3 const &amp;wsCamera) const</argsstring>
+        <name>computeIncident</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::computeIncident</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsCamera</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="57" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d39/a02859_1a5ed3dc036308b5a722ed05c653352d03" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::PbrReflectionModel::computeReflEnvMap</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsIncident, sdw::Vec3 const &amp;wsNormal, sdw::CombinedImageCubeRgba32 const &amp;envMap, PbrLightMaterial const &amp;material)</argsstring>
+        <name>computeReflEnvMap</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::computeReflEnvMap</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsIncident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImageCubeRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d24/a02847" kindref="compound">PbrLightMaterial</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="59" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d39/a02859_1aa7c3905d5fa739b45a6f8e662d38b540" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Void</type>
+        <definition>sdw::Void castor3d::shader::PbrReflectionModel::computeRefrEnvMap</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsIncident, sdw::Vec3 const &amp;wsNormal, sdw::CombinedImageCubeRgba32 const &amp;envMap, sdw::Float const &amp;refractionRatio, sdw::Vec3 const &amp;transmission, PbrLightMaterial const &amp;material, sdw::Vec3 &amp;reflection, sdw::Vec3 &amp;refraction)</argsstring>
+        <name>computeRefrEnvMap</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::computeRefrEnvMap</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsIncident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImageCubeRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>transmission</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d24/a02847" kindref="compound">PbrLightMaterial</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflection</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>refraction</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="63" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d39/a02859_1a54d3ba71d6679e00f8561a495d41b188" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::PbrReflectionModel::computeRefrEnvMap</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsIncident, sdw::Vec3 const &amp;wsNormal, sdw::CombinedImageCubeRgba32 const &amp;envMap, sdw::Float const &amp;refractionRatio, sdw::Vec3 const &amp;transmission, PbrLightMaterial const &amp;material)</argsstring>
+        <name>computeRefrEnvMap</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::computeRefrEnvMap</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsIncident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImageCubeRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>transmission</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d24/a02847" kindref="compound">PbrLightMaterial</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="71" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d39/a02859_1aa6485ec12a582d51914fa2600dbf1dd2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::PbrReflectionModel::computeReflEnvMaps</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsIncident, sdw::Vec3 const &amp;wsNormal, sdw::CombinedImageCubeArrayRgba32 const &amp;envMap, sdw::Int const &amp;envMapIndex, PbrLightMaterial const &amp;material)</argsstring>
+        <name>computeReflEnvMaps</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::computeReflEnvMaps</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsIncident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImageCubeArrayRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d24/a02847" kindref="compound">PbrLightMaterial</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="77" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d39/a02859_1ac11f66f2a6815493133389eec29274df" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::PbrReflectionModel::computeRefrEnvMaps</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsIncident, sdw::Vec3 const &amp;wsNormal, sdw::CombinedImageCubeArrayRgba32 const &amp;envMap, sdw::Int const &amp;envMapIndex, sdw::Float const &amp;refractionRatio, sdw::Vec3 const &amp;transmission, PbrLightMaterial const &amp;material)</argsstring>
+        <name>computeRefrEnvMaps</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::computeRefrEnvMaps</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsIncident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImageCubeArrayRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>transmission</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d24/a02847" kindref="compound">PbrLightMaterial</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="82" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d39/a02859_1ac3f84d9382f5369ab6e2d682691d73d4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Void</type>
+        <definition>sdw::Void castor3d::shader::PbrReflectionModel::computeRefrEnvMaps</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsIncident, sdw::Vec3 const &amp;wsNormal, sdw::CombinedImageCubeArrayRgba32 const &amp;envMap, sdw::Int const &amp;envMapIndex, sdw::Float const &amp;refractionRatio, sdw::Vec3 const &amp;transmission, PbrLightMaterial const &amp;material, sdw::Vec3 &amp;reflection, sdw::Vec3 &amp;refraction)</argsstring>
+        <name>computeRefrEnvMaps</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::computeRefrEnvMaps</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsIncident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImageCubeArrayRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>transmission</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d24/a02847" kindref="compound">PbrLightMaterial</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflection</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>refraction</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="89" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d39/a02859_1a95245e6412bacaf00489bf13a9f5b3be" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Void</type>
+        <definition>sdw::Void castor3d::shader::PbrReflectionModel::computeRefrSkybox</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsIncident, sdw::Vec3 const &amp;wsNormal, sdw::CombinedImageCubeRgba32 const &amp;envMap, sdw::Float const &amp;refractionRatio, sdw::Vec3 const &amp;transmission, PbrLightMaterial const &amp;material, sdw::Vec3 &amp;reflection, sdw::Vec3 &amp;refraction)</argsstring>
+        <name>computeRefrSkybox</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::computeRefrSkybox</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsIncident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImageCubeRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>transmission</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d24/a02847" kindref="compound">PbrLightMaterial</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflection</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>refraction</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="98" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d39/a02859_1a2df49fb65439c73eee094cb81f799fe4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::PbrReflectionModel::computeRefrSkybox</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsIncident, sdw::Vec3 const &amp;wsNormal, sdw::CombinedImageCubeRgba32 const &amp;envMap, sdw::Float const &amp;refractionRatio, sdw::Vec3 const &amp;transmission, PbrLightMaterial const &amp;material)</argsstring>
+        <name>computeRefrSkybox</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::computeRefrSkybox</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsIncident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImageCubeRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>transmission</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d24/a02847" kindref="compound">PbrLightMaterial</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="106" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d39/a02859_1aa01e6ad9199877496aa5f3ab72353b9e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PbrReflectionModel::doDeclareComputeIBL</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareComputeIBL</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::doDeclareComputeIBL</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="112" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d39/a02859_1ab34f62783bb3d6c4c3a7442e2f3a937d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PbrReflectionModel::doDeclareComputeReflEnvMap</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareComputeReflEnvMap</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::doDeclareComputeReflEnvMap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="113" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d39/a02859_1a4cc734c56e12ce2714737ea7a57328dd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PbrReflectionModel::doDeclareComputeRefrEnvMap</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareComputeRefrEnvMap</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::doDeclareComputeRefrEnvMap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="114" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d39/a02859_1a91bd609dfe9ed58ede0b0da492ce5d49" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PbrReflectionModel::doDeclareComputeMergeRefrEnvMap</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareComputeMergeRefrEnvMap</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::doDeclareComputeMergeRefrEnvMap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="115" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d39/a02859_1a2b1442272e0f4a589f776b061606ba8f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PbrReflectionModel::doDeclareComputeReflEnvMaps</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareComputeReflEnvMaps</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::doDeclareComputeReflEnvMaps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="116" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d39/a02859_1a8248da435423dc28bde203dc4a59cd57" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PbrReflectionModel::doDeclareComputeRefrEnvMaps</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareComputeRefrEnvMaps</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::doDeclareComputeRefrEnvMaps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="117" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d39/a02859_1a2aaf6d62340333ce48e7ce7491d3619c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PbrReflectionModel::doDeclareComputeMergeRefrEnvMaps</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareComputeMergeRefrEnvMaps</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::doDeclareComputeMergeRefrEnvMaps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="118" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d39/a02859_1abdf7081abf6770b704962c485b44d0fb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PbrReflectionModel::doDeclareComputeRefrSkybox</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareComputeRefrSkybox</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::doDeclareComputeRefrSkybox</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="119" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d39/a02859_1a5c03132a89a5abdaafdfba11a41e499a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PbrReflectionModel::doDeclareComputeMergeRefrSkybox</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareComputeMergeRefrSkybox</name>
+        <qualifiedname>castor3d::shader::PbrReflectionModel::doDeclareComputeMergeRefrSkybox</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="120" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="60" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="60" bodyend="60"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::PbrReflectionModel</label>
+        <link refid="d1/d39/a02859"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::ReflectionModel</label>
+        <link refid="d6/d6f/a04819"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::PbrReflectionModel</label>
+        <link refid="d1/d39/a02859"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::ReflectionModel</label>
+        <link refid="d6/d6f/a04819"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_utils</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::Utils</label>
+        <link refid="da/d9f/a04859"/>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" line="14" column="1" bodyfile="Material/Pass/PBR/Shaders/GlslPbrReflection.hpp" bodystart="16" bodyend="191"/>
     <listofallmembers>
-      <member refid="d1/d39/a02859_1a5ef7afb1da07eb297284bd50d9c4dc8c" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkMemoryBarrier &gt;</scope><name>value</name></member>
+      <member refid="d1/d39/a02859_1ad4cf467ce1cff2ddea392e24ee4e3c6e" prot="public" virt="virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>computeDeferred</name></member>
+      <member refid="d1/d39/a02859_1a47a539b678d401e4b8e51dddd9393c69" prot="public" virt="virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>computeForward</name></member>
+      <member refid="d1/d39/a02859_1a44291837ed0a47e35c047c17cb51409a" prot="public" virt="virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>computeForward</name></member>
+      <member refid="d1/d39/a02859_1afd1ffa739b4801d3d2733a4345fc38f3" prot="public" virt="virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>computeForward</name></member>
+      <member refid="d6/d6f/a04819_1ada2c9ecbe4d8818abf37027f027b9ffb" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>computeFresnel</name></member>
+      <member refid="d1/d39/a02859_1a0415267b64cfc7d8a67623bcd0b5c38e" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>computeIBL</name></member>
+      <member refid="d1/d39/a02859_1afb50ddebfe08b564a2ee7e1494c4ccc5" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>computeIncident</name></member>
+      <member refid="d1/d39/a02859_1a5ed3dc036308b5a722ed05c653352d03" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>computeReflEnvMap</name></member>
+      <member refid="d1/d39/a02859_1aa6485ec12a582d51914fa2600dbf1dd2" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>computeReflEnvMaps</name></member>
+      <member refid="d1/d39/a02859_1aa7c3905d5fa739b45a6f8e662d38b540" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>computeRefrEnvMap</name></member>
+      <member refid="d1/d39/a02859_1a54d3ba71d6679e00f8561a495d41b188" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>computeRefrEnvMap</name></member>
+      <member refid="d1/d39/a02859_1ac11f66f2a6815493133389eec29274df" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>computeRefrEnvMaps</name></member>
+      <member refid="d1/d39/a02859_1ac3f84d9382f5369ab6e2d682691d73d4" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>computeRefrEnvMaps</name></member>
+      <member refid="d1/d39/a02859_1a95245e6412bacaf00489bf13a9f5b3be" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>computeRefrSkybox</name></member>
+      <member refid="d1/d39/a02859_1a2df49fb65439c73eee094cb81f799fe4" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>computeRefrSkybox</name></member>
+      <member refid="d6/d6f/a04819_1a4de8b9230c6f6c815bd7c305a44468f4" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>computeScreenSpace</name></member>
+      <member refid="d6/d6f/a04819_1af0c88e8b7858f8efdb51502aacfeceb2" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>declareComputeFresnel</name></member>
+      <member refid="d6/d6f/a04819_1a896bf0ac2253775c748acf0bc05e34e9" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>declareComputeScreenSpace</name></member>
+      <member refid="d6/d6f/a04819_1aaf46556c3db082a3e71649a68d3edad9" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>declareTraceScreenSpace</name></member>
+      <member refid="d1/d39/a02859_1aa01e6ad9199877496aa5f3ab72353b9e" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>doDeclareComputeIBL</name></member>
+      <member refid="d1/d39/a02859_1a91bd609dfe9ed58ede0b0da492ce5d49" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>doDeclareComputeMergeRefrEnvMap</name></member>
+      <member refid="d1/d39/a02859_1a2aaf6d62340333ce48e7ce7491d3619c" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>doDeclareComputeMergeRefrEnvMaps</name></member>
+      <member refid="d1/d39/a02859_1a5c03132a89a5abdaafdfba11a41e499a" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>doDeclareComputeMergeRefrSkybox</name></member>
+      <member refid="d1/d39/a02859_1ab34f62783bb3d6c4c3a7442e2f3a937d" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>doDeclareComputeReflEnvMap</name></member>
+      <member refid="d1/d39/a02859_1a2b1442272e0f4a589f776b061606ba8f" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>doDeclareComputeReflEnvMaps</name></member>
+      <member refid="d1/d39/a02859_1a4cc734c56e12ce2714737ea7a57328dd" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>doDeclareComputeRefrEnvMap</name></member>
+      <member refid="d1/d39/a02859_1a8248da435423dc28bde203dc4a59cd57" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>doDeclareComputeRefrEnvMaps</name></member>
+      <member refid="d1/d39/a02859_1abdf7081abf6770b704962c485b44d0fb" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>doDeclareComputeRefrSkybox</name></member>
+      <member refid="d6/d6f/a04819_1a37a538d646d2cfb7025db4c8ad990c99" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>m_computeFresnel</name></member>
+      <member refid="d1/d39/a02859_1ae9fc1b6bf405e7808080920214340968" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>m_computeIBL</name></member>
+      <member refid="d1/d39/a02859_1adddf70cf68560d1c7284abc1d4558096" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>m_computeMergeRefrEnvMap</name></member>
+      <member refid="d1/d39/a02859_1a0144277bab88360f19667383124c7f3a" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>m_computeMergeRefrEnvMaps</name></member>
+      <member refid="d1/d39/a02859_1ae2f0b4f57392ee73e859424d16c9059a" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>m_computeMergeRefrSkybox</name></member>
+      <member refid="d1/d39/a02859_1a42a1ebd7ca0ec1fee0c9b4842668fd65" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>m_computeReflEnvMap</name></member>
+      <member refid="d1/d39/a02859_1a11c4b885efe700c826fb665642efad9f" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>m_computeReflEnvMaps</name></member>
+      <member refid="d1/d39/a02859_1abeedffcbd8df6dc9933a4850322ab92b" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>m_computeRefrEnvMap</name></member>
+      <member refid="d1/d39/a02859_1a15015289b349728dc1f3e1853a6acf3d" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>m_computeRefrEnvMaps</name></member>
+      <member refid="d1/d39/a02859_1a1bcd65f06808e5ab52242cc81aad965b" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>m_computeRefrSkybox</name></member>
+      <member refid="d6/d6f/a04819_1a4dacf94e9e976b47e13deed31611e60e" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>m_computeScreenSpace</name></member>
+      <member refid="d6/d6f/a04819_1a551f1fdfd98b317996261cc500242841" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>m_passFlags</name></member>
+      <member refid="d6/d6f/a04819_1a6295894be3ea19ea49a9ce8c8ca01474" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>m_traceScreenSpace</name></member>
+      <member refid="d6/d6f/a04819_1aca7e4f987a800a07a60e70823d3c227b" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>m_utils</name></member>
+      <member refid="d6/d6f/a04819_1ae525d4f79a6aeb9c3283ad34fa60400d" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>m_writer</name></member>
+      <member refid="d1/d39/a02859_1afa13d6087c85a6406d89dd2f39297126" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>PbrReflectionModel</name></member>
+      <member refid="d6/d6f/a04819_1a04440c3303085df09f734548b4dfb29d" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>ReflectionModel</name></member>
+      <member refid="d6/d6f/a04819_1a665333520095ab79bcd6ceba1666bcde" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>ReflectionModel</name></member>
+      <member refid="d6/d6f/a04819_1ad7af5ab2a285495abbdfbd19053ef700" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>traceScreenSpace</name></member>
+      <member refid="d6/d6f/a04819_1ab741a9bc5a596e2f5684120b015bd578" prot="public" virt="virtual"><scope>castor3d::shader::PbrReflectionModel</scope><name>~ReflectionModel</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

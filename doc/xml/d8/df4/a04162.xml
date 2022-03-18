@@ -1,110 +1,132 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d8/df4/a04162" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::TextOverlay::DisplayableLine</compoundname>
+    <compoundname>castor3d::SsaoBlurPass::Program</compoundname>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d8/df4/a04162_1a9f2ac2751fca1115467d7854ace59109" prot="public" static="no" mutable="no">
-        <type>castor::Point2d</type>
-        <definition>castor::Point2d castor3d::TextOverlay::DisplayableLine::m_position</definition>
+      <memberdef kind="variable" id="d8/df4/a04162_1a0af315ad5f21715b1c68177a6fda3961" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/d64/a04750" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::SsaoBlurPass::Program::vertexShader</definition>
         <argsstring></argsstring>
-        <name>m_position</name>
+        <name>vertexShader</name>
+        <qualifiedname>castor3d::SsaoBlurPass::Program::vertexShader</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The line position. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/TextOverlay.hpp" line="356" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="356" bodyend="-1"/>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="144" column="14" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="144" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d8/df4/a04162_1a52c971fa4e1dedc9e59f1f5fbc9d7732" prot="public" static="no" mutable="no">
-        <type>double</type>
-        <definition>double castor3d::TextOverlay::DisplayableLine::m_width</definition>
+      <memberdef kind="variable" id="d8/df4/a04162_1a1ebd8d8a21e02668ec16f347bcc6a8e7" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/d64/a04750" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::SsaoBlurPass::Program::pixelShader</definition>
         <argsstring></argsstring>
-        <name>m_width</name>
+        <name>pixelShader</name>
+        <qualifiedname>castor3d::SsaoBlurPass::Program::pixelShader</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The line width. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/TextOverlay.hpp" line="359" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="359" bodyend="-1"/>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="145" column="14" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="145" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d8/df4/a04162_1a585cac610b44ac128b9615b98e774e83" prot="public" static="no" mutable="no">
-        <type>double</type>
-        <definition>double castor3d::TextOverlay::DisplayableLine::m_height</definition>
+      <memberdef kind="variable" id="d8/df4/a04162_1aba59ecca6115b5eaa7ba512f2697d11e" prot="public" static="no" mutable="no">
+        <type>ashes::PipelineShaderStageCreateInfoArray</type>
+        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::SsaoBlurPass::Program::stages</definition>
         <argsstring></argsstring>
-        <name>m_height</name>
+        <name>stages</name>
+        <qualifiedname>castor3d::SsaoBlurPass::Program::stages</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The line height. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/TextOverlay.hpp" line="362" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="362" bodyend="-1"/>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="146" column="43" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="146" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d8/df4/a04162_1ab266c8d211aa41fabf8e11af0b17f348" prot="public" static="no" mutable="no">
-        <type>std::vector&lt; DisplayableChar &gt;</type>
-        <definition>std::vector&lt; DisplayableChar &gt; castor3d::TextOverlay::DisplayableLine::m_characters</definition>
-        <argsstring></argsstring>
-        <name>m_characters</name>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/df4/a04162_1a8a211e535bbd15f38faaf1bf303a2b18" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::SsaoBlurPass::Program::Program</definition>
+        <argsstring>(RenderDevice const &amp;device, bool useNormalsBuffer, castor::String const &amp;prefix)</argsstring>
+        <name>Program</name>
+        <qualifiedname>castor3d::SsaoBlurPass::Program::Program</qualifiedname>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>useNormalsBuffer</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>prefix</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The displayable characters. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/TextOverlay.hpp" line="365" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="365" bodyend="-1"/>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="140" column="1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>A text line, along with its size and position. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
-</simplesect>
-<simplesect kind="date"><para>28/01/2016 </para>
-</simplesect>
-</para>
     </detaileddescription>
     <collaborationgraph>
-      <node id="4361">
+      <node id="7">
         <label>T</label>
       </node>
-      <node id="4360">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="4361" relation="usage">
-          <edgelabel>elements</edgelabel>
+      <node id="2">
+        <label>castor3d::ShaderModule</label>
+        <link refid="dc/d64/a04750"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>name</edgelabel>
+          <edgelabel>source</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>shader</edgelabel>
         </childnode>
       </node>
-      <node id="4358">
-        <label>std::vector&lt; DisplayableChar &gt;</label>
-        <childnode refid="4359" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-        <childnode refid="4360" relation="template-instance">
-          <edgelabel>&lt; DisplayableChar &gt;</edgelabel>
+      <node id="1">
+        <label>castor3d::SsaoBlurPass::Program</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>pixelShader</edgelabel>
+          <edgelabel>vertexShader</edgelabel>
         </childnode>
       </node>
-      <node id="4357">
-        <label>castor3d::TextOverlay::DisplayableLine</label>
-        <childnode refid="4358" relation="usage">
-          <edgelabel>m_characters</edgelabel>
+      <node id="4">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="3">
+        <label>std::string</label>
+        <childnode refid="4" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="4359">
-        <label>castor3d::TextOverlay::DisplayableChar</label>
+      <node id="6">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::unique_ptr&lt; ast::Shader &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; ast::Shader &gt;</edgelabel>
+        </childnode>
       </node>
     </collaborationgraph>
-    <location file="Overlay/TextOverlay.hpp" line="353" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="352" bodyend="366"/>
+    <location file="Render/Ssao/SsaoBlurPass.hpp" line="138" column="1" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="139" bodyend="147"/>
     <listofallmembers>
-      <member refid="d8/df4/a04162_1ab266c8d211aa41fabf8e11af0b17f348" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableLine</scope><name>m_characters</name></member>
-      <member refid="d8/df4/a04162_1a585cac610b44ac128b9615b98e774e83" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableLine</scope><name>m_height</name></member>
-      <member refid="d8/df4/a04162_1a9f2ac2751fca1115467d7854ace59109" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableLine</scope><name>m_position</name></member>
-      <member refid="d8/df4/a04162_1a52c971fa4e1dedc9e59f1f5fbc9d7732" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableLine</scope><name>m_width</name></member>
+      <member refid="d8/df4/a04162_1a1ebd8d8a21e02668ec16f347bcc6a8e7" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass::Program</scope><name>pixelShader</name></member>
+      <member refid="d8/df4/a04162_1a8a211e535bbd15f38faaf1bf303a2b18" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass::Program</scope><name>Program</name></member>
+      <member refid="d8/df4/a04162_1aba59ecca6115b5eaa7ba512f2697d11e" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass::Program</scope><name>stages</name></member>
+      <member refid="d8/df4/a04162_1a0af315ad5f21715b1c68177a6fda3961" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass::Program</scope><name>vertexShader</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

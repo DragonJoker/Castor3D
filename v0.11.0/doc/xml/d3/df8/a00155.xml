@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d3/df8/a00155" kind="file" language="C++">
+    <compoundname>GeometryBuffers.hpp</compoundname>
+    <includes refid="d7/d9a/a00152" local="yes">BufferModule.hpp</includes>
+    <includedby refid="d4/dfb/a00512" local="yes">Model/Mesh/Submesh/Submesh.hpp</includedby>
+    <includedby refid="d7/d21/a00584" local="yes">Overlay/OverlayRenderer.hpp</includedby>
+    <includedby refid="d9/d10/a01103" local="yes">Scene/BillboardList.hpp</includedby>
+    <incdepgraph>
+      <node id="2017">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="2020">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="2021">
+        <label>cstdint</label>
+      </node>
+      <node id="2019">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="2012">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="2013" relation="include">
+        </childnode>
+        <childnode refid="2014" relation="include">
+        </childnode>
+        <childnode refid="2015" relation="include">
+        </childnode>
+        <childnode refid="2016" relation="include">
+        </childnode>
+        <childnode refid="2017" relation="include">
+        </childnode>
+        <childnode refid="2018" relation="include">
+        </childnode>
+        <childnode refid="2019" relation="include">
+        </childnode>
+        <childnode refid="2020" relation="include">
+        </childnode>
+        <childnode refid="2021" relation="include">
+        </childnode>
+        <childnode refid="2022" relation="include">
+        </childnode>
+        <childnode refid="2023" relation="include">
+        </childnode>
+        <childnode refid="2024" relation="include">
+        </childnode>
+      </node>
+      <node id="2023">
+        <label>string</label>
+      </node>
+      <node id="2016">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="2013">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="2011">
+        <label>BufferModule.hpp</label>
+        <link refid="d7/d9a/a00152"/>
+        <childnode refid="2012" relation="include">
+        </childnode>
+        <childnode refid="2025" relation="include">
+        </childnode>
+        <childnode refid="2026" relation="include">
+        </childnode>
+      </node>
+      <node id="2015">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="2010">
+        <label>Buffer/GeometryBuffers.hpp</label>
+        <link refid="d3/df8/a00155"/>
+        <childnode refid="2011" relation="include">
+        </childnode>
+      </node>
+      <node id="2025">
+        <label>CastorUtils/Pool/BuddyAllocator.hpp</label>
+      </node>
+      <node id="2014">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="2024">
+        <label>vector</label>
+      </node>
+      <node id="2018">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="2026">
+        <label>cstddef</label>
+      </node>
+      <node id="2022">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="2028">
+        <label>Model/Mesh/Submesh/Submesh.hpp</label>
+        <link refid="d4/dfb/a00512"/>
+      </node>
+      <node id="2031">
+        <label>Text/TextRenderWindow.hpp</label>
+        <link refid="db/d78/a01427"/>
+      </node>
+      <node id="2029">
+        <label>Overlay/OverlayRenderer.hpp</label>
+        <link refid="d7/d21/a00584"/>
+        <childnode refid="2030" relation="include">
+        </childnode>
+      </node>
+      <node id="2034">
+        <label>Text/TextBillboardList.hpp</label>
+        <link refid="de/d5c/a01358"/>
+      </node>
+      <node id="2030">
+        <label>Render/RenderWindow.hpp</label>
+        <link refid="dc/d1b/a00827"/>
+        <childnode refid="2031" relation="include">
+        </childnode>
+      </node>
+      <node id="2027">
+        <label>Buffer/GeometryBuffers.hpp</label>
+        <link refid="d3/df8/a00155"/>
+        <childnode refid="2028" relation="include">
+        </childnode>
+        <childnode refid="2029" relation="include">
+        </childnode>
+        <childnode refid="2032" relation="include">
+        </childnode>
+      </node>
+      <node id="2032">
+        <label>Scene/BillboardList.hpp</label>
+        <link refid="d9/d10/a01103"/>
+        <childnode refid="2033" relation="include">
+        </childnode>
+        <childnode refid="2034" relation="include">
+        </childnode>
+      </node>
+      <node id="2033">
+        <label>Render/Node/RenderNode_Render.hpp</label>
+        <link refid="d4/d6a/a00704"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="d7/d67/a02308" prot="public">castor3d::GeometryBuffers</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Buffer/GeometryBuffers.hpp"/>
+  </compounddef>
+</doxygen>

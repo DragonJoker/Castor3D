@@ -1,281 +1,45 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="da/d6d/a04019" kind="union" language="C++" prot="public">
-    <compoundname>castor3d::VertexBoneData::Ids</compoundname>
-    <includes local="no">VertexBoneData.hpp</includes>
-    <innerclass refid="de/d03/a04023" prot="public">castor3d::VertexBoneData::Ids::ids</innerclass>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="da/d6d/a04019" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TexturedCube::Quad</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+    <innerclass refid="de/d03/a04023" prot="public">castor3d::TexturedCube::Quad::Vertex</innerclass>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="da/d6d/a04019_1a2bf3acefcc41daac40ff83c31e12592c" prot="public" static="no" mutable="no">
-        <type>std::array&lt; uint32_t, <ref refid="d7/dd1/a01458_1a646fc2f48009177447cb9476d791b0e8" kindref="member">MaxBonesPerVertex</ref> &gt;</type>
-        <definition>std::array&lt; uint32_t, MaxBonesPerVertex &gt; castor3d::VertexBoneData::Ids::data</definition>
-        <argsstring></argsstring>
-        <name>data</name>
+      <memberdef kind="variable" id="da/d6d/a04019_1ab6642102bef3951fc82eb7d81004795d" prot="public" static="no" mutable="no">
+        <type><ref refid="de/d03/a04023" kindref="compound">Vertex</ref></type>
+        <definition>Vertex castor3d::TexturedCube::Quad::vertex[6]</definition>
+        <argsstring>[6]</argsstring>
+        <name>vertex</name>
+        <qualifiedname>castor3d::TexturedCube::Quad::vertex</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="41" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="41" bodyend="-1"/>
-        <referencedby refid="da/d6d/a04019_1abcef19830fba133bd04d81e9f895f865" compoundref="db/d44/a00533" startline="83" endline="86">begin</referencedby>
-        <referencedby refid="da/d6d/a04019_1acbc47210a6467dc4c0213fa0a80ca48b" compoundref="db/d44/a00533" startline="91" endline="94">end</referencedby>
-        <referencedby refid="da/d6d/a04019_1a22576b74e7dd21fce35996a5bbadd6e3" compoundref="db/d44/a00533" startline="46" endline="49">Ids</referencedby>
-        <referencedby refid="da/d6d/a04019_1a0a27c9e81fca79e6aecf48005df5bd26" compoundref="db/d44/a00533" startline="57" endline="61">operator=</referencedby>
-        <referencedby refid="da/d6d/a04019_1a80a810b88bc9ab0555aded02c335c386" compoundref="db/d44/a00533" startline="71" endline="74">operator[]</referencedby>
-        <referencedby refid="d7/dd1/a01458_1a770ba5e8e6c80ebb02e90284327877d0" compoundref="df/d6a/a00119" startline="1319" endline="1340">castor3d::prepareChunkData</referencedby>
-        <referencedby refid="da/d6d/a04019_1a452e6a25ba58ddc22628d843735b2e54" compoundref="db/d44/a00533" startline="79" endline="82">size</referencedby>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="da/d6d/a04019_1af3819b7bd80ef90bb65997155ad07fee" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::VertexBoneData::Ids::Ids</definition>
-        <argsstring>()</argsstring>
-        <name>Ids</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="42" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="42" bodyend="45"/>
-      </memberdef>
-      <memberdef kind="function" id="da/d6d/a04019_1a22576b74e7dd21fce35996a5bbadd6e3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::VertexBoneData::Ids::Ids</definition>
-        <argsstring>(Ids const &amp;rhs)</argsstring>
-        <name>Ids</name>
-        <param>
-          <type><ref refid="da/d6d/a04019" kindref="compound">Ids</ref> const &amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="46" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="46" bodyend="49"/>
-        <references refid="da/d6d/a04019_1a2bf3acefcc41daac40ff83c31e12592c" compoundref="db/d44/a00533" startline="41">data</references>
-      </memberdef>
-      <memberdef kind="function" id="da/d6d/a04019_1adc8d2e43813c7897bbfe3c94effb81a4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::VertexBoneData::Ids::Ids</definition>
-        <argsstring>(Ids &amp;&amp;rhs) noexcept</argsstring>
-        <name>Ids</name>
-        <param>
-          <type><ref refid="da/d6d/a04019" kindref="compound">Ids</ref> &amp;&amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="50" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="50" bodyend="53"/>
-      </memberdef>
-      <memberdef kind="function" id="da/d6d/a04019_1a5e2a5fe9f88bb63a442d0745ce858f84" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::VertexBoneData::Ids::~Ids</definition>
-        <argsstring>()</argsstring>
-        <name>~Ids</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="54" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="54" bodyend="56"/>
-      </memberdef>
-      <memberdef kind="function" id="da/d6d/a04019_1a0a27c9e81fca79e6aecf48005df5bd26" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="da/d6d/a04019" kindref="compound">Ids</ref> &amp;</type>
-        <definition>Ids&amp; castor3d::VertexBoneData::Ids::operator=</definition>
-        <argsstring>(Ids const &amp;rhs)</argsstring>
-        <name>operator=</name>
-        <param>
-          <type><ref refid="da/d6d/a04019" kindref="compound">Ids</ref> const &amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="57" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="57" bodyend="61"/>
-        <references refid="da/d6d/a04019_1a2bf3acefcc41daac40ff83c31e12592c" compoundref="db/d44/a00533" startline="41">data</references>
-      </memberdef>
-      <memberdef kind="function" id="da/d6d/a04019_1af7644b25c50fc002ef2796a278eb3bd5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="da/d6d/a04019" kindref="compound">Ids</ref> &amp;</type>
-        <definition>Ids&amp; castor3d::VertexBoneData::Ids::operator=</definition>
-        <argsstring>(Ids &amp;&amp;rhs) noexcept</argsstring>
-        <name>operator=</name>
-        <param>
-          <type><ref refid="da/d6d/a04019" kindref="compound">Ids</ref> &amp;&amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="62" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="62" bodyend="70"/>
-        <references refid="da/d6d/a04019_1a2bf3acefcc41daac40ff83c31e12592c" compoundref="db/d44/a00533" startline="41">data</references>
-      </memberdef>
-      <memberdef kind="function" id="da/d6d/a04019_1a80a810b88bc9ab0555aded02c335c386" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint32_t &amp;</type>
-        <definition>uint32_t&amp; castor3d::VertexBoneData::Ids::operator[]</definition>
-        <argsstring>(size_t index)</argsstring>
-        <name>operator[]</name>
-        <param>
-          <type>size_t</type>
-          <declname>index</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="71" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="71" bodyend="74"/>
-        <references refid="da/d6d/a04019_1a2bf3acefcc41daac40ff83c31e12592c" compoundref="db/d44/a00533" startline="41">data</references>
-      </memberdef>
-      <memberdef kind="function" id="da/d6d/a04019_1a15f8a18b1ce2a6b2a1fe12d08fb73006" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint32_t const  &amp;</type>
-        <definition>uint32_t const&amp; castor3d::VertexBoneData::Ids::operator[]</definition>
-        <argsstring>(size_t index) const</argsstring>
-        <name>operator[]</name>
-        <param>
-          <type>size_t</type>
-          <declname>index</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="75" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="75" bodyend="78"/>
-        <references refid="da/d6d/a04019_1a2bf3acefcc41daac40ff83c31e12592c" compoundref="db/d44/a00533" startline="41">data</references>
-      </memberdef>
-      <memberdef kind="function" id="da/d6d/a04019_1a452e6a25ba58ddc22628d843735b2e54" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>size_t</type>
-        <definition>size_t castor3d::VertexBoneData::Ids::size</definition>
-        <argsstring>() const</argsstring>
-        <name>size</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="79" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="79" bodyend="82"/>
-        <references refid="da/d6d/a04019_1a2bf3acefcc41daac40ff83c31e12592c" compoundref="db/d44/a00533" startline="41">data</references>
-      </memberdef>
-      <memberdef kind="function" id="da/d6d/a04019_1abcef19830fba133bd04d81e9f895f865" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>auto</type>
-        <definition>auto castor3d::VertexBoneData::Ids::begin</definition>
-        <argsstring>() const</argsstring>
-        <name>begin</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="83" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="83" bodyend="86"/>
-        <references refid="da/d6d/a04019_1a2bf3acefcc41daac40ff83c31e12592c" compoundref="db/d44/a00533" startline="41">data</references>
-      </memberdef>
-      <memberdef kind="function" id="da/d6d/a04019_1afe8fe6f84733e278a9f1f4c8d03185ef" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>auto</type>
-        <definition>auto castor3d::VertexBoneData::Ids::begin</definition>
-        <argsstring>()</argsstring>
-        <name>begin</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="87" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="87" bodyend="90"/>
-        <references refid="da/d6d/a04019_1a2bf3acefcc41daac40ff83c31e12592c" compoundref="db/d44/a00533" startline="41">data</references>
-      </memberdef>
-      <memberdef kind="function" id="da/d6d/a04019_1acbc47210a6467dc4c0213fa0a80ca48b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>auto</type>
-        <definition>auto castor3d::VertexBoneData::Ids::end</definition>
-        <argsstring>() const</argsstring>
-        <name>end</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="91" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="91" bodyend="94"/>
-        <references refid="da/d6d/a04019_1a2bf3acefcc41daac40ff83c31e12592c" compoundref="db/d44/a00533" startline="41">data</references>
-      </memberdef>
-      <memberdef kind="function" id="da/d6d/a04019_1a48cdcfe1bf1af8b3584969d52d09535b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>auto</type>
-        <definition>auto castor3d::VertexBoneData::Ids::end</definition>
-        <argsstring>()</argsstring>
-        <name>end</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="95" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="95" bodyend="98"/>
-        <references refid="da/d6d/a04019_1a2bf3acefcc41daac40ff83c31e12592c" compoundref="db/d44/a00533" startline="41">data</references>
+        <location file="Render/RenderModule.hpp" line="102" column="8" bodyfile="Render/RenderModule.hpp" bodystart="102" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
-<para>The bones ID. </para>
     </detaileddescription>
     <collaborationgraph>
-      <node id="4663">
-        <label>std::array&lt; uint32_t, MaxBonesPerVertex &gt;</label>
-        <childnode refid="4664" relation="template-instance">
-          <edgelabel>&lt; uint32_t, MaxBonesPerVertex &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4665">
-        <label>T</label>
-      </node>
-      <node id="4664">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="4665" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="4662">
-        <label>castor3d::VertexBoneData::Ids</label>
+      <node id="1">
+        <label>castor3d::TexturedCube::Quad</label>
         <link refid="da/d6d/a04019"/>
-        <childnode refid="4663" relation="usage">
-          <edgelabel>data</edgelabel>
+        <childnode refid="2" relation="usage">
+          <edgelabel>vertex</edgelabel>
         </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::TexturedCube::Quad::Vertex</label>
+        <link refid="de/d03/a04023"/>
       </node>
     </collaborationgraph>
-    <location file="Model/Skeleton/VertexBoneData.hpp" line="35" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="34" bodyend="99"/>
+    <location file="Render/RenderModule.hpp" line="94" column="1" bodyfile="Render/RenderModule.hpp" bodystart="95" bodyend="103"/>
     <listofallmembers>
-      <member refid="da/d6d/a04019_1abcef19830fba133bd04d81e9f895f865" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>begin</name></member>
-      <member refid="da/d6d/a04019_1afe8fe6f84733e278a9f1f4c8d03185ef" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>begin</name></member>
-      <member refid="da/d6d/a04019_1a2bf3acefcc41daac40ff83c31e12592c" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>data</name></member>
-      <member refid="da/d6d/a04019_1acbc47210a6467dc4c0213fa0a80ca48b" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>end</name></member>
-      <member refid="da/d6d/a04019_1a48cdcfe1bf1af8b3584969d52d09535b" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>end</name></member>
-      <member refid="da/d6d/a04019_1af3819b7bd80ef90bb65997155ad07fee" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>Ids</name></member>
-      <member refid="da/d6d/a04019_1a22576b74e7dd21fce35996a5bbadd6e3" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>Ids</name></member>
-      <member refid="da/d6d/a04019_1adc8d2e43813c7897bbfe3c94effb81a4" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>Ids</name></member>
-      <member refid="da/d6d/a04019_1a0a27c9e81fca79e6aecf48005df5bd26" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>operator=</name></member>
-      <member refid="da/d6d/a04019_1af7644b25c50fc002ef2796a278eb3bd5" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>operator=</name></member>
-      <member refid="da/d6d/a04019_1a80a810b88bc9ab0555aded02c335c386" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>operator[]</name></member>
-      <member refid="da/d6d/a04019_1a15f8a18b1ce2a6b2a1fe12d08fb73006" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>operator[]</name></member>
-      <member refid="da/d6d/a04019_1a452e6a25ba58ddc22628d843735b2e54" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>size</name></member>
-      <member refid="da/d6d/a04019_1a5e2a5fe9f88bb63a442d0745ce858f84" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>~Ids</name></member>
+      <member refid="da/d6d/a04019_1ab6642102bef3951fc82eb7d81004795d" prot="public" virt="non-virtual"><scope>castor3d::TexturedCube::Quad</scope><name>vertex</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

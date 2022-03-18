@@ -1,4 +1,6 @@
-<map id="castor3d::HandlerEvent" name="castor3d::HandlerEvent">
-<area shape="rect" id="node1" title=" " alt="" coords="11,80,167,107"/>
-<area shape="rect" id="node2" href="$d9/d66/a02562.html" title="Description of a user input event." alt="" coords="5,5,172,32"/>
+<map id="castor3d::ObjectBufferOffset" name="castor3d::ObjectBufferOffset">
+<area shape="rect" id="node1" title=" " alt="" coords="120,215,305,241"/>
+<area shape="rect" id="node2" href="$d5/ddd/a02490.html" title="A GPU buffer, that uses a buddy allocator to allocate sub&#45;buffers." alt="" coords="17,81,161,123"/>
+<area shape="rect" id="node3" href="$d6/de1/a02518.html" title=" " alt="" coords="5,5,172,32"/>
+<area shape="rect" id="node4" href="$dd/df4/a02510.html" title="A memory range, in bytes." alt="" coords="185,89,331,115"/>
 </map>

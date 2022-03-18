@@ -1,0 +1,300 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="db/d8e/a00482" kind="file" language="C++">
+    <compoundname>FaceIndices.hpp</compoundname>
+    <includes refid="d9/d34/a00476" local="yes">ComponentModule.hpp</includes>
+    <includes local="no">array</includes>
+    <includedby refid="d5/db1/a00140" local="yes">Binary/ChunkData.hpp</includedby>
+    <includedby refid="d9/d4a/a00479" local="yes">Model/Mesh/Submesh/Component/Face.hpp</includedby>
+    <includedby refid="df/db6/a00509" local="yes">Model/Mesh/Submesh/Component/TriFaceMapping.hpp</includedby>
+    <incdepgraph>
+      <node id="9140">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="9143">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="9150">
+        <label>CastorUtils/Graphics/BoundingSphere.hpp</label>
+      </node>
+      <node id="9144">
+        <label>cstdint</label>
+      </node>
+      <node id="9131">
+        <label>ComponentModule.hpp</label>
+        <link refid="d9/d34/a00476"/>
+        <childnode refid="9132" relation="include">
+        </childnode>
+      </node>
+      <node id="9142">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="9135">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="9136" relation="include">
+        </childnode>
+        <childnode refid="9137" relation="include">
+        </childnode>
+        <childnode refid="9138" relation="include">
+        </childnode>
+        <childnode refid="9139" relation="include">
+        </childnode>
+        <childnode refid="9140" relation="include">
+        </childnode>
+        <childnode refid="9141" relation="include">
+        </childnode>
+        <childnode refid="9142" relation="include">
+        </childnode>
+        <childnode refid="9143" relation="include">
+        </childnode>
+        <childnode refid="9144" relation="include">
+        </childnode>
+        <childnode refid="9145" relation="include">
+        </childnode>
+        <childnode refid="9146" relation="include">
+        </childnode>
+        <childnode refid="9147" relation="include">
+        </childnode>
+      </node>
+      <node id="9146">
+        <label>string</label>
+      </node>
+      <node id="9134">
+        <label>Castor3D/Model/ModelModule.hpp</label>
+        <link refid="d7/def/a00521"/>
+        <childnode refid="9135" relation="include">
+        </childnode>
+      </node>
+      <node id="9139">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="9136">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="9132">
+        <label>Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp</label>
+        <link refid="dc/d19/a00515"/>
+        <childnode refid="9133" relation="include">
+        </childnode>
+        <childnode refid="9149" relation="include">
+        </childnode>
+        <childnode refid="9150" relation="include">
+        </childnode>
+      </node>
+      <node id="9149">
+        <label>CastorUtils/Graphics/BoundingBox.hpp</label>
+      </node>
+      <node id="9138">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="9130">
+        <label>Model/Mesh/Submesh/Component/FaceIndices.hpp</label>
+        <link refid="db/d8e/a00482"/>
+        <childnode refid="9131" relation="include">
+        </childnode>
+        <childnode refid="9151" relation="include">
+        </childnode>
+      </node>
+      <node id="9137">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="9133">
+        <label>Castor3D/Model/Mesh/MeshModule.hpp</label>
+        <link refid="d2/d9d/a00464"/>
+        <childnode refid="9134" relation="include">
+        </childnode>
+        <childnode refid="9148" relation="include">
+        </childnode>
+      </node>
+      <node id="9147">
+        <label>vector</label>
+      </node>
+      <node id="9141">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="9151">
+        <label>array</label>
+      </node>
+      <node id="9148">
+        <label>CastorUtils/Design/Factory.hpp</label>
+      </node>
+      <node id="9145">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="9169">
+        <label>Binary/BinarySubmesh.hpp</label>
+        <link refid="de/d76/a00134"/>
+      </node>
+      <node id="9167">
+        <label>Binary/BinarySkeletonAnimationNode.hpp</label>
+        <link refid="d1/d88/a00128"/>
+      </node>
+      <node id="9155">
+        <label>Binary/ChunkParser.hpp</label>
+        <link refid="d7/dce/a00143"/>
+        <childnode refid="9156" relation="include">
+        </childnode>
+      </node>
+      <node id="9160">
+        <label>Binary/BinaryMesh.hpp</label>
+        <link refid="d4/d3a/a00101"/>
+      </node>
+      <node id="9159">
+        <label>Binary/BinaryBonesComponent.hpp</label>
+        <link refid="d9/d77/a00095"/>
+      </node>
+      <node id="9173">
+        <label>Model/Mesh/Submesh/Component/Face.hpp</label>
+        <link refid="d9/d4a/a00479"/>
+        <childnode refid="9174" relation="include">
+        </childnode>
+      </node>
+      <node id="9152">
+        <label>Model/Mesh/Submesh/Component/FaceIndices.hpp</label>
+        <link refid="db/d8e/a00482"/>
+        <childnode refid="9153" relation="include">
+        </childnode>
+        <childnode refid="9173" relation="include">
+        </childnode>
+        <childnode refid="9174" relation="include">
+        </childnode>
+      </node>
+      <node id="9168">
+        <label>Binary/BinarySkeletonAnimationObject.hpp</label>
+        <link refid="d7/d06/a00131"/>
+      </node>
+      <node id="9161">
+        <label>Binary/BinaryMeshAnimation.hpp</label>
+        <link refid="d0/dc2/a00104"/>
+      </node>
+      <node id="9164">
+        <label>Binary/BinarySkeletonAnimation.hpp</label>
+        <link refid="df/d6a/a00119"/>
+      </node>
+      <node id="9174">
+        <label>Model/Mesh/Submesh/Component/TriFaceMapping.hpp</label>
+        <link refid="df/db6/a00509"/>
+      </node>
+      <node id="9163">
+        <label>Binary/BinarySkeleton.hpp</label>
+        <link refid="d4/d3e/a00116"/>
+      </node>
+      <node id="9162">
+        <label>Binary/BinaryMeshAnimationKeyFrame.hpp</label>
+        <link refid="df/d98/a00107"/>
+      </node>
+      <node id="9153">
+        <label>Binary/ChunkData.hpp</label>
+        <link refid="d5/db1/a00140"/>
+        <childnode refid="9154" relation="include">
+        </childnode>
+      </node>
+      <node id="9154">
+        <label>Binary/BinaryChunk.hpp</label>
+        <link refid="d1/d44/a00098"/>
+        <childnode refid="9155" relation="include">
+        </childnode>
+        <childnode refid="9171" relation="include">
+        </childnode>
+      </node>
+      <node id="9156">
+        <label>Binary/BinaryParser.hpp</label>
+        <link refid="d3/d00/a00113"/>
+        <childnode refid="9157" relation="include">
+        </childnode>
+        <childnode refid="9158" relation="include">
+        </childnode>
+        <childnode refid="9159" relation="include">
+        </childnode>
+        <childnode refid="9160" relation="include">
+        </childnode>
+        <childnode refid="9161" relation="include">
+        </childnode>
+        <childnode refid="9162" relation="include">
+        </childnode>
+        <childnode refid="9163" relation="include">
+        </childnode>
+        <childnode refid="9164" relation="include">
+        </childnode>
+        <childnode refid="9165" relation="include">
+        </childnode>
+        <childnode refid="9166" relation="include">
+        </childnode>
+        <childnode refid="9167" relation="include">
+        </childnode>
+        <childnode refid="9168" relation="include">
+        </childnode>
+        <childnode refid="9169" relation="include">
+        </childnode>
+        <childnode refid="9170" relation="include">
+        </childnode>
+      </node>
+      <node id="9170">
+        <label>Model/Mesh/Animation/MeshAnimationKeyFrame.hpp</label>
+        <link refid="da/d9c/a00413"/>
+      </node>
+      <node id="9171">
+        <label>Binary/ChunkWriter.hpp</label>
+        <link refid="d9/db6/a00146"/>
+        <childnode refid="9172" relation="include">
+        </childnode>
+      </node>
+      <node id="9165">
+        <label>Binary/BinarySkeletonAnimationBone.hpp</label>
+        <link refid="df/dc8/a00122"/>
+      </node>
+      <node id="9172">
+        <label>Binary/BinaryWriter.hpp</label>
+        <link refid="d2/df5/a00137"/>
+        <childnode refid="9157" relation="include">
+        </childnode>
+        <childnode refid="9158" relation="include">
+        </childnode>
+        <childnode refid="9159" relation="include">
+        </childnode>
+        <childnode refid="9160" relation="include">
+        </childnode>
+        <childnode refid="9161" relation="include">
+        </childnode>
+        <childnode refid="9162" relation="include">
+        </childnode>
+        <childnode refid="9163" relation="include">
+        </childnode>
+        <childnode refid="9164" relation="include">
+        </childnode>
+        <childnode refid="9165" relation="include">
+        </childnode>
+        <childnode refid="9166" relation="include">
+        </childnode>
+        <childnode refid="9167" relation="include">
+        </childnode>
+        <childnode refid="9168" relation="include">
+        </childnode>
+        <childnode refid="9169" relation="include">
+        </childnode>
+      </node>
+      <node id="9157">
+        <label>Binary/BinaryAnimation.hpp</label>
+        <link refid="db/dab/a00089"/>
+      </node>
+      <node id="9158">
+        <label>Binary/BinaryBone.hpp</label>
+        <link refid="d1/dc1/a00092"/>
+      </node>
+      <node id="9166">
+        <label>Binary/BinarySkeletonAnimationKeyFrame.hpp</label>
+        <link refid="dc/dfe/a00125"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="d0/d60/a03936" prot="public">castor3d::FaceIndices</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Model/Mesh/Submesh/Component/FaceIndices.hpp"/>
+  </compounddef>
+</doxygen>

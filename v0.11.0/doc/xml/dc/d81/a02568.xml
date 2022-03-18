@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dc/d81/a02568" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::UserInputEvent</compoundname>
+    <derivedcompoundref refid="dc/d32/a02556" prot="public" virt="non-virtual">castor3d::HandlerEvent</derivedcompoundref>
+    <derivedcompoundref refid="d1/d03/a02560" prot="public" virt="non-virtual">castor3d::KeyboardEvent</derivedcompoundref>
+    <derivedcompoundref refid="db/d44/a02564" prot="public" virt="non-virtual">castor3d::MouseEvent</derivedcompoundref>
+    <includes local="no">UserInputEvent.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dc/d81/a02568_1a5973899c9785c2dffaae34250aec448b" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d1e/a01479_1abdf15c31ed466fee351daf42b2b45ad5" kindref="member">UserInputEventType</ref></type>
+        <definition>UserInputEventType castor3d::UserInputEvent::m_eventType</definition>
+        <argsstring></argsstring>
+        <name>m_eventType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/UserInputEvent.hpp" line="58" column="1" bodyfile="Event/UserInput/UserInputEvent.hpp" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d81/a02568_1a1d946a77fa49158379ee4e5dfb84a556" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::UserInputEvent::UserInputEvent</definition>
+        <argsstring>(UserInputEventType type)</argsstring>
+        <name>UserInputEvent</name>
+        <param>
+          <type><ref refid="da/d1e/a01479_1abdf15c31ed466fee351daf42b2b45ad5" kindref="member">UserInputEventType</ref></type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/UserInputEvent.hpp" line="33" column="1" bodyfile="Event/UserInput/UserInputEvent.hpp" bodystart="33" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d81/a02568_1a520eaa4deaa4a2c25ee217105e289b78" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type></type>
+        <definition>virtual castor3d::UserInputEvent::~UserInputEvent</definition>
+        <argsstring>()</argsstring>
+        <name>~UserInputEvent</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/UserInputEvent.hpp" line="43" column="1" bodyfile="Event/UserInput/UserInputEvent.hpp" bodystart="43" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d81/a02568_1ab45ab37b6687ae9a35165ea5b18f0a71" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d1e/a01479_1abdf15c31ed466fee351daf42b2b45ad5" kindref="member">UserInputEventType</ref></type>
+        <definition>UserInputEventType castor3d::UserInputEvent::getEventType</definition>
+        <argsstring>() const</argsstring>
+        <name>getEventType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The user input event type. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/UserInputEvent.hpp" line="52" column="1" bodyfile="Event/UserInput/UserInputEvent.hpp" bodystart="52" bodyend="55"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Description of a user input event. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="date"><para>17/04/2016 </para>
+</simplesect>
+<simplesect kind="version"><para>0.9.0</para>
+</simplesect>
+<simplesect kind="remark"><para>You may use this one, but prefer using <ref refid="db/d44/a02564" kindref="compound">MouseEvent</ref> or <ref refid="d1/d03/a02560" kindref="compound">KeyboardEvent</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4634">
+        <label>castor3d::UserInputEvent</label>
+        <link refid="dc/d81/a02568"/>
+      </node>
+      <node id="4637">
+        <label>castor3d::MouseEvent</label>
+        <link refid="db/d44/a02564"/>
+        <childnode refid="4634" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4635">
+        <label>castor3d::HandlerEvent</label>
+        <link refid="dc/d32/a02556"/>
+        <childnode refid="4634" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4636">
+        <label>castor3d::KeyboardEvent</label>
+        <link refid="d1/d03/a02560"/>
+        <childnode refid="4634" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="Event/UserInput/UserInputEvent.hpp" line="23" column="1" bodyfile="Event/UserInput/UserInputEvent.hpp" bodystart="22" bodyend="59"/>
+    <listofallmembers>
+      <member refid="dc/d81/a02568_1ab45ab37b6687ae9a35165ea5b18f0a71" prot="public" virt="non-virtual"><scope>castor3d::UserInputEvent</scope><name>getEventType</name></member>
+      <member refid="dc/d81/a02568_1a5973899c9785c2dffaae34250aec448b" prot="private" virt="non-virtual"><scope>castor3d::UserInputEvent</scope><name>m_eventType</name></member>
+      <member refid="dc/d81/a02568_1a1d946a77fa49158379ee4e5dfb84a556" prot="public" virt="non-virtual"><scope>castor3d::UserInputEvent</scope><name>UserInputEvent</name></member>
+      <member refid="dc/d81/a02568_1a520eaa4deaa4a2c25ee217105e289b78" prot="public" virt="virtual"><scope>castor3d::UserInputEvent</scope><name>~UserInputEvent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

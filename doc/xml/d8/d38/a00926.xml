@@ -1,720 +1,849 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d8/d38/a00926" kind="file" language="C++">
-    <compoundname>OpaquePass.hpp</compoundname>
-    <includes refid="df/de9/a00923" local="yes">OpaqueModule.hpp</includes>
-    <includes refid="db/d40/a00959" local="yes">Castor3D/Render/Technique/RenderTechniquePass.hpp</includes>
+    <compoundname>RenderTechniquePass.hpp</compoundname>
+    <includes refid="d8/d19/a00935" local="yes">TechniqueModule.hpp</includes>
+    <includes refid="df/d9e/a00686" local="yes">Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp</includes>
+    <includes refid="dc/d92/a00929" local="yes">Castor3D/Render/Technique/RenderTechniqueVisitor.hpp</includes>
+    <includes refid="dc/d17/a00872" local="yes">Castor3D/Render/Ssao/SsaoConfig.hpp</includes>
+    <includes refid="d3/d60/a00818" local="yes">Castor3D/Render/RenderNodesPass.hpp</includes>
+    <includes local="no">ashespp/Sync/Semaphore.hpp</includes>
+    <includedby refid="dc/dce/a00740" local="yes">Render/Passes/DepthPass.hpp</includedby>
+    <includedby refid="df/d41/a00881" local="yes">Render/Technique/ForwardRenderTechniquePass.hpp</includedby>
+    <includedby refid="d3/dd1/a00914" local="yes">Render/Technique/Opaque/OpaquePass.hpp</includedby>
+    <includedby refid="d6/dad/a00941" local="yes">Render/Technique/Transparent/TransparentPass.hpp</includedby>
     <incdepgraph>
-      <node id="20347">
-        <label>Castor3D/Render/Ssao/SsaoConfig.hpp</label>
-        <link refid="d7/d49/a00863"/>
-        <childnode refid="20348" relation="include">
-        </childnode>
-        <childnode refid="20296" relation="include">
-        </childnode>
-        <childnode refid="20350" relation="include">
-        </childnode>
-        <childnode refid="20345" relation="include">
-        </childnode>
-        <childnode refid="20346" relation="include">
-        </childnode>
-      </node>
-      <node id="20379">
-        <label>Castor3D/Render/Node/DistanceRenderNode.hpp</label>
-        <link refid="d1/d87/a00689"/>
-        <childnode refid="20343" relation="include">
-        </childnode>
-        <childnode refid="20377" relation="include">
-        </childnode>
-        <childnode refid="20378" relation="include">
-        </childnode>
-      </node>
-      <node id="20302">
-        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
-      </node>
-      <node id="20311">
-        <label>Castor3D/Material/MaterialModule.hpp</label>
-        <link refid="d8/d23/a00326"/>
-        <childnode refid="20297" relation="include">
-        </childnode>
-        <childnode refid="20312" relation="include">
-        </childnode>
-      </node>
-      <node id="20388">
-        <label>atomic</label>
-      </node>
-      <node id="20362">
-        <label>Castor3D/Render/Node/BillboardRenderNode.hpp</label>
-        <link refid="df/d9e/a00686"/>
-        <childnode refid="20363" relation="include">
-        </childnode>
-        <childnode refid="20343" relation="include">
-        </childnode>
-      </node>
-      <node id="20339">
-        <label>ShaderWriter/BaseTypes/UInt.hpp</label>
-      </node>
-      <node id="20345">
-        <label>CastorUtils/Design/ChangeTracked.hpp</label>
-      </node>
-      <node id="20326">
-        <label>CastorUtils/Graphics/Size.hpp</label>
-      </node>
-      <node id="20392">
-        <label>ashespp/RenderPass/RenderPass.hpp</label>
-      </node>
-      <node id="20295">
-        <label>Castor3D/Render/RenderModule.hpp</label>
-        <link refid="d5/d72/a00803"/>
-        <childnode refid="20296" relation="include">
-        </childnode>
-        <childnode refid="20310" relation="include">
-        </childnode>
-        <childnode refid="20319" relation="include">
-        </childnode>
-        <childnode refid="20320" relation="include">
-        </childnode>
-        <childnode refid="20321" relation="include">
-        </childnode>
-        <childnode refid="20322" relation="include">
-        </childnode>
-        <childnode refid="20325" relation="include">
-        </childnode>
-      </node>
-      <node id="20305">
-        <label>ashespp/AshesPPPrerequisites.hpp</label>
-      </node>
-      <node id="20329">
-        <label>Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp</label>
-        <link refid="dc/d91/a00659"/>
-        <childnode refid="20295" relation="include">
-        </childnode>
-      </node>
-      <node id="20318">
-        <label>CastorUtils/Graphics/BoundingSphere.hpp</label>
-      </node>
-      <node id="20341">
-        <label>Castor3D/Render/Technique/RenderTechniqueVisitor.hpp</label>
-        <link refid="df/d88/a00962"/>
-        <childnode refid="20294" relation="include">
-        </childnode>
-        <childnode refid="20310" relation="include">
-        </childnode>
-        <childnode refid="20342" relation="include">
-        </childnode>
-      </node>
-      <node id="20350">
-        <label>CastorUtils/Data/TextWriter.hpp</label>
-      </node>
-      <node id="20384">
-        <label>Castor3D/Render/Node/SkinningRenderNode.hpp</label>
-        <link refid="dd/dd8/a00719"/>
-        <childnode refid="20381" relation="include">
-        </childnode>
-        <childnode refid="20363" relation="include">
-        </childnode>
-      </node>
-      <node id="20354">
-        <label>ComponentModule.hpp</label>
-        <link refid="d9/d34/a00476"/>
-        <childnode refid="20313" relation="include">
-        </childnode>
-      </node>
-      <node id="20306">
-        <label>cstdint</label>
-      </node>
-      <node id="20390">
-        <label>CastorUtils/Design/Named.hpp</label>
-      </node>
-      <node id="20359">
-        <label>Castor3D/Render/Culling/CullingModule.hpp</label>
-        <link refid="d6/dfa/a00626"/>
-        <childnode refid="20295" relation="include">
-        </childnode>
-        <childnode refid="20312" relation="include">
-        </childnode>
-      </node>
-      <node id="20331">
-        <label>ShaderWriter/BaseTypes/Array.hpp</label>
-      </node>
-      <node id="20380">
-        <label>Castor3D/Render/Node/MorphingRenderNode.hpp</label>
-        <link refid="d0/db6/a00692"/>
-        <childnode refid="20363" relation="include">
-        </childnode>
-        <childnode refid="20381" relation="include">
-        </childnode>
-      </node>
-      <node id="20346">
-        <label>CastorUtils/Math/RangedValue.hpp</label>
-      </node>
-      <node id="20312">
-        <label>CastorUtils/Design/Signal.hpp</label>
-      </node>
-      <node id="20304">
-        <label>CastorUtils/Math/Point.hpp</label>
-      </node>
-      <node id="20332">
-        <label>ShaderWriter/BaseTypes/Bool.hpp</label>
-      </node>
-      <node id="20323">
-        <label>ShaderAST/Shader.hpp</label>
-      </node>
-      <node id="20349">
+      <node id="68">
         <label>CastorUtils/CastorUtilsPrerequisites.hpp</label>
       </node>
-      <node id="20297">
-        <label>Castor3D/Castor3DModule.hpp</label>
-        <link refid="d5/d35/a00266"/>
-        <childnode refid="20298" relation="include">
-        </childnode>
-        <childnode refid="20299" relation="include">
-        </childnode>
-        <childnode refid="20300" relation="include">
-        </childnode>
-        <childnode refid="20301" relation="include">
-        </childnode>
-        <childnode refid="20302" relation="include">
-        </childnode>
-        <childnode refid="20303" relation="include">
-        </childnode>
-        <childnode refid="20304" relation="include">
-        </childnode>
-        <childnode refid="20305" relation="include">
-        </childnode>
-        <childnode refid="20306" relation="include">
-        </childnode>
-        <childnode refid="20307" relation="include">
-        </childnode>
-        <childnode refid="20308" relation="include">
-        </childnode>
-        <childnode refid="20309" relation="include">
-        </childnode>
+      <node id="69">
+        <label>CastorUtils/Config/SmartPtr.hpp</label>
       </node>
-      <node id="20337">
-        <label>ShaderWriter/BaseTypes/SampledImage.hpp</label>
+      <node id="70">
+        <label>CastorUtils/Data/TextWriter.hpp</label>
       </node>
-      <node id="20360">
-        <label>Castor3D/Render/ShadowMap/ShadowMapModule.hpp</label>
-        <link refid="d3/d13/a00836"/>
-        <childnode refid="20295" relation="include">
-        </childnode>
-        <childnode refid="20319" relation="include">
-        </childnode>
-        <childnode refid="20326" relation="include">
-        </childnode>
-      </node>
-      <node id="20308">
-        <label>string</label>
-      </node>
-      <node id="20336">
-        <label>ShaderWriter/BaseTypes/Int.hpp</label>
-      </node>
-      <node id="20386">
-        <label>Castor3D/Render/Culling/SceneCuller.hpp</label>
-        <link refid="db/d3a/a00641"/>
-        <childnode refid="20359" relation="include">
-        </childnode>
-        <childnode refid="20313" relation="include">
-        </childnode>
-      </node>
-      <node id="20315">
-        <label>Castor3D/Model/ModelModule.hpp</label>
-        <link refid="d7/def/a00521"/>
-        <childnode refid="20297" relation="include">
-        </childnode>
-      </node>
-      <node id="20301">
-        <label>CastorUtils/Exception/Assertion.hpp</label>
-      </node>
-      <node id="20298">
-        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
-      </node>
-      <node id="20313">
-        <label>Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp</label>
-        <link refid="dc/d19/a00515"/>
-        <childnode refid="20314" relation="include">
-        </childnode>
-        <childnode refid="20317" relation="include">
-        </childnode>
-        <childnode refid="20318" relation="include">
-        </childnode>
-      </node>
-      <node id="20366">
-        <label>BufferModule.hpp</label>
-        <link refid="d7/d9a/a00152"/>
-        <childnode refid="20297" relation="include">
-        </childnode>
-        <childnode refid="20367" relation="include">
-        </childnode>
-        <childnode refid="20368" relation="include">
-        </childnode>
-      </node>
-      <node id="20377">
-        <label>Castor3D/Render/Node/PassRenderNode.hpp</label>
-        <link refid="df/dbb/a00698"/>
-        <childnode refid="20358" relation="include">
-        </childnode>
-        <childnode refid="20320" relation="include">
-        </childnode>
-      </node>
-      <node id="20321">
-        <label>Castor3D/Material/Texture/TextureModule.hpp</label>
-        <link refid="de/dd7/a00362"/>
-        <childnode refid="20311" relation="include">
-        </childnode>
-        <childnode refid="20312" relation="include">
-        </childnode>
-      </node>
-      <node id="20335">
-        <label>ShaderWriter/BaseTypes/Image.hpp</label>
-      </node>
-      <node id="20317">
-        <label>CastorUtils/Graphics/BoundingBox.hpp</label>
-      </node>
-      <node id="20300">
-        <label>CastorUtils/Design/OwnedBy.hpp</label>
-      </node>
-      <node id="20296">
-        <label>Castor3D/Miscellaneous/MiscellaneousModule.hpp</label>
-        <link refid="d4/d27/a00392"/>
-        <childnode refid="20297" relation="include">
-        </childnode>
-      </node>
-      <node id="20310">
-        <label>Castor3D/Scene/SceneModule.hpp</label>
-        <link refid="de/db5/a01181"/>
-        <childnode refid="20311" relation="include">
-        </childnode>
-        <childnode refid="20313" relation="include">
-        </childnode>
-        <childnode refid="20312" relation="include">
-        </childnode>
-      </node>
-      <node id="20343">
-        <label>Castor3D/Shader/Ubos/UbosModule.hpp</label>
-        <link refid="d9/de4/a01346"/>
-        <childnode refid="20322" relation="include">
-        </childnode>
-        <childnode refid="20330" relation="include">
-        </childnode>
-        <childnode refid="20344" relation="include">
-        </childnode>
-      </node>
-      <node id="20319">
-        <label>Castor3D/Scene/Light/LightModule.hpp</label>
-        <link refid="d9/d5b/a01127"/>
-        <childnode refid="20310" relation="include">
-        </childnode>
-      </node>
-      <node id="20351">
-        <label>Castor3D/Render/RenderPass.hpp</label>
-        <link refid="d0/dad/a00806"/>
-        <childnode refid="20295" relation="include">
-        </childnode>
-        <childnode refid="20352" relation="include">
-        </childnode>
-        <childnode refid="20356" relation="include">
-        </childnode>
-        <childnode refid="20357" relation="include">
-        </childnode>
-        <childnode refid="20389" relation="include">
-        </childnode>
-        <childnode refid="20390" relation="include">
-        </childnode>
-        <childnode refid="20326" relation="include">
-        </childnode>
-        <childnode refid="20391" relation="include">
-        </childnode>
-        <childnode refid="20392" relation="include">
-        </childnode>
-        <childnode refid="20393" relation="include">
-        </childnode>
-      </node>
-      <node id="20389">
-        <label>Castor3D/Shader/Ubos/SceneUbo.hpp</label>
-        <link refid="dc/d8e/a01331"/>
-        <childnode refid="20343" relation="include">
-        </childnode>
-        <childnode refid="20364" relation="include">
-        </childnode>
-      </node>
-      <node id="20338">
-        <label>ShaderWriter/BaseTypes/Sampler.hpp</label>
-      </node>
-      <node id="20376">
-        <label>ashespp/Descriptor/DescriptorSet.hpp</label>
-      </node>
-      <node id="20340">
-        <label>ShaderWriter/CompositeTypes/Function.hpp</label>
-      </node>
-      <node id="20293">
-        <label>OpaqueModule.hpp</label>
-        <link refid="df/de9/a00923"/>
-        <childnode refid="20294" relation="include">
-        </childnode>
-        <childnode refid="20326" relation="include">
-        </childnode>
-      </node>
-      <node id="20373">
+      <node id="92">
         <label>CastorUtils/Design/ArrayView.hpp</label>
       </node>
-      <node id="20365">
-        <label>PoolUniformBuffer.hpp</label>
-        <link refid="d5/dcb/a00170"/>
-        <childnode refid="20366" relation="include">
-        </childnode>
-        <childnode refid="20369" relation="include">
-        </childnode>
-        <childnode refid="20373" relation="include">
-        </childnode>
-        <childnode refid="20374" relation="include">
-        </childnode>
-        <childnode refid="20375" relation="include">
-        </childnode>
+      <node id="62">
+        <label>CastorUtils/Design/ChangeTracked.hpp</label>
       </node>
-      <node id="20355">
-        <label>ashespp/Buffer/VertexBuffer.hpp</label>
-      </node>
-      <node id="20383">
-        <label>CastorUtils/Math/Quaternion.hpp</label>
-      </node>
-      <node id="20387">
-        <label>CastorUtils/Design/GroupChangeTracked.hpp</label>
-      </node>
-      <node id="20348">
-        <label>SsaoModule.hpp</label>
-        <link refid="dd/db2/a00866"/>
-        <childnode refid="20349" relation="include">
-        </childnode>
-      </node>
-      <node id="20333">
-        <label>ShaderWriter/BaseTypes/Double.hpp</label>
-      </node>
-      <node id="20367">
-        <label>CastorUtils/Pool/BuddyAllocator.hpp</label>
-      </node>
-      <node id="20299">
-        <label>CastorUtils/Design/FlagCombination.hpp</label>
-      </node>
-      <node id="20382">
-        <label>Castor3D/Animation/AnimationModule.hpp</label>
-        <link refid="d0/d35/a07306"/>
-        <childnode refid="20297" relation="include">
-        </childnode>
-        <childnode refid="20383" relation="include">
-        </childnode>
-      </node>
-      <node id="20314">
-        <label>Castor3D/Model/Mesh/MeshModule.hpp</label>
-        <link refid="d2/d9d/a00464"/>
-        <childnode refid="20315" relation="include">
-        </childnode>
-        <childnode refid="20316" relation="include">
-        </childnode>
-      </node>
-      <node id="20309">
-        <label>vector</label>
-      </node>
-      <node id="20361">
-        <label>Castor3D/Render/Node/RenderNode.hpp</label>
-        <link refid="dd/d57/a00701"/>
-        <childnode refid="20362" relation="include">
-        </childnode>
-        <childnode refid="20379" relation="include">
-        </childnode>
-        <childnode refid="20380" relation="include">
-        </childnode>
-        <childnode refid="20363" relation="include">
-        </childnode>
-        <childnode refid="20377" relation="include">
-        </childnode>
-        <childnode refid="20378" relation="include">
-        </childnode>
-        <childnode refid="20384" relation="include">
-        </childnode>
-        <childnode refid="20385" relation="include">
-        </childnode>
-        <childnode refid="20386" relation="include">
-        </childnode>
-      </node>
-      <node id="20364">
-        <label>Castor3D/Buffer/UniformBufferOffset.hpp</label>
-        <link refid="db/dd9/a00179"/>
-        <childnode refid="20365" relation="include">
-        </childnode>
-        <childnode refid="20376" relation="include">
-        </childnode>
-      </node>
-      <node id="20303">
-        <label>CastorUtils/Math/Coords.hpp</label>
-      </node>
-      <node id="20372">
-        <label>array</label>
-      </node>
-      <node id="20292">
-        <label>Render/Technique/Opaque/OpaquePass.hpp</label>
-        <link refid="d8/d38/a00926"/>
-        <childnode refid="20293" relation="include">
-        </childnode>
-        <childnode refid="20327" relation="include">
-        </childnode>
-      </node>
-      <node id="20320">
-        <label>Castor3D/Material/Pass/PassModule.hpp</label>
-        <link refid="df/d91/a00335"/>
-        <childnode refid="20311" relation="include">
-        </childnode>
-        <childnode refid="20312" relation="include">
-        </childnode>
-      </node>
-      <node id="20294">
-        <label>Castor3D/Render/Technique/TechniqueModule.hpp</label>
-        <link refid="d3/dcd/a00965"/>
-        <childnode refid="20295" relation="include">
-        </childnode>
-      </node>
-      <node id="20394">
-        <label>ashespp/Sync/Semaphore.hpp</label>
-      </node>
-      <node id="20378">
-        <label>Castor3D/Render/Node/SceneRenderNode.hpp</label>
-        <link refid="d1/d04/a00713"/>
-        <childnode refid="20358" relation="include">
-        </childnode>
-      </node>
-      <node id="20385">
-        <label>Castor3D/Render/Node/StaticRenderNode.hpp</label>
-        <link refid="db/d7c/a00722"/>
-        <childnode refid="20363" relation="include">
-        </childnode>
-      </node>
-      <node id="20325">
-        <label>ashespp/Image/ImageView.hpp</label>
-      </node>
-      <node id="20342">
-        <label>Castor3D/Miscellaneous/PipelineVisitor.hpp</label>
-        <link refid="d7/d00/a00401"/>
-        <childnode refid="20296" relation="include">
-        </childnode>
-        <childnode refid="20343" relation="include">
-        </childnode>
-        <childnode refid="20345" relation="include">
-        </childnode>
-        <childnode refid="20346" relation="include">
-        </childnode>
-        <childnode refid="20344" relation="include">
-        </childnode>
-        <childnode refid="20325" relation="include">
-        </childnode>
-      </node>
-      <node id="20328">
-        <label>Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp</label>
-        <link refid="dc/de4/a00677"/>
-        <childnode refid="20329" relation="include">
-        </childnode>
-        <childnode refid="20319" relation="include">
-        </childnode>
-        <childnode refid="20330" relation="include">
-        </childnode>
-        <childnode refid="20326" relation="include">
-        </childnode>
-      </node>
-      <node id="20334">
-        <label>ShaderWriter/BaseTypes/Float.hpp</label>
-      </node>
-      <node id="20368">
-        <label>cstddef</label>
-      </node>
-      <node id="20369">
-        <label>Castor3D/Render/RenderDevice.hpp</label>
-        <link refid="df/d0c/a00788"/>
-        <childnode refid="20295" relation="include">
-        </childnode>
-        <childnode refid="20366" relation="include">
-        </childnode>
-        <childnode refid="20370" relation="include">
-        </childnode>
-        <childnode refid="20371" relation="include">
-        </childnode>
-        <childnode refid="20372" relation="include">
-        </childnode>
-        <childnode refid="20309" relation="include">
-        </childnode>
-      </node>
-      <node id="20393">
-        <label>unordered_map</label>
-      </node>
-      <node id="20381">
-        <label>Castor3D/Scene/Animation/AnimationModule.hpp</label>
-        <link refid="d9/da6/a07309"/>
-        <childnode refid="20310" relation="include">
-        </childnode>
-        <childnode refid="20382" relation="include">
-        </childnode>
-      </node>
-      <node id="20356">
-        <label>Castor3D/Render/RenderInfo.hpp</label>
-        <link refid="d4/d45/a00791"/>
-        <childnode refid="20295" relation="include">
-        </childnode>
-      </node>
-      <node id="20324">
-        <label>ShaderWriter/ShaderWriterPrerequisites.hpp</label>
-      </node>
-      <node id="20391">
-        <label>ashespp/Command/CommandBuffer.hpp</label>
-      </node>
-      <node id="20352">
-        <label>Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp</label>
-        <link refid="d6/d60/a00491"/>
-        <childnode refid="20353" relation="include">
-        </childnode>
-        <childnode refid="20344" relation="include">
-        </childnode>
-        <childnode refid="20355" relation="include">
-        </childnode>
-      </node>
-      <node id="20370">
-        <label>ashespp/Command/CommandPool.hpp</label>
-      </node>
-      <node id="20371">
-        <label>ashespp/Sync/Queue.hpp</label>
-      </node>
-      <node id="20363">
-        <label>Castor3D/Render/Node/ObjectRenderNode.hpp</label>
-        <link refid="d5/d5b/a00695"/>
-        <childnode refid="20358" relation="include">
-        </childnode>
-        <childnode refid="20364" relation="include">
-        </childnode>
-        <childnode refid="20377" relation="include">
-        </childnode>
-        <childnode refid="20378" relation="include">
-        </childnode>
-        <childnode refid="20343" relation="include">
-        </childnode>
-        <childnode refid="20376" relation="include">
-        </childnode>
-      </node>
-      <node id="20353">
-        <label>Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp</label>
-        <link refid="d4/d1f/a00506"/>
-        <childnode refid="20354" relation="include">
-        </childnode>
-        <childnode refid="20311" relation="include">
-        </childnode>
-        <childnode refid="20295" relation="include">
-        </childnode>
-        <childnode refid="20322" relation="include">
-        </childnode>
-      </node>
-      <node id="20327">
-        <label>Castor3D/Render/Technique/RenderTechniquePass.hpp</label>
-        <link refid="db/d40/a00959"/>
-        <childnode refid="20294" relation="include">
-        </childnode>
-        <childnode refid="20328" relation="include">
-        </childnode>
-        <childnode refid="20341" relation="include">
-        </childnode>
-        <childnode refid="20347" relation="include">
-        </childnode>
-        <childnode refid="20351" relation="include">
-        </childnode>
-        <childnode refid="20394" relation="include">
-        </childnode>
-      </node>
-      <node id="20358">
-        <label>Castor3D/Render/Node/RenderNodeModule.hpp</label>
-        <link refid="d1/d56/a00707"/>
-        <childnode refid="20295" relation="include">
-        </childnode>
-        <childnode refid="20359" relation="include">
-        </childnode>
-        <childnode refid="20313" relation="include">
-        </childnode>
-      </node>
-      <node id="20330">
-        <label>Castor3D/Shader/Shaders/SdwModule.hpp</label>
-        <link refid="de/d33/a01274"/>
-        <childnode refid="20322" relation="include">
-        </childnode>
-        <childnode refid="20320" relation="include">
-        </childnode>
-        <childnode refid="20310" relation="include">
-        </childnode>
-        <childnode refid="20319" relation="include">
-        </childnode>
-        <childnode refid="20331" relation="include">
-        </childnode>
-        <childnode refid="20332" relation="include">
-        </childnode>
-        <childnode refid="20333" relation="include">
-        </childnode>
-        <childnode refid="20334" relation="include">
-        </childnode>
-        <childnode refid="20335" relation="include">
-        </childnode>
-        <childnode refid="20336" relation="include">
-        </childnode>
-        <childnode refid="20337" relation="include">
-        </childnode>
-        <childnode refid="20338" relation="include">
-        </childnode>
-        <childnode refid="20339" relation="include">
-        </childnode>
-        <childnode refid="20340" relation="include">
-        </childnode>
-      </node>
-      <node id="20375">
-        <label>set</label>
-      </node>
-      <node id="20316">
+      <node id="32">
         <label>CastorUtils/Design/Factory.hpp</label>
       </node>
-      <node id="20357">
-        <label>Castor3D/Render/RenderQueue.hpp</label>
-        <link refid="d8/d2d/a00815"/>
-        <childnode refid="20358" relation="include">
-        </childnode>
-        <childnode refid="20360" relation="include">
-        </childnode>
-        <childnode refid="20361" relation="include">
-        </childnode>
-        <childnode refid="20387" relation="include">
-        </childnode>
-        <childnode refid="20388" relation="include">
-        </childnode>
+      <node id="7">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
       </node>
-      <node id="20374">
-        <label>ashespp/Buffer/UniformBuffer.hpp</label>
+      <node id="63">
+        <label>CastorUtils/Design/GroupChangeTracked.hpp</label>
       </node>
-      <node id="20322">
-        <label>Castor3D/Shader/ShaderModule.hpp</label>
-        <link refid="d5/d32/a01214"/>
-        <childnode refid="20297" relation="include">
-        </childnode>
-        <childnode refid="20323" relation="include">
-        </childnode>
-        <childnode refid="20324" relation="include">
-        </childnode>
-        <childnode refid="20299" relation="include">
-        </childnode>
+      <node id="112">
+        <label>CastorUtils/Design/Named.hpp</label>
       </node>
-      <node id="20307">
-        <label>memory</label>
+      <node id="8">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
       </node>
-      <node id="20344">
+      <node id="27">
+        <label>CastorUtils/Design/Resource.hpp</label>
+      </node>
+      <node id="23">
+        <label>CastorUtils/Design/ResourceCache.hpp</label>
+      </node>
+      <node id="28">
+        <label>CastorUtils/Design/Signal.hpp</label>
+      </node>
+      <node id="9">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="33">
+        <label>CastorUtils/Graphics/BoundingBox.hpp</label>
+      </node>
+      <node id="34">
+        <label>CastorUtils/Graphics/BoundingSphere.hpp</label>
+      </node>
+      <node id="10">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="11">
+        <label>CastorUtils/Graphics/Size.hpp</label>
+      </node>
+      <node id="12">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="13">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="102">
+        <label>CastorUtils/Math/Quaternion.hpp</label>
+      </node>
+      <node id="64">
+        <label>CastorUtils/Math/RangedValue.hpp</label>
+      </node>
+      <node id="41">
         <label>CastorUtils/Math/SquareMatrix.hpp</label>
       </node>
+      <node id="6">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="82">
+        <label>CastorUtils/Pool/BuddyAllocator.hpp</label>
+      </node>
+      <node id="95">
+        <label>GpuBuffer.inl</label>
+      </node>
+      <node id="15">
+        <label>RenderGraph/FrameGraphPrerequisites.hpp</label>
+      </node>
+      <node id="109">
+        <label>RenderGraph/FramePass.hpp</label>
+      </node>
+      <node id="90">
+        <label>RenderGraph/GraphContext.hpp</label>
+      </node>
+      <node id="44">
+        <label>RenderGraph/ImageData.hpp</label>
+      </node>
+      <node id="45">
+        <label>RenderGraph/ImageViewData.hpp</label>
+      </node>
+      <node id="113">
+        <label>RenderGraph/RunnablePasses/RenderPass.hpp</label>
+      </node>
+      <node id="39">
+        <label>ShaderAST/Shader.hpp</label>
+      </node>
+      <node id="50">
+        <label>ShaderWriter/BaseTypes/Array.hpp</label>
+      </node>
+      <node id="51">
+        <label>ShaderWriter/BaseTypes/Bool.hpp</label>
+      </node>
+      <node id="55">
+        <label>ShaderWriter/BaseTypes/CombinedImage.hpp</label>
+      </node>
+      <node id="52">
+        <label>ShaderWriter/BaseTypes/Double.hpp</label>
+      </node>
+      <node id="53">
+        <label>ShaderWriter/BaseTypes/Float.hpp</label>
+      </node>
+      <node id="54">
+        <label>ShaderWriter/BaseTypes/Int.hpp</label>
+      </node>
+      <node id="56">
+        <label>ShaderWriter/BaseTypes/StorageImage.hpp</label>
+      </node>
+      <node id="57">
+        <label>ShaderWriter/BaseTypes/UInt.hpp</label>
+      </node>
+      <node id="58">
+        <label>ShaderWriter/CompositeTypes/Function.hpp</label>
+      </node>
+      <node id="110">
+        <label>ShaderWriter/CompositeTypes/StructInstance.hpp</label>
+      </node>
+      <node id="40">
+        <label>ShaderWriter/ShaderWriterPrerequisites.hpp</label>
+      </node>
+      <node id="111">
+        <label>ShaderWriter/VecTypes/Vec4.hpp</label>
+      </node>
+      <node id="101">
+        <label>Castor3D/Animation/AnimationModule.hpp</label>
+        <link refid="de/d41/a10778"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="102" relation="include">
+        </childnode>
+      </node>
+      <node id="81">
+        <label>BufferModule.hpp</label>
+        <link refid="d3/df8/a00155"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="82" relation="include">
+        </childnode>
+        <childnode refid="83" relation="include">
+        </childnode>
+      </node>
+      <node id="80">
+        <label>Castor3D/Buffer/GpuBuffer.hpp</label>
+        <link refid="d6/d7d/a00161"/>
+        <childnode refid="81" relation="include">
+        </childnode>
+        <childnode refid="84" relation="include">
+        </childnode>
+        <childnode refid="85" relation="include">
+        </childnode>
+        <childnode refid="87" relation="include">
+        </childnode>
+        <childnode refid="92" relation="include">
+        </childnode>
+        <childnode refid="93" relation="include">
+        </childnode>
+        <childnode refid="74" relation="include">
+        </childnode>
+        <childnode refid="94" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="95" relation="include">
+        </childnode>
+      </node>
+      <node id="84">
+        <label>Castor3D/Buffer/GpuBufferBuddyAllocator.hpp</label>
+        <link refid="db/ddf/a00164"/>
+        <childnode refid="81" relation="include">
+        </childnode>
+      </node>
+      <node id="79">
+        <label>Castor3D/Buffer/GpuBufferOffset.hpp</label>
+        <link refid="d5/dcb/a00170"/>
+        <childnode refid="80" relation="include">
+        </childnode>
+        <childnode refid="96" relation="include">
+        </childnode>
+      </node>
+      <node id="105">
+        <label>PoolUniformBuffer.hpp</label>
+        <link refid="de/df3/a00185"/>
+        <childnode refid="81" relation="include">
+        </childnode>
+        <childnode refid="87" relation="include">
+        </childnode>
+        <childnode refid="92" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="106" relation="include">
+        </childnode>
+        <childnode refid="107" relation="include">
+        </childnode>
+      </node>
+      <node id="104">
+        <label>Castor3D/Buffer/UniformBufferOffset.hpp</label>
+        <link refid="dc/d57/a00194"/>
+        <childnode refid="105" relation="include">
+        </childnode>
+        <childnode refid="108" relation="include">
+        </childnode>
+        <childnode refid="109" relation="include">
+        </childnode>
+      </node>
+      <node id="22">
+        <label>Castor3D/Cache/CacheModule.hpp</label>
+        <link refid="d5/df1/a00206"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d6/d22/a00245"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+      </node>
+      <node id="21">
+        <label>Castor3D/Event/Frame/FrameEventModule.hpp</label>
+        <link refid="df/da9/a00263"/>
+        <childnode refid="22" relation="include">
+        </childnode>
+      </node>
+      <node id="26">
+        <label>Castor3D/Material/MaterialModule.hpp</label>
+        <link refid="df/d95/a00299"/>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+      </node>
+      <node id="36">
+        <label>Castor3D/Material/Pass/PassModule.hpp</label>
+        <link refid="d5/d0f/a00308"/>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+      </node>
+      <node id="37">
+        <label>Castor3D/Material/Texture/TextureModule.hpp</label>
+        <link refid="dd/db5/a00365"/>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+      </node>
+      <node id="85">
+        <label>Castor3D/Miscellaneous/DebugName.hpp</label>
+        <link refid="da/dee/a00383"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="86" relation="include">
+        </childnode>
+        <childnode refid="87" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>Castor3D/Miscellaneous/MiscellaneousModule.hpp</label>
+        <link refid="d7/d00/a00401"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="60">
+        <label>Castor3D/Miscellaneous/PipelineVisitor.hpp</label>
+        <link refid="d8/d91/a00410"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+        <childnode refid="64" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="65" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+      </node>
+      <node id="73">
+        <label>Castor3D/Miscellaneous/StagingData.hpp</label>
+        <link refid="df/d15/a00416"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="74" relation="include">
+        </childnode>
+        <childnode refid="75" relation="include">
+        </childnode>
+        <childnode refid="76" relation="include">
+        </childnode>
+      </node>
+      <node id="30">
+        <label>Castor3D/Model/Mesh/MeshModule.hpp</label>
+        <link refid="d9/d4a/a00479"/>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+      </node>
+      <node id="78">
+        <label>ComponentModule.hpp</label>
+        <link refid="d4/ddf/a00488"/>
+        <childnode refid="29" relation="include">
+        </childnode>
+      </node>
+      <node id="72">
+        <label>Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp</label>
+        <link refid="d4/de5/a00503"/>
+        <childnode refid="73" relation="include">
+        </childnode>
+        <childnode refid="77" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="94" relation="include">
+        </childnode>
+      </node>
+      <node id="77">
+        <label>Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp</label>
+        <link refid="d7/def/a00521"/>
+        <childnode refid="78" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="79" relation="include">
+        </childnode>
+      </node>
+      <node id="29">
+        <label>Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp</label>
+        <link refid="da/d7e/a00530"/>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+      </node>
+      <node id="31">
+        <label>Castor3D/Model/ModelModule.hpp</label>
+        <link refid="d4/d33/a00536"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="98">
+        <label>Castor3D/Render/Culling/CullingModule.hpp</label>
+        <link refid="db/d3a/a00641"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+      </node>
+      <node id="47">
+        <label>Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp</label>
+        <link refid="d0/d5c/a00668"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="46">
+        <label>Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp</label>
+        <link refid="df/d9e/a00686"/>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="99">
+        <label>Castor3D/Render/Node/RenderNodeModule.hpp</label>
+        <link refid="db/d7c/a00722"/>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="98" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+      </node>
+      <node id="86">
+        <label>Castor3D/Render/Passes/PassesModule.hpp</label>
+        <link refid="d2/ddd/a00755"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="87">
+        <label>Castor3D/Render/RenderDevice.hpp</label>
+        <link refid="df/d0e/a00800"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="81" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="88" relation="include">
+        </childnode>
+        <childnode refid="89" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="90" relation="include">
+        </childnode>
+        <childnode refid="91" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+      </node>
+      <node id="97">
+        <label>Castor3D/Render/RenderInfo.hpp</label>
+        <link refid="d5/d72/a00803"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>Castor3D/Render/RenderModule.hpp</label>
+        <link refid="d8/d2d/a00815"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+      </node>
+      <node id="71">
+        <label>Castor3D/Render/RenderNodesPass.hpp</label>
+        <link refid="d3/d60/a00818"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="72" relation="include">
+        </childnode>
+        <childnode refid="97" relation="include">
+        </childnode>
+        <childnode refid="98" relation="include">
+        </childnode>
+        <childnode refid="99" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="100" relation="include">
+        </childnode>
+        <childnode refid="103" relation="include">
+        </childnode>
+        <childnode refid="112" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="113" relation="include">
+        </childnode>
+        <childnode refid="75" relation="include">
+        </childnode>
+        <childnode refid="114" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+      </node>
+      <node id="49">
+        <label>Castor3D/Render/ShadowMap/ShadowMapModule.hpp</label>
+        <link refid="d7/dcf/a00845"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+      </node>
+      <node id="66">
+        <label>Castor3D/Render/Ssao/SsaoConfig.hpp</label>
+        <link refid="dc/d17/a00872"/>
+        <childnode refid="67" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="70" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="64" relation="include">
+        </childnode>
+      </node>
+      <node id="67">
+        <label>SsaoModule.hpp</label>
+        <link refid="d1/d93/a00875"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="68" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>Render/Technique/RenderTechniquePass.hpp</label>
+        <link refid="d8/d38/a00926"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="59" relation="include">
+        </childnode>
+        <childnode refid="66" relation="include">
+        </childnode>
+        <childnode refid="71" relation="include">
+        </childnode>
+        <childnode refid="115" relation="include">
+        </childnode>
+      </node>
+      <node id="59">
+        <label>Castor3D/Render/Technique/RenderTechniqueVisitor.hpp</label>
+        <link refid="dc/d92/a00929"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>TechniqueModule.hpp</label>
+        <link refid="d8/d19/a00935"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="42">
+        <label>Texture.hpp</label>
+        <link refid="df/d39/a00950"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+      </node>
+      <node id="100">
+        <label>Castor3D/Scene/Animation/AnimationModule.hpp</label>
+        <link refid="df/d73/a10781"/>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="101" relation="include">
+        </childnode>
+      </node>
+      <node id="35">
+        <label>Castor3D/Scene/Light/LightModule.hpp</label>
+        <link refid="d2/df3/a01085"/>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="20">
+        <label>Castor3D/Scene/SceneModule.hpp</label>
+        <link refid="d5/d3e/a01139"/>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+      </node>
+      <node id="38">
+        <label>Castor3D/Shader/ShaderModule.hpp</label>
+        <link refid="d6/df2/a01175"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="48">
+        <label>Castor3D/Shader/Shaders/SdwModule.hpp</label>
+        <link refid="d7/ddd/a01223"/>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+      </node>
+      <node id="103">
+        <label>Castor3D/Shader/Ubos/SceneUbo.hpp</label>
+        <link refid="d3/d53/a01262"/>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="104" relation="include">
+        </childnode>
+        <childnode refid="110" relation="include">
+        </childnode>
+        <childnode refid="111" relation="include">
+        </childnode>
+      </node>
+      <node id="61">
+        <label>Castor3D/Shader/Ubos/UbosModule.hpp</label>
+        <link refid="de/d33/a01274"/>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+      </node>
+      <node id="91">
+        <label>array</label>
+      </node>
+      <node id="14">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="93">
+        <label>ashespp/Buffer/Buffer.hpp</label>
+      </node>
+      <node id="74">
+        <label>ashespp/Buffer/StagingBuffer.hpp</label>
+      </node>
+      <node id="106">
+        <label>ashespp/Buffer/UniformBuffer.hpp</label>
+      </node>
+      <node id="94">
+        <label>ashespp/Buffer/VertexBuffer.hpp</label>
+      </node>
+      <node id="75">
+        <label>ashespp/Command/CommandBuffer.hpp</label>
+      </node>
+      <node id="88">
+        <label>ashespp/Command/CommandPool.hpp</label>
+      </node>
+      <node id="108">
+        <label>ashespp/Descriptor/DescriptorSet.hpp</label>
+      </node>
+      <node id="96">
+        <label>ashespp/Descriptor/WriteDescriptorSet.hpp</label>
+      </node>
+      <node id="65">
+        <label>ashespp/Image/Image.hpp</label>
+      </node>
+      <node id="43">
+        <label>ashespp/Image/ImageView.hpp</label>
+      </node>
+      <node id="114">
+        <label>ashespp/RenderPass/RenderPass.hpp</label>
+      </node>
+      <node id="76">
+        <label>ashespp/Sync/Fence.hpp</label>
+      </node>
+      <node id="89">
+        <label>ashespp/Sync/Queue.hpp</label>
+      </node>
+      <node id="115">
+        <label>ashespp/Sync/Semaphore.hpp</label>
+      </node>
+      <node id="83">
+        <label>cstddef</label>
+      </node>
+      <node id="16">
+        <label>cstdint</label>
+      </node>
+      <node id="24">
+        <label>functional</label>
+      </node>
+      <node id="17">
+        <label>memory</label>
+      </node>
+      <node id="107">
+        <label>set</label>
+      </node>
+      <node id="18">
+        <label>string</label>
+      </node>
+      <node id="25">
+        <label>unordered_map</label>
+      </node>
+      <node id="19">
+        <label>vector</label>
+      </node>
     </incdepgraph>
-    <innerclass refid="d9/d27/a04876" prot="public">castor3d::OpaquePass</innerclass>
-    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <invincdepgraph>
+      <node id="2">
+        <label>Render/Passes/DepthPass.hpp</label>
+        <link refid="dc/dce/a00740"/>
+      </node>
+      <node id="3">
+        <label>Render/Technique/ForwardRenderTechniquePass.hpp</label>
+        <link refid="df/d41/a00881"/>
+      </node>
+      <node id="4">
+        <label>Render/Technique/Opaque/OpaquePass.hpp</label>
+        <link refid="d3/dd1/a00914"/>
+      </node>
+      <node id="1">
+        <label>Render/Technique/RenderTechniquePass.hpp</label>
+        <link refid="d8/d38/a00926"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>Render/Technique/Transparent/TransparentPass.hpp</label>
+        <link refid="d6/dad/a00941"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>Render/Technique/Transparent/WeightedBlendRendering.hpp</label>
+        <link refid="d3/d29/a00947"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="dc/d16/a04283" prot="public">castor3d::RenderTechniquePassDesc</innerclass>
+    <innerclass refid="df/d48/a04287" prot="public">castor3d::RenderTechniquePass</innerclass>
+    <innernamespace refid="da/de3/a01398">castor3d</innernamespace>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Technique/Opaque/OpaquePass.hpp"/>
+    <location file="Render/Technique/RenderTechniquePass.hpp"/>
   </compounddef>
 </doxygen>

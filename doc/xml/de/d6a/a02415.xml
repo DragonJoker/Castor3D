@@ -1,37 +1,44 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="de/d6a/a02415" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::ObjectCacheTraits</compoundname>
-    <includes local="no">CacheModule.hpp</includes>
+    <compoundname>castor3d::ChunkTyper&lt; SkeletonAnimationKeyFrame &gt;</compoundname>
+    <includes local="no">BinarySkeletonAnimationKeyFrame.hpp</includes>
     <templateparamlist>
-      <param>
-        <type>typename ElementType</type>
-      </param>
-      <param>
-        <type>typename KeyType</type>
-      </param>
     </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="de/d6a/a02415_1aa7cb40d2fd1a1653ad9171877938a372" prot="public" static="yes" mutable="no">
+        <type><ref refid="da/de3/a01398_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref> const</type>
+        <definition>ChunkType const castor3d::ChunkTyper&lt; SkeletonAnimationKeyFrame &gt;::Value</definition>
+        <argsstring></argsstring>
+        <name>Value</name>
+        <qualifiedname>castor3d::ChunkTyper&lt; SkeletonAnimationKeyFrame &gt;::Value</qualifiedname>
+        <initializer>= <ref refid="da/de3/a01398_1a742783d4e4b7354fac3e375ae107414dafc2fcad1713bdfa545ca7db604802954" kindref="member">ChunkType::eSkeletonAnimationKeyFrame</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinarySkeletonAnimationKeyFrame.hpp" line="28" column="24" bodyfile="Binary/BinarySkeletonAnimationKeyFrame.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
     <briefdescription>
-<para>Helper structure to specialise a scene objects cache behaviour. </para>
+<para>Helper structure to find ChunkType from a type. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="remark"><para>Must hold: <itemizedlist>
-<listitem>
-<para>Name: The element type name. </para>
-</listitem>
-<listitem>
-<para>Producer: The element creation function prototype. </para>
-</listitem>
-<listitem>
-<para>Merger: The prototype of the function use to merge a cache element into another cache. </para>
-</listitem>
-</itemizedlist>
-</para>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="version"><para>0.10.0 </para>
+</simplesect>
+<simplesect kind="date"><para>07/12/2017</para>
+</simplesect>
+<simplesect kind="remark"><para>Specialisation for <ref refid="db/d47/a03447" kindref="compound">SkeletonAnimationKeyFrame</ref>. </para>
 </simplesect>
 </para>
     </detaileddescription>
-    <location file="Cache/CacheModule.hpp" line="352" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="352" bodyend="-1"/>
+    <location file="Binary/BinarySkeletonAnimationKeyFrame.hpp" line="26" column="1" bodyfile="Binary/BinarySkeletonAnimationKeyFrame.hpp" bodystart="27" bodyend="29"/>
     <listofallmembers>
+      <member refid="de/d6a/a02415_1aa7cb40d2fd1a1653ad9171877938a372" prot="public" virt="non-virtual"><scope>castor3d::ChunkTyper&lt; SkeletonAnimationKeyFrame &gt;</scope><name>Value</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

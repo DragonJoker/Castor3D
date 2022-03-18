@@ -1,60 +1,169 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="da/dfd/a02619" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::MipView</compoundname>
-    <includes local="no">TextureLayout.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="da/dfd/a02619_1ad7934d51067a1952360f589a74f18775" prot="public" static="no" mutable="no">
-        <type>TextureViewUPtr</type>
-        <definition>TextureViewUPtr castor3d::MipView::view</definition>
+    <compoundname>castor3d::PtrCacheTraitsBaseT</compoundname>
+    <includes local="no">CacheModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ResT</type>
+      </param>
+      <param>
+        <type>typename KeyT</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="da/dfd/a02619_1a97fc821a6c93a6497ce29ef7ee81d091" prot="public" static="no">
+        <type>ResT</type>
+        <definition>using castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;::ElementT =  ResT</definition>
         <argsstring></argsstring>
-        <name>view</name>
+        <name>ElementT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsBaseT::ElementT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureLayout.hpp" line="22" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="22" bodyend="-1"/>
-        <referencedby refid="da/dfd/a02619_1af2e0ded8789791d56f0bea1fa107fbb4" compoundref="dc/d84/a00338" startline="26" endline="29">forMipView</referencedby>
-        <referencedby refid="d9/d07/a02635_1a7c8048bdd41dee1940c71305fe3adce8" compoundref="dc/d84/a00338" startline="276" endline="280">castor3d::TextureLayout::getDefaultView</referencedby>
-        <referencedby refid="d9/d07/a02635_1ac22d9e54727e717cb817d318d70c7334" compoundref="dc/d84/a00338" startline="372" endline="376">castor3d::TextureLayout::getLayer2DView</referencedby>
-        <referencedby refid="d9/d07/a02635_1aa675de5ca1657240d789471b7a9ef3cf" compoundref="dc/d84/a00338" startline="520" endline="525">castor3d::TextureLayout::getLayerCubeFaceView</referencedby>
-        <referencedby refid="d9/d07/a02635_1a8fb683f04ef28ae07e604492bebd92da" compoundref="dc/d84/a00338" startline="492" endline="496">castor3d::TextureLayout::getLayerCubeView</referencedby>
-        <referencedby refid="d9/d07/a02635_1a92a40da08e26ed794fe67161021c7cb4" compoundref="dc/d84/a00338" startline="443" endline="447">castor3d::TextureLayout::getSliceView</referencedby>
+        <location file="Cache/CacheModule.hpp" line="25" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="25" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="da/dfd/a02619_1af1ba49261a22ad78a07f148018293b05" prot="public" static="no" mutable="no">
-        <type>std::vector&lt; TextureViewUPtr &gt;</type>
-        <definition>std::vector&lt; TextureViewUPtr &gt; castor3d::MipView::levels</definition>
+      <memberdef kind="typedef" id="da/dfd/a02619_1a37487aa6a3179e261c465a659e7e232d" prot="public" static="no">
+        <type>KeyT</type>
+        <definition>using castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;::ElementKeyT =  KeyT</definition>
         <argsstring></argsstring>
-        <name>levels</name>
+        <name>ElementKeyT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsBaseT::ElementKeyT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureLayout.hpp" line="23" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="23" bodyend="-1"/>
-        <referencedby refid="da/dfd/a02619_1a63ac7209185df2c391cab3451317221e" compoundref="dc/d84/a00338" startline="55" endline="65">forEachFirstMipView</referencedby>
-        <referencedby refid="da/dfd/a02619_1ac03773bfd6cca4ed522e80c0650641ea" compoundref="dc/d84/a00338" startline="32" endline="45">forEachLeafView</referencedby>
-        <referencedby refid="d9/d07/a02635_1ada63029043555e657c99244914c30917" compoundref="dc/d84/a00338" startline="557" endline="564">castor3d::TextureLayout::getLayerCubeFaceMipView</referencedby>
-        <referencedby refid="d9/d07/a02635_1aca42d4a2be1eae8de97fdaa7ac5215e2" compoundref="dc/d84/a00338" startline="299" endline="303">castor3d::TextureLayout::getMipView</referencedby>
+        <location file="Cache/CacheModule.hpp" line="26" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="da/dfd/a02619_1a1bb78b2e2efba448f1bab3f5714b9943" prot="public" static="no">
+        <type>std::shared_ptr&lt; <ref refid="da/dfd/a02619_1a97fc821a6c93a6497ce29ef7ee81d091" kindref="member">ElementT</ref> &gt;</type>
+        <definition>using castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;::ElementPtrT =  std::shared_ptr&lt; ElementT &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementPtrT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsBaseT::ElementPtrT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheModule.hpp" line="27" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="da/dfd/a02619_1aeeb13142ba14f28398dcf1b902e1d7df" prot="public" static="no">
+        <type>std::weak_ptr&lt; <ref refid="da/dfd/a02619_1a97fc821a6c93a6497ce29ef7ee81d091" kindref="member">ElementT</ref> &gt;</type>
+        <definition>using castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;::ElementObsT =  std::weak_ptr&lt; ElementT &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementObsT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsBaseT::ElementObsT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheModule.hpp" line="28" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="da/dfd/a02619_1acbb5da0cf908b54ec0b238b4bf290498" prot="public" static="no">
+        <type>std::unordered_map&lt; <ref refid="da/dfd/a02619_1a37487aa6a3179e261c465a659e7e232d" kindref="member">ElementKeyT</ref>, <ref refid="da/dfd/a02619_1a1bb78b2e2efba448f1bab3f5714b9943" kindref="member">ElementPtrT</ref> &gt;</type>
+        <definition>using castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;::ElementContT =  std::unordered_map&lt; ElementKeyT, ElementPtrT &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementContT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsBaseT::ElementContT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheModule.hpp" line="29" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="da/dfd/a02619_1a0606136714bd1cb7209313f2ece3f687" prot="public" static="no">
+        <type>castor::ResourceCacheBaseT&lt; <ref refid="da/dfd/a02619_1a97fc821a6c93a6497ce29ef7ee81d091" kindref="member">ElementT</ref>, <ref refid="da/dfd/a02619_1a37487aa6a3179e261c465a659e7e232d" kindref="member">ElementKeyT</ref>, <ref refid="d8/d4a/a02703" kindref="compound">PtrCacheTraitsT</ref>&lt; <ref refid="da/dfd/a02619_1a97fc821a6c93a6497ce29ef7ee81d091" kindref="member">ElementT</ref>, <ref refid="da/dfd/a02619_1a37487aa6a3179e261c465a659e7e232d" kindref="member">ElementKeyT</ref> &gt; &gt;</type>
+        <definition>using castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;::ElementCacheT =  castor::ResourceCacheBaseT&lt; ElementT, ElementKeyT, PtrCacheTraitsT&lt; ElementT, ElementKeyT &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementCacheT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsBaseT::ElementCacheT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheModule.hpp" line="30" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="da/dfd/a02619_1af3b3d08e4639ccc06cbe81f6cb200a64" prot="public" static="no">
+        <type>std::function&lt; void(<ref refid="da/dfd/a02619_1a97fc821a6c93a6497ce29ef7ee81d091" kindref="member">ElementT</ref> &amp;) &gt;</type>
+        <definition>using castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;::ElementInitialiserT =  std::function&lt; void( ElementT &amp; ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementInitialiserT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsBaseT::ElementInitialiserT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheModule.hpp" line="32" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="da/dfd/a02619_1a021a9d07d6fb3fe77b7ef22b5d9fc7e8" prot="public" static="no">
+        <type>std::function&lt; void(<ref refid="da/dfd/a02619_1a97fc821a6c93a6497ce29ef7ee81d091" kindref="member">ElementT</ref> &amp;) &gt;</type>
+        <definition>using castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;::ElementCleanerT =  std::function&lt; void( ElementT &amp; ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementCleanerT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsBaseT::ElementCleanerT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheModule.hpp" line="33" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="da/dfd/a02619_1a54c0975e844a33c1ef48f9284b13e984" prot="public" static="no">
+        <type>std::function&lt; void(<ref refid="da/dfd/a02619_1a0606136714bd1cb7209313f2ece3f687" kindref="member">ElementCacheT</ref> const &amp;, <ref refid="da/dfd/a02619_1acbb5da0cf908b54ec0b238b4bf290498" kindref="member">ElementContT</ref> &amp;, <ref refid="da/dfd/a02619_1a1bb78b2e2efba448f1bab3f5714b9943" kindref="member">ElementPtrT</ref>) &gt;</type>
+        <definition>using castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;::ElementMergerT =  std::function&lt; void( ElementCacheT const &amp; , ElementContT &amp; , ElementPtrT ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementMergerT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsBaseT::ElementMergerT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheModule.hpp" line="34" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="36" bodyend="-1"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="da/dfd/a02619_1af2e0ded8789791d56f0bea1fa107fbb4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="da/dfd/a02619_1a5f00547170a4e85ac4c706f0ac32f9aa" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
-            <type>typename FuncT</type>
+            <type>typename ...</type>
+            <declname>ParametersT</declname>
+            <defname>ParametersT</defname>
           </param>
         </templateparamlist>
-        <type>void</type>
-        <definition>void castor3d::MipView::forMipView</definition>
-        <argsstring>(FuncT function) const</argsstring>
-        <name>forMipView</name>
+        <type><ref refid="da/dfd/a02619_1a1bb78b2e2efba448f1bab3f5714b9943" kindref="member">ElementPtrT</ref></type>
+        <definition>static ElementPtrT castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;::makeElement</definition>
+        <argsstring>(ElementCacheT const &amp;cache, ElementKeyT const &amp;key, ParametersT &amp;&amp;... params)</argsstring>
+        <name>makeElement</name>
+        <qualifiedname>castor3d::PtrCacheTraitsBaseT::makeElement</qualifiedname>
         <param>
-          <type>FuncT</type>
-          <declname>function</declname>
+          <type><ref refid="da/dfd/a02619_1a0606136714bd1cb7209313f2ece3f687" kindref="member">ElementCacheT</ref> const &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dfd/a02619_1a37487aa6a3179e261c465a659e7e232d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dd3/a03251" kindref="compound">ParametersT</ref> &amp;&amp;...</type>
+          <declname>params</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -62,25 +171,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureLayout.hpp" line="26" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="26" bodyend="29"/>
-        <references refid="da/dfd/a02619_1ad7934d51067a1952360f589a74f18775" compoundref="dc/d84/a00338" startline="22">view</references>
-        <referencedby refid="da/dfd/a02619_1a63ac7209185df2c391cab3451317221e" compoundref="dc/d84/a00338" startline="55" endline="65">forEachFirstMipView</referencedby>
-        <referencedby refid="da/dfd/a02619_1ac03773bfd6cca4ed522e80c0650641ea" compoundref="dc/d84/a00338" startline="32" endline="45">forEachLeafView</referencedby>
-        <referencedby refid="da/dfd/a02619_1ac23bed4d978ef4c38473672b09fe4e25" compoundref="dc/d84/a00338" startline="48" endline="52">forEachView</referencedby>
+        <location file="Cache/CacheModule.hpp" line="39" column="20" bodyfile="Cache/CacheModule.hpp" bodystart="39" bodyend="45"/>
       </memberdef>
-      <memberdef kind="function" id="da/dfd/a02619_1ac03773bfd6cca4ed522e80c0650641ea" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename FuncT</type>
-          </param>
-        </templateparamlist>
-        <type>void</type>
-        <definition>void castor3d::MipView::forEachLeafView</definition>
-        <argsstring>(FuncT function) const</argsstring>
-        <name>forEachLeafView</name>
+      <memberdef kind="function" id="da/dfd/a02619_1aba7dca15362049b6e793f1b99d419bb0" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/dfd/a02619_1aeeb13142ba14f28398dcf1b902e1d7df" kindref="member">ElementObsT</ref></type>
+        <definition>static ElementObsT castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;::makeElementObs</definition>
+        <argsstring>(ElementPtrT const &amp;element)</argsstring>
+        <name>makeElementObs</name>
+        <qualifiedname>castor3d::PtrCacheTraitsBaseT::makeElementObs</qualifiedname>
         <param>
-          <type>FuncT</type>
-          <declname>function</declname>
+          <type><ref refid="da/dfd/a02619_1a1bb78b2e2efba448f1bab3f5714b9943" kindref="member">ElementPtrT</ref> const &amp;</type>
+          <declname>element</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -88,24 +189,21 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureLayout.hpp" line="32" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="32" bodyend="45"/>
-        <references refid="da/dfd/a02619_1af2e0ded8789791d56f0bea1fa107fbb4" compoundref="dc/d84/a00338" startline="26" endline="29">forMipView</references>
-        <references refid="da/dfd/a02619_1af1ba49261a22ad78a07f148018293b05" compoundref="dc/d84/a00338" startline="23">levels</references>
-        <referencedby refid="da/dfd/a02619_1ac23bed4d978ef4c38473672b09fe4e25" compoundref="dc/d84/a00338" startline="48" endline="52">forEachView</referencedby>
+        <location file="Cache/CacheModule.hpp" line="47" column="20" bodyfile="Cache/CacheModule.hpp" bodystart="47" bodyend="50"/>
       </memberdef>
-      <memberdef kind="function" id="da/dfd/a02619_1ac23bed4d978ef4c38473672b09fe4e25" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename FuncT</type>
-          </param>
-        </templateparamlist>
-        <type>void</type>
-        <definition>void castor3d::MipView::forEachView</definition>
-        <argsstring>(FuncT function) const</argsstring>
-        <name>forEachView</name>
+      <memberdef kind="function" id="da/dfd/a02619_1aad74680d04a777cf6e1a48f5335e5bba" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;::areElementsEqual</definition>
+        <argsstring>(ElementObsT const &amp;lhs, ElementObsT const &amp;rhs)</argsstring>
+        <name>areElementsEqual</name>
+        <qualifiedname>castor3d::PtrCacheTraitsBaseT::areElementsEqual</qualifiedname>
         <param>
-          <type>FuncT</type>
-          <declname>function</declname>
+          <type><ref refid="da/dfd/a02619_1aeeb13142ba14f28398dcf1b902e1d7df" kindref="member">ElementObsT</ref> const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dfd/a02619_1aeeb13142ba14f28398dcf1b902e1d7df" kindref="member">ElementObsT</ref> const &amp;</type>
+          <declname>rhs</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -113,25 +211,21 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureLayout.hpp" line="48" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="48" bodyend="52"/>
-        <references refid="da/dfd/a02619_1ac03773bfd6cca4ed522e80c0650641ea" compoundref="dc/d84/a00338" startline="32" endline="45">forEachLeafView</references>
-        <references refid="da/dfd/a02619_1af2e0ded8789791d56f0bea1fa107fbb4" compoundref="dc/d84/a00338" startline="26" endline="29">forMipView</references>
-        <referencedby refid="d4/d29/a02623_1a8a1b9a6114bd1ced90ab0b403237586e" compoundref="dc/d84/a00338" startline="74" endline="82">castor3d::CubeView::forEachView</referencedby>
-        <referencedby refid="d9/d07/a02635_1ac81cdcc9deac35d38d45bf5085b92bcf" compoundref="dc/d84/a00338" startline="677" endline="693">castor3d::TextureLayout::forEachView</referencedby>
+        <location file="Cache/CacheModule.hpp" line="52" column="13" bodyfile="Cache/CacheModule.hpp" bodystart="52" bodyend="56"/>
       </memberdef>
-      <memberdef kind="function" id="da/dfd/a02619_1a63ac7209185df2c391cab3451317221e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename FuncT</type>
-          </param>
-        </templateparamlist>
-        <type>void</type>
-        <definition>void castor3d::MipView::forEachFirstMipView</definition>
-        <argsstring>(FuncT function) const</argsstring>
-        <name>forEachFirstMipView</name>
+      <memberdef kind="function" id="da/dfd/a02619_1acc9650475bb6cfdd4b46f86662ee4d67" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;::areElementsEqual</definition>
+        <argsstring>(ElementObsT const &amp;lhs, ElementPtrT const &amp;rhs)</argsstring>
+        <name>areElementsEqual</name>
+        <qualifiedname>castor3d::PtrCacheTraitsBaseT::areElementsEqual</qualifiedname>
         <param>
-          <type>FuncT</type>
-          <declname>function</declname>
+          <type><ref refid="da/dfd/a02619_1aeeb13142ba14f28398dcf1b902e1d7df" kindref="member">ElementObsT</ref> const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dfd/a02619_1a1bb78b2e2efba448f1bab3f5714b9943" kindref="member">ElementPtrT</ref> const &amp;</type>
+          <declname>rhs</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -139,49 +233,151 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureLayout.hpp" line="55" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="55" bodyend="65"/>
-        <references refid="da/dfd/a02619_1af2e0ded8789791d56f0bea1fa107fbb4" compoundref="dc/d84/a00338" startline="26" endline="29">forMipView</references>
-        <references refid="da/dfd/a02619_1af1ba49261a22ad78a07f148018293b05" compoundref="dc/d84/a00338" startline="23">levels</references>
-        <referencedby refid="d4/d29/a02623_1a7e60b24dc675dcfe72cc637b0d00b6b9" compoundref="dc/d84/a00338" startline="85" endline="88">castor3d::CubeView::forEachFirstMipView</referencedby>
-        <referencedby refid="d9/d07/a02635_1abd9e4b858ad805cfa5746588031566ff" compoundref="dc/d84/a00338" startline="696" endline="714">castor3d::TextureLayout::forEachFirstMipView</referencedby>
+        <location file="Cache/CacheModule.hpp" line="58" column="13" bodyfile="Cache/CacheModule.hpp" bodystart="58" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dfd/a02619_1aace6e188551a79fe4c617062a3987c34" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;::areElementsEqual</definition>
+        <argsstring>(ElementPtrT const &amp;lhs, ElementObsT const &amp;rhs)</argsstring>
+        <name>areElementsEqual</name>
+        <qualifiedname>castor3d::PtrCacheTraitsBaseT::areElementsEqual</qualifiedname>
+        <param>
+          <type><ref refid="da/dfd/a02619_1a1bb78b2e2efba448f1bab3f5714b9943" kindref="member">ElementPtrT</ref> const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dfd/a02619_1aeeb13142ba14f28398dcf1b902e1d7df" kindref="member">ElementObsT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheModule.hpp" line="64" column="13" bodyfile="Cache/CacheModule.hpp" bodystart="64" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dfd/a02619_1a604b98a8324764213e894ac5ff3192e4" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;::areElementsEqual</definition>
+        <argsstring>(ElementPtrT const &amp;lhs, ElementPtrT const &amp;rhs)</argsstring>
+        <name>areElementsEqual</name>
+        <qualifiedname>castor3d::PtrCacheTraitsBaseT::areElementsEqual</qualifiedname>
+        <param>
+          <type><ref refid="da/dfd/a02619_1a1bb78b2e2efba448f1bab3f5714b9943" kindref="member">ElementPtrT</ref> const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dfd/a02619_1a1bb78b2e2efba448f1bab3f5714b9943" kindref="member">ElementPtrT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheModule.hpp" line="70" column="13" bodyfile="Cache/CacheModule.hpp" bodystart="70" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dfd/a02619_1a97feed9b72e3c5d21e10571563ec56f5" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;::isElementObsNull</definition>
+        <argsstring>(ElementObsT const &amp;element)</argsstring>
+        <name>isElementObsNull</name>
+        <qualifiedname>castor3d::PtrCacheTraitsBaseT::isElementObsNull</qualifiedname>
+        <param>
+          <type><ref refid="da/dfd/a02619_1aeeb13142ba14f28398dcf1b902e1d7df" kindref="member">ElementObsT</ref> const &amp;</type>
+          <declname>element</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheModule.hpp" line="76" column="13" bodyfile="Cache/CacheModule.hpp" bodystart="76" bodyend="79"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="2071">
-        <label>T</label>
-      </node>
-      <node id="2070">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="2071" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="2069">
-        <label>std::vector&lt; TextureViewUPtr &gt;</label>
-        <childnode refid="2070" relation="template-instance">
-          <edgelabel>&lt; TextureViewUPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2068">
-        <label>castor3d::MipView</label>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::PtrCacheTraitsBaseT&lt; AnimatedObjectGroup, castor::String &gt;</label>
         <link refid="da/dfd/a02619"/>
-        <childnode refid="2069" relation="usage">
-          <edgelabel>levels</edgelabel>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; AnimatedObjectGroup, castor::String &gt;</edgelabel>
         </childnode>
       </node>
-    </collaborationgraph>
-    <location file="Material/Texture/TextureLayout.hpp" line="21" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="20" bodyend="66"/>
+      <node id="4">
+        <label>castor3d::PtrCacheTraitsBaseT&lt; FrameListener, castor::String &gt;</label>
+        <link refid="da/dfd/a02619"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; FrameListener, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::PtrCacheTraitsBaseT&lt; Overlay, castor::String &gt;</label>
+        <link refid="da/dfd/a02619"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Overlay, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::PtrCacheTraitsBaseT&lt; Plugin, castor::String &gt;</label>
+        <link refid="da/dfd/a02619"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Plugin, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;</label>
+        <link refid="da/dfd/a02619"/>
+      </node>
+      <node id="3">
+        <label>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</label>
+        <link refid="d1/d71/a04399"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;</label>
+        <link refid="d1/d58/a02731"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::PtrCacheTraitsT&lt; Overlay, castor::String &gt;</label>
+        <link refid="d3/d1c/a03551"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</label>
+        <link refid="d1/d7b/a03639"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="Cache/CacheModule.hpp" line="23" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="24" bodyend="80"/>
     <listofallmembers>
-      <member refid="da/dfd/a02619_1a63ac7209185df2c391cab3451317221e" prot="public" virt="non-virtual"><scope>castor3d::MipView</scope><name>forEachFirstMipView</name></member>
-      <member refid="da/dfd/a02619_1ac03773bfd6cca4ed522e80c0650641ea" prot="public" virt="non-virtual"><scope>castor3d::MipView</scope><name>forEachLeafView</name></member>
-      <member refid="da/dfd/a02619_1ac23bed4d978ef4c38473672b09fe4e25" prot="public" virt="non-virtual"><scope>castor3d::MipView</scope><name>forEachView</name></member>
-      <member refid="da/dfd/a02619_1af2e0ded8789791d56f0bea1fa107fbb4" prot="public" virt="non-virtual"><scope>castor3d::MipView</scope><name>forMipView</name></member>
-      <member refid="da/dfd/a02619_1af1ba49261a22ad78a07f148018293b05" prot="public" virt="non-virtual"><scope>castor3d::MipView</scope><name>levels</name></member>
-      <member refid="da/dfd/a02619_1ad7934d51067a1952360f589a74f18775" prot="public" virt="non-virtual"><scope>castor3d::MipView</scope><name>view</name></member>
+      <member refid="da/dfd/a02619_1aad74680d04a777cf6e1a48f5335e5bba" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsBaseT</scope><name>areElementsEqual</name></member>
+      <member refid="da/dfd/a02619_1acc9650475bb6cfdd4b46f86662ee4d67" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsBaseT</scope><name>areElementsEqual</name></member>
+      <member refid="da/dfd/a02619_1aace6e188551a79fe4c617062a3987c34" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsBaseT</scope><name>areElementsEqual</name></member>
+      <member refid="da/dfd/a02619_1a604b98a8324764213e894ac5ff3192e4" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsBaseT</scope><name>areElementsEqual</name></member>
+      <member refid="da/dfd/a02619_1a0606136714bd1cb7209313f2ece3f687" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsBaseT</scope><name>ElementCacheT</name></member>
+      <member refid="da/dfd/a02619_1a021a9d07d6fb3fe77b7ef22b5d9fc7e8" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsBaseT</scope><name>ElementCleanerT</name></member>
+      <member refid="da/dfd/a02619_1acbb5da0cf908b54ec0b238b4bf290498" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsBaseT</scope><name>ElementContT</name></member>
+      <member refid="da/dfd/a02619_1af3b3d08e4639ccc06cbe81f6cb200a64" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsBaseT</scope><name>ElementInitialiserT</name></member>
+      <member refid="da/dfd/a02619_1a37487aa6a3179e261c465a659e7e232d" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsBaseT</scope><name>ElementKeyT</name></member>
+      <member refid="da/dfd/a02619_1a54c0975e844a33c1ef48f9284b13e984" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsBaseT</scope><name>ElementMergerT</name></member>
+      <member refid="da/dfd/a02619_1aeeb13142ba14f28398dcf1b902e1d7df" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsBaseT</scope><name>ElementObsT</name></member>
+      <member refid="da/dfd/a02619_1a1bb78b2e2efba448f1bab3f5714b9943" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsBaseT</scope><name>ElementPtrT</name></member>
+      <member refid="da/dfd/a02619_1a97fc821a6c93a6497ce29ef7ee81d091" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsBaseT</scope><name>ElementT</name></member>
+      <member refid="da/dfd/a02619_1a97feed9b72e3c5d21e10571563ec56f5" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsBaseT</scope><name>isElementObsNull</name></member>
+      <member refid="da/dfd/a02619_1a5f00547170a4e85ac4c706f0ac32f9aa" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsBaseT</scope><name>makeElement</name></member>
+      <member refid="da/dfd/a02619_1aba7dca15362049b6e793f1b99d419bb0" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsBaseT</scope><name>makeElementObs</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

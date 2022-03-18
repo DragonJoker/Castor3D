@@ -1,44 +1,111 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="db/dfa/a04395" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::LineariseDepthPass::MinifyConfiguration</compoundname>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="db/dfa/a04395" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::GroupAnimation</compoundname>
+    <includes local="no">AnimationModule.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="db/dfa/a04395_1a149c0c3bfa6061f313ac30551a7c2e26" prot="public" static="no" mutable="no">
-        <type>castor::Point2i</type>
-        <definition>castor::Point2i castor3d::LineariseDepthPass::MinifyConfiguration::textureSize</definition>
+      <memberdef kind="variable" id="db/dfa/a04395_1aec5eef420d98c4cd706d29e4f6705cd9" prot="public" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::GroupAnimation::name</definition>
         <argsstring></argsstring>
-        <name>textureSize</name>
+        <name>name</name>
+        <qualifiedname>castor3d::GroupAnimation::name</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="194" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="194" bodyend="-1"/>
+        <location file="Scene/Animation/AnimationModule.hpp" line="101" column="16" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="101" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="db/dfa/a04395_1a9ef38062f5d2fa1d31003528ee3cfaa9" prot="public" static="no" mutable="no">
-        <type>int</type>
-        <definition>int castor3d::LineariseDepthPass::MinifyConfiguration::previousLevel</definition>
+      <memberdef kind="variable" id="db/dfa/a04395_1ac1cffe9fb3af1195cc920e3d69c3b7cd" prot="public" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1a2405dedd7ac8a7be93c2a8c1f8848e04" kindref="member">AnimationState</ref></type>
+        <definition>AnimationState castor3d::GroupAnimation::state</definition>
         <argsstring></argsstring>
-        <name>previousLevel</name>
+        <name>state</name>
+        <qualifiedname>castor3d::GroupAnimation::state</qualifiedname>
+        <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="195" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="195" bodyend="-1"/>
+        <location file="Scene/Animation/AnimationModule.hpp" line="102" column="16" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dfa/a04395_1a327556143a7996f9520e012f8e66b9a1" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::GroupAnimation::looped</definition>
+        <argsstring></argsstring>
+        <name>looped</name>
+        <qualifiedname>castor3d::GroupAnimation::looped</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationModule.hpp" line="103" column="6" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dfa/a04395_1aee527b7a918120e5a9d40248dff0f543" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::GroupAnimation::scale</definition>
+        <argsstring></argsstring>
+        <name>scale</name>
+        <qualifiedname>castor3d::GroupAnimation::scale</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationModule.hpp" line="104" column="7" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dfa/a04395_1af2cddf741baf6e988bff84be6421a9b2" prot="public" static="no" mutable="no">
+        <type>castor::Milliseconds</type>
+        <definition>castor::Milliseconds castor3d::GroupAnimation::startingPoint</definition>
+        <argsstring></argsstring>
+        <name>startingPoint</name>
+        <qualifiedname>castor3d::GroupAnimation::startingPoint</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationModule.hpp" line="105" column="22" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dfa/a04395_1a68e716393e98ef06874d686c6d51767b" prot="public" static="no" mutable="no">
+        <type>castor::Milliseconds</type>
+        <definition>castor::Milliseconds castor3d::GroupAnimation::stoppingPoint</definition>
+        <argsstring></argsstring>
+        <name>stoppingPoint</name>
+        <qualifiedname>castor3d::GroupAnimation::stoppingPoint</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationModule.hpp" line="106" column="22" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="106" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
-<para>name Minification. </para>
     </detaileddescription>
-    <location file="Render/Passes/LineariseDepthPass.hpp" line="193" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="192" bodyend="196"/>
+    <location file="Scene/Animation/AnimationModule.hpp" line="99" column="1" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="100" bodyend="107"/>
     <listofallmembers>
-      <member refid="db/dfa/a04395_1a9ef38062f5d2fa1d31003528ee3cfaa9" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass::MinifyConfiguration</scope><name>previousLevel</name></member>
-      <member refid="db/dfa/a04395_1a149c0c3bfa6061f313ac30551a7c2e26" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass::MinifyConfiguration</scope><name>textureSize</name></member>
+      <member refid="db/dfa/a04395_1a327556143a7996f9520e012f8e66b9a1" prot="public" virt="non-virtual"><scope>castor3d::GroupAnimation</scope><name>looped</name></member>
+      <member refid="db/dfa/a04395_1aec5eef420d98c4cd706d29e4f6705cd9" prot="public" virt="non-virtual"><scope>castor3d::GroupAnimation</scope><name>name</name></member>
+      <member refid="db/dfa/a04395_1aee527b7a918120e5a9d40248dff0f543" prot="public" virt="non-virtual"><scope>castor3d::GroupAnimation</scope><name>scale</name></member>
+      <member refid="db/dfa/a04395_1af2cddf741baf6e988bff84be6421a9b2" prot="public" virt="non-virtual"><scope>castor3d::GroupAnimation</scope><name>startingPoint</name></member>
+      <member refid="db/dfa/a04395_1ac1cffe9fb3af1195cc920e3d69c3b7cd" prot="public" virt="non-virtual"><scope>castor3d::GroupAnimation</scope><name>state</name></member>
+      <member refid="db/dfa/a04395_1a68e716393e98ef06874d686c6d51767b" prot="public" virt="non-virtual"><scope>castor3d::GroupAnimation</scope><name>stoppingPoint</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

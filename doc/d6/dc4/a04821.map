@@ -1,4 +1,5 @@
-<map id="castor3d::SubsurfaceScatteringPass" name="castor3d::SubsurfaceScatteringPass">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,240,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="29,5,216,32"/>
+<map id="castor3d::shader::ReflectionModel" name="castor3d::shader::ReflectionModel">
+<area shape="rect" id="node1" title=" " alt="" coords="134,5,318,47"/>
+<area shape="rect" id="node2" href="$d3/dee/a02862.html" title=" " alt="" coords="5,95,209,136"/>
+<area shape="rect" id="node3" href="$d6/d92/a02890.html" title=" " alt="" coords="234,95,455,136"/>
 </map>

@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="de/d2b/a04375" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::GaussianBlur::Configuration</compoundname>
+    <includes local="no">GaussianBlur.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/d2b/a04375_1ac9c17b03167cc405fa7142669239b6c4" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::GaussianBlur::Configuration::textureSize</definition>
+        <argsstring></argsstring>
+        <name>textureSize</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="184" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="184" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d2b/a04375_1a50c8573932f8195cfdea8163aafcf041" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::GaussianBlur::Configuration::blurCoeffsCount</definition>
+        <argsstring></argsstring>
+        <name>blurCoeffsCount</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="185" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="185" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d2b/a04375_1aa675748b11ce22d505c09ac77a9e0200" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::GaussianBlur::Configuration::dump</definition>
+        <argsstring></argsstring>
+        <name>dump</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="186" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="186" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d2b/a04375_1a0229b8b3c8457af2659f43bfcee26663" prot="public" static="no" mutable="no">
+        <type>std::array&lt; castor::Point4f, <ref refid="dd/d06/a04371_1af2348a695a12bfe432775545bf4838d3" kindref="member">GaussianBlur::MaxCoefficients</ref>/4u &gt;</type>
+        <definition>std::array&lt; castor::Point4f, GaussianBlur::MaxCoefficients / 4u &gt; castor3d::GaussianBlur::Configuration::blurCoeffs</definition>
+        <argsstring></argsstring>
+        <name>blurCoeffs</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="187" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="187" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1251">
+        <label>T</label>
+      </node>
+      <node id="1250">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="1251" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="1249">
+        <label>std::array&lt; castor::Point4f, GaussianBlur::MaxCoefficients/4u &gt;</label>
+        <childnode refid="1250" relation="template-instance">
+          <edgelabel>&lt; castor::Point4f, GaussianBlur::MaxCoefficients/4u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1248">
+        <label>castor3d::GaussianBlur::Configuration</label>
+        <link refid="de/d2b/a04375"/>
+        <childnode refid="1249" relation="usage">
+          <edgelabel>blurCoeffs</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Passes/GaussianBlur.hpp" line="183" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="182" bodyend="188"/>
+    <listofallmembers>
+      <member refid="de/d2b/a04375_1a0229b8b3c8457af2659f43bfcee26663" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::Configuration</scope><name>blurCoeffs</name></member>
+      <member refid="de/d2b/a04375_1a50c8573932f8195cfdea8163aafcf041" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::Configuration</scope><name>blurCoeffsCount</name></member>
+      <member refid="de/d2b/a04375_1aa675748b11ce22d505c09ac77a9e0200" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::Configuration</scope><name>dump</name></member>
+      <member refid="de/d2b/a04375_1ac9c17b03167cc405fa7142669239b6c4" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::Configuration</scope><name>textureSize</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,33 +1,150 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d6/d95/a02726" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkSemaphoreCreateInfo &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
+    <compoundname>castor3d::CpuEventInitialiserT</compoundname>
+    <includes local="no">CpuFunctorEvent.hpp</includes>
     <templateparamlist>
+      <param>
+        <type>typename CacheT</type>
+      </param>
     </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d6/d95/a02726_1ac79541047aded1aec25d4036c749bfff" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkSemaphoreCreateInfo &gt;::value</definition>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d6/d95/a02726_1a882b21eb295745f7ec8115e7199fa1b7" prot="public" static="no">
+        <type>typename CacheT::ElementT</type>
+        <definition>using castor3d::CpuEventInitialiserT&lt; CacheT &gt;::ElementT =  typename CacheT::ElementT</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO</initializer>
+        <name>ElementT</name>
+        <qualifiedname>castor3d::CpuEventInitialiserT::ElementT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="23" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="23" bodyend="-1"/>
+        <location file="Event/Frame/CpuFunctorEvent.hpp" line="109" column="1" bodyfile="Event/Frame/CpuFunctorEvent.hpp" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/d95/a02726_1aaa235cc85293bd1a27b4f02ed0f5c68d" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/da5/a02746" kindref="compound">FrameListener</ref> *</type>
+        <definition>FrameListener* castor3d::CpuEventInitialiserT&lt; CacheT &gt;::listener</definition>
+        <argsstring></argsstring>
+        <name>listener</name>
+        <qualifiedname>castor3d::CpuEventInitialiserT::listener</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/CpuFunctorEvent.hpp" line="121" column="16" bodyfile="Event/Frame/CpuFunctorEvent.hpp" bodystart="121" bodyend="-1"/>
+        <referencedby refid="d6/d95/a02726_1a44e4dda8e201c29d9349587ba4c55f1f" compoundref="df/da9/a00263" startline="116" endline="119">castor3d::CpuEventInitialiserT&lt; CacheT &gt;::operator()</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d95/a02726_1a4673940af2c66b9ff55f06d5fc0a2c32" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::CpuEventInitialiserT&lt; CacheT &gt;::CpuEventInitialiserT</definition>
+        <argsstring>(FrameListener &amp;listener)</argsstring>
+        <name>CpuEventInitialiserT</name>
+        <qualifiedname>castor3d::CpuEventInitialiserT::CpuEventInitialiserT</qualifiedname>
+        <param>
+          <type><ref refid="d4/da5/a02746" kindref="compound">FrameListener</ref> &amp;</type>
+          <declname>listener</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/CpuFunctorEvent.hpp" line="111" column="10" bodyfile="Event/Frame/CpuFunctorEvent.hpp" bodystart="111" bodyend="114"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d95/a02726_1a44e4dda8e201c29d9349587ba4c55f1f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::CpuEventInitialiserT&lt; CacheT &gt;::operator()</definition>
+        <argsstring>(ElementT &amp;res) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor3d::CpuEventInitialiserT::operator()</qualifiedname>
+        <param>
+          <type><ref refid="d6/d95/a02726_1a882b21eb295745f7ec8115e7199fa1b7" kindref="member">ElementT</ref> &amp;</type>
+          <declname>res</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/CpuFunctorEvent.hpp" line="116" column="6" bodyfile="Event/Frame/CpuFunctorEvent.hpp" bodystart="116" bodyend="119"/>
+        <references refid="d6/d95/a02726_1aaa235cc85293bd1a27b4f02ed0f5c68d" compoundref="df/da9/a00263" startline="121">castor3d::CpuEventInitialiserT&lt; CacheT &gt;::listener</references>
+        <references refid="dc/df4/a01401_1acb34d7cc6468fa16a1e9971f21310472" compoundref="df/da9/a00263" startline="89" endline="96">castor3d::makeCpuInitialiseEvent</references>
+        <references refid="d4/da5/a02746_1a2c62573911a7ed3c2149fd37a7de9df0">castor3d::FrameListener::postEvent</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
+<para>name Cache functors.</para>
+<para>Cached resource initialiser, through a CPU frame event. </para>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="23" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="23" bodyend="23"/>
+    <collaborationgraph>
+      <node id="6">
+        <label>T</label>
+      </node>
+      <node id="4">
+        <label>std::array&lt; CpuFrameEventPtrArray, size_t(EventType::eCount) &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; CpuFrameEventPtrArray, size_t(EventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::array&lt; GpuFrameEventPtrArray, size_t(EventType::eCount) &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; GpuFrameEventPtrArray, size_t(EventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::CpuEventInitialiserT&lt; CacheT &gt;</label>
+        <link refid="d6/d95/a02726"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>listener</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::FrameListener</label>
+        <link refid="d4/da5/a02746"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_cpuEvents</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_gpuEvents</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>m_mutex</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+      <node id="5">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::recursive_mutex</label>
+      </node>
+    </collaborationgraph>
+    <location file="Event/Frame/CpuFunctorEvent.hpp" line="107" column="1" bodyfile="Event/Frame/CpuFunctorEvent.hpp" bodystart="108" bodyend="122"/>
     <listofallmembers>
-      <member refid="d6/d95/a02726_1ac79541047aded1aec25d4036c749bfff" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkSemaphoreCreateInfo &gt;</scope><name>value</name></member>
+      <member refid="d6/d95/a02726_1a4673940af2c66b9ff55f06d5fc0a2c32" prot="public" virt="non-virtual"><scope>castor3d::CpuEventInitialiserT</scope><name>CpuEventInitialiserT</name></member>
+      <member refid="d6/d95/a02726_1a882b21eb295745f7ec8115e7199fa1b7" prot="public" virt="non-virtual"><scope>castor3d::CpuEventInitialiserT</scope><name>ElementT</name></member>
+      <member refid="d6/d95/a02726_1aaa235cc85293bd1a27b4f02ed0f5c68d" prot="public" virt="non-virtual"><scope>castor3d::CpuEventInitialiserT</scope><name>listener</name></member>
+      <member refid="d6/d95/a02726_1a44e4dda8e201c29d9349587ba4c55f1f" prot="public" virt="non-virtual"><scope>castor3d::CpuEventInitialiserT</scope><name>operator()</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,0 +1,184 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d4/d46/a04312" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::DistanceRenderNode</compoundname>
+    <basecompoundref refid="de/d12/a04308" prot="public" virt="non-virtual">castor3d::DistanceRenderNodeBase</basecompoundref>
+    <includes local="no">RenderNodeModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename NodeType</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/d46/a04312_1ab055f4d17cc5896a68ad39b09178ec7c" prot="public" static="no" mutable="no">
+        <type>NodeType &amp;</type>
+        <definition>NodeType&amp; castor3d::DistanceRenderNode&lt; NodeType &gt;::node</definition>
+        <argsstring></argsstring>
+        <name>node</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The object node. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/DistanceRenderNode.hpp" line="110" column="1" bodyfile="Render/Node/DistanceRenderNode.hpp" bodystart="110" bodyend="-1"/>
+        <referencedby refid="d4/d46/a04312_1a996fdd150f28fb9db8cbb47c26f294fb" compoundref="d1/d87/a00689" startline="68" endline="71">castor3d::DistanceRenderNode&lt; NodeType &gt;::DistanceRenderNode</referencedby>
+        <referencedby refid="d4/d46/a04312_1a2ef81bbc0f1fb8ac8aced4d600491ae3" compoundref="d1/d87/a00689" startline="96" endline="99">castor3d::DistanceRenderNode&lt; NodeType &gt;::getModelUbo</referencedby>
+        <referencedby refid="d4/d46/a04312_1a78f7b1dce04653a60a0797245c419b26" compoundref="d1/d87/a00689" startline="82" endline="85">castor3d::DistanceRenderNode&lt; NodeType &gt;::getPassNode</referencedby>
+        <referencedby refid="d4/d46/a04312_1ab35962e74b10993ac36d7a1eb0556997" compoundref="d1/d87/a00689" startline="75" endline="78">castor3d::DistanceRenderNode&lt; NodeType &gt;::getPipeline</referencedby>
+        <referencedby refid="d4/d46/a04312_1a0c4a7aeceff6d42bb195aa96a096cd0c" compoundref="d1/d87/a00689" startline="89" endline="92">castor3d::DistanceRenderNode&lt; NodeType &gt;::getSceneNode</referencedby>
+        <referencedby refid="d4/d46/a04312_1a3f4da1718ee7bf49df70a3fb554f1a44" compoundref="d1/d87/a00689" startline="103" endline="106">castor3d::DistanceRenderNode&lt; NodeType &gt;::render</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/d46/a04312_1a996fdd150f28fb9db8cbb47c26f294fb" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::DistanceRenderNode&lt; NodeType &gt;::DistanceRenderNode</definition>
+        <argsstring>(NodeType &amp;node)</argsstring>
+        <name>DistanceRenderNode</name>
+        <param>
+          <type>NodeType &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/DistanceRenderNode.hpp" line="68" column="1" bodyfile="Render/Node/DistanceRenderNode.hpp" bodystart="68" bodyend="71"/>
+        <references refid="d4/d46/a04312_1ab055f4d17cc5896a68ad39b09178ec7c" compoundref="d1/d87/a00689" startline="110">castor3d::DistanceRenderNode&lt; NodeType &gt;::node</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/d46/a04312_1ab35962e74b10993ac36d7a1eb0556997" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="de/dfb/a04616" kindref="compound">RenderPipeline</ref> &amp;</type>
+        <definition>RenderPipeline&amp; castor3d::DistanceRenderNode&lt; NodeType &gt;::getPipeline</definition>
+        <argsstring>() override</argsstring>
+        <name>getPipeline</name>
+        <reimplements refid="de/d12/a04308_1a2a5592ae38bf3de4741b6190c579c44c">getPipeline</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The render pipeline. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/DistanceRenderNode.hpp" line="75" column="1" bodyfile="Render/Node/DistanceRenderNode.hpp" bodystart="75" bodyend="78"/>
+        <references refid="d4/d46/a04312_1ab055f4d17cc5896a68ad39b09178ec7c" compoundref="d1/d87/a00689" startline="110">castor3d::DistanceRenderNode&lt; NodeType &gt;::node</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/d46/a04312_1a78f7b1dce04653a60a0797245c419b26" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d4/d85/a04324" kindref="compound">PassRenderNode</ref> &amp;</type>
+        <definition>PassRenderNode&amp; castor3d::DistanceRenderNode&lt; NodeType &gt;::getPassNode</definition>
+        <argsstring>() override</argsstring>
+        <name>getPassNode</name>
+        <reimplements refid="de/d12/a04308_1a4091f677cfac746e65bcff51f31e7a6b">getPassNode</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The pass render node. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/DistanceRenderNode.hpp" line="82" column="1" bodyfile="Render/Node/DistanceRenderNode.hpp" bodystart="82" bodyend="85"/>
+        <references refid="d4/d46/a04312_1ab055f4d17cc5896a68ad39b09178ec7c" compoundref="d1/d87/a00689" startline="110">castor3d::DistanceRenderNode&lt; NodeType &gt;::node</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/d46/a04312_1a0c4a7aeceff6d42bb195aa96a096cd0c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="da/d44/a05256" kindref="compound">SceneNode</ref> &amp;</type>
+        <definition>SceneNode&amp; castor3d::DistanceRenderNode&lt; NodeType &gt;::getSceneNode</definition>
+        <argsstring>() override</argsstring>
+        <name>getSceneNode</name>
+        <reimplements refid="de/d12/a04308_1a4cd4499db3f4c70e047b6945d0fad2c0">getSceneNode</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The instance&apos;s scene node. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/DistanceRenderNode.hpp" line="89" column="1" bodyfile="Render/Node/DistanceRenderNode.hpp" bodystart="89" bodyend="92"/>
+        <references refid="d1/de4/a01481_1ac4e84ca4120fcf8084a940eea0be4ae6">castor3d::details::getParentNode</references>
+        <references refid="d4/d46/a04312_1ab055f4d17cc5896a68ad39b09178ec7c" compoundref="d1/d87/a00689" startline="110">castor3d::DistanceRenderNode&lt; NodeType &gt;::node</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/d46/a04312_1a2ef81bbc0f1fb8ac8aced4d600491ae3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d7/d56/a05508" kindref="compound">ModelUbo</ref> &amp;</type>
+        <definition>ModelUbo&amp; castor3d::DistanceRenderNode&lt; NodeType &gt;::getModelUbo</definition>
+        <argsstring>() override</argsstring>
+        <name>getModelUbo</name>
+        <reimplements refid="de/d12/a04308_1a0ec7f04cc9c2953bf7cdc246075d5b4e">getModelUbo</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The instance&apos;s model UBO. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/DistanceRenderNode.hpp" line="96" column="1" bodyfile="Render/Node/DistanceRenderNode.hpp" bodystart="96" bodyend="99"/>
+        <references refid="d4/d46/a04312_1ab055f4d17cc5896a68ad39b09178ec7c" compoundref="d1/d87/a00689" startline="110">castor3d::DistanceRenderNode&lt; NodeType &gt;::node</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/d46/a04312_1a3f4da1718ee7bf49df70a3fb554f1a44" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::DistanceRenderNode&lt; NodeType &gt;::render</definition>
+        <argsstring>() override</argsstring>
+        <name>render</name>
+        <reimplements refid="de/d12/a04308_1afc07902eafe9ea8f5bd6593785e76289">render</reimplements>
+        <briefdescription>
+<para>Renders the node. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/DistanceRenderNode.hpp" line="103" column="1" bodyfile="Render/Node/DistanceRenderNode.hpp" bodystart="103" bodyend="106"/>
+        <references refid="d4/d46/a04312_1ab055f4d17cc5896a68ad39b09178ec7c" compoundref="d1/d87/a00689" startline="110">castor3d::DistanceRenderNode&lt; NodeType &gt;::node</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Helper structure used to render distance sorted typed nodes. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1047">
+        <label>castor3d::DistanceRenderNode&lt; NodeType &gt;</label>
+        <link refid="d4/d46/a04312"/>
+        <childnode refid="1048" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1048">
+        <label>castor3d::DistanceRenderNodeBase</label>
+        <link refid="de/d12/a04308"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1049">
+        <label>castor3d::DistanceRenderNode&lt; NodeType &gt;</label>
+        <link refid="d4/d46/a04312"/>
+        <childnode refid="1050" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1050">
+        <label>castor3d::DistanceRenderNodeBase</label>
+        <link refid="de/d12/a04308"/>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Node/DistanceRenderNode.hpp" line="67" column="1" bodyfile="Render/Node/DistanceRenderNode.hpp" bodystart="65" bodyend="111"/>
+    <listofallmembers>
+      <member refid="d4/d46/a04312_1a996fdd150f28fb9db8cbb47c26f294fb" prot="public" virt="non-virtual"><scope>castor3d::DistanceRenderNode</scope><name>DistanceRenderNode</name></member>
+      <member refid="d4/d46/a04312_1a2ef81bbc0f1fb8ac8aced4d600491ae3" prot="public" virt="virtual"><scope>castor3d::DistanceRenderNode</scope><name>getModelUbo</name></member>
+      <member refid="d4/d46/a04312_1a78f7b1dce04653a60a0797245c419b26" prot="public" virt="virtual"><scope>castor3d::DistanceRenderNode</scope><name>getPassNode</name></member>
+      <member refid="d4/d46/a04312_1ab35962e74b10993ac36d7a1eb0556997" prot="public" virt="virtual"><scope>castor3d::DistanceRenderNode</scope><name>getPipeline</name></member>
+      <member refid="d4/d46/a04312_1a0c4a7aeceff6d42bb195aa96a096cd0c" prot="public" virt="virtual"><scope>castor3d::DistanceRenderNode</scope><name>getSceneNode</name></member>
+      <member refid="d4/d46/a04312_1ab055f4d17cc5896a68ad39b09178ec7c" prot="public" virt="non-virtual"><scope>castor3d::DistanceRenderNode</scope><name>node</name></member>
+      <member refid="d4/d46/a04312_1a3f4da1718ee7bf49df70a3fb554f1a44" prot="public" virt="virtual"><scope>castor3d::DistanceRenderNode</scope><name>render</name></member>
+      <member refid="de/d12/a04308_1a8bdfa5487838338721c7a64845da1874" prot="public" virt="virtual"><scope>castor3d::DistanceRenderNode</scope><name>~DistanceRenderNodeBase</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,69 +1,92 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d5/d8e/a04448" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::rq::ConfigT</compoundname>
-    <derivedcompoundref refid="d3/dd1/a04364" prot="public" virt="non-virtual">castor3d::CombinePassConfigT&lt; WrapperT &gt;</derivedcompoundref>
-    <derivedcompoundref refid="d3/dd1/a04364" prot="public" virt="non-virtual">castor3d::CombinePassConfigT&lt; ashes::Optional &gt;</derivedcompoundref>
-    <includes local="no">RenderQuad.hpp</includes>
-    <templateparamlist>
-      <param>
-        <type>template&lt; typename ValueT &gt; typename</type>
-        <declname>WrapperT</declname>
-        <defname>WrapperT</defname>
-      </param>
-    </templateparamlist>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d5/d8e/a04448_1ac4d5fa2df58c23f29429178eff899699" prot="public" static="no" mutable="no">
-        <type>WrapperT&lt; <ref refid="d2/dc4/a01483_1a4a9359de68c83f5e0f2d2cbe8bf5910b" kindref="member">BindingDescriptionArray</ref> &gt;</type>
-        <definition>WrapperT&lt; BindingDescriptionArray &gt; castor3d::rq::ConfigT&lt; WrapperT &gt;::bindings</definition>
-        <argsstring></argsstring>
-        <name>bindings</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d5/d8e/a04448" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BackgroundTextWriter</compoundname>
+    <basecompoundref refid="df/d25/a04464" prot="public" virt="non-virtual">castor3d::BackgroundVisitor</basecompoundref>
+    <includes local="no">BackgroundTextWriter.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/d8e/a04448_1a3f6f1d7eb058cf7e67df41c3b9dbe5c1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::BackgroundTextWriter::BackgroundTextWriter</definition>
+        <argsstring>(castor::TextFile &amp;file, castor::String const &amp;tabs)</argsstring>
+        <name>BackgroundTextWriter</name>
+        <qualifiedname>castor3d::BackgroundTextWriter::BackgroundTextWriter</qualifiedname>
+        <param>
+          <type>castor::TextFile &amp;</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
         <briefdescription>
+<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/RenderQuad.hpp" line="77" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="77" bodyend="-1"/>
+        <location file="Scene/Background/BackgroundTextWriter.hpp" line="25" column="9"/>
       </memberdef>
-      <memberdef kind="variable" id="d5/d8e/a04448_1a34e232f8e87ff523d0df7cd3f697124f" prot="public" static="no" mutable="no">
-        <type>WrapperT&lt; VkImageSubresourceRange &gt;</type>
-        <definition>WrapperT&lt; VkImageSubresourceRange &gt; castor3d::rq::ConfigT&lt; WrapperT &gt;::range</definition>
-        <argsstring></argsstring>
-        <name>range</name>
+      <memberdef kind="function" id="d5/d8e/a04448_1aa3a7db97a7795a6197b9fb1ca203069d" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BackgroundTextWriter::visit</definition>
+        <argsstring>(ColourBackground &amp;background) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::BackgroundTextWriter::visit</qualifiedname>
+        <reimplements refid="df/d25/a04464_1ad29638182ddf77a3a1f8652f12dc5d0c">visit</reimplements>
+        <param>
+          <type><ref refid="d7/d79/a04452" kindref="compound">ColourBackground</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
         <briefdescription>
+<para>Visits a colour background. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/RenderQuad.hpp" line="78" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="78" bodyend="-1"/>
+        <location file="Scene/Background/BackgroundTextWriter.hpp" line="30" column="14"/>
       </memberdef>
-      <memberdef kind="variable" id="d5/d8e/a04448_1a4e4283067ecc109099b08f65723dffae" prot="public" static="no" mutable="no">
-        <type>WrapperT&lt; <ref refid="dc/dc7/a04440" kindref="compound">Texcoord</ref> &gt;</type>
-        <definition>WrapperT&lt; Texcoord &gt; castor3d::rq::ConfigT&lt; WrapperT &gt;::texcoordConfig</definition>
-        <argsstring></argsstring>
-        <name>texcoordConfig</name>
+      <memberdef kind="function" id="d5/d8e/a04448_1a3c7a63e29f8ad50ad597265e458d6c2e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BackgroundTextWriter::visit</definition>
+        <argsstring>(SkyboxBackground &amp;background) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::BackgroundTextWriter::visit</qualifiedname>
+        <reimplements refid="df/d25/a04464_1a0cf4b81b17c74c49364f0cab18567ef0">visit</reimplements>
+        <param>
+          <type><ref refid="d0/ddf/a04460" kindref="compound">SkyboxBackground</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
         <briefdescription>
+<para>Visits a colour background. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/RenderQuad.hpp" line="79" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="79" bodyend="-1"/>
+        <location file="Scene/Background/BackgroundTextWriter.hpp" line="34" column="14"/>
       </memberdef>
-      <memberdef kind="variable" id="d5/d8e/a04448_1aad18baaa7ab25c7cf1f27c9f3719104e" prot="public" static="no" mutable="no">
-        <type>WrapperT&lt; <ref refid="da/d1e/a01479_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref> &gt;</type>
-        <definition>WrapperT&lt; BlendMode &gt; castor3d::rq::ConfigT&lt; WrapperT &gt;::blendMode</definition>
-        <argsstring></argsstring>
-        <name>blendMode</name>
+      <memberdef kind="function" id="d5/d8e/a04448_1a738cbed54e5babeadea2e891bf67264c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BackgroundTextWriter::visit</definition>
+        <argsstring>(ImageBackground &amp;background) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::BackgroundTextWriter::visit</qualifiedname>
+        <reimplements refid="df/d25/a04464_1a3c4bae12afffa3a4f2b08f4733f7c119">visit</reimplements>
+        <param>
+          <type><ref refid="d4/d45/a04456" kindref="compound">ImageBackground</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
         <briefdescription>
+<para>Visits a colour background. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/RenderQuad.hpp" line="80" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="80" bodyend="-1"/>
+        <location file="Scene/Background/BackgroundTextWriter.hpp" line="38" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -71,36 +94,37 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="3178">
-        <label>castor3d::CombinePassConfigT&lt; ashes::Optional &gt;</label>
-        <link refid="d3/dd1/a04364"/>
-        <childnode refid="3177" relation="template-instance">
-          <edgelabel>&lt; ashes::Optional &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3177">
-        <label>castor3d::CombinePassConfigT&lt; WrapperT &gt;</label>
-        <link refid="d3/dd1/a04364"/>
-        <childnode refid="3176" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3176">
-        <label>castor3d::rq::ConfigT&lt; WrapperT &gt;</label>
+      <node id="1">
+        <label>castor3d::BackgroundTextWriter</label>
         <link refid="d5/d8e/a04448"/>
-      </node>
-      <node id="3179">
-        <label>CombinePassConfigT&lt; ashes::Optional &gt;</label>
-        <link refid="d3/dd1/a04364"/>
-        <childnode refid="3176" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::BackgroundVisitor</label>
+        <link refid="df/d25/a04464"/>
       </node>
     </inheritancegraph>
-    <location file="Render/Passes/RenderQuad.hpp" line="76" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="75" bodyend="81"/>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::BackgroundTextWriter</label>
+        <link refid="d5/d8e/a04448"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::BackgroundVisitor</label>
+        <link refid="df/d25/a04464"/>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/Background/BackgroundTextWriter.hpp" line="13" column="1" bodyfile="Scene/Background/BackgroundTextWriter.hpp" bodystart="15" bodyend="39"/>
     <listofallmembers>
-      <member refid="d5/d8e/a04448_1ac4d5fa2df58c23f29429178eff899699" prot="public" virt="non-virtual"><scope>castor3d::rq::ConfigT</scope><name>bindings</name></member>
-      <member refid="d5/d8e/a04448_1aad18baaa7ab25c7cf1f27c9f3719104e" prot="public" virt="non-virtual"><scope>castor3d::rq::ConfigT</scope><name>blendMode</name></member>
-      <member refid="d5/d8e/a04448_1a34e232f8e87ff523d0df7cd3f697124f" prot="public" virt="non-virtual"><scope>castor3d::rq::ConfigT</scope><name>range</name></member>
-      <member refid="d5/d8e/a04448_1a4e4283067ecc109099b08f65723dffae" prot="public" virt="non-virtual"><scope>castor3d::rq::ConfigT</scope><name>texcoordConfig</name></member>
+      <member refid="d5/d8e/a04448_1a3f6f1d7eb058cf7e67df41c3b9dbe5c1" prot="public" virt="non-virtual"><scope>castor3d::BackgroundTextWriter</scope><name>BackgroundTextWriter</name></member>
+      <member refid="df/d25/a04464_1af05ce31b5608cdd6b02f87ab1eadae6f" prot="public" virt="non-virtual"><scope>castor3d::BackgroundTextWriter</scope><name>BackgroundVisitor</name></member>
+      <member refid="d5/d8e/a04448_1aa3a7db97a7795a6197b9fb1ca203069d" prot="public" virt="virtual"><scope>castor3d::BackgroundTextWriter</scope><name>visit</name></member>
+      <member refid="d5/d8e/a04448_1a3c7a63e29f8ad50ad597265e458d6c2e" prot="public" virt="virtual"><scope>castor3d::BackgroundTextWriter</scope><name>visit</name></member>
+      <member refid="d5/d8e/a04448_1a738cbed54e5babeadea2e891bf67264c" prot="public" virt="virtual"><scope>castor3d::BackgroundTextWriter</scope><name>visit</name></member>
+      <member refid="df/d25/a04464_1a575ad64b4b6f1bf1bd76adc9891ce58d" prot="public" virt="virtual"><scope>castor3d::BackgroundTextWriter</scope><name>~BackgroundVisitor</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

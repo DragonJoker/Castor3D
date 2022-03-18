@@ -1,6 +1,8 @@
-<map id="castor3d::VertexBoneData::Weights" name="castor3d::VertexBoneData::Weights">
-<area shape="rect" id="node1" title=" " alt="" coords="5,288,180,329"/>
-<area shape="rect" id="node2" title=" " alt="" coords="13,184,172,225"/>
-<area shape="rect" id="node3" title="STL class." alt="" coords="39,95,147,121"/>
-<area shape="rect" id="node4" title=" " alt="" coords="73,5,112,32"/>
+<map id="castor3d::TechniqueQueues" name="castor3d::TechniqueQueues">
+<area shape="rect" id="node1" title=" " alt="" coords="795,47,979,74"/>
+<area shape="rect" id="node2" title=" " alt="" coords="476,5,665,47"/>
+<area shape="rect" id="node3" title=" " alt="" coords="149,58,263,85"/>
+<area shape="rect" id="node5" title=" " alt="" coords="481,71,660,127"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,87,44,114"/>
+<area shape="rect" id="node6" title=" " alt="" coords="152,117,260,143"/>
 </map>

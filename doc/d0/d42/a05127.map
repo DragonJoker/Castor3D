@@ -1,6 +1,4 @@
-<map id="castor3d::ImageBackground" name="castor3d::ImageBackground">
-<area shape="rect" id="node1" title=" " alt="" coords="81,155,265,181"/>
-<area shape="rect" id="node2" href="$d0/d47/a05104.html" title=" " alt="" coords="80,80,267,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,192,32"/>
-<area shape="rect" id="node4" title=" " alt="" coords="217,5,279,32"/>
+<map id="castor::TextWriter&lt; castor3d::PanelOverlay &gt;" name="castor::TextWriter&lt; castor3d::PanelOverlay &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="5,95,185,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="20,5,171,47"/>
 </map>

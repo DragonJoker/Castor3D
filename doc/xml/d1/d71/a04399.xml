@@ -1,85 +1,166 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d1/d71/a04399" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::LineariseDepthPass::MinifyPipeline</compoundname>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d1/d71/a04399_1a361ceb249dcf57d0d356afe8a9f531f2" prot="public" static="no" mutable="no">
-        <type>ashes::ImageView const  *</type>
-        <definition>ashes::ImageView const* castor3d::LineariseDepthPass::MinifyPipeline::sourceView</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d1/d71/a04399" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</compoundname>
+    <basecompoundref refid="da/dfd/a02619" prot="public" virt="non-virtual">castor3d::PtrCacheTraitsBaseT&lt; AnimatedObjectGroup, castor::String &gt;</basecompoundref>
+    <includes local="no">AnimationModule.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d1/d71/a04399_1ac5bce022e53c3362542b0482e8d253fb" prot="public" static="no">
+        <type><ref refid="de/d2b/a04375" kindref="compound">AnimatedObjectGroup</ref></type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::ResT =  AnimatedObjectGroup</definition>
         <argsstring></argsstring>
-        <name>sourceView</name>
+        <name>ResT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::ResT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="199" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="199" bodyend="-1"/>
+        <location file="Scene/Animation/AnimationModule.hpp" line="161" column="1" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="161" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d71/a04399_1a61d87ccf15abcb78d1e75c428f592adb" prot="public" static="no" mutable="no">
-        <type>ashes::ImageView</type>
-        <definition>ashes::ImageView castor3d::LineariseDepthPass::MinifyPipeline::targetView</definition>
+      <memberdef kind="typedef" id="d1/d71/a04399_1ac566e1574a124f6ea278632f940bf1f5" prot="public" static="no">
+        <type>castor::String</type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::KeyT =  castor::String</definition>
         <argsstring></argsstring>
-        <name>targetView</name>
+        <name>KeyT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::KeyT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="200" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="200" bodyend="-1"/>
+        <location file="Scene/Animation/AnimationModule.hpp" line="162" column="1" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="162" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d71/a04399_1a3b8257cbc0efa2272796e52db97f34dc" prot="public" static="no" mutable="no">
-        <type>ashes::DescriptorSetPtr</type>
-        <definition>ashes::DescriptorSetPtr castor3d::LineariseDepthPass::MinifyPipeline::descriptor</definition>
+      <memberdef kind="typedef" id="d1/d71/a04399_1af211257f2e4b8c8c03375bbd2f7636c7" prot="public" static="no">
+        <type><ref refid="da/dfd/a02619" kindref="compound">PtrCacheTraitsBaseT</ref>&lt; <ref refid="d1/d71/a04399_1ac5bce022e53c3362542b0482e8d253fb" kindref="member">ResT</ref>, <ref refid="d1/d71/a04399_1ac566e1574a124f6ea278632f940bf1f5" kindref="member">KeyT</ref> &gt;</type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::Base =  PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;</definition>
         <argsstring></argsstring>
-        <name>descriptor</name>
+        <name>Base</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::Base</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="201" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="201" bodyend="-1"/>
+        <location file="Scene/Animation/AnimationModule.hpp" line="163" column="1" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="163" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d71/a04399_1a9e03420edc1781373c2cca95bdbafb3c" prot="public" static="no" mutable="no">
-        <type>ashes::FrameBufferPtr</type>
-        <definition>ashes::FrameBufferPtr castor3d::LineariseDepthPass::MinifyPipeline::frameBuffer</definition>
+      <memberdef kind="typedef" id="d1/d71/a04399_1a9b57ef555b360858b24d4d0d87a5cc1a" prot="public" static="no">
+        <type>typename <ref refid="da/dfd/a02619_1a97fc821a6c93a6497ce29ef7ee81d091" kindref="member">Base::ElementT</ref></type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::ElementT =  typename Base::ElementT</definition>
         <argsstring></argsstring>
-        <name>frameBuffer</name>
+        <name>ElementT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::ElementT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="202" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="202" bodyend="-1"/>
+        <location file="Scene/Animation/AnimationModule.hpp" line="164" column="1" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="164" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d71/a04399_1a65f705de6ae65851a3f845c290f805e6" prot="public" static="no" mutable="no">
-        <type>ashes::GraphicsPipelinePtr</type>
-        <definition>ashes::GraphicsPipelinePtr castor3d::LineariseDepthPass::MinifyPipeline::pipeline</definition>
+      <memberdef kind="typedef" id="d1/d71/a04399_1a0176a33900149da04187a86225e7f429" prot="public" static="no">
+        <type>typename <ref refid="da/dfd/a02619_1a1bb78b2e2efba448f1bab3f5714b9943" kindref="member">Base::ElementPtrT</ref></type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::ElementPtrT =  typename Base::ElementPtrT</definition>
         <argsstring></argsstring>
-        <name>pipeline</name>
+        <name>ElementPtrT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::ElementPtrT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="203" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="203" bodyend="-1"/>
+        <location file="Scene/Animation/AnimationModule.hpp" line="165" column="1" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="165" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d1/d71/a04399_1adec95b034d1c404e93ba33cf68b5db11" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <definition>C3D_API const castor::String castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;::Name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationModule.hpp" line="167" column="37" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="167" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
+<para>Helper structure to specialise a cache behaviour. <simplesect kind="remark"><para>Specialisation for <ref refid="de/d2b/a04375" kindref="compound">AnimatedObjectGroup</ref>. </para>
+</simplesect>
+</para>
     </detaileddescription>
-    <location file="Render/Passes/LineariseDepthPass.hpp" line="198" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="197" bodyend="204"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::PtrCacheTraitsBaseT&lt; AnimatedObjectGroup, castor::String &gt;</label>
+        <link refid="da/dfd/a02619"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; AnimatedObjectGroup, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;</label>
+        <link refid="da/dfd/a02619"/>
+      </node>
+      <node id="1">
+        <label>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</label>
+        <link refid="d1/d71/a04399"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::PtrCacheTraitsBaseT&lt; AnimatedObjectGroup, castor::String &gt;</label>
+        <link refid="da/dfd/a02619"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; AnimatedObjectGroup, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;</label>
+        <link refid="da/dfd/a02619"/>
+      </node>
+      <node id="1">
+        <label>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</label>
+        <link refid="d1/d71/a04399"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/Animation/AnimationModule.hpp" line="158" column="1" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="160" bodyend="168"/>
     <listofallmembers>
-      <member refid="d1/d71/a04399_1a3b8257cbc0efa2272796e52db97f34dc" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass::MinifyPipeline</scope><name>descriptor</name></member>
-      <member refid="d1/d71/a04399_1a9e03420edc1781373c2cca95bdbafb3c" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass::MinifyPipeline</scope><name>frameBuffer</name></member>
-      <member refid="d1/d71/a04399_1a65f705de6ae65851a3f845c290f805e6" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass::MinifyPipeline</scope><name>pipeline</name></member>
-      <member refid="d1/d71/a04399_1a361ceb249dcf57d0d356afe8a9f531f2" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass::MinifyPipeline</scope><name>sourceView</name></member>
-      <member refid="d1/d71/a04399_1a61d87ccf15abcb78d1e75c428f592adb" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass::MinifyPipeline</scope><name>targetView</name></member>
+      <member refid="da/dfd/a02619_1aad74680d04a777cf6e1a48f5335e5bba" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="da/dfd/a02619_1acc9650475bb6cfdd4b46f86662ee4d67" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="da/dfd/a02619_1aace6e188551a79fe4c617062a3987c34" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="da/dfd/a02619_1a604b98a8324764213e894ac5ff3192e4" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="d1/d71/a04399_1af211257f2e4b8c8c03375bbd2f7636c7" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>Base</name></member>
+      <member refid="da/dfd/a02619_1a0606136714bd1cb7209313f2ece3f687" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementCacheT</name></member>
+      <member refid="da/dfd/a02619_1a021a9d07d6fb3fe77b7ef22b5d9fc7e8" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementCleanerT</name></member>
+      <member refid="da/dfd/a02619_1acbb5da0cf908b54ec0b238b4bf290498" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementContT</name></member>
+      <member refid="da/dfd/a02619_1af3b3d08e4639ccc06cbe81f6cb200a64" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementInitialiserT</name></member>
+      <member refid="da/dfd/a02619_1a37487aa6a3179e261c465a659e7e232d" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementKeyT</name></member>
+      <member refid="da/dfd/a02619_1a54c0975e844a33c1ef48f9284b13e984" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementMergerT</name></member>
+      <member refid="da/dfd/a02619_1aeeb13142ba14f28398dcf1b902e1d7df" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementObsT</name></member>
+      <member refid="d1/d71/a04399_1a0176a33900149da04187a86225e7f429" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementPtrT</name></member>
+      <member refid="d1/d71/a04399_1a9b57ef555b360858b24d4d0d87a5cc1a" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementT</name></member>
+      <member refid="da/dfd/a02619_1a97feed9b72e3c5d21e10571563ec56f5" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>isElementObsNull</name></member>
+      <member refid="d1/d71/a04399_1ac566e1574a124f6ea278632f940bf1f5" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>KeyT</name></member>
+      <member refid="da/dfd/a02619_1a5f00547170a4e85ac4c706f0ac32f9aa" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>makeElement</name></member>
+      <member refid="da/dfd/a02619_1aba7dca15362049b6e793f1b99d419bb0" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>makeElementObs</name></member>
+      <member refid="d1/d71/a04399_1adec95b034d1c404e93ba33cf68b5db11" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>Name</name></member>
+      <member refid="d1/d71/a04399_1ac5bce022e53c3362542b0482e8d253fb" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ResT</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

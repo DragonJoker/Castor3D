@@ -1,88 +1,61 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="de/dbd/a02507" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::CpuFunctorEvent</compoundname>
-    <basecompoundref refid="d1/d5d/a02503" prot="public" virt="non-virtual">castor3d::CpuFrameEvent</basecompoundref>
-    <includes local="no">CpuFunctorEvent.hpp</includes>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="de/dbd/a02507_1a076a85bf563a18b1df0511ec60ef1944" prot="public" static="no">
-        <type>std::function&lt; void() &gt;</type>
-        <definition>using castor3d::CpuFunctorEvent::Functor =  std::function&lt; void() &gt;</definition>
-        <argsstring></argsstring>
-        <name>Functor</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/Frame/CpuFunctorEvent.hpp" line="15" column="1" bodyfile="Event/Frame/CpuFunctorEvent.hpp" bodystart="15" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
+    <compoundname>castor3d::UniformBufferT</compoundname>
+    <basecompoundref refid="d1/de9/a02591" prot="public" virt="non-virtual">castor3d::UniformBufferBase</basecompoundref>
+    <includes local="no">UniformBuffer.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename DataT</type>
+      </param>
+    </templateparamlist>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="de/dbd/a02507_1a640dbd0efbaba2d82d82e48f2f871f3c" prot="private" static="no" mutable="no">
-        <type><ref refid="de/dbd/a02507_1a076a85bf563a18b1df0511ec60ef1944" kindref="member">Functor</ref></type>
-        <definition>Functor castor3d::CpuFunctorEvent::m_functor</definition>
+      <memberdef kind="variable" id="de/dbd/a02507_1ae2136477cd64fd42ce2a6a5c0a69d00c" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; DataT &gt;</type>
+        <definition>std::vector&lt; DataT &gt; castor3d::UniformBufferT&lt; DataT &gt;::m_data</definition>
         <argsstring></argsstring>
-        <name>m_functor</name>
+        <name>m_data</name>
+        <qualifiedname>castor3d::UniformBufferT::m_data</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/Frame/CpuFunctorEvent.hpp" line="50" column="1" bodyfile="Event/Frame/CpuFunctorEvent.hpp" bodystart="50" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="de/dbd/a02507_1a641674326843af3f162593e58969e8ba" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::CpuFunctorEvent::CpuFunctorEvent</definition>
-        <argsstring>(CpuFunctorEvent const &amp;copy)=delete</argsstring>
-        <name>CpuFunctorEvent</name>
-        <param>
-          <type><ref refid="de/dbd/a02507" kindref="compound">CpuFunctorEvent</ref> const &amp;</type>
-          <declname>copy</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/Frame/CpuFunctorEvent.hpp" line="18" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="de/dbd/a02507_1a462ebac0cb85e7f1d899aac0a46269ad" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="de/dbd/a02507" kindref="compound">CpuFunctorEvent</ref> &amp;</type>
-        <definition>CpuFunctorEvent&amp; castor3d::CpuFunctorEvent::operator=</definition>
-        <argsstring>(CpuFunctorEvent const &amp;copy)=delete</argsstring>
-        <name>operator=</name>
-        <param>
-          <type><ref refid="de/dbd/a02507" kindref="compound">CpuFunctorEvent</ref> const &amp;</type>
-          <declname>copy</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/Frame/CpuFunctorEvent.hpp" line="19" column="1"/>
+        <location file="Buffer/UniformBuffer.hpp" line="245" column="13" bodyfile="Buffer/UniformBuffer.hpp" bodystart="245" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="de/dbd/a02507_1a5be9e5cea2243fb0e162a6968f0a1194" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="de/dbd/a02507_1ae7fba1155fbe6b61a636fbffd4c16fe4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
-        <definition>castor3d::CpuFunctorEvent::CpuFunctorEvent</definition>
-        <argsstring>(EventType type, Functor functor)</argsstring>
-        <name>CpuFunctorEvent</name>
+        <definition>castor3d::UniformBufferT&lt; DataT &gt;::UniformBufferT</definition>
+        <argsstring>(RenderSystem const &amp;renderSystem, VkDeviceSize count, VkBufferUsageFlags usage, VkMemoryPropertyFlags flags, castor::String debugName, ashes::QueueShare sharingMode={})</argsstring>
+        <name>UniformBufferT</name>
+        <qualifiedname>castor3d::UniformBufferT::UniformBufferT</qualifiedname>
         <param>
-          <type><ref refid="d7/dd1/a01458_1ad442bf3c1ba8a06ac36f710ba30b2870" kindref="member">EventType</ref></type>
-          <declname>type</declname>
+          <type><ref refid="d3/d9a/a04075" kindref="compound">RenderSystem</ref> const &amp;</type>
+          <declname>renderSystem</declname>
         </param>
         <param>
-          <type><ref refid="de/dbd/a02507_1a076a85bf563a18b1df0511ec60ef1944" kindref="member">Functor</ref></type>
-          <declname>functor</declname>
+          <type>VkDeviceSize</type>
+          <declname>count</declname>
+        </param>
+        <param>
+          <type>VkBufferUsageFlags</type>
+          <declname>usage</declname>
+        </param>
+        <param>
+          <type>VkMemoryPropertyFlags</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>castor::String</type>
+          <declname>debugName</declname>
+        </param>
+        <param>
+          <type>ashes::QueueShare</type>
+          <declname>sharingMode</declname>
+          <defval>{}</defval>
         </param>
         <briefdescription>
 <para>Constructor. </para>
@@ -90,18 +63,50 @@
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">type</parametername>
+<parametername direction="in">renderSystem</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The event type </para>
+<para>The <ref refid="d3/d9a/a04075" kindref="compound">RenderSystem</ref>. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">functor</parametername>
+<parametername direction="in">count</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The functor to execute </para>
+<para>The elements count. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">usage</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer usage flags. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer memory flags. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">debugName</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer debug name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sharingMode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer sharing mode. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -109,69 +114,667 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/Frame/CpuFunctorEvent.hpp" line="32" column="1" bodyfile="Event/Frame/CpuFunctorEvent.hpp" bodystart="32" bodyend="37"/>
+        <location file="Buffer/UniformBuffer.hpp" line="36" column="8"/>
       </memberdef>
-      <memberdef kind="function" id="de/dbd/a02507_1af2c8330462afd5efbcb1b15458f796bb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+      <memberdef kind="function" id="de/dbd/a02507_1aebbeac4f41693ba895b792e884842be4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::CpuFunctorEvent::apply</definition>
-        <argsstring>() override</argsstring>
-        <name>apply</name>
-        <reimplements refid="d1/d5d/a02503_1ae31a541d4c966f978a3174b048a45b2a">apply</reimplements>
+        <definition>void castor3d::UniformBufferT&lt; DataT &gt;::upload</definition>
+        <argsstring>(ashes::BufferBase const &amp;stagingBuffer, ashes::Queue const &amp;queue, ashes::CommandPool const &amp;commandPool, uint32_t offset, VkPipelineStageFlags flags) const</argsstring>
+        <name>upload</name>
+        <qualifiedname>castor3d::UniformBufferT::upload</qualifiedname>
+        <param>
+          <type>ashes::BufferBase const &amp;</type>
+          <declname>stagingBuffer</declname>
+        </param>
+        <param>
+          <type>ashes::Queue const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>ashes::CommandPool const &amp;</type>
+          <declname>commandPool</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>offset</declname>
+        </param>
+        <param>
+          <type>VkPipelineStageFlags</type>
+          <declname>flags</declname>
+        </param>
         <briefdescription>
-<para>Applies the event. </para>
+<para>Transfers data to the GPU buffer from RAM. </para>
         </briefdescription>
         <detaileddescription>
+<para><simplesect kind="remark"><para>Transfers data from buffer[offset*sizeof( T )] to buffer[(offset+count-1)*sizeof( T )]. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">stagingBuffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The staging buffer used to transfer the data. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue used to execute the transfer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">commandPool</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The command pool on which the command buffer will be created. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The start offset. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pipeline stage flags for the out memory barrier. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/Frame/CpuFunctorEvent.hpp" line="44" column="1" bodyfile="Event/Frame/CpuFunctorEvent.hpp" bodystart="44" bodyend="47"/>
+        <location file="Buffer/UniformBuffer.hpp" line="60" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dbd/a02507_1a4b052e889fbcb8a740b0f1970167301c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::UniformBufferT&lt; DataT &gt;::upload</definition>
+        <argsstring>(ashes::BufferBase const &amp;stagingBuffer, ashes::CommandBuffer const &amp;commandBuffer, uint32_t offset, VkPipelineStageFlags flags) const</argsstring>
+        <name>upload</name>
+        <qualifiedname>castor3d::UniformBufferT::upload</qualifiedname>
+        <param>
+          <type>ashes::BufferBase const &amp;</type>
+          <declname>stagingBuffer</declname>
+        </param>
+        <param>
+          <type>ashes::CommandBuffer const &amp;</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>offset</declname>
+        </param>
+        <param>
+          <type>VkPipelineStageFlags</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+<para>Transfers data to the GPU buffer from RAM. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Transfers data from buffer[offset*sizeof( T )] to buffer[(offset+count-1)*sizeof( T )]. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">stagingBuffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The staging buffer used to transfer the data. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">commandBuffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The command buffer on which the transfer commands are recorded. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The start offset. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pipeline stage flags for the out memory barrier. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBuffer.hpp" line="81" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dbd/a02507_1a61873b9b0a0066fedd1146d54464b497" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::UniformBufferT&lt; DataT &gt;::upload</definition>
+        <argsstring>(ashes::BufferBase const &amp;stagingBuffer, ashes::Queue const &amp;queue, ashes::CommandPool const &amp;commandPool, uint32_t offset, VkPipelineStageFlags flags, FramePassTimer const &amp;timer, uint32_t index) const</argsstring>
+        <name>upload</name>
+        <qualifiedname>castor3d::UniformBufferT::upload</qualifiedname>
+        <param>
+          <type>ashes::BufferBase const &amp;</type>
+          <declname>stagingBuffer</declname>
+        </param>
+        <param>
+          <type>ashes::Queue const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>ashes::CommandPool const &amp;</type>
+          <declname>commandPool</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>offset</declname>
+        </param>
+        <param>
+          <type>VkPipelineStageFlags</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>FramePassTimer const &amp;</type>
+          <declname>timer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Transfers data to the GPU buffer from RAM. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Transfers data from buffer[offset*sizeof( T )] to buffer[(offset+count-1)*sizeof( T )]. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">stagingBuffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The staging buffer used to transfer the data. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue used to execute the transfer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">commandPool</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The command pool on which the command buffer will be created. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The start offset. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pipeline stage flags for the out memory barrier. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">timer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render pass timer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render pass index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBuffer.hpp" line="107" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dbd/a02507_1a0b134b54910476b18fc90ec31657f4ff" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::UniformBufferT&lt; DataT &gt;::upload</definition>
+        <argsstring>(ashes::BufferBase const &amp;stagingBuffer, ashes::CommandBuffer const &amp;commandBuffer, uint32_t offset, VkPipelineStageFlags flags, FramePassTimer const &amp;timer, uint32_t index) const</argsstring>
+        <name>upload</name>
+        <qualifiedname>castor3d::UniformBufferT::upload</qualifiedname>
+        <param>
+          <type>ashes::BufferBase const &amp;</type>
+          <declname>stagingBuffer</declname>
+        </param>
+        <param>
+          <type>ashes::CommandBuffer const &amp;</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>offset</declname>
+        </param>
+        <param>
+          <type>VkPipelineStageFlags</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>FramePassTimer const &amp;</type>
+          <declname>timer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Transfers data to the GPU buffer from RAM. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Transfers data from buffer[offset*sizeof( T )] to buffer[(offset+count-1)*sizeof( T )]. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">stagingBuffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The staging buffer used to transfer the data. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">commandBuffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The command buffer on which the transfer commands are recorded. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The start offset. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pipeline stage flags for the out memory barrier. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">timer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render pass timer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render pass index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBuffer.hpp" line="134" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dbd/a02507_1abd746563b016741ef2ef499766a66de0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::UniformBufferT&lt; DataT &gt;::upload</definition>
+        <argsstring>(VkDeviceSize offset=0u, VkDeviceSize range=1u) const</argsstring>
+        <name>upload</name>
+        <qualifiedname>castor3d::UniformBufferT::upload</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+          <defval>0u</defval>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>range</declname>
+          <defval>1u</defval>
+        </param>
+        <briefdescription>
+<para>Uploads the buffer data to VRAM. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The offset in elements from which buffer memory is mapped. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">range</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of elements to map. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBuffer.hpp" line="156" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dbd/a02507_1a4be7cdd2c259692a07281cff794cef15" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::UniformBufferT&lt; DataT &gt;::download</definition>
+        <argsstring>(ashes::BufferBase const &amp;stagingBuffer, ashes::Queue const &amp;queue, ashes::CommandPool const &amp;commandPool, uint32_t offset, VkPipelineStageFlags flags, FramePassTimer const &amp;timer, uint32_t index)</argsstring>
+        <name>download</name>
+        <qualifiedname>castor3d::UniformBufferT::download</qualifiedname>
+        <param>
+          <type>ashes::BufferBase const &amp;</type>
+          <declname>stagingBuffer</declname>
+        </param>
+        <param>
+          <type>ashes::Queue const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>ashes::CommandPool const &amp;</type>
+          <declname>commandPool</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>offset</declname>
+        </param>
+        <param>
+          <type>VkPipelineStageFlags</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>FramePassTimer const &amp;</type>
+          <declname>timer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Transfers data from the GPU buffer to RAM. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Transfers data from buffer[offset*sizeof( T )] to buffer[(offset+count-1)*sizeof( T )]. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">stagingBuffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The staging buffer used to transfer the data. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue used to execute the transfer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">commandPool</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The command pool on which the command buffer will be created. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The start offset. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pipeline stage flags for the out memory barrier. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">timer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render pass timer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render pass index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBuffer.hpp" line="180" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dbd/a02507_1a8519466aa940d7a16efc1b797796bf00" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>DataT const &amp;</type>
+        <definition>DataT const  &amp; castor3d::UniformBufferT&lt; DataT &gt;::getData</definition>
+        <argsstring>(VkDeviceSize index=0) const</argsstring>
+        <name>getData</name>
+        <qualifiedname>castor3d::UniformBufferT::getData</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>index</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The N-th instance of the data. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The instance index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBuffer.hpp" line="199" column="14" bodyfile="Buffer/UniformBuffer.hpp" bodystart="199" bodyend="202"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dbd/a02507_1a69b7e9278e85f2f2653e3fb2b8b7a826" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>DataT &amp;</type>
+        <definition>DataT &amp; castor3d::UniformBufferT&lt; DataT &gt;::getData</definition>
+        <argsstring>(VkDeviceSize index=0)</argsstring>
+        <name>getData</name>
+        <qualifiedname>castor3d::UniformBufferT::getData</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>index</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The N-th instance of the data. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The instance index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBuffer.hpp" line="215" column="8" bodyfile="Buffer/UniformBuffer.hpp" bodystart="215" bodyend="218"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dbd/a02507_1ab0bb9c85abe172d1a9952c37ddccca40" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::vector&lt; DataT &gt; const &amp;</type>
+        <definition>std::vector&lt; DataT &gt; const  &amp; castor3d::UniformBufferT&lt; DataT &gt;::getDatas</definition>
+        <argsstring>() const</argsstring>
+        <name>getDatas</name>
+        <qualifiedname>castor3d::UniformBufferT::getDatas</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The data. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBuffer.hpp" line="227" column="20" bodyfile="Buffer/UniformBuffer.hpp" bodystart="227" bodyend="230"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dbd/a02507_1a485dbb369e0b8072dbbe7fd7e8fdc5a2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::vector&lt; DataT &gt; &amp;</type>
+        <definition>std::vector&lt; DataT &gt; &amp; castor3d::UniformBufferT&lt; DataT &gt;::getDatas</definition>
+        <argsstring>()</argsstring>
+        <name>getDatas</name>
+        <qualifiedname>castor3d::UniformBufferT::getDatas</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The data. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBuffer.hpp" line="239" column="14" bodyfile="Buffer/UniformBuffer.hpp" bodystart="239" bodyend="242"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>A uniform typed buffer, than can contain multiple sub-buffers. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="813">
-        <label>castor3d::CpuFrameEvent</label>
-        <link refid="d1/d5d/a02503"/>
-      </node>
-      <node id="812">
-        <label>castor3d::CpuFunctorEvent</label>
+      <node id="3">
+        <label>castor3d::UniformBufferT&lt; castor3d::ModelBufferConfiguration &gt;</label>
         <link refid="de/dbd/a02507"/>
-        <childnode refid="813" relation="public-inheritance">
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::ModelBufferConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::UniformBufferBase</label>
+        <link refid="d1/de9/a02591"/>
+      </node>
+      <node id="1">
+        <label>castor3d::UniformBufferT&lt; DataT &gt;</label>
+        <link refid="de/dbd/a02507"/>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="815">
-        <label>castor3d::CpuFrameEvent</label>
-        <link refid="d1/d5d/a02503"/>
+      <node id="2">
+        <label>castor3d::UniformBufferBase</label>
+        <link refid="d1/de9/a02591"/>
       </node>
-      <node id="814">
-        <label>castor3d::CpuFunctorEvent</label>
+      <node id="1">
+        <label>castor3d::UniformBufferT&lt; DataT &gt;</label>
         <link refid="de/dbd/a02507"/>
-        <childnode refid="815" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Event/Frame/CpuFunctorEvent.hpp" line="13" column="1" bodyfile="Event/Frame/CpuFunctorEvent.hpp" bodystart="11" bodyend="51"/>
+    <location file="Buffer/UniformBuffer.hpp" line="14" column="1" bodyfile="Buffer/UniformBuffer.hpp" bodystart="16" bodyend="246"/>
     <listofallmembers>
-      <member refid="de/dbd/a02507_1af2c8330462afd5efbcb1b15458f796bb" prot="public" virt="virtual"><scope>castor3d::CpuFunctorEvent</scope><name>apply</name></member>
-      <member refid="d1/d5d/a02503_1ae83db3b8b709ecf853a35d683ad8b6e8" prot="public" virt="non-virtual"><scope>castor3d::CpuFunctorEvent</scope><name>CpuFrameEvent</name></member>
-      <member refid="d1/d5d/a02503_1aa5118537fba83fa70a961831602b01ab" prot="public" virt="non-virtual"><scope>castor3d::CpuFunctorEvent</scope><name>CpuFrameEvent</name></member>
-      <member refid="d1/d5d/a02503_1aaf3cac5e82d244c2c6dbe23debd5d915" prot="public" virt="non-virtual"><scope>castor3d::CpuFunctorEvent</scope><name>CpuFrameEvent</name></member>
-      <member refid="de/dbd/a02507_1a641674326843af3f162593e58969e8ba" prot="private" virt="non-virtual"><scope>castor3d::CpuFunctorEvent</scope><name>CpuFunctorEvent</name></member>
-      <member refid="de/dbd/a02507_1a5be9e5cea2243fb0e162a6968f0a1194" prot="public" virt="non-virtual"><scope>castor3d::CpuFunctorEvent</scope><name>CpuFunctorEvent</name></member>
-      <member refid="de/dbd/a02507_1a076a85bf563a18b1df0511ec60ef1944" prot="public" virt="non-virtual"><scope>castor3d::CpuFunctorEvent</scope><name>Functor</name></member>
-      <member refid="d1/d5d/a02503_1a1838923995e8f180a7a627280580566e" prot="public" virt="non-virtual"><scope>castor3d::CpuFunctorEvent</scope><name>getType</name></member>
-      <member refid="de/dbd/a02507_1a640dbd0efbaba2d82d82e48f2f871f3c" prot="private" virt="non-virtual"><scope>castor3d::CpuFunctorEvent</scope><name>m_functor</name></member>
-      <member refid="d1/d5d/a02503_1a524ea078d871f55861b6bf095da318a0" prot="protected" virt="non-virtual"><scope>castor3d::CpuFunctorEvent</scope><name>m_stackTrace</name></member>
-      <member refid="d1/d5d/a02503_1a5a5e26283b8543afb6d89443498c3ece" prot="protected" virt="non-virtual"><scope>castor3d::CpuFunctorEvent</scope><name>m_type</name></member>
-      <member refid="de/dbd/a02507_1a462ebac0cb85e7f1d899aac0a46269ad" prot="private" virt="non-virtual"><scope>castor3d::CpuFunctorEvent</scope><name>operator=</name></member>
-      <member refid="d1/d5d/a02503_1a93dc90e257b2baa38767bab42d92713f" prot="public" virt="non-virtual" ambiguityscope="castor3d::CpuFrameEvent::"><scope>castor3d::CpuFunctorEvent</scope><name>operator=</name></member>
-      <member refid="d1/d5d/a02503_1a175874ffb8e6c175da89443e3ab48d83" prot="public" virt="non-virtual" ambiguityscope="castor3d::CpuFrameEvent::"><scope>castor3d::CpuFunctorEvent</scope><name>operator=</name></member>
-      <member refid="d1/d5d/a02503_1a4e9e9aceb04443692aa5c494293fdae2" prot="public" virt="virtual"><scope>castor3d::CpuFunctorEvent</scope><name>~CpuFrameEvent</name></member>
+      <member refid="d1/de9/a02591_1a2d44961d8428a660fc1e11d919c2e328" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>allocate</name></member>
+      <member refid="d1/de9/a02591_1aa538b53f279b4dbc2257c5ed3c226a0a" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>cleanup</name></member>
+      <member refid="d1/de9/a02591_1a0a38a33c4cf17752bd406dd3fc8de34a" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>deallocate</name></member>
+      <member refid="de/dbd/a02507_1a4be7cdd2c259692a07281cff794cef15" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>download</name></member>
+      <member refid="d1/de9/a02591_1a1a52034564cf1bb13c32aeb6295eeb11" prot="public" virt="non-virtual" ambiguityscope="castor3d::UniformBufferBase::"><scope>castor3d::UniformBufferT</scope><name>download</name></member>
+      <member refid="d1/de9/a02591_1a5fe29a5035bba089082ce4d573c6c42e" prot="public" virt="non-virtual" ambiguityscope="castor3d::UniformBufferBase::"><scope>castor3d::UniformBufferT</scope><name>download</name></member>
+      <member refid="d1/de9/a02591_1a43cbde3c96b7517206de5d452bbd350e" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>getAlignedSize</name></member>
+      <member refid="d1/de9/a02591_1a7341067e4a6aae481fe65904cea1dced" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>getAlignedSize</name></member>
+      <member refid="d1/de9/a02591_1a29e653bd16513f644691de924a80aa17" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>getBuffer</name></member>
+      <member refid="d1/de9/a02591_1a83a13211fc8b9d11f84b29ef5a5ee80b" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>getBuffer</name></member>
+      <member refid="de/dbd/a02507_1a8519466aa940d7a16efc1b797796bf00" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>getData</name></member>
+      <member refid="de/dbd/a02507_1a69b7e9278e85f2f2653e3fb2b8b7a826" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>getData</name></member>
+      <member refid="de/dbd/a02507_1ab0bb9c85abe172d1a9952c37ddccca40" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>getDatas</name></member>
+      <member refid="de/dbd/a02507_1a485dbb369e0b8072dbbe7fd7e8fdc5a2" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>getDatas</name></member>
+      <member refid="d1/de9/a02591_1a2f05a0079c76aa8e45427437b5a6342b" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>getElementSize</name></member>
+      <member refid="d1/de9/a02591_1af27b60f527e8b215abedea67baa9f17d" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>hasAvailable</name></member>
+      <member refid="d1/de9/a02591_1af7c01beed3624b041935b2d17e8f6c12" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>hasBuffer</name></member>
+      <member refid="d1/de9/a02591_1a2fe7805a14ce0d3bf0b178e66a20dbd9" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>initialise</name></member>
+      <member refid="d1/de9/a02591_1ad9d2c2daa90095d4109ff2032cb5d3d1" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>initialise</name></member>
+      <member refid="de/dbd/a02507_1ae2136477cd64fd42ce2a6a5c0a69d00c" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>m_data</name></member>
+      <member refid="d1/de9/a02591_1a0ddd5fa000a5ff5c0408b7099beff2ab" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>operator ashes::UniformBuffer &amp;</name></member>
+      <member refid="d1/de9/a02591_1ac620faacb633f017c5a85cd8e95f015e" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>operator ashes::UniformBuffer const &amp;</name></member>
+      <member refid="d1/de9/a02591_1a4acf1fef1cb1078d11b16d7f34803e74" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>UniformBufferBase</name></member>
+      <member refid="de/dbd/a02507_1ae7fba1155fbe6b61a636fbffd4c16fe4" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>UniformBufferT</name></member>
+      <member refid="de/dbd/a02507_1aebbeac4f41693ba895b792e884842be4" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>upload</name></member>
+      <member refid="de/dbd/a02507_1a4b052e889fbcb8a740b0f1970167301c" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>upload</name></member>
+      <member refid="de/dbd/a02507_1a61873b9b0a0066fedd1146d54464b497" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>upload</name></member>
+      <member refid="de/dbd/a02507_1a0b134b54910476b18fc90ec31657f4ff" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>upload</name></member>
+      <member refid="de/dbd/a02507_1abd746563b016741ef2ef499766a66de0" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferT</scope><name>upload</name></member>
+      <member refid="d1/de9/a02591_1ad56ef47e3a77da41e7971ce6b9f76f48" prot="public" virt="non-virtual" ambiguityscope="castor3d::UniformBufferBase::"><scope>castor3d::UniformBufferT</scope><name>upload</name></member>
+      <member refid="d1/de9/a02591_1ab66278b315c90593aa870cd3ef04447c" prot="public" virt="non-virtual" ambiguityscope="castor3d::UniformBufferBase::"><scope>castor3d::UniformBufferT</scope><name>upload</name></member>
+      <member refid="d1/de9/a02591_1a5932cec96bf8d905b7fbc5bee3d68004" prot="public" virt="non-virtual" ambiguityscope="castor3d::UniformBufferBase::"><scope>castor3d::UniformBufferT</scope><name>upload</name></member>
+      <member refid="d1/de9/a02591_1aabcfe5ba88e3e3ea931631f640bb8f80" prot="public" virt="non-virtual" ambiguityscope="castor3d::UniformBufferBase::"><scope>castor3d::UniformBufferT</scope><name>upload</name></member>
+      <member refid="d1/de9/a02591_1a6e142d982998f84db232f36cae3f2fb2" prot="public" virt="non-virtual" ambiguityscope="castor3d::UniformBufferBase::"><scope>castor3d::UniformBufferT</scope><name>upload</name></member>
+      <member refid="d1/de9/a02591_1a769ac5ec0ba07fa6b620d3ae32e25393" prot="public" virt="non-virtual" ambiguityscope="castor3d::UniformBufferBase::"><scope>castor3d::UniformBufferT</scope><name>upload</name></member>
+      <member refid="d1/de9/a02591_1a11d3536ca92a7c7d36d2da8e658651bf" prot="public" virt="non-virtual" ambiguityscope="castor3d::UniformBufferBase::"><scope>castor3d::UniformBufferT</scope><name>upload</name></member>
+      <member refid="d1/de9/a02591_1a29c277e049142fe675215ac918fc541f" prot="public" virt="non-virtual" ambiguityscope="castor3d::UniformBufferBase::"><scope>castor3d::UniformBufferT</scope><name>upload</name></member>
+      <member refid="d1/de9/a02591_1aa739acefda291cda14d4b4c5b06ecf9a" prot="public" virt="virtual"><scope>castor3d::UniformBufferT</scope><name>~UniformBufferBase</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,33 +1,160 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d6/de6/a03666" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPhysicalDeviceShaderAtomicInt64FeaturesKHR &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d6/de6/a03666_1a0f07defc8d92d7e44ccbec47f085bde6" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPhysicalDeviceShaderAtomicInt64FeaturesKHR &gt;::value</definition>
+    <compoundname>castor3d::SceneCuller::RenderPassBuffers</compoundname>
+    <includes local="no">SceneCuller.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/de6/a03666_1ad350c92f5b25dfabe1fe856becc10d98" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/d2b/a03662_1a9c5df1fcfd55a6050920465031ee16fe" kindref="member">IndexedDrawCommandsBuffer</ref></type>
+        <definition>IndexedDrawCommandsBuffer castor3d::SceneCuller::RenderPassBuffers::submeshIdxIndirectCommands</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_ATOMIC_INT64_FEATURES_KHR</initializer>
+        <name>submeshIdxIndirectCommands</name>
+        <qualifiedname>castor3d::SceneCuller::RenderPassBuffers::submeshIdxIndirectCommands</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="329" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="329" bodyend="-1"/>
+        <location file="Render/Culling/SceneCuller.hpp" line="78" column="27" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/de6/a03666_1a88d34c12beea811feb465903f34534f6" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/d2b/a03662_1aab980445b5e3b308a83202c17ed319fe" kindref="member">DrawCommandsBuffer</ref></type>
+        <definition>DrawCommandsBuffer castor3d::SceneCuller::RenderPassBuffers::submeshNIdxIndirectCommands</definition>
+        <argsstring></argsstring>
+        <name>submeshNIdxIndirectCommands</name>
+        <qualifiedname>castor3d::SceneCuller::RenderPassBuffers::submeshNIdxIndirectCommands</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="79" column="20" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/de6/a03666_1a1946ff400e4cbd2c602dc53159f27317" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/d2b/a03662_1aab980445b5e3b308a83202c17ed319fe" kindref="member">DrawCommandsBuffer</ref></type>
+        <definition>DrawCommandsBuffer castor3d::SceneCuller::RenderPassBuffers::billboardIndirectCommands</definition>
+        <argsstring></argsstring>
+        <name>billboardIndirectCommands</name>
+        <qualifiedname>castor3d::SceneCuller::RenderPassBuffers::billboardIndirectCommands</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="80" column="20" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/de6/a03666_1a7c5be63ba4dcf8490213e71f557e5585" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/d2b/a03662_1ae574a8f382f045af7ef6da4649e40d36" kindref="member">PipelineNodesBuffer</ref></type>
+        <definition>PipelineNodesBuffer castor3d::SceneCuller::RenderPassBuffers::pipelinesNodes</definition>
+        <argsstring></argsstring>
+        <name>pipelinesNodes</name>
+        <qualifiedname>castor3d::SceneCuller::RenderPassBuffers::pipelinesNodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="81" column="21" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/de6/a03666_1a8675ff2d57a2eac8b22c86a36b9db279" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/d2b/a03662_1a0df54bafb8f37f2b9d2729913c034dbc" kindref="member">PipelineBufferArray</ref></type>
+        <definition>PipelineBufferArray castor3d::SceneCuller::RenderPassBuffers::nodesIds</definition>
+        <argsstring></argsstring>
+        <name>nodesIds</name>
+        <qualifiedname>castor3d::SceneCuller::RenderPassBuffers::nodesIds</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="82" column="21" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/de6/a03666_1a1337efae362ca98f616a05a3c83c8d3f" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/d2b/a03662_1a63128301aea730cc1e93a32d5d88acfc" kindref="member">SidedNodePipelineMapT</ref>&lt; <ref refid="d6/da7/a03794" kindref="compound">SubmeshRenderNode</ref> &gt;</type>
+        <definition>SidedNodePipelineMapT&lt; SubmeshRenderNode &gt; castor3d::SceneCuller::RenderPassBuffers::sortedSubmeshes</definition>
+        <argsstring></argsstring>
+        <name>sortedSubmeshes</name>
+        <qualifiedname>castor3d::SceneCuller::RenderPassBuffers::sortedSubmeshes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="83" column="23" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/de6/a03666_1af55d3c32590fe84637ea2837d63dcd4b" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/d2b/a03662_1a230881528f26599cfcf19fa9527e9c24" kindref="member">SidedObjectNodePipelineMapT</ref>&lt; <ref refid="d6/da7/a03794" kindref="compound">SubmeshRenderNode</ref> &gt;</type>
+        <definition>SidedObjectNodePipelineMapT&lt; SubmeshRenderNode &gt; castor3d::SceneCuller::RenderPassBuffers::sortedInstancedSubmeshes</definition>
+        <argsstring></argsstring>
+        <name>sortedInstancedSubmeshes</name>
+        <qualifiedname>castor3d::SceneCuller::RenderPassBuffers::sortedInstancedSubmeshes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="84" column="29" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/de6/a03666_1a419e714c326a8dc0ce59fe53eccae807" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/d2b/a03662_1a63128301aea730cc1e93a32d5d88acfc" kindref="member">SidedNodePipelineMapT</ref>&lt; <ref refid="d7/d82/a03774" kindref="compound">BillboardRenderNode</ref> &gt;</type>
+        <definition>SidedNodePipelineMapT&lt; BillboardRenderNode &gt; castor3d::SceneCuller::RenderPassBuffers::sortedBillboards</definition>
+        <argsstring></argsstring>
+        <name>sortedBillboards</name>
+        <qualifiedname>castor3d::SceneCuller::RenderPassBuffers::sortedBillboards</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="85" column="23" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="85" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="329" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="329" bodyend="329"/>
+    <collaborationgraph>
+      <node id="4">
+        <label>T</label>
+      </node>
+      <node id="1">
+        <label>castor3d::SceneCuller::RenderPassBuffers</label>
+        <link refid="d6/de6/a03666"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>nodesIds</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::vector&lt; PipelineBuffer &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; PipelineBuffer &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Culling/SceneCuller.hpp" line="76" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="77" bodyend="86"/>
     <listofallmembers>
-      <member refid="d6/de6/a03666_1a0f07defc8d92d7e44ccbec47f085bde6" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPhysicalDeviceShaderAtomicInt64FeaturesKHR &gt;</scope><name>value</name></member>
+      <member refid="d6/de6/a03666_1a1946ff400e4cbd2c602dc53159f27317" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller::RenderPassBuffers</scope><name>billboardIndirectCommands</name></member>
+      <member refid="d6/de6/a03666_1a8675ff2d57a2eac8b22c86a36b9db279" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller::RenderPassBuffers</scope><name>nodesIds</name></member>
+      <member refid="d6/de6/a03666_1a7c5be63ba4dcf8490213e71f557e5585" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller::RenderPassBuffers</scope><name>pipelinesNodes</name></member>
+      <member refid="d6/de6/a03666_1a419e714c326a8dc0ce59fe53eccae807" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller::RenderPassBuffers</scope><name>sortedBillboards</name></member>
+      <member refid="d6/de6/a03666_1af55d3c32590fe84637ea2837d63dcd4b" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller::RenderPassBuffers</scope><name>sortedInstancedSubmeshes</name></member>
+      <member refid="d6/de6/a03666_1a1337efae362ca98f616a05a3c83c8d3f" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller::RenderPassBuffers</scope><name>sortedSubmeshes</name></member>
+      <member refid="d6/de6/a03666_1ad350c92f5b25dfabe1fe856becc10d98" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller::RenderPassBuffers</scope><name>submeshIdxIndirectCommands</name></member>
+      <member refid="d6/de6/a03666_1a88d34c12beea811feb465903f34534f6" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller::RenderPassBuffers</scope><name>submeshNIdxIndirectCommands</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

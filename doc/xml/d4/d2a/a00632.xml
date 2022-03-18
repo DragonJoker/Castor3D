@@ -1,223 +1,213 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d4/d2a/a00632" kind="file" language="C++">
-    <compoundname>FrustumCuller.hpp</compoundname>
-    <includes refid="db/d3a/a00641" local="yes">Castor3D/Render/Culling/SceneCuller.hpp</includes>
+    <compoundname>PluginModule.hpp</compoundname>
+    <includes refid="d5/df1/a00206" local="yes">Castor3D/Cache/CacheModule.hpp</includes>
+    <includes local="no">CastorUtils/Data/Path.hpp</includes>
+    <includedby refid="d6/de1/a00233" local="yes">Cache/PluginCache.hpp</includedby>
+    <includedby refid="d3/d1a/a00251" local="yes">Castor3DPrerequisites.hpp</includedby>
+    <includedby refid="d7/d03/a00254" local="yes">Engine.hpp</includedby>
+    <includedby refid="d6/dfa/a00626" local="yes">Plugin/Plugin.hpp</includedby>
+    <includedby refid="da/dd1/a00629" local="yes">Plugin/PluginException.hpp</includedby>
     <incdepgraph>
-      <node id="11811">
-        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      <node id="21">
+        <label>CastorUtils/Data/Path.hpp</label>
       </node>
-      <node id="11820">
-        <label>Castor3D/Material/MaterialModule.hpp</label>
-        <link refid="d8/d23/a00326"/>
-        <childnode refid="11806" relation="include">
-        </childnode>
-        <childnode refid="11821" relation="include">
-        </childnode>
-      </node>
-      <node id="11804">
-        <label>Castor3D/Render/RenderModule.hpp</label>
-        <link refid="d5/d72/a00803"/>
-        <childnode refid="11805" relation="include">
-        </childnode>
-        <childnode refid="11819" relation="include">
-        </childnode>
-        <childnode refid="11828" relation="include">
-        </childnode>
-        <childnode refid="11829" relation="include">
-        </childnode>
-        <childnode refid="11830" relation="include">
-        </childnode>
-        <childnode refid="11831" relation="include">
-        </childnode>
-        <childnode refid="11834" relation="include">
-        </childnode>
-      </node>
-      <node id="11814">
-        <label>ashespp/AshesPPPrerequisites.hpp</label>
-      </node>
-      <node id="11827">
-        <label>CastorUtils/Graphics/BoundingSphere.hpp</label>
-      </node>
-      <node id="11815">
-        <label>cstdint</label>
-      </node>
-      <node id="11803">
-        <label>CullingModule.hpp</label>
-        <link refid="d6/dfa/a00626"/>
-        <childnode refid="11804" relation="include">
-        </childnode>
-        <childnode refid="11821" relation="include">
-        </childnode>
-      </node>
-      <node id="11821">
-        <label>CastorUtils/Design/Signal.hpp</label>
-      </node>
-      <node id="11813">
-        <label>CastorUtils/Math/Point.hpp</label>
-      </node>
-      <node id="11832">
-        <label>ShaderAST/Shader.hpp</label>
-      </node>
-      <node id="11806">
-        <label>Castor3D/Castor3DModule.hpp</label>
-        <link refid="d5/d35/a00266"/>
-        <childnode refid="11807" relation="include">
-        </childnode>
-        <childnode refid="11808" relation="include">
-        </childnode>
-        <childnode refid="11809" relation="include">
-        </childnode>
-        <childnode refid="11810" relation="include">
-        </childnode>
-        <childnode refid="11811" relation="include">
-        </childnode>
-        <childnode refid="11812" relation="include">
-        </childnode>
-        <childnode refid="11813" relation="include">
-        </childnode>
-        <childnode refid="11814" relation="include">
-        </childnode>
-        <childnode refid="11815" relation="include">
-        </childnode>
-        <childnode refid="11816" relation="include">
-        </childnode>
-        <childnode refid="11817" relation="include">
-        </childnode>
-        <childnode refid="11818" relation="include">
-        </childnode>
-      </node>
-      <node id="11817">
-        <label>string</label>
-      </node>
-      <node id="11802">
-        <label>Castor3D/Render/Culling/SceneCuller.hpp</label>
-        <link refid="db/d3a/a00641"/>
-        <childnode refid="11803" relation="include">
-        </childnode>
-        <childnode refid="11822" relation="include">
-        </childnode>
-      </node>
-      <node id="11824">
-        <label>Castor3D/Model/ModelModule.hpp</label>
-        <link refid="d7/def/a00521"/>
-        <childnode refid="11806" relation="include">
-        </childnode>
-      </node>
-      <node id="11810">
-        <label>CastorUtils/Exception/Assertion.hpp</label>
-      </node>
-      <node id="11807">
-        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
-      </node>
-      <node id="11822">
-        <label>Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp</label>
-        <link refid="dc/d19/a00515"/>
-        <childnode refid="11823" relation="include">
-        </childnode>
-        <childnode refid="11826" relation="include">
-        </childnode>
-        <childnode refid="11827" relation="include">
-        </childnode>
-      </node>
-      <node id="11830">
-        <label>Castor3D/Material/Texture/TextureModule.hpp</label>
-        <link refid="de/dd7/a00362"/>
-        <childnode refid="11820" relation="include">
-        </childnode>
-        <childnode refid="11821" relation="include">
-        </childnode>
-      </node>
-      <node id="11826">
-        <label>CastorUtils/Graphics/BoundingBox.hpp</label>
-      </node>
-      <node id="11809">
-        <label>CastorUtils/Design/OwnedBy.hpp</label>
-      </node>
-      <node id="11805">
-        <label>Castor3D/Miscellaneous/MiscellaneousModule.hpp</label>
-        <link refid="d4/d27/a00392"/>
-        <childnode refid="11806" relation="include">
-        </childnode>
-      </node>
-      <node id="11819">
-        <label>Castor3D/Scene/SceneModule.hpp</label>
-        <link refid="de/db5/a01181"/>
-        <childnode refid="11820" relation="include">
-        </childnode>
-        <childnode refid="11822" relation="include">
-        </childnode>
-        <childnode refid="11821" relation="include">
-        </childnode>
-      </node>
-      <node id="11828">
-        <label>Castor3D/Scene/Light/LightModule.hpp</label>
-        <link refid="d9/d5b/a01127"/>
-        <childnode refid="11819" relation="include">
-        </childnode>
-      </node>
-      <node id="11808">
+      <node id="5">
         <label>CastorUtils/Design/FlagCombination.hpp</label>
       </node>
-      <node id="11823">
-        <label>Castor3D/Model/Mesh/MeshModule.hpp</label>
-        <link refid="d2/d9d/a00464"/>
-        <childnode refid="11824" relation="include">
-        </childnode>
-        <childnode refid="11825" relation="include">
-        </childnode>
+      <node id="6">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
       </node>
-      <node id="11818">
-        <label>vector</label>
+      <node id="18">
+        <label>CastorUtils/Design/ResourceCache.hpp</label>
       </node>
-      <node id="11812">
+      <node id="7">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="8">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="9">
+        <label>CastorUtils/Graphics/Size.hpp</label>
+      </node>
+      <node id="10">
         <label>CastorUtils/Math/Coords.hpp</label>
       </node>
-      <node id="11829">
-        <label>Castor3D/Material/Pass/PassModule.hpp</label>
-        <link refid="df/d91/a00335"/>
-        <childnode refid="11820" relation="include">
+      <node id="11">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="4">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="13">
+        <label>RenderGraph/FrameGraphPrerequisites.hpp</label>
+      </node>
+      <node id="2">
+        <label>Castor3D/Cache/CacheModule.hpp</label>
+        <link refid="d5/df1/a00206"/>
+        <childnode refid="3" relation="include">
         </childnode>
-        <childnode refid="11821" relation="include">
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
         </childnode>
       </node>
-      <node id="11834">
-        <label>ashespp/Image/ImageView.hpp</label>
+      <node id="3">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d6/d22/a00245"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
       </node>
-      <node id="11833">
-        <label>ShaderWriter/ShaderWriterPrerequisites.hpp</label>
-      </node>
-      <node id="11801">
-        <label>Render/Culling/FrustumCuller.hpp</label>
+      <node id="1">
+        <label>Plugin/PluginModule.hpp</label>
         <link refid="d4/d2a/a00632"/>
-        <childnode refid="11802" relation="include">
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
         </childnode>
       </node>
-      <node id="11825">
-        <label>CastorUtils/Design/Factory.hpp</label>
+      <node id="12">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
       </node>
-      <node id="11831">
-        <label>Castor3D/Shader/ShaderModule.hpp</label>
-        <link refid="d5/d32/a01214"/>
-        <childnode refid="11806" relation="include">
-        </childnode>
-        <childnode refid="11832" relation="include">
-        </childnode>
-        <childnode refid="11833" relation="include">
-        </childnode>
-        <childnode refid="11808" relation="include">
-        </childnode>
+      <node id="14">
+        <label>cstdint</label>
       </node>
-      <node id="11816">
+      <node id="19">
+        <label>functional</label>
+      </node>
+      <node id="15">
         <label>memory</label>
       </node>
+      <node id="16">
+        <label>string</label>
+      </node>
+      <node id="20">
+        <label>unordered_map</label>
+      </node>
+      <node id="17">
+        <label>vector</label>
+      </node>
     </incdepgraph>
-    <innerclass refid="d3/d6f/a04212" prot="public">castor3d::FrustumCuller</innerclass>
-    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <invincdepgraph>
+      <node id="2">
+        <label>Cache/PluginCache.hpp</label>
+        <link refid="d6/de1/a00233"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>Castor3DPrerequisites.hpp</label>
+        <link refid="d3/d1a/a00251"/>
+      </node>
+      <node id="3">
+        <label>Engine.hpp</label>
+        <link refid="d7/d03/a00254"/>
+      </node>
+      <node id="6">
+        <label>Plugin/DividerPlugin.hpp</label>
+        <link refid="dd/dc0/a00611"/>
+      </node>
+      <node id="7">
+        <label>Plugin/GeneratorPlugin.hpp</label>
+        <link refid="d7/d80/a00614"/>
+      </node>
+      <node id="8">
+        <label>Plugin/GenericPlugin.hpp</label>
+        <link refid="d4/dc4/a00617"/>
+      </node>
+      <node id="9">
+        <label>Plugin/ImporterPlugin.hpp</label>
+        <link refid="dc/d4d/a00620"/>
+      </node>
+      <node id="10">
+        <label>Plugin/ParticlePlugin.hpp</label>
+        <link refid="df/d6f/a00623"/>
+      </node>
+      <node id="5">
+        <label>Plugin/Plugin.hpp</label>
+        <link refid="d6/dfa/a00626"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>Plugin/PluginException.hpp</label>
+        <link refid="da/dd1/a00629"/>
+      </node>
+      <node id="1">
+        <label>Plugin/PluginModule.hpp</label>
+        <link refid="d4/d2a/a00632"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>Plugin/PostFxPlugin.hpp</label>
+        <link refid="d4/d10/a00635"/>
+      </node>
+      <node id="12">
+        <label>Plugin/ToneMappingPlugin.hpp</label>
+        <link refid="d1/daa/a00638"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="d1/d7b/a03639" prot="public">castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</innerclass>
+    <innernamespace refid="da/de3/a01398">castor3d</innernamespace>
+    <innernamespace refid="d6/d64/a01399">castor</innernamespace>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Culling/FrustumCuller.hpp"/>
+    <location file="Plugin/PluginModule.hpp"/>
   </compounddef>
 </doxygen>

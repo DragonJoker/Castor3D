@@ -1,402 +1,83 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="de/d61/a05191" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::ParticleDeclaration</compoundname>
-    <includes local="no">ParticleDeclaration.hpp</includes>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="de/d61/a05191_1ac3605c9497d42815f814501886deff89" prot="public" static="no">
-        <type>ParticleElementDeclarationArrayIt</type>
-        <definition>using castor3d::ParticleDeclaration::iterator =  ParticleElementDeclarationArrayIt</definition>
-        <argsstring></argsstring>
-        <name>iterator</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="64" column="1" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="64" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="de/d61/a05191_1a4218788ea671d00ca5f5b0b6f56db038" prot="public" static="no">
-        <type>ParticleElementDeclarationArrayConstIt</type>
-        <definition>using castor3d::ParticleDeclaration::const_iterator =  ParticleElementDeclarationArrayConstIt</definition>
-        <argsstring></argsstring>
-        <name>const_iterator</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="65" column="1" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="65" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="de/d61/a05191_1aa661b1b54c3f511c20ea4a7cd640b55f" prot="private" static="no" mutable="no">
-        <type>ParticleElementDeclarationArray</type>
-        <definition>ParticleElementDeclarationArray castor3d::ParticleDeclaration::m_elements</definition>
-        <argsstring></argsstring>
-        <name>m_elements</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="208" column="1" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="208" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/d61/a05191_1ac74a37e700e61a021dd3f98366c5fb5a" prot="private" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::ParticleDeclaration::m_stride</definition>
-        <argsstring></argsstring>
-        <name>m_stride</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="209" column="1" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="209" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
+    <compoundname>castor::TextWriter&lt; castor3d::SsaoConfig &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::SsaoConfig &gt;</basecompoundref>
+    <includes local="no">TextSsaoConfig.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="de/d61/a05191_1a94906dc420ab54fe789e78978b9afb11" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::ParticleDeclaration::CU_DeclareVector</definition>
-        <argsstring>(ParticleElementDeclaration, ParticleElementDeclaration)</argsstring>
-        <name>CU_DeclareVector</name>
-        <param>
-          <type><ref refid="dc/d65/a05195" kindref="compound">ParticleElementDeclaration</ref></type>
-        </param>
-        <param>
-          <type><ref refid="dc/d65/a05195" kindref="compound">ParticleElementDeclaration</ref></type>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="63" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d61/a05191_1a8ec38ae51302b43f610e7c25ea18a871" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="de/d61/a05191_1a638e7ff77aacd6b9b43a9ea2bd77cf1f" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::ParticleDeclaration::ParticleDeclaration</definition>
-        <argsstring>()</argsstring>
-        <name>ParticleDeclaration</name>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="74" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d61/a05191_1aa4f5720619218210cc6489768d196dc0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::ParticleDeclaration::ParticleDeclaration</definition>
-        <argsstring>(ParticleElementDeclaration const *elements, uint32_t count)</argsstring>
-        <name>ParticleDeclaration</name>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::SsaoConfig &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs)</argsstring>
+        <name>TextWriter</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::SsaoConfig &gt;::TextWriter</qualifiedname>
         <param>
-          <type><ref refid="dc/d65/a05195" kindref="compound">ParticleElementDeclaration</ref> const *</type>
-          <declname>elements</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>count</declname>
+          <type>String const &amp;</type>
+          <declname>tabs</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">elements</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The elements array </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">count</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Elements array size </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="85" column="1"/>
+        <location file="Text/TextSsaoConfig.hpp" line="18" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="de/d61/a05191_1a0514f25eaec348b564a1b4db6774532d" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>uint32_t</type>
-            <declname>N</declname>
-            <defname>N</defname>
-          </param>
-        </templateparamlist>
-        <type></type>
-        <definition>castor3d::ParticleDeclaration::ParticleDeclaration</definition>
-        <argsstring>(ParticleElementDeclaration const(&amp;elements)[N])</argsstring>
-        <name>ParticleDeclaration</name>
+      <memberdef kind="function" id="de/d61/a05191_1a982176df0af49c56bd2189e71efe9b54" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::SsaoConfig &gt;::operator()</definition>
+        <argsstring>(castor3d::SsaoConfig const &amp;config, StringStream &amp;file) override</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::SsaoConfig &gt;::operator()</qualifiedname>
         <param>
-          <type><ref refid="dc/d65/a05195" kindref="compound">ParticleElementDeclaration</ref> const(&amp;)</type>
-          <declname>elements</declname>
-          <array>[N]</array>
+          <type><ref refid="d6/d64/a04167" kindref="compound">castor3d::SsaoConfig</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type>StringStream &amp;</type>
+          <declname>file</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">elements</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The elements array </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="96" column="1" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="96" bodyend="99"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d61/a05191_1aa730f3f47157eb4929349ce651695d15" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::ParticleDeclaration::ParticleDeclaration</definition>
-        <argsstring>(std::vector&lt; ParticleElementDeclaration &gt; const &amp;elements)</argsstring>
-        <name>ParticleDeclaration</name>
-        <param>
-          <type>std::vector&lt; <ref refid="dc/d65/a05195" kindref="compound">ParticleElementDeclaration</ref> &gt; const &amp;</type>
-          <declname>elements</declname>
-        </param>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">elements</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The elements array </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="108" column="1" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="108" bodyend="111"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d61/a05191_1a79f52eef30d7309b4306e332a1f61407" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::ParticleDeclaration::~ParticleDeclaration</definition>
-        <argsstring>()</argsstring>
-        <name>~ParticleDeclaration</name>
-        <briefdescription>
-<para>Destructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="118" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d61/a05191_1a2801ab754c2996e43bf6acf5681aa9d1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>size_t</type>
-        <definition>size_t castor3d::ParticleDeclaration::count</definition>
-        <argsstring>() const</argsstring>
-        <name>count</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The elements count. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="125" column="1" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="125" bodyend="128"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d61/a05191_1a94c23e4abf0b8bc8e7a4d2804cb66e01" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::ParticleDeclaration::stride</definition>
-        <argsstring>() const</argsstring>
-        <name>stride</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The byte size of the declaration. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="135" column="1" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="135" bodyend="138"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d61/a05191_1a9d90b77b2728db722108628e703c43f7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="de/d61/a05191_1ac3605c9497d42815f814501886deff89" kindref="member">iterator</ref></type>
-        <definition>iterator castor3d::ParticleDeclaration::begin</definition>
-        <argsstring>()</argsstring>
-        <name>begin</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>An iterator to the beginning of the elements. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="145" column="1" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="145" bodyend="148"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d61/a05191_1a3e1896a96f323d94c4779f9093304c97" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="de/d61/a05191_1a4218788ea671d00ca5f5b0b6f56db038" kindref="member">const_iterator</ref></type>
-        <definition>const_iterator castor3d::ParticleDeclaration::begin</definition>
-        <argsstring>() const</argsstring>
-        <name>begin</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>An iterator to the beginning of the elements. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="155" column="1" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="155" bodyend="158"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d61/a05191_1ad535a512a6834f843fce3a8cfc553ba8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="de/d61/a05191_1ac3605c9497d42815f814501886deff89" kindref="member">iterator</ref></type>
-        <definition>iterator castor3d::ParticleDeclaration::end</definition>
-        <argsstring>()</argsstring>
-        <name>end</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>An iterator to the end of the elements. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="165" column="1" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="165" bodyend="168"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d61/a05191_1a3a08259686ff389f5e3630736a997b37" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="de/d61/a05191_1a4218788ea671d00ca5f5b0b6f56db038" kindref="member">const_iterator</ref></type>
-        <definition>const_iterator castor3d::ParticleDeclaration::end</definition>
-        <argsstring>() const</argsstring>
-        <name>end</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>An iterator to the end of the elements. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="175" column="1" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="175" bodyend="178"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d61/a05191_1aa0b424404ccc18558bcbd1983dc9810c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::ParticleDeclaration::push_back</definition>
-        <argsstring>(ParticleElementDeclaration const &amp;element)</argsstring>
-        <name>push_back</name>
-        <param>
-          <type><ref refid="dc/d65/a05195" kindref="compound">ParticleElementDeclaration</ref> const &amp;</type>
-          <declname>element</declname>
-        </param>
-        <briefdescription>
-<para>Adds an element to the end of the list. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">element</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="187" column="1" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="187" bodyend="191"/>
-        <references refid="d7/dd1/a01458_1af145720a0b2c8ccbcc74c2a00c0c8f31" compoundref="d9/d5b/a01127" startline="23" endline="58">castor3d::getSize</references>
-      </memberdef>
-      <memberdef kind="function" id="de/d61/a05191_1ae9fa2c33110f50fdd3c3875d87508624" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename ...</type>
-            <declname>Params</declname>
-            <defname>Params</defname>
-          </param>
-        </templateparamlist>
-        <type>void</type>
-        <definition>void castor3d::ParticleDeclaration::emplace_back</definition>
-        <argsstring>(Params const &amp;... params)</argsstring>
-        <name>emplace_back</name>
-        <param>
-          <type>Params const &amp;...</type>
-          <declname>params</declname>
-        </param>
-        <briefdescription>
-<para>Adds an element to the end of the list. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">params</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element construction parameters. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="201" column="1" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="201" bodyend="205"/>
-        <references refid="d7/dd1/a01458_1af145720a0b2c8ccbcc74c2a00c0c8f31" compoundref="d9/d5b/a01127" startline="23" endline="58">castor3d::getSize</references>
+        <location file="Text/TextSsaoConfig.hpp" line="19" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="61" column="1" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="60" bodyend="210"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::SsaoConfig &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::SsaoConfig &gt;</label>
+        <link refid="de/d61/a05191"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::SsaoConfig &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::SsaoConfig &gt;</label>
+        <link refid="de/d61/a05191"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextSsaoConfig.hpp" line="14" column="1" bodyfile="Text/TextSsaoConfig.hpp" bodystart="16" bodyend="21"/>
     <listofallmembers>
-      <member refid="de/d61/a05191_1a9d90b77b2728db722108628e703c43f7" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>begin</name></member>
-      <member refid="de/d61/a05191_1a3e1896a96f323d94c4779f9093304c97" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>begin</name></member>
-      <member refid="de/d61/a05191_1a4218788ea671d00ca5f5b0b6f56db038" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>const_iterator</name></member>
-      <member refid="de/d61/a05191_1a2801ab754c2996e43bf6acf5681aa9d1" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>count</name></member>
-      <member refid="de/d61/a05191_1a94906dc420ab54fe789e78978b9afb11" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>CU_DeclareVector</name></member>
-      <member refid="de/d61/a05191_1ae9fa2c33110f50fdd3c3875d87508624" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>emplace_back</name></member>
-      <member refid="de/d61/a05191_1ad535a512a6834f843fce3a8cfc553ba8" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>end</name></member>
-      <member refid="de/d61/a05191_1a3a08259686ff389f5e3630736a997b37" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>end</name></member>
-      <member refid="de/d61/a05191_1ac3605c9497d42815f814501886deff89" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>iterator</name></member>
-      <member refid="de/d61/a05191_1aa661b1b54c3f511c20ea4a7cd640b55f" prot="private" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>m_elements</name></member>
-      <member refid="de/d61/a05191_1ac74a37e700e61a021dd3f98366c5fb5a" prot="private" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>m_stride</name></member>
-      <member refid="de/d61/a05191_1a8ec38ae51302b43f610e7c25ea18a871" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>ParticleDeclaration</name></member>
-      <member refid="de/d61/a05191_1aa4f5720619218210cc6489768d196dc0" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>ParticleDeclaration</name></member>
-      <member refid="de/d61/a05191_1a0514f25eaec348b564a1b4db6774532d" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>ParticleDeclaration</name></member>
-      <member refid="de/d61/a05191_1aa730f3f47157eb4929349ce651695d15" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>ParticleDeclaration</name></member>
-      <member refid="de/d61/a05191_1aa0b424404ccc18558bcbd1983dc9810c" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>push_back</name></member>
-      <member refid="de/d61/a05191_1a94c23e4abf0b8bc8e7a4d2804cb66e01" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>stride</name></member>
-      <member refid="de/d61/a05191_1a79f52eef30d7309b4306e332a1f61407" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>~ParticleDeclaration</name></member>
+      <member refid="de/d61/a05191_1a982176df0af49c56bd2189e71efe9b54" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::SsaoConfig &gt;</scope><name>operator()</name></member>
+      <member refid="de/d61/a05191_1a638e7ff77aacd6b9b43a9ea2bd77cf1f" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::SsaoConfig &gt;</scope><name>TextWriter</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

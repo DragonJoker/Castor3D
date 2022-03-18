@@ -1,69 +1,71 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dc/d02/a03883" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::MeshImporterFactory</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">castor::Factory&lt; MeshImporter, castor::String, MeshImporterUPtr, std::function&lt; MeshImporterUPtr(Engine &amp;) &gt; &gt;</basecompoundref>
-    <includes local="no">ImporterFactory.hpp</includes>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="dc/d02/a03883_1ab8c66c78e679eb45fbb9b0c1d17e856c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::MeshImporterFactory::MeshImporterFactory</definition>
-        <argsstring>()</argsstring>
-        <name>MeshImporterFactory</name>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/ImporterFactory.hpp" line="23" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="dc/d02/a03883_1a487226529aa95edbf4def120475511f9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::MeshImporterFactory::~MeshImporterFactory</definition>
-        <argsstring>()</argsstring>
-        <name>~MeshImporterFactory</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/ImporterFactory.hpp" line="30" column="1"/>
-      </memberdef>
-      </sectiondef>
+    <compoundname>castor3d::RenderQuadBuilder</compoundname>
+    <basecompoundref refid="d5/daa/a03855" prot="public" virt="non-virtual">castor3d::RenderQuadBuilderT&lt; rq::Config, RenderQuadBuilder &gt;</basecompoundref>
+    <includes local="no">RenderQuad.hpp</includes>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="1965">
-        <label>castor::Factory&lt; MeshImporter, castor::String, MeshImporterUPtr, std::function&lt; MeshImporterUPtr(Engine &amp;) &gt; &gt;</label>
-      </node>
-      <node id="1964">
-        <label>castor3d::MeshImporterFactory</label>
-        <link refid="dc/d02/a03883"/>
-        <childnode refid="1965" relation="public-inheritance">
+      <node id="2">
+        <label>castor3d::RenderQuadBuilderT&lt; rq::Config, RenderQuadBuilder &gt;</label>
+        <link refid="d5/daa/a03855"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; rq::Config, RenderQuadBuilder &gt;</edgelabel>
         </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::RenderQuadBuilder</label>
+        <link refid="dc/d02/a03883"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;</label>
+        <link refid="d5/daa/a03855"/>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="1967">
-        <label>castor::Factory&lt; MeshImporter, castor::String, MeshImporterUPtr, std::function&lt; MeshImporterUPtr(Engine &amp;) &gt; &gt;</label>
-      </node>
-      <node id="1966">
-        <label>castor3d::MeshImporterFactory</label>
-        <link refid="dc/d02/a03883"/>
-        <childnode refid="1967" relation="public-inheritance">
+      <node id="2">
+        <label>castor3d::RenderQuadBuilderT&lt; rq::Config, RenderQuadBuilder &gt;</label>
+        <link refid="d5/daa/a03855"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_config</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; rq::Config, RenderQuadBuilder &gt;</edgelabel>
         </childnode>
       </node>
+      <node id="1">
+        <label>castor3d::RenderQuadBuilder</label>
+        <link refid="dc/d02/a03883"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;</label>
+        <link refid="d5/daa/a03855"/>
+      </node>
+      <node id="3">
+        <label>castor3d::rq::ConfigT&lt; WrapperT &gt;</label>
+        <link refid="d8/d03/a03871"/>
+      </node>
     </collaborationgraph>
-    <location file="Model/Mesh/ImporterFactory.hpp" line="15" column="1" bodyfile="Model/Mesh/ImporterFactory.hpp" bodystart="13" bodyend="31"/>
+    <location file="Render/Passes/RenderQuad.hpp" line="758" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="760" bodyend="761"/>
     <listofallmembers>
-      <member refid="dc/d02/a03883_1ab8c66c78e679eb45fbb9b0c1d17e856c" prot="public" virt="non-virtual"><scope>castor3d::MeshImporterFactory</scope><name>MeshImporterFactory</name></member>
-      <member refid="dc/d02/a03883_1a487226529aa95edbf4def120475511f9" prot="public" virt="non-virtual"><scope>castor3d::MeshImporterFactory</scope><name>~MeshImporterFactory</name></member>
+      <member refid="d5/daa/a03855_1a2d157c5fa13f40f5fae84a33c6f26365" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>binding</name></member>
+      <member refid="d5/daa/a03855_1a4c77483c0d73db74aae5fe59e03a6d54" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>binding</name></member>
+      <member refid="d5/daa/a03855_1ac1edfedf55abf1b02776b6ee9719482c" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>binding</name></member>
+      <member refid="d5/daa/a03855_1a970a0bf93dfb36ba6f349bd07725e521" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>bindings</name></member>
+      <member refid="d5/daa/a03855_1a062561625f7ff24ed0cfa65f3bfc8688" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>blendMode</name></member>
+      <member refid="d5/daa/a03855_1a4a58abd503ed0bff1600be8605477258" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>build</name></member>
+      <member refid="d5/daa/a03855_1aa7fc146147deb53c51c646122d66eef6" prot="protected" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>m_config</name></member>
+      <member refid="d5/daa/a03855_1a2b7159354bb4ab5f87da28299e2e21da" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>range</name></member>
+      <member refid="d5/daa/a03855_1a13037f2937494dc1ab0f713225aeedd6" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>RenderQuadBuilderT</name></member>
+      <member refid="d5/daa/a03855_1a4a4f339fd319b5c843eb831cbe6ca153" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>tex3DResult</name></member>
+      <member refid="d5/daa/a03855_1a12f59a1dbb62bd1cc2fc3d26db8b1897" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>texcoordConfig</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

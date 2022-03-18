@@ -1,115 +1,121 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d1/d0c/a02251" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::ChunkWriterBase</compoundname>
-    <derivedcompoundref refid="d1/dda/a02255" prot="public" virt="non-virtual">castor3d::ChunkWriter&lt; T &gt;</derivedcompoundref>
-    <derivedcompoundref refid="d4/d4a/a02263" prot="public" virt="non-virtual">castor3d::ChunkWriter&lt; castor::Path &gt;</derivedcompoundref>
-    <derivedcompoundref refid="d3/d3a/a02259" prot="public" virt="non-virtual">castor3d::ChunkWriter&lt; castor::String &gt;</derivedcompoundref>
-    <includes local="no">ChunkWriter.hpp</includes>
-      <sectiondef kind="public-static-func">
-      <memberdef kind="function" id="d1/d0c/a02251_1a6d5639d69c83f6b59094817e85f17398" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>static bool castor3d::ChunkWriterBase::write</definition>
-        <argsstring>(uint8_t const *begin, uint8_t const *end, ChunkType type, BinaryChunk &amp;chunk)</argsstring>
-        <name>write</name>
+    <compoundname>castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;</compoundname>
+    <basecompoundref refid="d7/da1/a02231" prot="public" virt="non-virtual">castor3d::Interpolator&lt; castor::Quaternion &gt;</basecompoundref>
+    <includes local="no">Interpolator.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d0c/a02251_1a910141885b8ae03c0ab795586cc9f345" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>castor::Quaternion</type>
+        <definition>castor::Quaternion castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;::interpolate</definition>
+        <argsstring>(castor::Quaternion const &amp;src, castor::Quaternion const &amp;dst, float percent) const override</argsstring>
+        <name>interpolate</name>
+        <qualifiedname>castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;::interpolate</qualifiedname>
+        <reimplements refid="d7/da1/a02231_1a38c4c864a411f0fbc92d8af20d4ec52f">interpolate</reimplements>
         <param>
-          <type>uint8_t const *</type>
-          <declname>begin</declname>
+          <type>castor::Quaternion const &amp;</type>
+          <declname>src</declname>
         </param>
         <param>
-          <type>uint8_t const *</type>
-          <declname>end</declname>
+          <type>castor::Quaternion const &amp;</type>
+          <declname>dst</declname>
         </param>
         <param>
-          <type><ref refid="d7/dd1/a01458_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref></type>
-          <declname>type</declname>
-        </param>
-        <param>
-          <type><ref refid="d2/d31/a02087" kindref="compound">BinaryChunk</ref> &amp;</type>
-          <declname>chunk</declname>
+          <type>float</type>
+          <declname>percent</declname>
         </param>
         <briefdescription>
-<para>Writes a subchunk value into a chunk. </para>
+<para>Interpolation function. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">begin</parametername>
+<parametername direction="in">src</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The values begin </para>
+<para>The start. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">end</parametername>
+<parametername direction="in">dst</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The values end </para>
+<para>The end. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">type</parametername>
+<parametername direction="in">percent</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The subchunk type </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">chunk</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The chunk </para>
+<para>The percentage. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
-</simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Binary/ChunkWriter.hpp" line="32" column="1" bodyfile="Binary/ChunkWriter.hpp" bodystart="32" bodyend="51"/>
-        <references refid="d2/d31/a02087_1a05ffb50a92f97be91612f8f91ceeed8e">castor3d::BinaryChunk::addSubChunk</references>
-        <references refid="d2/d31/a02087_1aa21722c40ca9e697b02b6612e81e41c9" compoundref="d1/d09/a00077" startline="303" endline="307">castor3d::BinaryChunk::setData</references>
-        <referencedby refid="d1/dda/a02255_1ac4cf51584e348def2f360b81e6ec7a9a" compoundref="dc/dfe/a00125" startline="83" endline="99">castor3d::ChunkWriter&lt; T &gt;::write</referencedby>
-        <referencedby refid="d3/d3a/a02259_1a3f0c739cc3dd42610e348f722ee20506" compoundref="dc/dfe/a00125" startline="153" endline="171">castor3d::ChunkWriter&lt; castor::String &gt;::write</referencedby>
-        <referencedby refid="d4/d4a/a02263_1afdeae129e73ddd2c7980afdd4441dba0" compoundref="dc/dfe/a00125" startline="201" endline="219">castor3d::ChunkWriter&lt; castor::Path &gt;::write</referencedby>
+        <location file="Animation/Interpolator.hpp" line="137" column="20" bodyfile="Animation/Interpolator.hpp" bodystart="137" bodyend="157"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>Handles the Quaternion linear interpolations. </para>
     </briefdescription>
     <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="version"><para>0.1 </para>
+</simplesect>
+<simplesect kind="date"><para>09/02/2010 </para>
+</simplesect>
+</para>
     </detaileddescription>
     <inheritancegraph>
-      <node id="719">
-        <label>castor3d::ChunkWriter&lt; castor::String &gt;</label>
-        <link refid="d3/d3a/a02259"/>
-        <childnode refid="716" relation="public-inheritance">
+      <node id="2">
+        <label>castor3d::Interpolator&lt; castor::Quaternion &gt;</label>
+        <link refid="d7/da1/a02231"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; castor::Quaternion &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="718">
-        <label>castor3d::ChunkWriter&lt; castor::Path &gt;</label>
-        <link refid="d4/d4a/a02263"/>
-        <childnode refid="716" relation="public-inheritance">
-        </childnode>
+      <node id="3">
+        <label>castor3d::Interpolator&lt; DataT &gt;</label>
+        <link refid="d7/da1/a02231"/>
       </node>
-      <node id="717">
-        <label>castor3d::ChunkWriter&lt; T &gt;</label>
-        <link refid="d1/dda/a02255"/>
-        <childnode refid="716" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="716">
-        <label>castor3d::ChunkWriterBase</label>
+      <node id="1">
+        <label>castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;</label>
         <link refid="d1/d0c/a02251"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
       </node>
     </inheritancegraph>
-    <location file="Binary/ChunkWriter.hpp" line="14" column="1" bodyfile="Binary/ChunkWriter.hpp" bodystart="13" bodyend="52"/>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::Interpolator&lt; castor::Quaternion &gt;</label>
+        <link refid="d7/da1/a02231"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; castor::Quaternion &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::Interpolator&lt; DataT &gt;</label>
+        <link refid="d7/da1/a02231"/>
+      </node>
+      <node id="1">
+        <label>castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;</label>
+        <link refid="d1/d0c/a02251"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Animation/Interpolator.hpp" line="121" column="1" bodyfile="Animation/Interpolator.hpp" bodystart="123" bodyend="158"/>
     <listofallmembers>
-      <member refid="d1/d0c/a02251_1a6d5639d69c83f6b59094817e85f17398" prot="public" virt="non-virtual"><scope>castor3d::ChunkWriterBase</scope><name>write</name></member>
+      <member refid="d1/d0c/a02251_1a910141885b8ae03c0ab795586cc9f345" prot="public" virt="virtual"><scope>castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;</scope><name>interpolate</name></member>
+      <member refid="d7/da1/a02231_1a86511dc9c5cf1b7f36a57452e147cfef" prot="protected" virt="virtual"><scope>castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;</scope><name>~Interpolator</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

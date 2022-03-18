@@ -1,111 +1,163 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d9/dd1/a00398" kind="file" language="C++">
-    <compoundname>Pattern.hpp</compoundname>
-    <includes refid="d4/d27/a00392" local="yes">MiscellaneousModule.hpp</includes>
-    <includes local="no">list</includes>
-    <includedby refid="de/df8/a00440" local="yes">Model/Mesh/Generator/Projection.hpp</includedby>
+    <compoundname>makeVkType.hpp</compoundname>
+    <includes refid="d7/d00/a00401" local="yes">MiscellaneousModule.hpp</includes>
     <incdepgraph>
-      <node id="7915">
-        <label>list</label>
-      </node>
-      <node id="7907">
-        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
-      </node>
-      <node id="7900">
-        <label>Miscellaneous/Pattern.hpp</label>
-        <link refid="d9/dd1/a00398"/>
-        <childnode refid="7901" relation="include">
-        </childnode>
-        <childnode refid="7915" relation="include">
-        </childnode>
-      </node>
-      <node id="7910">
-        <label>ashespp/AshesPPPrerequisites.hpp</label>
-      </node>
-      <node id="7911">
-        <label>cstdint</label>
-      </node>
-      <node id="7909">
-        <label>CastorUtils/Math/Point.hpp</label>
-      </node>
-      <node id="7902">
-        <label>Castor3D/Castor3DModule.hpp</label>
-        <link refid="d5/d35/a00266"/>
-        <childnode refid="7903" relation="include">
-        </childnode>
-        <childnode refid="7904" relation="include">
-        </childnode>
-        <childnode refid="7905" relation="include">
-        </childnode>
-        <childnode refid="7906" relation="include">
-        </childnode>
-        <childnode refid="7907" relation="include">
-        </childnode>
-        <childnode refid="7908" relation="include">
-        </childnode>
-        <childnode refid="7909" relation="include">
-        </childnode>
-        <childnode refid="7910" relation="include">
-        </childnode>
-        <childnode refid="7911" relation="include">
-        </childnode>
-        <childnode refid="7912" relation="include">
-        </childnode>
-        <childnode refid="7913" relation="include">
-        </childnode>
-        <childnode refid="7914" relation="include">
-        </childnode>
-      </node>
-      <node id="7913">
-        <label>string</label>
-      </node>
-      <node id="7906">
-        <label>CastorUtils/Exception/Assertion.hpp</label>
-      </node>
-      <node id="7903">
-        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
-      </node>
-      <node id="7905">
-        <label>CastorUtils/Design/OwnedBy.hpp</label>
-      </node>
-      <node id="7901">
-        <label>MiscellaneousModule.hpp</label>
-        <link refid="d4/d27/a00392"/>
-        <childnode refid="7902" relation="include">
-        </childnode>
-      </node>
-      <node id="7904">
+      <node id="5">
         <label>CastorUtils/Design/FlagCombination.hpp</label>
       </node>
-      <node id="7914">
-        <label>vector</label>
+      <node id="6">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
       </node>
-      <node id="7908">
+      <node id="7">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="8">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="9">
+        <label>CastorUtils/Graphics/Size.hpp</label>
+      </node>
+      <node id="10">
         <label>CastorUtils/Math/Coords.hpp</label>
       </node>
-      <node id="7912">
-        <label>memory</label>
+      <node id="11">
+        <label>CastorUtils/Math/Point.hpp</label>
       </node>
-    </incdepgraph>
-    <invincdepgraph>
-      <node id="7916">
-        <label>Miscellaneous/Pattern.hpp</label>
-        <link refid="d9/dd1/a00398"/>
-        <childnode refid="7917" relation="include">
+      <node id="4">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="13">
+        <label>RenderGraph/FrameGraphPrerequisites.hpp</label>
+      </node>
+      <node id="3">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d6/d22/a00245"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
         </childnode>
       </node>
-      <node id="7917">
-        <label>Model/Mesh/Generator/Projection.hpp</label>
-        <link refid="de/df8/a00440"/>
+      <node id="2">
+        <label>MiscellaneousModule.hpp</label>
+        <link refid="d7/d00/a00401"/>
+        <childnode refid="3" relation="include">
+        </childnode>
       </node>
-    </invincdepgraph>
-    <innerclass refid="d6/d6e/a03832" prot="public">castor3d::Pattern</innerclass>
-    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+      <node id="1">
+        <label>Miscellaneous/makeVkType.hpp</label>
+        <link refid="d9/dd1/a00398"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="14">
+        <label>cstdint</label>
+      </node>
+      <node id="15">
+        <label>memory</label>
+      </node>
+      <node id="16">
+        <label>string</label>
+      </node>
+      <node id="17">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="dc/d94/a02999" prot="public">castor3d::VkStructTraits&lt; VkApplicationInfo &gt;</innerclass>
+    <innerclass refid="dd/d26/a03003" prot="public">castor3d::VkStructTraits&lt; VkInstanceCreateInfo &gt;</innerclass>
+    <innerclass refid="db/d52/a03007" prot="public">castor3d::VkStructTraits&lt; VkDeviceQueueCreateInfo &gt;</innerclass>
+    <innerclass refid="d6/d97/a03011" prot="public">castor3d::VkStructTraits&lt; VkDeviceCreateInfo &gt;</innerclass>
+    <innerclass refid="de/d1e/a03015" prot="public">castor3d::VkStructTraits&lt; VkSubmitInfo &gt;</innerclass>
+    <innerclass refid="de/dc6/a03019" prot="public">castor3d::VkStructTraits&lt; VkMemoryAllocateInfo &gt;</innerclass>
+    <innerclass refid="d9/df8/a03023" prot="public">castor3d::VkStructTraits&lt; VkMappedMemoryRange &gt;</innerclass>
+    <innerclass refid="dd/da9/a03027" prot="public">castor3d::VkStructTraits&lt; VkBindSparseInfo &gt;</innerclass>
+    <innerclass refid="d4/de4/a03031" prot="public">castor3d::VkStructTraits&lt; VkFenceCreateInfo &gt;</innerclass>
+    <innerclass refid="d1/d89/a03035" prot="public">castor3d::VkStructTraits&lt; VkSemaphoreCreateInfo &gt;</innerclass>
+    <innerclass refid="d4/df1/a03039" prot="public">castor3d::VkStructTraits&lt; VkEventCreateInfo &gt;</innerclass>
+    <innerclass refid="d1/de6/a03043" prot="public">castor3d::VkStructTraits&lt; VkQueryPoolCreateInfo &gt;</innerclass>
+    <innerclass refid="d2/de4/a03047" prot="public">castor3d::VkStructTraits&lt; VkBufferCreateInfo &gt;</innerclass>
+    <innerclass refid="df/d4a/a03051" prot="public">castor3d::VkStructTraits&lt; VkBufferViewCreateInfo &gt;</innerclass>
+    <innerclass refid="df/d0c/a03055" prot="public">castor3d::VkStructTraits&lt; VkImageCreateInfo &gt;</innerclass>
+    <innerclass refid="da/d9e/a03059" prot="public">castor3d::VkStructTraits&lt; VkImageViewCreateInfo &gt;</innerclass>
+    <innerclass refid="dc/dec/a03063" prot="public">castor3d::VkStructTraits&lt; VkShaderModuleCreateInfo &gt;</innerclass>
+    <innerclass refid="da/de2/a03067" prot="public">castor3d::VkStructTraits&lt; VkPipelineCacheCreateInfo &gt;</innerclass>
+    <innerclass refid="df/d48/a03071" prot="public">castor3d::VkStructTraits&lt; VkPipelineShaderStageCreateInfo &gt;</innerclass>
+    <innerclass refid="d3/dbd/a03075" prot="public">castor3d::VkStructTraits&lt; VkPipelineVertexInputStateCreateInfo &gt;</innerclass>
+    <innerclass refid="dd/d41/a03079" prot="public">castor3d::VkStructTraits&lt; VkPipelineInputAssemblyStateCreateInfo &gt;</innerclass>
+    <innerclass refid="d5/dd8/a03083" prot="public">castor3d::VkStructTraits&lt; VkPipelineTessellationStateCreateInfo &gt;</innerclass>
+    <innerclass refid="dc/dc0/a03087" prot="public">castor3d::VkStructTraits&lt; VkPipelineViewportStateCreateInfo &gt;</innerclass>
+    <innerclass refid="da/dbe/a03091" prot="public">castor3d::VkStructTraits&lt; VkPipelineRasterizationStateCreateInfo &gt;</innerclass>
+    <innerclass refid="d0/d2b/a03095" prot="public">castor3d::VkStructTraits&lt; VkPipelineMultisampleStateCreateInfo &gt;</innerclass>
+    <innerclass refid="d4/d6e/a03099" prot="public">castor3d::VkStructTraits&lt; VkPipelineDepthStencilStateCreateInfo &gt;</innerclass>
+    <innerclass refid="d0/d9b/a03103" prot="public">castor3d::VkStructTraits&lt; VkPipelineColorBlendStateCreateInfo &gt;</innerclass>
+    <innerclass refid="da/d4a/a03107" prot="public">castor3d::VkStructTraits&lt; VkPipelineDynamicStateCreateInfo &gt;</innerclass>
+    <innerclass refid="df/d9e/a03111" prot="public">castor3d::VkStructTraits&lt; VkGraphicsPipelineCreateInfo &gt;</innerclass>
+    <innerclass refid="d2/d7a/a03115" prot="public">castor3d::VkStructTraits&lt; VkComputePipelineCreateInfo &gt;</innerclass>
+    <innerclass refid="d2/df0/a03119" prot="public">castor3d::VkStructTraits&lt; VkPipelineLayoutCreateInfo &gt;</innerclass>
+    <innerclass refid="dc/d11/a03123" prot="public">castor3d::VkStructTraits&lt; VkSamplerCreateInfo &gt;</innerclass>
+    <innerclass refid="d7/d2e/a03127" prot="public">castor3d::VkStructTraits&lt; VkDescriptorSetLayoutCreateInfo &gt;</innerclass>
+    <innerclass refid="db/d09/a03131" prot="public">castor3d::VkStructTraits&lt; VkDescriptorPoolCreateInfo &gt;</innerclass>
+    <innerclass refid="d7/d36/a03135" prot="public">castor3d::VkStructTraits&lt; VkDescriptorSetAllocateInfo &gt;</innerclass>
+    <innerclass refid="d6/d09/a03139" prot="public">castor3d::VkStructTraits&lt; VkWriteDescriptorSet &gt;</innerclass>
+    <innerclass refid="d4/d43/a03143" prot="public">castor3d::VkStructTraits&lt; VkCopyDescriptorSet &gt;</innerclass>
+    <innerclass refid="d5/d1f/a03147" prot="public">castor3d::VkStructTraits&lt; VkFramebufferCreateInfo &gt;</innerclass>
+    <innerclass refid="d3/dd4/a03151" prot="public">castor3d::VkStructTraits&lt; VkRenderPassCreateInfo &gt;</innerclass>
+    <innerclass refid="dc/d9b/a03155" prot="public">castor3d::VkStructTraits&lt; VkCommandPoolCreateInfo &gt;</innerclass>
+    <innerclass refid="d4/dbc/a03159" prot="public">castor3d::VkStructTraits&lt; VkCommandBufferAllocateInfo &gt;</innerclass>
+    <innerclass refid="d0/da2/a03163" prot="public">castor3d::VkStructTraits&lt; VkCommandBufferInheritanceInfo &gt;</innerclass>
+    <innerclass refid="d2/d94/a03167" prot="public">castor3d::VkStructTraits&lt; VkCommandBufferBeginInfo &gt;</innerclass>
+    <innerclass refid="d3/dca/a03171" prot="public">castor3d::VkStructTraits&lt; VkRenderPassBeginInfo &gt;</innerclass>
+    <innerclass refid="d7/d45/a03175" prot="public">castor3d::VkStructTraits&lt; VkBufferMemoryBarrier &gt;</innerclass>
+    <innerclass refid="db/d65/a03179" prot="public">castor3d::VkStructTraits&lt; VkImageMemoryBarrier &gt;</innerclass>
+    <innerclass refid="d5/d27/a03183" prot="public">castor3d::VkStructTraits&lt; VkMemoryBarrier &gt;</innerclass>
+    <innerclass refid="d7/d49/a03187" prot="public">castor3d::VkStructTraits&lt; VkPhysicalDeviceSubgroupProperties &gt;</innerclass>
+    <innerclass refid="d1/d45/a03191" prot="public">castor3d::VkStructTraits&lt; VkBindBufferMemoryInfo &gt;</innerclass>
+    <innerclass refid="d8/dd4/a03195" prot="public">castor3d::VkStructTraits&lt; VkBindImageMemoryInfo &gt;</innerclass>
+    <innerclass refid="db/d47/a03199" prot="public">castor3d::VkStructTraits&lt; VkPhysicalDevice16BitStorageFeatures &gt;</innerclass>
+    <innerclass refid="d5/d73/a03203" prot="public">castor3d::VkStructTraits&lt; VkMemoryDedicatedRequirements &gt;</innerclass>
+    <innerclass refid="db/d4b/a03207" prot="public">castor3d::VkStructTraits&lt; VkMemoryDedicatedAllocateInfo &gt;</innerclass>
+    <innerclass refid="d5/ddf/a03211" prot="public">castor3d::VkStructTraits&lt; VkMemoryAllocateFlagsInfo &gt;</innerclass>
+    <innerclass refid="d9/d65/a03215" prot="public">castor3d::VkStructTraits&lt; VkDeviceGroupRenderPassBeginInfo &gt;</innerclass>
+    <innerclass refid="d6/dcf/a03219" prot="public">castor3d::VkStructTraits&lt; VkDeviceGroupCommandBufferBeginInfo &gt;</innerclass>
+    <innerclass refid="dd/de1/a03223" prot="public">castor3d::VkStructTraits&lt; VkDeviceGroupSubmitInfo &gt;</innerclass>
+    <innerclass refid="d3/d1b/a03227" prot="public">castor3d::VkStructTraits&lt; VkDeviceGroupBindSparseInfo &gt;</innerclass>
+    <innerclass refid="d4/d9c/a03231" prot="public">castor3d::VkStructTraits&lt; VkBindBufferMemoryDeviceGroupInfo &gt;</innerclass>
+    <innerclass refid="dd/d87/a03235" prot="public">castor3d::VkStructTraits&lt; VkBindImageMemoryDeviceGroupInfo &gt;</innerclass>
+    <innerclass refid="db/d5f/a03239" prot="public">castor3d::VkStructTraits&lt; VkPhysicalDeviceGroupProperties &gt;</innerclass>
+    <innerclass refid="db/d36/a03243" prot="public">castor3d::VkStructTraits&lt; VkDeviceGroupDeviceCreateInfo &gt;</innerclass>
+    <innernamespace refid="da/de3/a01398">castor3d</innernamespace>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/Pattern.hpp"/>
+    <location file="Miscellaneous/makeVkType.hpp"/>
   </compounddef>
 </doxygen>

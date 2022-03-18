@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="da/dca/a04132" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::OverlayRenderer::OverlayRenderNode</compoundname>
+    <includes local="no">OverlayRenderer.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/dca/a04132_1ac84fd2a8829565df64ebb2918bce2e2e" prot="public" static="no" mutable="no">
+        <type>Pipeline &amp;</type>
+        <definition>Pipeline&amp; castor3d::OverlayRenderer::OverlayRenderNode::pipeline</definition>
+        <argsstring></argsstring>
+        <name>pipeline</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="197" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="197" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/dca/a04132_1ac9ba98f75649718e7f930014fc961a3d" prot="public" static="no" mutable="no">
+        <type><ref refid="df/d5d/a02596" kindref="compound">Pass</ref> const  &amp;</type>
+        <definition>Pass const&amp; castor3d::OverlayRenderer::OverlayRenderNode::pass</definition>
+        <argsstring></argsstring>
+        <name>pass</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="198" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="198" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2472">
+        <label>castor::OwnedBy&lt; Material &gt;</label>
+      </node>
+      <node id="2470">
+        <label>castor3d::OverlayRenderer::Pipeline</label>
+      </node>
+      <node id="2469">
+        <label>castor3d::OverlayRenderer::OverlayRenderNode</label>
+        <link refid="da/dca/a04132"/>
+        <childnode refid="2470" relation="usage">
+          <edgelabel>pipeline</edgelabel>
+        </childnode>
+        <childnode refid="2471" relation="usage">
+          <edgelabel>pass</edgelabel>
+        </childnode>
+      </node>
+      <node id="2471">
+        <label>castor3d::Pass</label>
+        <link refid="df/d5d/a02596"/>
+        <childnode refid="2472" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Overlay/OverlayRenderer.hpp" line="196" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="195" bodyend="199"/>
+    <listofallmembers>
+      <member refid="da/dca/a04132_1ac9ba98f75649718e7f930014fc961a3d" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::OverlayRenderNode</scope><name>pass</name></member>
+      <member refid="da/dca/a04132_1ac84fd2a8829565df64ebb2918bce2e2e" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::OverlayRenderNode</scope><name>pipeline</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

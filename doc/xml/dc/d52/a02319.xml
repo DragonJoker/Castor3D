@@ -1,44 +1,44 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dc/d52/a02319" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::UniformBufferPool::Buffer</compoundname>
-    <includes local="no">UniformBufferPool.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="dc/d52/a02319_1a8be6c9bfdbc08d8ad27bc188c408165a" prot="public" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::UniformBufferPool::Buffer::index</definition>
+    <compoundname>castor3d::ChunkTyper&lt; MeshAnimationKeyFrame &gt;</compoundname>
+    <includes local="no">BinaryMeshAnimationKeyFrame.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="dc/d52/a02319_1abb16e5e57366d23aba3ce73926f1d1fc" prot="public" static="yes" mutable="no">
+        <type><ref refid="da/de3/a01398_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref> const</type>
+        <definition>ChunkType const castor3d::ChunkTyper&lt; MeshAnimationKeyFrame &gt;::Value</definition>
         <argsstring></argsstring>
-        <name>index</name>
+        <name>Value</name>
+        <qualifiedname>castor3d::ChunkTyper&lt; MeshAnimationKeyFrame &gt;::Value</qualifiedname>
+        <initializer>= <ref refid="da/de3/a01398_1a742783d4e4b7354fac3e375ae107414dad0e65a7476b424b77bb21459bb8f8541" kindref="member">ChunkType::eMeshAnimationKeyFrame</ref></initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/UniformBufferPool.hpp" line="23" column="1" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="23" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dc/d52/a02319_1a93439f45e2bb2a12935501dabbc23349" prot="public" static="no" mutable="no">
-        <type>PoolUniformBufferUPtr</type>
-        <definition>PoolUniformBufferUPtr castor3d::UniformBufferPool::Buffer::buffer</definition>
-        <argsstring></argsstring>
-        <name>buffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/UniformBufferPool.hpp" line="24" column="1" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="24" bodyend="-1"/>
+        <location file="Binary/BinaryMeshAnimationKeyFrame.hpp" line="28" column="24" bodyfile="Binary/BinaryMeshAnimationKeyFrame.hpp" bodystart="28" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>Helper structure to find ChunkType from a type. </para>
     </briefdescription>
     <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="version"><para>0.10.0 </para>
+</simplesect>
+<simplesect kind="date"><para>07/12/2017</para>
+</simplesect>
+<simplesect kind="remark"><para>Specialisation for <ref refid="da/dbb/a03291" kindref="compound">MeshAnimationKeyFrame</ref>. </para>
+</simplesect>
+</para>
     </detaileddescription>
-    <location file="Buffer/UniformBufferPool.hpp" line="22" column="1" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="21" bodyend="25"/>
+    <location file="Binary/BinaryMeshAnimationKeyFrame.hpp" line="26" column="1" bodyfile="Binary/BinaryMeshAnimationKeyFrame.hpp" bodystart="27" bodyend="29"/>
     <listofallmembers>
-      <member refid="dc/d52/a02319_1a93439f45e2bb2a12935501dabbc23349" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferPool::Buffer</scope><name>buffer</name></member>
-      <member refid="dc/d52/a02319_1a8be6c9bfdbc08d8ad27bc188c408165a" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferPool::Buffer</scope><name>index</name></member>
+      <member refid="dc/d52/a02319_1abb16e5e57366d23aba3ce73926f1d1fc" prot="public" virt="non-virtual"><scope>castor3d::ChunkTyper&lt; MeshAnimationKeyFrame &gt;</scope><name>Value</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

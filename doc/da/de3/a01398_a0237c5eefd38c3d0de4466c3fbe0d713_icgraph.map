@@ -1,0 +1,5 @@
+<map id="castor3d::getDataSize" name="castor3d::getDataSize">
+<area shape="rect" id="node1" title="Retrieves the value binary size." alt="" coords="208,46,359,73"/>
+<area shape="rect" id="node2" href="$da/dae/a02467.html#ad15c5a1f67d963aaebd202df3e903042" title="Retrieves a value from a chunk." alt="" coords="5,5,160,47"/>
+<area shape="rect" id="node3" href="$d3/de3/a02483.html#a9d1fa6f341bb8c14ae9a7c2c1bfb184b" title="Writes a subchunk value into a chunk." alt="" coords="7,71,159,112"/>
+</map>

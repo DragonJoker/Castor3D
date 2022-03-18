@@ -1,17 +1,21 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_cb6750fd0f63fd8f29108a0684eccd46" kind="dir">
     <compoundname>Scene/Animation</compoundname>
     <innerdir refid="dir_445e4ddf266ed225b822af9f80cf11e7">Scene/Animation/Mesh</innerdir>
+    <innerdir refid="dir_adca96594a9f2b1f8e20f892db14748e">Scene/Animation/SceneNode</innerdir>
     <innerdir refid="dir_7ae9340dfd2e99071768353d974fafa4">Scene/Animation/Skeleton</innerdir>
     <innerdir refid="dir_bf7d606a9e146adc3707e5329f55d213">Scene/Animation/Texture</innerdir>
-    <innerfile refid="db/d14/a01040">AnimatedMesh.hpp</innerfile>
-    <innerfile refid="d8/d27/a01043">AnimatedObject.hpp</innerfile>
-    <innerfile refid="da/d17/a01046">AnimatedObjectGroup.hpp</innerfile>
-    <innerfile refid="d0/d22/a01049">AnimatedSkeleton.hpp</innerfile>
-    <innerfile refid="d9/dce/a01052">AnimatedTexture.hpp</innerfile>
-    <innerfile refid="d2/d71/a01055">AnimationInstance.hpp</innerfile>
-    <innerfile refid="d9/da6/a07309">AnimationModule.hpp</innerfile>
+    <innerfile refid="d7/d98/a00983">AnimatedMesh.hpp</innerfile>
+    <innerfile refid="d3/d7b/a00986">AnimatedObject.hpp</innerfile>
+    <innerfile refid="d4/d95/a00989">AnimatedObjectGroup.hpp</innerfile>
+    <innerfile refid="d7/d76/a00992">AnimatedSceneNode.hpp</innerfile>
+    <innerfile refid="dd/d48/a00995">AnimatedSkeleton.hpp</innerfile>
+    <innerfile refid="d9/d9a/a00998">AnimatedTexture.hpp</innerfile>
+    <innerfile refid="df/d59/a01001">AnimationInstance.hpp</innerfile>
+    <innerfile refid="df/d73/a10781">AnimationModule.hpp</innerfile>
+    <innerfile refid="de/def/a01016">SceneNodeAnimation.hpp</innerfile>
+    <innerfile refid="db/daf/a01019">SceneNodeAnimationKeyFrame.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

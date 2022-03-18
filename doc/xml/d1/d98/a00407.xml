@@ -1,124 +1,121 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d1/d98/a00407" kind="file" language="C++">
-    <compoundname>VersionException.hpp</compoundname>
-    <includes refid="d9/de6/a00404" local="yes">Castor3D/Miscellaneous/Version.hpp</includes>
-    <includes local="no">CastorUtils/Exception/Exception.hpp</includes>
+    <compoundname>Pattern.hpp</compoundname>
+    <includes refid="d7/d00/a00401" local="yes">MiscellaneousModule.hpp</includes>
+    <includes local="no">list</includes>
+    <includedby refid="dd/d63/a00455" local="yes">Model/Mesh/Generator/Projection.hpp</includedby>
     <incdepgraph>
-      <node id="8022">
-        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
-      </node>
-      <node id="8030">
-        <label>Castor3D/RequiredVersion.hpp</label>
-      </node>
-      <node id="8025">
-        <label>ashespp/AshesPPPrerequisites.hpp</label>
-      </node>
-      <node id="8026">
-        <label>cstdint</label>
-      </node>
-      <node id="8024">
-        <label>CastorUtils/Math/Point.hpp</label>
-      </node>
-      <node id="8017">
-        <label>Castor3D/Castor3DModule.hpp</label>
-        <link refid="d5/d35/a00266"/>
-        <childnode refid="8018" relation="include">
-        </childnode>
-        <childnode refid="8019" relation="include">
-        </childnode>
-        <childnode refid="8020" relation="include">
-        </childnode>
-        <childnode refid="8021" relation="include">
-        </childnode>
-        <childnode refid="8022" relation="include">
-        </childnode>
-        <childnode refid="8023" relation="include">
-        </childnode>
-        <childnode refid="8024" relation="include">
-        </childnode>
-        <childnode refid="8025" relation="include">
-        </childnode>
-        <childnode refid="8026" relation="include">
-        </childnode>
-        <childnode refid="8027" relation="include">
-        </childnode>
-        <childnode refid="8028" relation="include">
-        </childnode>
-        <childnode refid="8029" relation="include">
-        </childnode>
-      </node>
-      <node id="8028">
-        <label>string</label>
-      </node>
-      <node id="8021">
-        <label>CastorUtils/Exception/Assertion.hpp</label>
-      </node>
-      <node id="8018">
-        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
-      </node>
-      <node id="8020">
-        <label>CastorUtils/Design/OwnedBy.hpp</label>
-      </node>
-      <node id="8016">
-        <label>MiscellaneousModule.hpp</label>
-        <link refid="d4/d27/a00392"/>
-        <childnode refid="8017" relation="include">
-        </childnode>
-      </node>
-      <node id="8019">
+      <node id="5">
         <label>CastorUtils/Design/FlagCombination.hpp</label>
       </node>
-      <node id="8029">
-        <label>vector</label>
+      <node id="6">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
       </node>
-      <node id="8023">
+      <node id="7">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="8">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="9">
+        <label>CastorUtils/Graphics/Size.hpp</label>
+      </node>
+      <node id="10">
         <label>CastorUtils/Math/Coords.hpp</label>
       </node>
-      <node id="8031">
-        <label>CastorUtils/Exception/Exception.hpp</label>
+      <node id="11">
+        <label>CastorUtils/Math/Point.hpp</label>
       </node>
-      <node id="8015">
-        <label>Castor3D/Miscellaneous/Version.hpp</label>
-        <link refid="d9/de6/a00404"/>
-        <childnode refid="8016" relation="include">
+      <node id="4">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="13">
+        <label>RenderGraph/FrameGraphPrerequisites.hpp</label>
+      </node>
+      <node id="3">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d6/d22/a00245"/>
+        <childnode refid="4" relation="include">
         </childnode>
-        <childnode refid="8030" relation="include">
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
         </childnode>
       </node>
-      <node id="8014">
-        <label>Miscellaneous/VersionException.hpp</label>
+      <node id="2">
+        <label>MiscellaneousModule.hpp</label>
+        <link refid="d7/d00/a00401"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>Miscellaneous/Pattern.hpp</label>
         <link refid="d1/d98/a00407"/>
-        <childnode refid="8015" relation="include">
+        <childnode refid="2" relation="include">
         </childnode>
-        <childnode refid="8031" relation="include">
+        <childnode refid="18" relation="include">
         </childnode>
       </node>
-      <node id="8027">
+      <node id="12">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="14">
+        <label>cstdint</label>
+      </node>
+      <node id="18">
+        <label>list</label>
+      </node>
+      <node id="15">
         <label>memory</label>
       </node>
+      <node id="16">
+        <label>string</label>
+      </node>
+      <node id="17">
+        <label>vector</label>
+      </node>
     </incdepgraph>
-    <innerclass refid="d8/d80/a03852" prot="public">castor3d::VersionException</innerclass>
-    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
-      <sectiondef kind="define">
-      <memberdef kind="define" id="d1/d98/a00407_1a9d9cdc8049e0a356062d1f34e8475837" prot="public" static="no">
-        <name>CASTOR_VERSION_EXCEPTION</name>
-        <param><defname>given</defname></param>
-        <param><defname>expected</defname></param>
-        <initializer>throw <ref refid="d8/d80/a03852" kindref="compound">castor3d::VersionException</ref>{ given, expected, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/VersionException.hpp" line="48" column="9" bodyfile="Miscellaneous/VersionException.hpp" bodystart="48" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
+    <invincdepgraph>
+      <node id="1">
+        <label>Miscellaneous/Pattern.hpp</label>
+        <link refid="d1/d98/a00407"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Model/Mesh/Generator/Projection.hpp</label>
+        <link refid="dd/d63/a00455"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="d5/d8f/a03255" prot="public">castor3d::Pattern</innerclass>
+    <innernamespace refid="da/de3/a01398">castor3d</innernamespace>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/VersionException.hpp"/>
+    <location file="Miscellaneous/Pattern.hpp"/>
   </compounddef>
 </doxygen>

@@ -1,5 +1,4 @@
-<map id="castor3d::ShadowMapPoint" name="castor3d::ShadowMapPoint">
-<area shape="rect" id="node1" title=" " alt="" coords="8,155,189,181"/>
-<area shape="rect" id="node2" href="$dd/d6a/a04642.html" title=" " alt="" coords="23,80,174,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,192,32"/>
+<map id="castor3d::LightBuffer::Float4x4" name="castor3d::LightBuffer::Float4x4">
+<area shape="rect" id="node1" title=" " alt="" coords="5,153,147,195"/>
+<area shape="rect" id="node2" href="$db/dc1/a04671.html" title=" " alt="" coords="5,5,147,47"/>
 </map>

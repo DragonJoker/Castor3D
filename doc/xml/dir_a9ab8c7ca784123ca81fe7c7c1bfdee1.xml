@@ -1,13 +1,13 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_a9ab8c7ca784123ca81fe7c7c1bfdee1" kind="dir">
     <compoundname>Model/Skeleton</compoundname>
     <innerdir refid="dir_3b4817b9f2a35282b63f28dfc52d0430">Model/Skeleton/Animation</innerdir>
-    <innerfile refid="d0/ddb/a00542">Bone.hpp</innerfile>
-    <innerfile refid="d8/deb/a00545">BonedVertex.hpp</innerfile>
-    <innerfile refid="dd/de6/a00548">Skeleton.hpp</innerfile>
-    <innerfile refid="d9/d87/a00551">SkeletonModule.hpp</innerfile>
-    <innerfile refid="dc/df9/a00554">VertexBoneData.hpp</innerfile>
+    <innerfile refid="d8/df0/a00557">Bone.hpp</innerfile>
+    <innerfile refid="d9/d19/a00560">BonedVertex.hpp</innerfile>
+    <innerfile refid="dc/dae/a00563">Skeleton.hpp</innerfile>
+    <innerfile refid="d0/d3e/a00566">SkeletonModule.hpp</innerfile>
+    <innerfile refid="d4/d9e/a00569">VertexBoneData.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

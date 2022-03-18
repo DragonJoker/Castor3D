@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d1/d44/a02242" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BinaryWriter&lt; Submesh &gt;</compoundname>
+    <basecompoundref refid="d4/d5d/a02150" prot="public" virt="non-virtual">castor3d::BinaryWriterBase&lt; Submesh &gt;</basecompoundref>
+    <includes local="no">BinarySubmesh.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d1/d44/a02242_1a2e106060645a94fe21d58a6cd5735079" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BinaryWriter&lt; Submesh &gt;::doWrite</definition>
+        <argsstring>(Submesh const &amp;obj) override</argsstring>
+        <name>doWrite</name>
+        <reimplements refid="d4/d5d/a02150_1a720ab792b3e53c6556c3cb4e5b0e2d06">doWrite</reimplements>
+        <param>
+          <type><ref refid="d7/df2/a03986" kindref="compound">Submesh</ref> const &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>Function used to fill the chunk from specific data. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to write. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinarySubmesh.hpp" line="53" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para><ref refid="db/d21/a05186" kindref="compound">MovableObject</ref> loader. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="date"><para>14/02/2010</para>
+</simplesect>
+Loader de <ref refid="db/d21/a05186" kindref="compound">MovableObject</ref> </para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="449">
+        <label>castor3d::BinaryWriterBase&lt; TWritten &gt;</label>
+        <link refid="d4/d5d/a02150"/>
+      </node>
+      <node id="447">
+        <label>castor3d::BinaryWriter&lt; Submesh &gt;</label>
+        <link refid="d1/d44/a02242"/>
+        <childnode refid="448" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="448">
+        <label>castor3d::BinaryWriterBase&lt; Submesh &gt;</label>
+        <link refid="d4/d5d/a02150"/>
+        <childnode refid="449" relation="template-instance">
+          <edgelabel>&lt; Submesh &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="453">
+        <label>castor3d::BinaryWriterBase&lt; TWritten &gt;</label>
+        <link refid="d4/d5d/a02150"/>
+        <childnode refid="452" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+      </node>
+      <node id="452">
+        <label>castor3d::BinaryChunk</label>
+        <link refid="d0/dfe/a02102"/>
+      </node>
+      <node id="450">
+        <label>castor3d::BinaryWriter&lt; Submesh &gt;</label>
+        <link refid="d1/d44/a02242"/>
+        <childnode refid="451" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="451">
+        <label>castor3d::BinaryWriterBase&lt; Submesh &gt;</label>
+        <link refid="d4/d5d/a02150"/>
+        <childnode refid="452" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+        <childnode refid="453" relation="template-instance">
+          <edgelabel>&lt; Submesh &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Binary/BinarySubmesh.hpp" line="41" column="1" bodyfile="Binary/BinarySubmesh.hpp" bodystart="39" bodyend="54"/>
+    <listofallmembers>
+      <member refid="d1/d44/a02242_1a2e106060645a94fe21d58a6cd5735079" prot="private" virt="virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWrite</name></member>
+      <member refid="d4/d5d/a02150_1a95685db95521fe46169767620976688c" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d4/d5d/a02150_1ac978d1019caf2d37ad181911c78dde33" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d4/d5d/a02150_1a5eef4da7e3bbce50e00c878bd7b32516" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d4/d5d/a02150_1a5b782961d4526354e5d0e84e78c6bbbb" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d4/d5d/a02150_1a3bd1cb047e1f2872668a4397496bd7c4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d4/d5d/a02150_1a7bdb655caf767fdde8a4267602e06191" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d4/d5d/a02150_1a8828d359b7a61ea2b657d5aada2dd87b" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteHeader</name></member>
+      <member refid="d4/d5d/a02150_1ad6c66bdde51dd57ab2b27f4ddc8db513" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>m_chunk</name></member>
+      <member refid="d4/d5d/a02150_1a21e7985d2f99ff20a6056d198aac07c5" prot="public" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>write</name></member>
+      <member refid="d4/d5d/a02150_1a3b4ae75e6ecd0bdf9f5dc26381633dab" prot="public" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>write</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

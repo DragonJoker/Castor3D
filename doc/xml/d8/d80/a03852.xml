@@ -1,77 +1,73 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d8/d80/a03852" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::VersionException</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">Exception</basecompoundref>
-    <includes local="no">VersionException.hpp</includes>
+    <compoundname>castor3d::RenderQuadBuilderT</compoundname>
+    <includes local="no">RenderQuad.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ConfigT</type>
+      </param>
+      <param>
+        <type>typename BuilderT</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d8/d80/a03852_1aa7fc146147deb53c51c646122d66eef6" prot="protected" static="no" mutable="no">
+        <type>ConfigT</type>
+        <definition>ConfigT castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::m_config</definition>
+        <argsstring></argsstring>
+        <name>m_config</name>
+        <qualifiedname>castor3d::RenderQuadBuilderT::m_config</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderQuad.hpp" line="751" column="9" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="751" bodyend="-1"/>
+        <referencedby refid="d8/d80/a03852_1a2d157c5fa13f40f5fae84a33c6f26365" compoundref="d2/d4a/a00758" startline="650" endline="659">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::binding</referencedby>
+        <referencedby refid="d8/d80/a03852_1a970a0bf93dfb36ba6f349bd07725e521" compoundref="d2/d4a/a00758" startline="635" endline="639">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::bindings</referencedby>
+        <referencedby refid="d8/d80/a03852_1a062561625f7ff24ed0cfa65f3bfc8688" compoundref="d2/d4a/a00758" startline="622" endline="626">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::blendMode</referencedby>
+        <referencedby refid="d8/d80/a03852_1a4a58abd503ed0bff1600be8605477258" compoundref="d2/d4a/a00758" startline="740" endline="748">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::build</referencedby>
+        <referencedby refid="d8/d80/a03852_1a2b7159354bb4ab5f87da28299e2e21da" compoundref="d2/d4a/a00758" startline="609" endline="613">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::range</referencedby>
+        <referencedby refid="d8/d80/a03852_1a4a4f339fd319b5c843eb831cbe6ca153" compoundref="d2/d4a/a00758" startline="717" endline="721">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::tex3DResult</referencedby>
+        <referencedby refid="d8/d80/a03852_1a12f59a1dbb62bd1cc2fc3d26db8b1897" compoundref="d2/d4a/a00758" startline="596" endline="600">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::texcoordConfig</referencedby>
+      </memberdef>
+      </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d8/d80/a03852_1afd9c24e163e939cbaf4dd54ff13d1bf9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::VersionException::VersionException</definition>
-        <argsstring>(Version const &amp;given, Version const &amp;expected, char const *file, char const *function, uint32_t line)</argsstring>
-        <name>VersionException</name>
+      <memberdef kind="function" id="d8/d80/a03852_1a13037f2937494dc1ab0f713225aeedd6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::RenderQuadBuilderT</definition>
+        <argsstring>()</argsstring>
+        <name>RenderQuadBuilderT</name>
+        <qualifiedname>castor3d::RenderQuadBuilderT::RenderQuadBuilderT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderQuad.hpp" line="585" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="585" bodyend="587"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d80/a03852_1a12f59a1dbb62bd1cc2fc3d26db8b1897" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>BuilderT &amp;</type>
+        <definition>BuilderT &amp; castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::texcoordConfig</definition>
+        <argsstring>(rq::Texcoord const &amp;config)</argsstring>
+        <name>texcoordConfig</name>
+        <qualifiedname>castor3d::RenderQuadBuilderT::texcoordConfig</qualifiedname>
         <param>
-          <type><ref refid="de/de6/a03848" kindref="compound">Version</ref> const &amp;</type>
-          <declname>given</declname>
-        </param>
-        <param>
-          <type><ref refid="de/de6/a03848" kindref="compound">Version</ref> const &amp;</type>
-          <declname>expected</declname>
-        </param>
-        <param>
-          <type>char const *</type>
-          <declname>file</declname>
-        </param>
-        <param>
-          <type>char const *</type>
-          <declname>function</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>line</declname>
+          <type><ref refid="db/d62/a03860" kindref="compound">rq::Texcoord</ref> const &amp;</type>
+          <declname>config</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">given</parametername>
+<parametername direction="in">config</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The given version </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">expected</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The expected version </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">file</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The file </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">function</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The function </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">line</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The file line </para>
+<para>The texture coordinates configuration. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -79,54 +75,351 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/VersionException.hpp" line="33" column="1"/>
+        <location file="Render/Passes/RenderQuad.hpp" line="596" column="11" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="596" bodyend="600"/>
+        <references refid="d8/d80/a03852_1aa7fc146147deb53c51c646122d66eef6" compoundref="d2/d4a/a00758" startline="751">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::m_config</references>
       </memberdef>
-      <memberdef kind="function" id="d8/d80/a03852_1a7072af920e19cfa2edd3a6986fcd8a7a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>virtual C3D_API castor3d::VersionException::~VersionException</definition>
-        <argsstring>()</argsstring>
-        <name>~VersionException</name>
-        <exceptions> throw ()</exceptions>
+      <memberdef kind="function" id="d8/d80/a03852_1a2b7159354bb4ab5f87da28299e2e21da" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>BuilderT &amp;</type>
+        <definition>BuilderT &amp; castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::range</definition>
+        <argsstring>(VkImageSubresourceRange const &amp;range)</argsstring>
+        <name>range</name>
+        <qualifiedname>castor3d::RenderQuadBuilderT::range</qualifiedname>
+        <param>
+          <type>VkImageSubresourceRange const &amp;</type>
+          <declname>range</declname>
+        </param>
         <briefdescription>
-<para>Destructor. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">range</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Contains mip levels for the sampler. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/VersionException.hpp" line="44" column="1" bodyfile="Miscellaneous/VersionException.hpp" bodystart="44" bodyend="44"/>
+        <location file="Render/Passes/RenderQuad.hpp" line="609" column="11" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="609" bodyend="613"/>
+        <references refid="d8/d80/a03852_1aa7fc146147deb53c51c646122d66eef6" compoundref="d2/d4a/a00758" startline="751">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::m_config</references>
+        <references refid="d8/d80/a03852_1a2b7159354bb4ab5f87da28299e2e21da" compoundref="d2/d4a/a00758" startline="609" endline="613">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::range</references>
+        <referencedby refid="d8/d80/a03852_1a2b7159354bb4ab5f87da28299e2e21da" compoundref="d2/d4a/a00758" startline="609" endline="613">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::range</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/d80/a03852_1a062561625f7ff24ed0cfa65f3bfc8688" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>BuilderT &amp;</type>
+        <definition>BuilderT &amp; castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::blendMode</definition>
+        <argsstring>(BlendMode blendMode)</argsstring>
+        <name>blendMode</name>
+        <qualifiedname>castor3d::RenderQuadBuilderT::blendMode</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
+          <declname>blendMode</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">blendMode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Contains blendMode to destination status. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderQuad.hpp" line="622" column="11" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="622" bodyend="626"/>
+        <references refid="d8/d80/a03852_1a062561625f7ff24ed0cfa65f3bfc8688" compoundref="d2/d4a/a00758" startline="622" endline="626">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::blendMode</references>
+        <references refid="d8/d80/a03852_1aa7fc146147deb53c51c646122d66eef6" compoundref="d2/d4a/a00758" startline="751">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::m_config</references>
+        <referencedby refid="d8/d80/a03852_1a062561625f7ff24ed0cfa65f3bfc8688" compoundref="d2/d4a/a00758" startline="622" endline="626">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::blendMode</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/d80/a03852_1a970a0bf93dfb36ba6f349bd07725e521" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>BuilderT &amp;</type>
+        <definition>BuilderT &amp; castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::bindings</definition>
+        <argsstring>(rq::BindingDescriptionArray const &amp;bindings)</argsstring>
+        <name>bindings</name>
+        <qualifiedname>castor3d::RenderQuadBuilderT::bindings</qualifiedname>
+        <param>
+          <type><ref refid="d6/d64/a01399_1a4a9359de68c83f5e0f2d2cbe8bf5910b" kindref="member">rq::BindingDescriptionArray</ref> const &amp;</type>
+          <declname>bindings</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">bindings</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Contains the inputs bindings. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderQuad.hpp" line="635" column="11" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="635" bodyend="639"/>
+        <references refid="d8/d80/a03852_1a970a0bf93dfb36ba6f349bd07725e521" compoundref="d2/d4a/a00758" startline="635" endline="639">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::bindings</references>
+        <references refid="d8/d80/a03852_1aa7fc146147deb53c51c646122d66eef6" compoundref="d2/d4a/a00758" startline="751">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::m_config</references>
+        <referencedby refid="d8/d80/a03852_1a970a0bf93dfb36ba6f349bd07725e521" compoundref="d2/d4a/a00758" startline="635" endline="639">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::bindings</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/d80/a03852_1a2d157c5fa13f40f5fae84a33c6f26365" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>BuilderT &amp;</type>
+        <definition>BuilderT &amp; castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::binding</definition>
+        <argsstring>(rq::BindingDescription const &amp;binding)</argsstring>
+        <name>binding</name>
+        <qualifiedname>castor3d::RenderQuadBuilderT::binding</qualifiedname>
+        <param>
+          <type><ref refid="d5/d6a/a03864" kindref="compound">rq::BindingDescription</ref> const &amp;</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Adds an image. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">binding</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Contains the binding to add. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderQuad.hpp" line="650" column="11" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="650" bodyend="659"/>
+        <references refid="d8/d80/a03852_1a2d157c5fa13f40f5fae84a33c6f26365" compoundref="d2/d4a/a00758" startline="650" endline="659">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::binding</references>
+        <references refid="d8/d80/a03852_1aa7fc146147deb53c51c646122d66eef6" compoundref="d2/d4a/a00758" startline="751">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::m_config</references>
+        <referencedby refid="d8/d80/a03852_1a2d157c5fa13f40f5fae84a33c6f26365" compoundref="d2/d4a/a00758" startline="650" endline="659">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::binding</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/d80/a03852_1a4c77483c0d73db74aae5fe59e03a6d54" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>BuilderT &amp;</type>
+        <definition>BuilderT &amp; castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::binding</definition>
+        <argsstring>(VkDescriptorType descriptor, VkShaderStageFlags stageFlags=VK_SHADER_STAGE_FRAGMENT_BIT)</argsstring>
+        <name>binding</name>
+        <qualifiedname>castor3d::RenderQuadBuilderT::binding</qualifiedname>
+        <param>
+          <type>VkDescriptorType</type>
+          <declname>descriptor</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>stageFlags</declname>
+          <defval>VK_SHADER_STAGE_FRAGMENT_BIT</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Adds an image. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">descriptor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The descriptor type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">stageFlags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The descriptor stage flags. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderQuad.hpp" line="674" column="11" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="674" bodyend="678"/>
+        <references refid="d8/d80/a03852_1a2d157c5fa13f40f5fae84a33c6f26365" compoundref="d2/d4a/a00758" startline="650" endline="659">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::binding</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/d80/a03852_1ac1edfedf55abf1b02776b6ee9719482c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>BuilderT &amp;</type>
+        <definition>BuilderT &amp; castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::binding</definition>
+        <argsstring>(VkDescriptorType descriptor, VkImageViewType view, VkShaderStageFlags stageFlags=VK_SHADER_STAGE_FRAGMENT_BIT)</argsstring>
+        <name>binding</name>
+        <qualifiedname>castor3d::RenderQuadBuilderT::binding</qualifiedname>
+        <param>
+          <type>VkDescriptorType</type>
+          <declname>descriptor</declname>
+        </param>
+        <param>
+          <type>VkImageViewType</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>stageFlags</declname>
+          <defval>VK_SHADER_STAGE_FRAGMENT_BIT</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Adds an image binding. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">descriptor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The descriptor type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">view</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The image view. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">stageFlags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The descriptor stage flags. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderQuad.hpp" line="697" column="11" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="697" bodyend="702"/>
+        <references refid="d8/d80/a03852_1a2d157c5fa13f40f5fae84a33c6f26365" compoundref="d2/d4a/a00758" startline="650" endline="659">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::binding</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/d80/a03852_1a4a4f339fd319b5c843eb831cbe6ca153" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>BuilderT &amp;</type>
+        <definition>BuilderT &amp; castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::tex3DResult</definition>
+        <argsstring>(IntermediateView result)</argsstring>
+        <name>tex3DResult</name>
+        <qualifiedname>castor3d::RenderQuadBuilderT::tex3DResult</qualifiedname>
+        <param>
+          <type><ref refid="de/d38/a04316" kindref="compound">IntermediateView</ref></type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the result used for for 3D texture inputs. <simplesect kind="remark"><para>The 3D textures must be preprocessed externally to this result. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">result</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The result. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderQuad.hpp" line="717" column="11" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="717" bodyend="721"/>
+        <references refid="d8/d80/a03852_1aa7fc146147deb53c51c646122d66eef6" compoundref="d2/d4a/a00758" startline="751">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::m_config</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/d80/a03852_1a4a58abd503ed0bff1600be8605477258" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>RenderQuadUPtr</type>
+        <definition>RenderQuadUPtr castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::build</definition>
+        <argsstring>(RenderDevice const &amp;device, castor::String const &amp;name, VkFilter samplerFilter)</argsstring>
+        <name>build</name>
+        <qualifiedname>castor3d::RenderQuadBuilderT::build</qualifiedname>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkFilter</type>
+          <declname>samplerFilter</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates the <ref refid="d4/dfc/a03876" kindref="compound">RenderQuad</ref>. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The <ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref>. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">samplerFilter</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The sampler filter for the source texture. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderQuad.hpp" line="740" column="16" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="740" bodyend="748"/>
+        <references refid="d8/d80/a03852_1aa7fc146147deb53c51c646122d66eef6" compoundref="d2/d4a/a00758" startline="751">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::m_config</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>Used to create a <ref refid="d4/dfc/a03876" kindref="compound">RenderQuad</ref> variable. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="4650">
-        <label>Exception</label>
-      </node>
-      <node id="4649">
-        <label>castor3d::VersionException</label>
+      <node id="2">
+        <label>castor3d::RenderQuadBuilderT&lt; rq::Config, RenderQuadBuilder &gt;</label>
         <link refid="d8/d80/a03852"/>
-        <childnode refid="4650" relation="public-inheritance">
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; rq::Config, RenderQuadBuilder &gt;</edgelabel>
         </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::RenderQuadBuilder</label>
+        <link refid="df/d0d/a03880"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;</label>
+        <link refid="d8/d80/a03852"/>
       </node>
     </inheritancegraph>
-    <collaborationgraph>
-      <node id="4652">
-        <label>Exception</label>
-      </node>
-      <node id="4651">
-        <label>castor3d::VersionException</label>
-        <link refid="d8/d80/a03852"/>
-        <childnode refid="4652" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Miscellaneous/VersionException.hpp" line="15" column="1" bodyfile="Miscellaneous/VersionException.hpp" bodystart="13" bodyend="45"/>
+    <location file="Render/Passes/RenderQuad.hpp" line="578" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="579" bodyend="752"/>
     <listofallmembers>
-      <member refid="d8/d80/a03852_1afd9c24e163e939cbaf4dd54ff13d1bf9" prot="public" virt="non-virtual"><scope>castor3d::VersionException</scope><name>VersionException</name></member>
-      <member refid="d8/d80/a03852_1a7072af920e19cfa2edd3a6986fcd8a7a" prot="public" virt="virtual"><scope>castor3d::VersionException</scope><name>~VersionException</name></member>
+      <member refid="d8/d80/a03852_1a2d157c5fa13f40f5fae84a33c6f26365" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilderT</scope><name>binding</name></member>
+      <member refid="d8/d80/a03852_1a4c77483c0d73db74aae5fe59e03a6d54" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilderT</scope><name>binding</name></member>
+      <member refid="d8/d80/a03852_1ac1edfedf55abf1b02776b6ee9719482c" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilderT</scope><name>binding</name></member>
+      <member refid="d8/d80/a03852_1a970a0bf93dfb36ba6f349bd07725e521" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilderT</scope><name>bindings</name></member>
+      <member refid="d8/d80/a03852_1a062561625f7ff24ed0cfa65f3bfc8688" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilderT</scope><name>blendMode</name></member>
+      <member refid="d8/d80/a03852_1a4a58abd503ed0bff1600be8605477258" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilderT</scope><name>build</name></member>
+      <member refid="d8/d80/a03852_1aa7fc146147deb53c51c646122d66eef6" prot="protected" virt="non-virtual"><scope>castor3d::RenderQuadBuilderT</scope><name>m_config</name></member>
+      <member refid="d8/d80/a03852_1a2b7159354bb4ab5f87da28299e2e21da" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilderT</scope><name>range</name></member>
+      <member refid="d8/d80/a03852_1a13037f2937494dc1ab0f713225aeedd6" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilderT</scope><name>RenderQuadBuilderT</name></member>
+      <member refid="d8/d80/a03852_1a4a4f339fd319b5c843eb831cbe6ca153" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilderT</scope><name>tex3DResult</name></member>
+      <member refid="d8/d80/a03852_1a12f59a1dbb62bd1cc2fc3d26db8b1897" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilderT</scope><name>texcoordConfig</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

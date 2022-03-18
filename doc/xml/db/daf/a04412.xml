@@ -1,58 +1,338 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="db/daf/a04412" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::LineariseDepthPass::Layout</compoundname>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="db/daf/a04412_1a9ab30459ca85b0466f95ee314ef5341e" prot="public" static="no" mutable="no">
-        <type>ashes::DescriptorSetLayoutPtr</type>
-        <definition>ashes::DescriptorSetLayoutPtr castor3d::LineariseDepthPass::Layout::descriptorLayout</definition>
-        <argsstring></argsstring>
-        <name>descriptorLayout</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="db/daf/a04412" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::SceneNodeAnimation</compoundname>
+    <basecompoundref refid="d5/de0/a02220" prot="public" virt="non-virtual">castor3d::AnimationT&lt; Engine &gt;</basecompoundref>
+    <includes local="no">SceneNodeAnimation.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="db/daf/a04412_1aee96f60d95f89134c3e52087825c3d92" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SceneNodeAnimation::SceneNodeAnimation</definition>
+        <argsstring>(SceneNodeAnimation &amp;&amp;rhs)=default</argsstring>
+        <name>SceneNodeAnimation</name>
+        <qualifiedname>castor3d::SceneNodeAnimation::SceneNodeAnimation</qualifiedname>
+        <param>
+          <type><ref refid="db/daf/a04412" kindref="compound">SceneNodeAnimation</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>name Copy / Move. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="167" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="167" bodyend="-1"/>
+        <location file="Scene/Animation/SceneNodeAnimation.hpp" line="26" column="9"/>
       </memberdef>
-      <memberdef kind="variable" id="db/daf/a04412_1aca951a8d047144fb7052df48b7e1a8cd" prot="public" static="no" mutable="no">
-        <type>ashes::DescriptorSetPoolPtr</type>
-        <definition>ashes::DescriptorSetPoolPtr castor3d::LineariseDepthPass::Layout::descriptorPool</definition>
-        <argsstring></argsstring>
-        <name>descriptorPool</name>
+      <memberdef kind="function" id="db/daf/a04412_1af9833c8f2cf2f5bd25ded4ff9706cfeb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="db/daf/a04412" kindref="compound">SceneNodeAnimation</ref> &amp;</type>
+        <definition>C3D_API SceneNodeAnimation &amp; castor3d::SceneNodeAnimation::operator=</definition>
+        <argsstring>(SceneNodeAnimation &amp;&amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::SceneNodeAnimation::operator=</qualifiedname>
+        <param>
+          <type><ref refid="db/daf/a04412" kindref="compound">SceneNodeAnimation</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="168" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="168" bodyend="-1"/>
+        <location file="Scene/Animation/SceneNodeAnimation.hpp" line="27" column="29"/>
       </memberdef>
-      <memberdef kind="variable" id="db/daf/a04412_1aa9594a587e860db6acd7d78c3c7df359" prot="public" static="no" mutable="no">
-        <type>ashes::PipelineLayoutPtr</type>
-        <definition>ashes::PipelineLayoutPtr castor3d::LineariseDepthPass::Layout::pipelineLayout</definition>
-        <argsstring></argsstring>
-        <name>pipelineLayout</name>
+      <memberdef kind="function" id="db/daf/a04412_1acf532ebced866abe9966021d00b59e82" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SceneNodeAnimation::SceneNodeAnimation</definition>
+        <argsstring>(SceneNodeAnimation const &amp;rhs)=delete</argsstring>
+        <name>SceneNodeAnimation</name>
+        <qualifiedname>castor3d::SceneNodeAnimation::SceneNodeAnimation</qualifiedname>
+        <param>
+          <type><ref refid="db/daf/a04412" kindref="compound">SceneNodeAnimation</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="169" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="169" bodyend="-1"/>
+        <location file="Scene/Animation/SceneNodeAnimation.hpp" line="28" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="db/daf/a04412_1ab9cf4adf0f918b39d752f004f4d43310" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="db/daf/a04412" kindref="compound">SceneNodeAnimation</ref> &amp;</type>
+        <definition>C3D_API SceneNodeAnimation &amp; castor3d::SceneNodeAnimation::operator=</definition>
+        <argsstring>(SceneNodeAnimation const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::SceneNodeAnimation::operator=</qualifiedname>
+        <param>
+          <type><ref refid="db/daf/a04412" kindref="compound">SceneNodeAnimation</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/SceneNodeAnimation.hpp" line="29" column="29"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="db/daf/a04412_1a2df110bcfac52a5d47c10822f68744c9" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class BinaryWriter&lt; SceneNodeAnimation &gt;</definition>
+        <argsstring></argsstring>
+        <name>BinaryWriter&lt; SceneNodeAnimation &gt;</name>
+        <qualifiedname>castor3d::SceneNodeAnimation::BinaryWriter&lt; SceneNodeAnimation &gt;</qualifiedname>
+        <param>
+          <type><ref refid="df/d49/a02340" kindref="compound">BinaryWriter</ref>&lt; <ref refid="db/daf/a04412" kindref="compound">SceneNodeAnimation</ref> &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/SceneNodeAnimation.hpp" line="41" column="18" bodyfile="Scene/Animation/SceneNodeAnimation.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="db/daf/a04412_1ae81a5e5bff32c6e0db6491178bcd8e6b" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class BinaryParser&lt; SceneNodeAnimation &gt;</definition>
+        <argsstring></argsstring>
+        <name>BinaryParser&lt; SceneNodeAnimation &gt;</name>
+        <qualifiedname>castor3d::SceneNodeAnimation::BinaryParser&lt; SceneNodeAnimation &gt;</qualifiedname>
+        <param>
+          <type><ref refid="d1/d03/a02332" kindref="compound">BinaryParser</ref>&lt; <ref refid="db/daf/a04412" kindref="compound">SceneNodeAnimation</ref> &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/SceneNodeAnimation.hpp" line="41" column="18" bodyfile="Scene/Animation/SceneNodeAnimation.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="db/daf/a04412_1a1d1f4e3785acb372f0ecc5f8548cc34e" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class SceneNodeAnimationInstance</definition>
+        <argsstring></argsstring>
+        <name>SceneNodeAnimationInstance</name>
+        <qualifiedname>castor3d::SceneNodeAnimation::SceneNodeAnimationInstance</qualifiedname>
+        <param>
+          <type><ref refid="d5/dbb/a04408" kindref="compound">SceneNodeAnimationInstance</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/SceneNodeAnimation.hpp" line="47" column="14" bodyfile="Scene/Animation/SceneNodeAnimation.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/daf/a04412_1a75f99a05c79a8d89ed1bc49fa652d72a" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SceneNodeAnimation::SceneNodeAnimation</definition>
+        <argsstring>(SceneNode &amp;node, castor::String const &amp;name=castor::cuEmptyString)</argsstring>
+        <name>SceneNodeAnimation</name>
+        <qualifiedname>castor3d::SceneNodeAnimation::SceneNodeAnimation</qualifiedname>
+        <param>
+          <type><ref refid="d4/d6d/a04636" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>node</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+          <defval>castor::cuEmptyString</defval>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">animable</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent animable object. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The name of the animation. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/SceneNodeAnimation.hpp" line="41" column="18"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
-<para>name Common. </para>
     </detaileddescription>
-    <location file="Render/Passes/LineariseDepthPass.hpp" line="166" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="165" bodyend="170"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>Animation</label>
+        <link refid="d5/de0/a02220"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::AnimationT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d5/de0/a02220"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SceneNodeAnimation</label>
+        <link refid="db/daf/a04412"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+      <node id="6">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5">
+        <label>castor3d::AnimableT&lt; Engine &gt;</label>
+        <link refid="d8/d5f/a02216"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Animation</label>
+        <link refid="d5/de0/a02220"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_animable</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>K</label>
+      </node>
+      <node id="10">
+        <label>T</label>
+      </node>
+      <node id="11">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d8/d5f/a02216"/>
+        <childnode refid="12" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::AnimationT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d5/de0/a02220"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="12" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SceneNodeAnimation</label>
+        <link refid="db/daf/a04412"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+      <node id="12">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="6">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="7">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/Animation/SceneNodeAnimation.hpp" line="15" column="1" bodyfile="Scene/Animation/SceneNodeAnimation.hpp" bodystart="17" bodyend="48"/>
     <listofallmembers>
-      <member refid="db/daf/a04412_1a9ab30459ca85b0466f95ee314ef5341e" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass::Layout</scope><name>descriptorLayout</name></member>
-      <member refid="db/daf/a04412_1aca951a8d047144fb7052df48b7e1a8cd" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass::Layout</scope><name>descriptorPool</name></member>
-      <member refid="db/daf/a04412_1aa9594a587e860db6acd7d78c3c7df359" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass::Layout</scope><name>pipelineLayout</name></member>
+      <member refid="d5/de0/a02220_1a006d6ed2641a537bceebaca154133415" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>addKeyFrame</name></member>
+      <member refid="d5/de0/a02220_1adb1052af5d809dbe7cb65d7abfa71dfd" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>AnimationT</name></member>
+      <member refid="d5/de0/a02220_1af8e6704a37b5aca0c24363b10be3e196" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>AnimationT</name></member>
+      <member refid="d5/de0/a02220_1aaeaa385f6dc3ff2650a8b3b34784c038" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>AnimationT</name></member>
+      <member refid="d5/de0/a02220_1a44a8302d52493997f5047dfb98ee9132" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>AnimationT</name></member>
+      <member refid="d5/de0/a02220_1a030124cf2d675db7befc1439c032a239" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>begin</name></member>
+      <member refid="d5/de0/a02220_1a10eb3a79ab8187133d04bbbac79a867e" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>begin</name></member>
+      <member refid="db/daf/a04412_1ae81a5e5bff32c6e0db6491178bcd8e6b" prot="protected" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>BinaryParser&lt; SceneNodeAnimation &gt;</name></member>
+      <member refid="db/daf/a04412_1a2df110bcfac52a5d47c10822f68744c9" prot="protected" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>BinaryWriter&lt; SceneNodeAnimation &gt;</name></member>
+      <member refid="d5/de0/a02220_1ae9f0f55cd804d87dcf3061da7e2bf8c7" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>end</name></member>
+      <member refid="d5/de0/a02220_1afffd735843f39b88370bd7fb352b22b1" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>end</name></member>
+      <member refid="d5/de0/a02220_1a948349eb0ae8905ab203815a8a2d16d9" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>find</name></member>
+      <member refid="d5/de0/a02220_1a43459e4e85d0d100c0bb33ce76301596" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>findKeyFrame</name></member>
+      <member refid="d5/de0/a02220_1ac2ea4433da1220bf08252286df377c40" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>getAnimable</name></member>
+      <member refid="d5/de0/a02220_1ad45c59abfe36c3a47bb0d35a15b7b280" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>getLength</name></member>
+      <member refid="d5/de0/a02220_1aa23c8683e8eb8e813b654d6e59e08a85" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>getType</name></member>
+      <member refid="d5/de0/a02220_1a569d370c8ac8e7b2171bde6538167f8f" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>isEmpty</name></member>
+      <member refid="d5/de0/a02220_1a3072da6120ff9933da94eba55981d04f" prot="protected" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>m_animable</name></member>
+      <member refid="d5/de0/a02220_1afcef08681fffacaf889104e64afaefde" prot="protected" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>m_keyframes</name></member>
+      <member refid="d5/de0/a02220_1a24f5bd291c689cf9157a7860fd6a5d7f" prot="protected" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>m_length</name></member>
+      <member refid="d5/de0/a02220_1aacafe3fc6cde0dfaa39f09da0ea4107e" prot="protected" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>m_type</name></member>
+      <member refid="db/daf/a04412_1af9833c8f2cf2f5bd25ded4ff9706cfeb" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>operator=</name></member>
+      <member refid="db/daf/a04412_1ab9cf4adf0f918b39d752f004f4d43310" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>operator=</name></member>
+      <member refid="d5/de0/a02220_1a0c4cc84356b5918bcd5f32a56724bfd0" prot="public" virt="non-virtual" ambiguityscope="AnimationT&lt; Engine &gt;::"><scope>castor3d::SceneNodeAnimation</scope><name>operator=</name></member>
+      <member refid="d5/de0/a02220_1a55e638295c5571c3051c2dcffa43c88d" prot="public" virt="non-virtual" ambiguityscope="AnimationT&lt; Engine &gt;::"><scope>castor3d::SceneNodeAnimation</scope><name>operator=</name></member>
+      <member refid="db/daf/a04412_1aee96f60d95f89134c3e52087825c3d92" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>SceneNodeAnimation</name></member>
+      <member refid="db/daf/a04412_1acf532ebced866abe9966021d00b59e82" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>SceneNodeAnimation</name></member>
+      <member refid="db/daf/a04412_1a75f99a05c79a8d89ed1bc49fa652d72a" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>SceneNodeAnimation</name></member>
+      <member refid="db/daf/a04412_1a1d1f4e3785acb372f0ecc5f8548cc34e" prot="protected" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>SceneNodeAnimationInstance</name></member>
+      <member refid="d5/de0/a02220_1a18b4cbd78559233907c4acd14bc9f9a6" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimation</scope><name>updateLength</name></member>
+      <member refid="d5/de0/a02220_1a792680fb5eac70b3543a4272924aee11" prot="public" virt="virtual"><scope>castor3d::SceneNodeAnimation</scope><name>~AnimationT</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

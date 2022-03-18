@@ -1,9 +1,10 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_83dd0b6e9a230a71a17985a017af57f9" kind="dir">
     <compoundname>Material/Texture/Animation</compoundname>
     <innerfile refid="d1/dc6/a00347">TextureAnimation.hpp</innerfile>
-    <innerfile refid="d9/ddf/a07312">TextureAnimationModule.hpp</innerfile>
+    <innerfile refid="db/d10/a00350">TextureAnimationKeyFrame.hpp</innerfile>
+    <innerfile refid="d5/d9e/a10784">TextureAnimationModule.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

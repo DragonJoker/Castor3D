@@ -1,4 +1,10 @@
-<map id="castor3d::TextureSource" name="castor3d::TextureSource">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,169,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="56,5,119,32"/>
+<map id="castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;" name="castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;">
+<area shape="rect" id="node1" title="Light cache." alt="" coords="1128,63,1291,119"/>
+<area shape="rect" id="node2" href="$db/d99/a02626.html" title=" " alt="" coords="893,63,1079,119"/>
+<area shape="rect" id="node3" title=" " alt="" coords="228,180,411,207"/>
+<area shape="rect" id="node7" href="$db/d99/a02626.html" title=" " alt="" coords="524,118,709,159"/>
+<area shape="rect" id="node4" title=" " alt="" coords="523,37,711,93"/>
+<area shape="rect" id="node5" href="$d7/d94/a02702.html" title=" " alt="" coords="259,32,379,59"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,32,176,59"/>
+<area shape="rect" id="node8" title=" " alt="" coords="225,110,413,151"/>
 </map>

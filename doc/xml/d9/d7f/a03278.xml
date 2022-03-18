@@ -1,33 +1,236 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d9/d7f/a03278" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkCommandBufferInheritanceConditionalRenderingInfoEXT &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d9/d7f/a03278_1a44ab6dec77cdd4ecfcfb76da9dc02a15" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkCommandBufferInheritanceConditionalRenderingInfoEXT &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d9/d7f/a03278" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::StagingData</compoundname>
+    <includes local="no">StagingData.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d9/d7f/a03278_1a8ad21a3b851bc0617b26076087a1e931" prot="private" static="no" mutable="no">
+        <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::StagingData::m_device</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_CONDITIONAL_RENDERING_INFO_EXT</initializer>
+        <name>m_device</name>
+        <qualifiedname>castor3d::StagingData::m_device</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="224" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="224" bodyend="-1"/>
+        <location file="Miscellaneous/StagingData.hpp" line="52" column="21" bodyfile="Miscellaneous/StagingData.hpp" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d7f/a03278_1a36da5b7cf6083888463173fb5410e72f" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string castor3d::StagingData::m_debugName</definition>
+        <argsstring></argsstring>
+        <name>m_debugName</name>
+        <qualifiedname>castor3d::StagingData::m_debugName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/StagingData.hpp" line="53" column="13" bodyfile="Miscellaneous/StagingData.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d7f/a03278_1aaec95444cbc747fb8cc5cef6a199fba6" prot="private" static="no" mutable="no">
+        <type>ashes::StagingBufferPtr</type>
+        <definition>ashes::StagingBufferPtr castor3d::StagingData::m_staging</definition>
+        <argsstring></argsstring>
+        <name>m_staging</name>
+        <qualifiedname>castor3d::StagingData::m_staging</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/StagingData.hpp" line="54" column="25" bodyfile="Miscellaneous/StagingData.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d7f/a03278_1abb82f53ae64b9052ed0a97479b7b5bca" prot="private" static="no" mutable="no">
+        <type>ashes::CommandBufferPtr</type>
+        <definition>ashes::CommandBufferPtr castor3d::StagingData::m_command</definition>
+        <argsstring></argsstring>
+        <name>m_command</name>
+        <qualifiedname>castor3d::StagingData::m_command</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/StagingData.hpp" line="55" column="25" bodyfile="Miscellaneous/StagingData.hpp" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d7f/a03278_1aa182874c9299acc10b5dce18695fc00a" prot="private" static="no" mutable="no">
+        <type>ashes::FencePtr</type>
+        <definition>ashes::FencePtr castor3d::StagingData::m_fence</definition>
+        <argsstring></argsstring>
+        <name>m_fence</name>
+        <qualifiedname>castor3d::StagingData::m_fence</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/StagingData.hpp" line="56" column="17" bodyfile="Miscellaneous/StagingData.hpp" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/d7f/a03278_1a52d243d03afda9bf65467169e87eb19f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::StagingData::StagingData</definition>
+        <argsstring>(RenderDevice const &amp;device, std::string const &amp;debugName)</argsstring>
+        <name>StagingData</name>
+        <qualifiedname>castor3d::StagingData::StagingData</qualifiedname>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>std::string const &amp;</type>
+          <declname>debugName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/StagingData.hpp" line="19" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d7f/a03278_1a41b600ffee8ceed2a7ee7587dc28ec3b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::StagingData::upload</definition>
+        <argsstring>(void const *data, VkDeviceSize size, VkDeviceSize offset, ashes::BufferBase const &amp;buffer)</argsstring>
+        <name>upload</name>
+        <qualifiedname>castor3d::StagingData::upload</qualifiedname>
+        <param>
+          <type>void const *</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <param>
+          <type>ashes::BufferBase const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/StagingData.hpp" line="22" column="14"/>
+        <referencedby refid="d9/d7f/a03278_1ad0475f1bc41a4850f8bcf093fb542809" compoundref="d3/d29/a00419" startline="31" endline="39">upload</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d9/d7f/a03278_1a26eb18ffc94a0087d3f766d8f1831f25" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::StagingData::uploadNoWait</definition>
+        <argsstring>(void const *data, VkDeviceSize size, VkDeviceSize offset, ashes::BufferBase const &amp;buffer)</argsstring>
+        <name>uploadNoWait</name>
+        <qualifiedname>castor3d::StagingData::uploadNoWait</qualifiedname>
+        <param>
+          <type>void const *</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <param>
+          <type>ashes::BufferBase const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/StagingData.hpp" line="26" column="14"/>
+        <referencedby refid="d9/d7f/a03278_1a4967c98fd019eb8e43e9c6aca22a0e37" compoundref="d3/d29/a00419" startline="41" endline="49">uploadNoWait</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d9/d7f/a03278_1ad0475f1bc41a4850f8bcf093fb542809" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::StagingData::upload</definition>
+        <argsstring>(castor::ByteArray const &amp;data, VkDeviceSize offset, ashes::BufferBase const &amp;buffer)</argsstring>
+        <name>upload</name>
+        <qualifiedname>castor3d::StagingData::upload</qualifiedname>
+        <param>
+          <type>castor::ByteArray const &amp;</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <param>
+          <type>ashes::BufferBase const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/StagingData.hpp" line="31" column="6" bodyfile="Miscellaneous/StagingData.hpp" bodystart="31" bodyend="39"/>
+        <references refid="d9/d7f/a03278_1a41b600ffee8ceed2a7ee7587dc28ec3b">upload</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/d7f/a03278_1a4967c98fd019eb8e43e9c6aca22a0e37" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::StagingData::uploadNoWait</definition>
+        <argsstring>(castor::ByteArray const &amp;data, VkDeviceSize offset, ashes::BufferBase const &amp;buffer)</argsstring>
+        <name>uploadNoWait</name>
+        <qualifiedname>castor3d::StagingData::uploadNoWait</qualifiedname>
+        <param>
+          <type>castor::ByteArray const &amp;</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <param>
+          <type>ashes::BufferBase const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/StagingData.hpp" line="41" column="6" bodyfile="Miscellaneous/StagingData.hpp" bodystart="41" bodyend="49"/>
+        <references refid="d9/d7f/a03278_1a26eb18ffc94a0087d3f766d8f1831f25">uploadNoWait</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="224" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="224" bodyend="224"/>
+    <location file="Miscellaneous/StagingData.hpp" line="16" column="1" bodyfile="Miscellaneous/StagingData.hpp" bodystart="17" bodyend="57"/>
     <listofallmembers>
-      <member refid="d9/d7f/a03278_1a44ab6dec77cdd4ecfcfb76da9dc02a15" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkCommandBufferInheritanceConditionalRenderingInfoEXT &gt;</scope><name>value</name></member>
+      <member refid="d9/d7f/a03278_1abb82f53ae64b9052ed0a97479b7b5bca" prot="private" virt="non-virtual"><scope>castor3d::StagingData</scope><name>m_command</name></member>
+      <member refid="d9/d7f/a03278_1a36da5b7cf6083888463173fb5410e72f" prot="private" virt="non-virtual"><scope>castor3d::StagingData</scope><name>m_debugName</name></member>
+      <member refid="d9/d7f/a03278_1a8ad21a3b851bc0617b26076087a1e931" prot="private" virt="non-virtual"><scope>castor3d::StagingData</scope><name>m_device</name></member>
+      <member refid="d9/d7f/a03278_1aa182874c9299acc10b5dce18695fc00a" prot="private" virt="non-virtual"><scope>castor3d::StagingData</scope><name>m_fence</name></member>
+      <member refid="d9/d7f/a03278_1aaec95444cbc747fb8cc5cef6a199fba6" prot="private" virt="non-virtual"><scope>castor3d::StagingData</scope><name>m_staging</name></member>
+      <member refid="d9/d7f/a03278_1a52d243d03afda9bf65467169e87eb19f" prot="public" virt="non-virtual"><scope>castor3d::StagingData</scope><name>StagingData</name></member>
+      <member refid="d9/d7f/a03278_1a41b600ffee8ceed2a7ee7587dc28ec3b" prot="public" virt="non-virtual"><scope>castor3d::StagingData</scope><name>upload</name></member>
+      <member refid="d9/d7f/a03278_1ad0475f1bc41a4850f8bcf093fb542809" prot="public" virt="non-virtual"><scope>castor3d::StagingData</scope><name>upload</name></member>
+      <member refid="d9/d7f/a03278_1a26eb18ffc94a0087d3f766d8f1831f25" prot="public" virt="non-virtual"><scope>castor3d::StagingData</scope><name>uploadNoWait</name></member>
+      <member refid="d9/d7f/a03278_1a4967c98fd019eb8e43e9c6aca22a0e37" prot="public" virt="non-virtual"><scope>castor3d::StagingData</scope><name>uploadNoWait</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

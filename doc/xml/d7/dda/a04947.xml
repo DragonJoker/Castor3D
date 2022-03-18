@@ -1,43 +1,208 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d7/dda/a04947" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::EquirectangularToCube::FrameBuffer</compoundname>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d7/dda/a04947_1a8427e16432bbaa0a1b5c1de40f781d10" prot="public" static="no" mutable="no">
-        <type>ashes::ImageView</type>
-        <definition>ashes::ImageView castor3d::EquirectangularToCube::FrameBuffer::view</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d7/dda/a04947" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::OverlayData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">OverlayUbo.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d7/dda/a04947_1ad9967d754321f997d51cc6d28da3512b" prot="private" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::OverlayData::m_positionRatio</definition>
         <argsstring></argsstring>
-        <name>view</name>
+        <name>m_positionRatio</name>
+        <qualifiedname>castor3d::shader::OverlayData::m_positionRatio</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/EquirectangularToCube.hpp" line="28" column="1" bodyfile="Render/ToTexture/EquirectangularToCube.hpp" bodystart="28" bodyend="-1"/>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="38" column="11" bodyfile="Shader/Ubos/OverlayUbo.hpp" bodystart="38" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d7/dda/a04947_1ac4a3f0c19f7fb8336901f57d976cbf3c" prot="public" static="no" mutable="no">
-        <type>ashes::FrameBufferPtr</type>
-        <definition>ashes::FrameBufferPtr castor3d::EquirectangularToCube::FrameBuffer::frameBuffer</definition>
+      <memberdef kind="variable" id="d7/dda/a04947_1affe8daf215bdea4aa3b0e13c68b1b2d5" prot="private" static="no" mutable="no">
+        <type>sdw::IVec4</type>
+        <definition>sdw::IVec4 castor3d::shader::OverlayData::m_renderSizeIndex</definition>
         <argsstring></argsstring>
-        <name>frameBuffer</name>
+        <name>m_renderSizeIndex</name>
+        <qualifiedname>castor3d::shader::OverlayData::m_renderSizeIndex</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/EquirectangularToCube.hpp" line="29" column="1" bodyfile="Render/ToTexture/EquirectangularToCube.hpp" bodystart="29" bodyend="-1"/>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="39" column="12" bodyfile="Shader/Ubos/OverlayUbo.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/dda/a04947_1a7fada12fa272a841f97cf38b07dc41ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::OverlayData::OverlayData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>OverlayData</name>
+        <qualifiedname>castor3d::shader::OverlayData::OverlayData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="21" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/dda/a04947_1a4747ccef18af340fecaedfbf6faf9fd1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::OverlayData::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, OverlayData)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::OverlayData::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        </param>
+        <param>
+          <type><ref refid="d7/dda/a04947" kindref="compound">OverlayData</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="24" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/dda/a04947_1afaffe38eb54fa99c996da05d1c19516b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec2</type>
+        <definition>C3D_API sdw::Vec2 castor3d::shader::OverlayData::getOverlaySize</definition>
+        <argsstring>() const</argsstring>
+        <name>getOverlaySize</name>
+        <qualifiedname>castor3d::shader::OverlayData::getOverlaySize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="29" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/dda/a04947_1a2d8237b2e05e8e6fe00240238a74edb8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec2</type>
+        <definition>C3D_API sdw::Vec2 castor3d::shader::OverlayData::modelToView</definition>
+        <argsstring>(sdw::Vec2 const &amp;pos) const</argsstring>
+        <name>modelToView</name>
+        <qualifiedname>castor3d::shader::OverlayData::modelToView</qualifiedname>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>pos</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="30" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/dda/a04947_1ae037b1f5fdc0aa59edf6d8b25ba6a0b7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::UInt</type>
+        <definition>C3D_API sdw::UInt castor3d::shader::OverlayData::getMaterialIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>getMaterialIndex</name>
+        <qualifiedname>castor3d::shader::OverlayData::getMaterialIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="31" column="19"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d7/dda/a04947_1ac3ee25a5e4724a7febb67999bb9844d9" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
+        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::OverlayData::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::OverlayData::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="26" column="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/dda/a04947_1a18559a70abe19ac0d29839d59170ab08" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::OverlayData::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::OverlayData::declare</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="27" column="32"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/ToTexture/EquirectangularToCube.hpp" line="27" column="1" bodyfile="Render/ToTexture/EquirectangularToCube.hpp" bodystart="26" bodyend="30"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::OverlayData</label>
+        <link refid="d7/dda/a04947"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::OverlayData</label>
+        <link refid="d7/dda/a04947"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Ubos/OverlayUbo.hpp" line="18" column="1" bodyfile="Shader/Ubos/OverlayUbo.hpp" bodystart="20" bodyend="40"/>
     <listofallmembers>
-      <member refid="d7/dda/a04947_1ac4a3f0c19f7fb8336901f57d976cbf3c" prot="public" virt="non-virtual"><scope>castor3d::EquirectangularToCube::FrameBuffer</scope><name>frameBuffer</name></member>
-      <member refid="d7/dda/a04947_1a8427e16432bbaa0a1b5c1de40f781d10" prot="public" virt="non-virtual"><scope>castor3d::EquirectangularToCube::FrameBuffer</scope><name>view</name></member>
+      <member refid="d7/dda/a04947_1a18559a70abe19ac0d29839d59170ab08" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>declare</name></member>
+      <member refid="d7/dda/a04947_1ae037b1f5fdc0aa59edf6d8b25ba6a0b7" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>getMaterialIndex</name></member>
+      <member refid="d7/dda/a04947_1afaffe38eb54fa99c996da05d1c19516b" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>getOverlaySize</name></member>
+      <member refid="d7/dda/a04947_1ad9967d754321f997d51cc6d28da3512b" prot="private" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>m_positionRatio</name></member>
+      <member refid="d7/dda/a04947_1affe8daf215bdea4aa3b0e13c68b1b2d5" prot="private" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>m_renderSizeIndex</name></member>
+      <member refid="d7/dda/a04947_1ac3ee25a5e4724a7febb67999bb9844d9" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>makeType</name></member>
+      <member refid="d7/dda/a04947_1a2d8237b2e05e8e6fe00240238a74edb8" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>modelToView</name></member>
+      <member refid="d7/dda/a04947_1a7fada12fa272a841f97cf38b07dc41ad" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>OverlayData</name></member>
+      <member refid="d7/dda/a04947_1a4747ccef18af340fecaedfbf6faf9fd1" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>SDW_DeclStructInstance</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

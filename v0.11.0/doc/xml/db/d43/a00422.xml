@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="db/d43/a00422" kind="file" language="C++">
+    <compoundname>Cone.hpp</compoundname>
+    <includes refid="d5/d5f/a00461" local="yes">Castor3D/Model/Mesh/MeshGenerator.hpp</includes>
+    <incdepgraph>
+      <node id="8210">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="8213">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="8214">
+        <label>cstdint</label>
+      </node>
+      <node id="8212">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="8205">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="8206" relation="include">
+        </childnode>
+        <childnode refid="8207" relation="include">
+        </childnode>
+        <childnode refid="8208" relation="include">
+        </childnode>
+        <childnode refid="8209" relation="include">
+        </childnode>
+        <childnode refid="8210" relation="include">
+        </childnode>
+        <childnode refid="8211" relation="include">
+        </childnode>
+        <childnode refid="8212" relation="include">
+        </childnode>
+        <childnode refid="8213" relation="include">
+        </childnode>
+        <childnode refid="8214" relation="include">
+        </childnode>
+        <childnode refid="8215" relation="include">
+        </childnode>
+        <childnode refid="8216" relation="include">
+        </childnode>
+        <childnode refid="8217" relation="include">
+        </childnode>
+      </node>
+      <node id="8202">
+        <label>Castor3D/Model/Mesh/MeshGenerator.hpp</label>
+        <link refid="d5/d5f/a00461"/>
+        <childnode refid="8203" relation="include">
+        </childnode>
+        <childnode refid="8219" relation="include">
+        </childnode>
+      </node>
+      <node id="8216">
+        <label>string</label>
+      </node>
+      <node id="8204">
+        <label>Castor3D/Model/ModelModule.hpp</label>
+        <link refid="d7/def/a00521"/>
+        <childnode refid="8205" relation="include">
+        </childnode>
+      </node>
+      <node id="8209">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="8206">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="8208">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="8219">
+        <label>Castor3D/Miscellaneous/MiscellaneousModule.hpp</label>
+        <link refid="d4/d27/a00392"/>
+        <childnode refid="8205" relation="include">
+        </childnode>
+      </node>
+      <node id="8207">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="8203">
+        <label>MeshModule.hpp</label>
+        <link refid="d2/d9d/a00464"/>
+        <childnode refid="8204" relation="include">
+        </childnode>
+        <childnode refid="8218" relation="include">
+        </childnode>
+      </node>
+      <node id="8217">
+        <label>vector</label>
+      </node>
+      <node id="8211">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="8218">
+        <label>CastorUtils/Design/Factory.hpp</label>
+      </node>
+      <node id="8201">
+        <label>Model/Mesh/Generator/Cone.hpp</label>
+        <link refid="db/d43/a00422"/>
+        <childnode refid="8202" relation="include">
+        </childnode>
+      </node>
+      <node id="8215">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="d0/de0/a03868" prot="public">castor3d::Cone</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Model/Mesh/Generator/Cone.hpp"/>
+  </compounddef>
+</doxygen>

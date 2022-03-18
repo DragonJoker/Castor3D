@@ -1,4 +1,7 @@
-<map id="castor3d::TextureLayout" name="castor3d::TextureLayout">
-<area shape="rect" id="node1" title=" " alt="" coords="40,80,203,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,237,32"/>
+<map id="castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;" name="castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="523,57,708,98"/>
+<area shape="rect" id="node2" title=" " alt="" coords="228,5,411,32"/>
+<area shape="rect" id="node3" title=" " alt="" coords="225,57,413,98"/>
+<area shape="rect" id="node4" href="$d8/dd0/a02711.html" title=" " alt="" coords="259,123,379,149"/>
+<area shape="rect" id="node5" title=" " alt="" coords="5,123,176,149"/>
 </map>

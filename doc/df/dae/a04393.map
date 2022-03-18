@@ -1,5 +1,8 @@
-<map id="castor3d::GaussianBlur::RenderQuad" name="castor3d::GaussianBlur::RenderQuad">
-<area shape="rect" id="node1" title=" " alt="" coords="5,155,164,196"/>
-<area shape="rect" id="node2" href="$d8/d1f/a04450.html" title=" " alt="" coords="9,80,161,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="53,5,116,32"/>
+<map id="castor3d::AnimationInstance" name="castor3d::AnimationInstance">
+<area shape="rect" id="node1" title=" " alt="" coords="243,97,429,124"/>
+<area shape="rect" id="node3" href="$d4/d61/a04406.html" title=" " alt="" coords="477,5,696,32"/>
+<area shape="rect" id="node4" href="$da/d48/a04414.html" title=" " alt="" coords="484,57,689,98"/>
+<area shape="rect" id="node5" href="$df/de5/a04426.html" title=" " alt="" coords="492,122,681,163"/>
+<area shape="rect" id="node6" href="$dc/da0/a04446.html" title=" " alt="" coords="496,187,677,229"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,90,195,131"/>
 </map>

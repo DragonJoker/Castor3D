@@ -1,5 +1,8 @@
-<map id="castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;" name="castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;">
-<area shape="rect" id="node1" title="Base class for all light passes with light propagation volumes." alt="" coords="5,184,212,225"/>
-<area shape="rect" id="node2" href="$d5/def/a04676.html" title="Base class for all light passes with shadow." alt="" coords="17,95,201,136"/>
-<area shape="rect" id="node3" title=" " alt="" coords="17,5,201,47"/>
+<map id="castor3d::shader::LightMaterial" name="castor3d::shader::LightMaterial">
+<area shape="rect" id="node1" title=" " alt="" coords="215,80,417,107"/>
+<area shape="rect" id="node3" href="$df/de1/a02844.html" title=" " alt="" coords="125,155,299,196"/>
+<area shape="rect" id="node6" href="$d7/d35/a02880.html" title=" " alt="" coords="324,155,516,196"/>
+<area shape="rect" id="node2" title=" " alt="" coords="247,5,385,32"/>
+<area shape="rect" id="node4" href="$d6/dbe/a02848.html" title=" " alt="" coords="5,244,200,285"/>
+<area shape="rect" id="node5" href="$da/de8/a02852.html" title=" " alt="" coords="224,244,419,285"/>
 </map>

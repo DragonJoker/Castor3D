@@ -1,220 +1,1090 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="db/dde/a04856" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</compoundname>
-    <basecompoundref refid="dc/d42/a04748" prot="public" virt="non-virtual">castor3d::LightPassShadow&lt; LightType::eDirectional &gt;</basecompoundref>
-    <includes local="no">LightPassLayeredVolumePropagationShadow.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="db/dde/a04856_1a5129f85e58709ed1c6078497dc9bc1f2" prot="public" static="no">
-        <type><ref refid="d8/d0e/a04744" kindref="compound">LightPassShadowTraits</ref>&lt; <ref refid="da/d1e/a01479_1a381718aa9accc88c20afd97d76c30ed8a0ddd5baafa15f79528b19dd012e1dce3" kindref="member">LightType::eDirectional</ref> &gt;</type>
-        <definition>using castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;::my_traits =  LightPassShadowTraits&lt; LightType::eDirectional &gt;</definition>
-        <argsstring></argsstring>
-        <name>my_traits</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" line="37" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" bodystart="37" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="db/dde/a04856_1ae5ccee48046705cb8dd192342a9732d9" prot="public" static="no">
-        <type>typename <ref refid="d6/db2/a04780_1a7f9d9558a63b272cadf67971800878ca" kindref="member">my_traits::light_type</ref></type>
-        <definition>using castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;::my_light_type =  typename my_traits::light_type</definition>
-        <argsstring></argsstring>
-        <name>my_light_type</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" line="38" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" bodystart="38" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="db/dde/a04856_1a75fa843ef31503792c6cbe1e4eeafb79" prot="public" static="no">
-        <type>typename <ref refid="d6/db2/a04780_1a0d244934d4b78bbaeda354845ff51c0b" kindref="member">my_traits::light_pass_type</ref></type>
-        <definition>using castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;::my_pass_type =  typename my_traits::light_pass_type</definition>
-        <argsstring></argsstring>
-        <name>my_pass_type</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" line="39" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" bodystart="39" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="db/dde/a04856_1aeaa23c83bec324f43c719d464e720012" prot="public" static="no">
-        <type>typename <ref refid="d6/db2/a04780_1a866c07c0c54aa479160db99fc725edde" kindref="member">my_traits::shadow_pass_type</ref></type>
-        <definition>using castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;::my_shadow_pass_type =  typename my_traits::shadow_pass_type</definition>
-        <argsstring></argsstring>
-        <name>my_shadow_pass_type</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" line="40" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" bodystart="40" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="db/dde/a04856_1a7e2625ff1e0e380579563562f8c2f8f5" prot="public" static="yes" mutable="no">
-        <type>constexpr uint32_t</type>
-        <definition>constexpr uint32_t castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;::MaxPropagationSteps</definition>
-        <argsstring></argsstring>
-        <name>MaxPropagationSteps</name>
-        <initializer>= 8u</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" line="42" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" bodystart="42" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="db/dde/a04856_1abbc54c0990a27b6c438fd54683512183" prot="public" static="yes" mutable="no">
-        <type>constexpr <ref refid="da/d1e/a01479_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
-        <definition>constexpr LightType castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;::LtType</definition>
-        <argsstring></argsstring>
-        <name>LtType</name>
-        <initializer>= <ref refid="da/d1e/a01479_1a381718aa9accc88c20afd97d76c30ed8a0ddd5baafa15f79528b19dd012e1dce3" kindref="member">LightType::eDirectional</ref></initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" line="43" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" bodystart="43" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
+    <compoundname>castor3d::shader::Utils</compoundname>
+    <includes local="no">GlslUtils.hpp</includes>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="db/dde/a04856_1a191ea9de3bf8b2be9bd3f4edf6ddfec9" prot="private" static="no" mutable="no">
-        <type><ref refid="d1/dcd/a04880" kindref="compound">OpaquePassResult</ref> const  &amp;</type>
-        <definition>OpaquePassResult const&amp; castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;::m_gpResult</definition>
+      <memberdef kind="variable" id="db/dde/a04856_1ab61e153fe5e347fea8c9f95a2dd83696" prot="private" static="no" mutable="no">
+        <type>sdw::ShaderWriter &amp;</type>
+        <definition>sdw::ShaderWriter&amp; castor3d::shader::Utils::m_writer</definition>
         <argsstring></argsstring>
-        <name>m_gpResult</name>
+        <name>m_writer</name>
+        <qualifiedname>castor3d::shader::Utils::m_writer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" line="137" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" bodystart="137" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="170" column="20" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="170" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="db/dde/a04856_1adf9417edc47584a6adfe1ae25b4d61cf" prot="private" static="no" mutable="no">
-        <type><ref refid="d9/dcf/a04692" kindref="compound">ShadowMapResult</ref> const  &amp;</type>
-        <definition>ShadowMapResult const&amp; castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;::m_smResult</definition>
+      <memberdef kind="variable" id="db/dde/a04856_1a227684a574239d969b2238aa50b0205b" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/d73/a02708" kindref="compound">Engine</ref> const  &amp;</type>
+        <definition>Engine const&amp; castor3d::shader::Utils::m_engine</definition>
         <argsstring></argsstring>
-        <name>m_smResult</name>
+        <name>m_engine</name>
+        <qualifiedname>castor3d::shader::Utils::m_engine</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" line="138" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" bodystart="138" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="171" column="15" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="171" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="db/dde/a04856_1a15e55569f4d700ef006ce362d10a8c21" prot="private" static="no" mutable="no">
-        <type><ref refid="db/d2a/a04776" kindref="compound">LightPassResult</ref> const  &amp;</type>
-        <definition>LightPassResult const&amp; castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;::m_lpResult</definition>
+      <memberdef kind="variable" id="db/dde/a04856_1ac5a0766c0dff5d6a189d4c5d51b4aa14" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Void, sdw::InOutFloat, sdw::InOutFloat &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , sdw::InOutFloat , sdw::InOutFloat &gt; castor3d::shader::Utils::m_swap1F</definition>
         <argsstring></argsstring>
-        <name>m_lpResult</name>
+        <name>m_swap1F</name>
+        <qualifiedname>castor3d::shader::Utils::m_swap1F</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" line="139" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" bodystart="139" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="174" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="174" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="db/dde/a04856_1a8b04842521790a198b18ad858b9098e5" prot="private" static="no" mutable="no">
-        <type>LightVolumePassResultArray const  &amp;</type>
-        <definition>LightVolumePassResultArray const&amp; castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;::m_lpvResult</definition>
+      <memberdef kind="variable" id="db/dde/a04856_1aaf299834ea9f0db759c8ed99347bcbf6" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Float, sdw::InVec2, sdw::InVec2 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Float , sdw::InVec2 , sdw::InVec2 &gt; castor3d::shader::Utils::m_distanceSquared2F</definition>
         <argsstring></argsstring>
-        <name>m_lpvResult</name>
+        <name>m_distanceSquared2F</name>
+        <qualifiedname>castor3d::shader::Utils::m_distanceSquared2F</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" line="140" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" bodystart="140" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="177" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="177" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="db/dde/a04856_1af633deddcbcd8840c7319c5f36fdd50f" prot="private" static="no" mutable="no">
-        <type><ref refid="d1/d22/a05464" kindref="compound">GpInfoUbo</ref> const  &amp;</type>
-        <definition>GpInfoUbo const&amp; castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;::m_gpInfoUbo</definition>
+      <memberdef kind="variable" id="db/dde/a04856_1a79a15aad4c545463d0f4ceb5fa8a3ef2" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Float, sdw::InVec3, sdw::InVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Float , sdw::InVec3 , sdw::InVec3 &gt; castor3d::shader::Utils::m_distanceSquared3F</definition>
         <argsstring></argsstring>
-        <name>m_gpInfoUbo</name>
+        <name>m_distanceSquared3F</name>
+        <qualifiedname>castor3d::shader::Utils::m_distanceSquared3F</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" line="141" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" bodystart="141" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="180" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="180" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="db/dde/a04856_1aa2854db2a5c14dbc650fcf43352614a1" prot="private" static="no" mutable="no">
-        <type><ref refid="d4/db7/a05476" kindref="compound">LayeredLpvGridConfigUbo</ref> const  &amp;</type>
-        <definition>LayeredLpvGridConfigUbo const&amp; castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;::m_lpvConfigUbo</definition>
+      <memberdef kind="variable" id="db/dde/a04856_1aa2974291fcd4182387b16c796e66148c" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec2, sdw::InVec2, sdw::InVec2 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec2 , sdw::InVec2 , sdw::InVec2 &gt; castor3d::shader::Utils::m_calcTexCoord</definition>
         <argsstring></argsstring>
-        <name>m_lpvConfigUbo</name>
+        <name>m_calcTexCoord</name>
+        <qualifiedname>castor3d::shader::Utils::m_calcTexCoord</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" line="142" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" bodystart="142" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="183" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="183" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="db/dde/a04856_1a17ba15a6d71910b3abfe2b81f0683a96" prot="private" static="no" mutable="no">
-        <type>LayeredLightVolumeGIPassArray</type>
-        <definition>LayeredLightVolumeGIPassArray castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;::m_lightVolumeGIPasses</definition>
+      <memberdef kind="variable" id="db/dde/a04856_1aee7bc11f1497032bbd99771475e9a237" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec2, sdw::InFloat, sdw::InMat4 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InVec2 , sdw::InFloat , sdw::InMat4 &gt; castor3d::shader::Utils::m_calcVSPosition</definition>
         <argsstring></argsstring>
-        <name>m_lightVolumeGIPasses</name>
+        <name>m_calcVSPosition</name>
+        <qualifiedname>castor3d::shader::Utils::m_calcVSPosition</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" line="143" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" bodystart="143" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="187" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="187" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dde/a04856_1ac5cde487f8ba929ec3f5176e9d912c9c" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec2, sdw::InFloat, sdw::InMat4 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InVec2 , sdw::InFloat , sdw::InMat4 &gt; castor3d::shader::Utils::m_calcWSPosition</definition>
+        <argsstring></argsstring>
+        <name>m_calcWSPosition</name>
+        <qualifiedname>castor3d::shader::Utils::m_calcWSPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="191" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="191" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dde/a04856_1a98395ff83ac417157100cecff37d4b86" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InFloat, sdw::InVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InFloat , sdw::InVec3 &gt; castor3d::shader::Utils::m_applyGamma</definition>
+        <argsstring></argsstring>
+        <name>m_applyGamma</name>
+        <qualifiedname>castor3d::shader::Utils::m_applyGamma</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="194" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="194" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dde/a04856_1acfe0733cd8fa80949bad7838956eb7d9" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InFloat, sdw::InVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InFloat , sdw::InVec3 &gt; castor3d::shader::Utils::m_removeGamma</definition>
+        <argsstring></argsstring>
+        <name>m_removeGamma</name>
+        <qualifiedname>castor3d::shader::Utils::m_removeGamma</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="197" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="197" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dde/a04856_1a667219c704b57961f4998fbbf1e202ac" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec2, sdw::InVec3, sdw::InVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InVec2 , sdw::InVec3 , sdw::InVec3 &gt; castor3d::shader::Utils::m_getMapNormal</definition>
+        <argsstring></argsstring>
+        <name>m_getMapNormal</name>
+        <qualifiedname>castor3d::shader::Utils::m_getMapNormal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="201" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="201" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dde/a04856_1aa84968b83f2797db82be4f4433b5ccfb" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Float, sdw::InFloat, sdw::InFloat, sdw::InFloat &gt;</type>
+        <definition>sdw::Function&lt; sdw::Float , sdw::InFloat , sdw::InFloat , sdw::InFloat &gt; castor3d::shader::Utils::m_rescaleDepth</definition>
+        <argsstring></argsstring>
+        <name>m_rescaleDepth</name>
+        <qualifiedname>castor3d::shader::Utils::m_rescaleDepth</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="205" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="205" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dde/a04856_1a3d87cc65be9b7e3b89695120752309d0" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec4, sdw::InFloat, sdw::InVec3, sdw::InFloat, sdw::InFloat, sdw::InFloat, sdw::InFloat &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec4 , sdw::InFloat , sdw::InVec3 , sdw::InFloat , sdw::InFloat , sdw::InFloat , sdw::InFloat &gt; castor3d::shader::Utils::m_computeAccumulation</definition>
+        <argsstring></argsstring>
+        <name>m_computeAccumulation</name>
+        <qualifiedname>castor3d::shader::Utils::m_computeAccumulation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="212" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="212" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dde/a04856_1acd8abd67a6aa1a06b50df66e30d354d3" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InFloat, sdw::InVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InFloat , sdw::InVec3 &gt; castor3d::shader::Utils::m_fresnelSchlick</definition>
+        <argsstring></argsstring>
+        <name>m_fresnelSchlick</name>
+        <qualifiedname>castor3d::shader::Utils::m_fresnelSchlick</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="215" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="215" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dde/a04856_1a7245719c15d6a6b5f24b523d97cd6c31" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec2, sdw::InVec2 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec2 , sdw::InVec2 &gt; castor3d::shader::Utils::m_invertVec2Y</definition>
+        <argsstring></argsstring>
+        <name>m_invertVec2Y</name>
+        <qualifiedname>castor3d::shader::Utils::m_invertVec2Y</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="217" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="217" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dde/a04856_1abfa389a4cd7c15bd95e4a9b0d5f0a8f4" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InVec3 &gt; castor3d::shader::Utils::m_invertVec3Y</definition>
+        <argsstring></argsstring>
+        <name>m_invertVec3Y</name>
+        <qualifiedname>castor3d::shader::Utils::m_invertVec3Y</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="219" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="219" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dde/a04856_1a6c28b8c50ebbecb91be305cf0512cce5" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec4, sdw::InVec4 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec4 , sdw::InVec4 &gt; castor3d::shader::Utils::m_invertVec4Y</definition>
+        <argsstring></argsstring>
+        <name>m_invertVec4Y</name>
+        <qualifiedname>castor3d::shader::Utils::m_invertVec4Y</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="221" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="221" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dde/a04856_1a653854e420bae117625eedafe477f669" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InVec3 &gt; castor3d::shader::Utils::m_invertNormal</definition>
+        <argsstring></argsstring>
+        <name>m_invertNormal</name>
+        <qualifiedname>castor3d::shader::Utils::m_invertNormal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="223" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="223" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dde/a04856_1a3df6b3a15134a09989fbf5122f29b68b" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec2, sdw::InVec2 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec2 , sdw::InVec2 &gt; castor3d::shader::Utils::m_negateVec2Y</definition>
+        <argsstring></argsstring>
+        <name>m_negateVec2Y</name>
+        <qualifiedname>castor3d::shader::Utils::m_negateVec2Y</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="225" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="225" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dde/a04856_1a4e9bfac7f72149a046042a0014a9cc4e" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InVec3 &gt; castor3d::shader::Utils::m_negateVec3Y</definition>
+        <argsstring></argsstring>
+        <name>m_negateVec3Y</name>
+        <qualifiedname>castor3d::shader::Utils::m_negateVec3Y</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="227" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="227" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dde/a04856_1a6c4309954ecc59d9c973405e612414b8" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec4, sdw::InVec4 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec4 , sdw::InVec4 &gt; castor3d::shader::Utils::m_negateVec4Y</definition>
+        <argsstring></argsstring>
+        <name>m_negateVec4Y</name>
+        <qualifiedname>castor3d::shader::Utils::m_negateVec4Y</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="229" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="229" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dde/a04856_1adc8c162e8424c6016d9d1c4325223268" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec2, sdw::InVec2, sdw::InVec3, sdw::InCombinedImage2DRgba32, InTextureConfigData &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec2 , sdw::InVec2 , sdw::InVec3 , sdw::InCombinedImage2DRgba32 , InTextureConfigData &gt; castor3d::shader::Utils::m_parallaxMapping</definition>
+        <argsstring></argsstring>
+        <name>m_parallaxMapping</name>
+        <qualifiedname>castor3d::shader::Utils::m_parallaxMapping</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="234" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="234" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dde/a04856_1a5684f521a967eab48cc5e4a9449ec9e5" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Float, sdw::InVec3, sdw::InVec2, sdw::InFloat, sdw::InCombinedImage2DRgba32, InTextureConfigData &gt;</type>
+        <definition>sdw::Function&lt; sdw::Float , sdw::InVec3 , sdw::InVec2 , sdw::InFloat , sdw::InCombinedImage2DRgba32 , InTextureConfigData &gt; castor3d::shader::Utils::m_parallaxShadow</definition>
+        <argsstring></argsstring>
+        <name>m_parallaxShadow</name>
+        <qualifiedname>castor3d::shader::Utils::m_parallaxShadow</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="240" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="240" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dde/a04856_1a9a6a70536e44ce91368b6f3a174ecd1d" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Boolean, sdw::InVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Boolean , sdw::InVec3 &gt; castor3d::shader::Utils::m_isSaturated3D</definition>
+        <argsstring></argsstring>
+        <name>m_isSaturated3D</name>
+        <qualifiedname>castor3d::shader::Utils::m_isSaturated3D</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="242" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="242" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dde/a04856_1a2cb8d66efd1b829feb9562cb4e20445a" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Boolean, sdw::InIVec3, sdw::InInt &gt;</type>
+        <definition>sdw::Function&lt; sdw::Boolean , sdw::InIVec3 , sdw::InInt &gt; castor3d::shader::Utils::m_isSaturated3DImg</definition>
+        <argsstring></argsstring>
+        <name>m_isSaturated3DImg</name>
+        <qualifiedname>castor3d::shader::Utils::m_isSaturated3DImg</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="245" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="245" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dde/a04856_1a142ec45f02e2dd04c8f7239f53be8a55" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::UInt, sdw::InVec4 &gt;</type>
+        <definition>sdw::Function&lt; sdw::UInt , sdw::InVec4 &gt; castor3d::shader::Utils::m_encodeColor</definition>
+        <argsstring></argsstring>
+        <name>m_encodeColor</name>
+        <qualifiedname>castor3d::shader::Utils::m_encodeColor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="247" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="247" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dde/a04856_1a86f4c1cc35ad432a069a0645d7f94e4e" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::UInt, sdw::InVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::UInt , sdw::InVec3 &gt; castor3d::shader::Utils::m_encodeNormal</definition>
+        <argsstring></argsstring>
+        <name>m_encodeNormal</name>
+        <qualifiedname>castor3d::shader::Utils::m_encodeNormal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="249" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="249" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dde/a04856_1a71ab63ad72a5de77344912cc4bd24ac7" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec4, sdw::InUInt &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec4 , sdw::InUInt &gt; castor3d::shader::Utils::m_decodeColor</definition>
+        <argsstring></argsstring>
+        <name>m_decodeColor</name>
+        <qualifiedname>castor3d::shader::Utils::m_decodeColor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="251" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="251" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dde/a04856_1a74f10451c4a42bad6fba68bce5694314" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InUInt &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InUInt &gt; castor3d::shader::Utils::m_decodeNormal</definition>
+        <argsstring></argsstring>
+        <name>m_decodeNormal</name>
+        <qualifiedname>castor3d::shader::Utils::m_decodeNormal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="253" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="253" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dde/a04856_1a8297dc6c0fe07001a223174dcc3cbb1b" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::UInt, sdw::InUVec3, sdw::InUVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::UInt , sdw::InUVec3 , sdw::InUVec3 &gt; castor3d::shader::Utils::m_flatten3D</definition>
+        <argsstring></argsstring>
+        <name>m_flatten3D</name>
+        <qualifiedname>castor3d::shader::Utils::m_flatten3D</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="256" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="256" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dde/a04856_1a272723772fb24d89971924245b0b7f08" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::UVec3, sdw::InUInt, sdw::InUVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::UVec3 , sdw::InUInt , sdw::InUVec3 &gt; castor3d::shader::Utils::m_unflatten3D</definition>
+        <argsstring></argsstring>
+        <name>m_unflatten3D</name>
+        <qualifiedname>castor3d::shader::Utils::m_unflatten3D</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="259" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="259" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dde/a04856_1a06e3a5e6742090c4b16d48ba8fe961be" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec4, sdw::InVec4 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec4 , sdw::InVec4 &gt; castor3d::shader::Utils::m_clipToScreen</definition>
+        <argsstring></argsstring>
+        <name>m_clipToScreen</name>
+        <qualifiedname>castor3d::shader::Utils::m_clipToScreen</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="261" column="2" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="261" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="db/dde/a04856_1a65b48f1398964b1bd666a838222b401c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;::LightPassLayeredVolumePropagationShadowT</definition>
-        <argsstring>(RenderDevice const &amp;device, LayeredLpvLightPassConfig lpConfig)</argsstring>
-        <name>LightPassLayeredVolumePropagationShadowT</name>
+      <memberdef kind="function" id="db/dde/a04856_1a015f8c46fdd8e3c9d521965e8c5923b0" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::Utils::Utils</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Engine const &amp;engine)</argsstring>
+        <name>Utils</name>
+        <qualifiedname>castor3d::shader::Utils::Utils</qualifiedname>
         <param>
-          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
         </param>
         <param>
-          <type><ref refid="da/d1e/a01479_1afb8d10adeb087c1804672ef1415f29b2" kindref="member">LayeredLpvLightPassConfig</ref></type>
-          <declname>lpConfig</declname>
+          <type><ref refid="d7/d73/a02708" kindref="compound">Engine</ref> const &amp;</type>
+          <declname>engine</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="18" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1ab768512f937f7d3214d70aaf05032110" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/d1c/a01397_1a69009a36ab335c9cd7d4eed926a70037" kindref="member">LightingModelPtr</ref></type>
+        <definition>C3D_API LightingModelPtr castor3d::shader::Utils::createLightingModel</definition>
+        <argsstring>(castor::String const &amp;name, ShadowOptions shadowsOptions, SssProfiles const *sssProfiles, bool isOpaqueProgram)</argsstring>
+        <name>createLightingModel</name>
+        <qualifiedname>castor3d::shader::Utils::createLightingModel</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dea/a04864" kindref="compound">ShadowOptions</ref></type>
+          <declname>shadowsOptions</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d27/a04808" kindref="compound">SssProfiles</ref> const *</type>
+          <declname>sssProfiles</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isOpaqueProgram</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="21" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a0cf1366e480541ed056bacf8f2b2a144" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::Utils::swap</definition>
+        <argsstring>(sdw::Float const A, sdw::Float const &amp;B)</argsstring>
+        <name>swap</name>
+        <qualifiedname>castor3d::shader::Utils::swap</qualifiedname>
+        <param>
+          <type>sdw::Float const</type>
+          <declname>A</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>B</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="26" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a22f9c409eb0c28d76e98aaf7659cd36f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>C3D_API sdw::Float castor3d::shader::Utils::saturate</definition>
+        <argsstring>(sdw::Float const v)</argsstring>
+        <name>saturate</name>
+        <qualifiedname>castor3d::shader::Utils::saturate</qualifiedname>
+        <param>
+          <type>sdw::Float const</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="27" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a9ef955eacde9b245c7a365848c676d53" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::Utils::saturate</definition>
+        <argsstring>(sdw::Vec3 const v)</argsstring>
+        <name>saturate</name>
+        <qualifiedname>castor3d::shader::Utils::saturate</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="28" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a189dadce68589f5f42b31e17cc50c92d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>C3D_API sdw::Float castor3d::shader::Utils::distanceSquared</definition>
+        <argsstring>(sdw::Vec2 const A, sdw::Vec2 const &amp;B)</argsstring>
+        <name>distanceSquared</name>
+        <qualifiedname>castor3d::shader::Utils::distanceSquared</qualifiedname>
+        <param>
+          <type>sdw::Vec2 const</type>
+          <declname>A</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>B</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="29" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1ab1d178a4786968a94c3bd40dedcaa8f0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>C3D_API sdw::Float castor3d::shader::Utils::distanceSquared</definition>
+        <argsstring>(sdw::Vec3 const A, sdw::Vec3 const &amp;B)</argsstring>
+        <name>distanceSquared</name>
+        <qualifiedname>castor3d::shader::Utils::distanceSquared</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>A</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>B</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="30" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1ab9aabc9ac31021fd392e70f0e608c34e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec2</type>
+        <definition>C3D_API sdw::Vec2 castor3d::shader::Utils::topDownToBottomUp</definition>
+        <argsstring>(sdw::Vec2 const &amp;texCoord)</argsstring>
+        <name>topDownToBottomUp</name>
+        <qualifiedname>castor3d::shader::Utils::topDownToBottomUp</qualifiedname>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>texCoord</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="31" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1acc23f5b95be36a0fd8bae6ef9eeacbf8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::Utils::topDownToBottomUp</definition>
+        <argsstring>(sdw::Vec3 const &amp;texCoord)</argsstring>
+        <name>topDownToBottomUp</name>
+        <qualifiedname>castor3d::shader::Utils::topDownToBottomUp</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>texCoord</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="32" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a7af044db34b07c594da8d4b21af1730d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::Utils::topDownToBottomUp</definition>
+        <argsstring>(sdw::Vec4 const &amp;texCoord)</argsstring>
+        <name>topDownToBottomUp</name>
+        <qualifiedname>castor3d::shader::Utils::topDownToBottomUp</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>texCoord</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="33" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1ae99ae80c59f09dd4b8eaef4280bbb670" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec2</type>
+        <definition>C3D_API sdw::Vec2 castor3d::shader::Utils::negateTopDownToBottomUp</definition>
+        <argsstring>(sdw::Vec2 const &amp;texCoord)</argsstring>
+        <name>negateTopDownToBottomUp</name>
+        <qualifiedname>castor3d::shader::Utils::negateTopDownToBottomUp</qualifiedname>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>texCoord</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="34" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a73c766a520d22af5f39916e348982e01" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::Utils::negateTopDownToBottomUp</definition>
+        <argsstring>(sdw::Vec3 const &amp;texCoord)</argsstring>
+        <name>negateTopDownToBottomUp</name>
+        <qualifiedname>castor3d::shader::Utils::negateTopDownToBottomUp</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>texCoord</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="35" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a8617ffa03ef3c9eddeee029b8cc9d1c4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::Utils::negateTopDownToBottomUp</definition>
+        <argsstring>(sdw::Vec4 const &amp;texCoord)</argsstring>
+        <name>negateTopDownToBottomUp</name>
+        <qualifiedname>castor3d::shader::Utils::negateTopDownToBottomUp</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>texCoord</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="36" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1acc8ad95ca13dff4a25465d77597c7075" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec2</type>
+        <definition>C3D_API sdw::Vec2 castor3d::shader::Utils::calcTexCoord</definition>
+        <argsstring>(sdw::Vec2 const &amp;renderPos, sdw::Vec2 const &amp;renderSize)</argsstring>
+        <name>calcTexCoord</name>
+        <qualifiedname>castor3d::shader::Utils::calcTexCoord</qualifiedname>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>renderPos</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>renderSize</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="37" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a8925b9fab4c46a330b81a2c1100cb328" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::Utils::calcVSPosition</definition>
+        <argsstring>(sdw::Vec2 const &amp;uv, sdw::Float const &amp;depth, sdw::Mat4 const &amp;invProj)</argsstring>
+        <name>calcVSPosition</name>
+        <qualifiedname>castor3d::shader::Utils::calcVSPosition</qualifiedname>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>uv</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>depth</declname>
+        </param>
+        <param>
+          <type>sdw::Mat4 const &amp;</type>
+          <declname>invProj</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="39" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a4c10a19ae46ffc6ceda889a2d9b847fe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::Utils::calcWSPosition</definition>
+        <argsstring>(sdw::Vec2 const &amp;uv, sdw::Float const &amp;depth, sdw::Mat4 const &amp;invViewProj)</argsstring>
+        <name>calcWSPosition</name>
+        <qualifiedname>castor3d::shader::Utils::calcWSPosition</qualifiedname>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>uv</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>depth</declname>
+        </param>
+        <param>
+          <type>sdw::Mat4 const &amp;</type>
+          <declname>invViewProj</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="42" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a4501df7d65ca5130898fbf70b09f3dfb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::Utils::applyGamma</definition>
+        <argsstring>(sdw::Float const &amp;gamma, sdw::Vec3 const &amp;HDR)</argsstring>
+        <name>applyGamma</name>
+        <qualifiedname>castor3d::shader::Utils::applyGamma</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>gamma</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>HDR</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="45" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a68cffa9b48801bc3d5f9ced927322281" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::Utils::removeGamma</definition>
+        <argsstring>(sdw::Float const &amp;gamma, sdw::Vec3 const &amp;sRGB)</argsstring>
+        <name>removeGamma</name>
+        <qualifiedname>castor3d::shader::Utils::removeGamma</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>gamma</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>sRGB</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="47" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1ac1551ff70beeecee96e2c81cf546d56a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::Utils::getMapNormal</definition>
+        <argsstring>(sdw::Vec2 const &amp;uv, sdw::Vec3 const &amp;normal, sdw::Vec3 const &amp;position)</argsstring>
+        <name>getMapNormal</name>
+        <qualifiedname>castor3d::shader::Utils::getMapNormal</qualifiedname>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>uv</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>normal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="49" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a6bc87fa036142f0115cf9bcafb326fb8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>C3D_API sdw::Float castor3d::shader::Utils::rescaleDepth</definition>
+        <argsstring>(sdw::Float const &amp;depth, sdw::Float const &amp;nearPlane, sdw::Float const &amp;farPlane)</argsstring>
+        <name>rescaleDepth</name>
+        <qualifiedname>castor3d::shader::Utils::rescaleDepth</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>depth</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>nearPlane</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>farPlane</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="52" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1af809da0919e407ef8faea7827327fd67" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::Utils::computeAccumulation</definition>
+        <argsstring>(sdw::Float const &amp;depth, sdw::Vec3 const &amp;colour, sdw::Float const &amp;alpha, sdw::Float const &amp;nearPlane, sdw::Float const &amp;farPlane, sdw::Float const &amp;accumulationOperator)</argsstring>
+        <name>computeAccumulation</name>
+        <qualifiedname>castor3d::shader::Utils::computeAccumulation</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>depth</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>alpha</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>nearPlane</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>farPlane</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>accumulationOperator</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="55" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a784d0e2ef620317f0bf6e1e0424c0066" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::Utils::fresnelSchlick</definition>
+        <argsstring>(sdw::Float const &amp;product, sdw::Vec3 const &amp;f0)</argsstring>
+        <name>fresnelSchlick</name>
+        <qualifiedname>castor3d::shader::Utils::fresnelSchlick</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>product</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>f0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="61" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1ad6d7eec32e55c93ec8678e9deba90fec" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::Utils::compute2DMapsContributions</definition>
+        <argsstring>(FilteredTextureFlags const &amp;flags, TextureConfigurations const &amp;textureConfigs, TextureAnimations const &amp;textureAnims, sdw::Array&lt; sdw::CombinedImage2DRgba32 &gt; const &amp;maps, sdw::Vec3 const &amp;texCoords, sdw::Vec3 &amp;colour, sdw::Float &amp;opacity)</argsstring>
+        <name>compute2DMapsContributions</name>
+        <qualifiedname>castor3d::shader::Utils::compute2DMapsContributions</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1ab813dd8c4ac91695c9ba9e13a16b89d1" kindref="member">FilteredTextureFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d75/a04852" kindref="compound">TextureConfigurations</ref> const &amp;</type>
+          <declname>textureConfigs</declname>
+        </param>
+        <param>
+          <type><ref refid="de/df4/a04844" kindref="compound">TextureAnimations</ref> const &amp;</type>
+          <declname>textureAnims</declname>
+        </param>
+        <param>
+          <type>sdw::Array&lt; sdw::CombinedImage2DRgba32 &gt; const &amp;</type>
+          <declname>maps</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>texCoords</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>opacity</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="63" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a2d9d8c1f596eea9700db96e297015979" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec2</type>
+        <definition>C3D_API sdw::Vec2 castor3d::shader::Utils::parallaxMapping</definition>
+        <argsstring>(sdw::Vec2 const &amp;texCoords, sdw::Vec3 const &amp;viewDir, sdw::CombinedImage2DRgba32 const &amp;heightMap, TextureConfigData const &amp;textureConfig)</argsstring>
+        <name>parallaxMapping</name>
+        <qualifiedname>castor3d::shader::Utils::parallaxMapping</qualifiedname>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>texCoords</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>viewDir</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>heightMap</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d08/a04848" kindref="compound">TextureConfigData</ref> const &amp;</type>
+          <declname>textureConfig</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="70" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1ab4630f1e9a0caebfe0149c391babf798" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::Utils::clipToScreen</definition>
+        <argsstring>(sdw::Vec4 const &amp;in)</argsstring>
+        <name>clipToScreen</name>
+        <qualifiedname>castor3d::shader::Utils::clipToScreen</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="74" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a270c881419c95c03feb7cfb4a744cd89" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::Utils::applyAlphaFunc</definition>
+        <argsstring>(VkCompareOp alphaFunc, sdw::Float &amp;alpha, sdw::Float const &amp;alphaRef, bool opaque=true)</argsstring>
+        <name>applyAlphaFunc</name>
+        <qualifiedname>castor3d::shader::Utils::applyAlphaFunc</qualifiedname>
+        <param>
+          <type>VkCompareOp</type>
+          <declname>alphaFunc</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>alpha</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>alphaRef</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>opaque</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>Writes the alpha function in GLSL. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">device</parametername>
+<parametername>alphaFunc</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The GPU device. </para>
+<para>The alpha function. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">lpConfig</parametername>
+<parametername direction="in">alpha</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The light pass configuration. </para>
+<para>The alpha TypeEnum. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">alphaRef</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The alpha comparison reference TypeEnum. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -222,264 +1092,753 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" line="56" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" bodystart="56" bodyend="68"/>
-        <references refid="d7/d61/a04868_1a9953dd65711dfed8d2155a7e0c95cb38" compoundref="d4/ddc/a00917" startline="86">castor3d::LpvLightPassConfigT&lt; LpvResultT, LpvGridConfigUboT &gt;::base</references>
-        <references refid="da/d0e/a04752_1ad1b519a143e49a165eee407645b29fa4" compoundref="df/d41/a00881" startline="203">castor3d::LightPassConfig::gpInfoUbo</references>
-        <references refid="da/d0e/a04752_1ad5e3ccefa9799287321c57d513245a12" compoundref="df/d41/a00881" startline="202">castor3d::LightPassConfig::lpResult</references>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="87" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="db/dde/a04856_1af814242db43e907782b507b85c1a0194" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;::initialise</definition>
-        <argsstring>(Scene const &amp;scene, OpaquePassResult const &amp;gp, SceneUbo &amp;sceneUbo, RenderPassTimer &amp;timer) override</argsstring>
-        <name>initialise</name>
+      <memberdef kind="function" id="db/dde/a04856_1a70ca51dafbe505f954d58cf51d1191f6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Boolean</type>
+        <definition>C3D_API sdw::Boolean castor3d::shader::Utils::isSaturated</definition>
+        <argsstring>(sdw::Vec3 const &amp;p)</argsstring>
+        <name>isSaturated</name>
+        <qualifiedname>castor3d::shader::Utils::isSaturated</qualifiedname>
         <param>
-          <type><ref refid="d5/d76/a05244" kindref="compound">Scene</ref> const &amp;</type>
-          <declname>scene</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/dcd/a04880" kindref="compound">OpaquePassResult</ref> const &amp;</type>
-          <declname>gp</declname>
-        </param>
-        <param>
-          <type><ref refid="df/d63/a05528" kindref="compound">SceneUbo</ref> &amp;</type>
-          <declname>sceneUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/dc4/a04612" kindref="compound">RenderPassTimer</ref> &amp;</type>
-          <declname>timer</declname>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>p</declname>
         </param>
         <briefdescription>
-<para>Initialises the light pass. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">scene</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The scene. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">gp</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The geometry pass buffers. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">sceneUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The scene UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">timer</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render pass timer. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" line="72" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" bodystart="72" bodyend="97"/>
-        <references refid="da/d1e/a01479_1a840ab6fd50c1a08fcc1b6dc3f98d90faa0b80141c50fc5876012b5102b1fcb1f7">castor3d::eAdditive</references>
-        <references refid="da/d1e/a01479_1ad9c2eac495497ef40705cc770a05c4f3a714901740a2cbc9e8a322cbdb7d9255f">castor3d::eIndirectDiffuse</references>
-        <references refid="da/d1e/a01479_1a840ab6fd50c1a08fcc1b6dc3f98d90faa12c10e6e0388d587340cfbe98b5045ae">castor3d::eNoBlend</references>
-        <references refid="da/d1e/a01479_1a5691da845a89609231c90071fccdfc20">castor3d::getName</references>
-      </memberdef>
-      <memberdef kind="function" id="db/dde/a04856_1ab163c43772732b7ad6fcd9194e066cbb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;::cleanup</definition>
-        <argsstring>() override</argsstring>
-        <name>cleanup</name>
-        <briefdescription>
-<para>Cleans up the light pass. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" line="101" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" bodystart="101" bodyend="105"/>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="92" column="22"/>
       </memberdef>
-      <memberdef kind="function" id="db/dde/a04856_1aba5d4f8f81d962484f7ef4bcb2c43fe0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::Semaphore const  &amp;</type>
-        <definition>ashes::Semaphore const&amp; castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;::render</definition>
-        <argsstring>(uint32_t index, ashes::Semaphore const &amp;toWait) override</argsstring>
-        <name>render</name>
+      <memberdef kind="function" id="db/dde/a04856_1ad003ff9c692646f16506a06ee13b54db" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Boolean</type>
+        <definition>C3D_API sdw::Boolean castor3d::shader::Utils::isSaturated</definition>
+        <argsstring>(sdw::IVec3 const &amp;p, sdw::Int const &amp;imax)</argsstring>
+        <name>isSaturated</name>
+        <qualifiedname>castor3d::shader::Utils::isSaturated</qualifiedname>
         <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
+          <type>sdw::IVec3 const &amp;</type>
+          <declname>p</declname>
         </param>
         <param>
-          <type>ashes::Semaphore const &amp;</type>
-          <declname>toWait</declname>
+          <type>sdw::Int const &amp;</type>
+          <declname>imax</declname>
         </param>
         <briefdescription>
-<para>Renders the light pass. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">index</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render pass index. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">toWait</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The semaphore from the previous render pass. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" line="109" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" bodystart="109" bodyend="116"/>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="93" column="22"/>
       </memberdef>
-      <memberdef kind="function" id="db/dde/a04856_1ae29a5a0a7d9f0d56cf168978c73928c4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;::accept</definition>
-        <argsstring>(PipelineVisitorBase &amp;visitor) override</argsstring>
-        <name>accept</name>
+      <memberdef kind="function" id="db/dde/a04856_1a76bf9f8b374e74bb486eac552ffb3b05" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::UInt</type>
+        <definition>C3D_API sdw::UInt castor3d::shader::Utils::encodeColor</definition>
+        <argsstring>(sdw::Vec4 const &amp;color)</argsstring>
+        <name>encodeColor</name>
+        <qualifiedname>castor3d::shader::Utils::encodeColor</qualifiedname>
         <param>
-          <type><ref refid="d5/d73/a03836" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
-          <declname>visitor</declname>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>color</declname>
         </param>
         <briefdescription>
-<para>Visitor acceptance function. </para>
+<para>Encode HDR color to a 32 bit uint. Alpha is 1 bit + 7 bit HDR remapping. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername>visitor</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The ... visitor. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" line="120" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" bodystart="120" bodyend="128"/>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="101" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a39bad99b74d07acb6676b0f14474613b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::UInt</type>
+        <definition>C3D_API sdw::UInt castor3d::shader::Utils::encodeNormal</definition>
+        <argsstring>(sdw::Vec3 const &amp;normal)</argsstring>
+        <name>encodeNormal</name>
+        <qualifiedname>castor3d::shader::Utils::encodeNormal</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>normal</declname>
+        </param>
+        <briefdescription>
+<para>Encode specified normal (normalized) into 32 bits uint. Each axis of the normal is encoded into 9 bits (1 for the sign/ 8 for the value). </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="108" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a13f368e2496671d773a28f5d76bcc9d4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::Utils::decodeColor</definition>
+        <argsstring>(sdw::UInt const &amp;colorMask)</argsstring>
+        <name>decodeColor</name>
+        <qualifiedname>castor3d::shader::Utils::decodeColor</qualifiedname>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>colorMask</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="109" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a1cbe3e2d5c7fbb288e71ed28bf6214a4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::Utils::decodeNormal</definition>
+        <argsstring>(sdw::UInt const &amp;normalMask)</argsstring>
+        <name>decodeNormal</name>
+        <qualifiedname>castor3d::shader::Utils::decodeNormal</qualifiedname>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>normalMask</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="110" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1abade1e53c273d4cfa146f688d36957e9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::UInt</type>
+        <definition>C3D_API sdw::UInt castor3d::shader::Utils::flatten</definition>
+        <argsstring>(sdw::UVec3 const &amp;p, sdw::UVec3 const &amp;dim)</argsstring>
+        <name>flatten</name>
+        <qualifiedname>castor3d::shader::Utils::flatten</qualifiedname>
+        <param>
+          <type>sdw::UVec3 const &amp;</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>sdw::UVec3 const &amp;</type>
+          <declname>dim</declname>
+        </param>
+        <briefdescription>
+<para>3D array index to flattened 1D array index </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="116" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a92e59c6abb739041c0c59e5a5d1e3432" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::UVec3</type>
+        <definition>C3D_API sdw::UVec3 castor3d::shader::Utils::unflatten</definition>
+        <argsstring>(sdw::UInt const &amp;p, sdw::UVec3 const &amp;dim)</argsstring>
+        <name>unflatten</name>
+        <qualifiedname>castor3d::shader::Utils::unflatten</qualifiedname>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>sdw::UVec3 const &amp;</type>
+          <declname>dim</declname>
+        </param>
+        <briefdescription>
+<para>Flattened array index to 3D array index. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="123" column="20"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="db/dde/a04856_1a93761bc30f90b4d4fa5e000c0f11e5db" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Mat3</type>
+        <definition>static C3D_API sdw::Mat3 castor3d::shader::Utils::getTBN</definition>
+        <argsstring>(sdw::Vec3 const &amp;normal, sdw::Vec3 const &amp;tangent, sdw::Vec3 const &amp;bitangent)</argsstring>
+        <name>getTBN</name>
+        <qualifiedname>castor3d::shader::Utils::getTBN</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>normal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>tangent</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>bitangent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="126" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a916abd76ba71922677ed5e2171da6ba1" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>static C3D_API bool castor3d::shader::Utils::isGeometryMap</definition>
+        <argsstring>(TextureFlags const &amp;flags, PassFlags const &amp;passFlags)</argsstring>
+        <name>isGeometryMap</name>
+        <qualifiedname>castor3d::shader::Utils::isGeometryMap</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref> const &amp;</type>
+          <declname>passFlags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="129" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1aa89158e03af4874d0cc92f2a2438a4e3" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>static C3D_API bool castor3d::shader::Utils::isGeometryOnlyMap</definition>
+        <argsstring>(TextureFlags const &amp;flags, PassFlags const &amp;passFlags)</argsstring>
+        <name>isGeometryOnlyMap</name>
+        <qualifiedname>castor3d::shader::Utils::isGeometryOnlyMap</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref> const &amp;</type>
+          <declname>passFlags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="131" column="21"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-func">
-      <memberdef kind="function" id="db/dde/a04856_1a835a5d718f4cbaff5ac1c8dd5effd0c8" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>VkClearValue</type>
-        <definition>VkClearValue castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;::doGetIndirectClearColor</definition>
-        <argsstring>() const override</argsstring>
-        <name>doGetIndirectClearColor</name>
+      <memberdef kind="function" id="db/dde/a04856_1a9bd61e01f57b1ed9d7696765715ebb7d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareSwap1F</definition>
+        <argsstring>()</argsstring>
+        <name>declareSwap1F</name>
+        <qualifiedname>castor3d::shader::Utils::declareSwap1F</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" line="131" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" bodystart="131" bodyend="134"/>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="135" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1ad88904a90f9c795274e7983352f3729d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareDistanceSquared2F</definition>
+        <argsstring>()</argsstring>
+        <name>declareDistanceSquared2F</name>
+        <qualifiedname>castor3d::shader::Utils::declareDistanceSquared2F</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="136" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a6633b90e8866ec3a5d39d1a089408073" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareDistanceSquared3F</definition>
+        <argsstring>()</argsstring>
+        <name>declareDistanceSquared3F</name>
+        <qualifiedname>castor3d::shader::Utils::declareDistanceSquared3F</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="137" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a3cfa5430dea075d7d500bd939246bbcc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareCalcTexCoord</definition>
+        <argsstring>()</argsstring>
+        <name>declareCalcTexCoord</name>
+        <qualifiedname>castor3d::shader::Utils::declareCalcTexCoord</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="138" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a9267e6c59161b023421e8dfacabf9b6f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareCalcVSPosition</definition>
+        <argsstring>()</argsstring>
+        <name>declareCalcVSPosition</name>
+        <qualifiedname>castor3d::shader::Utils::declareCalcVSPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="139" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a4ec779ec203c675496924d852f0e8199" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareCalcWSPosition</definition>
+        <argsstring>()</argsstring>
+        <name>declareCalcWSPosition</name>
+        <qualifiedname>castor3d::shader::Utils::declareCalcWSPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="140" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1ab8c2cb2a4cb9095bc8ccfa85e6acf745" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareApplyGamma</definition>
+        <argsstring>()</argsstring>
+        <name>declareApplyGamma</name>
+        <qualifiedname>castor3d::shader::Utils::declareApplyGamma</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="141" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a82b9d25bc476e41b303bbb9ab3d73aed" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareRemoveGamma</definition>
+        <argsstring>()</argsstring>
+        <name>declareRemoveGamma</name>
+        <qualifiedname>castor3d::shader::Utils::declareRemoveGamma</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="142" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a90c3702c8023c58ebbcaedbdae5860d0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareRescaleDepth</definition>
+        <argsstring>()</argsstring>
+        <name>declareRescaleDepth</name>
+        <qualifiedname>castor3d::shader::Utils::declareRescaleDepth</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="143" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a1fafd54ffb7251ba47673ad257d76ae5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareGetMapNormal</definition>
+        <argsstring>()</argsstring>
+        <name>declareGetMapNormal</name>
+        <qualifiedname>castor3d::shader::Utils::declareGetMapNormal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="144" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1abb81bc6d53bf7a9ed83d31fa97db1d7e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareComputeAccumulation</definition>
+        <argsstring>()</argsstring>
+        <name>declareComputeAccumulation</name>
+        <qualifiedname>castor3d::shader::Utils::declareComputeAccumulation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="145" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a3fea9c149f8e81511d990da24e314653" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareFresnelSchlick</definition>
+        <argsstring>()</argsstring>
+        <name>declareFresnelSchlick</name>
+        <qualifiedname>castor3d::shader::Utils::declareFresnelSchlick</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="146" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1aea6f7ef026f826e35f9fd1ca5a0434ee" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareInvertVec2Y</definition>
+        <argsstring>()</argsstring>
+        <name>declareInvertVec2Y</name>
+        <qualifiedname>castor3d::shader::Utils::declareInvertVec2Y</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="148" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a5f6a33e3075e7d10f7f411311bc7b3ca" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareInvertVec3Y</definition>
+        <argsstring>()</argsstring>
+        <name>declareInvertVec3Y</name>
+        <qualifiedname>castor3d::shader::Utils::declareInvertVec3Y</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="149" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a900c94b03237179628421582d0b2e3bd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareInvertVec4Y</definition>
+        <argsstring>()</argsstring>
+        <name>declareInvertVec4Y</name>
+        <qualifiedname>castor3d::shader::Utils::declareInvertVec4Y</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="150" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a6233a99b2bb0fbd537da55e77f0f6ec4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareNegateVec2Y</definition>
+        <argsstring>()</argsstring>
+        <name>declareNegateVec2Y</name>
+        <qualifiedname>castor3d::shader::Utils::declareNegateVec2Y</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="152" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a879be29613862184cac74fe1ad5d1807" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareNegateVec3Y</definition>
+        <argsstring>()</argsstring>
+        <name>declareNegateVec3Y</name>
+        <qualifiedname>castor3d::shader::Utils::declareNegateVec3Y</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="153" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a4c8df1838fad99a09a2b849bc09ca4fc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareNegateVec4Y</definition>
+        <argsstring>()</argsstring>
+        <name>declareNegateVec4Y</name>
+        <qualifiedname>castor3d::shader::Utils::declareNegateVec4Y</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="154" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a3bc2a69ee4b68f0602a91865d7baeab6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareParallaxMappingFunc</definition>
+        <argsstring>()</argsstring>
+        <name>declareParallaxMappingFunc</name>
+        <qualifiedname>castor3d::shader::Utils::declareParallaxMappingFunc</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="156" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a568ad348fa6138579ac700828b70ec23" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareParallaxShadowFunc</definition>
+        <argsstring>()</argsstring>
+        <name>declareParallaxShadowFunc</name>
+        <qualifiedname>castor3d::shader::Utils::declareParallaxShadowFunc</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="157" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1ac65b27d58a2f95e6b7a741c681cb5e1f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareIsSaturated</definition>
+        <argsstring>()</argsstring>
+        <name>declareIsSaturated</name>
+        <qualifiedname>castor3d::shader::Utils::declareIsSaturated</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="159" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1abad1794ca5a3851f4631f3726dda2a8a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareEncodeColor</definition>
+        <argsstring>()</argsstring>
+        <name>declareEncodeColor</name>
+        <qualifiedname>castor3d::shader::Utils::declareEncodeColor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="160" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1aaecb88ec7179968a9dc94ea73bca8bf0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareEncodeNormal</definition>
+        <argsstring>()</argsstring>
+        <name>declareEncodeNormal</name>
+        <qualifiedname>castor3d::shader::Utils::declareEncodeNormal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="161" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a43f94f1d44d35a88a9d48b7d484dd4b7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareDecodeColor</definition>
+        <argsstring>()</argsstring>
+        <name>declareDecodeColor</name>
+        <qualifiedname>castor3d::shader::Utils::declareDecodeColor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="162" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a620982d1b82ed39a26eecfc608d03f8b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareDecodeNormal</definition>
+        <argsstring>()</argsstring>
+        <name>declareDecodeNormal</name>
+        <qualifiedname>castor3d::shader::Utils::declareDecodeNormal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="163" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1afc5231b508b995e41ec1f27ffd293104" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareFlatten</definition>
+        <argsstring>()</argsstring>
+        <name>declareFlatten</name>
+        <qualifiedname>castor3d::shader::Utils::declareFlatten</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="164" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1ac3b3bc06d6a2a049ebd083a70a99ef0f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareUnflatten</definition>
+        <argsstring>()</argsstring>
+        <name>declareUnflatten</name>
+        <qualifiedname>castor3d::shader::Utils::declareUnflatten</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="165" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a41021464dcdcd3937b1fb0067f4bcb69" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareIsSaturatedImg</definition>
+        <argsstring>()</argsstring>
+        <name>declareIsSaturatedImg</name>
+        <qualifiedname>castor3d::shader::Utils::declareIsSaturatedImg</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="166" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dde/a04856_1a1b2787842f703e8d99ef77fc14e14786" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::Utils::declareClipToScreen</definition>
+        <argsstring>()</argsstring>
+        <name>declareClipToScreen</name>
+        <qualifiedname>castor3d::shader::Utils::declareClipToScreen</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslUtils.hpp" line="167" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="1667">
-        <label>castor3d::LightPassShadow&lt; LightType::eDirectional &gt;</label>
-        <link refid="dc/d42/a04748"/>
-        <childnode refid="1668" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1669" relation="template-instance">
-          <edgelabel>&lt; LightType::eDirectional &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1668">
-        <label>LightPassShadowTraits&lt; LtType &gt;::light_pass_type</label>
-      </node>
-      <node id="1669">
-        <label>castor3d::LightPassShadow&lt; LtType &gt;</label>
-        <link refid="dc/d42/a04748"/>
-        <childnode refid="1670" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1670">
-        <label>LightPassShadowTraits::light_pass_type&lt; LtType &gt;</label>
-      </node>
-      <node id="1666">
-        <label>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</label>
-        <link refid="db/dde/a04856"/>
-        <childnode refid="1667" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="1672">
-        <label>castor3d::LightPassShadow&lt; LightType::eDirectional &gt;</label>
-        <link refid="dc/d42/a04748"/>
-        <childnode refid="1673" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1674" relation="template-instance">
-          <edgelabel>&lt; LightType::eDirectional &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1673">
-        <label>LightPassShadowTraits&lt; LtType &gt;::light_pass_type</label>
-      </node>
-      <node id="1674">
-        <label>castor3d::LightPassShadow&lt; LtType &gt;</label>
-        <link refid="dc/d42/a04748"/>
-        <childnode refid="1675" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1675">
-        <label>LightPassShadowTraits::light_pass_type&lt; LtType &gt;</label>
-      </node>
-      <node id="1671">
-        <label>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</label>
-        <link refid="db/dde/a04856"/>
-        <childnode refid="1672" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" line="35" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp" bodystart="33" bodyend="144"/>
+    <location file="Shader/Shaders/GlslUtils.hpp" line="15" column="1" bodyfile="Shader/Shaders/GlslUtils.hpp" bodystart="16" bodyend="262"/>
     <listofallmembers>
-      <member refid="db/dde/a04856_1ae29a5a0a7d9f0d56cf168978c73928c4" prot="public" virt="non-virtual"><scope>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</scope><name>accept</name></member>
-      <member refid="db/dde/a04856_1ab163c43772732b7ad6fcd9194e066cbb" prot="public" virt="non-virtual"><scope>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</scope><name>cleanup</name></member>
-      <member refid="dc/d42/a04748_1a9e825ffbf45cea4a802bce65b2c49b8d" prot="protected" virt="non-virtual"><scope>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</scope><name>doCreateProgram</name></member>
-      <member refid="db/dde/a04856_1a835a5d718f4cbaff5ac1c8dd5effd0c8" prot="private" virt="non-virtual"><scope>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</scope><name>doGetIndirectClearColor</name></member>
-      <member refid="db/dde/a04856_1af814242db43e907782b507b85c1a0194" prot="public" virt="non-virtual"><scope>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</scope><name>initialise</name></member>
-      <member refid="db/dde/a04856_1a65b48f1398964b1bd666a838222b401c" prot="public" virt="non-virtual"><scope>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</scope><name>LightPassLayeredVolumePropagationShadowT</name></member>
-      <member refid="dc/d42/a04748_1afbf1abefd9c154581a1f308df55dfcdc" prot="public" virt="non-virtual"><scope>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</scope><name>LightPassShadow</name></member>
-      <member refid="dc/d42/a04748_1ae320654976bc3926d02d9ed2b8bb9985" prot="public" virt="non-virtual"><scope>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</scope><name>LightPassShadow</name></member>
-      <member refid="db/dde/a04856_1abbc54c0990a27b6c438fd54683512183" prot="public" virt="non-virtual"><scope>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</scope><name>LtType</name></member>
-      <member refid="db/dde/a04856_1af633deddcbcd8840c7319c5f36fdd50f" prot="private" virt="non-virtual"><scope>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</scope><name>m_gpInfoUbo</name></member>
-      <member refid="db/dde/a04856_1a191ea9de3bf8b2be9bd3f4edf6ddfec9" prot="private" virt="non-virtual"><scope>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</scope><name>m_gpResult</name></member>
-      <member refid="db/dde/a04856_1a17ba15a6d71910b3abfe2b81f0683a96" prot="private" virt="non-virtual"><scope>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</scope><name>m_lightVolumeGIPasses</name></member>
-      <member refid="db/dde/a04856_1a15e55569f4d700ef006ce362d10a8c21" prot="private" virt="non-virtual"><scope>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</scope><name>m_lpResult</name></member>
-      <member refid="db/dde/a04856_1aa2854db2a5c14dbc650fcf43352614a1" prot="private" virt="non-virtual"><scope>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</scope><name>m_lpvConfigUbo</name></member>
-      <member refid="db/dde/a04856_1a8b04842521790a198b18ad858b9098e5" prot="private" virt="non-virtual"><scope>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</scope><name>m_lpvResult</name></member>
-      <member refid="db/dde/a04856_1adf9417edc47584a6adfe1ae25b4d61cf" prot="private" virt="non-virtual"><scope>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</scope><name>m_smResult</name></member>
-      <member refid="db/dde/a04856_1a7e2625ff1e0e380579563562f8c2f8f5" prot="public" virt="non-virtual"><scope>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</scope><name>MaxPropagationSteps</name></member>
-      <member refid="db/dde/a04856_1ae5ccee48046705cb8dd192342a9732d9" prot="public" virt="non-virtual"><scope>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</scope><name>my_light_type</name></member>
-      <member refid="db/dde/a04856_1a75fa843ef31503792c6cbe1e4eeafb79" prot="public" virt="non-virtual"><scope>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</scope><name>my_pass_type</name></member>
-      <member refid="dc/d42/a04748_1a22ca9dcec229a6fb1bb13fd52a1373cb" prot="public" virt="non-virtual"><scope>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</scope><name>my_shadow_matype</name></member>
-      <member refid="db/dde/a04856_1aeaa23c83bec324f43c719d464e720012" prot="public" virt="non-virtual"><scope>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</scope><name>my_shadow_pass_type</name></member>
-      <member refid="db/dde/a04856_1a5129f85e58709ed1c6078497dc9bc1f2" prot="public" virt="non-virtual"><scope>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</scope><name>my_traits</name></member>
-      <member refid="db/dde/a04856_1aba5d4f8f81d962484f7ef4bcb2c43fe0" prot="public" virt="non-virtual"><scope>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</scope><name>render</name></member>
+      <member refid="db/dde/a04856_1a270c881419c95c03feb7cfb4a744cd89" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>applyAlphaFunc</name></member>
+      <member refid="db/dde/a04856_1a4501df7d65ca5130898fbf70b09f3dfb" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>applyGamma</name></member>
+      <member refid="db/dde/a04856_1acc8ad95ca13dff4a25465d77597c7075" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>calcTexCoord</name></member>
+      <member refid="db/dde/a04856_1a8925b9fab4c46a330b81a2c1100cb328" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>calcVSPosition</name></member>
+      <member refid="db/dde/a04856_1a4c10a19ae46ffc6ceda889a2d9b847fe" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>calcWSPosition</name></member>
+      <member refid="db/dde/a04856_1ab4630f1e9a0caebfe0149c391babf798" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>clipToScreen</name></member>
+      <member refid="db/dde/a04856_1ad6d7eec32e55c93ec8678e9deba90fec" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>compute2DMapsContributions</name></member>
+      <member refid="db/dde/a04856_1af809da0919e407ef8faea7827327fd67" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>computeAccumulation</name></member>
+      <member refid="db/dde/a04856_1ab768512f937f7d3214d70aaf05032110" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>createLightingModel</name></member>
+      <member refid="db/dde/a04856_1ab8c2cb2a4cb9095bc8ccfa85e6acf745" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareApplyGamma</name></member>
+      <member refid="db/dde/a04856_1a3cfa5430dea075d7d500bd939246bbcc" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareCalcTexCoord</name></member>
+      <member refid="db/dde/a04856_1a9267e6c59161b023421e8dfacabf9b6f" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareCalcVSPosition</name></member>
+      <member refid="db/dde/a04856_1a4ec779ec203c675496924d852f0e8199" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareCalcWSPosition</name></member>
+      <member refid="db/dde/a04856_1a1b2787842f703e8d99ef77fc14e14786" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareClipToScreen</name></member>
+      <member refid="db/dde/a04856_1abb81bc6d53bf7a9ed83d31fa97db1d7e" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareComputeAccumulation</name></member>
+      <member refid="db/dde/a04856_1a43f94f1d44d35a88a9d48b7d484dd4b7" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareDecodeColor</name></member>
+      <member refid="db/dde/a04856_1a620982d1b82ed39a26eecfc608d03f8b" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareDecodeNormal</name></member>
+      <member refid="db/dde/a04856_1ad88904a90f9c795274e7983352f3729d" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareDistanceSquared2F</name></member>
+      <member refid="db/dde/a04856_1a6633b90e8866ec3a5d39d1a089408073" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareDistanceSquared3F</name></member>
+      <member refid="db/dde/a04856_1abad1794ca5a3851f4631f3726dda2a8a" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareEncodeColor</name></member>
+      <member refid="db/dde/a04856_1aaecb88ec7179968a9dc94ea73bca8bf0" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareEncodeNormal</name></member>
+      <member refid="db/dde/a04856_1afc5231b508b995e41ec1f27ffd293104" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareFlatten</name></member>
+      <member refid="db/dde/a04856_1a3fea9c149f8e81511d990da24e314653" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareFresnelSchlick</name></member>
+      <member refid="db/dde/a04856_1a1fafd54ffb7251ba47673ad257d76ae5" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareGetMapNormal</name></member>
+      <member refid="db/dde/a04856_1aea6f7ef026f826e35f9fd1ca5a0434ee" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareInvertVec2Y</name></member>
+      <member refid="db/dde/a04856_1a5f6a33e3075e7d10f7f411311bc7b3ca" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareInvertVec3Y</name></member>
+      <member refid="db/dde/a04856_1a900c94b03237179628421582d0b2e3bd" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareInvertVec4Y</name></member>
+      <member refid="db/dde/a04856_1ac65b27d58a2f95e6b7a741c681cb5e1f" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareIsSaturated</name></member>
+      <member refid="db/dde/a04856_1a41021464dcdcd3937b1fb0067f4bcb69" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareIsSaturatedImg</name></member>
+      <member refid="db/dde/a04856_1a6233a99b2bb0fbd537da55e77f0f6ec4" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareNegateVec2Y</name></member>
+      <member refid="db/dde/a04856_1a879be29613862184cac74fe1ad5d1807" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareNegateVec3Y</name></member>
+      <member refid="db/dde/a04856_1a4c8df1838fad99a09a2b849bc09ca4fc" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareNegateVec4Y</name></member>
+      <member refid="db/dde/a04856_1a3bc2a69ee4b68f0602a91865d7baeab6" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareParallaxMappingFunc</name></member>
+      <member refid="db/dde/a04856_1a568ad348fa6138579ac700828b70ec23" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareParallaxShadowFunc</name></member>
+      <member refid="db/dde/a04856_1a82b9d25bc476e41b303bbb9ab3d73aed" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareRemoveGamma</name></member>
+      <member refid="db/dde/a04856_1a90c3702c8023c58ebbcaedbdae5860d0" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareRescaleDepth</name></member>
+      <member refid="db/dde/a04856_1a9bd61e01f57b1ed9d7696765715ebb7d" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareSwap1F</name></member>
+      <member refid="db/dde/a04856_1ac3b3bc06d6a2a049ebd083a70a99ef0f" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>declareUnflatten</name></member>
+      <member refid="db/dde/a04856_1a13f368e2496671d773a28f5d76bcc9d4" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>decodeColor</name></member>
+      <member refid="db/dde/a04856_1a1cbe3e2d5c7fbb288e71ed28bf6214a4" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>decodeNormal</name></member>
+      <member refid="db/dde/a04856_1a189dadce68589f5f42b31e17cc50c92d" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>distanceSquared</name></member>
+      <member refid="db/dde/a04856_1ab1d178a4786968a94c3bd40dedcaa8f0" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>distanceSquared</name></member>
+      <member refid="db/dde/a04856_1a76bf9f8b374e74bb486eac552ffb3b05" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>encodeColor</name></member>
+      <member refid="db/dde/a04856_1a39bad99b74d07acb6676b0f14474613b" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>encodeNormal</name></member>
+      <member refid="db/dde/a04856_1abade1e53c273d4cfa146f688d36957e9" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>flatten</name></member>
+      <member refid="db/dde/a04856_1a784d0e2ef620317f0bf6e1e0424c0066" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>fresnelSchlick</name></member>
+      <member refid="db/dde/a04856_1ac1551ff70beeecee96e2c81cf546d56a" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>getMapNormal</name></member>
+      <member refid="db/dde/a04856_1a93761bc30f90b4d4fa5e000c0f11e5db" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>getTBN</name></member>
+      <member refid="db/dde/a04856_1a916abd76ba71922677ed5e2171da6ba1" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>isGeometryMap</name></member>
+      <member refid="db/dde/a04856_1aa89158e03af4874d0cc92f2a2438a4e3" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>isGeometryOnlyMap</name></member>
+      <member refid="db/dde/a04856_1a70ca51dafbe505f954d58cf51d1191f6" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>isSaturated</name></member>
+      <member refid="db/dde/a04856_1ad003ff9c692646f16506a06ee13b54db" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>isSaturated</name></member>
+      <member refid="db/dde/a04856_1a98395ff83ac417157100cecff37d4b86" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_applyGamma</name></member>
+      <member refid="db/dde/a04856_1aa2974291fcd4182387b16c796e66148c" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_calcTexCoord</name></member>
+      <member refid="db/dde/a04856_1aee7bc11f1497032bbd99771475e9a237" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_calcVSPosition</name></member>
+      <member refid="db/dde/a04856_1ac5cde487f8ba929ec3f5176e9d912c9c" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_calcWSPosition</name></member>
+      <member refid="db/dde/a04856_1a06e3a5e6742090c4b16d48ba8fe961be" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_clipToScreen</name></member>
+      <member refid="db/dde/a04856_1a3d87cc65be9b7e3b89695120752309d0" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_computeAccumulation</name></member>
+      <member refid="db/dde/a04856_1a71ab63ad72a5de77344912cc4bd24ac7" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_decodeColor</name></member>
+      <member refid="db/dde/a04856_1a74f10451c4a42bad6fba68bce5694314" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_decodeNormal</name></member>
+      <member refid="db/dde/a04856_1aaf299834ea9f0db759c8ed99347bcbf6" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_distanceSquared2F</name></member>
+      <member refid="db/dde/a04856_1a79a15aad4c545463d0f4ceb5fa8a3ef2" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_distanceSquared3F</name></member>
+      <member refid="db/dde/a04856_1a142ec45f02e2dd04c8f7239f53be8a55" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_encodeColor</name></member>
+      <member refid="db/dde/a04856_1a86f4c1cc35ad432a069a0645d7f94e4e" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_encodeNormal</name></member>
+      <member refid="db/dde/a04856_1a227684a574239d969b2238aa50b0205b" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_engine</name></member>
+      <member refid="db/dde/a04856_1a8297dc6c0fe07001a223174dcc3cbb1b" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_flatten3D</name></member>
+      <member refid="db/dde/a04856_1acd8abd67a6aa1a06b50df66e30d354d3" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_fresnelSchlick</name></member>
+      <member refid="db/dde/a04856_1a667219c704b57961f4998fbbf1e202ac" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_getMapNormal</name></member>
+      <member refid="db/dde/a04856_1a653854e420bae117625eedafe477f669" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_invertNormal</name></member>
+      <member refid="db/dde/a04856_1a7245719c15d6a6b5f24b523d97cd6c31" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_invertVec2Y</name></member>
+      <member refid="db/dde/a04856_1abfa389a4cd7c15bd95e4a9b0d5f0a8f4" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_invertVec3Y</name></member>
+      <member refid="db/dde/a04856_1a6c28b8c50ebbecb91be305cf0512cce5" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_invertVec4Y</name></member>
+      <member refid="db/dde/a04856_1a9a6a70536e44ce91368b6f3a174ecd1d" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_isSaturated3D</name></member>
+      <member refid="db/dde/a04856_1a2cb8d66efd1b829feb9562cb4e20445a" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_isSaturated3DImg</name></member>
+      <member refid="db/dde/a04856_1a3df6b3a15134a09989fbf5122f29b68b" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_negateVec2Y</name></member>
+      <member refid="db/dde/a04856_1a4e9bfac7f72149a046042a0014a9cc4e" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_negateVec3Y</name></member>
+      <member refid="db/dde/a04856_1a6c4309954ecc59d9c973405e612414b8" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_negateVec4Y</name></member>
+      <member refid="db/dde/a04856_1adc8c162e8424c6016d9d1c4325223268" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_parallaxMapping</name></member>
+      <member refid="db/dde/a04856_1a5684f521a967eab48cc5e4a9449ec9e5" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_parallaxShadow</name></member>
+      <member refid="db/dde/a04856_1acfe0733cd8fa80949bad7838956eb7d9" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_removeGamma</name></member>
+      <member refid="db/dde/a04856_1aa84968b83f2797db82be4f4433b5ccfb" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_rescaleDepth</name></member>
+      <member refid="db/dde/a04856_1ac5a0766c0dff5d6a189d4c5d51b4aa14" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_swap1F</name></member>
+      <member refid="db/dde/a04856_1a272723772fb24d89971924245b0b7f08" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_unflatten3D</name></member>
+      <member refid="db/dde/a04856_1ab61e153fe5e347fea8c9f95a2dd83696" prot="private" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>m_writer</name></member>
+      <member refid="db/dde/a04856_1ae99ae80c59f09dd4b8eaef4280bbb670" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>negateTopDownToBottomUp</name></member>
+      <member refid="db/dde/a04856_1a73c766a520d22af5f39916e348982e01" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>negateTopDownToBottomUp</name></member>
+      <member refid="db/dde/a04856_1a8617ffa03ef3c9eddeee029b8cc9d1c4" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>negateTopDownToBottomUp</name></member>
+      <member refid="db/dde/a04856_1a2d9d8c1f596eea9700db96e297015979" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>parallaxMapping</name></member>
+      <member refid="db/dde/a04856_1a68cffa9b48801bc3d5f9ced927322281" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>removeGamma</name></member>
+      <member refid="db/dde/a04856_1a6bc87fa036142f0115cf9bcafb326fb8" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>rescaleDepth</name></member>
+      <member refid="db/dde/a04856_1a22f9c409eb0c28d76e98aaf7659cd36f" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>saturate</name></member>
+      <member refid="db/dde/a04856_1a9ef955eacde9b245c7a365848c676d53" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>saturate</name></member>
+      <member refid="db/dde/a04856_1a0cf1366e480541ed056bacf8f2b2a144" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>swap</name></member>
+      <member refid="db/dde/a04856_1ab9aabc9ac31021fd392e70f0e608c34e" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>topDownToBottomUp</name></member>
+      <member refid="db/dde/a04856_1acc23f5b95be36a0fd8bae6ef9eeacbf8" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>topDownToBottomUp</name></member>
+      <member refid="db/dde/a04856_1a7af044db34b07c594da8d4b21af1730d" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>topDownToBottomUp</name></member>
+      <member refid="db/dde/a04856_1a92e59c6abb739041c0c59e5a5d1e3432" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>unflatten</name></member>
+      <member refid="db/dde/a04856_1a015f8c46fdd8e3c9d521965e8c5923b0" prot="public" virt="non-virtual"><scope>castor3d::shader::Utils</scope><name>Utils</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

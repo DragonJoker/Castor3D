@@ -1,33 +1,500 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d4/ddc/a03787" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkValidationFeaturesEXT &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d4/ddc/a03787_1adb9508cb448cf4e1fd80acbe21a8bf36" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkValidationFeaturesEXT &gt;::value</definition>
+    <compoundname>castor3d::SceneRenderNodes</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Scene const &gt;</basecompoundref>
+    <includes local="no">SceneRenderNodes.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d4/ddc/a03787_1a68ae02258ce58cfcd5ebb4a7d432a6b1" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>typename NodeT</type>
+          </param>
+        </templateparamlist>
+        <type>std::unordered_map&lt; size_t, castor::UniquePtr&lt; NodeT &gt; &gt;</type>
+        <definition>using castor3d::SceneRenderNodes::DescriptorNodesPtrT =  std::unordered_map&lt; size_t, castor::UniquePtr&lt; NodeT &gt; &gt;</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_VALIDATION_FEATURES_EXT</initializer>
+        <name>DescriptorNodesPtrT</name>
+        <qualifiedname>castor3d::SceneRenderNodes::DescriptorNodesPtrT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="363" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="363" bodyend="-1"/>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="31" column="1" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/ddc/a03787_1a3b1df35d0fd5921e5875daba5787ecbf" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>typename NodeT</type>
+          </param>
+        </templateparamlist>
+        <type>std::unordered_map&lt; size_t, <ref refid="d4/ddc/a03787_1a68ae02258ce58cfcd5ebb4a7d432a6b1" kindref="member">DescriptorNodesPtrT</ref>&lt; NodeT &gt; &gt;</type>
+        <definition>using castor3d::SceneRenderNodes::DescriptorNodesPoolsT =  std::unordered_map&lt; size_t, DescriptorNodesPtrT&lt; NodeT &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>DescriptorNodesPoolsT</name>
+        <qualifiedname>castor3d::SceneRenderNodes::DescriptorNodesPoolsT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="33" column="1" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d4/ddc/a03787_1a2d3398a23e211c94c7a39a7f692799ca" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::SceneRenderNodes::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::SceneRenderNodes::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="85" column="21" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/ddc/a03787_1a6eda63edca5905fce9088a21301f27c8" prot="private" static="no" mutable="no">
+        <type>std::mutex</type>
+        <definition>std::mutex castor3d::SceneRenderNodes::m_nodesMutex</definition>
+        <argsstring></argsstring>
+        <name>m_nodesMutex</name>
+        <qualifiedname>castor3d::SceneRenderNodes::m_nodesMutex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="86" column="12" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/ddc/a03787_1a22baf84e762b9f1d2b1630da63f4ae6c" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/ddc/a03787_1a3b1df35d0fd5921e5875daba5787ecbf" kindref="member">DescriptorNodesPoolsT</ref>&lt; <ref refid="d6/d8b/a03791" kindref="compound">SubmeshRenderNode</ref> &gt;</type>
+        <definition>DescriptorNodesPoolsT&lt; SubmeshRenderNode &gt; castor3d::SceneRenderNodes::m_submeshNodes</definition>
+        <argsstring></argsstring>
+        <name>m_submeshNodes</name>
+        <qualifiedname>castor3d::SceneRenderNodes::m_submeshNodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="87" column="23" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/ddc/a03787_1a63e185f65db19086e5504f36092c2779" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/ddc/a03787_1a3b1df35d0fd5921e5875daba5787ecbf" kindref="member">DescriptorNodesPoolsT</ref>&lt; <ref refid="d7/d88/a03771" kindref="compound">BillboardRenderNode</ref> &gt;</type>
+        <definition>DescriptorNodesPoolsT&lt; BillboardRenderNode &gt; castor3d::SceneRenderNodes::m_billboardNodes</definition>
+        <argsstring></argsstring>
+        <name>m_billboardNodes</name>
+        <qualifiedname>castor3d::SceneRenderNodes::m_billboardNodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="88" column="23" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/ddc/a03787_1a6cc8f5433c31d5e949708e69009ac040" prot="private" static="no" mutable="no">
+        <type>ashes::BufferPtr&lt; <ref refid="db/d39/a05023" kindref="compound">ModelBufferConfiguration</ref> &gt;</type>
+        <definition>ashes::BufferPtr&lt; ModelBufferConfiguration &gt; castor3d::SceneRenderNodes::m_nodesData</definition>
+        <argsstring></argsstring>
+        <name>m_nodesData</name>
+        <qualifiedname>castor3d::SceneRenderNodes::m_nodesData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="89" column="18" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/ddc/a03787_1abf349f1753d5c9a7c1f937c902f97e7d" prot="private" static="no" mutable="no">
+        <type>ashes::BufferPtr&lt; <ref refid="d9/d7c/a04999" kindref="compound">BillboardUboConfiguration</ref> &gt;</type>
+        <definition>ashes::BufferPtr&lt; BillboardUboConfiguration &gt; castor3d::SceneRenderNodes::m_billboardsData</definition>
+        <argsstring></argsstring>
+        <name>m_billboardsData</name>
+        <qualifiedname>castor3d::SceneRenderNodes::m_billboardsData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="90" column="17" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/ddc/a03787_1a3aebddcfd1390b0c439005343725358e" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::SceneRenderNodes::m_nodeId</definition>
+        <argsstring></argsstring>
+        <name>m_nodeId</name>
+        <qualifiedname>castor3d::SceneRenderNodes::m_nodeId</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="91" column="10" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/ddc/a03787_1a3536321271c30ef61799020fe01e9ce2" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SceneRenderNodes::m_dirty</definition>
+        <argsstring></argsstring>
+        <name>m_dirty</name>
+        <qualifiedname>castor3d::SceneRenderNodes::m_dirty</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="92" column="6" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/ddc/a03787_1ab1c964fb284696a9647ca8e33d84a312" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SceneRenderNodes::SceneRenderNodes</definition>
+        <argsstring>(Scene const &amp;scene)</argsstring>
+        <name>SceneRenderNodes</name>
+        <qualifiedname>castor3d::SceneRenderNodes::SceneRenderNodes</qualifiedname>
+        <param>
+          <type><ref refid="dd/dec/a04595" kindref="compound">Scene</ref> const &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="36" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/ddc/a03787_1a524ae6b3f2e9a79a6f8c871a43ad80df" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneRenderNodes::clear</definition>
+        <argsstring>()</argsstring>
+        <name>clear</name>
+        <qualifiedname>castor3d::SceneRenderNodes::clear</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="38" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/ddc/a03787_1ab379f91ba869bcd440c763f27fd11784" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/d8b/a03791" kindref="compound">SubmeshRenderNode</ref> &amp;</type>
+        <definition>C3D_API SubmeshRenderNode &amp; castor3d::SceneRenderNodes::createNode</definition>
+        <argsstring>(Pass &amp;pass, Submesh &amp;data, Geometry &amp;instance, AnimatedMesh *mesh, AnimatedSkeleton *skeleton)</argsstring>
+        <name>createNode</name>
+        <qualifiedname>castor3d::SceneRenderNodes::createNode</qualifiedname>
+        <param>
+          <type><ref refid="d9/daf/a02807" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/da7/a03427" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/dc4/a04487" kindref="compound">Geometry</ref> &amp;</type>
+          <declname>instance</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/db4/a04367" kindref="compound">AnimatedMesh</ref> *</type>
+          <declname>mesh</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/dd0/a04383" kindref="compound">AnimatedSkeleton</ref> *</type>
+          <declname>skeleton</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="39" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/ddc/a03787_1ae2ef34dab43a2a989112be1f23c81621" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/d88/a03771" kindref="compound">BillboardRenderNode</ref> &amp;</type>
+        <definition>C3D_API BillboardRenderNode &amp; castor3d::SceneRenderNodes::createNode</definition>
+        <argsstring>(Pass &amp;pass, BillboardBase &amp;instance)</argsstring>
+        <name>createNode</name>
+        <qualifiedname>castor3d::SceneRenderNodes::createNode</qualifiedname>
+        <param>
+          <type><ref refid="d9/daf/a02807" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d67/a04471" kindref="compound">BillboardBase</ref> &amp;</type>
+          <declname>instance</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="44" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/ddc/a03787_1a9de88c3f056fa067ba96adf9ffa5a89d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/d8b/a03791" kindref="compound">SubmeshRenderNode</ref> const *</type>
+        <definition>C3D_API SubmeshRenderNode const  * castor3d::SceneRenderNodes::getSubmeshNode</definition>
+        <argsstring>(uint32_t nodeId)</argsstring>
+        <name>getSubmeshNode</name>
+        <qualifiedname>castor3d::SceneRenderNodes::getSubmeshNode</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>nodeId</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="46" column="34"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/ddc/a03787_1a3e3dd2976367540e3ac13bce74e7d1aa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/d88/a03771" kindref="compound">BillboardRenderNode</ref> const *</type>
+        <definition>C3D_API BillboardRenderNode const  * castor3d::SceneRenderNodes::getBillboardNode</definition>
+        <argsstring>(uint32_t nodeId)</argsstring>
+        <name>getBillboardNode</name>
+        <qualifiedname>castor3d::SceneRenderNodes::getBillboardNode</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>nodeId</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="47" column="36"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/ddc/a03787_1aba7cb7618d0a2dc7481d822eb76441fc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneRenderNodes::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::SceneRenderNodes::update</qualifiedname>
+        <param>
+          <type><ref refid="d6/dae/a04043" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="48" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/ddc/a03787_1aae15f63631fdd89ca1e06ff84a36f654" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneRenderNodes::update</definition>
+        <argsstring>(GpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::SceneRenderNodes::update</qualifiedname>
+        <param>
+          <type><ref refid="d1/d46/a04047" kindref="compound">GpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="49" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/ddc/a03787_1ace4c873a85b167a87eca23469296709d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::SceneRenderNodes::hasNodes</definition>
+        <argsstring>() const</argsstring>
+        <name>hasNodes</name>
+        <qualifiedname>castor3d::SceneRenderNodes::hasNodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="51" column="6" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="51" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/ddc/a03787_1a85310421bcca0e96f69b8e375b7e21a6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Buffer&lt; <ref refid="db/d39/a05023" kindref="compound">ModelBufferConfiguration</ref> &gt; const &amp;</type>
+        <definition>ashes::Buffer&lt; ModelBufferConfiguration &gt; const  &amp; castor3d::SceneRenderNodes::getModelBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>getModelBuffer</name>
+        <qualifiedname>castor3d::SceneRenderNodes::getModelBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="57" column="22" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="57" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/ddc/a03787_1a400586d1bd292459b8ef9991e9eaa7aa" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Buffer&lt; <ref refid="d9/d7c/a04999" kindref="compound">BillboardUboConfiguration</ref> &gt; const &amp;</type>
+        <definition>ashes::Buffer&lt; BillboardUboConfiguration &gt; const  &amp; castor3d::SceneRenderNodes::getBillboardsBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>getBillboardsBuffer</name>
+        <qualifiedname>castor3d::SceneRenderNodes::getBillboardsBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="62" column="22" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="62" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/ddc/a03787_1a7a81da4fbca10b76f984fe1a8935b26a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/ddc/a03787_1a3b1df35d0fd5921e5875daba5787ecbf" kindref="member">DescriptorNodesPoolsT</ref>&lt; <ref refid="d6/d8b/a03791" kindref="compound">SubmeshRenderNode</ref> &gt; const &amp;</type>
+        <definition>DescriptorNodesPoolsT&lt; SubmeshRenderNode &gt; const  &amp; castor3d::SceneRenderNodes::getSubmeshNodes</definition>
+        <argsstring>() const</argsstring>
+        <name>getSubmeshNodes</name>
+        <qualifiedname>castor3d::SceneRenderNodes::getSubmeshNodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="67" column="30" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="67" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/ddc/a03787_1a2505d2148e2af38a3ea8125796919b62" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/ddc/a03787_1a3b1df35d0fd5921e5875daba5787ecbf" kindref="member">DescriptorNodesPoolsT</ref>&lt; <ref refid="d7/d88/a03771" kindref="compound">BillboardRenderNode</ref> &gt; const &amp;</type>
+        <definition>DescriptorNodesPoolsT&lt; BillboardRenderNode &gt; const  &amp; castor3d::SceneRenderNodes::getBillboardNodes</definition>
+        <argsstring>() const</argsstring>
+        <name>getBillboardNodes</name>
+        <qualifiedname>castor3d::SceneRenderNodes::getBillboardNodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="72" column="30" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="72" bodyend="75"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d4/ddc/a03787_1a75fa4579c9ab7701c578ad2da0560c21" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneRenderNodes::doUpdateNode</definition>
+        <argsstring>(SubmeshRenderNode &amp;node, ModelBufferConfiguration *modelBufferData)</argsstring>
+        <name>doUpdateNode</name>
+        <qualifiedname>castor3d::SceneRenderNodes::doUpdateNode</qualifiedname>
+        <param>
+          <type><ref refid="d6/d8b/a03791" kindref="compound">SubmeshRenderNode</ref> &amp;</type>
+          <declname>node</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d39/a05023" kindref="compound">ModelBufferConfiguration</ref> *</type>
+          <declname>modelBufferData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="78" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/ddc/a03787_1aabebab257cc19b949b86b635ffbefc11" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneRenderNodes::doUpdateNode</definition>
+        <argsstring>(BillboardRenderNode &amp;node, ModelBufferConfiguration *modelBufferData, BillboardUboConfiguration *billboardBufferData)</argsstring>
+        <name>doUpdateNode</name>
+        <qualifiedname>castor3d::SceneRenderNodes::doUpdateNode</qualifiedname>
+        <param>
+          <type><ref refid="d7/d88/a03771" kindref="compound">BillboardRenderNode</ref> &amp;</type>
+          <declname>node</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d39/a05023" kindref="compound">ModelBufferConfiguration</ref> *</type>
+          <declname>modelBufferData</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d7c/a04999" kindref="compound">BillboardUboConfiguration</ref> *</type>
+          <declname>billboardBufferData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="80" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="363" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="363" bodyend="363"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::SceneRenderNodes</label>
+        <link refid="d4/ddc/a03787"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Scene const &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::SceneRenderNodes</label>
+        <link refid="d4/ddc/a03787"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Scene const &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Node/SceneRenderNodes.hpp" line="26" column="1" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="28" bodyend="93"/>
     <listofallmembers>
-      <member refid="d4/ddc/a03787_1adb9508cb448cf4e1fd80acbe21a8bf36" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkValidationFeaturesEXT &gt;</scope><name>value</name></member>
+      <member refid="d4/ddc/a03787_1a524ae6b3f2e9a79a6f8c871a43ad80df" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>clear</name></member>
+      <member refid="d4/ddc/a03787_1ab379f91ba869bcd440c763f27fd11784" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>createNode</name></member>
+      <member refid="d4/ddc/a03787_1ae2ef34dab43a2a989112be1f23c81621" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>createNode</name></member>
+      <member refid="d4/ddc/a03787_1a3b1df35d0fd5921e5875daba5787ecbf" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>DescriptorNodesPoolsT</name></member>
+      <member refid="d4/ddc/a03787_1a68ae02258ce58cfcd5ebb4a7d432a6b1" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>DescriptorNodesPtrT</name></member>
+      <member refid="d4/ddc/a03787_1a75fa4579c9ab7701c578ad2da0560c21" prot="private" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>doUpdateNode</name></member>
+      <member refid="d4/ddc/a03787_1aabebab257cc19b949b86b635ffbefc11" prot="private" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>doUpdateNode</name></member>
+      <member refid="d4/ddc/a03787_1a3e3dd2976367540e3ac13bce74e7d1aa" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>getBillboardNode</name></member>
+      <member refid="d4/ddc/a03787_1a2505d2148e2af38a3ea8125796919b62" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>getBillboardNodes</name></member>
+      <member refid="d4/ddc/a03787_1a400586d1bd292459b8ef9991e9eaa7aa" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>getBillboardsBuffer</name></member>
+      <member refid="d4/ddc/a03787_1a85310421bcca0e96f69b8e375b7e21a6" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>getModelBuffer</name></member>
+      <member refid="d4/ddc/a03787_1a9de88c3f056fa067ba96adf9ffa5a89d" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>getSubmeshNode</name></member>
+      <member refid="d4/ddc/a03787_1a7a81da4fbca10b76f984fe1a8935b26a" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>getSubmeshNodes</name></member>
+      <member refid="d4/ddc/a03787_1ace4c873a85b167a87eca23469296709d" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>hasNodes</name></member>
+      <member refid="d4/ddc/a03787_1a63e185f65db19086e5504f36092c2779" prot="private" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>m_billboardNodes</name></member>
+      <member refid="d4/ddc/a03787_1abf349f1753d5c9a7c1f937c902f97e7d" prot="private" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>m_billboardsData</name></member>
+      <member refid="d4/ddc/a03787_1a2d3398a23e211c94c7a39a7f692799ca" prot="private" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>m_device</name></member>
+      <member refid="d4/ddc/a03787_1a3536321271c30ef61799020fe01e9ce2" prot="private" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>m_dirty</name></member>
+      <member refid="d4/ddc/a03787_1a3aebddcfd1390b0c439005343725358e" prot="private" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>m_nodeId</name></member>
+      <member refid="d4/ddc/a03787_1a6cc8f5433c31d5e949708e69009ac040" prot="private" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>m_nodesData</name></member>
+      <member refid="d4/ddc/a03787_1a6eda63edca5905fce9088a21301f27c8" prot="private" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>m_nodesMutex</name></member>
+      <member refid="d4/ddc/a03787_1a22baf84e762b9f1d2b1630da63f4ae6c" prot="private" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>m_submeshNodes</name></member>
+      <member refid="d4/ddc/a03787_1ab1c964fb284696a9647ca8e33d84a312" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>SceneRenderNodes</name></member>
+      <member refid="d4/ddc/a03787_1aba7cb7618d0a2dc7481d822eb76441fc" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>update</name></member>
+      <member refid="d4/ddc/a03787_1aae15f63631fdd89ca1e06ff84a36f654" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>update</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

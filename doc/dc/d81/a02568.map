@@ -1,6 +1,6 @@
-<map id="castor3d::MouseState" name="castor3d::MouseState">
-<area shape="rect" id="node1" title="Mouse state." alt="" coords="19,303,170,329"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,199,184,240"/>
-<area shape="rect" id="node3" title="STL class." alt="" coords="41,95,149,121"/>
-<area shape="rect" id="node4" title=" " alt="" coords="75,5,114,32"/>
+<map id="castor3d::VertexBufferPool::ModelBuffers" name="castor3d::VertexBufferPool::ModelBuffers">
+<area shape="rect" id="node1" title=" " alt="" coords="16,289,193,331"/>
+<area shape="rect" id="node2" href="$db/d09/a02502.html" title=" " alt="" coords="5,185,204,227"/>
+<area shape="rect" id="node3" href="$d3/d41/a02530.html" title=" " alt="" coords="35,5,201,32"/>
+<area shape="rect" id="node4" href="$db/d09/a02502.html" title="A GPU buffer, that uses a buddy allocator to allocate sub&#45;buffers." alt="" coords="121,81,265,123"/>
 </map>

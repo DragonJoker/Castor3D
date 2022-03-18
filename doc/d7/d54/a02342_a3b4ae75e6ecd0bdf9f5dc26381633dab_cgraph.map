@@ -1,0 +1,5 @@
+<map id="castor3d::BinaryWriterBase::write" name="castor3d::BinaryWriterBase::write">
+<area shape="rect" id="node1" title="To chunk writer function." alt="" coords="5,39,188,80"/>
+<area shape="rect" id="node2" href="$dd/dae/a02294.html#a05ffb50a92f97be91612f8f91ceeed8e" title="Writes a subchunk into a chunk." alt="" coords="236,5,391,47"/>
+<area shape="rect" id="node3" href="$dd/dae/a02294.html#abbed73a8f9ab118d0b9ba81219a919b6" title="Computes the final data buffer from each one added until this call." alt="" coords="236,71,391,112"/>
+</map>

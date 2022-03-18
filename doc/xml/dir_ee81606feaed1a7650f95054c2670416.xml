@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_ee81606feaed1a7650f95054c2670416" kind="dir">
     <compoundname>Render</compoundname>
     <innerdir refid="dir_60224d060cc31e4c570b52945980330e">Render/Culling</innerdir>
@@ -14,26 +14,25 @@
     <innerdir refid="dir_76410ba93165758e25a17769a661127f">Render/Technique</innerdir>
     <innerdir refid="dir_2f420a322fccce9022e969751359b41f">Render/ToneMapping</innerdir>
     <innerdir refid="dir_8bdc861425a7dc5d5ee070906426a976">Render/ToTexture</innerdir>
-    <innerdir refid="dir_8d8b5ef6fcf58874742e6107801c78e1">Render/Voxelize</innerdir>
-    <innerfile refid="de/ddd/a00653">Frustum.hpp</innerfile>
-    <innerfile refid="dc/df2/a00656">GBuffer.hpp</innerfile>
-    <innerfile refid="d0/d7e/a00770">PickingPass.hpp</innerfile>
-    <innerfile refid="d3/d00/a00785">Ray.hpp</innerfile>
-    <innerfile refid="df/d0c/a00788">RenderDevice.hpp</innerfile>
-    <innerfile refid="d4/d45/a00791">RenderInfo.hpp</innerfile>
-    <innerfile refid="d5/d12/a00794">RenderLoop.hpp</innerfile>
-    <innerfile refid="da/db8/a00797">RenderLoopAsync.hpp</innerfile>
-    <innerfile refid="df/d0e/a00800">RenderLoopSync.hpp</innerfile>
-    <innerfile refid="d5/d72/a00803">RenderModule.hpp</innerfile>
-    <innerfile refid="d0/dad/a00806">RenderPass.hpp</innerfile>
-    <innerfile refid="dd/d7e/a00809">RenderPassTimer.hpp</innerfile>
-    <innerfile refid="d8/db7/a00812">RenderPipeline.hpp</innerfile>
-    <innerfile refid="d8/d2d/a00815">RenderQueue.hpp</innerfile>
-    <innerfile refid="d3/d60/a00818">RenderSystem.hpp</innerfile>
-    <innerfile refid="d6/d8b/a00821">RenderSystemFactory.hpp</innerfile>
-    <innerfile refid="d8/d1c/a00824">RenderTarget.hpp</innerfile>
-    <innerfile refid="dc/d1b/a00827">RenderWindow.hpp</innerfile>
-    <innerfile refid="db/daf/a01019">Viewport.hpp</innerfile>
+    <innerfile refid="dc/df1/a00662">Frustum.hpp</innerfile>
+    <innerfile refid="da/d46/a00665">GBuffer.hpp</innerfile>
+    <innerfile refid="da/d96/a00782">Picking.hpp</innerfile>
+    <innerfile refid="da/db8/a00797">Ray.hpp</innerfile>
+    <innerfile refid="df/d0e/a00800">RenderDevice.hpp</innerfile>
+    <innerfile refid="d5/d72/a00803">RenderInfo.hpp</innerfile>
+    <innerfile refid="d0/dad/a00806">RenderLoop.hpp</innerfile>
+    <innerfile refid="dd/d7e/a00809">RenderLoopAsync.hpp</innerfile>
+    <innerfile refid="d8/db7/a00812">RenderLoopSync.hpp</innerfile>
+    <innerfile refid="d8/d2d/a00815">RenderModule.hpp</innerfile>
+    <innerfile refid="d3/d60/a00818">RenderNodesPass.hpp</innerfile>
+    <innerfile refid="d6/d8b/a00821">RenderPipeline.hpp</innerfile>
+    <innerfile refid="d8/d1c/a00824">RenderQueue.hpp</innerfile>
+    <innerfile refid="dc/d1b/a00827">RenderSystem.hpp</innerfile>
+    <innerfile refid="d9/daf/a00830">RenderSystemFactory.hpp</innerfile>
+    <innerfile refid="dc/d6e/a00833">RenderTarget.hpp</innerfile>
+    <innerfile refid="d3/d13/a00836">RenderWindow.hpp</innerfile>
+    <innerfile refid="df/d39/a00950">Texture.hpp</innerfile>
+    <innerfile refid="db/d20/a00980">Viewport.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

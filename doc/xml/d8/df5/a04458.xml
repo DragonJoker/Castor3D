@@ -1,14 +1,16 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d8/df5/a04458" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::StencilPass</compoundname>
-    <includes local="no">StencilPass.hpp</includes>
+    <compoundname>castor3d::ColourBackground</compoundname>
+    <basecompoundref refid="d8/d1f/a04450" prot="public" virt="non-virtual">castor3d::SceneBackground</basecompoundref>
+    <includes local="no">Colour.hpp</includes>
       <sectiondef kind="user-defined">
-      <memberdef kind="function" id="d8/df5/a04458_1a09fa26b2c0a62af56fd5bd971ded3853" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::Semaphore const  &amp;</type>
-        <definition>ashes::Semaphore const&amp; castor3d::StencilPass::getSemaphore</definition>
+      <memberdef kind="function" id="d8/df5/a04458_1ae2f6bb050edc0115744a06362a411d16" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d99/a02942" kindref="compound">TextureLayout</ref> const &amp;</type>
+        <definition>TextureLayout const  &amp; castor3d::ColourBackground::getTexture</definition>
         <argsstring>() const</argsstring>
-        <name>getSemaphore</name>
+        <name>getTexture</name>
+        <qualifiedname>castor3d::ColourBackground::getTexture</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -16,245 +18,132 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/StencilPass.hpp" line="89" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="89" bodyend="93"/>
+        <location file="Scene/Background/Colour.hpp" line="58" column="29" bodyfile="Scene/Background/Colour.hpp" bodystart="58" bodyend="62"/>
+        <references refid="d8/d1f/a04450_1ad0cdc0509b6d96af3320404feea93dbe" compoundref="d8/d27/a01043" startline="258">castor3d::SceneBackground::m_texture</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/df5/a04458_1a782e698303048eaa289464858ebd8f11" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d99/a02942" kindref="compound">TextureLayout</ref> &amp;</type>
+        <definition>TextureLayout &amp; castor3d::ColourBackground::getTexture</definition>
+        <argsstring>()</argsstring>
+        <name>getTexture</name>
+        <qualifiedname>castor3d::ColourBackground::getTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Colour.hpp" line="64" column="23" bodyfile="Scene/Background/Colour.hpp" bodystart="64" bodyend="68"/>
+        <references refid="d8/d1f/a04450_1ad0cdc0509b6d96af3320404feea93dbe" compoundref="d8/d27/a01043" startline="258">castor3d::SceneBackground::m_texture</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/df5/a04458_1a305fe422cdfe1b6f9369591824d7b991" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Image const &amp;</type>
+        <definition>ashes::Image const  &amp; castor3d::ColourBackground::getImage</definition>
+        <argsstring>() const</argsstring>
+        <name>getImage</name>
+        <qualifiedname>castor3d::ColourBackground::getImage</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Colour.hpp" line="70" column="28" bodyfile="Scene/Background/Colour.hpp" bodystart="70" bodyend="74"/>
+        <references refid="d8/d1f/a04450_1ad0cdc0509b6d96af3320404feea93dbe" compoundref="d8/d27/a01043" startline="258">castor3d::SceneBackground::m_texture</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/df5/a04458_1a4ef31becfb47b522427c512f3320f4e3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::ImageView const &amp;</type>
+        <definition>ashes::ImageView const  &amp; castor3d::ColourBackground::getView</definition>
+        <argsstring>() const</argsstring>
+        <name>getView</name>
+        <qualifiedname>castor3d::ColourBackground::getView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Colour.hpp" line="76" column="32" bodyfile="Scene/Background/Colour.hpp" bodystart="76" bodyend="80"/>
+        <references refid="d8/d1f/a04450_1ad0cdc0509b6d96af3320404feea93dbe" compoundref="d8/d27/a01043" startline="258">castor3d::SceneBackground::m_texture</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/df5/a04458_1ad3edebb8e96c40539c73387dc52a483c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::HdrRgbColour const &amp;</type>
+        <definition>castor::HdrRgbColour const  &amp; castor3d::ColourBackground::getColour</definition>
+        <argsstring>() const</argsstring>
+        <name>getColour</name>
+        <qualifiedname>castor3d::ColourBackground::getColour</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Colour.hpp" line="82" column="36" bodyfile="Scene/Background/Colour.hpp" bodystart="82" bodyend="85"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d8/df5/a04458_1af13d654dbd3668bf8a3010327d1dec6f" prot="private" static="no" mutable="no">
-        <type><ref refid="df/d9b/a02514" kindref="compound">Engine</ref> const  &amp;</type>
-        <definition>Engine const&amp; castor3d::StencilPass::m_engine</definition>
+      <memberdef kind="variable" id="d8/df5/a04458_1a4d0ce4f87cd64afc67d3194a99da0248" prot="private" static="no" mutable="yes">
+        <type>castor::ChangeTracked&lt; castor::HdrRgbColour &gt;</type>
+        <definition>castor::ChangeTracked&lt; castor::HdrRgbColour &gt; castor3d::ColourBackground::m_colour</definition>
         <argsstring></argsstring>
-        <name>m_engine</name>
+        <name>m_colour</name>
+        <qualifiedname>castor3d::ColourBackground::m_colour</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/StencilPass.hpp" line="97" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="97" bodyend="-1"/>
+        <location file="Scene/Background/Colour.hpp" line="96" column="31" bodyfile="Scene/Background/Colour.hpp" bodystart="96" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d8/df5/a04458_1a21345630b30dad001142b496616b80e7" prot="private" static="no" mutable="no">
-        <type>castor::String</type>
-        <definition>castor::String castor3d::StencilPass::m_prefix</definition>
+      <memberdef kind="variable" id="d8/df5/a04458_1a660e6c904c306dea0a324f8400459f63" prot="private" static="no" mutable="no">
+        <type>ashes::StagingTexturePtr</type>
+        <definition>ashes::StagingTexturePtr castor3d::ColourBackground::m_stagingTexture</definition>
         <argsstring></argsstring>
-        <name>m_prefix</name>
+        <name>m_stagingTexture</name>
+        <qualifiedname>castor3d::ColourBackground::m_stagingTexture</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/StencilPass.hpp" line="98" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="98" bodyend="-1"/>
+        <location file="Scene/Background/Colour.hpp" line="97" column="26" bodyfile="Scene/Background/Colour.hpp" bodystart="97" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d8/df5/a04458_1a66ee4ae8e648ce0f2c9a233d844abd6b" prot="private" static="no" mutable="no">
-        <type>ashes::ImageView const  &amp;</type>
-        <definition>ashes::ImageView const&amp; castor3d::StencilPass::m_depthView</definition>
-        <argsstring></argsstring>
-        <name>m_depthView</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/StencilPass.hpp" line="99" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="99" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/df5/a04458_1a9251291b1e276c8577d3dc5b42799406" prot="private" static="no" mutable="no">
-        <type><ref refid="d2/d30/a05490" kindref="compound">MatrixUbo</ref> &amp;</type>
-        <definition>MatrixUbo&amp; castor3d::StencilPass::m_matrixUbo</definition>
-        <argsstring></argsstring>
-        <name>m_matrixUbo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/StencilPass.hpp" line="100" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="100" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/df5/a04458_1a82d8fe45c8e8adeca64b97804a18c019" prot="private" static="no" mutable="no">
-        <type><ref refid="d7/da1/a02290" kindref="compound">UniformBufferT</ref>&lt; <ref refid="d4/de2/a05578" kindref="compound">ModelMatrixUboConfiguration</ref> &gt; const  &amp;</type>
-        <definition>UniformBufferT&lt; ModelMatrixUboConfiguration &gt; const&amp; castor3d::StencilPass::m_modelMatrixUbo</definition>
-        <argsstring></argsstring>
-        <name>m_modelMatrixUbo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/StencilPass.hpp" line="101" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="101" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/df5/a04458_1ae647962de14ffa56d763497deb1d1e1b" prot="private" static="no" mutable="no">
-        <type>ashes::DescriptorSetLayoutPtr</type>
-        <definition>ashes::DescriptorSetLayoutPtr castor3d::StencilPass::m_descriptorLayout</definition>
-        <argsstring></argsstring>
-        <name>m_descriptorLayout</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/StencilPass.hpp" line="102" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="102" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/df5/a04458_1a2442df588fb5c2681fb11a3ccb1091c2" prot="private" static="no" mutable="no">
-        <type>ashes::DescriptorSetPoolPtr</type>
-        <definition>ashes::DescriptorSetPoolPtr castor3d::StencilPass::m_descriptorPool</definition>
-        <argsstring></argsstring>
-        <name>m_descriptorPool</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/StencilPass.hpp" line="103" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="103" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/df5/a04458_1ab17983dbbc5c201d6008d33b1cb7fbd3" prot="private" static="no" mutable="no">
-        <type>ashes::DescriptorSetPtr</type>
-        <definition>ashes::DescriptorSetPtr castor3d::StencilPass::m_descriptorSet</definition>
-        <argsstring></argsstring>
-        <name>m_descriptorSet</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/StencilPass.hpp" line="104" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="104" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/df5/a04458_1aa7886f0643c01724637d9854346fd6f8" prot="private" static="no" mutable="no">
-        <type>ashes::RenderPassPtr</type>
-        <definition>ashes::RenderPassPtr castor3d::StencilPass::m_renderPass</definition>
-        <argsstring></argsstring>
-        <name>m_renderPass</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/StencilPass.hpp" line="105" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="105" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/df5/a04458_1a4ef5a1857c44b9edba8e61f793e05fce" prot="private" static="no" mutable="no">
-        <type>ashes::FrameBufferPtr</type>
-        <definition>ashes::FrameBufferPtr castor3d::StencilPass::m_frameBuffer</definition>
-        <argsstring></argsstring>
-        <name>m_frameBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/StencilPass.hpp" line="106" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="106" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/df5/a04458_1a3bb29a2f6babfee748f0af509ee310ca" prot="private" static="no" mutable="no">
-        <type>ashes::PipelineLayoutPtr</type>
-        <definition>ashes::PipelineLayoutPtr castor3d::StencilPass::m_pipelineLayout</definition>
-        <argsstring></argsstring>
-        <name>m_pipelineLayout</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/StencilPass.hpp" line="107" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="107" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/df5/a04458_1a0981ffe7699fe43be4cbf43e6a8f044e" prot="private" static="no" mutable="no">
-        <type>ashes::PipelineShaderStageCreateInfoArray</type>
-        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::StencilPass::m_program</definition>
-        <argsstring></argsstring>
-        <name>m_program</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/StencilPass.hpp" line="108" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="108" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/df5/a04458_1a2cd1f74e34f8a18bcb20fca0080d83e7" prot="private" static="no" mutable="no">
-        <type>ashes::GraphicsPipelinePtr</type>
-        <definition>ashes::GraphicsPipelinePtr castor3d::StencilPass::m_pipeline</definition>
-        <argsstring></argsstring>
-        <name>m_pipeline</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/StencilPass.hpp" line="109" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="109" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/df5/a04458_1a6ccdd5aab82e2d7b7c47c62be9811e0e" prot="private" static="no" mutable="no">
-        <type>ashes::VertexBufferBase const  *</type>
-        <definition>ashes::VertexBufferBase const* castor3d::StencilPass::m_vbo</definition>
-        <argsstring></argsstring>
-        <name>m_vbo</name>
-        <initializer>{ nullptr }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/StencilPass.hpp" line="110" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="110" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/df5/a04458_1a98e2e842fc80d738f40405e8533fa287" prot="private" static="no" mutable="no">
+      <memberdef kind="variable" id="d8/df5/a04458_1affc8f3989d25652e10b268d9829c90a7" prot="private" static="no" mutable="no">
         <type>ashes::CommandBufferPtr</type>
-        <definition>ashes::CommandBufferPtr castor3d::StencilPass::m_commandBuffer</definition>
+        <definition>ashes::CommandBufferPtr castor3d::ColourBackground::m_cmdCopy</definition>
         <argsstring></argsstring>
-        <name>m_commandBuffer</name>
+        <name>m_cmdCopy</name>
+        <qualifiedname>castor3d::ColourBackground::m_cmdCopy</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/StencilPass.hpp" line="111" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="111" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/df5/a04458_1a299a808808cd54b0a5f6df9a5b117981" prot="private" static="no" mutable="no">
-        <type>ashes::SemaphorePtr</type>
-        <definition>ashes::SemaphorePtr castor3d::StencilPass::m_finished</definition>
-        <argsstring></argsstring>
-        <name>m_finished</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/StencilPass.hpp" line="112" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="112" bodyend="-1"/>
+        <location file="Scene/Background/Colour.hpp" line="98" column="25" bodyfile="Scene/Background/Colour.hpp" bodystart="98" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d8/df5/a04458_1a8b9784c101b82d33b6261f0415438445" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::StencilPass::StencilPass</definition>
-        <argsstring>(Engine const &amp;engine, castor::String const &amp;prefix, ashes::ImageView const &amp;depthView, MatrixUbo &amp;matrixUbo, UniformBufferT&lt; ModelMatrixUboConfiguration &gt; const &amp;modelMatrixUbo)</argsstring>
-        <name>StencilPass</name>
+      <memberdef kind="function" id="d8/df5/a04458_1a81c10d99488d162108627a433dfebd85" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ColourBackground::ColourBackground</definition>
+        <argsstring>(Engine &amp;engine, Scene &amp;scene, castor::String const &amp;name=castor::String{})</argsstring>
+        <name>ColourBackground</name>
+        <qualifiedname>castor3d::ColourBackground::ColourBackground</qualifiedname>
         <param>
-          <type><ref refid="df/d9b/a02514" kindref="compound">Engine</ref> const &amp;</type>
+          <type><ref refid="d1/d3c/a02714" kindref="compound">Engine</ref> &amp;</type>
           <declname>engine</declname>
         </param>
         <param>
+          <type><ref refid="d6/d71/a04598" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
           <type>castor::String const &amp;</type>
-          <declname>prefix</declname>
-        </param>
-        <param>
-          <type>ashes::ImageView const &amp;</type>
-          <declname>depthView</declname>
-        </param>
-        <param>
-          <type><ref refid="d2/d30/a05490" kindref="compound">MatrixUbo</ref> &amp;</type>
-          <declname>matrixUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/da1/a02290" kindref="compound">UniformBufferT</ref>&lt; <ref refid="d4/de2/a05578" kindref="compound">ModelMatrixUboConfiguration</ref> &gt; const &amp;</type>
-          <declname>modelMatrixUbo</declname>
+          <declname>name</declname>
+          <defval>castor::String{}</defval>
         </param>
         <briefdescription>
 <para>Constructor. </para>
@@ -270,34 +159,18 @@
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">prefix</parametername>
+<parametername direction="in">scene</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The pass name&apos;s prefix. </para>
+<para>The scene. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">depthView</parametername>
+<parametername>name</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The depth buffer view. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">matrixUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The matrix UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">modelMatrixUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The model matrix UBO. </para>
+<para>The background name. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -305,51 +178,29 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/StencilPass.hpp" line="41" column="1"/>
+        <location file="Scene/Background/Colour.hpp" line="42" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d8/df5/a04458_1af2402375a3b0510c788fdebe84cfd2ee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::StencilPass::initialise</definition>
-        <argsstring>(RenderDevice const &amp;device, ashes::PipelineVertexInputStateCreateInfo const &amp;vertexLayout, ashes::VertexBufferBase &amp;vbo)</argsstring>
-        <name>initialise</name>
+      <memberdef kind="function" id="d8/df5/a04458_1a7472f5a7748c81a789225c2b7bc51364" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ColourBackground::accept</definition>
+        <argsstring>(BackgroundVisitor &amp;visitor) override</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::ColourBackground::accept</qualifiedname>
+        <reimplements refid="d8/d1f/a04450_1abb50a43cc66dc731a9a3a6e6298a412d">accept</reimplements>
         <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>ashes::PipelineVertexInputStateCreateInfo const &amp;</type>
-          <declname>vertexLayout</declname>
-        </param>
-        <param>
-          <type>ashes::VertexBufferBase &amp;</type>
-          <declname>vbo</declname>
+          <type><ref refid="dd/de8/a04470" kindref="compound">BackgroundVisitor</ref> &amp;</type>
+          <declname>visitor</declname>
         </param>
         <briefdescription>
-<para>Initialises the program and its pipeline. </para>
+<para>Visitor acceptance function. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">device</parametername>
+<parametername>visitor</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">vertexLayout</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The vertex buffer layout. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">vbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The vertex buffer containing the object to render. </para>
+<para>The visitor. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -357,90 +208,290 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/StencilPass.hpp" line="58" column="1"/>
+        <location file="Scene/Background/Colour.hpp" line="48" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d8/df5/a04458_1a2fa65ad2647bdd3e509d4322cef91565" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::StencilPass::cleanup</definition>
-        <argsstring>()</argsstring>
-        <name>cleanup</name>
-        <briefdescription>
-<para>Cleans up the program and its pipeline. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/StencilPass.hpp" line="67" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/df5/a04458_1a46175e0c00dc4af4118e98c63634993c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>ashes::Semaphore const  &amp;</type>
-        <definition>ashes::Semaphore const&amp; castor3d::StencilPass::render</definition>
-        <argsstring>(RenderDevice const &amp;device, ashes::Semaphore const &amp;toWait)</argsstring>
-        <name>render</name>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d8/df5/a04458_1a4a0e04571698b3754d8ddb80fc6e014f" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ColourBackground::doInitialise</definition>
+        <argsstring>(RenderDevice const &amp;device) override</argsstring>
+        <name>doInitialise</name>
+        <qualifiedname>castor3d::ColourBackground::doInitialise</qualifiedname>
+        <reimplements refid="d8/d1f/a04450_1a9d7a8b209f7ff6324c469f276a35bc86">doInitialise</reimplements>
         <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
           <declname>device</declname>
         </param>
-        <param>
-          <type>ashes::Semaphore const &amp;</type>
-          <declname>toWait</declname>
-        </param>
         <briefdescription>
-<para>Renders the stencil pass. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">toWait</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The semaphore to wait. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/StencilPass.hpp" line="78" column="1"/>
+        <location file="Scene/Background/Colour.hpp" line="89" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/df5/a04458_1a2db112387d82d63e77152beaca8b7697" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ColourBackground::doCleanup</definition>
+        <argsstring>() override</argsstring>
+        <name>doCleanup</name>
+        <qualifiedname>castor3d::ColourBackground::doCleanup</qualifiedname>
+        <reimplements refid="d8/d1f/a04450_1a224d34c6944a0dbdd63066e383718fd9">doCleanup</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Colour.hpp" line="90" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/df5/a04458_1a07fdd6be06386c29ac96725669f10d27" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ColourBackground::doCpuUpdate</definition>
+        <argsstring>(CpuUpdater &amp;updater) const override</argsstring>
+        <name>doCpuUpdate</name>
+        <qualifiedname>castor3d::ColourBackground::doCpuUpdate</qualifiedname>
+        <reimplements refid="d8/d1f/a04450_1a59ff1c0b98d7aea210f10ce4bf3f4dd2">doCpuUpdate</reimplements>
+        <param>
+          <type><ref refid="d3/d14/a04046" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Colour.hpp" line="91" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/df5/a04458_1ab9bdcc6a828980d13f9cae29e1c078ab" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ColourBackground::doGpuUpdate</definition>
+        <argsstring>(GpuUpdater &amp;updater) const override</argsstring>
+        <name>doGpuUpdate</name>
+        <qualifiedname>castor3d::ColourBackground::doGpuUpdate</qualifiedname>
+        <reimplements refid="d8/d1f/a04450_1a62c95edc026ada697aa8b4c3bf6f16ff">doGpuUpdate</reimplements>
+        <param>
+          <type><ref refid="dd/daf/a04050" kindref="compound">GpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Colour.hpp" line="92" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/df5/a04458_1a1432e518d5fa7bf56d16cc33e0193935" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ColourBackground::doUpdateColour</definition>
+        <argsstring>(RenderDevice const &amp;device) const</argsstring>
+        <name>doUpdateColour</name>
+        <qualifiedname>castor3d::ColourBackground::doUpdateColour</qualifiedname>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Colour.hpp" line="93" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Passes/StencilPass.hpp" line="23" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="22" bodyend="113"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::ColourBackground</label>
+        <link refid="d8/df5/a04458"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SceneBackground</label>
+        <link refid="d8/d1f/a04450"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="13">
+        <label>T</label>
+      </node>
+      <node id="1">
+        <label>castor3d::ColourBackground</label>
+        <link refid="d8/df5/a04458"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::IblTextures</label>
+        <link refid="d0/d0b/a03910"/>
+        <childnode refid="16" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor3d::QueuesData</label>
+        <link refid="de/d88/a03958"/>
+      </node>
+      <node id="8">
+        <label>castor3d::RenderDevice</label>
+        <link refid="df/de5/a03966"/>
+        <childnode refid="9" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>queueFamilies</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d7/d34/a04078"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::Scene</label>
+        <link refid="d6/d71/a04598"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SceneBackground</label>
+        <link refid="d8/d1f/a04450"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_scene</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_textureId</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>m_ibl</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::Texture</label>
+        <link refid="d3/d8c/a04318"/>
+        <childnode refid="8" relation="usage">
+          <edgelabel>device</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="16">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="6">
+        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
+      </node>
+      <node id="17">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="13" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="13" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>std::unique_ptr&lt; castor3d::IblTextures &gt;</label>
+        <childnode refid="15" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+        <childnode refid="17" relation="template-instance">
+          <edgelabel>&lt; castor3d::IblTextures &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::vector&lt; QueuesData &gt;</label>
+        <childnode refid="11" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; QueuesData &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/Background/Colour.hpp" line="18" column="1" bodyfile="Scene/Background/Colour.hpp" bodystart="20" bodyend="99"/>
     <listofallmembers>
-      <member refid="d8/df5/a04458_1a2fa65ad2647bdd3e509d4322cef91565" prot="public" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>cleanup</name></member>
-      <member refid="d8/df5/a04458_1a09fa26b2c0a62af56fd5bd971ded3853" prot="public" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>getSemaphore</name></member>
-      <member refid="d8/df5/a04458_1af2402375a3b0510c788fdebe84cfd2ee" prot="public" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>initialise</name></member>
-      <member refid="d8/df5/a04458_1a98e2e842fc80d738f40405e8533fa287" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_commandBuffer</name></member>
-      <member refid="d8/df5/a04458_1a66ee4ae8e648ce0f2c9a233d844abd6b" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_depthView</name></member>
-      <member refid="d8/df5/a04458_1ae647962de14ffa56d763497deb1d1e1b" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_descriptorLayout</name></member>
-      <member refid="d8/df5/a04458_1a2442df588fb5c2681fb11a3ccb1091c2" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_descriptorPool</name></member>
-      <member refid="d8/df5/a04458_1ab17983dbbc5c201d6008d33b1cb7fbd3" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_descriptorSet</name></member>
-      <member refid="d8/df5/a04458_1af13d654dbd3668bf8a3010327d1dec6f" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_engine</name></member>
-      <member refid="d8/df5/a04458_1a299a808808cd54b0a5f6df9a5b117981" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_finished</name></member>
-      <member refid="d8/df5/a04458_1a4ef5a1857c44b9edba8e61f793e05fce" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_frameBuffer</name></member>
-      <member refid="d8/df5/a04458_1a9251291b1e276c8577d3dc5b42799406" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_matrixUbo</name></member>
-      <member refid="d8/df5/a04458_1a82d8fe45c8e8adeca64b97804a18c019" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_modelMatrixUbo</name></member>
-      <member refid="d8/df5/a04458_1a2cd1f74e34f8a18bcb20fca0080d83e7" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_pipeline</name></member>
-      <member refid="d8/df5/a04458_1a3bb29a2f6babfee748f0af509ee310ca" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_pipelineLayout</name></member>
-      <member refid="d8/df5/a04458_1a21345630b30dad001142b496616b80e7" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_prefix</name></member>
-      <member refid="d8/df5/a04458_1a0981ffe7699fe43be4cbf43e6a8f044e" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_program</name></member>
-      <member refid="d8/df5/a04458_1aa7886f0643c01724637d9854346fd6f8" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_renderPass</name></member>
-      <member refid="d8/df5/a04458_1a6ccdd5aab82e2d7b7c47c62be9811e0e" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_vbo</name></member>
-      <member refid="d8/df5/a04458_1a46175e0c00dc4af4118e98c63634993c" prot="public" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>render</name></member>
-      <member refid="d8/df5/a04458_1a8b9784c101b82d33b6261f0415438445" prot="public" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>StencilPass</name></member>
+      <member refid="d8/df5/a04458_1a7472f5a7748c81a789225c2b7bc51364" prot="public" virt="virtual"><scope>castor3d::ColourBackground</scope><name>accept</name></member>
+      <member refid="d8/d1f/a04450_1a31a64b0a48a9634db8602f3eb6320f5b" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>cleanup</name></member>
+      <member refid="d8/df5/a04458_1a81c10d99488d162108627a433dfebd85" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>ColourBackground</name></member>
+      <member refid="d8/d1f/a04450_1ad18ff3c236416667fdd28f727cc93921" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>DescriptorIdx</name></member>
+      <member refid="d8/df5/a04458_1a2db112387d82d63e77152beaca8b7697" prot="private" virt="virtual"><scope>castor3d::ColourBackground</scope><name>doCleanup</name></member>
+      <member refid="d8/df5/a04458_1a07fdd6be06386c29ac96725669f10d27" prot="private" virt="virtual"><scope>castor3d::ColourBackground</scope><name>doCpuUpdate</name></member>
+      <member refid="d8/df5/a04458_1ab9bdcc6a828980d13f9cae29e1c078ab" prot="private" virt="virtual"><scope>castor3d::ColourBackground</scope><name>doGpuUpdate</name></member>
+      <member refid="d8/df5/a04458_1a4a0e04571698b3754d8ddb80fc6e014f" prot="private" virt="virtual"><scope>castor3d::ColourBackground</scope><name>doInitialise</name></member>
+      <member refid="d8/df5/a04458_1a1432e518d5fa7bf56d16cc33e0193935" prot="private" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>doUpdateColour</name></member>
+      <member refid="d8/df5/a04458_1ad3edebb8e96c40539c73387dc52a483c" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getColour</name></member>
+      <member refid="d8/d1f/a04450_1ad5be63bcd996ac7b4509c0650154eeb8" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getIbl</name></member>
+      <member refid="d8/df5/a04458_1a305fe422cdfe1b6f9369591824d7b991" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getImage</name></member>
+      <member refid="d8/d1f/a04450_1aab7f6f25e99aae100a34cb05c20110d4" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getSampler</name></member>
+      <member refid="d8/d1f/a04450_1a94391840bb8ef5f2765c007dd390f851" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getScene</name></member>
+      <member refid="d8/d1f/a04450_1abf867faba21687fa273ed02866f053f9" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getScene</name></member>
+      <member refid="d8/df5/a04458_1ae2f6bb050edc0115744a06362a411d16" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getTexture</name></member>
+      <member refid="d8/df5/a04458_1a782e698303048eaa289464858ebd8f11" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getTexture</name></member>
+      <member refid="d8/d1f/a04450_1a8baa7f517ba8d23448a2ba14b685ae9b" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getTextureId</name></member>
+      <member refid="d8/d1f/a04450_1a4b83ebfc7dccd47b45de5c69dc832c57" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getType</name></member>
+      <member refid="d8/df5/a04458_1a4ef31becfb47b522427c512f3320f4e3" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>getView</name></member>
+      <member refid="d8/d1f/a04450_1a33b01c80a820a9523c7b4a7da69d6f9b" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>hasIbl</name></member>
+      <member refid="d8/d1f/a04450_1ad18ff3c236416667fdd28f727cc93921a59fc8e09fc29eff3fb4c7310f621022d" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>HdrCfgUboIdx</name></member>
+      <member refid="d8/d1f/a04450_1a8aa9ef0444b4e26d44c035bea663ead0" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>initialise</name></member>
+      <member refid="d8/d1f/a04450_1ae6746af3d552e442d8d1e3df05602201" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>isHdr</name></member>
+      <member refid="d8/d1f/a04450_1af779d88ba3b2f2665c0f2cf5f5db2441" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>isInitialised</name></member>
+      <member refid="d8/d1f/a04450_1a53c673b2c5ed9a4f45b59f7a5e5fae24" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>isSRGB</name></member>
+      <member refid="d8/df5/a04458_1affc8f3989d25652e10b268d9829c90a7" prot="private" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_cmdCopy</name></member>
+      <member refid="d8/df5/a04458_1a4d0ce4f87cd64afc67d3194a99da0248" prot="private" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_colour</name></member>
+      <member refid="d8/d1f/a04450_1a6976c0fa06338604086b94015fa5c5ef" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_hdr</name></member>
+      <member refid="d8/d1f/a04450_1a309f8efbb3e4ec591d7fa63141e6eaa6" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_ibl</name></member>
+      <member refid="d8/d1f/a04450_1a205a26001f4ddcb22affe1806df1e9be" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_initialised</name></member>
+      <member refid="d8/d1f/a04450_1a8809ba9d2b7f4956673b2663fa4fee8e" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_sampler</name></member>
+      <member refid="d8/d1f/a04450_1a65fdb6af39d291d044c5a0774c1ec61f" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_scene</name></member>
+      <member refid="d8/d1f/a04450_1a6f3b48bb5b1d156426d498f16094ed96" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_srgb</name></member>
+      <member refid="d8/df5/a04458_1a660e6c904c306dea0a324f8400459f63" prot="private" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_stagingTexture</name></member>
+      <member refid="d8/d1f/a04450_1ad0cdc0509b6d96af3320404feea93dbe" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_texture</name></member>
+      <member refid="d8/d1f/a04450_1af1b89856f30d7e64667ccad4976f22be" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_textureId</name></member>
+      <member refid="d8/d1f/a04450_1a784d7ed978459602ec6edd9ad62eede4" prot="protected" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>m_type</name></member>
+      <member refid="d8/d1f/a04450_1ad18ff3c236416667fdd28f727cc93921a1a23c910c8354682e03cc78a11ecd0d2" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>MdlMtxUboIdx</name></member>
+      <member refid="d8/d1f/a04450_1ad18ff3c236416667fdd28f727cc93921a3092a1ca38f3384b562544584320dac2" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>MtxUboIdx</name></member>
+      <member refid="d8/d1f/a04450_1afa9be9f8f1c561cb4d63d5c1494b05af" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>notifyChanged</name></member>
+      <member refid="d8/d1f/a04450_1af44b4b2ffcfc43f0e823c1c3fafc7f25" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>onChanged</name></member>
+      <member refid="d8/d1f/a04450_1ab235843e07744ffe6429cbc3abf781ef" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>SceneBackground</name></member>
+      <member refid="d8/d1f/a04450_1ad18ff3c236416667fdd28f727cc93921ab54449d12fbb56b70d2b27d9f709c00e" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>SceneUboIdx</name></member>
+      <member refid="d8/d1f/a04450_1ad18ff3c236416667fdd28f727cc93921ac28ac8ec9930bae6c3736efca69d5def" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>SkyBoxImgIdx</name></member>
+      <member refid="d8/d1f/a04450_1ab51fedd3cda51b70196cf2b62e4caa04" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>update</name></member>
+      <member refid="d8/d1f/a04450_1a397189455798634e6890f80886a19208" prot="public" virt="non-virtual"><scope>castor3d::ColourBackground</scope><name>update</name></member>
+      <member refid="d8/d1f/a04450_1aa1884723b97782f2f2eeea86fc44527b" prot="public" virt="virtual"><scope>castor3d::ColourBackground</scope><name>~SceneBackground</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

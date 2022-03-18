@@ -1,33 +1,1319 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d2/db0/a03595" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkWriteDescriptorSetAccelerationStructureNV &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d2/db0/a03595_1ac94f6b3cbf33ef9e6de4b96c8bea9285" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkWriteDescriptorSetAccelerationStructureNV &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d2/db0/a03595" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::TextOverlay</compoundname>
+    <basecompoundref refid="d8/d59/a03539" prot="public" virt="non-virtual">castor3d::OverlayCategory</basecompoundref>
+    <includes local="no">TextOverlay.hpp</includes>
+    <innerclass refid="d3/d97/a03603" prot="private">castor3d::TextOverlay::DisplayableChar</innerclass>
+    <innerclass refid="da/d93/a03607" prot="private">castor3d::TextOverlay::DisplayableLine</innerclass>
+    <innerclass refid="d4/dd9/a03599" prot="public">castor3d::TextOverlay::Vertex</innerclass>
+      <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="d2/db0/a03595_1a0b2fac81d8b8840ae701192a7fef30d8" prot="private" static="no">
+        <type>std::vector&lt; DisplayableLine &gt;</type>
+        <definition>using castor3d::TextOverlay::DisplayableLineArray =  std::vector&lt; DisplayableLine &gt;</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_NV</initializer>
+        <name>DisplayableLineArray</name>
+        <qualifiedname>castor3d::TextOverlay::DisplayableLineArray</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="315" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="315" bodyend="-1"/>
+        <location file="Overlay/TextOverlay.hpp" line="346" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="346" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/db0/a03595_1abcd5aaabf175e6276f92a83e2eb4eb04" prot="private" static="no">
+        <type>std::array&lt; float, 2 &gt;</type>
+        <definition>using castor3d::TextOverlay::TextureCoordinates =  std::array&lt; float, 2 &gt;</definition>
+        <argsstring></argsstring>
+        <name>TextureCoordinates</name>
+        <qualifiedname>castor3d::TextOverlay::TextureCoordinates</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="347" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="347" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/db0/a03595_1a25378e9764dbcaace3b8b4f71a935aae" prot="private" static="no" mutable="no">
+        <type>VertexArray</type>
+        <definition>VertexArray castor3d::TextOverlay::m_arrayVtx</definition>
+        <argsstring></argsstring>
+        <name>m_arrayVtx</name>
+        <qualifiedname>castor3d::TextOverlay::m_arrayVtx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="465" column="13" bodyfile="Overlay/TextOverlay.hpp" bodystart="465" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/db0/a03595_1a234051a891ef1943226220208679bb0a" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::TextOverlay::m_currentCaption</definition>
+        <argsstring></argsstring>
+        <name>m_currentCaption</name>
+        <qualifiedname>castor3d::TextOverlay::m_currentCaption</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="466" column="16" bodyfile="Overlay/TextOverlay.hpp" bodystart="466" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/db0/a03595_1ae15bd39a4aee4176666718162b65790d" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::TextOverlay::m_previousCaption</definition>
+        <argsstring></argsstring>
+        <name>m_previousCaption</name>
+        <qualifiedname>castor3d::TextOverlay::m_previousCaption</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="467" column="16" bodyfile="Overlay/TextOverlay.hpp" bodystart="467" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/db0/a03595_1a344eab96a93cfdbb09431f5a45a71c29" prot="private" static="no" mutable="no">
+        <type>FontTextureWPtr</type>
+        <definition>FontTextureWPtr castor3d::TextOverlay::m_fontTexture</definition>
+        <argsstring></argsstring>
+        <name>m_fontTexture</name>
+        <qualifiedname>castor3d::TextOverlay::m_fontTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="468" column="17" bodyfile="Overlay/TextOverlay.hpp" bodystart="468" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/db0/a03595_1a7866edc4bd082b200149df0856b69022" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::TextOverlay::m_fontChanged</definition>
+        <argsstring></argsstring>
+        <name>m_fontChanged</name>
+        <qualifiedname>castor3d::TextOverlay::m_fontChanged</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="469" column="6" bodyfile="Overlay/TextOverlay.hpp" bodystart="469" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/db0/a03595_1a1989eba63c4e2c90c11c641f3ec405d6" prot="private" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1a0589990d8ef06cfe12058a892f79e25c" kindref="member">TextWrappingMode</ref></type>
+        <definition>TextWrappingMode castor3d::TextOverlay::m_wrappingMode</definition>
+        <argsstring></argsstring>
+        <name>m_wrappingMode</name>
+        <qualifiedname>castor3d::TextOverlay::m_wrappingMode</qualifiedname>
+        <initializer>{ <ref refid="da/de3/a01398_1a0589990d8ef06cfe12058a892f79e25cabe988781e4e1de1c6a36fb698afbbe1f" kindref="member">TextWrappingMode::eNone</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="470" column="18" bodyfile="Overlay/TextOverlay.hpp" bodystart="470" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/db0/a03595_1a4efa137b367a325dddbd8f05d4b3265f" prot="private" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1abd7f1f735abf0b76cd2014b1c184fabe" kindref="member">TextLineSpacingMode</ref></type>
+        <definition>TextLineSpacingMode castor3d::TextOverlay::m_lineSpacingMode</definition>
+        <argsstring></argsstring>
+        <name>m_lineSpacingMode</name>
+        <qualifiedname>castor3d::TextOverlay::m_lineSpacingMode</qualifiedname>
+        <initializer>{ <ref refid="da/de3/a01398_1abd7f1f735abf0b76cd2014b1c184fabeac58b8ce83977e7cf127f5423cfd12779" kindref="member">TextLineSpacingMode::eOwnHeight</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="471" column="21" bodyfile="Overlay/TextOverlay.hpp" bodystart="471" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/db0/a03595_1ac2bea27fe5461f65deb2b1fb28f5e0ba" prot="private" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1ab0160e68f657e06de22817b952f53e3a" kindref="member">HAlign</ref></type>
+        <definition>HAlign castor3d::TextOverlay::m_hAlign</definition>
+        <argsstring></argsstring>
+        <name>m_hAlign</name>
+        <qualifiedname>castor3d::TextOverlay::m_hAlign</qualifiedname>
+        <initializer>{ <ref refid="da/de3/a01398_1ab0160e68f657e06de22817b952f53e3aa97d352658db7b34c35502f9cd535e48b" kindref="member">HAlign::eLeft</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="472" column="8" bodyfile="Overlay/TextOverlay.hpp" bodystart="472" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/db0/a03595_1a68668bd44942047bedcdc7d6773e10c1" prot="private" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1a334ae87f0ec7477bc21783203aad9762" kindref="member">VAlign</ref></type>
+        <definition>VAlign castor3d::TextOverlay::m_vAlign</definition>
+        <argsstring></argsstring>
+        <name>m_vAlign</name>
+        <qualifiedname>castor3d::TextOverlay::m_vAlign</qualifiedname>
+        <initializer>{ <ref refid="da/de3/a01398_1a334ae87f0ec7477bc21783203aad9762a220067f8b2018584c34a90d950f9bd9c" kindref="member">VAlign::eCenter</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="473" column="8" bodyfile="Overlay/TextOverlay.hpp" bodystart="473" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/db0/a03595_1a2cb18309838bfddf3a51bb0d7e4f6153" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::TextOverlay::m_textChanged</definition>
+        <argsstring></argsstring>
+        <name>m_textChanged</name>
+        <qualifiedname>castor3d::TextOverlay::m_textChanged</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="474" column="6" bodyfile="Overlay/TextOverlay.hpp" bodystart="474" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/db0/a03595_1a14b7f86d58562016dd4918fd8ff228dd" prot="private" static="no" mutable="no">
+        <type>FontTexture::OnChanged::connection</type>
+        <definition>FontTexture::OnChanged::connection castor3d::TextOverlay::m_connection</definition>
+        <argsstring></argsstring>
+        <name>m_connection</name>
+        <qualifiedname>castor3d::TextOverlay::m_connection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="475" column="36" bodyfile="Overlay/TextOverlay.hpp" bodystart="475" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/db0/a03595_1a7df40ddb0663ffdfe673de59c8345556" prot="private" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1a02593db145d41e373b98df0e4e0f5561" kindref="member">TextTexturingMode</ref></type>
+        <definition>TextTexturingMode castor3d::TextOverlay::m_texturingMode</definition>
+        <argsstring></argsstring>
+        <name>m_texturingMode</name>
+        <qualifiedname>castor3d::TextOverlay::m_texturingMode</qualifiedname>
+        <initializer>{ <ref refid="da/de3/a01398_1a02593db145d41e373b98df0e4e0f5561a8c15e6038102a3065760b26043b9c162" kindref="member">TextTexturingMode::eText</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="476" column="19" bodyfile="Overlay/TextOverlay.hpp" bodystart="476" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/db0/a03595_1a996b3a26173d8b5fa59f83175820ee4e" prot="private" static="no" mutable="no">
+        <type>TextureCoordsArray</type>
+        <definition>TextureCoordsArray castor3d::TextOverlay::m_arrayTextTexture</definition>
+        <argsstring></argsstring>
+        <name>m_arrayTextTexture</name>
+        <qualifiedname>castor3d::TextOverlay::m_arrayTextTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="477" column="20" bodyfile="Overlay/TextOverlay.hpp" bodystart="477" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/db0/a03595_1a97ee4b74fabcd3a89e0e767e1285184f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::TextOverlay::CU_DeclareVector</definition>
+        <argsstring>(Vertex, Vertex)</argsstring>
+        <name>CU_DeclareVector</name>
+        <qualifiedname>castor3d::TextOverlay::CU_DeclareVector</qualifiedname>
+        <param>
+          <type><ref refid="d4/dd9/a03599" kindref="compound">Vertex</ref></type>
+        </param>
+        <param>
+          <type><ref refid="d4/dd9/a03599" kindref="compound">Vertex</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="31" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1aaf065f2be0b4da3d8a380ac2f142c85a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::TextOverlay::CU_DeclareMap</definition>
+        <argsstring>(char32_t, castor::Position, GlyphPosition)</argsstring>
+        <name>CU_DeclareMap</name>
+        <qualifiedname>castor3d::TextOverlay::CU_DeclareMap</qualifiedname>
+        <param>
+          <type>char32_t</type>
+        </param>
+        <param>
+          <type>castor::Position</type>
+        </param>
+        <param>
+          <type>GlyphPosition</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="34" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1aa18caa0d619a5b3fadbcafb56afa0d61" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::TextOverlay::TextOverlay</definition>
+        <argsstring>()</argsstring>
+        <name>TextOverlay</name>
+        <qualifiedname>castor3d::TextOverlay::TextOverlay</qualifiedname>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="43" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1a5b6eb642dc688f6b5efafd9907d54c32" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextOverlay::accept</definition>
+        <argsstring>(OverlayVisitor &amp;visitor) const override</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::TextOverlay::accept</qualifiedname>
+        <reimplements refid="d8/d59/a03539_1a1cfb21cc1b6e4ac7a46dc7f3e424bbd3">accept</reimplements>
+        <param>
+          <type><ref refid="df/d38/a03587" kindref="compound">OverlayVisitor</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Draws the overlay. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="56" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1a32a7553841280aeb5583f510309dcc05" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextOverlay::setFont</definition>
+        <argsstring>(castor::String const &amp;value)</argsstring>
+        <name>setFont</name>
+        <qualifiedname>castor3d::TextOverlay::setFont</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Sets the text font. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="65" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1acf5da467a781f9fd597061c2fed97910" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::String const &amp;</type>
+        <definition>castor::String const  &amp; castor3d::TextOverlay::getFontName</definition>
+        <argsstring>() const</argsstring>
+        <name>getFontName</name>
+        <qualifiedname>castor3d::TextOverlay::getFontName</qualifiedname>
+        <briefdescription>
+<para>Retrieves the font name. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="74" column="30" bodyfile="Overlay/TextOverlay.hpp" bodystart="74" bodyend="77"/>
+        <references refid="d2/db0/a03595_1a52ee25535e9aba05591b0a6932aa9d0a" compoundref="d3/d9a/a10802" startline="94" endline="97">getFontTexture</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1ae765deac6edb51768183dae9c9bce43a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>bool</type>
+        <definition>bool castor3d::TextOverlay::isChanged</definition>
+        <argsstring>() const override</argsstring>
+        <name>isChanged</name>
+        <qualifiedname>castor3d::TextOverlay::isChanged</qualifiedname>
+        <reimplements refid="d8/d59/a03539_1ac99be9e485c326264a6da3108e554dba">isChanged</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if this overlay&apos;s has changed. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="84" column="13" bodyfile="Overlay/TextOverlay.hpp" bodystart="84" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1a52ee25535e9aba05591b0a6932aa9d0a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>FontTextureSPtr</type>
+        <definition>FontTextureSPtr castor3d::TextOverlay::getFontTexture</definition>
+        <argsstring>() const</argsstring>
+        <name>getFontTexture</name>
+        <qualifiedname>castor3d::TextOverlay::getFontTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The <ref refid="d9/d1f/a03531" kindref="compound">FontTexture</ref>. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="94" column="24" bodyfile="Overlay/TextOverlay.hpp" bodystart="94" bodyend="97"/>
+        <referencedby refid="d2/db0/a03595_1acf5da467a781f9fd597061c2fed97910" compoundref="d3/d9a/a10802" startline="74" endline="77">getFontName</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1a04168d50fa660d799d5a8592ce78cf18" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::TextOverlay::isFontChanged</definition>
+        <argsstring>() const</argsstring>
+        <name>isFontChanged</name>
+        <qualifiedname>castor3d::TextOverlay::isFontChanged</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if this overlay&apos;s font has changed. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="104" column="13" bodyfile="Overlay/TextOverlay.hpp" bodystart="104" bodyend="107"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1af1c956b66dfbe250bb0785cc6a67fb5e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>VertexArray const &amp;</type>
+        <definition>VertexArray const  &amp; castor3d::TextOverlay::getTextVertex</definition>
+        <argsstring>() const</argsstring>
+        <name>getTextVertex</name>
+        <qualifiedname>castor3d::TextOverlay::getTextVertex</qualifiedname>
+        <briefdescription>
+<para>Retrieves the panel vertex buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The buffer </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="116" column="27" bodyfile="Overlay/TextOverlay.hpp" bodystart="116" bodyend="119"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1acbb929e299d193f679ea2403b9c9b6dd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::TextOverlay::getCaption</definition>
+        <argsstring>() const</argsstring>
+        <name>getCaption</name>
+        <qualifiedname>castor3d::TextOverlay::getCaption</qualifiedname>
+        <briefdescription>
+<para>Retrieves the overlay text. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="128" column="23" bodyfile="Overlay/TextOverlay.hpp" bodystart="128" bodyend="131"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1a73c69ef13a2ab7e40317a24212062cea" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextOverlay::setCaption</definition>
+        <argsstring>(castor::String const &amp;value)</argsstring>
+        <name>setCaption</name>
+        <qualifiedname>castor3d::TextOverlay::setCaption</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Sets the overlay text. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="140" column="13" bodyfile="Overlay/TextOverlay.hpp" bodystart="140" bodyend="144"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1a459ac8c960b2f5a42ce0408a0f9847c8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/de3/a01398_1a0589990d8ef06cfe12058a892f79e25c" kindref="member">TextWrappingMode</ref></type>
+        <definition>TextWrappingMode castor3d::TextOverlay::getTextWrappingMode</definition>
+        <argsstring>() const</argsstring>
+        <name>getTextWrappingMode</name>
+        <qualifiedname>castor3d::TextOverlay::getTextWrappingMode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The text wrapping mode. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="151" column="25" bodyfile="Overlay/TextOverlay.hpp" bodystart="151" bodyend="154"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1a885966c5563fb64da897e6ac29d34813" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextOverlay::setTextWrappingMode</definition>
+        <argsstring>(TextWrappingMode value)</argsstring>
+        <name>setTextWrappingMode</name>
+        <qualifiedname>castor3d::TextOverlay::setTextWrappingMode</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1a0589990d8ef06cfe12058a892f79e25c" kindref="member">TextWrappingMode</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Sets text wrapping mode. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="163" column="13" bodyfile="Overlay/TextOverlay.hpp" bodystart="163" bodyend="167"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1a859f71d0a04615fa4501b18662d46da9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/de3/a01398_1ab0160e68f657e06de22817b952f53e3a" kindref="member">HAlign</ref></type>
+        <definition>HAlign castor3d::TextOverlay::getHAlign</definition>
+        <argsstring>() const</argsstring>
+        <name>getHAlign</name>
+        <qualifiedname>castor3d::TextOverlay::getHAlign</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The horizontal alignment. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="174" column="15" bodyfile="Overlay/TextOverlay.hpp" bodystart="174" bodyend="177"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1a64dad5a0bcee8ca10793b62721e064ff" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextOverlay::setHAlign</definition>
+        <argsstring>(HAlign value)</argsstring>
+        <name>setHAlign</name>
+        <qualifiedname>castor3d::TextOverlay::setHAlign</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1ab0160e68f657e06de22817b952f53e3a" kindref="member">HAlign</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Defines the horizontal alignment. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="186" column="13" bodyfile="Overlay/TextOverlay.hpp" bodystart="186" bodyend="190"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1a9cf25bf5f401963ba8e9130204f63d7a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/de3/a01398_1a334ae87f0ec7477bc21783203aad9762" kindref="member">VAlign</ref></type>
+        <definition>VAlign castor3d::TextOverlay::getVAlign</definition>
+        <argsstring>() const</argsstring>
+        <name>getVAlign</name>
+        <qualifiedname>castor3d::TextOverlay::getVAlign</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The vertical alignment. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="197" column="15" bodyfile="Overlay/TextOverlay.hpp" bodystart="197" bodyend="200"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1a3a5f3a0cf2f8bac5a6d08b25d6015f7c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextOverlay::setVAlign</definition>
+        <argsstring>(VAlign value)</argsstring>
+        <name>setVAlign</name>
+        <qualifiedname>castor3d::TextOverlay::setVAlign</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1a334ae87f0ec7477bc21783203aad9762" kindref="member">VAlign</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Defines the vertical alignment. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="209" column="13" bodyfile="Overlay/TextOverlay.hpp" bodystart="209" bodyend="213"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1addd3352aeb9fdbdf034b641925a4ecc9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/de3/a01398_1a02593db145d41e373b98df0e4e0f5561" kindref="member">TextTexturingMode</ref></type>
+        <definition>TextTexturingMode castor3d::TextOverlay::getTexturingMode</definition>
+        <argsstring>() const</argsstring>
+        <name>getTexturingMode</name>
+        <qualifiedname>castor3d::TextOverlay::getTexturingMode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The text texture mapping mode. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="220" column="26" bodyfile="Overlay/TextOverlay.hpp" bodystart="220" bodyend="223"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1aaa48521035a547618539fdaf975860ad" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextOverlay::setTexturingMode</definition>
+        <argsstring>(TextTexturingMode value)</argsstring>
+        <name>setTexturingMode</name>
+        <qualifiedname>castor3d::TextOverlay::setTexturingMode</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1a02593db145d41e373b98df0e4e0f5561" kindref="member">TextTexturingMode</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Defines the text texture mapping mode. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="232" column="13" bodyfile="Overlay/TextOverlay.hpp" bodystart="232" bodyend="236"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1a4f617400c0001242f992cff57a915b6f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/de3/a01398_1abd7f1f735abf0b76cd2014b1c184fabe" kindref="member">TextLineSpacingMode</ref></type>
+        <definition>TextLineSpacingMode castor3d::TextOverlay::getLineSpacingMode</definition>
+        <argsstring>() const</argsstring>
+        <name>getLineSpacingMode</name>
+        <qualifiedname>castor3d::TextOverlay::getLineSpacingMode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The lines spacing mode. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="243" column="28" bodyfile="Overlay/TextOverlay.hpp" bodystart="243" bodyend="246"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1ad7e1ec9239a80f84be178860cd239130" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextOverlay::setLineSpacingMode</definition>
+        <argsstring>(TextLineSpacingMode value)</argsstring>
+        <name>setLineSpacingMode</name>
+        <qualifiedname>castor3d::TextOverlay::setLineSpacingMode</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1abd7f1f735abf0b76cd2014b1c184fabe" kindref="member">TextLineSpacingMode</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Defines the lines spacing mode. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="255" column="13" bodyfile="Overlay/TextOverlay.hpp" bodystart="255" bodyend="259"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d2/db0/a03595_1a5f3b6641c6be45c18fdf42fab7172582" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> OverlayCategorySPtr</type>
+        <definition>static C3D_API OverlayCategorySPtr castor3d::TextOverlay::create</definition>
+        <argsstring>()</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::TextOverlay::create</qualifiedname>
+        <briefdescription>
+<para>Creation function, used by the factory. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>An overlay </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="52" column="36"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d2/db0/a03595_1ae932e122852f5e24b085a4019921c3d5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::TextOverlay::CU_DeclareVector</definition>
+        <argsstring>(TextureCoordinates, TextureCoords)</argsstring>
+        <name>CU_DeclareVector</name>
+        <qualifiedname>castor3d::TextOverlay::CU_DeclareVector</qualifiedname>
+        <param>
+          <type>TextureCoordinates</type>
+        </param>
+        <param>
+          <type>TextureCoords</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="348" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1ad58a1a7c89acc814b2313371cdf56886" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextOverlay::doUpdate</definition>
+        <argsstring>(OverlayRenderer const &amp;renderer) override</argsstring>
+        <name>doUpdate</name>
+        <qualifiedname>castor3d::TextOverlay::doUpdate</qualifiedname>
+        <reimplements refid="d8/d59/a03539_1a72d64442dc9b48612aa7a0a64b9104d2">doUpdate</reimplements>
+        <param>
+          <type><ref refid="d1/df9/a03555" kindref="compound">OverlayRenderer</ref> const &amp;</type>
+          <declname>renderer</declname>
+        </param>
+        <briefdescription>
+<para>Updates the overlay position, size... </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="352" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1a6bbb573584195b46e5e92363583e8d5f" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextOverlay::doUpdateBuffer</definition>
+        <argsstring>(castor::Size const &amp;size) override</argsstring>
+        <name>doUpdateBuffer</name>
+        <qualifiedname>castor3d::TextOverlay::doUpdateBuffer</qualifiedname>
+        <reimplements refid="d8/d59/a03539_1af740ba50ac54496f3c2d48161047b89e">doUpdateBuffer</reimplements>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Updates the vertex buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render target size. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="356" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1a86cf64dd8a0cc3e8889a029b851b1b23" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextOverlay::doUpdateBuffer</definition>
+        <argsstring>(castor::Size const &amp;size, std::function&lt; void(castor::Point2d const &amp;size, castor::Rectangle const &amp;absolute, castor::Point4f const &amp;fontUV, float &amp;uvLeft, float &amp;uvTop, float &amp;uvRight, float &amp;uvBottom) &gt; generateUvs)</argsstring>
+        <name>doUpdateBuffer</name>
+        <qualifiedname>castor3d::TextOverlay::doUpdateBuffer</qualifiedname>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>std::function&lt; void(castor::Point2d const &amp;size, castor::Rectangle const &amp;absolute, castor::Point4f const &amp;fontUV, float &amp;uvLeft, float &amp;uvTop, float &amp;uvRight, float &amp;uvBottom) &gt;</type>
+          <declname>generateUvs</declname>
+        </param>
+        <briefdescription>
+<para>Updates the vertex buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render target size. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">generateUvs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The UV generator function. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="367" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1ad41c5224f564da0a52a078ec152a1636" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> DisplayableLineArray</type>
+        <definition>C3D_API DisplayableLineArray castor3d::TextOverlay::doPrepareText</definition>
+        <argsstring>(castor::Size const &amp;renderSize, castor::Point2d const &amp;size)</argsstring>
+        <name>doPrepareText</name>
+        <qualifiedname>castor3d::TextOverlay::doPrepareText</qualifiedname>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>renderSize</declname>
+        </param>
+        <param>
+          <type>castor::Point2d const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Computes the lines to display. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Takes care of vertical alignment to retrieve the right vertical offset. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">renderSize</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render size. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The overlay dimensions. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The lines. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="389" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1a81d9b4aba109ca8da72b3aee499a4867" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextOverlay::doPrepareWord</definition>
+        <argsstring>(castor::Size const &amp;renderSize, std::u32string const &amp;word, double wordWidth, castor::Point2d const &amp;size, double &amp;left, DisplayableLine &amp;line, DisplayableLineArray &amp;lines)</argsstring>
+        <name>doPrepareWord</name>
+        <qualifiedname>castor3d::TextOverlay::doPrepareWord</qualifiedname>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>renderSize</declname>
+        </param>
+        <param>
+          <type>std::u32string const &amp;</type>
+          <declname>word</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>wordWidth</declname>
+        </param>
+        <param>
+          <type>castor::Point2d const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>left</declname>
+        </param>
+        <param>
+          <type>DisplayableLine &amp;</type>
+          <declname>line</declname>
+        </param>
+        <param>
+          <type>DisplayableLineArray &amp;</type>
+          <declname>lines</declname>
+        </param>
+        <briefdescription>
+<para>adds a word to the vertex buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">renderSize</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render size. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">word</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The word to add. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">wordWidth</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The word width. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The overlay size. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">left</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The left position. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">line</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The line. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">lines</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The lines. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="411" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1abdaf835cebc57b825d02a8d56c42d006" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> DisplayableLine</type>
+        <definition>C3D_API DisplayableLine castor3d::TextOverlay::doFinishLine</definition>
+        <argsstring>(castor::Point2d const &amp;size, DisplayableLine line, double &amp;left, DisplayableLineArray &amp;lines)</argsstring>
+        <name>doFinishLine</name>
+        <qualifiedname>castor3d::TextOverlay::doFinishLine</qualifiedname>
+        <param>
+          <type>castor::Point2d const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>DisplayableLine</type>
+          <declname>line</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>left</declname>
+        </param>
+        <param>
+          <type>DisplayableLineArray &amp;</type>
+          <declname>lines</declname>
+        </param>
+        <briefdescription>
+<para>Fills the line, and jumps to the next one. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The overlay size. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">line</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The line. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">left</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The left position. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">lines</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The lines. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="432" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1aaa6f7394a363fb1d56f399a7fff29138" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextOverlay::doAlignHorizontally</definition>
+        <argsstring>(double width, DisplayableLine line, DisplayableLineArray &amp;lines)</argsstring>
+        <name>doAlignHorizontally</name>
+        <qualifiedname>castor3d::TextOverlay::doAlignHorizontally</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>width</declname>
+        </param>
+        <param>
+          <type>DisplayableLine</type>
+          <declname>line</declname>
+        </param>
+        <param>
+          <type>DisplayableLineArray &amp;</type>
+          <declname>lines</declname>
+        </param>
+        <briefdescription>
+<para>Horizontally align a line. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">width</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The overlay width. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">line</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The line. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">lines</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The lines. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="448" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/db0/a03595_1a1075be5e7fe9b949757d8067724bf1d7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextOverlay::doAlignVertically</definition>
+        <argsstring>(double height, DisplayableLineArray &amp;lines)</argsstring>
+        <name>doAlignVertically</name>
+        <qualifiedname>castor3d::TextOverlay::doAlignVertically</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>height</declname>
+        </param>
+        <param>
+          <type>DisplayableLineArray &amp;</type>
+          <declname>lines</declname>
+        </param>
+        <briefdescription>
+<para>Vertically align text. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">height</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The overlay height. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">lines</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The lines. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="461" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="315" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="315" bodyend="315"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::OverlayCategory</label>
+        <link refid="d8/d59/a03539"/>
+      </node>
+      <node id="1">
+        <label>castor3d::TextOverlay</label>
+        <link refid="d2/db0/a03595"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor3d::Overlay</label>
+        <link refid="d3/d52/a03535"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_scene</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>m_renderSystem</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::OverlayCategory</label>
+        <link refid="d8/d59/a03539"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_pOverlay</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d3/d9a/a04075"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::Scene</label>
+        <link refid="dd/dec/a04595"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::TextOverlay</label>
+        <link refid="d2/db0/a03595"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::Named</label>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="6">
+        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Overlay/TextOverlay.hpp" line="12" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="14" bodyend="478"/>
     <listofallmembers>
-      <member refid="d2/db0/a03595_1ac94f6b3cbf33ef9e6de4b96c8bea9285" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkWriteDescriptorSetAccelerationStructureNV &gt;</scope><name>value</name></member>
+      <member refid="d2/db0/a03595_1a5b6eb642dc688f6b5efafd9907d54c32" prot="public" virt="virtual"><scope>castor3d::TextOverlay</scope><name>accept</name></member>
+      <member refid="d2/db0/a03595_1a5f3b6641c6be45c18fdf42fab7172582" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>create</name></member>
+      <member refid="d2/db0/a03595_1aaf065f2be0b4da3d8a380ac2f142c85a" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>CU_DeclareMap</name></member>
+      <member refid="d2/db0/a03595_1a97ee4b74fabcd3a89e0e767e1285184f" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>CU_DeclareVector</name></member>
+      <member refid="d2/db0/a03595_1ae932e122852f5e24b085a4019921c3d5" prot="private" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>CU_DeclareVector</name></member>
+      <member refid="d8/d59/a03539_1af30a39d84244e6f097d7b245d75e16f4" prot="public" virt="non-virtual" ambiguityscope="castor3d::OverlayCategory::"><scope>castor3d::TextOverlay</scope><name>CU_DeclareVector</name></member>
+      <member refid="d2/db0/a03595_1a0b2fac81d8b8840ae701192a7fef30d8" prot="private" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>DisplayableLineArray</name></member>
+      <member refid="d2/db0/a03595_1aaa6f7394a363fb1d56f399a7fff29138" prot="private" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>doAlignHorizontally</name></member>
+      <member refid="d2/db0/a03595_1a1075be5e7fe9b949757d8067724bf1d7" prot="private" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>doAlignVertically</name></member>
+      <member refid="d2/db0/a03595_1abdaf835cebc57b825d02a8d56c42d006" prot="private" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>doFinishLine</name></member>
+      <member refid="d8/d59/a03539_1a4914ddaa1aa2755d7a4bf1d1351b0d53" prot="protected" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>doGetTotalSize</name></member>
+      <member refid="d2/db0/a03595_1ad41c5224f564da0a52a078ec152a1636" prot="private" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>doPrepareText</name></member>
+      <member refid="d2/db0/a03595_1a81d9b4aba109ca8da72b3aee499a4867" prot="private" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>doPrepareWord</name></member>
+      <member refid="d2/db0/a03595_1ad58a1a7c89acc814b2313371cdf56886" prot="private" virt="virtual"><scope>castor3d::TextOverlay</scope><name>doUpdate</name></member>
+      <member refid="d2/db0/a03595_1a6bbb573584195b46e5e92363583e8d5f" prot="private" virt="virtual"><scope>castor3d::TextOverlay</scope><name>doUpdateBuffer</name></member>
+      <member refid="d2/db0/a03595_1a86cf64dd8a0cc3e8889a029b851b1b23" prot="private" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>doUpdateBuffer</name></member>
+      <member refid="d8/d59/a03539_1a4f4b67d20428187bed69ce338e5174f5" prot="protected" virt="virtual"><scope>castor3d::TextOverlay</scope><name>doUpdatePosition</name></member>
+      <member refid="d8/d59/a03539_1acba79349220c84700bad09bc829ed123" prot="protected" virt="virtual"><scope>castor3d::TextOverlay</scope><name>doUpdateSize</name></member>
+      <member refid="d8/d59/a03539_1aaf4f2b38dd87a7bcdba59feff70cfe5c" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getAbsolutePosition</name></member>
+      <member refid="d8/d59/a03539_1a0e18c7032ece1f9fabb21621f54f27c7" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getAbsolutePosition</name></member>
+      <member refid="d8/d59/a03539_1a096401b552723c3e5527045193451b2a" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getAbsoluteSize</name></member>
+      <member refid="d8/d59/a03539_1af5c16e73f89fa5f438bf2df8f9eb56fc" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getAbsoluteSize</name></member>
+      <member refid="d2/db0/a03595_1acbb929e299d193f679ea2403b9c9b6dd" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getCaption</name></member>
+      <member refid="d2/db0/a03595_1acf5da467a781f9fd597061c2fed97910" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getFontName</name></member>
+      <member refid="d2/db0/a03595_1a52ee25535e9aba05591b0a6932aa9d0a" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getFontTexture</name></member>
+      <member refid="d2/db0/a03595_1a859f71d0a04615fa4501b18662d46da9" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getHAlign</name></member>
+      <member refid="d8/d59/a03539_1ac7d35aa737a683282da3f94362f351bf" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getIndex</name></member>
+      <member refid="d8/d59/a03539_1a46204ee81cd66a0ab948a9f83acc5bae" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getLevel</name></member>
+      <member refid="d2/db0/a03595_1a4f617400c0001242f992cff57a915b6f" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getLineSpacingMode</name></member>
+      <member refid="d8/d59/a03539_1a90eaf0a04b2ec908211d77f3444bc833" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getMaterial</name></member>
+      <member refid="d8/d59/a03539_1a8b4091426253a6de32728aaba0d8e90f" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getOverlay</name></member>
+      <member refid="d8/d59/a03539_1a6025fb9f4f47a243022cb752245b6f62" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getOverlay</name></member>
+      <member refid="d8/d59/a03539_1a44be8f4402ee3ce13d9cb63b1b729ea2" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getOverlayName</name></member>
+      <member refid="d8/d59/a03539_1a96af1a918d956aad578c877164986fd8" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getPixelPosition</name></member>
+      <member refid="d8/d59/a03539_1afada466dc2f719b05080a977bac80df1" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getPixelPosition</name></member>
+      <member refid="d8/d59/a03539_1aa1cff949676f574c52223137b6737be4" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getPixelSize</name></member>
+      <member refid="d8/d59/a03539_1ae09abe68d13278545daf10a37c5c1726" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getPixelSize</name></member>
+      <member refid="d8/d59/a03539_1af06bbc73c3946980e75b983c1d661589" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getPosition</name></member>
+      <member refid="d8/d59/a03539_1a8c47fc64b83e003d2119f763c91caec6" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getPosition</name></member>
+      <member refid="d8/d59/a03539_1ad2268e51289922bdd13cec10ae9084ca" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getRenderRatio</name></member>
+      <member refid="d8/d59/a03539_1a8085bf50e87dc15310026435668609b1" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getSize</name></member>
+      <member refid="d8/d59/a03539_1acb2cc96f32d6b40da2c7502e3a4c54a3" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getSize</name></member>
+      <member refid="d2/db0/a03595_1addd3352aeb9fdbdf034b641925a4ecc9" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getTexturingMode</name></member>
+      <member refid="d2/db0/a03595_1af1c956b66dfbe250bb0785cc6a67fb5e" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getTextVertex</name></member>
+      <member refid="d2/db0/a03595_1a459ac8c960b2f5a42ce0408a0f9847c8" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getTextWrappingMode</name></member>
+      <member refid="d8/d59/a03539_1a70ba9b4a7ef7bc8e35de3f0af39bcf42" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getType</name></member>
+      <member refid="d8/d59/a03539_1ac110f23c2c21fb014f512f2626ef2837" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getUV</name></member>
+      <member refid="d2/db0/a03595_1a9cf25bf5f401963ba8e9130204f63d7a" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>getVAlign</name></member>
+      <member refid="d2/db0/a03595_1ae765deac6edb51768183dae9c9bce43a" prot="public" virt="virtual"><scope>castor3d::TextOverlay</scope><name>isChanged</name></member>
+      <member refid="d2/db0/a03595_1a04168d50fa660d799d5a8592ce78cf18" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>isFontChanged</name></member>
+      <member refid="d8/d59/a03539_1a0836f09c4f8ffbd2b185863e150196b4" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>isPositionChanged</name></member>
+      <member refid="d8/d59/a03539_1a5a5577d603b35fc1dae496989669d598" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>isSizeChanged</name></member>
+      <member refid="d8/d59/a03539_1a2e9384538ff62b740d005b6442cfdf71" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>isVisible</name></member>
+      <member refid="d2/db0/a03595_1a996b3a26173d8b5fa59f83175820ee4e" prot="private" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_arrayTextTexture</name></member>
+      <member refid="d2/db0/a03595_1a25378e9764dbcaace3b8b4f71a935aae" prot="private" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_arrayVtx</name></member>
+      <member refid="d8/d59/a03539_1a3f0ea9ec842763a39d5baa2e78889b8c" prot="protected" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_computeSize</name></member>
+      <member refid="d2/db0/a03595_1a14b7f86d58562016dd4918fd8ff228dd" prot="private" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_connection</name></member>
+      <member refid="d2/db0/a03595_1a234051a891ef1943226220208679bb0a" prot="private" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_currentCaption</name></member>
+      <member refid="d2/db0/a03595_1a7866edc4bd082b200149df0856b69022" prot="private" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_fontChanged</name></member>
+      <member refid="d2/db0/a03595_1a344eab96a93cfdbb09431f5a45a71c29" prot="private" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_fontTexture</name></member>
+      <member refid="d2/db0/a03595_1ac2bea27fe5461f65deb2b1fb28f5e0ba" prot="private" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_hAlign</name></member>
+      <member refid="d8/d59/a03539_1a35662d515c8e078cfe30e66da64f8821" prot="protected" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_index</name></member>
+      <member refid="d8/d59/a03539_1ac02bb1ecfe695b90caa6f2f3b154cbc7" prot="protected" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_level</name></member>
+      <member refid="d2/db0/a03595_1a4efa137b367a325dddbd8f05d4b3265f" prot="private" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_lineSpacingMode</name></member>
+      <member refid="d8/d59/a03539_1abddc9ff5a550427c4e54d427289f12dc" prot="protected" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_pMaterial</name></member>
+      <member refid="d8/d59/a03539_1a08bb475094eee27dd84fde7a24a5fd3f" prot="protected" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_position</name></member>
+      <member refid="d8/d59/a03539_1aa9411ea45aa6e5eeeb85943f33f8b6f7" prot="protected" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_positionChanged</name></member>
+      <member refid="d8/d59/a03539_1a8a0d08cc32db67ab349e5519c6895933" prot="protected" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_pOverlay</name></member>
+      <member refid="d2/db0/a03595_1ae15bd39a4aee4176666718162b65790d" prot="private" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_previousCaption</name></member>
+      <member refid="d8/d59/a03539_1a2223016a130025720269632785ec2b61" prot="protected" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_ptSize</name></member>
+      <member refid="d8/d59/a03539_1a0ce34334ebcc12c62dfb0dc7ac5523ff" prot="protected" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_pxPosition</name></member>
+      <member refid="d8/d59/a03539_1a022dd93e8d5bff1d4f2a8c0b21142f75" prot="protected" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_size</name></member>
+      <member refid="d8/d59/a03539_1aada69d0c8319feb51d6f7f91feacceb1" prot="protected" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_sizeChanged</name></member>
+      <member refid="d8/d59/a03539_1ac4624a6d11471700631f394110218994" prot="protected" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_strMatName</name></member>
+      <member refid="d2/db0/a03595_1a2cb18309838bfddf3a51bb0d7e4f6153" prot="private" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_textChanged</name></member>
+      <member refid="d2/db0/a03595_1a7df40ddb0663ffdfe673de59c8345556" prot="private" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_texturingMode</name></member>
+      <member refid="d8/d59/a03539_1a4fcedc67c26ae5608270bfd6e0704549" prot="protected" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_type</name></member>
+      <member refid="d8/d59/a03539_1a13ff69997c85e2e77149138667bf3766" prot="protected" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_uv</name></member>
+      <member refid="d2/db0/a03595_1a68668bd44942047bedcdc7d6773e10c1" prot="private" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_vAlign</name></member>
+      <member refid="d8/d59/a03539_1ab598ebcee12614789e36336d1253e5bb" prot="protected" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_visible</name></member>
+      <member refid="d2/db0/a03595_1a1989eba63c4e2c90c11c641f3ec405d6" prot="private" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>m_wrappingMode</name></member>
+      <member refid="d8/d59/a03539_1ae996131002acbaaf6d020d250450bd33" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>OverlayCategory</name></member>
+      <member refid="d2/db0/a03595_1a73c69ef13a2ab7e40317a24212062cea" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>setCaption</name></member>
+      <member refid="d2/db0/a03595_1a32a7553841280aeb5583f510309dcc05" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>setFont</name></member>
+      <member refid="d2/db0/a03595_1a64dad5a0bcee8ca10793b62721e064ff" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>setHAlign</name></member>
+      <member refid="d2/db0/a03595_1ad7e1ec9239a80f84be178860cd239130" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>setLineSpacingMode</name></member>
+      <member refid="d8/d59/a03539_1a432724ad0feeb3c091f49a61e3715cc4" prot="public" virt="virtual"><scope>castor3d::TextOverlay</scope><name>setMaterial</name></member>
+      <member refid="d8/d59/a03539_1a5849e6f76ba3aa922d017d0188c20e9f" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>setOrder</name></member>
+      <member refid="d8/d59/a03539_1acd4f5cb3624f5875394b9e7d0ba6f5df" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>setOverlay</name></member>
+      <member refid="d8/d59/a03539_1a3ce663c7cd0d1ca8e2b9a8f2f91866d6" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>setPixelPosition</name></member>
+      <member refid="d8/d59/a03539_1aacea36a0f353d61cfaa3f863f29299a6" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>setPixelSize</name></member>
+      <member refid="d8/d59/a03539_1ac26db7b4f23efb5882a917d2e08db61d" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>setPosition</name></member>
+      <member refid="d8/d59/a03539_1afb4352263ce6a56a31283b5d87c6c94b" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>setSize</name></member>
+      <member refid="d2/db0/a03595_1aaa48521035a547618539fdaf975860ad" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>setTexturingMode</name></member>
+      <member refid="d2/db0/a03595_1a885966c5563fb64da897e6ac29d34813" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>setTextWrappingMode</name></member>
+      <member refid="d8/d59/a03539_1a01add917e67d90c05ce49b7f22a6832c" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>setUV</name></member>
+      <member refid="d2/db0/a03595_1a3a5f3a0cf2f8bac5a6d08b25d6015f7c" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>setVAlign</name></member>
+      <member refid="d8/d59/a03539_1a9a6dea3ee2fcbf07bff0f478795ace08" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>setVisible</name></member>
+      <member refid="d2/db0/a03595_1aa18caa0d619a5b3fadbcafb56afa0d61" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>TextOverlay</name></member>
+      <member refid="d2/db0/a03595_1abcd5aaabf175e6276f92a83e2eb4eb04" prot="private" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>TextureCoordinates</name></member>
+      <member refid="d8/d59/a03539_1aa45f9642c8fd544e189c4427efc43fe8" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay</scope><name>update</name></member>
+      <member refid="d8/d59/a03539_1aff0ea758ff18dd648a7e1c9aa6cf8689" prot="public" virt="virtual"><scope>castor3d::TextOverlay</scope><name>~OverlayCategory</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

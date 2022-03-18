@@ -1,5 +1,5 @@
-<map id="castor3d::MaterialCache" name="castor3d::MaterialCache">
-<area shape="rect" id="node1" title="Material collection, with additional functions." alt="" coords="15,229,177,256"/>
-<area shape="rect" id="node2" href="$db/d77/a02304.html" title=" " alt="" coords="23,124,169,180"/>
-<area shape="rect" id="node3" href="$db/d77/a02304.html" title="Base class for an element cache." alt="" coords="5,5,187,47"/>
+<map id="castor3d::BinaryWriter&lt; SkeletonAnimationKeyFrame &gt;" name="castor3d::BinaryWriter&lt; SkeletonAnimationKeyFrame &gt;">
+<area shape="rect" id="node1" title="SkeletonAnimationKeyFrame binary loader." alt="" coords="5,200,220,241"/>
+<area shape="rect" id="node2" href="$d3/d9c/a02336.html" title=" " alt="" coords="5,109,220,151"/>
+<area shape="rect" id="node3" href="$d3/d9c/a02336.html" title="Binary data chunk writer base class." alt="" coords="21,5,204,47"/>
 </map>

@@ -1,76 +1,71 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d2/d6c/a04754" kind="struct" language="C++" prot="protected">
-    <compoundname>castor3d::LightPass::RenderPass</compoundname>
-    <includes local="no">LightPass.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d2/d6c/a04754" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SpirVShader</compoundname>
+    <includes local="no">ShaderModule.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d2/d6c/a04754_1a2b85e860baa157a0b7a51c9d55dd6d16" prot="public" static="no" mutable="no">
-        <type>ashes::RenderPassPtr</type>
-        <definition>ashes::RenderPassPtr castor3d::LightPass::RenderPass::renderPass</definition>
+      <memberdef kind="variable" id="d2/d6c/a04754_1aa9154c5d764c20f2d45b6161ac65159a" prot="public" static="no" mutable="no">
+        <type>castor::UInt32Array</type>
+        <definition>castor::UInt32Array castor3d::SpirVShader::spirv</definition>
         <argsstring></argsstring>
-        <name>renderPass</name>
+        <name>spirv</name>
+        <qualifiedname>castor3d::SpirVShader::spirv</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="39" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="39" bodyend="-1"/>
+        <location file="Shader/ShaderModule.hpp" line="63" column="21" bodyfile="Shader/ShaderModule.hpp" bodystart="63" bodyend="-1"/>
+        <referencedby refid="dc/df4/a01401_1a0c19aca64c0ae4f33a537e1071e48963" compoundref="d5/d16/a01154" startline="161" endline="178">castor3d::makeShaderState</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="d2/d6c/a04754_1acb70804b63ec8651d8edb8e81ef9073c" prot="public" static="no" mutable="no">
-        <type>ashes::FrameBufferPtr</type>
-        <definition>ashes::FrameBufferPtr castor3d::LightPass::RenderPass::frameBuffer</definition>
+      <memberdef kind="variable" id="d2/d6c/a04754_1a814dd927d2a2a4306a668b8a0180cba5" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string castor3d::SpirVShader::text</definition>
         <argsstring></argsstring>
-        <name>frameBuffer</name>
+        <name>text</name>
+        <qualifiedname>castor3d::SpirVShader::text</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="40" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="40" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d2/d6c/a04754_1ac00fa53d066af78eb7ae961fe6ee2820" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::LightPass::RenderPass::RenderPass</definition>
-        <argsstring>(std::string const &amp;name, ashes::RenderPassPtr renderPass, LightPassResult const &amp;lpResult, bool generatesIndirect)</argsstring>
-        <name>RenderPass</name>
-        <param>
-          <type>std::string const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type>ashes::RenderPassPtr</type>
-          <declname>renderPass</declname>
-        </param>
-        <param>
-          <type><ref refid="d6/df5/a04770" kindref="compound">LightPassResult</ref> const &amp;</type>
-          <declname>lpResult</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>generatesIndirect</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="35" column="1"/>
+        <location file="Shader/ShaderModule.hpp" line="64" column="13" bodyfile="Shader/ShaderModule.hpp" bodystart="64" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>A SPIR-V shader module, with SPIR-V binary and debug text source. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="34" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="33" bodyend="41"/>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::SpirVShader</label>
+        <link refid="d2/d6c/a04754"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>spirv</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>text</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>UInt32Array</label>
+      </node>
+      <node id="4">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="3">
+        <label>std::string</label>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/ShaderModule.hpp" line="61" column="1" bodyfile="Shader/ShaderModule.hpp" bodystart="62" bodyend="65"/>
     <listofallmembers>
-      <member refid="d2/d6c/a04754_1acb70804b63ec8651d8edb8e81ef9073c" prot="public" virt="non-virtual"><scope>castor3d::LightPass::RenderPass</scope><name>frameBuffer</name></member>
-      <member refid="d2/d6c/a04754_1ac00fa53d066af78eb7ae961fe6ee2820" prot="public" virt="non-virtual"><scope>castor3d::LightPass::RenderPass</scope><name>RenderPass</name></member>
-      <member refid="d2/d6c/a04754_1a2b85e860baa157a0b7a51c9d55dd6d16" prot="public" virt="non-virtual"><scope>castor3d::LightPass::RenderPass</scope><name>renderPass</name></member>
+      <member refid="d2/d6c/a04754_1aa9154c5d764c20f2d45b6161ac65159a" prot="public" virt="non-virtual"><scope>castor3d::SpirVShader</scope><name>spirv</name></member>
+      <member refid="d2/d6c/a04754_1a814dd927d2a2a4306a668b8a0180cba5" prot="public" virt="non-virtual"><scope>castor3d::SpirVShader</scope><name>text</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

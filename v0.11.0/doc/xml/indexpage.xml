@@ -1,0 +1,247 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="indexpage" kind="page">
+    <compoundname>index</compoundname>
+    <title>Castor3D</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Castor3D is a 3D engine written in C++ 17.<linebreak/>
+ It works on Windows and GNU/Linux.<linebreak/>
+ It relies on Ashes as a rendering API, allowing Vulkan, Direct3D 11, and OpenGL.<linebreak/>
+ The project itself is compilable on supported platforms using CMake (<ref refid="da/d60/a07301" kindref="compound">Building Castor3D</ref>).<linebreak/>
+ <linebreak/>
+ <linebreak/>
+ </para>
+<sect1 id="index_1features">
+<title>Features</title>
+<para><itemizedlist>
+<listitem>
+<para>Deferred rendering for opaque objects. </para>
+</listitem>
+<listitem>
+<para>Blended Weighted rendering for transparent objects. </para>
+</listitem>
+<listitem>
+<para>Normal mapping. </para>
+</listitem>
+<listitem>
+<para>Shadow Mapping (allowing to choose between Raw, PCF or Variance Shadow Maps). </para>
+</listitem>
+<listitem>
+<para>Parallax Occlusion mapping. </para>
+</listitem>
+<listitem>
+<para>Screen Space Ambient Occlusion (using Scalable Ambiant Obscurance implementation). </para>
+</listitem>
+<listitem>
+<para>Reflection/Refraction Mapping. </para>
+</listitem>
+<listitem>
+<para>PBR rendering (Metallic and Specular workflows), and Phong rendering. </para>
+</listitem>
+<listitem>
+<para>HDR rendering with various tone mapping operators. </para>
+</listitem>
+<listitem>
+<para>Screen Space Subsurface Scattering (without backlit transmittance yet). </para>
+</listitem>
+<listitem>
+<para>Volumetric Light Scattering for the directional light source, if it projects shadows. </para>
+</listitem>
+<listitem>
+<para>Cascaded Shadow Maps for the directional light source. </para>
+</listitem>
+<listitem>
+<para>Global Illumination, through Light Propagation Volumes or Voxel Cone Tracing. </para>
+</listitem>
+<listitem>
+<para>Frustum culling. </para>
+</listitem>
+<listitem>
+<para>Scene graph. </para>
+</listitem>
+<listitem>
+<para>Modular architecture through plug-ins. </para>
+</listitem>
+<listitem>
+<para>Shaders are generated automatically from pipeline configuration. </para>
+</listitem>
+<listitem>
+<para>Shaders are writable directly from C++ code. </para>
+</listitem>
+<listitem>
+<para>Scenes are described using a text format easily comprehensible and extensible. (<ref refid="d0/d71/a07304" kindref="compound">CSCN File Format</ref>) </para>
+</listitem>
+<listitem>
+<para>Asynchronous (timers) or synchronour (thread) rendering. </para>
+</listitem>
+</itemizedlist>
+<linebreak/>
+ <linebreak/>
+ </para>
+</sect1>
+<sect1 id="index_1plugin">
+<title>Plugins</title>
+<para><itemizedlist>
+<listitem>
+<para>Importer: Allow importing meshes from external formats. </para>
+</listitem>
+<listitem>
+<para>Divider: Allow implementation of mesh subdivision algorithms. </para>
+</listitem>
+<listitem>
+<para>PostEffect: Allow implementation of post-effects. </para>
+</listitem>
+<listitem>
+<para>Generator: Allow meshes and textures procedural generation. </para>
+</listitem>
+<listitem>
+<para>Generic: Allow adding general features to the engine. </para>
+</listitem>
+<listitem>
+<para>ToneMapping: Allow implementation of additional tone mapping operators. </para>
+</listitem>
+</itemizedlist>
+<linebreak/>
+ </para>
+<sect2 id="index_1plugin_importer">
+<title>Importers</title>
+<para><itemizedlist>
+<listitem>
+<para>ASSIMP: Multiple format mesh importer. </para>
+</listitem>
+<listitem>
+<para>PLY: Stanford Polygon library mesh importer. </para>
+</listitem>
+<listitem>
+<para>OBJ: Wavefront OBJ mesh importer. </para>
+</listitem>
+</itemizedlist>
+<linebreak/>
+ </para>
+</sect2>
+<sect2 id="index_1plugin_divider">
+<title>Dividers</title>
+<para><itemizedlist>
+<listitem>
+<para>Loop subdivision surfaces. </para>
+</listitem>
+<listitem>
+<para>Phong tessellation. </para>
+</listitem>
+<listitem>
+<para>PN-Triangles surfaces. </para>
+</listitem>
+</itemizedlist>
+<linebreak/>
+ </para>
+</sect2>
+<sect2 id="index_1plugin_postfx">
+<title>PostEffects</title>
+<para><itemizedlist>
+<listitem>
+<para>Bloom: HDR Bloom implementation. </para>
+</listitem>
+<listitem>
+<para>FilmGrain: To display some grain on the render. </para>
+</listitem>
+<listitem>
+<para>GrayScale. </para>
+</listitem>
+<listitem>
+<para>LightStreaks (using Kawase Light Streaks). </para>
+</listitem>
+<listitem>
+<para>FXAA Antialiasing: fast low quality antialiasing. </para>
+</listitem>
+<listitem>
+<para>SMAA Antialiasing (1X and T2X so far): slower high quality antialiasing. </para>
+</listitem>
+<listitem>
+<para>Linear Motion Blur. </para>
+</listitem>
+</itemizedlist>
+<linebreak/>
+ </para>
+</sect2>
+<sect2 id="index_1plugin_generator">
+<title>Generators</title>
+<para><itemizedlist>
+<listitem>
+<para>DiamondSquareTerrain: to generate terrains inside Castor3D scenes, using diamond-quare algorithm. </para>
+</listitem>
+</itemizedlist>
+<linebreak/>
+ </para>
+</sect2>
+<sect2 id="index_1plugin_generic">
+<title>Generic</title>
+<para><itemizedlist>
+<listitem>
+<para>CastorGUI: to build GUIs inside Castor3D scenes. </para>
+</listitem>
+</itemizedlist>
+<linebreak/>
+ </para>
+</sect2>
+<sect2 id="index_1plugin_tonemap">
+<title>ToneMappings</title>
+<para><itemizedlist>
+<listitem>
+<para>LinearToneMapping: Default tone mapping. </para>
+</listitem>
+<listitem>
+<para>HaarmPieterDuikerToneMapping: Haarm Pieter Duiker tone mapping. </para>
+</listitem>
+<listitem>
+<para>HejlBurgessDawsonToneMapping: Hejl Burgess Dawson (filmic) tone mapping. </para>
+</listitem>
+<listitem>
+<para>ReinhardToneMapping: Reinhard tone mapping. </para>
+</listitem>
+<listitem>
+<para>Uncharted2ToneMapping: Uncharted 2 tone mapping. </para>
+</listitem>
+</itemizedlist>
+<linebreak/>
+ </para>
+</sect2>
+</sect1>
+<sect1 id="index_1other_apps">
+<title>Other applications</title>
+<para><itemizedlist>
+<listitem>
+<para>CastorViewer: A scene viewer based on Castor3D. </para>
+</listitem>
+<listitem>
+<para>CastorMeshConverter: A converter from various mesh files to Castor3D mesh format. </para>
+</listitem>
+<listitem>
+<para>CastorMeshUpgrader: Upgrades from earlier versions of Castor3D mesh format to the latest one. </para>
+</listitem>
+<listitem>
+<para>ImgConverter: Allows you to convert any image file type to XPM or ICO. </para>
+</listitem>
+</itemizedlist>
+<linebreak/>
+ </para>
+</sect1>
+<sect1 id="index_1screenshots">
+<title>Screenshots</title>
+<para><image type="html" name="Cerberus-PBRMR.png"></image>
+ <image type="html" name="Nyra-PBRMR.png"></image>
+ <image type="html" name="Sponza-PBRMR.png"></image>
+ <image type="html" name="Sponza-PBRMR-VCT.png"></image>
+ <image type="html" name="Park-Phong.png"></image>
+ <image type="html" name="Park-PBRMR.png"></image>
+ <image type="html" name="SanMiguel-PBRSG.png"></image>
+ <image type="html" name="SanMiguel-PBRSG-LPV.png"></image>
+ <linebreak/>
+ <linebreak/>
+ Full changelog: <ref refid="da/d1a/a07302" kindref="compound">Change log</ref><linebreak/>
+ </para>
+</sect1>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

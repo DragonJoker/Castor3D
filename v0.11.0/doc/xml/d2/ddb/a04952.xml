@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d2/ddb/a04952" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::HdrConfig</compoundname>
+    <includes local="no">HdrConfig.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/ddb/a04952_1ac8fd9583280cdc34d0a26e1237764a0d" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::HdrConfig::exposure</definition>
+        <argsstring></argsstring>
+        <name>exposure</name>
+        <initializer>{ 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The exposure value. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/HdrConfig.hpp" line="18" column="1" bodyfile="Render/ToneMapping/HdrConfig.hpp" bodystart="18" bodyend="-1"/>
+        <referencedby refid="d5/d9c/a05152_1a3164f41de67e9bb9b4df3e39a3bc4433" compoundref="da/d4e/a01106" startline="264" endline="268">castor3d::Camera::setExposure</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d2/ddb/a04952_1a9d5123b1dbd5da1ebb2517854c23fb26" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::HdrConfig::gamma</definition>
+        <argsstring></argsstring>
+        <name>gamma</name>
+        <initializer>{ 2.2f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The gamma correction value. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/HdrConfig.hpp" line="21" column="1" bodyfile="Render/ToneMapping/HdrConfig.hpp" bodystart="21" bodyend="-1"/>
+        <referencedby refid="d5/d9c/a05152_1af59eaccd54cff1df69b3ef0f406a2e06" compoundref="da/d4e/a01106" startline="270" endline="274">castor3d::Camera::setGamma</referencedby>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/ToneMapping/HdrConfig.hpp" line="14" column="1" bodyfile="Render/ToneMapping/HdrConfig.hpp" bodystart="13" bodyend="22"/>
+    <listofallmembers>
+      <member refid="d2/ddb/a04952_1ac8fd9583280cdc34d0a26e1237764a0d" prot="public" virt="non-virtual"><scope>castor3d::HdrConfig</scope><name>exposure</name></member>
+      <member refid="d2/ddb/a04952_1a9d5123b1dbd5da1ebb2517854c23fb26" prot="public" virt="non-virtual"><scope>castor3d::HdrConfig</scope><name>gamma</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

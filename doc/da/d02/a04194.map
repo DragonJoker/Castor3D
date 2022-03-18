@@ -1,4 +1,9 @@
-<map id="castor3d::PluginException" name="castor3d::PluginException">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,180,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="31,5,155,32"/>
+<map id="castor3d::IndirectLightingPass::Program" name="castor3d::IndirectLightingPass::Program">
+<area shape="rect" id="node1" title=" " alt="" coords="65,421,232,463"/>
+<area shape="rect" id="node2" href="$d8/d0e/a04744.html" title="A non compiled shader module, with its source." alt="" coords="67,317,230,344"/>
+<area shape="rect" id="node3" title=" " alt="" coords="34,206,114,233"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,95,132,136"/>
+<area shape="rect" id="node5" title=" " alt="" coords="141,199,279,240"/>
+<area shape="rect" id="node6" title=" " alt="" coords="157,102,295,129"/>
+<area shape="rect" id="node7" title=" " alt="" coords="207,5,245,32"/>
 </map>

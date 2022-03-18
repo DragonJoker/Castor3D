@@ -1,1158 +1,141 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d9/d87/a04855" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::OpaquePass</compoundname>
-    <basecompoundref refid="df/d7b/a04903" prot="public" virt="non-virtual">castor3d::RenderTechniquePass</basecompoundref>
-    <includes local="no">OpaquePass.hpp</includes>
-      <sectiondef kind="private-static-attrib">
-      <memberdef kind="variable" id="d9/d87/a04855_1a6bb0a877a32dd735c19547590544d51e" prot="private" static="yes" mutable="no">
-        <type>castor::String const</type>
-        <definition>castor::String const castor3d::OpaquePass::Output1</definition>
-        <argsstring></argsstring>
-        <name>Output1</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaquePass.hpp" line="89" column="1" bodyfile="Render/Technique/Opaque/OpaquePass.hpp" bodystart="89" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/d87/a04855_1a443961e6fcaeecca7f3aff1118f9c833" prot="private" static="yes" mutable="no">
-        <type>castor::String const</type>
-        <definition>castor::String const castor3d::OpaquePass::Output2</definition>
-        <argsstring></argsstring>
-        <name>Output2</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaquePass.hpp" line="90" column="1" bodyfile="Render/Technique/Opaque/OpaquePass.hpp" bodystart="90" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/d87/a04855_1a9c97699ff2efb906d64a4f9ce3efabb5" prot="private" static="yes" mutable="no">
-        <type>castor::String const</type>
-        <definition>castor::String const castor3d::OpaquePass::Output3</definition>
-        <argsstring></argsstring>
-        <name>Output3</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaquePass.hpp" line="91" column="1" bodyfile="Render/Technique/Opaque/OpaquePass.hpp" bodystart="91" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/d87/a04855_1a8cfed154bc486329318cae1d7a01f36d" prot="private" static="yes" mutable="no">
-        <type>castor::String const</type>
-        <definition>castor::String const castor3d::OpaquePass::Output4</definition>
-        <argsstring></argsstring>
-        <name>Output4</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaquePass.hpp" line="92" column="1" bodyfile="Render/Technique/Opaque/OpaquePass.hpp" bodystart="92" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/d87/a04855_1a18af2dbba353412ee56b408b800f7be8" prot="private" static="yes" mutable="no">
-        <type>castor::String const</type>
-        <definition>castor::String const castor3d::OpaquePass::Output5</definition>
-        <argsstring></argsstring>
-        <name>Output5</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaquePass.hpp" line="93" column="1" bodyfile="Render/Technique/Opaque/OpaquePass.hpp" bodystart="93" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
+    <compoundname>castor3d::shader::TextureConfigurations</compoundname>
+    <includes local="no">GlslTextureConfiguration.hpp</includes>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d9/d87/a04855_1a2a2817b984bfe921a653263d492e7072" prot="private" static="no" mutable="no">
-        <type>ashes::FrameBufferPtr</type>
-        <definition>ashes::FrameBufferPtr castor3d::OpaquePass::m_frameBuffer</definition>
+      <memberdef kind="variable" id="d9/d87/a04855_1a91e0a79e1bc4fa92e6fe34046e0b03f4" prot="private" static="no" mutable="no">
+        <type>sdw::ShaderWriter &amp;</type>
+        <definition>sdw::ShaderWriter&amp; castor3d::shader::TextureConfigurations::m_writer</definition>
         <argsstring></argsstring>
-        <name>m_frameBuffer</name>
+        <name>m_writer</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::m_writer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaquePass.hpp" line="95" column="1" bodyfile="Render/Technique/Opaque/OpaquePass.hpp" bodystart="95" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="310" column="20" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="310" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d9/d87/a04855_1aebaea175f1903a55c35c65e578cb65e0" prot="private" static="no" mutable="no">
-        <type>ashes::CommandBufferPtr</type>
-        <definition>ashes::CommandBufferPtr castor3d::OpaquePass::m_nodesCommands</definition>
+      <memberdef kind="variable" id="d9/d87/a04855_1ab135b60f39133b9055b915a2ea543dde" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; sdw::ArraySsboT&lt; <ref refid="dd/d3b/a04851" kindref="compound">TextureConfigData</ref> &gt; &gt;</type>
+        <definition>std::unique_ptr&lt; sdw::ArraySsboT&lt; TextureConfigData &gt; &gt; castor3d::shader::TextureConfigurations::m_ssbo</definition>
         <argsstring></argsstring>
-        <name>m_nodesCommands</name>
+        <name>m_ssbo</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::m_ssbo</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaquePass.hpp" line="96" column="1" bodyfile="Render/Technique/Opaque/OpaquePass.hpp" bodystart="96" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="311" column="17" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="311" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d9/d87/a04855_1a6dd61b37030ab8b1ddffef636544c69e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d9/d87/a04855_1a44c56a0f4edf2d83146813096172be84" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::OpaquePass::OpaquePass</definition>
-        <argsstring>(MatrixUbo &amp;matrixUbo, SceneCuller &amp;culler, SsaoConfig const &amp;config)</argsstring>
-        <name>OpaquePass</name>
+        <definition>C3D_API castor3d::shader::TextureConfigurations::TextureConfigurations</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>TextureConfigurations</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::TextureConfigurations</qualifiedname>
         <param>
-          <type><ref refid="d9/dae/a05475" kindref="compound">MatrixUbo</ref> &amp;</type>
-          <declname>matrixUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="dc/d2d/a04211" kindref="compound">SceneCuller</ref> &amp;</type>
-          <declname>culler</declname>
-        </param>
-        <param>
-          <type><ref refid="d6/d12/a04691" kindref="compound">SsaoConfig</ref> const &amp;</type>
-          <declname>config</declname>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">matrixUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The scene matrices UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">culler</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The culler for this pass. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">config</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The SSAO configuration. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaquePass.hpp" line="29" column="1"/>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="301" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d9/d87/a04855_1a9ec01f29e5704908d9c5806c706bfdea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d9/d87/a04855_1aaaaee2d9f57922f83785453ec3f60bcd" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::OpaquePass::~OpaquePass</definition>
-        <argsstring>()</argsstring>
-        <name>~OpaquePass</name>
+        <definition>C3D_API castor3d::shader::TextureConfigurations::TextureConfigurations</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, uint32_t binding, uint32_t set, bool enable=true)</argsstring>
+        <name>TextureConfigurations</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::TextureConfigurations</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enable</declname>
+          <defval>true</defval>
+        </param>
         <briefdescription>
-<para>Destructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaquePass.hpp" line="38" column="1"/>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="302" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d9/d87/a04855_1ae0ea6530a5a1fbc726e8f208d4525fd9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d9/d87/a04855_1ab3b848b58529111840d27b0667299fad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::OpaquePass::initialiseRenderPass</definition>
-        <argsstring>(RenderDevice const &amp;device, OpaquePassResult const &amp;gpResult)</argsstring>
-        <name>initialiseRenderPass</name>
+        <definition>C3D_API void castor3d::shader::TextureConfigurations::declare</definition>
+        <argsstring>(uint32_t binding, uint32_t set)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::declare</qualifiedname>
         <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
+          <type>uint32_t</type>
+          <declname>binding</declname>
         </param>
         <param>
-          <type><ref refid="da/d9f/a04859" kindref="compound">OpaquePassResult</ref> const &amp;</type>
-          <declname>gpResult</declname>
+          <type>uint32_t</type>
+          <declname>set</declname>
         </param>
-        <briefdescription>
-<para>Initialises the render pass. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">gpResult</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The geometry pass buffers. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaquePass.hpp" line="49" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d87/a04855_1a4029b022099f08aade22502862c97438" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::OpaquePass::accept</definition>
-        <argsstring>(RenderTechniqueVisitor &amp;visitor) override</argsstring>
-        <name>accept</name>
-        <reimplements refid="df/d7b/a04903_1a4c9d269118ce29a21fdb17eabd6e9070">accept</reimplements>
-        <param>
-          <type><ref refid="d6/d45/a04907" kindref="compound">RenderTechniqueVisitor</ref> &amp;</type>
-          <declname>visitor</declname>
-        </param>
-        <briefdescription>
-<para>Visitor acceptance function. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername>visitor</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The ... visitor. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaquePass.hpp" line="54" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d87/a04855_1a556181797fe48e7eea32d3f7d08ae300" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Semaphore const  &amp;</type>
-        <definition>C3D_API ashes::Semaphore const&amp; castor3d::OpaquePass::render</definition>
-        <argsstring>(RenderDevice const &amp;device, ashes::Semaphore const &amp;toWait)</argsstring>
-        <name>render</name>
-        <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>ashes::Semaphore const &amp;</type>
-          <declname>toWait</declname>
-        </param>
-        <briefdescription>
-<para>Renders transparent nodes. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">toWait</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The semaphore from the previous render pass. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaquePass.hpp" line="65" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d87/a04855_1a39ad9b2e93e31212a87f08dbde82f172" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/dd1/a01458_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref></type>
-        <definition>C3D_API TextureFlags castor3d::OpaquePass::getTexturesMask</definition>
-        <argsstring>() const override</argsstring>
-        <name>getTexturesMask</name>
-        <reimplements refid="d1/d48/a04575_1abe50f4442fa70138e392be9d1bfba637">getTexturesMask</reimplements>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>name Getters. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaquePass.hpp" line="68" column="1"/>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="306" column="14"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d9/d87/a04855_1a33ab6f093dbe14d4ddb66e430b00a0f1" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::OpaquePass::doUpdateFlags</definition>
-        <argsstring>(PipelineFlags &amp;flags) const override</argsstring>
-        <name>doUpdateFlags</name>
-        <reimplements refid="d1/d48/a04575_1a5d3dc93485a69008afb0170312d11e11">doUpdateFlags</reimplements>
+      <memberdef kind="function" id="d9/d87/a04855_1a042521e9d65e8a17762a04bae82f33fd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dd/d3b/a04851" kindref="compound">TextureConfigData</ref></type>
+        <definition>C3D_API TextureConfigData castor3d::shader::TextureConfigurations::getTextureConfiguration</definition>
+        <argsstring>(sdw::UInt const &amp;index) const</argsstring>
+        <name>getTextureConfiguration</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::getTextureConfiguration</qualifiedname>
         <param>
-          <type><ref refid="d1/dce/a04559" kindref="compound">PipelineFlags</ref> &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Modifies the given flags to make them match the render pass requirements. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="inout">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaquePass.hpp" line="71" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d87/a04855_1a3e2b1e692468c83c356b96a897912feb" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::OpaquePass::doUpdatePipeline</definition>
-        <argsstring>(RenderPipeline &amp;pipeline) override</argsstring>
-        <name>doUpdatePipeline</name>
-        <reimplements refid="d1/d48/a04575_1a698e64428c216acae1ca725373359689">doUpdatePipeline</reimplements>
-        <param>
-          <type><ref refid="dd/dec/a04595" kindref="compound">RenderPipeline</ref> &amp;</type>
-          <declname>pipeline</declname>
-        </param>
-        <briefdescription>
-<para>Updates the pipeline. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">pipeline</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render pipeline. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaquePass.hpp" line="72" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d87/a04855_1a724ddd2686e1759df808c548a2d8d320" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type>ashes::PipelineColorBlendStateCreateInfo</type>
-        <definition>ashes::PipelineColorBlendStateCreateInfo castor3d::OpaquePass::doCreateBlendState</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
-        <name>doCreateBlendState</name>
-        <reimplements refid="d1/d48/a04575_1aee56eed63ba3932ab498d5b7a10a5d41">doCreateBlendState</reimplements>
-        <param>
-          <type><ref refid="d1/dce/a04559" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Creates the colour blend state. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaquePass.hpp" line="73" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d87/a04855_1a2ce6dd0e42f5b976f2e4ab3d8680b041" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::OpaquePass::doFillTextureDescriptor</definition>
-        <argsstring>(ashes::DescriptorSetLayout const &amp;layout, uint32_t &amp;index, BillboardListRenderNode &amp;nodes, ShadowMapLightTypeArray const &amp;shadowMaps) override</argsstring>
-        <name>doFillTextureDescriptor</name>
-        <reimplements refid="d1/d48/a04575_1a2ff8b6ee2139a5f6dd562c74d94a913a">doFillTextureDescriptor</reimplements>
-        <param>
-          <type>ashes::DescriptorSetLayout const &amp;</type>
-          <declname>layout</declname>
-        </param>
-        <param>
-          <type>uint32_t &amp;</type>
+          <type>sdw::UInt const &amp;</type>
           <declname>index</declname>
         </param>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1a384f6fd61b75ba3fbac28239a79872cd" kindref="member">BillboardListRenderNode</ref> &amp;</type>
-          <declname>node</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1ad3137fb4b01f8deea8b1e20522ec8e6c" kindref="member">ShadowMapLightTypeArray</ref> const &amp;</type>
-          <declname>shadowMaps</declname>
-        </param>
         <briefdescription>
-<para>Initialises the descriptor set of a billboard node. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">layout</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The descriptors layout. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="inout">index</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The texture index, updated to the next available. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">node</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The node. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">shadowMaps</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The shadow maps. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaquePass.hpp" line="74" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d87/a04855_1aca1dedc12185f8c2936f0cc90f605061" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::OpaquePass::doFillTextureDescriptor</definition>
-        <argsstring>(ashes::DescriptorSetLayout const &amp;layout, uint32_t &amp;index, SubmeshRenderNode &amp;nodes, ShadowMapLightTypeArray const &amp;shadowMaps) override</argsstring>
-        <name>doFillTextureDescriptor</name>
-        <reimplements refid="d1/d48/a04575_1a15b8a481485c2184f315c4ba4131ec3b">doFillTextureDescriptor</reimplements>
-        <param>
-          <type>ashes::DescriptorSetLayout const &amp;</type>
-          <declname>layout</declname>
-        </param>
-        <param>
-          <type>uint32_t &amp;</type>
-          <declname>index</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1ae05cd0daba83f842b870aa2eb08b1b91" kindref="member">SubmeshRenderNode</ref> &amp;</type>
-          <declname>node</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1ad3137fb4b01f8deea8b1e20522ec8e6c" kindref="member">ShadowMapLightTypeArray</ref> const &amp;</type>
-          <declname>shadowMaps</declname>
-        </param>
-        <briefdescription>
-<para>Initialises the descriptor set of a morphing node. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">layout</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The descriptors layout. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="inout">index</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The texture index, updated to the next available. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">node</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The node. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">shadowMaps</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The shadow maps. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaquePass.hpp" line="78" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d87/a04855_1a64901a80bed9459d6d228c25458a06ba" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type>ashes::VkDescriptorSetLayoutBindingArray</type>
-        <definition>ashes::VkDescriptorSetLayoutBindingArray castor3d::OpaquePass::doCreateTextureBindings</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
-        <name>doCreateTextureBindings</name>
-        <reimplements refid="d1/d48/a04575_1add71461e455e60430c682a664e5ff163">doCreateTextureBindings</reimplements>
-        <param>
-          <type><ref refid="d1/dce/a04559" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Creates the common textures descriptor layout bindings. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaquePass.hpp" line="82" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d87/a04855_1ab23681f74e85b38c2137edcb0c5989e6" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d7/dd1/a01458_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
-        <definition>ShaderPtr castor3d::OpaquePass::doGetGeometryShaderSource</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
-        <name>doGetGeometryShaderSource</name>
-        <reimplements refid="d1/d48/a04575_1a29139e48d35633ad218f6ecc9e52c435">doGetGeometryShaderSource</reimplements>
-        <param>
-          <type><ref refid="d1/dce/a04559" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves the geometry shader source matching the given flags. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaquePass.hpp" line="83" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d87/a04855_1adb3956fe08bb49a6c8e0ca6e8a7eb67e" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d7/dd1/a01458_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
-        <definition>ShaderPtr castor3d::OpaquePass::doGetPhongPixelShaderSource</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
-        <name>doGetPhongPixelShaderSource</name>
-        <reimplements refid="d1/d48/a04575_1a64c67405e2954877ce96d89c3bd6b0ad">doGetPhongPixelShaderSource</reimplements>
-        <param>
-          <type><ref refid="d1/dce/a04559" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves the pixel shader source matching the given flags. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaquePass.hpp" line="84" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d87/a04855_1a2bd79c05d264235b205cd806d664e3f7" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d7/dd1/a01458_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
-        <definition>ShaderPtr castor3d::OpaquePass::doGetPbrMRPixelShaderSource</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
-        <name>doGetPbrMRPixelShaderSource</name>
-        <reimplements refid="d1/d48/a04575_1a840611696fdbf0542000710c0191781f">doGetPbrMRPixelShaderSource</reimplements>
-        <param>
-          <type><ref refid="d1/dce/a04559" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves the pixel shader source matching the given flags. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaquePass.hpp" line="85" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d87/a04855_1a74ee199d3f15e3be7e1bfff00abc3123" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d7/dd1/a01458_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
-        <definition>ShaderPtr castor3d::OpaquePass::doGetPbrSGPixelShaderSource</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
-        <name>doGetPbrSGPixelShaderSource</name>
-        <reimplements refid="d1/d48/a04575_1a26b38ac7476d3a153faa4b18573f3744">doGetPbrSGPixelShaderSource</reimplements>
-        <param>
-          <type><ref refid="d1/dce/a04559" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves the pixel shader source matching the given flags. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/OpaquePass.hpp" line="86" column="1"/>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="307" column="27"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="2355">
-        <label>castor3d::RenderTechniquePass</label>
-        <link refid="df/d7b/a04903"/>
-        <childnode refid="2356" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2358">
-        <label>Named</label>
-      </node>
-      <node id="2356">
-        <label>castor3d::SceneRenderPass</label>
-        <link refid="d1/d48/a04575"/>
-        <childnode refid="2357" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2358" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2357">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="2354">
-        <label>castor3d::OpaquePass</label>
-        <link refid="d9/d87/a04855"/>
-        <childnode refid="2355" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="2375">
-        <label>castor3d::RenderQueue</label>
-        <link refid="d2/de5/a04599"/>
-        <childnode refid="2376" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2372">
-        <label>castor3d::SceneCuller</label>
-        <link refid="dc/d2d/a04211"/>
-      </node>
-      <node id="2371">
-        <label>castor3d::RenderSystem</label>
-        <link refid="d6/d55/a04603"/>
-        <childnode refid="2362" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2388">
-        <label>castor3d::TextureUnit</label>
-        <link refid="d8/dd7/a02643"/>
-        <childnode refid="2389" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2391">
-        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
-        <childnode refid="2367" relation="template-instance">
-          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2368">
-        <label>K</label>
-      </node>
-      <node id="2369">
-        <label>T</label>
-      </node>
-      <node id="2397">
-        <label>castor3d::Camera</label>
-        <link refid="d0/dcf/a05131"/>
-        <childnode refid="2398" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2400">
-        <label>castor3d::SceneNode</label>
-        <link refid="d8/dd0/a05235"/>
-        <childnode refid="2401" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2402" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2363" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2394">
-        <label>castor3d::SsaoConfig</label>
-        <link refid="d6/d12/a04691"/>
-      </node>
-      <node id="2387">
-        <label>castor3d::VoxelizerUbo</label>
-        <link refid="d6/df6/a05611"/>
-      </node>
-      <node id="2382">
-        <label>castor3d::GBufferT&lt; LpvTexture &gt;</label>
-        <link refid="de/d93/a04235"/>
-        <childnode refid="2383" relation="private-inheritance">
-        </childnode>
-        <childnode refid="2384" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="2386" relation="template-instance">
-          <edgelabel>&lt; LpvTexture &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2402">
-        <label>castor::OwnedBy&lt; Scene &gt;</label>
-      </node>
-      <node id="2376">
-        <label>castor::OwnedBy&lt; SceneRenderPass &gt;</label>
-      </node>
-      <node id="2367">
-        <label>std::map&lt; K, T &gt;</label>
-        <childnode refid="2368" relation="usage">
-          <edgelabel>keys</edgelabel>
-        </childnode>
-        <childnode refid="2369" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="2366">
-        <label>castor3d::UniformBufferOffsetT&lt; DataT &gt;</label>
-        <link refid="d2/dd2/a02279"/>
-      </node>
-      <node id="2401">
-        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
-      </node>
-      <node id="2403">
-        <label>castor3d::LayeredLpvGridConfigUbo</label>
-        <link refid="d3/dd4/a05455"/>
-        <childnode refid="2378" relation="usage">
-          <edgelabel>LayeredLpvGridData</edgelabel>
-          <edgelabel>LayeredLpvConfig</edgelabel>
-        </childnode>
-      </node>
-      <node id="2360">
-        <label>castor3d::RenderTechniquePass</label>
-        <link refid="df/d7b/a04903"/>
-        <childnode refid="2361" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2377" relation="usage">
-          <edgelabel>m_lpvConfigUbo</edgelabel>
-        </childnode>
-        <childnode refid="2380" relation="usage">
-          <edgelabel>m_sceneNode</edgelabel>
-        </childnode>
-        <childnode refid="2381" relation="usage">
-          <edgelabel>m_lpvResult</edgelabel>
-        </childnode>
-        <childnode refid="2387" relation="usage">
-          <edgelabel>m_vctConfigUbo</edgelabel>
-        </childnode>
-        <childnode refid="2388" relation="usage">
-          <edgelabel>m_vctFirstBounce</edgelabel>
-          <edgelabel>m_vctSecondaryBounce</edgelabel>
-        </childnode>
-        <childnode refid="2394" relation="usage">
-          <edgelabel>m_ssaoConfig</edgelabel>
-        </childnode>
-        <childnode refid="2395" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-        <childnode refid="2397" relation="usage">
-          <edgelabel>m_camera</edgelabel>
-        </childnode>
-        <childnode refid="2403" relation="usage">
-          <edgelabel>m_llpvConfigUbo</edgelabel>
-        </childnode>
-      </node>
-      <node id="2398">
-        <label>castor3d::MovableObject</label>
-        <link refid="dc/d66/a05171"/>
-        <childnode refid="2399" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2363" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2400" relation="usage">
-          <edgelabel>m_sceneNode</edgelabel>
-        </childnode>
-        <childnode refid="2395" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-      </node>
-      <node id="2363">
-        <label>Named</label>
-      </node>
-      <node id="2365">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelInstancesUboConfiguration &gt;</label>
-        <link refid="d2/dd2/a02279"/>
-        <childnode refid="2366" relation="template-instance">
-          <edgelabel>&lt; castor3d::ModelInstancesUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2389">
-        <label>castor3d::AnimableT&lt; Engine &gt;</label>
-        <link refid="de/d0a/a02015"/>
-        <childnode refid="2390" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2391" relation="usage">
-          <edgelabel>m_animations</edgelabel>
-        </childnode>
-        <childnode refid="2392" relation="template-instance">
-          <edgelabel>&lt; Engine &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2390">
-        <label>castor::OwnedBy&lt; Engine  &gt;</label>
-      </node>
-      <node id="2385">
-        <label>castor::Unique&lt; Engine &gt;</label>
-      </node>
-      <node id="2377">
-        <label>castor3d::LpvGridConfigUbo</label>
-        <link refid="da/d34/a05463"/>
-        <childnode refid="2378" relation="usage">
-          <edgelabel>LpvGridConfig</edgelabel>
-          <edgelabel>LpvGridData</edgelabel>
-        </childnode>
-      </node>
-      <node id="2361">
-        <label>castor3d::SceneRenderPass</label>
-        <link refid="d1/d48/a04575"/>
-        <childnode refid="2362" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2363" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2364" relation="usage">
-          <edgelabel>m_modelsInstances</edgelabel>
-        </childnode>
-        <childnode refid="2370" relation="usage">
-          <edgelabel>m_sceneUbo</edgelabel>
-        </childnode>
-        <childnode refid="2371" relation="usage">
-          <edgelabel>m_renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="2372" relation="usage">
-          <edgelabel>m_culler</edgelabel>
-        </childnode>
-        <childnode refid="2373" relation="usage">
-          <edgelabel>m_timer</edgelabel>
-        </childnode>
-        <childnode refid="2374" relation="usage">
-          <edgelabel>m_matrixUbo</edgelabel>
-        </childnode>
-        <childnode refid="2375" relation="usage">
-          <edgelabel>m_renderQueue</edgelabel>
-        </childnode>
-      </node>
-      <node id="2379">
-        <label>std::basic_string&lt; char &gt;</label>
-      </node>
-      <node id="2370">
-        <label>castor3d::SceneUbo</label>
-        <link refid="d0/d2f/a05507"/>
-      </node>
-      <node id="2392">
-        <label>castor3d::AnimableT&lt; AnimableHanlerT &gt;</label>
-        <link refid="de/d0a/a02015"/>
-        <childnode refid="2393" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2391" relation="usage">
-          <edgelabel>m_animations</edgelabel>
-        </childnode>
-      </node>
-      <node id="2396">
-        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
-      </node>
-      <node id="2399">
-        <label>Animable</label>
-        <link refid="de/d0a/a02015"/>
-        <childnode refid="2393" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2391" relation="usage">
-          <edgelabel>m_animations</edgelabel>
-        </childnode>
-      </node>
-      <node id="2373">
-        <label>castor3d::RenderPassTimer</label>
-        <link refid="d7/db9/a04591"/>
-        <childnode refid="2363" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2393">
-        <label>castor::OwnedBy&lt; AnimableHanlerT &gt;</label>
-      </node>
-      <node id="2362">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="2381">
-        <label>castor3d::LightVolumePassResult</label>
-        <link refid="dc/d23/a04275"/>
-        <childnode refid="2382" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2384">
-        <label>castor3d::Engine</label>
-        <link refid="d0/d7c/a02499"/>
-        <childnode refid="2385" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2386">
-        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
-        <link refid="de/d93/a04235"/>
-        <childnode refid="2383" relation="private-inheritance">
-        </childnode>
-        <childnode refid="2384" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-      </node>
-      <node id="2359">
-        <label>castor3d::OpaquePass</label>
-        <link refid="d9/d87/a04855"/>
-        <childnode refid="2360" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2383">
-        <label>castor3d::GBufferBase</label>
-        <link refid="d7/da1/a04231"/>
-        <childnode refid="2363" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2395">
-        <label>castor3d::Scene</label>
-        <link refid="d7/d00/a05223"/>
-        <childnode refid="2396" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2362" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2363" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2374">
-        <label>castor3d::MatrixUbo</label>
-        <link refid="d9/dae/a05475"/>
-      </node>
-      <node id="2364">
-        <label>std::map&lt; size_t, castor3d::UniformBufferOffsetT&lt; castor3d::ModelInstancesUboConfiguration &gt; &gt;</label>
-        <childnode refid="2365" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-        <childnode refid="2367" relation="template-instance">
-          <edgelabel>&lt; size_t, castor3d::UniformBufferOffsetT&lt; castor3d::ModelInstancesUboConfiguration &gt; &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2378">
-        <label>std::string</label>
-        <childnode refid="2379" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2380">
-        <label>castor3d::SceneRenderNode</label>
-        <link refid="de/dc3/a04319"/>
-      </node>
-    </collaborationgraph>
-    <location file="Render/Technique/Opaque/OpaquePass.hpp" line="15" column="1" bodyfile="Render/Technique/Opaque/OpaquePass.hpp" bodystart="13" bodyend="97"/>
+    <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="298" column="1" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="299" bodyend="312"/>
     <listofallmembers>
-      <member refid="d9/d87/a04855_1a4029b022099f08aade22502862c97438" prot="public" virt="virtual"><scope>castor3d::OpaquePass</scope><name>accept</name></member>
-      <member refid="d1/d48/a04575_1ac5627bf8072801b914f5a7a8fde7c4ef" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>cleanup</name></member>
-      <member refid="d1/d48/a04575_1a7534bc2c8e7a5e8812685d23cf92da18" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>createBillboardNode</name></member>
-      <member refid="d1/d48/a04575_1a85a295a43ea151d07bbb59a983fc0a9b" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>createBlendState</name></member>
-      <member refid="d1/d48/a04575_1aef15f688cd35f6b8b50970e7b5f57d1b" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>createMorphingNode</name></member>
-      <member refid="d1/d48/a04575_1a1f6309ff1990fcf752d1b1fc4162707e" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>createSkinningNode</name></member>
-      <member refid="d1/d48/a04575_1ad06a7b233133bd72a5f40a6309bbb636" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>createStaticNode</name></member>
-      <member refid="d1/d48/a04575_1acfc7eaded98ff40bb227979eb6f56274" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>DistanceSortedNodeMap</name></member>
-      <member refid="df/d7b/a04903_1a281c6db6df63bc04b4656377b453a571" prot="protected" virt="virtual"><scope>castor3d::OpaquePass</scope><name>doCleanup</name></member>
-      <member refid="d1/d48/a04575_1a5ad44dd6ff6eff2ff3ef28ffce50790d" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>doCopyNodesBones</name></member>
-      <member refid="d1/d48/a04575_1af6a1dcd4de30a16371ff2801ae10c23a" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>doCopyNodesBones</name></member>
-      <member refid="d1/d48/a04575_1ac7e8cea34069461a25c5dce78ad4133d" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>doCopyNodesMatrices</name></member>
-      <member refid="d1/d48/a04575_1abedc9556fe34264878d1175e4c5dd76d" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>doCopyNodesMatrices</name></member>
-      <member refid="d1/d48/a04575_1a8ea69998caa9d7ccc3c86d5fd5b4f0f0" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>doCopyNodesMatrices</name></member>
-      <member refid="d1/d48/a04575_1a6bce0687b325c3413c94465655611170" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>doCopyNodesMatrices</name></member>
-      <member refid="d9/d87/a04855_1a724ddd2686e1759df808c548a2d8d320" prot="private" virt="virtual"><scope>castor3d::OpaquePass</scope><name>doCreateBlendState</name></member>
-      <member refid="d1/d48/a04575_1ab989a2da21f70c26e1fed17823e39af6" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>doCreatePassRenderNode</name></member>
-      <member refid="d1/d48/a04575_1a9bf6b45209c8b79cccfa152d51b3b144" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>doCreateSceneRenderNode</name></member>
-      <member refid="d9/d87/a04855_1a64901a80bed9459d6d228c25458a06ba" prot="private" virt="virtual"><scope>castor3d::OpaquePass</scope><name>doCreateTextureBindings</name></member>
-      <member refid="df/d7b/a04903_1aaf8bc2adc1ec263f60686e8cbd6705c8" prot="protected" virt="virtual"><scope>castor3d::OpaquePass</scope><name>doCreateUboBindings</name></member>
-      <member refid="d9/d87/a04855_1a2ce6dd0e42f5b976f2e4ab3d8680b041" prot="private" virt="virtual"><scope>castor3d::OpaquePass</scope><name>doFillTextureDescriptor</name></member>
-      <member refid="d9/d87/a04855_1aca1dedc12185f8c2936f0cc90f605061" prot="private" virt="virtual"><scope>castor3d::OpaquePass</scope><name>doFillTextureDescriptor</name></member>
-      <member refid="d1/d48/a04575_1adc154d1a476245fee3c7a997e51018ae" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>doGetBackPipelines</name></member>
-      <member refid="d1/d48/a04575_1a31fa7bcde80cfbdcb6acce0810df198e" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>doGetBackPipelines</name></member>
-      <member refid="d1/d48/a04575_1a1f4d8c2e2d67d3686c1059e189ab2d95" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>doGetFrontPipelines</name></member>
-      <member refid="d1/d48/a04575_1ab11482c4f9eb0c4a7d91af6681bc558d" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>doGetFrontPipelines</name></member>
-      <member refid="d9/d87/a04855_1ab23681f74e85b38c2137edcb0c5989e6" prot="private" virt="virtual"><scope>castor3d::OpaquePass</scope><name>doGetGeometryShaderSource</name></member>
-      <member refid="d9/d87/a04855_1a2bd79c05d264235b205cd806d664e3f7" prot="private" virt="virtual"><scope>castor3d::OpaquePass</scope><name>doGetPbrMRPixelShaderSource</name></member>
-      <member refid="d9/d87/a04855_1a74ee199d3f15e3be7e1bfff00abc3123" prot="private" virt="virtual"><scope>castor3d::OpaquePass</scope><name>doGetPbrSGPixelShaderSource</name></member>
-      <member refid="d9/d87/a04855_1adb3956fe08bb49a6c8e0ca6e8a7eb67e" prot="private" virt="virtual"><scope>castor3d::OpaquePass</scope><name>doGetPhongPixelShaderSource</name></member>
-      <member refid="d1/d48/a04575_1a4b807ea9d74d5f1ccaba4b29e78c8085" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>doGetProgram</name></member>
-      <member refid="df/d7b/a04903_1a58e4f7398f67bbfff2c97dc6e0d1549b" prot="protected" virt="virtual"><scope>castor3d::OpaquePass</scope><name>doGetVertexShaderSource</name></member>
-      <member refid="d1/d48/a04575_1a01dba0c138042186e5976fd73e716fc5" prot="protected" virt="virtual"><scope>castor3d::OpaquePass</scope><name>doPrepareBackPipeline</name></member>
-      <member refid="d1/d48/a04575_1ab5eabfab3b395ee4a59d0302b0e245d1" prot="protected" virt="virtual"><scope>castor3d::OpaquePass</scope><name>doPrepareFrontPipeline</name></member>
-      <member refid="d1/d48/a04575_1a1f6449a6facd708b63468e0cf2395133" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>doUpdate</name></member>
-      <member refid="d1/d48/a04575_1a8daee9fd51dd6295fcfde8f29d9b0215" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>doUpdate</name></member>
-      <member refid="d1/d48/a04575_1accb2dd43ffa84bee0d475a1f39135d2a" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>doUpdate</name></member>
-      <member refid="d1/d48/a04575_1a42af41141686d6979c7f14d427b2b978" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>doUpdate</name></member>
-      <member refid="d1/d48/a04575_1a8130e8bcfe91063cf2589979d4381e73" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>doUpdate</name></member>
-      <member refid="d1/d48/a04575_1ab524ba33c1aaec1b9f95ab64b8efaab5" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>doUpdate</name></member>
-      <member refid="d1/d48/a04575_1a8e02e08b5f5e4065d583926ae5a2b313" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>doUpdate</name></member>
-      <member refid="d1/d48/a04575_1ae907440fd9c2237ba4bb5a4dec97a898" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>doUpdate</name></member>
-      <member refid="d1/d48/a04575_1ab0c1a3251b5af55708ad6b6a13307fa6" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>doUpdate</name></member>
-      <member refid="d1/d48/a04575_1acc81b152f8a75a0006f933aa9ad1c35b" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>doUpdate</name></member>
-      <member refid="d1/d48/a04575_1ad95120cc3a5f5ae2566518fbfd1e96b1" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>doUpdate</name></member>
-      <member refid="d1/d48/a04575_1abcc866dd44044031e30ed73d47357ed0" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>doUpdate</name></member>
-      <member refid="d1/d48/a04575_1a7b644b338ea6bbbffec7ed1cf4936a38" prot="protected" virt="virtual"><scope>castor3d::OpaquePass</scope><name>doUpdate</name></member>
-      <member refid="d9/d87/a04855_1a33ab6f093dbe14d4ddb66e430b00a0f1" prot="private" virt="virtual"><scope>castor3d::OpaquePass</scope><name>doUpdateFlags</name></member>
-      <member refid="d9/d87/a04855_1a3e2b1e692468c83c356b96a897912feb" prot="private" virt="virtual"><scope>castor3d::OpaquePass</scope><name>doUpdatePipeline</name></member>
-      <member refid="d1/d48/a04575_1a8dd34d9bcfcbf1cc93c73d633e26b375" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>forceTwoSided</name></member>
-      <member refid="d1/d48/a04575_1abcf02ee3b5e0f4dbfb0c9b5cf22a3245" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>getCommandBuffer</name></member>
-      <member refid="d1/d48/a04575_1a9ec598bacebe135008057204f4b7e498" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>getCuller</name></member>
-      <member refid="d1/d48/a04575_1ab06deeaf325f047f97f0fdd046b1db9a" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>getCuller</name></member>
-      <member refid="d1/d48/a04575_1ad17ff2b38eb4b3323973a04816eca7a9" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>getGeometryShaderSource</name></member>
-      <member refid="d1/d48/a04575_1ae964287f47d4145776448a31cb9a6ccd" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>getInstanceMult</name></member>
-      <member refid="d1/d48/a04575_1a283dc741d44f730b657f153ee8c0b21d" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>getMatrixUbo</name></member>
-      <member refid="d1/d48/a04575_1a3f2e595dabdcea8b9668d591a5e26879" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>getPipelineBack</name></member>
-      <member refid="d1/d48/a04575_1a9ee5e22f4b636f7d1eb3dc7993cc23a4" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>getPipelineFront</name></member>
-      <member refid="d1/d48/a04575_1a6f6289ae6913449d6cb3cb7a1ae64976" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>getPipelinesCount</name></member>
-      <member refid="d1/d48/a04575_1a32ad22d6a16a83d89a3a888599bf19ed" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>getPixelShaderSource</name></member>
-      <member refid="d1/d48/a04575_1af9a616bf4b5e1bf848d4a7783cff5dcf" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>getRenderPass</name></member>
-      <member refid="d1/d48/a04575_1a9ce55bbe9de899304219df9a29869ac2" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>getSceneUbo</name></member>
-      <member refid="d1/d48/a04575_1ad5bf1e846317bf671e0cac4118922226" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>getSceneUbo</name></member>
-      <member refid="df/d7b/a04903_1a7fa2f3526158ff47ac18cf2fa563edb8" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>getSemaphore</name></member>
-      <member refid="d9/d87/a04855_1a39ad9b2e93e31212a87f08dbde82f172" prot="public" virt="virtual"><scope>castor3d::OpaquePass</scope><name>getTexturesMask</name></member>
-      <member refid="d1/d48/a04575_1ab21b006fe9daf0ae6172c17f076c5f85" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>getTimer</name></member>
-      <member refid="d1/d48/a04575_1a70c70fcde770cfa3efeaba683a11cbe4" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>getTimer</name></member>
-      <member refid="d1/d48/a04575_1a2d99705d33fb3391c2556e0c484d6ab8" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>getVertexShaderSource</name></member>
-      <member refid="d1/d48/a04575_1afaa168a458700f72a3365a1f4c550c55" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>hasNodes</name></member>
-      <member refid="df/d7b/a04903_1a7087dd96e88ccce71594bda01521d49d" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>initialise</name></member>
-      <member refid="df/d7b/a04903_1a5d25691aefc33b304bc4a10b7fe5d474" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>initialise</name></member>
-      <member refid="d1/d48/a04575_1a659c1c103b9db5a461c77a6c0417be1b" prot="public" virt="non-virtual" ambiguityscope="castor3d::SceneRenderPass::"><scope>castor3d::OpaquePass</scope><name>initialise</name></member>
-      <member refid="d1/d48/a04575_1aa19a90dd2842009db8b987e205272135" prot="public" virt="non-virtual" ambiguityscope="castor3d::SceneRenderPass::"><scope>castor3d::OpaquePass</scope><name>initialise</name></member>
-      <member refid="d9/d87/a04855_1ae0ea6530a5a1fbc726e8f208d4525fd9" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>initialiseRenderPass</name></member>
-      <member refid="d1/d48/a04575_1a3206b3416f9f404253530cd6a8bcf39d" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>initialiseTextureDescriptor</name></member>
-      <member refid="d1/d48/a04575_1a19fdc14553d98acdae5243a15a009b0e" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>initialiseTextureDescriptor</name></member>
-      <member refid="d1/d48/a04575_1a9f7a16a74d188c71932474d2dfabd496" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>initialiseTextureDescriptor</name></member>
-      <member refid="d1/d48/a04575_1a6293db061efb0ed860e247a10373b25b" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>initialiseTextureDescriptor</name></member>
-      <member refid="d1/d48/a04575_1a244414e5446292f40316010853b25a85" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>initialiseTextureDescriptor</name></member>
-      <member refid="d1/d48/a04575_1a80f92f9b5d2ac1396870e4a19d88baaa" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>initialiseTextureDescriptor</name></member>
-      <member refid="d1/d48/a04575_1a41e1f148667ede6bf4a4b15b63edbd09" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>initialiseUboDescriptor</name></member>
-      <member refid="d1/d48/a04575_1a1566db0372f6d6a3db34efc6c469cd26" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>initialiseUboDescriptor</name></member>
-      <member refid="d1/d48/a04575_1a6eb27cf641fd25efae02250beae221ac" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>initialiseUboDescriptor</name></member>
-      <member refid="d1/d48/a04575_1a8e22a05fc6dbb5c7a99030c0a688cc15" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>initialiseUboDescriptor</name></member>
-      <member refid="d1/d48/a04575_1a174e24b5897213c0dda6e3fcfb4d90d5" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>initialiseUboDescriptor</name></member>
-      <member refid="d1/d48/a04575_1ab6ccf8272797a7df98ad6dc8c7c43706" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>initialiseUboDescriptor</name></member>
-      <member refid="d1/d48/a04575_1a912328721eae90138599880d76a309ae" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>isDirty</name></member>
-      <member refid="d1/d48/a04575_1a4bac800c4178729d7e6c2324eb126fd6" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>isOrderIndependent</name></member>
-      <member refid="df/d7b/a04903_1a561fc478bc6c7a8929c0ccd8357d0ac7" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_camera</name></member>
-      <member refid="d1/d48/a04575_1aa7fc94ef9d99bc777795fb27941d7c65" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_category</name></member>
-      <member refid="d1/d48/a04575_1a16c632e89f0628620bcf01a70d520b2d" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_culler</name></member>
-      <member refid="df/d7b/a04903_1a269923719047d7da20f4a6e264461bae" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_environment</name></member>
-      <member refid="df/d7b/a04903_1ad3107dc97f3d953d13c47f44b59edbd0" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_finished</name></member>
-      <member refid="d1/d48/a04575_1aa9df6fd78c7eb9ca9b59c10574776085" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_forceTwoSided</name></member>
-      <member refid="d9/d87/a04855_1a2a2817b984bfe921a653263d492e7072" prot="private" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_frameBuffer</name></member>
-      <member refid="d1/d48/a04575_1a6e274505905d565cac4f9d6743b0417d" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_index</name></member>
-      <member refid="d1/d48/a04575_1afe43990c332123ca5bcaaa12e2204ff5" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_instanceMult</name></member>
-      <member refid="d1/d48/a04575_1ac70af3d0c68adfc6fa7ec2f68d5b6f12" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_isDirty</name></member>
-      <member refid="df/d7b/a04903_1a9b457c9f92302ebfec621d6198af2ae1" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_llpvConfigUbo</name></member>
-      <member refid="df/d7b/a04903_1a4df75ae519c2c6695914fe8f9c618944" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_lpvConfigUbo</name></member>
-      <member refid="df/d7b/a04903_1a0da52e609494b66e161f6cf5d0d202ce" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_lpvResult</name></member>
-      <member refid="d1/d48/a04575_1a6b0f370e15e18a3a554c56b09fba85b4" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_matrixUbo</name></member>
-      <member refid="d1/d48/a04575_1a927f5ac447cecf2b3419ce9501632fd7" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_mode</name></member>
-      <member refid="d1/d48/a04575_1a923ae0f7686d6ef4c9a27f0799ca62c8" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_modelsInstances</name></member>
-      <member refid="d9/d87/a04855_1aebaea175f1903a55c35c65e578cb65e0" prot="private" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_nodesCommands</name></member>
-      <member refid="d1/d48/a04575_1a898939bc8fc037bb32daebe391e6263b" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_oit</name></member>
-      <member refid="d1/d48/a04575_1a5faf1387a50606631d9eccf95060f84a" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_ownTimer</name></member>
-      <member refid="d1/d48/a04575_1a6f215acabcb9564bc85f30f8abeaba56" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_renderPass</name></member>
-      <member refid="d1/d48/a04575_1a3fd80e792cc2f052add8f252b531c0e2" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_renderQueue</name></member>
-      <member refid="d1/d48/a04575_1a1513ba71b682375fed01e9819105c894" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_renderSystem</name></member>
-      <member refid="df/d7b/a04903_1a97ef9757bc87714bf0d7f61594a10dc1" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_scene</name></member>
-      <member refid="df/d7b/a04903_1aa7a5ba8ef4a7a31a7585322ce2f4f17f" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_sceneNode</name></member>
-      <member refid="d1/d48/a04575_1aa623f3557914bcc6e2e8cf058da1c5e5" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_sceneUbo</name></member>
-      <member refid="d1/d48/a04575_1ab4b6ee7f462854794ed9e3fccdc5b10f" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_size</name></member>
-      <member refid="df/d7b/a04903_1a13bfc94b8af871d1e1bca1268d921397" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_ssaoConfig</name></member>
-      <member refid="d1/d48/a04575_1a729739080d9153cd9ce71129b909a869" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_timer</name></member>
-      <member refid="df/d7b/a04903_1a2635c15545bce3cfe1f8a71698fc8286" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_vctConfigUbo</name></member>
-      <member refid="df/d7b/a04903_1ad1f6e25e29d6fab2aefab5c09dacbddb" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_vctFirstBounce</name></member>
-      <member refid="df/d7b/a04903_1a15a7d78a593d50789066f2ad20aa3f13" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>m_vctSecondaryBounce</name></member>
-      <member refid="d9/d87/a04855_1a6dd61b37030ab8b1ddffef636544c69e" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>OpaquePass</name></member>
-      <member refid="d9/d87/a04855_1a6bb0a877a32dd735c19547590544d51e" prot="private" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>Output1</name></member>
-      <member refid="d9/d87/a04855_1a443961e6fcaeecca7f3aff1118f9c833" prot="private" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>Output2</name></member>
-      <member refid="d9/d87/a04855_1a9c97699ff2efb906d64a4f9ce3efabb5" prot="private" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>Output3</name></member>
-      <member refid="d9/d87/a04855_1a8cfed154bc486329318cae1d7a01f36d" prot="private" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>Output4</name></member>
-      <member refid="d9/d87/a04855_1a18af2dbba353412ee56b408b800f7be8" prot="private" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>Output5</name></member>
-      <member refid="d1/d48/a04575_1a1944832d81c804c1db58c6ce658aa50c" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>prepareBackPipeline</name></member>
-      <member refid="d1/d48/a04575_1aca7f84fa9420e1056a2254e7387c4c56" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>prepareBackPipeline</name></member>
-      <member refid="d1/d48/a04575_1a8ef8352df2d2af6d596e4b8f7f013679" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>prepareFrontPipeline</name></member>
-      <member refid="d1/d48/a04575_1ab2e52ba19699b996f9a24a209af5c50d" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>prepareFrontPipeline</name></member>
-      <member refid="d9/d87/a04855_1a556181797fe48e7eea32d3f7d08ae300" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>render</name></member>
-      <member refid="df/d7b/a04903_1a2babe394143a32a9b58e1e8afaf11b5c" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>RenderTechniquePass</name></member>
-      <member refid="df/d7b/a04903_1a18da3e98fa3727c796c4ded91c736a9c" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>RenderTechniquePass</name></member>
-      <member refid="d1/d48/a04575_1affb5828080147f1657a582841cbaca01" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>SceneRenderPass</name></member>
-      <member refid="d1/d48/a04575_1ac65dc41b8e3392db21bd3cadd94754d6" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>SceneRenderPass</name></member>
-      <member refid="d1/d48/a04575_1a7a964bd723f31105db6937b6c2016344" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>SceneRenderPass</name></member>
-      <member refid="d1/d48/a04575_1a78ae5b7ef98084673c04980da95e359f" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>SceneRenderPass</name></member>
-      <member refid="d1/d48/a04575_1adf551a42f8dec9de911b7f2ffc56b666" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>SceneRenderPass</name></member>
-      <member refid="df/d7b/a04903_1a34b80c98549ada2496387ba4db944fd1" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>update</name></member>
-      <member refid="df/d7b/a04903_1add6df2057351a89dbe243c62d6a5728a" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>update</name></member>
-      <member refid="d1/d48/a04575_1add6df2057351a89dbe243c62d6a5728a" prot="public" virt="non-virtual" ambiguityscope="castor3d::SceneRenderPass::"><scope>castor3d::OpaquePass</scope><name>update</name></member>
-      <member refid="d1/d48/a04575_1a49f451446a2b5cc5622aaaeda521bfbf" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>updateFlags</name></member>
-      <member refid="d1/d48/a04575_1aeb30d85455e3fb74cff7074377268d80" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>updatePipeline</name></member>
-      <member refid="d9/d87/a04855_1a9ec01f29e5704908d9c5806c706bfdea" prot="public" virt="non-virtual"><scope>castor3d::OpaquePass</scope><name>~OpaquePass</name></member>
-      <member refid="d1/d48/a04575_1a8ece518761c68ec639b59e82cde459af" prot="public" virt="virtual"><scope>castor3d::OpaquePass</scope><name>~SceneRenderPass</name></member>
+      <member refid="d9/d87/a04855_1ab3b848b58529111840d27b0667299fad" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>declare</name></member>
+      <member refid="d9/d87/a04855_1a042521e9d65e8a17762a04bae82f33fd" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>getTextureConfiguration</name></member>
+      <member refid="d9/d87/a04855_1ab135b60f39133b9055b915a2ea543dde" prot="private" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>m_ssbo</name></member>
+      <member refid="d9/d87/a04855_1a91e0a79e1bc4fa92e6fe34046e0b03f4" prot="private" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>m_writer</name></member>
+      <member refid="d9/d87/a04855_1a44c56a0f4edf2d83146813096172be84" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>TextureConfigurations</name></member>
+      <member refid="d9/d87/a04855_1aaaaee2d9f57922f83785453ec3f60bcd" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>TextureConfigurations</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

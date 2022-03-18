@@ -1,33 +1,209 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d0/dd4/a03812" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPhysicalDeviceCooperativeMatrixFeaturesNV &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d0/dd4/a03812_1a233ea868f5aff25ac706751f13db0bc5" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPhysicalDeviceCooperativeMatrixFeaturesNV &gt;::value</definition>
+    <compoundname>castor3d::CommandsSemaphore</compoundname>
+    <includes local="no">CommandsSemaphore.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/dd4/a03812_1a69f8a98779e7005fc1494f7cef97ebb4" prot="public" static="no" mutable="no">
+        <type>ashes::CommandBufferPtr</type>
+        <definition>ashes::CommandBufferPtr castor3d::CommandsSemaphore::commandBuffer</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_COOPERATIVE_MATRIX_FEATURES_NV</initializer>
+        <name>commandBuffer</name>
+        <qualifiedname>castor3d::CommandsSemaphore::commandBuffer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="364" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="364" bodyend="-1"/>
+        <location file="Render/Passes/CommandsSemaphore.hpp" line="36" column="25" bodyfile="Render/Passes/CommandsSemaphore.hpp" bodystart="36" bodyend="-1"/>
+        <referencedby refid="d1/d6e/a03552_1af3313af7d553f47d5a6f04a1492c7389" compoundref="dc/d25/a00596" startline="171" endline="175">castor3d::OverlayRenderer::getCommands</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dd4/a03812_1ab63a3f9fdc8ca326973ddaccb1c5e074" prot="public" static="no" mutable="no">
+        <type>ashes::SemaphorePtr</type>
+        <definition>ashes::SemaphorePtr castor3d::CommandsSemaphore::semaphore</definition>
+        <argsstring></argsstring>
+        <name>semaphore</name>
+        <qualifiedname>castor3d::CommandsSemaphore::semaphore</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CommandsSemaphore.hpp" line="37" column="21" bodyfile="Render/Passes/CommandsSemaphore.hpp" bodystart="37" bodyend="-1"/>
+        <referencedby refid="d1/d6e/a03552_1a42ded6a093f3eac5b1f24bcac8659f84" compoundref="dc/d25/a00596" startline="192" endline="195">castor3d::OverlayRenderer::getSemaphore</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/dd4/a03812_1a45111e76b54c590ed4c25560a30b5dab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::CommandsSemaphore::CommandsSemaphore</definition>
+        <argsstring>(ashes::CommandBufferPtr commandBuffer=nullptr, ashes::SemaphorePtr semaphore=nullptr)</argsstring>
+        <name>CommandsSemaphore</name>
+        <qualifiedname>castor3d::CommandsSemaphore::CommandsSemaphore</qualifiedname>
+        <param>
+          <type>ashes::CommandBufferPtr</type>
+          <declname>commandBuffer</declname>
+          <defval>nullptr</defval>
+        </param>
+        <param>
+          <type>ashes::SemaphorePtr</type>
+          <declname>semaphore</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CommandsSemaphore.hpp" line="18" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dd4/a03812_1a7420f857cd6bb6683442b1f160e603d5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::CommandsSemaphore::CommandsSemaphore</definition>
+        <argsstring>(RenderDevice const &amp;device, QueueData const &amp;queueData, castor::String const &amp;name, VkCommandBufferLevel level=VK_COMMAND_BUFFER_LEVEL_PRIMARY)</argsstring>
+        <name>CommandsSemaphore</name>
+        <qualifiedname>castor3d::CommandsSemaphore::CommandsSemaphore</qualifiedname>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dde/a03944" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkCommandBufferLevel</type>
+          <declname>level</declname>
+          <defval>VK_COMMAND_BUFFER_LEVEL_PRIMARY</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CommandsSemaphore.hpp" line="20" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dd4/a03812_1a7646f4d8c1f38268ccc3db23d71f6832" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::CommandsSemaphore::submit</definition>
+        <argsstring>(ashes::Queue const &amp;queue, VkPipelineStageFlags stage=VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT) const</argsstring>
+        <name>submit</name>
+        <qualifiedname>castor3d::CommandsSemaphore::submit</qualifiedname>
+        <param>
+          <type>ashes::Queue const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>VkPipelineStageFlags</type>
+          <declname>stage</declname>
+          <defval>VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CommandsSemaphore.hpp" line="25" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dd4/a03812_1a7e9335fb61f7a8f85e6d48e1942ebf53" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Semaphore const &amp;</type>
+        <definition>C3D_API ashes::Semaphore const  &amp; castor3d::CommandsSemaphore::submit</definition>
+        <argsstring>(ashes::Queue const &amp;queue, ashes::Semaphore const &amp;toWait, VkPipelineStageFlags stage=VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT) const</argsstring>
+        <name>submit</name>
+        <qualifiedname>castor3d::CommandsSemaphore::submit</qualifiedname>
+        <param>
+          <type>ashes::Queue const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>ashes::Semaphore const &amp;</type>
+          <declname>toWait</declname>
+        </param>
+        <param>
+          <type>VkPipelineStageFlags</type>
+          <declname>stage</declname>
+          <defval>VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CommandsSemaphore.hpp" line="27" column="33"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dd4/a03812_1a7e689f3bf2570bf9777d553982424d20" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Semaphore const &amp;</type>
+        <definition>C3D_API ashes::Semaphore const  &amp; castor3d::CommandsSemaphore::submit</definition>
+        <argsstring>(ashes::Queue const &amp;queue, crg::SemaphoreWait const &amp;toWait) const</argsstring>
+        <name>submit</name>
+        <qualifiedname>castor3d::CommandsSemaphore::submit</qualifiedname>
+        <param>
+          <type>ashes::Queue const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>crg::SemaphoreWait const &amp;</type>
+          <declname>toWait</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CommandsSemaphore.hpp" line="30" column="33"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dd4/a03812_1a7c18fc7d4910c9c3d5050b5dda1c0edf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::CommandsSemaphore::submit</definition>
+        <argsstring>(ashes::Queue const &amp;queue, ashes::VkSemaphoreArray &amp;semaphores, ashes::VkPipelineStageFlagsArray &amp;stages)</argsstring>
+        <name>submit</name>
+        <qualifiedname>castor3d::CommandsSemaphore::submit</qualifiedname>
+        <param>
+          <type>ashes::Queue const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>ashes::VkSemaphoreArray &amp;</type>
+          <declname>semaphores</declname>
+        </param>
+        <param>
+          <type>ashes::VkPipelineStageFlagsArray &amp;</type>
+          <declname>stages</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CommandsSemaphore.hpp" line="32" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="364" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="364" bodyend="364"/>
+    <location file="Render/Passes/CommandsSemaphore.hpp" line="16" column="1" bodyfile="Render/Passes/CommandsSemaphore.hpp" bodystart="17" bodyend="38"/>
     <listofallmembers>
-      <member refid="d0/dd4/a03812_1a233ea868f5aff25ac706751f13db0bc5" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPhysicalDeviceCooperativeMatrixFeaturesNV &gt;</scope><name>value</name></member>
+      <member refid="d0/dd4/a03812_1a69f8a98779e7005fc1494f7cef97ebb4" prot="public" virt="non-virtual"><scope>castor3d::CommandsSemaphore</scope><name>commandBuffer</name></member>
+      <member refid="d0/dd4/a03812_1a45111e76b54c590ed4c25560a30b5dab" prot="public" virt="non-virtual"><scope>castor3d::CommandsSemaphore</scope><name>CommandsSemaphore</name></member>
+      <member refid="d0/dd4/a03812_1a7420f857cd6bb6683442b1f160e603d5" prot="public" virt="non-virtual"><scope>castor3d::CommandsSemaphore</scope><name>CommandsSemaphore</name></member>
+      <member refid="d0/dd4/a03812_1ab63a3f9fdc8ca326973ddaccb1c5e074" prot="public" virt="non-virtual"><scope>castor3d::CommandsSemaphore</scope><name>semaphore</name></member>
+      <member refid="d0/dd4/a03812_1a7646f4d8c1f38268ccc3db23d71f6832" prot="public" virt="non-virtual"><scope>castor3d::CommandsSemaphore</scope><name>submit</name></member>
+      <member refid="d0/dd4/a03812_1a7e9335fb61f7a8f85e6d48e1942ebf53" prot="public" virt="non-virtual"><scope>castor3d::CommandsSemaphore</scope><name>submit</name></member>
+      <member refid="d0/dd4/a03812_1a7e689f3bf2570bf9777d553982424d20" prot="public" virt="non-virtual"><scope>castor3d::CommandsSemaphore</scope><name>submit</name></member>
+      <member refid="d0/dd4/a03812_1a7c18fc7d4910c9c3d5050b5dda1c0edf" prot="public" virt="non-virtual"><scope>castor3d::CommandsSemaphore</scope><name>submit</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

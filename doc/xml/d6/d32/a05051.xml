@@ -1,334 +1,401 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d6/d32/a05051" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::MeshAnimationInstance</compoundname>
-    <basecompoundref refid="d2/d61/a05043" prot="public" virt="non-virtual">castor3d::AnimationInstance</basecompoundref>
-    <includes local="no">MeshAnimationInstance.hpp</includes>
-      <sectiondef kind="user-defined">
-      <memberdef kind="function" id="d6/d32/a05051_1a20eb16758bfff388fdb9001644bc5475" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::MeshAnimationInstance::MeshAnimationInstance</definition>
-        <argsstring>(MeshAnimationInstance &amp;&amp;rhs)=default</argsstring>
-        <name>MeshAnimationInstance</name>
-        <param>
-          <type><ref refid="d6/d32/a05051" kindref="compound">MeshAnimationInstance</ref> &amp;&amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>name Copy / Move. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="25" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d6/d32/a05051_1a4df16c67f56ea72d28a40f48181faabb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/d32/a05051" kindref="compound">MeshAnimationInstance</ref> &amp;</type>
-        <definition>C3D_API MeshAnimationInstance&amp; castor3d::MeshAnimationInstance::operator=</definition>
-        <argsstring>(MeshAnimationInstance &amp;&amp;rhs)=delete</argsstring>
-        <name>operator=</name>
-        <param>
-          <type><ref refid="d6/d32/a05051" kindref="compound">MeshAnimationInstance</ref> &amp;&amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="26" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d6/d32/a05051_1ae5911fe86e5b102df6abfc3ce082ff93" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::MeshAnimationInstance::MeshAnimationInstance</definition>
-        <argsstring>(MeshAnimationInstance const &amp;rhs)=delete</argsstring>
-        <name>MeshAnimationInstance</name>
-        <param>
-          <type><ref refid="d6/d32/a05051" kindref="compound">MeshAnimationInstance</ref> const &amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="27" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d6/d32/a05051_1a6e41741a94547e6463f9dd1ef2946be9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/d32/a05051" kindref="compound">MeshAnimationInstance</ref> &amp;</type>
-        <definition>C3D_API MeshAnimationInstance&amp; castor3d::MeshAnimationInstance::operator=</definition>
-        <argsstring>(MeshAnimationInstance const &amp;rhs)=delete</argsstring>
-        <name>operator=</name>
-        <param>
-          <type><ref refid="d6/d32/a05051" kindref="compound">MeshAnimationInstance</ref> const &amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="28" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="protected-attrib">
-      <memberdef kind="variable" id="d6/d32/a05051_1a9825c86fc3fe267e5bb60036a66cc6d0" prot="protected" static="no" mutable="no">
-        <type><ref refid="db/d39/a05023" kindref="compound">AnimatedMesh</ref> &amp;</type>
-        <definition>AnimatedMesh&amp; castor3d::MeshAnimationInstance::m_animatedMesh</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d6/d32/a05051" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::VoxelData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">VoxelizerUbo.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/d32/a05051_1a4b517948ec73e5630738368b977ac308" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::VoxelData::gridConv</definition>
         <argsstring></argsstring>
-        <name>m_animatedMesh</name>
+        <name>gridConv</name>
+        <qualifiedname>castor3d::shader::VoxelData::gridConv</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="90" column="1" bodyfile="Scene/Animation/Mesh/MeshAnimationInstance.hpp" bodystart="90" bodyend="-1"/>
-        <referencedby refid="d6/d32/a05051_1af5b82b9b5915f9bfa50756b9bb2e9e59" compoundref="d2/d41/a01037" startline="71" endline="74">getAnimatedMesh</referencedby>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="35" column="11" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="35" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d32/a05051_1a9f7ace121e37ba978036c6754c1faab1" prot="protected" static="no" mutable="no">
-        <type><ref refid="d1/da3/a03835" kindref="compound">MeshAnimation</ref> const  &amp;</type>
-        <definition>MeshAnimation const&amp; castor3d::MeshAnimationInstance::m_meshAnimation</definition>
+      <memberdef kind="variable" id="d6/d32/a05051_1a76a7623a22cfdf2917eb72155874b793" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::VoxelData::radiance</definition>
         <argsstring></argsstring>
-        <name>m_meshAnimation</name>
+        <name>radiance</name>
+        <qualifiedname>castor3d::shader::VoxelData::radiance</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="91" column="1" bodyfile="Scene/Animation/Mesh/MeshAnimationInstance.hpp" bodystart="91" bodyend="-1"/>
-        <referencedby refid="d6/d32/a05051_1a34c077b5f5bc50920d655e72a2427db7" compoundref="d2/d41/a01037" startline="61" endline="64">getMeshAnimation</referencedby>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="36" column="11" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="36" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d32/a05051_1a75cf3563d778d2feccbe458f62f6eca0" prot="protected" static="no" mutable="no">
-        <type>MeshAnimationInstanceSubmeshMap</type>
-        <definition>MeshAnimationInstanceSubmeshMap castor3d::MeshAnimationInstance::m_submeshes</definition>
+      <memberdef kind="variable" id="d6/d32/a05051_1ae1c6b8dd855f82069e7ccec438ac5d0d" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::VoxelData::other</definition>
         <argsstring></argsstring>
-        <name>m_submeshes</name>
+        <name>other</name>
+        <qualifiedname>castor3d::shader::VoxelData::other</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="92" column="1" bodyfile="Scene/Animation/Mesh/MeshAnimationInstance.hpp" bodystart="92" bodyend="-1"/>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="37" column="11" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="37" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d32/a05051_1adb73747e9076d1c1cc116a4ed1ef27de" prot="protected" static="no" mutable="no">
-        <type>AnimationKeyFrameArray::iterator</type>
-        <definition>AnimationKeyFrameArray::iterator castor3d::MeshAnimationInstance::m_prev</definition>
+      <memberdef kind="variable" id="d6/d32/a05051_1a9bba7859b379287bf5ceabc81e28a194" prot="public" static="no" mutable="no">
+        <type>sdw::UVec4</type>
+        <definition>sdw::UVec4 castor3d::shader::VoxelData::status</definition>
         <argsstring></argsstring>
-        <name>m_prev</name>
+        <name>status</name>
+        <qualifiedname>castor3d::shader::VoxelData::status</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="93" column="1" bodyfile="Scene/Animation/Mesh/MeshAnimationInstance.hpp" bodystart="93" bodyend="-1"/>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="38" column="12" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="38" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d32/a05051_1a098806667b1b6205333243bf710401b8" prot="protected" static="no" mutable="no">
-        <type>AnimationKeyFrameArray::iterator</type>
-        <definition>AnimationKeyFrameArray::iterator castor3d::MeshAnimationInstance::m_curr</definition>
+      <memberdef kind="variable" id="d6/d32/a05051_1a5ddcc24ee3265decf781df770d42c89d" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::VoxelData::worldToGrid</definition>
         <argsstring></argsstring>
-        <name>m_curr</name>
+        <name>worldToGrid</name>
+        <qualifiedname>castor3d::shader::VoxelData::worldToGrid</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="94" column="1" bodyfile="Scene/Animation/Mesh/MeshAnimationInstance.hpp" bodystart="94" bodyend="-1"/>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="40" column="12" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="40" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d32/a05051_1af0744ac075f80ed341613a0c18a03a4a" prot="protected" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::MeshAnimationInstance::m_ratio</definition>
+      <memberdef kind="variable" id="d6/d32/a05051_1a24c7fb9fc5dea56f10f3d3d4e494555c" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::VoxelData::gridToWorld</definition>
         <argsstring></argsstring>
-        <name>m_ratio</name>
-        <initializer>{ 0.0f }</initializer>
+        <name>gridToWorld</name>
+        <qualifiedname>castor3d::shader::VoxelData::gridToWorld</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="95" column="1" bodyfile="Scene/Animation/Mesh/MeshAnimationInstance.hpp" bodystart="95" bodyend="-1"/>
-        <referencedby refid="d6/d32/a05051_1a7d0a2474cd378cf37cca6868e2286548" compoundref="d2/d41/a01037" startline="81" endline="84">getRatio</referencedby>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="41" column="12" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="41" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="friend">
-      <memberdef kind="friend" id="d6/d32/a05051_1ac6a0a82fd0082097621fd77e2cf5afec" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>friend class</type>
-        <definition>friend class BinaryWriter&lt; MeshAnimation &gt;</definition>
+      <memberdef kind="variable" id="d6/d32/a05051_1a72d999d766be6df5cb2a3bc48f9ac3c9" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::VoxelData::clipToGrid</definition>
         <argsstring></argsstring>
-        <name>BinaryWriter&lt; MeshAnimation &gt;</name>
+        <name>clipToGrid</name>
+        <qualifiedname>castor3d::shader::VoxelData::clipToGrid</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="95" column="1" bodyfile="Scene/Animation/Mesh/MeshAnimationInstance.hpp" bodystart="97" bodyend="-1"/>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="42" column="12" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="42" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="friend" id="d6/d32/a05051_1a843c2e6a2af43657991379b2b506e920" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>friend class</type>
-        <definition>friend class BinaryParser&lt; MeshAnimation &gt;</definition>
+      <memberdef kind="variable" id="d6/d32/a05051_1aa129b983e32ea939ce95d94491c39ca6" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::VoxelData::gridToClip</definition>
         <argsstring></argsstring>
-        <name>BinaryParser&lt; MeshAnimation &gt;</name>
+        <name>gridToClip</name>
+        <qualifiedname>castor3d::shader::VoxelData::gridToClip</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="95" column="1" bodyfile="Scene/Animation/Mesh/MeshAnimationInstance.hpp" bodystart="98" bodyend="-1"/>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="43" column="12" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d32/a05051_1ac8452f42664c1b7cba7cdcd2edbbda52" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::VoxelData::radianceMaxDistance</definition>
+        <argsstring></argsstring>
+        <name>radianceMaxDistance</name>
+        <qualifiedname>castor3d::shader::VoxelData::radianceMaxDistance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="44" column="12" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d32/a05051_1a523940c657ac7affa6952e417ad66f2f" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::VoxelData::radianceMips</definition>
+        <argsstring></argsstring>
+        <name>radianceMips</name>
+        <qualifiedname>castor3d::shader::VoxelData::radianceMips</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="45" column="12" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d32/a05051_1a214c02f34fb2d58bd74c57eb9d49f810" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::VoxelData::radianceNumCones</definition>
+        <argsstring></argsstring>
+        <name>radianceNumCones</name>
+        <qualifiedname>castor3d::shader::VoxelData::radianceNumCones</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="46" column="11" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d32/a05051_1a65658fe9946d6dd4bd8e66bc37b0cf18" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::VoxelData::radianceNumConesInv</definition>
+        <argsstring></argsstring>
+        <name>radianceNumConesInv</name>
+        <qualifiedname>castor3d::shader::VoxelData::radianceNumConesInv</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="47" column="12" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d32/a05051_1a3ba7b3dc085ba6f2fdab46efba813e0a" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::VoxelData::gridCenter</definition>
+        <argsstring></argsstring>
+        <name>gridCenter</name>
+        <qualifiedname>castor3d::shader::VoxelData::gridCenter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="48" column="11" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d32/a05051_1a692caa2804fc10b0eacee9d61474f24d" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::VoxelData::rayStepSize</definition>
+        <argsstring></argsstring>
+        <name>rayStepSize</name>
+        <qualifiedname>castor3d::shader::VoxelData::rayStepSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="49" column="12" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d32/a05051_1a6014bf441369f9be890715f99b063488" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::VoxelData::enabled</definition>
+        <argsstring></argsstring>
+        <name>enabled</name>
+        <qualifiedname>castor3d::shader::VoxelData::enabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="50" column="11" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d32/a05051_1af098e6b84c04b793830ff6461a2e21f6" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::VoxelData::enableConservativeRasterization</definition>
+        <argsstring></argsstring>
+        <name>enableConservativeRasterization</name>
+        <qualifiedname>castor3d::shader::VoxelData::enableConservativeRasterization</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="51" column="11" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d32/a05051_1a2c64dbf3f02ae41c7d90cde43a61c3ac" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::VoxelData::enableOcclusion</definition>
+        <argsstring></argsstring>
+        <name>enableOcclusion</name>
+        <qualifiedname>castor3d::shader::VoxelData::enableOcclusion</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="52" column="11" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d32/a05051_1a37c3a383a21fe77db6b2d3995fea5634" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::VoxelData::enableSecondaryBounce</definition>
+        <argsstring></argsstring>
+        <name>enableSecondaryBounce</name>
+        <qualifiedname>castor3d::shader::VoxelData::enableSecondaryBounce</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="53" column="11" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="53" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d6/d32/a05051_1a50ada71097dfbba1597db4190abe7890" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d6/d32/a05051_1ac1f87494e367538ba2b944a5e798ad67" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::MeshAnimationInstance::MeshAnimationInstance</definition>
-        <argsstring>(AnimatedMesh &amp;object, MeshAnimation &amp;animation)</argsstring>
-        <name>MeshAnimationInstance</name>
+        <definition>C3D_API castor3d::shader::VoxelData::VoxelData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>VoxelData</name>
+        <qualifiedname>castor3d::shader::VoxelData::VoxelData</qualifiedname>
         <param>
-          <type><ref refid="db/d39/a05023" kindref="compound">AnimatedMesh</ref> &amp;</type>
-          <declname>object</declname>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
         </param>
         <param>
-          <type><ref refid="d1/da3/a03835" kindref="compound">MeshAnimation</ref> &amp;</type>
-          <declname>animation</declname>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
         </param>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">object</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parent <ref refid="db/d39/a05023" kindref="compound">AnimatedMesh</ref>. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">animation</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The animation. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="40" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d6/d32/a05051_1a9443ed0336aafb7db2e21859dd18f12b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::MeshAnimationInstance::~MeshAnimationInstance</definition>
-        <argsstring>()</argsstring>
-        <name>~MeshAnimationInstance</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="47" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d6/d32/a05051_1ac6e3eb159a7383ed941851b043345c36" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dc/d7e/a05055" kindref="compound">MeshAnimationInstanceSubmesh</ref> const  *</type>
-        <definition>C3D_API MeshAnimationInstanceSubmesh const* castor3d::MeshAnimationInstance::getAnimationSubmesh</definition>
-        <argsstring>(uint32_t index) const</argsstring>
-        <name>getAnimationSubmesh</name>
         <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
+          <type>bool</type>
+          <declname>enabled</declname>
         </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The animation submesh at given ID, nullptr if not found. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="54" column="1"/>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="22" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d6/d32/a05051_1a34c077b5f5bc50920d655e72a2427db7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d1/da3/a03835" kindref="compound">MeshAnimation</ref> const  &amp;</type>
-        <definition>MeshAnimation const&amp; castor3d::MeshAnimationInstance::getMeshAnimation</definition>
-        <argsstring>() const</argsstring>
-        <name>getMeshAnimation</name>
+      <memberdef kind="function" id="d6/d32/a05051_1a59894b51f58bd155b81725c5c8b6e693" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::VoxelData::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, VoxelData)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::VoxelData::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        </param>
+        <param>
+          <type><ref refid="d6/d32/a05051" kindref="compound">VoxelData</ref></type>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The animation. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="61" column="1" bodyfile="Scene/Animation/Mesh/MeshAnimationInstance.hpp" bodystart="61" bodyend="64"/>
-        <references refid="d6/d32/a05051_1a9f7ace121e37ba978036c6754c1faab1" compoundref="d2/d41/a01037" startline="91">m_meshAnimation</references>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="25" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="d6/d32/a05051_1af5b82b9b5915f9bfa50756b9bb2e9e59" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="db/d39/a05023" kindref="compound">AnimatedMesh</ref> &amp;</type>
-        <definition>AnimatedMesh&amp; castor3d::MeshAnimationInstance::getAnimatedMesh</definition>
-        <argsstring>()</argsstring>
-        <name>getAnimatedMesh</name>
+      <memberdef kind="function" id="d6/d32/a05051_1ae143d3937bdc8794c0bd08bf847ce359" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::VoxelData::worldToTex</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsPosition) const</argsstring>
+        <name>worldToTex</name>
+        <qualifiedname>castor3d::shader::VoxelData::worldToTex</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsPosition</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The animated mesh. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="71" column="1" bodyfile="Scene/Animation/Mesh/MeshAnimationInstance.hpp" bodystart="71" bodyend="74"/>
-        <references refid="d6/d32/a05051_1a9825c86fc3fe267e5bb60036a66cc6d0" compoundref="d2/d41/a01037" startline="90">m_animatedMesh</references>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="30" column="19"/>
       </memberdef>
-      <memberdef kind="function" id="d6/d32/a05051_1a7d0a2474cd378cf37cca6868e2286548" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>float</type>
-        <definition>float castor3d::MeshAnimationInstance::getRatio</definition>
-        <argsstring>() const</argsstring>
-        <name>getRatio</name>
+      <memberdef kind="function" id="d6/d32/a05051_1ae9fd67ce6168cee6b2ab0b4964e9f55f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::IVec3</type>
+        <definition>C3D_API sdw::IVec3 castor3d::shader::VoxelData::worldToImg</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsPosition) const</argsstring>
+        <name>worldToImg</name>
+        <qualifiedname>castor3d::shader::VoxelData::worldToImg</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsPosition</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The current keyframe current ratio. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="81" column="1" bodyfile="Scene/Animation/Mesh/MeshAnimationInstance.hpp" bodystart="81" bodyend="84"/>
-        <references refid="d6/d32/a05051_1af0744ac075f80ed341613a0c18a03a4a" compoundref="d2/d41/a01037" startline="95">m_ratio</references>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="31" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d32/a05051_1a590eb67897ebce10136dd1d228ecaf22" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::VoxelData::worldToClip</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsPosition) const</argsstring>
+        <name>worldToClip</name>
+        <qualifiedname>castor3d::shader::VoxelData::worldToClip</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="32" column="19"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d6/d32/a05051_1a0b80de77ce6f39af0ed72ecfaed6dedc" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::MeshAnimationInstance::doUpdate</definition>
-        <argsstring>() override</argsstring>
-        <name>doUpdate</name>
-        <reimplements refid="d2/d61/a05043_1a3ae30f9d3201f11bb86ac99d8c5b58e7">doUpdate</reimplements>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d6/d32/a05051_1ab60a991501e99f0c58b852805b4cd500" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
+        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::VoxelData::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::VoxelData::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
         <briefdescription>
-<para>Updates the animation, updates the key frame at the good time index. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="87" column="1"/>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="27" column="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d32/a05051_1a79a008edb1563c64bc07a85546f4c473" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::VoxelData::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::VoxelData::declare</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="28" column="32"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -336,254 +403,54 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="1884">
-        <label>castor3d::MeshAnimationInstance</label>
+      <node id="1">
+        <label>castor3d::shader::VoxelData</label>
         <link refid="d6/d32/a05051"/>
-        <childnode refid="1885" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="1886">
-        <label>castor::OwnedBy&lt; AnimatedObject &gt;</label>
-      </node>
-      <node id="1885">
-        <label>castor3d::AnimationInstance</label>
-        <link refid="d2/d61/a05043"/>
-        <childnode refid="1886" relation="public-inheritance">
-        </childnode>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="1895">
-        <label>castor3d::Mesh</label>
-        <link refid="d5/d45/a03887"/>
-        <childnode refid="1896" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1897" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1899">
-        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
-        <childnode refid="1900" relation="template-instance">
-          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1901">
-        <label>K</label>
-      </node>
-      <node id="1902">
-        <label>T</label>
-      </node>
-      <node id="1903">
-        <label>castor3d::Geometry</label>
-        <link refid="db/d6b/a05139"/>
-        <childnode refid="1904" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1911" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1905">
-        <label>castor3d::SceneNode</label>
-        <link refid="d8/dd0/a05235"/>
-        <childnode refid="1906" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1907" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1891" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1914">
-        <label>Animation</label>
-        <link refid="df/d78/a02019"/>
-        <childnode refid="1915" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1916" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1890" relation="template-instance">
-          <edgelabel>&lt; Engine &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1887">
-        <label>castor3d::MeshAnimationInstance</label>
+      <node id="1">
+        <label>castor3d::shader::VoxelData</label>
         <link refid="d6/d32/a05051"/>
-        <childnode refid="1888" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1893" relation="usage">
-          <edgelabel>m_animatedMesh</edgelabel>
-        </childnode>
-        <childnode refid="1913" relation="usage">
-          <edgelabel>m_meshAnimation</edgelabel>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="1907">
-        <label>castor::OwnedBy&lt; Scene &gt;</label>
-      </node>
-      <node id="1900">
-        <label>std::map&lt; K, T &gt;</label>
-        <childnode refid="1901" relation="usage">
-          <edgelabel>keys</edgelabel>
-        </childnode>
-        <childnode refid="1902" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="1906">
-        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
-      </node>
-      <node id="1896">
-        <label>castor::Resource&lt; Mesh &gt;</label>
-      </node>
-      <node id="1915">
-        <label>castor::Named</label>
-      </node>
-      <node id="1904">
-        <label>castor3d::MovableObject</label>
-        <link refid="dc/d66/a05171"/>
-        <childnode refid="1897" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1891" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1905" relation="usage">
-          <edgelabel>m_sceneNode</edgelabel>
-        </childnode>
-        <childnode refid="1908" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-      </node>
-      <node id="1891">
-        <label>Named</label>
-      </node>
-      <node id="1913">
-        <label>castor3d::MeshAnimation</label>
-        <link refid="d1/da3/a03835"/>
-        <childnode refid="1914" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1916">
-        <label>castor::OwnedBy&lt; AnimableT&lt; Engine &gt; &gt;</label>
-      </node>
-      <node id="1911">
-        <label>castor3d::RenderedObject</label>
-        <link refid="d8/d9b/a05219"/>
-        <childnode refid="1912" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1894">
-        <label>castor3d::AnimatedObject</label>
-        <link refid="d1/d82/a05027"/>
-        <childnode refid="1891" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1909">
-        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
-      </node>
-      <node id="1897">
-        <label>Animable</label>
-        <link refid="de/d0a/a02015"/>
-        <childnode refid="1898" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1899" relation="usage">
-          <edgelabel>m_animations</edgelabel>
-        </childnode>
-      </node>
-      <node id="1898">
-        <label>castor::OwnedBy&lt; AnimableHanlerT &gt;</label>
-      </node>
-      <node id="1910">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="1890">
-        <label>castor3d::AnimationT&lt; AnimableHanlerT &gt;</label>
-        <link refid="df/d78/a02019"/>
-        <childnode refid="1891" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1892" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1889">
-        <label>castor::OwnedBy&lt; AnimatedObject &gt;</label>
-      </node>
-      <node id="1893">
-        <label>castor3d::AnimatedMesh</label>
-        <link refid="db/d39/a05023"/>
-        <childnode refid="1894" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1895" relation="usage">
-          <edgelabel>m_mesh</edgelabel>
-        </childnode>
-        <childnode refid="1903" relation="usage">
-          <edgelabel>m_geometry</edgelabel>
-        </childnode>
-      </node>
-      <node id="1892">
-        <label>castor::OwnedBy&lt; AnimableT&lt; AnimableHanlerT &gt; &gt;</label>
-      </node>
-      <node id="1912">
-        <label>std::enable_shared_from_this&lt; RenderedObject &gt;</label>
-      </node>
-      <node id="1888">
-        <label>castor3d::AnimationInstance</label>
-        <link refid="d2/d61/a05043"/>
-        <childnode refid="1889" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1890" relation="usage">
-          <edgelabel>m_animation</edgelabel>
-        </childnode>
-      </node>
-      <node id="1908">
-        <label>castor3d::Scene</label>
-        <link refid="d7/d00/a05223"/>
-        <childnode refid="1909" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1910" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1891" relation="public-inheritance">
-        </childnode>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </collaborationgraph>
-    <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="16" column="1" bodyfile="Scene/Animation/Mesh/MeshAnimationInstance.hpp" bodystart="14" bodyend="99"/>
+    <location file="Shader/Ubos/VoxelizerUbo.hpp" line="19" column="1" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="21" bodyend="58"/>
     <listofallmembers>
-      <member refid="d2/d61/a05043_1a23a7bfcdfcd7c97de734734aff4cd3c5" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>AnimationInstance</name></member>
-      <member refid="d6/d32/a05051_1a843c2e6a2af43657991379b2b506e920" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>BinaryParser&lt; MeshAnimation &gt;</name></member>
-      <member refid="d6/d32/a05051_1ac6a0a82fd0082097621fd77e2cf5afec" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>BinaryWriter&lt; MeshAnimation &gt;</name></member>
-      <member refid="d6/d32/a05051_1a0b80de77ce6f39af0ed72ecfaed6dedc" prot="private" virt="virtual"><scope>castor3d::MeshAnimationInstance</scope><name>doUpdate</name></member>
-      <member refid="d6/d32/a05051_1af5b82b9b5915f9bfa50756b9bb2e9e59" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>getAnimatedMesh</name></member>
-      <member refid="d2/d61/a05043_1aab33ccf8f14ea1991f4f3569fabd59f4" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>getAnimation</name></member>
-      <member refid="d6/d32/a05051_1ac6e3eb159a7383ed941851b043345c36" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>getAnimationSubmesh</name></member>
-      <member refid="d6/d32/a05051_1a34c077b5f5bc50920d655e72a2427db7" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>getMeshAnimation</name></member>
-      <member refid="d6/d32/a05051_1a7d0a2474cd378cf37cca6868e2286548" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>getRatio</name></member>
-      <member refid="d2/d61/a05043_1a3170af477f4a163dfc67f240baafa55d" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>getScale</name></member>
-      <member refid="d2/d61/a05043_1aac09e282b3696b2e46f820a86449918f" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>getStartingPoint</name></member>
-      <member refid="d2/d61/a05043_1ab2197aab90f85806400a9e4087761cc3" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>getState</name></member>
-      <member refid="d2/d61/a05043_1a6b8de0d470c6d060cc7f835c599ec4ae" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>getStoppingPoint</name></member>
-      <member refid="d2/d61/a05043_1a914538daf4453ee5ee35a32986d5dbec" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>isLooped</name></member>
-      <member refid="d6/d32/a05051_1a9825c86fc3fe267e5bb60036a66cc6d0" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>m_animatedMesh</name></member>
-      <member refid="d2/d61/a05043_1a4ea27648adc0879b6d44149b089c0295" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>m_animation</name></member>
-      <member refid="d6/d32/a05051_1a098806667b1b6205333243bf710401b8" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>m_curr</name></member>
-      <member refid="d2/d61/a05043_1a5a7017dbf729b5ddf98c80548804cf8f" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>m_currentTime</name></member>
-      <member refid="d2/d61/a05043_1a5064a319a11f8d3928c81a4a629b5982" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>m_looped</name></member>
-      <member refid="d6/d32/a05051_1a9f7ace121e37ba978036c6754c1faab1" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>m_meshAnimation</name></member>
-      <member refid="d6/d32/a05051_1adb73747e9076d1c1cc116a4ed1ef27de" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>m_prev</name></member>
-      <member refid="d6/d32/a05051_1af0744ac075f80ed341613a0c18a03a4a" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>m_ratio</name></member>
-      <member refid="d2/d61/a05043_1aa313a440c453a3433cc6261e06b43a8a" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>m_scale</name></member>
-      <member refid="d2/d61/a05043_1a1948260ac64b862bc876124d06f34673" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>m_startingPoint</name></member>
-      <member refid="d2/d61/a05043_1a2e5b588a84db6b90580577a93d9f5d20" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>m_state</name></member>
-      <member refid="d2/d61/a05043_1abd1d4de3d4e507ac453f0531026dd9db" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>m_stoppingPoint</name></member>
-      <member refid="d6/d32/a05051_1a75cf3563d778d2feccbe458f62f6eca0" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>m_submeshes</name></member>
-      <member refid="d6/d32/a05051_1a20eb16758bfff388fdb9001644bc5475" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>MeshAnimationInstance</name></member>
-      <member refid="d6/d32/a05051_1ae5911fe86e5b102df6abfc3ce082ff93" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>MeshAnimationInstance</name></member>
-      <member refid="d6/d32/a05051_1a50ada71097dfbba1597db4190abe7890" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>MeshAnimationInstance</name></member>
-      <member refid="d6/d32/a05051_1a4df16c67f56ea72d28a40f48181faabb" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>operator=</name></member>
-      <member refid="d6/d32/a05051_1a6e41741a94547e6463f9dd1ef2946be9" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>operator=</name></member>
-      <member refid="d2/d61/a05043_1ad18010efe608f7087115754ef77a3f7e" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>pause</name></member>
-      <member refid="d2/d61/a05043_1a59bea7025b5c52e5b09df209e95e4c6b" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>play</name></member>
-      <member refid="d2/d61/a05043_1a060d6999c9e24ab73e28400cb7e8850b" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>setLooped</name></member>
-      <member refid="d2/d61/a05043_1a338ffe9fbc76c64938f1fe8b072bbd41" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>setScale</name></member>
-      <member refid="d2/d61/a05043_1ab6dd01f7c83349132cd6e4d205e33e3a" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>setStartingPoint</name></member>
-      <member refid="d2/d61/a05043_1aab7fdd5bb07392f6faba0743e1c6073b" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>setStoppingPoint</name></member>
-      <member refid="d2/d61/a05043_1aeb6466ce1395148bbbed32cacfe49291" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>stop</name></member>
-      <member refid="d2/d61/a05043_1a3f89c5c509bba8c43af73cb0f068745b" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>update</name></member>
-      <member refid="d2/d61/a05043_1ac419fc44173c317197c06e8be55df362" prot="public" virt="virtual"><scope>castor3d::MeshAnimationInstance</scope><name>~AnimationInstance</name></member>
-      <member refid="d6/d32/a05051_1a9443ed0336aafb7db2e21859dd18f12b" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>~MeshAnimationInstance</name></member>
+      <member refid="d6/d32/a05051_1a72d999d766be6df5cb2a3bc48f9ac3c9" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>clipToGrid</name></member>
+      <member refid="d6/d32/a05051_1a79a008edb1563c64bc07a85546f4c473" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>declare</name></member>
+      <member refid="d6/d32/a05051_1af098e6b84c04b793830ff6461a2e21f6" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>enableConservativeRasterization</name></member>
+      <member refid="d6/d32/a05051_1a6014bf441369f9be890715f99b063488" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>enabled</name></member>
+      <member refid="d6/d32/a05051_1a2c64dbf3f02ae41c7d90cde43a61c3ac" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>enableOcclusion</name></member>
+      <member refid="d6/d32/a05051_1a37c3a383a21fe77db6b2d3995fea5634" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>enableSecondaryBounce</name></member>
+      <member refid="d6/d32/a05051_1a3ba7b3dc085ba6f2fdab46efba813e0a" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>gridCenter</name></member>
+      <member refid="d6/d32/a05051_1a4b517948ec73e5630738368b977ac308" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>gridConv</name></member>
+      <member refid="d6/d32/a05051_1aa129b983e32ea939ce95d94491c39ca6" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>gridToClip</name></member>
+      <member refid="d6/d32/a05051_1a24c7fb9fc5dea56f10f3d3d4e494555c" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>gridToWorld</name></member>
+      <member refid="d6/d32/a05051_1ab60a991501e99f0c58b852805b4cd500" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>makeType</name></member>
+      <member refid="d6/d32/a05051_1ae1c6b8dd855f82069e7ccec438ac5d0d" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>other</name></member>
+      <member refid="d6/d32/a05051_1a76a7623a22cfdf2917eb72155874b793" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>radiance</name></member>
+      <member refid="d6/d32/a05051_1ac8452f42664c1b7cba7cdcd2edbbda52" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>radianceMaxDistance</name></member>
+      <member refid="d6/d32/a05051_1a523940c657ac7affa6952e417ad66f2f" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>radianceMips</name></member>
+      <member refid="d6/d32/a05051_1a214c02f34fb2d58bd74c57eb9d49f810" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>radianceNumCones</name></member>
+      <member refid="d6/d32/a05051_1a65658fe9946d6dd4bd8e66bc37b0cf18" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>radianceNumConesInv</name></member>
+      <member refid="d6/d32/a05051_1a692caa2804fc10b0eacee9d61474f24d" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>rayStepSize</name></member>
+      <member refid="d6/d32/a05051_1a59894b51f58bd155b81725c5c8b6e693" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="d6/d32/a05051_1a9bba7859b379287bf5ceabc81e28a194" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>status</name></member>
+      <member refid="d6/d32/a05051_1ac1f87494e367538ba2b944a5e798ad67" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>VoxelData</name></member>
+      <member refid="d6/d32/a05051_1a590eb67897ebce10136dd1d228ecaf22" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>worldToClip</name></member>
+      <member refid="d6/d32/a05051_1a5ddcc24ee3265decf781df770d42c89d" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>worldToGrid</name></member>
+      <member refid="d6/d32/a05051_1ae9fd67ce6168cee6b2ab0b4964e9f55f" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>worldToImg</name></member>
+      <member refid="d6/d32/a05051_1ae143d3937bdc8794c0bd08bf847ce359" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>worldToTex</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

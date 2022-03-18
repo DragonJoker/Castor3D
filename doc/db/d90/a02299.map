@@ -1,29 +1,5 @@
-<map id="castor3d::UniformBufferOffsetT&lt; DataT &gt;" name="castor3d::UniformBufferOffsetT&lt; DataT &gt;">
-<area shape="rect" id="node1" title="A UniformBuffer and an offset from the GpuBuffer." alt="" coords="5,882,196,923"/>
-<area shape="rect" id="node2" href="$d1/d47/a02300.html" title=" " alt="" coords="481,49,781,90"/>
-<area shape="rect" id="node3" href="$d1/d47/a02300.html" title=" " alt="" coords="491,114,771,155"/>
-<area shape="rect" id="node4" href="$d1/d47/a02300.html" title=" " alt="" coords="536,179,727,221"/>
-<area shape="rect" id="node5" href="$d1/d47/a02300.html" title=" " alt="" coords="502,245,761,286"/>
-<area shape="rect" id="node6" href="$d1/d47/a02300.html" title=" " alt="" coords="509,310,754,351"/>
-<area shape="rect" id="node7" href="$d1/d47/a02300.html" title=" " alt="" coords="508,375,755,417"/>
-<area shape="rect" id="node8" href="$d1/d47/a02300.html" title=" " alt="" coords="502,441,761,482"/>
-<area shape="rect" id="node9" href="$d1/d47/a02300.html" title=" " alt="" coords="508,506,755,547"/>
-<area shape="rect" id="node10" href="$d1/d47/a02300.html" title=" " alt="" coords="519,572,743,628"/>
-<area shape="rect" id="node11" href="$d1/d47/a02300.html" title=" " alt="" coords="509,653,753,694"/>
-<area shape="rect" id="node12" href="$d1/d47/a02300.html" title=" " alt="" coords="505,718,757,759"/>
-<area shape="rect" id="node13" href="$d1/d47/a02300.html" title=" " alt="" coords="500,783,763,825"/>
-<area shape="rect" id="node14" href="$d1/d47/a02300.html" title=" " alt="" coords="487,849,775,890"/>
-<area shape="rect" id="node15" href="$d1/d47/a02300.html" title=" " alt="" coords="485,914,777,955"/>
-<area shape="rect" id="node16" href="$d1/d47/a02300.html" title=" " alt="" coords="518,979,745,1021"/>
-<area shape="rect" id="node17" href="$d1/d47/a02300.html" title=" " alt="" coords="536,1045,727,1101"/>
-<area shape="rect" id="node18" href="$d1/d47/a02300.html" title=" " alt="" coords="520,1125,743,1181"/>
-<area shape="rect" id="node19" href="$d1/d47/a02300.html" title=" " alt="" coords="500,1206,763,1247"/>
-<area shape="rect" id="node20" href="$d1/d47/a02300.html" title=" " alt="" coords="511,1272,751,1328"/>
-<area shape="rect" id="node21" href="$d1/d47/a02300.html" title=" " alt="" coords="520,1352,743,1408"/>
-<area shape="rect" id="node22" href="$d1/d47/a02300.html" title=" " alt="" coords="491,1433,771,1474"/>
-<area shape="rect" id="node23" href="$d1/d47/a02300.html" title=" " alt="" coords="536,1498,727,1539"/>
-<area shape="rect" id="node24" href="$d1/d47/a02300.html" title=" " alt="" coords="513,1563,749,1605"/>
-<area shape="rect" id="node25" href="$d1/d47/a02300.html" title=" " alt="" coords="536,1629,727,1670"/>
-<area shape="rect" id="node26" href="$d1/d47/a02300.html" title=" " alt="" coords="536,1694,727,1735"/>
-<area shape="rect" id="node27" href="$d1/d47/a02300.html" title=" " alt="" coords="502,1759,761,1801"/>
+<map id="castor3d::BinaryParser&lt; Mesh &gt;" name="castor3d::BinaryParser&lt; Mesh &gt;">
+<area shape="rect" id="node1" title="MovableObject loader." alt="" coords="21,200,175,241"/>
+<area shape="rect" id="node2" href="$db/d83/a02328.html" title=" " alt="" coords="5,109,191,151"/>
+<area shape="rect" id="node3" href="$db/d83/a02328.html" title="Binary data chunk reader base class." alt="" coords="5,5,191,47"/>
 </map>

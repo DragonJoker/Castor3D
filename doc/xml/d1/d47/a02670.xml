@@ -1,69 +1,160 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d1/d47/a02670" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::GpuInformations</compoundname>
-    <includes local="no">GpuInformations.hpp</includes>
-      <sectiondef kind="friend">
-      <memberdef kind="friend" id="d1/d47/a02670_1ac26c806e60ca4a0547680edb68f6e39b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>friend class</type>
-        <definition>friend class Context</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d1/d47/a02670" kind="class" language="C++" prot="public" final="yes">
+    <compoundname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::ResourceCacheBaseT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</basecompoundref>
+    <includes local="no">MaterialCache.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d1/d47/a02670_1a2e8362aa0cc7ad4225dd774633a0a059" prot="public" static="no">
+        <type><ref refid="d9/da4/a02798" kindref="compound">castor3d::Material</ref></type>
+        <definition>using castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::ElementT =  castor3d::Material</definition>
         <argsstring></argsstring>
-        <name>Context</name>
+        <name>ElementT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::ElementT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="22" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="22" bodyend="-1"/>
+        <location file="Cache/MaterialCache.hpp" line="32" column="1" bodyfile="Cache/MaterialCache.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d1/d47/a02670_1aca7732ca8d1d640d875f31910f369e0f" prot="public" static="no">
+        <type>String</type>
+        <definition>using castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::ElementKeyT =  String</definition>
+        <argsstring></argsstring>
+        <name>ElementKeyT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::ElementKeyT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="33" column="1" bodyfile="Cache/MaterialCache.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d1/d47/a02670_1a83076cb77678d407790112009622dd97" prot="public" static="no">
+        <type><ref refid="dc/df4/a01401_1a6e635e023f57ea38d137ac1fc41f1b42" kindref="member">castor3d::MaterialCacheTraits</ref></type>
+        <definition>using castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::ElementCacheTraitsT =  castor3d::MaterialCacheTraits</definition>
+        <argsstring></argsstring>
+        <name>ElementCacheTraitsT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::ElementCacheTraitsT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="34" column="1" bodyfile="Cache/MaterialCache.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d1/d47/a02670_1a71846673bda4b1b15e61b23ac8535aa8" prot="public" static="no">
+        <type>ResourceCacheBaseT&lt; <ref refid="d1/d47/a02670_1a2e8362aa0cc7ad4225dd774633a0a059" kindref="member">ElementT</ref>, <ref refid="d1/d47/a02670_1aca7732ca8d1d640d875f31910f369e0f" kindref="member">ElementKeyT</ref>, <ref refid="d1/d47/a02670_1a83076cb77678d407790112009622dd97" kindref="member">ElementCacheTraitsT</ref> &gt;</type>
+        <definition>using castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::ElementCacheT =  ResourceCacheBaseT&lt; ElementT, ElementKeyT, ElementCacheTraitsT &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementCacheT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::ElementCacheT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="35" column="1" bodyfile="Cache/MaterialCache.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d1/d47/a02670_1afa462945dfba611c3133ec10bec92329" prot="public" static="no">
+        <type>typename ElementCacheT::ElementPtrT</type>
+        <definition>using castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::ElementPtrT =  typename ElementCacheT::ElementPtrT</definition>
+        <argsstring></argsstring>
+        <name>ElementPtrT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::ElementPtrT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="36" column="1" bodyfile="Cache/MaterialCache.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d1/d47/a02670_1a38549dbe67389cb3733fd2eb086071fa" prot="public" static="no">
+        <type>typename ElementCacheT::ElementContT</type>
+        <definition>using castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::ElementContT =  typename ElementCacheT::ElementContT</definition>
+        <argsstring></argsstring>
+        <name>ElementContT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::ElementContT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="37" column="1" bodyfile="Cache/MaterialCache.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d1/d47/a02670_1aff5a03c7926f22209df3ac322e82ec8b" prot="public" static="no">
+        <type>typename ElementCacheT::ElementInitialiserT</type>
+        <definition>using castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::ElementInitialiserT =  typename ElementCacheT::ElementInitialiserT</definition>
+        <argsstring></argsstring>
+        <name>ElementInitialiserT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::ElementInitialiserT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="38" column="1" bodyfile="Cache/MaterialCache.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d1/d47/a02670_1a8dcedbb4763b9e48e12ed0c68b71636d" prot="public" static="no">
+        <type>typename ElementCacheT::ElementCleanerT</type>
+        <definition>using castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::ElementCleanerT =  typename ElementCacheT::ElementCleanerT</definition>
+        <argsstring></argsstring>
+        <name>ElementCleanerT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::ElementCleanerT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="39" column="1" bodyfile="Cache/MaterialCache.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d1/d47/a02670_1aa58cfa8c81418b4c794ef40c4dcbcd96" prot="public" static="no">
+        <type>typename ElementCacheT::ElementMergerT</type>
+        <definition>using castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::ElementMergerT =  typename ElementCacheT::ElementMergerT</definition>
+        <argsstring></argsstring>
+        <name>ElementMergerT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::ElementMergerT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="40" column="1" bodyfile="Cache/MaterialCache.hpp" bodystart="40" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d1/d47/a02670_1aa903bcbe525a7d4d8fd2c92eb3f7f450" prot="private" static="no" mutable="no">
-        <type><ref refid="de/d13/a01473_1a5a9b5f4cf020bb0542dcb66762b8f3ef" kindref="member">GpuFeatures</ref></type>
-        <definition>GpuFeatures castor3d::GpuInformations::m_features</definition>
+      <memberdef kind="variable" id="d1/d47/a02670_1a76c05aabc90661f2c5c1efa4f30ae7c8" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/d3c/a02714" kindref="compound">castor3d::Engine</ref> &amp;</type>
+        <definition>castor3d::Engine&amp; castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::m_engine</definition>
         <argsstring></argsstring>
-        <name>m_features</name>
-        <initializer>{ 0u }</initializer>
+        <name>m_engine</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::m_engine</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="241" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="241" bodyend="-1"/>
+        <location file="Cache/MaterialCache.hpp" line="162" column="19" bodyfile="Cache/MaterialCache.hpp" bodystart="162" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d47/a02670_1a1ec38e388d2180a4e4e16f6f32e69db4" prot="private" static="no" mutable="no">
-        <type>std::map&lt; VkShaderStageFlagBits, bool &gt;</type>
-        <definition>std::map&lt; VkShaderStageFlagBits, bool &gt; castor3d::GpuInformations::m_useShader</definition>
+      <memberdef kind="variable" id="d1/d47/a02670_1af6b439019cb71c8d4c5c153187194790" prot="private" static="no" mutable="no">
+        <type>castor3d::MaterialRPtr</type>
+        <definition>castor3d::MaterialRPtr castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::m_defaultMaterial</definition>
         <argsstring></argsstring>
-        <name>m_useShader</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="242" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="242" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/d47/a02670_1add3096c23a5d6be5e91219f80b92b1d6" prot="private" static="no" mutable="no">
-        <type>std::map&lt; <ref refid="de/d13/a01473_1aa8db7fdfd75692716c162f6d6c1b9cb6" kindref="member">GpuMax</ref>, int32_t &gt;</type>
-        <definition>std::map&lt; GpuMax, int32_t &gt; castor3d::GpuInformations::m_maxValues</definition>
-        <argsstring></argsstring>
-        <name>m_maxValues</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="243" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="243" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/d47/a02670_1a6fc9f5cc58db157543f68ff00cead7c5" prot="private" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::GpuInformations::m_totalMemorySize</definition>
-        <argsstring></argsstring>
-        <name>m_totalMemorySize</name>
+        <name>m_defaultMaterial</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::m_defaultMaterial</qualifiedname>
         <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
@@ -71,241 +162,184 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="244" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="244" bodyend="-1"/>
+        <location file="Cache/MaterialCache.hpp" line="163" column="24" bodyfile="Cache/MaterialCache.hpp" bodystart="163" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d47/a02670_1afd6810aadff3a79cda9b6f4622a60c31" prot="private" static="no" mutable="no">
-        <type>castor::String</type>
-        <definition>castor::String castor3d::GpuInformations::m_vendor</definition>
+      <memberdef kind="variable" id="d1/d47/a02670_1abd269030188f7fa4ec507cb220a6ef2a" prot="private" static="no" mutable="no">
+        <type>castor3d::PassBufferSPtr</type>
+        <definition>castor3d::PassBufferSPtr castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::m_passBuffer</definition>
         <argsstring></argsstring>
-        <name>m_vendor</name>
+        <name>m_passBuffer</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::m_passBuffer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="245" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="245" bodyend="-1"/>
+        <location file="Cache/MaterialCache.hpp" line="164" column="26" bodyfile="Cache/MaterialCache.hpp" bodystart="164" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d47/a02670_1adc42e66d0024a7c94161ff1293f75c4d" prot="private" static="no" mutable="no">
-        <type>castor::String</type>
-        <definition>castor::String castor3d::GpuInformations::m_renderer</definition>
+      <memberdef kind="variable" id="d1/d47/a02670_1ac4e6eea70596ed856da94e896f553dc3" prot="private" static="no" mutable="no">
+        <type>castor3d::SssProfileBufferSPtr</type>
+        <definition>castor3d::SssProfileBufferSPtr castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::m_sssProfileBuffer</definition>
         <argsstring></argsstring>
-        <name>m_renderer</name>
+        <name>m_sssProfileBuffer</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::m_sssProfileBuffer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="246" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="246" bodyend="-1"/>
+        <location file="Cache/MaterialCache.hpp" line="165" column="32" bodyfile="Cache/MaterialCache.hpp" bodystart="165" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d47/a02670_1a9f5de498a5c73d1c3c72a77a2e4aedc6" prot="private" static="no" mutable="no">
-        <type>castor::String</type>
-        <definition>castor::String castor3d::GpuInformations::m_version</definition>
+      <memberdef kind="variable" id="d1/d47/a02670_1a27adb581ce9d97bd9f3f78c120bba777" prot="private" static="no" mutable="no">
+        <type>castor3d::TextureConfigurationBufferSPtr</type>
+        <definition>castor3d::TextureConfigurationBufferSPtr castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::m_texConfigBuffer</definition>
         <argsstring></argsstring>
-        <name>m_version</name>
+        <name>m_texConfigBuffer</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::m_texConfigBuffer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="247" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="247" bodyend="-1"/>
+        <location file="Cache/MaterialCache.hpp" line="166" column="42" bodyfile="Cache/MaterialCache.hpp" bodystart="166" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d47/a02670_1aa1a5ad5bcba3bbd27f8188069cc6fac6" prot="private" static="no" mutable="no">
+        <type>castor3d::TextureAnimationBufferSPtr</type>
+        <definition>castor3d::TextureAnimationBufferSPtr castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::m_texAnimBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_texAnimBuffer</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::m_texAnimBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="167" column="38" bodyfile="Cache/MaterialCache.hpp" bodystart="167" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d47/a02670_1abbd1339a7e51f3028aa1d042b924a867" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d6/d59/a02810" kindref="compound">castor3d::Pass</ref> * &gt;</type>
+        <definition>std::vector&lt; castor3d::Pass * &gt; castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::m_pendingPasses</definition>
+        <argsstring></argsstring>
+        <name>m_pendingPasses</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::m_pendingPasses</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="168" column="13" bodyfile="Cache/MaterialCache.hpp" bodystart="168" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d47/a02670_1a756aaa6a913ce4ecd28579581baffe1a" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d6/d0c/a02962" kindref="compound">castor3d::TextureUnit</ref> * &gt;</type>
+        <definition>std::vector&lt; castor3d::TextureUnit * &gt; castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::m_pendingUnits</definition>
+        <argsstring></argsstring>
+        <name>m_pendingUnits</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::m_pendingUnits</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="169" column="13" bodyfile="Cache/MaterialCache.hpp" bodystart="169" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d47/a02670_1a8d540967620676e52cc266dcf9aa17e1" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d5/de5/a04390" kindref="compound">castor3d::AnimatedTexture</ref> const * &gt;</type>
+        <definition>std::vector&lt; castor3d::AnimatedTexture const * &gt; castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::m_pendingTextures</definition>
+        <argsstring></argsstring>
+        <name>m_pendingTextures</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::m_pendingTextures</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="170" column="13" bodyfile="Cache/MaterialCache.hpp" bodystart="170" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d1/d47/a02670_1a23508153e9a5af0604881548c9600e70" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::GpuInformations::GpuInformations</definition>
-        <argsstring>()</argsstring>
-        <name>GpuInformations</name>
+      <memberdef kind="function" id="d1/d47/a02670_1ab5401b5170a4e6fed9b5ad6e0afb2b2e" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::ResourceCacheT</definition>
+        <argsstring>(castor3d::Engine &amp;engine)</argsstring>
+        <name>ResourceCacheT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::ResourceCacheT</qualifiedname>
+        <param>
+          <type><ref refid="d1/d3c/a02714" kindref="compound">castor3d::Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
         <briefdescription>
 <para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="31" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="31" bodyend="46"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d47/a02670_1a920655b10f814af0305b05da4994567c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::GpuInformations::addFeature</definition>
-        <argsstring>(GpuFeature feature)</argsstring>
-        <name>addFeature</name>
-        <param>
-          <type><ref refid="de/d13/a01473_1a592ae630c434fe2af95c3eefcc900698" kindref="member">GpuFeature</ref></type>
-          <declname>feature</declname>
-        </param>
-        <briefdescription>
-<para>Adds a supported feature. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="53" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="53" bodyend="56"/>
-        <referencedby refid="d1/d47/a02670_1a8f6280381240315eb6a1ed5cda23d863" compoundref="d5/db5/a00374" startline="73" endline="78">updateFeature</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="d1/d47/a02670_1a54e7993e2b67ed913955497e6f0bccd3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::GpuInformations::removeFeature</definition>
-        <argsstring>(GpuFeature feature)</argsstring>
-        <name>removeFeature</name>
-        <param>
-          <type><ref refid="de/d13/a01473_1a592ae630c434fe2af95c3eefcc900698" kindref="member">GpuFeature</ref></type>
-          <declname>feature</declname>
-        </param>
-        <briefdescription>
-<para>Removes a supported feature. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="63" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="63" bodyend="66"/>
-        <referencedby refid="d1/d47/a02670_1a8f6280381240315eb6a1ed5cda23d863" compoundref="d5/db5/a00374" startline="73" endline="78">updateFeature</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="d1/d47/a02670_1a8f6280381240315eb6a1ed5cda23d863" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::GpuInformations::updateFeature</definition>
-        <argsstring>(GpuFeature feature, bool supported)</argsstring>
-        <name>updateFeature</name>
-        <param>
-          <type><ref refid="de/d13/a01473_1a592ae630c434fe2af95c3eefcc900698" kindref="member">GpuFeature</ref></type>
-          <declname>feature</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>supported</declname>
-        </param>
-        <briefdescription>
-<para>Updates the support for a feature. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="73" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="73" bodyend="78"/>
-        <references refid="d1/d47/a02670_1a920655b10f814af0305b05da4994567c" compoundref="d5/db5/a00374" startline="53" endline="56">addFeature</references>
-        <references refid="d1/d47/a02670_1a54e7993e2b67ed913955497e6f0bccd3" compoundref="d5/db5/a00374" startline="63" endline="66">removeFeature</references>
-      </memberdef>
-      <memberdef kind="function" id="d1/d47/a02670_1a77ad12ba88030c8938bf7c5a76d8f733" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::GpuInformations::hasFeature</definition>
-        <argsstring>(GpuFeature feature) const</argsstring>
-        <name>hasFeature</name>
-        <param>
-          <type><ref refid="de/d13/a01473_1a592ae630c434fe2af95c3eefcc900698" kindref="member">GpuFeature</ref></type>
-          <declname>feature</declname>
-        </param>
-        <briefdescription>
-<para>Tells if the feature is supported supports stereo. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="85" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="85" bodyend="88"/>
-        <referencedby refid="d1/d47/a02670_1ac1dce053c9680a03f15630687fe8ea21" compoundref="d5/db5/a00374" startline="105" endline="108">hasShaderStorageBuffers</referencedby>
-        <referencedby refid="d1/d47/a02670_1a27fd0413c1d5302ecb4df383919385b1" compoundref="d5/db5/a00374" startline="95" endline="98">hasStereoRendering</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="d1/d47/a02670_1a27fd0413c1d5302ecb4df383919385b1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::GpuInformations::hasStereoRendering</definition>
-        <argsstring>() const</argsstring>
-        <name>hasStereoRendering</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The stereo support status. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="95" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="95" bodyend="98"/>
-        <references refid="de/d13/a01473_1a592ae630c434fe2af95c3eefcc900698ad427bacfb2917febdb3d7159276612e0">castor3d::eStereoRendering</references>
-        <references refid="d1/d47/a02670_1a77ad12ba88030c8938bf7c5a76d8f733" compoundref="d5/db5/a00374" startline="85" endline="88">hasFeature</references>
-      </memberdef>
-      <memberdef kind="function" id="d1/d47/a02670_1ac1dce053c9680a03f15630687fe8ea21" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::GpuInformations::hasShaderStorageBuffers</definition>
-        <argsstring>() const</argsstring>
-        <name>hasShaderStorageBuffers</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The SSBO support status. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="105" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="105" bodyend="108"/>
-        <references refid="de/d13/a01473_1a592ae630c434fe2af95c3eefcc900698aceb457852896087c2fd755b19274b164">castor3d::eShaderStorageBuffers</references>
-        <references refid="d1/d47/a02670_1a77ad12ba88030c8938bf7c5a76d8f733" compoundref="d5/db5/a00374" startline="85" endline="88">hasFeature</references>
-      </memberdef>
-      <memberdef kind="function" id="d1/d47/a02670_1ae1081f130b61e04a81e7b9b5aa875d88" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::GpuInformations::hasShaderType</definition>
-        <argsstring>(VkShaderStageFlagBits type) const</argsstring>
-        <name>hasShaderType</name>
-        <param>
-          <type>VkShaderStageFlagBits</type>
-          <declname>type</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">type</parametername>
+<parametername direction="in">engine</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The shader type. </para>
+<para>The engine. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>The shader type support status. </para>
-</simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="117" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="117" bodyend="120"/>
+        <location file="Cache/MaterialCache.hpp" line="51" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d47/a02670_1af5de1bc6a466e517149d968c53a0bd55" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::GpuInformations::useShaderType</definition>
-        <argsstring>(VkShaderStageFlagBits type, bool value)</argsstring>
-        <name>useShaderType</name>
+      <memberdef kind="function" id="d1/d47/a02670_1ac72b64c0c59af1a6407f974103c39f04" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::~ResourceCacheT</definition>
+        <argsstring>()=default</argsstring>
+        <name>~ResourceCacheT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::~ResourceCacheT</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="58" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d47/a02670_1aba34a35d0159a047ab6ec3ebfdd0f800" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::initialise</definition>
+        <argsstring>(castor3d::RenderDevice const &amp;device, castor3d::PassTypeID passType)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::initialise</qualifiedname>
         <param>
-          <type>VkShaderStageFlagBits</type>
-          <declname>type</declname>
+          <type><ref refid="df/de5/a03966" kindref="compound">castor3d::RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
         </param>
         <param>
-          <type>bool</type>
-          <declname>value</declname>
+          <type><ref refid="dc/df4/a01401_1a773fcfeb825d3fe54eb4a3dce23bca11" kindref="member">castor3d::PassTypeID</ref></type>
+          <declname>passType</declname>
         </param>
         <briefdescription>
-<para>Defines the support for given shader type. </para>
+<para>Intialises the default material. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">type</parametername>
+<parametername direction="in">device</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The shader type. </para>
+<para>The GPU device. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">value</parametername>
+<parametername direction="in">passType</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The new value. </para>
+<para>The materials type. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -313,67 +347,87 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="131" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="131" bodyend="134"/>
+        <location file="Cache/MaterialCache.hpp" line="69" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d47/a02670_1ab3e59c395984ebec066d765ef9c21902" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>int32_t</type>
-        <definition>int32_t castor3d::GpuInformations::getMaxValue</definition>
-        <argsstring>(GpuMax index) const</argsstring>
-        <name>getMaxValue</name>
+      <memberdef kind="function" id="d1/d47/a02670_1a0d588f394b8d371677de866ef7190781" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::cleanup</qualifiedname>
+        <briefdescription>
+<para>Sets all the elements to be cleaned up. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="77" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d47/a02670_1a8ab2951ce4050f189b757e24dacd8ba4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::clear</definition>
+        <argsstring>()</argsstring>
+        <name>clear</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::clear</qualifiedname>
+        <briefdescription>
+<para>Deletes the default material, flush the collection. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="84" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d47/a02670_1ab14a837693173404ee079ece0ee8ff39" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::update</definition>
+        <argsstring>(castor3d::CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::update</qualifiedname>
         <param>
-          <type><ref refid="de/d13/a01473_1aa8db7fdfd75692716c162f6d6c1b9cb6" kindref="member">GpuMax</ref></type>
-          <declname>index</declname>
+          <type><ref refid="d3/d14/a04046" kindref="compound">castor3d::CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
         </param>
         <briefdescription>
+<para>Updates the render pass, CPU wise. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">index</parametername>
+<parametername direction="inout">updater</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The index. </para>
+<para>The update data. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>The maximum value for given index. </para>
-</simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="143" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="143" bodyend="146"/>
+        <location file="Cache/MaterialCache.hpp" line="93" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d47/a02670_1a9d444edf78bdf453bedbed7e1235a68c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::GpuInformations::setMaxValue</definition>
-        <argsstring>(GpuMax index, int32_t value)</argsstring>
-        <name>setMaxValue</name>
+      <memberdef kind="function" id="d1/d47/a02670_1abc4ccd540b28fa253acae77bd0e69085" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::update</definition>
+        <argsstring>(castor3d::GpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::update</qualifiedname>
         <param>
-          <type><ref refid="de/d13/a01473_1aa8db7fdfd75692716c162f6d6c1b9cb6" kindref="member">GpuMax</ref></type>
-          <declname>index</declname>
-        </param>
-        <param>
-          <type>int32_t</type>
-          <declname>value</declname>
+          <type><ref refid="dd/daf/a04050" kindref="compound">castor3d::GpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
         </param>
         <briefdescription>
+<para>Updates the render pass, GPU wise. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">index</parametername>
+<parametername direction="inout">updater</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The index. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The maximum value for given index. </para>
+<para>The update data. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -381,222 +435,312 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="155" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="155" bodyend="158"/>
+        <location file="Cache/MaterialCache.hpp" line="102" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d47/a02670_1a6019f736c637d2eb47beb7fbe15025d3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::GpuInformations::getTotalMemorySize</definition>
+      <memberdef kind="function" id="d1/d47/a02670_1a6d618b8a9b296dfcd30dfbea3881feba" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::upload</definition>
+        <argsstring>(ashes::CommandBuffer const &amp;cb) const</argsstring>
+        <name>upload</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::upload</qualifiedname>
+        <param>
+          <type>ashes::CommandBuffer const &amp;</type>
+          <declname>cb</declname>
+        </param>
+        <briefdescription>
+<para>Uploads all GPU buffers to VRAM. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">cb</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The command buffer on which transfer commands are recorded. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="111" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d47/a02670_1a4c3b21965423f7e2e47a207f073d4246" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::getNames</definition>
+        <argsstring>(StringArray &amp;names)</argsstring>
+        <name>getNames</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::getNames</qualifiedname>
+        <param>
+          <type>StringArray &amp;</type>
+          <declname>names</declname>
+        </param>
+        <briefdescription>
+<para>Puts all the materials names in the given array. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">names</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The array of names to be filled </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="120" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d47/a02670_1a765d511c829d11a9c64ba8b94ac6c528" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::registerPass</definition>
+        <argsstring>(castor3d::Pass &amp;pass)</argsstring>
+        <name>registerPass</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::registerPass</qualifiedname>
+        <param>
+          <type><ref refid="d6/d59/a02810" kindref="compound">castor3d::Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="121" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d47/a02670_1aa9d8f34646b51a4187b9cc21f54bcf9e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::unregisterPass</definition>
+        <argsstring>(castor3d::Pass &amp;pass)</argsstring>
+        <name>unregisterPass</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::unregisterPass</qualifiedname>
+        <param>
+          <type><ref refid="d6/d59/a02810" kindref="compound">castor3d::Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="122" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d47/a02670_1a8b5c40a563a01c03a365ab0428de36d4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::registerUnit</definition>
+        <argsstring>(castor3d::TextureUnit &amp;unit)</argsstring>
+        <name>registerUnit</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::registerUnit</qualifiedname>
+        <param>
+          <type><ref refid="d6/d0c/a02962" kindref="compound">castor3d::TextureUnit</ref> &amp;</type>
+          <declname>unit</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="123" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d47/a02670_1a83d0c6dbcb6546d11c09b125f7c2bfb8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::unregisterUnit</definition>
+        <argsstring>(castor3d::TextureUnit &amp;unit)</argsstring>
+        <name>unregisterUnit</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::unregisterUnit</qualifiedname>
+        <param>
+          <type><ref refid="d6/d0c/a02962" kindref="compound">castor3d::TextureUnit</ref> &amp;</type>
+          <declname>unit</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="124" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d47/a02670_1a22df5d2afbc5ed394e483f5122346643" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::registerTexture</definition>
+        <argsstring>(castor3d::AnimatedTexture const &amp;texture)</argsstring>
+        <name>registerTexture</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::registerTexture</qualifiedname>
+        <param>
+          <type><ref refid="d5/de5/a04390" kindref="compound">castor3d::AnimatedTexture</ref> const &amp;</type>
+          <declname>texture</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="125" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d47/a02670_1a25494fc9299e2dd3c8eccea0a46a758a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::unregisterTexture</definition>
+        <argsstring>(castor3d::AnimatedTexture const &amp;texture)</argsstring>
+        <name>unregisterTexture</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::unregisterTexture</qualifiedname>
+        <param>
+          <type><ref refid="d5/de5/a04390" kindref="compound">castor3d::AnimatedTexture</ref> const &amp;</type>
+          <declname>texture</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="126" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d47/a02670_1acdaf025b251dff6ea51be85dc6e41fef" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor3d::MaterialRPtr</type>
+        <definition>castor3d::MaterialRPtr castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::getDefaultMaterial</definition>
         <argsstring>() const</argsstring>
-        <name>getTotalMemorySize</name>
+        <name>getDefaultMaterial</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::getDefaultMaterial</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The total VRAM size. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="165" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="165" bodyend="168"/>
+        <location file="Cache/MaterialCache.hpp" line="128" column="24" bodyfile="Cache/MaterialCache.hpp" bodystart="128" bodyend="131"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d47/a02670_1a3b2251f9205cbab1d67c8e8745d5e127" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::GpuInformations::setTotalMemorySize</definition>
-        <argsstring>(uint32_t value)</argsstring>
-        <name>setTotalMemorySize</name>
-        <param>
-          <type>uint32_t</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The total VRAM size. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="175" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="175" bodyend="178"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d47/a02670_1af2729f7cb4c8b8b33af8e43c3ae19c69" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::String const  &amp;</type>
-        <definition>castor::String const&amp; castor3d::GpuInformations::getVendor</definition>
+      <memberdef kind="function" id="d1/d47/a02670_1ad1bdc77d886ae68af9404991cad08fd4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="df/dd9/a04702" kindref="compound">castor3d::PassBuffer</ref> const &amp;</type>
+        <definition>castor3d::PassBuffer const  &amp; castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::getPassBuffer</definition>
         <argsstring>() const</argsstring>
-        <name>getVendor</name>
+        <name>getPassBuffer</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::getPassBuffer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The GPU vendor name. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="185" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="185" bodyend="188"/>
+        <location file="Cache/MaterialCache.hpp" line="133" column="29" bodyfile="Cache/MaterialCache.hpp" bodystart="133" bodyend="137"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d47/a02670_1ab0ac9f65ba13c1e0bd4fbf4ecfde6c66" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::GpuInformations::setVendor</definition>
-        <argsstring>(castor::String const &amp;value)</argsstring>
-        <name>setVendor</name>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU vendor name. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="195" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="195" bodyend="198"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d47/a02670_1a461e961def70c8675711fe9907b05662" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::String const  &amp;</type>
-        <definition>castor::String const&amp; castor3d::GpuInformations::getRenderer</definition>
+      <memberdef kind="function" id="d1/d47/a02670_1ac9708deb11f1bb5b8d3f1420c674c0ae" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="de/d18/a04722" kindref="compound">castor3d::SssProfileBuffer</ref> const &amp;</type>
+        <definition>castor3d::SssProfileBuffer const  &amp; castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::getSssProfileBuffer</definition>
         <argsstring>() const</argsstring>
-        <name>getRenderer</name>
+        <name>getSssProfileBuffer</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::getSssProfileBuffer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The GPU platform. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="205" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="205" bodyend="208"/>
+        <location file="Cache/MaterialCache.hpp" line="139" column="35" bodyfile="Cache/MaterialCache.hpp" bodystart="139" bodyend="143"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d47/a02670_1a7deaf472384cf8d678d2124ccfd50878" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::GpuInformations::setRenderer</definition>
-        <argsstring>(castor::String const &amp;value)</argsstring>
-        <name>setRenderer</name>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU platform. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="215" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="215" bodyend="218"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d47/a02670_1ad5615e9cda13527565bf3f7986357289" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::String const  &amp;</type>
-        <definition>castor::String const&amp; castor3d::GpuInformations::getVersion</definition>
+      <memberdef kind="function" id="d1/d47/a02670_1aef53da27f436ed7c39adf7b6f8f73248" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/dc9/a04742" kindref="compound">castor3d::TextureConfigurationBuffer</ref> const &amp;</type>
+        <definition>castor3d::TextureConfigurationBuffer const  &amp; castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::getTexConfigBuffer</definition>
         <argsstring>() const</argsstring>
-        <name>getVersion</name>
+        <name>getTexConfigBuffer</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::getTexConfigBuffer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The rendering API version. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="225" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="225" bodyend="228"/>
+        <location file="Cache/MaterialCache.hpp" line="145" column="45" bodyfile="Cache/MaterialCache.hpp" bodystart="145" bodyend="149"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d47/a02670_1a66470d90f68b6f97353a14d871b31608" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::GpuInformations::setVersion</definition>
-        <argsstring>(castor::String const &amp;value)</argsstring>
-        <name>setVersion</name>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>value</declname>
-        </param>
+      <memberdef kind="function" id="d1/d47/a02670_1a1fa176212aabd8f9b32895465990ed71" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dc/ddd/a04738" kindref="compound">castor3d::TextureAnimationBuffer</ref> const &amp;</type>
+        <definition>castor3d::TextureAnimationBuffer const  &amp; castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::getTexAnimBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>getTexAnimBuffer</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::getTexAnimBuffer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The rendering API version. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/GpuInformations.hpp" line="235" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="235" bodyend="238"/>
+        <location file="Cache/MaterialCache.hpp" line="151" column="41" bodyfile="Cache/MaterialCache.hpp" bodystart="151" bodyend="155"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Holds GPU informations. </para>
+<para>Material collection, with additional functions. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
-</simplesect>
-<simplesect kind="date"><para>04/05/2016 </para>
-</simplesect>
-<simplesect kind="version"><para>0.9.0 </para>
-</simplesect>
-</para>
     </detaileddescription>
-    <location file="Miscellaneous/GpuInformations.hpp" line="21" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="20" bodyend="248"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::ResourceCacheBaseT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</label>
+        <link refid="d1/d47/a02670"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::ResourceCacheBaseT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</label>
+        <link refid="d1/d47/a02670"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Cache/MaterialCache.hpp" line="28" column="1" bodyfile="Cache/MaterialCache.hpp" bodystart="30" bodyend="171"/>
     <listofallmembers>
-      <member refid="d1/d47/a02670_1a920655b10f814af0305b05da4994567c" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>addFeature</name></member>
-      <member refid="d1/d47/a02670_1ac26c806e60ca4a0547680edb68f6e39b" prot="private" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>Context</name></member>
-      <member refid="d1/d47/a02670_1ab3e59c395984ebec066d765ef9c21902" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>getMaxValue</name></member>
-      <member refid="d1/d47/a02670_1a461e961def70c8675711fe9907b05662" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>getRenderer</name></member>
-      <member refid="d1/d47/a02670_1a6019f736c637d2eb47beb7fbe15025d3" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>getTotalMemorySize</name></member>
-      <member refid="d1/d47/a02670_1af2729f7cb4c8b8b33af8e43c3ae19c69" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>getVendor</name></member>
-      <member refid="d1/d47/a02670_1ad5615e9cda13527565bf3f7986357289" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>getVersion</name></member>
-      <member refid="d1/d47/a02670_1a23508153e9a5af0604881548c9600e70" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>GpuInformations</name></member>
-      <member refid="d1/d47/a02670_1a77ad12ba88030c8938bf7c5a76d8f733" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>hasFeature</name></member>
-      <member refid="d1/d47/a02670_1ac1dce053c9680a03f15630687fe8ea21" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>hasShaderStorageBuffers</name></member>
-      <member refid="d1/d47/a02670_1ae1081f130b61e04a81e7b9b5aa875d88" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>hasShaderType</name></member>
-      <member refid="d1/d47/a02670_1a27fd0413c1d5302ecb4df383919385b1" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>hasStereoRendering</name></member>
-      <member refid="d1/d47/a02670_1aa903bcbe525a7d4d8fd2c92eb3f7f450" prot="private" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>m_features</name></member>
-      <member refid="d1/d47/a02670_1add3096c23a5d6be5e91219f80b92b1d6" prot="private" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>m_maxValues</name></member>
-      <member refid="d1/d47/a02670_1adc42e66d0024a7c94161ff1293f75c4d" prot="private" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>m_renderer</name></member>
-      <member refid="d1/d47/a02670_1a6fc9f5cc58db157543f68ff00cead7c5" prot="private" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>m_totalMemorySize</name></member>
-      <member refid="d1/d47/a02670_1a1ec38e388d2180a4e4e16f6f32e69db4" prot="private" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>m_useShader</name></member>
-      <member refid="d1/d47/a02670_1afd6810aadff3a79cda9b6f4622a60c31" prot="private" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>m_vendor</name></member>
-      <member refid="d1/d47/a02670_1a9f5de498a5c73d1c3c72a77a2e4aedc6" prot="private" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>m_version</name></member>
-      <member refid="d1/d47/a02670_1a54e7993e2b67ed913955497e6f0bccd3" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>removeFeature</name></member>
-      <member refid="d1/d47/a02670_1a9d444edf78bdf453bedbed7e1235a68c" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>setMaxValue</name></member>
-      <member refid="d1/d47/a02670_1a7deaf472384cf8d678d2124ccfd50878" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>setRenderer</name></member>
-      <member refid="d1/d47/a02670_1a3b2251f9205cbab1d67c8e8745d5e127" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>setTotalMemorySize</name></member>
-      <member refid="d1/d47/a02670_1ab0ac9f65ba13c1e0bd4fbf4ecfde6c66" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>setVendor</name></member>
-      <member refid="d1/d47/a02670_1a66470d90f68b6f97353a14d871b31608" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>setVersion</name></member>
-      <member refid="d1/d47/a02670_1a8f6280381240315eb6a1ed5cda23d863" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>updateFeature</name></member>
-      <member refid="d1/d47/a02670_1af5de1bc6a466e517149d968c53a0bd55" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>useShaderType</name></member>
+      <member refid="d1/d47/a02670_1a0d588f394b8d371677de866ef7190781" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>cleanup</name></member>
+      <member refid="d1/d47/a02670_1a8ab2951ce4050f189b757e24dacd8ba4" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>clear</name></member>
+      <member refid="d1/d47/a02670_1a71846673bda4b1b15e61b23ac8535aa8" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>ElementCacheT</name></member>
+      <member refid="d1/d47/a02670_1a83076cb77678d407790112009622dd97" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>ElementCacheTraitsT</name></member>
+      <member refid="d1/d47/a02670_1a8dcedbb4763b9e48e12ed0c68b71636d" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>ElementCleanerT</name></member>
+      <member refid="d1/d47/a02670_1a38549dbe67389cb3733fd2eb086071fa" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>ElementContT</name></member>
+      <member refid="d1/d47/a02670_1aff5a03c7926f22209df3ac322e82ec8b" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>ElementInitialiserT</name></member>
+      <member refid="d1/d47/a02670_1aca7732ca8d1d640d875f31910f369e0f" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>ElementKeyT</name></member>
+      <member refid="d1/d47/a02670_1aa58cfa8c81418b4c794ef40c4dcbcd96" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>ElementMergerT</name></member>
+      <member refid="d1/d47/a02670_1afa462945dfba611c3133ec10bec92329" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>ElementPtrT</name></member>
+      <member refid="d1/d47/a02670_1a2e8362aa0cc7ad4225dd774633a0a059" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>ElementT</name></member>
+      <member refid="d1/d47/a02670_1acdaf025b251dff6ea51be85dc6e41fef" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>getDefaultMaterial</name></member>
+      <member refid="d1/d47/a02670_1a4c3b21965423f7e2e47a207f073d4246" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>getNames</name></member>
+      <member refid="d1/d47/a02670_1ad1bdc77d886ae68af9404991cad08fd4" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>getPassBuffer</name></member>
+      <member refid="d1/d47/a02670_1ac9708deb11f1bb5b8d3f1420c674c0ae" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>getSssProfileBuffer</name></member>
+      <member refid="d1/d47/a02670_1a1fa176212aabd8f9b32895465990ed71" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>getTexAnimBuffer</name></member>
+      <member refid="d1/d47/a02670_1aef53da27f436ed7c39adf7b6f8f73248" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>getTexConfigBuffer</name></member>
+      <member refid="d1/d47/a02670_1aba34a35d0159a047ab6ec3ebfdd0f800" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>initialise</name></member>
+      <member refid="d1/d47/a02670_1af6b439019cb71c8d4c5c153187194790" prot="private" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>m_defaultMaterial</name></member>
+      <member refid="d1/d47/a02670_1a76c05aabc90661f2c5c1efa4f30ae7c8" prot="private" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>m_engine</name></member>
+      <member refid="d1/d47/a02670_1abd269030188f7fa4ec507cb220a6ef2a" prot="private" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>m_passBuffer</name></member>
+      <member refid="d1/d47/a02670_1abbd1339a7e51f3028aa1d042b924a867" prot="private" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>m_pendingPasses</name></member>
+      <member refid="d1/d47/a02670_1a8d540967620676e52cc266dcf9aa17e1" prot="private" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>m_pendingTextures</name></member>
+      <member refid="d1/d47/a02670_1a756aaa6a913ce4ecd28579581baffe1a" prot="private" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>m_pendingUnits</name></member>
+      <member refid="d1/d47/a02670_1ac4e6eea70596ed856da94e896f553dc3" prot="private" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>m_sssProfileBuffer</name></member>
+      <member refid="d1/d47/a02670_1aa1a5ad5bcba3bbd27f8188069cc6fac6" prot="private" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>m_texAnimBuffer</name></member>
+      <member refid="d1/d47/a02670_1a27adb581ce9d97bd9f3f78c120bba777" prot="private" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>m_texConfigBuffer</name></member>
+      <member refid="d1/d47/a02670_1a765d511c829d11a9c64ba8b94ac6c528" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>registerPass</name></member>
+      <member refid="d1/d47/a02670_1a22df5d2afbc5ed394e483f5122346643" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>registerTexture</name></member>
+      <member refid="d1/d47/a02670_1a8b5c40a563a01c03a365ab0428de36d4" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>registerUnit</name></member>
+      <member refid="d1/d47/a02670_1ab5401b5170a4e6fed9b5ad6e0afb2b2e" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>ResourceCacheT</name></member>
+      <member refid="d1/d47/a02670_1aa9d8f34646b51a4187b9cc21f54bcf9e" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>unregisterPass</name></member>
+      <member refid="d1/d47/a02670_1a25494fc9299e2dd3c8eccea0a46a758a" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>unregisterTexture</name></member>
+      <member refid="d1/d47/a02670_1a83d0c6dbcb6546d11c09b125f7c2bfb8" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>unregisterUnit</name></member>
+      <member refid="d1/d47/a02670_1ab14a837693173404ee079ece0ee8ff39" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>update</name></member>
+      <member refid="d1/d47/a02670_1abc4ccd540b28fa253acae77bd0e69085" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>update</name></member>
+      <member refid="d1/d47/a02670_1a6d618b8a9b296dfcd30dfbea3881feba" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>upload</name></member>
+      <member refid="d1/d47/a02670_1ac72b64c0c59af1a6407f974103c39f04" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</scope><name>~ResourceCacheT</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

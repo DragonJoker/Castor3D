@@ -1,7 +1,7 @@
-<map id="castor3d::BinaryParser&lt; SkeletonAnimationNode &gt;" name="castor3d::BinaryParser&lt; SkeletonAnimationNode &gt;">
-<area shape="rect" id="node1" title="MovingBone binary loader." alt="" coords="85,289,270,331"/>
-<area shape="rect" id="node2" href="$d2/d08/a02148.html" title=" " alt="" coords="85,199,270,240"/>
-<area shape="rect" id="node3" href="$d8/dd8/a02108.html" title=" " alt="" coords="5,5,160,32"/>
-<area shape="rect" id="node5" href="$d2/d08/a02148.html" title="Binary data chunk reader base class." alt="" coords="131,95,317,136"/>
-<area shape="rect" id="node4" href="$de/de6/a03848.html" title=" " alt="" coords="218,5,342,32"/>
+<map id="castor3d::AnimationKeyFrame" name="castor3d::AnimationKeyFrame">
+<area shape="rect" id="node1" title=" " alt="" coords="5,111,204,138"/>
+<area shape="rect" id="node2" href="$da/dbb/a03291.html" title=" " alt="" coords="258,5,451,47"/>
+<area shape="rect" id="node3" href="$d8/d38/a04419.html" title=" " alt="" coords="252,71,457,112"/>
+<area shape="rect" id="node4" href="$db/d47/a03447.html" title=" " alt="" coords="260,136,449,177"/>
+<area shape="rect" id="node5" href="$dc/d44/a02899.html" title=" " alt="" coords="264,201,445,243"/>
 </map>

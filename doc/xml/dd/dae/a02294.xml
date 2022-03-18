@@ -1,249 +1,565 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dd/dae/a02294" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::UniformBufferOffsetT</compoundname>
-    <includes local="no">UniformBufferOffset.hpp</includes>
-    <templateparamlist>
-      <param>
-        <type>typename</type>
-        <declname>DataT</declname>
-        <defname>DataT</defname>
-      </param>
-    </templateparamlist>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dd/dae/a02294" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BinaryChunk</compoundname>
+    <includes local="no">BinaryChunk.hpp</includes>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="dd/dae/a02294_1a3117ce5906b0dfad47eb07efae8a4f97" prot="private" static="no" mutable="no">
-        <type><ref refid="d7/df2/a02322" kindref="compound">PoolUniformBuffer</ref> *</type>
-        <definition>PoolUniformBuffer* castor3d::UniformBufferOffsetT&lt; DataT &gt;::buffer</definition>
+      <memberdef kind="variable" id="dd/dae/a02294_1a5dfb1c3fbdc326cdaf84215c3be977e5" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref></type>
+        <definition>ChunkType castor3d::BinaryChunk::m_type</definition>
         <argsstring></argsstring>
-        <name>buffer</name>
-        <initializer>{ nullptr }</initializer>
+        <name>m_type</name>
+        <qualifiedname>castor3d::BinaryChunk::m_type</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/UniformBufferOffset.hpp" line="17" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="17" bodyend="-1"/>
+        <location file="Binary/BinaryChunk.hpp" line="368" column="11" bodyfile="Binary/BinaryChunk.hpp" bodystart="368" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="dd/dae/a02294_1a1d26718436319b3fbb99c18baecacf61" prot="public" static="no" mutable="no">
-        <type>VkMemoryPropertyFlags</type>
-        <definition>VkMemoryPropertyFlags castor3d::UniformBufferOffsetT&lt; DataT &gt;::flags</definition>
+      <memberdef kind="variable" id="dd/dae/a02294_1a059735da6503db76252c057fc6709ee3" prot="private" static="no" mutable="no">
+        <type>castor::ByteArray</type>
+        <definition>castor::ByteArray castor3d::BinaryChunk::m_data</definition>
         <argsstring></argsstring>
-        <name>flags</name>
-        <initializer>{ 0u }</initializer>
+        <name>m_data</name>
+        <qualifiedname>castor3d::BinaryChunk::m_data</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/UniformBufferOffset.hpp" line="20" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="20" bodyend="-1"/>
+        <location file="Binary/BinaryChunk.hpp" line="369" column="19" bodyfile="Binary/BinaryChunk.hpp" bodystart="369" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dd/dae/a02294_1ab51520c7931ecdafe28653604734fb73" prot="public" static="no" mutable="no">
+      <memberdef kind="variable" id="dd/dae/a02294_1a015fcb63f067ac5b03be85fb8083a343" prot="private" static="no" mutable="no">
         <type>uint32_t</type>
-        <definition>uint32_t castor3d::UniformBufferOffsetT&lt; DataT &gt;::offset</definition>
+        <definition>uint32_t castor3d::BinaryChunk::m_index</definition>
         <argsstring></argsstring>
-        <name>offset</name>
-        <initializer>{ 0u }</initializer>
+        <name>m_index</name>
+        <qualifiedname>castor3d::BinaryChunk::m_index</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/UniformBufferOffset.hpp" line="21" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="21" bodyend="-1"/>
-        <referencedby refid="dd/dae/a02294_1a2c6ad146d4910651544564c25ca7dccd" compoundref="d7/d3f/a00173" startline="70" endline="79">castor3d::UniformBufferOffsetT&lt; castor3d::SkinningUboConfiguration &gt;::createSizedBinding</referencedby>
-        <referencedby refid="dd/dae/a02294_1a30110cf344fed3ed16b4d7972ebd263d" compoundref="d7/d3f/a00173" startline="35" endline="38">castor3d::UniformBufferOffsetT&lt; castor3d::SkinningUboConfiguration &gt;::getData</referencedby>
-        <referencedby refid="dd/dae/a02294_1ad7dcad7c96a620540d10eb85f3d4586b" compoundref="d7/d3f/a00173" startline="81" endline="94">castor3d::UniformBufferOffsetT&lt; castor3d::SkinningUboConfiguration &gt;::getDescriptorWrite</referencedby>
+        <location file="Binary/BinaryChunk.hpp" line="370" column="10" bodyfile="Binary/BinaryChunk.hpp" bodystart="370" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dd/dae/a02294_1a2a86f23b4e59cbd966c463b700562f63" prot="public" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::UniformBufferOffsetT&lt; DataT &gt;::range</definition>
+      <memberdef kind="variable" id="dd/dae/a02294_1a832aab7e0a978eb5f93cfed8fdee6585" prot="private" static="no" mutable="no">
+        <type>std::list&lt; castor::ByteArray &gt;</type>
+        <definition>std::list&lt; castor::ByteArray &gt; castor3d::BinaryChunk::m_addedData</definition>
         <argsstring></argsstring>
-        <name>range</name>
-        <initializer>{ 0u }</initializer>
+        <name>m_addedData</name>
+        <qualifiedname>castor3d::BinaryChunk::m_addedData</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/UniformBufferOffset.hpp" line="22" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="22" bodyend="-1"/>
-        <referencedby refid="dd/dae/a02294_1a2c6ad146d4910651544564c25ca7dccd" compoundref="d7/d3f/a00173" startline="70" endline="79">castor3d::UniformBufferOffsetT&lt; castor3d::SkinningUboConfiguration &gt;::createSizedBinding</referencedby>
-        <referencedby refid="dd/dae/a02294_1ad7dcad7c96a620540d10eb85f3d4586b" compoundref="d7/d3f/a00173" startline="81" endline="94">castor3d::UniformBufferOffsetT&lt; castor3d::SkinningUboConfiguration &gt;::getDescriptorWrite</referencedby>
+        <location file="Binary/BinaryChunk.hpp" line="371" column="11" bodyfile="Binary/BinaryChunk.hpp" bodystart="371" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="dd/dae/a02294_1a1fa7ff048545c978eb2f031a158de792" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::UniformBufferOffsetT&lt; DataT &gt;::setPool</definition>
-        <argsstring>(PoolUniformBuffer &amp;pool)</argsstring>
-        <name>setPool</name>
+      <memberdef kind="function" id="dd/dae/a02294_1a1d9e53f4c699bc1d98fd0ee89a62cc09" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::BinaryChunk::BinaryChunk</definition>
+        <argsstring>()</argsstring>
+        <name>BinaryChunk</name>
+        <qualifiedname>castor3d::BinaryChunk::BinaryChunk</qualifiedname>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryChunk.hpp" line="148" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dae/a02294_1aed1a8ade3e7aa65e73874b88d1b764a8" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::BinaryChunk::BinaryChunk</definition>
+        <argsstring>(ChunkType type)</argsstring>
+        <name>BinaryChunk</name>
+        <qualifiedname>castor3d::BinaryChunk::BinaryChunk</qualifiedname>
         <param>
-          <type><ref refid="d7/df2/a02322" kindref="compound">PoolUniformBuffer</ref> &amp;</type>
-          <declname>pool</declname>
+          <type><ref refid="dc/df4/a01401_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref></type>
+          <declname>type</declname>
         </param>
         <briefdescription>
+<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk type </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/UniformBufferOffset.hpp" line="24" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="24" bodyend="27"/>
+        <location file="Binary/BinaryChunk.hpp" line="157" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="dd/dae/a02294_1ad7a4b5aef7f032e598077b111714ad28" prot="public" static="no" const="yes" explicit="yes" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::UniformBufferOffsetT&lt; DataT &gt;::operator bool</definition>
-        <argsstring>() const</argsstring>
-        <name>operator bool</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/UniformBufferOffset.hpp" line="29" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="29" bodyend="33"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/dae/a02294_1a30110cf344fed3ed16b4d7972ebd263d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>DataT const  &amp;</type>
-        <definition>DataT const&amp; castor3d::UniformBufferOffsetT&lt; DataT &gt;::getData</definition>
-        <argsstring>() const</argsstring>
-        <name>getData</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/UniformBufferOffset.hpp" line="35" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="35" bodyend="38"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/dae/a02294_1a59e6572d14eef98230c4528b03bb8abd" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>DataT &amp;</type>
-        <definition>DataT&amp; castor3d::UniformBufferOffsetT&lt; DataT &gt;::getData</definition>
+      <memberdef kind="function" id="dd/dae/a02294_1abbed73a8f9ab118d0b9ba81219a919b6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BinaryChunk::finalise</definition>
         <argsstring>()</argsstring>
-        <name>getData</name>
+        <name>finalise</name>
+        <qualifiedname>castor3d::BinaryChunk::finalise</qualifiedname>
         <briefdescription>
+<para>Computes the final data buffer from each one added until this call. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/UniformBufferOffset.hpp" line="40" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="40" bodyend="43"/>
+        <location file="Binary/BinaryChunk.hpp" line="164" column="14"/>
+        <referencedby refid="d7/d54/a02342_1a3b4ae75e6ecd0bdf9f5dc26381633dab" compoundref="d7/dce/a00143" startline="59" endline="71">castor3d::BinaryWriterBase&lt; TWritten &gt;::write</referencedby>
       </memberdef>
-      <memberdef kind="function" id="dd/dae/a02294_1ac0fba92ce126ac045a59bdf34cb2a28e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d7/df2/a02322" kindref="compound">PoolUniformBuffer</ref> const  &amp;</type>
-        <definition>PoolUniformBuffer const&amp; castor3d::UniformBufferOffsetT&lt; DataT &gt;::getPool</definition>
+      <memberdef kind="function" id="dd/dae/a02294_1abb64f14b109e38fe0aaddab9ac52f8b2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BinaryChunk::add</definition>
+        <argsstring>(uint8_t *data, uint32_t size)</argsstring>
+        <name>add</name>
+        <qualifiedname>castor3d::BinaryChunk::add</qualifiedname>
+        <param>
+          <type>uint8_t *</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>adds data to the chunk </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The data buffer </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer size </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryChunk.hpp" line="175" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dae/a02294_1a7c1bb3cf53d6b4a6856c9964c54fac11" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BinaryChunk::get</definition>
+        <argsstring>(uint8_t *data, uint32_t size)</argsstring>
+        <name>get</name>
+        <qualifiedname>castor3d::BinaryChunk::get</qualifiedname>
+        <param>
+          <type>uint8_t *</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves data from the chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The data buffer to fill </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer size </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryChunk.hpp" line="186" column="14"/>
+        <referencedby refid="dc/dd2/a02466_1a062463121032ba679336be2382c508d0" compoundref="da/d1e/a00149" startline="30" endline="42">castor3d::ChunkParserBase::parse</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/dae/a02294_1af711032d94753cb2d482fe2bcf3afb17" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BinaryChunk::checkAvailable</definition>
+        <argsstring>(uint32_t size=0) const</argsstring>
+        <name>checkAvailable</name>
+        <qualifiedname>castor3d::BinaryChunk::checkAvailable</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>size</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+<para>Checks that the remaining place can hold the given size. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The size </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryChunk.hpp" line="195" column="14"/>
+        <referencedby refid="d3/d09/a02334_1ab5f9ba53ad5865f967b41e5a27ed73a9" compoundref="d3/d00/a00113" startline="489" endline="500">castor3d::BinaryParserBase&lt; TParsed &gt;::doGetSubChunk</referencedby>
+        <referencedby refid="d3/d09/a02334_1a035881aba2b64571b30a5efd3faaf3d9" compoundref="d3/d00/a00113" startline="322" endline="385">castor3d::BinaryParserBase&lt; TParsed &gt;::doParseHeader</referencedby>
+        <referencedby refid="d4/deb/a02478_1ab3e16eea9051bc679aff2782279aafea" compoundref="da/d1e/a00149" startline="183" endline="203">castor3d::ChunkParser&lt; castor::Path &gt;::parse</referencedby>
+        <referencedby refid="d5/d61/a02474_1acf5c3a4513e23e175339295361d35119" compoundref="da/d1e/a00149" startline="135" endline="155">castor3d::ChunkParser&lt; castor::String &gt;::parse</referencedby>
+        <referencedby refid="d3/d09/a02334_1a5db83668684ca219f67de3a381898e64" compoundref="d3/d00/a00113" startline="48" endline="86">castor3d::BinaryParserBase&lt; TParsed &gt;::parse</referencedby>
+        <referencedby refid="dc/dd2/a02466_1a062463121032ba679336be2382c508d0" compoundref="da/d1e/a00149" startline="30" endline="42">castor3d::ChunkParserBase::parse</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/dae/a02294_1a2819c7ddf95251296b5a61bf40435358" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::BinaryChunk::getRemaining</definition>
         <argsstring>() const</argsstring>
-        <name>getPool</name>
+        <name>getRemaining</name>
+        <qualifiedname>castor3d::BinaryChunk::getRemaining</qualifiedname>
         <briefdescription>
+<para>Retrieves the remaining place. </para>
         </briefdescription>
         <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/UniformBufferOffset.hpp" line="45" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="45" bodyend="48"/>
+        <location file="Binary/BinaryChunk.hpp" line="204" column="18"/>
+        <referencedby refid="d4/deb/a02478_1ab3e16eea9051bc679aff2782279aafea" compoundref="da/d1e/a00149" startline="183" endline="203">castor3d::ChunkParser&lt; castor::Path &gt;::parse</referencedby>
+        <referencedby refid="d5/d61/a02474_1acf5c3a4513e23e175339295361d35119" compoundref="da/d1e/a00149" startline="135" endline="155">castor3d::ChunkParser&lt; castor::String &gt;::parse</referencedby>
       </memberdef>
-      <memberdef kind="function" id="dd/dae/a02294_1af3ab4fb1c5a51d3c277c360d5d904f15" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d7/df2/a02322" kindref="compound">PoolUniformBuffer</ref> &amp;</type>
-        <definition>PoolUniformBuffer&amp; castor3d::UniformBufferOffsetT&lt; DataT &gt;::getPool</definition>
-        <argsstring>()</argsstring>
-        <name>getPool</name>
+      <memberdef kind="function" id="dd/dae/a02294_1ab3148d763e8fca01e746ec01991db22b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BinaryChunk::getSubChunk</definition>
+        <argsstring>(BinaryChunk &amp;subchunk)</argsstring>
+        <name>getSubChunk</name>
+        <qualifiedname>castor3d::BinaryChunk::getSubChunk</qualifiedname>
+        <param>
+          <type><ref refid="dd/dae/a02294" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>subchunk</declname>
+        </param>
         <briefdescription>
+<para>Retrieves a subchunk. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">subchunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the subchunk </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/UniformBufferOffset.hpp" line="50" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="50" bodyend="53"/>
+        <location file="Binary/BinaryChunk.hpp" line="215" column="14"/>
+        <referencedby refid="d3/d09/a02334_1ab5f9ba53ad5865f967b41e5a27ed73a9" compoundref="d3/d00/a00113" startline="489" endline="500">castor3d::BinaryParserBase&lt; TParsed &gt;::doGetSubChunk</referencedby>
+        <referencedby refid="d3/d09/a02334_1a035881aba2b64571b30a5efd3faaf3d9" compoundref="d3/d00/a00113" startline="322" endline="385">castor3d::BinaryParserBase&lt; TParsed &gt;::doParseHeader</referencedby>
+        <referencedby refid="d3/d09/a02334_1a5db83668684ca219f67de3a381898e64" compoundref="d3/d00/a00113" startline="48" endline="86">castor3d::BinaryParserBase&lt; TParsed &gt;::parse</referencedby>
       </memberdef>
-      <memberdef kind="function" id="dd/dae/a02294_1adc389f5d4fd605791054221d7119cdae" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::UniformBuffer const  &amp;</type>
-        <definition>ashes::UniformBuffer const&amp; castor3d::UniformBufferOffsetT&lt; DataT &gt;::getBuffer</definition>
+      <memberdef kind="function" id="dd/dae/a02294_1a05ffb50a92f97be91612f8f91ceeed8e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BinaryChunk::addSubChunk</definition>
+        <argsstring>(BinaryChunk const &amp;subchunk)</argsstring>
+        <name>addSubChunk</name>
+        <qualifiedname>castor3d::BinaryChunk::addSubChunk</qualifiedname>
+        <param>
+          <type><ref refid="dd/dae/a02294" kindref="compound">BinaryChunk</ref> const &amp;</type>
+          <declname>subchunk</declname>
+        </param>
+        <briefdescription>
+<para>Writes a subchunk into a chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">subchunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The subchunk </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryChunk.hpp" line="226" column="14"/>
+        <referencedby refid="d7/d54/a02342_1a8828d359b7a61ea2b657d5aada2dd87b" compoundref="d7/dce/a00143" startline="84" endline="103">castor3d::BinaryWriterBase&lt; TWritten &gt;::doWriteHeader</referencedby>
+        <referencedby refid="d7/d54/a02342_1a3b4ae75e6ecd0bdf9f5dc26381633dab" compoundref="d7/dce/a00143" startline="59" endline="71">castor3d::BinaryWriterBase&lt; TWritten &gt;::write</referencedby>
+        <referencedby refid="d2/df5/a02482_1a6d5639d69c83f6b59094817e85f17398" compoundref="d7/d9a/a00152" startline="32" endline="51">castor3d::ChunkWriterBase::write</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/dae/a02294_1ae0ed432fd2e24e10f545b4d34d1d9a82" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BinaryChunk::write</definition>
+        <argsstring>(castor::BinaryFile &amp;file)</argsstring>
+        <name>write</name>
+        <qualifiedname>castor3d::BinaryChunk::write</qualifiedname>
+        <param>
+          <type>castor::BinaryFile &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+<para>To chunk writer function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The file </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryChunk.hpp" line="237" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dae/a02294_1aef0d7f6fbdd6f0ace675b5c4784b4089" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BinaryChunk::read</definition>
+        <argsstring>(castor::BinaryFile &amp;file)</argsstring>
+        <name>read</name>
+        <qualifiedname>castor3d::BinaryChunk::read</qualifiedname>
+        <param>
+          <type>castor::BinaryFile &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+<para>From file reader function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The file containing the chunk </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryChunk.hpp" line="248" column="14"/>
+        <referencedby refid="d3/d09/a02334_1a5db83668684ca219f67de3a381898e64" compoundref="d3/d00/a00113" startline="48" endline="86">castor3d::BinaryParserBase&lt; TParsed &gt;::parse</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/dae/a02294_1a866e46180b6501c20d8c646b72174ac1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint8_t const *</type>
+        <definition>uint8_t const  * castor3d::BinaryChunk::getRemainingData</definition>
         <argsstring>() const</argsstring>
-        <name>getBuffer</name>
+        <name>getRemainingData</name>
+        <qualifiedname>castor3d::BinaryChunk::getRemainingData</qualifiedname>
         <briefdescription>
+<para>Retrieves the remaining data. </para>
         </briefdescription>
         <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/UniformBufferOffset.hpp" line="55" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="55" bodyend="58"/>
+        <location file="Binary/BinaryChunk.hpp" line="257" column="23" bodyfile="Binary/BinaryChunk.hpp" bodystart="257" bodyend="260"/>
       </memberdef>
-      <memberdef kind="function" id="dd/dae/a02294_1abd6e7c0458d09a9fe7097df3f84417a0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::UniformBuffer &amp;</type>
-        <definition>ashes::UniformBuffer&amp; castor3d::UniformBufferOffsetT&lt; DataT &gt;::getBuffer</definition>
-        <argsstring>()</argsstring>
-        <name>getBuffer</name>
+      <memberdef kind="function" id="dd/dae/a02294_1a4b542ea9ab36cf0aaa73e9f1fed8967b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dc/df4/a01401_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref></type>
+        <definition>ChunkType castor3d::BinaryChunk::getChunkType</definition>
+        <argsstring>() const</argsstring>
+        <name>getChunkType</name>
+        <qualifiedname>castor3d::BinaryChunk::getChunkType</qualifiedname>
         <briefdescription>
+<para>Retrieves the chunk type. </para>
         </briefdescription>
         <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/UniformBufferOffset.hpp" line="60" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="60" bodyend="63"/>
+        <location file="Binary/BinaryChunk.hpp" line="269" column="18" bodyfile="Binary/BinaryChunk.hpp" bodystart="269" bodyend="272"/>
+        <referencedby refid="d3/d09/a02334_1a035881aba2b64571b30a5efd3faaf3d9" compoundref="d3/d00/a00113" startline="322" endline="385">castor3d::BinaryParserBase&lt; TParsed &gt;::doParseHeader</referencedby>
+        <referencedby refid="d3/d09/a02334_1a5db83668684ca219f67de3a381898e64" compoundref="d3/d00/a00113" startline="48" endline="86">castor3d::BinaryParserBase&lt; TParsed &gt;::parse</referencedby>
+        <referencedby refid="d3/d09/a02334_1a61b02dbf69d89569eff5be22facd5f07" compoundref="d3/d00/a00113" startline="162" endline="189">castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_1</referencedby>
+        <referencedby refid="d3/d09/a02334_1a95788692ddd6fae91074c299b674aaab" compoundref="d3/d00/a00113" startline="202" endline="229">castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_2</referencedby>
+        <referencedby refid="d3/d09/a02334_1a6f39b66d980e4a65660016f71115a89c" compoundref="d3/d00/a00113" startline="242" endline="269">castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_3</referencedby>
+        <referencedby refid="d3/d09/a02334_1aabc068daf8d99718497aa35f7a17c346" compoundref="d3/d00/a00113" startline="282" endline="309">castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_4</referencedby>
       </memberdef>
-      <memberdef kind="function" id="dd/dae/a02294_1a27740308743c3e5d9e0a84631b3df4b9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="dd/dae/a02294_1a897d1fd01c2b6d1ac85de9c3c501b3a6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>uint32_t</type>
-        <definition>uint32_t castor3d::UniformBufferOffsetT&lt; DataT &gt;::getAlignedSize</definition>
+        <definition>uint32_t castor3d::BinaryChunk::getDataSize</definition>
         <argsstring>() const</argsstring>
-        <name>getAlignedSize</name>
+        <name>getDataSize</name>
+        <qualifiedname>castor3d::BinaryChunk::getDataSize</qualifiedname>
         <briefdescription>
+<para>Retrieves the chunk data size. </para>
         </briefdescription>
         <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/UniformBufferOffset.hpp" line="65" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="65" bodyend="68"/>
+        <location file="Binary/BinaryChunk.hpp" line="281" column="17" bodyfile="Binary/BinaryChunk.hpp" bodystart="281" bodyend="284"/>
       </memberdef>
-      <memberdef kind="function" id="dd/dae/a02294_1a2c6ad146d4910651544564c25ca7dccd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="dd/dae/a02294_1a56f8f486a9cd589ac3c6d10ccf83830e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint8_t const *</type>
+        <definition>uint8_t const  * castor3d::BinaryChunk::getData</definition>
+        <argsstring>() const</argsstring>
+        <name>getData</name>
+        <qualifiedname>castor3d::BinaryChunk::getData</qualifiedname>
+        <briefdescription>
+<para>Retrieves the chunk data. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryChunk.hpp" line="293" column="23" bodyfile="Binary/BinaryChunk.hpp" bodystart="293" bodyend="296"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dae/a02294_1aa21722c40ca9e697b02b6612e81e41c9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</definition>
-        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</argsstring>
-        <name>createSizedBinding</name>
+        <definition>void castor3d::BinaryChunk::setData</definition>
+        <argsstring>(uint8_t const *begin, uint8_t const *end)</argsstring>
+        <name>setData</name>
+        <qualifiedname>castor3d::BinaryChunk::setData</qualifiedname>
         <param>
-          <type>ashes::DescriptorSet &amp;</type>
-          <declname>descriptorSet</declname>
+          <type>uint8_t const *</type>
+          <declname>begin</declname>
         </param>
         <param>
-          <type>VkDescriptorSetLayoutBinding const &amp;</type>
-          <declname>layoutBinding</declname>
+          <type>uint8_t const *</type>
+          <declname>end</declname>
         </param>
         <briefdescription>
+<para>Sets the chunk&apos;s data. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">begin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The data buffer&apos;s begin </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">end</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The data buffer&apos;s end </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/UniformBufferOffset.hpp" line="70" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="70" bodyend="79"/>
-        <referencedby refid="d7/d55/a05514_1a329e3cca96d30cfb46fcfa67c51ca404" compoundref="d1/d72/a01319" startline="36" endline="40">castor3d::PickingUbo::createSizedBinding</referencedby>
-        <referencedby refid="da/d10/a05470_1ab75a8a861f800ea0ac6a5f95b39b3683" compoundref="d8/d7a/a01292" startline="67" endline="71">castor3d::LayeredLpvGridConfigUbo::createSizedBinding</referencedby>
-        <referencedby refid="de/d5f/a05458_1a5d2c9c7da7669ef53a90758a44b7619c" compoundref="d0/d00/a01286" startline="70" endline="74">castor3d::GpInfoUbo::createSizedBinding</referencedby>
-        <referencedby refid="d3/d29/a05518_1a409d04099ce176f7ba8601720b85c9b5" compoundref="d5/df4/a01322" startline="78" endline="82">castor3d::RsmConfigUbo::createSizedBinding</referencedby>
-        <referencedby refid="d5/d90/a05494_1ae20924059170ff6f59e934828e26ef9c" compoundref="d6/dae/a01304" startline="78" endline="82">castor3d::ModelInstancesUbo::createSizedBinding</referencedby>
-        <referencedby refid="d0/d22/a05526_1a33ff803524d407253ea98caeeb038418" compoundref="dc/dd9/a01328" startline="79" endline="83">castor3d::ShadowMapUbo::createSizedBinding</referencedby>
-        <referencedby refid="dd/d2c/a05486_1a55564c6a2a416333c26436076181029c" compoundref="d4/d34/a01298" startline="81" endline="85">castor3d::LpvLightConfigUbo::createSizedBinding</referencedby>
-        <referencedby refid="dd/de0/a05478_1a25c8501fecd9349223a1b66f7a9393e7" compoundref="d2/d68/a01295" startline="91" endline="95">castor3d::LpvGridConfigUbo::createSizedBinding</referencedby>
-        <referencedby refid="d6/dca/a05498_1a00aa24677e5950ec3108ac546ef1cdf5" compoundref="d2/d4c/a01307" startline="96" endline="100">castor3d::ModelMatrixUbo::createSizedBinding</referencedby>
-        <referencedby refid="d2/d30/a05490_1ac31062a614833908640fbbeed9cb92fe" compoundref="d3/d07/a01301" startline="103" endline="107">castor3d::MatrixUbo::createSizedBinding</referencedby>
-        <referencedby refid="df/d05/a05626_1ac12f32dda8736e904642f50f0d6be562" compoundref="d3/da4/a01343" startline="112" endline="116">castor3d::VoxelizerUbo::createSizedBinding</referencedby>
-        <referencedby refid="dc/d79/a05522_1a3820ea1f3fdb87e2fe8b95009c8a55fa" compoundref="dd/d5d/a01325" startline="118" endline="122">castor3d::SceneUbo::createSizedBinding</referencedby>
-        <referencedby refid="df/de9/a05538_1a073ca04d26a7b693d1bad1049ed59890" compoundref="d4/dd1/a01334" startline="147" endline="151">castor3d::SsaoConfigUbo::createSizedBinding</referencedby>
+        <location file="Binary/BinaryChunk.hpp" line="307" column="13" bodyfile="Binary/BinaryChunk.hpp" bodystart="307" bodyend="311"/>
+        <referencedby refid="d2/df5/a02482_1a6d5639d69c83f6b59094817e85f17398" compoundref="d7/d9a/a00152" startline="32" endline="51">castor3d::ChunkWriterBase::write</referencedby>
       </memberdef>
-      <memberdef kind="function" id="dd/dae/a02294_1ad7dcad7c96a620540d10eb85f3d4586b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::WriteDescriptorSet</type>
-        <definition>ashes::WriteDescriptorSet castor3d::UniformBufferOffsetT&lt; DataT &gt;::getDescriptorWrite</definition>
-        <argsstring>(uint32_t dstBinding, uint32_t dstArrayElement=0u) const</argsstring>
-        <name>getDescriptorWrite</name>
+      <memberdef kind="function" id="dd/dae/a02294_1a08e242acd79584a8c061b89c14f68452" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BinaryChunk::endParse</definition>
+        <argsstring>()</argsstring>
+        <name>endParse</name>
+        <qualifiedname>castor3d::BinaryChunk::endParse</qualifiedname>
+        <briefdescription>
+<para>Retrieves the chunk data size. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryChunk.hpp" line="318" column="6" bodyfile="Binary/BinaryChunk.hpp" bodystart="318" bodyend="321"/>
+        <referencedby refid="d3/d09/a02334_1a035881aba2b64571b30a5efd3faaf3d9" compoundref="d3/d00/a00113" startline="322" endline="385">castor3d::BinaryParserBase&lt; TParsed &gt;::doParseHeader</referencedby>
+        <referencedby refid="d3/d09/a02334_1a6bbbb529f463085c7d259600ae1b3e99" compoundref="d3/d00/a00113" startline="99" endline="149">castor3d::BinaryParserBase&lt; TParsed &gt;::parse</referencedby>
+        <referencedby refid="d3/d09/a02334_1a61b02dbf69d89569eff5be22facd5f07" compoundref="d3/d00/a00113" startline="162" endline="189">castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_1</referencedby>
+        <referencedby refid="d3/d09/a02334_1a95788692ddd6fae91074c299b674aaab" compoundref="d3/d00/a00113" startline="202" endline="229">castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_2</referencedby>
+        <referencedby refid="d3/d09/a02334_1a6f39b66d980e4a65660016f71115a89c" compoundref="d3/d00/a00113" startline="242" endline="269">castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_3</referencedby>
+        <referencedby refid="d3/d09/a02334_1aabc068daf8d99718497aa35f7a17c346" compoundref="d3/d00/a00113" startline="282" endline="309">castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_4</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/dae/a02294_1a7a755e5c70676c80e150d61574442c2c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BinaryChunk::resetParse</definition>
+        <argsstring>()</argsstring>
+        <name>resetParse</name>
+        <qualifiedname>castor3d::BinaryChunk::resetParse</qualifiedname>
+        <briefdescription>
+<para>Resets the chunk, to be able to reparse it. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryChunk.hpp" line="328" column="6" bodyfile="Binary/BinaryChunk.hpp" bodystart="328" bodyend="331"/>
+        <referencedby refid="d3/d09/a02334_1a6bbbb529f463085c7d259600ae1b3e99" compoundref="d3/d00/a00113" startline="99" endline="149">castor3d::BinaryParserBase&lt; TParsed &gt;::parse</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="dd/dae/a02294_1a7f1fb9ce9dd3bc07fecd4f019350944a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BinaryChunk::binaryError</definition>
+        <argsstring>(std::string_view view)</argsstring>
+        <name>binaryError</name>
+        <qualifiedname>castor3d::BinaryChunk::binaryError</qualifiedname>
         <param>
-          <type>uint32_t</type>
-          <declname>dstBinding</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>dstArrayElement</declname>
-          <defval>0u</defval>
+          <type>std::string_view</type>
+          <declname>view</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -251,220 +567,66 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/UniformBufferOffset.hpp" line="81" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="81" bodyend="94"/>
-        <referencedby refid="d8/d1f/a04450_1a612d681d62631e6bb92d9601c660b48e" compoundref="d0/d0a/a00743" startline="363" endline="369">castor3d::RenderQuad::makeDescriptorWrite</referencedby>
+        <location file="Binary/BinaryChunk.hpp" line="334" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dae/a02294_1ae29dfd79c3cae3e844d9baa06769afed" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::BinaryChunk::doRead</definition>
+        <argsstring>(T *values, uint32_t count)</argsstring>
+        <name>doRead</name>
+        <qualifiedname>castor3d::BinaryChunk::doRead</qualifiedname>
+        <param>
+          <type>T *</type>
+          <declname>values</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryChunk.hpp" line="338" column="13" bodyfile="Binary/BinaryChunk.hpp" bodystart="338" bodyend="365"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>A UniformBuffer and an offset from the <ref refid="d3/dc5/a02306" kindref="compound">GpuBuffer</ref>. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="4612">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ShadowMapUboConfiguration &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4591" relation="template-instance">
-          <edgelabel>&lt; castor3d::ShadowMapUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4611">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::SubsurfaceScatteringPass::BlurConfiguration &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4591" relation="template-instance">
-          <edgelabel>&lt; castor3d::SubsurfaceScatteringPass::BlurConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4610">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ComputeParticleSystem::Configuration &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4591" relation="template-instance">
-          <edgelabel>&lt; castor3d::ComputeParticleSystem::Configuration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4594">
-        <label>castor3d::UniformBufferOffsetT&lt; MinifyConfiguration &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4591" relation="template-instance">
-          <edgelabel>&lt; MinifyConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4605">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::LpvLightConfigUboConfiguration &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4591" relation="template-instance">
-          <edgelabel>&lt; castor3d::LpvLightConfigUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4607">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::GaussianBlur::Configuration &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4591" relation="template-instance">
-          <edgelabel>&lt; castor3d::GaussianBlur::Configuration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4615">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::HdrConfig &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4591" relation="template-instance">
-          <edgelabel>&lt; castor3d::HdrConfig &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4601">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelUboConfiguration &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4591" relation="template-instance">
-          <edgelabel>&lt; castor3d::ModelUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4602">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::PickingUboConfiguration &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4591" relation="template-instance">
-          <edgelabel>&lt; castor3d::PickingUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4617">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::SkinningUboConfiguration &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4591" relation="template-instance">
-          <edgelabel>&lt; castor3d::SkinningUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4591">
-        <label>castor3d::UniformBufferOffsetT&lt; DataT &gt;</label>
-        <link refid="dd/dae/a02294"/>
-      </node>
-      <node id="4597">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::SceneUboConfiguration &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4591" relation="template-instance">
-          <edgelabel>&lt; castor3d::SceneUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4592">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelInstancesUboConfiguration &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4591" relation="template-instance">
-          <edgelabel>&lt; castor3d::ModelInstancesUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4596">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::MatrixUboConfiguration &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4591" relation="template-instance">
-          <edgelabel>&lt; castor3d::MatrixUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4599">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::GpInfoUboConfiguration &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4591" relation="template-instance">
-          <edgelabel>&lt; castor3d::GpInfoUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4616">
-        <label>castor3d::UniformBufferOffsetT&lt; castor::Point3f &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4591" relation="template-instance">
-          <edgelabel>&lt; castor::Point3f &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4608">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::SubsurfaceScatteringPass::BlurWeights &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4591" relation="template-instance">
-          <edgelabel>&lt; castor3d::SubsurfaceScatteringPass::BlurWeights &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4598">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::BillboardUboConfiguration &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4591" relation="template-instance">
-          <edgelabel>&lt; castor3d::BillboardUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4593">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelMatrixUboConfiguration &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4591" relation="template-instance">
-          <edgelabel>&lt; castor3d::ModelMatrixUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4613">
-        <label>castor3d::UniformBufferOffsetT&lt; Configuration &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4591" relation="template-instance">
-          <edgelabel>&lt; Configuration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4614">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::RsmUboConfiguration &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4591" relation="template-instance">
-          <edgelabel>&lt; castor3d::RsmUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4609">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::MorphingUboConfiguration &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4591" relation="template-instance">
-          <edgelabel>&lt; castor3d::MorphingUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4603">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::VoxelizerUboConfiguration &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4591" relation="template-instance">
-          <edgelabel>&lt; castor3d::VoxelizerUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4604">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::LpvGridConfigUboConfiguration &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4591" relation="template-instance">
-          <edgelabel>&lt; castor3d::LpvGridConfigUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4600">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::LayeredLpvGridConfigUboConfiguration &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4591" relation="template-instance">
-          <edgelabel>&lt; castor3d::LayeredLpvGridConfigUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4606">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::Texture3DTo2DData &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4591" relation="template-instance">
-          <edgelabel>&lt; castor3d::Texture3DTo2DData &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4595">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::TexturesUboConfiguration &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4591" relation="template-instance">
-          <edgelabel>&lt; castor3d::TexturesUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <location file="Buffer/BufferModule.hpp" line="109" column="1" bodyfile="Buffer/BufferModule.hpp" bodystart="109" bodyend="-1"/>
+    <location file="Binary/BinaryChunk.hpp" line="139" column="1" bodyfile="Binary/BinaryChunk.hpp" bodystart="140" bodyend="372"/>
     <listofallmembers>
-      <member refid="dd/dae/a02294_1a3117ce5906b0dfad47eb07efae8a4f97" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>buffer</name></member>
-      <member refid="dd/dae/a02294_1a2c6ad146d4910651544564c25ca7dccd" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>createSizedBinding</name></member>
-      <member refid="dd/dae/a02294_1a1d26718436319b3fbb99c18baecacf61" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>flags</name></member>
-      <member refid="dd/dae/a02294_1a27740308743c3e5d9e0a84631b3df4b9" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>getAlignedSize</name></member>
-      <member refid="dd/dae/a02294_1adc389f5d4fd605791054221d7119cdae" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>getBuffer</name></member>
-      <member refid="dd/dae/a02294_1abd6e7c0458d09a9fe7097df3f84417a0" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>getBuffer</name></member>
-      <member refid="dd/dae/a02294_1a30110cf344fed3ed16b4d7972ebd263d" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>getData</name></member>
-      <member refid="dd/dae/a02294_1a59e6572d14eef98230c4528b03bb8abd" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>getData</name></member>
-      <member refid="dd/dae/a02294_1ad7dcad7c96a620540d10eb85f3d4586b" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>getDescriptorWrite</name></member>
-      <member refid="dd/dae/a02294_1ac0fba92ce126ac045a59bdf34cb2a28e" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>getPool</name></member>
-      <member refid="dd/dae/a02294_1af3ab4fb1c5a51d3c277c360d5d904f15" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>getPool</name></member>
-      <member refid="dd/dae/a02294_1ab51520c7931ecdafe28653604734fb73" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>offset</name></member>
-      <member refid="dd/dae/a02294_1ad7a4b5aef7f032e598077b111714ad28" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>operator bool</name></member>
-      <member refid="dd/dae/a02294_1a2a86f23b4e59cbd966c463b700562f63" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>range</name></member>
-      <member refid="dd/dae/a02294_1a1fa7ff048545c978eb2f031a158de792" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>setPool</name></member>
+      <member refid="dd/dae/a02294_1abb64f14b109e38fe0aaddab9ac52f8b2" prot="public" virt="non-virtual"><scope>castor3d::BinaryChunk</scope><name>add</name></member>
+      <member refid="dd/dae/a02294_1a05ffb50a92f97be91612f8f91ceeed8e" prot="public" virt="non-virtual"><scope>castor3d::BinaryChunk</scope><name>addSubChunk</name></member>
+      <member refid="dd/dae/a02294_1a1d9e53f4c699bc1d98fd0ee89a62cc09" prot="public" virt="non-virtual"><scope>castor3d::BinaryChunk</scope><name>BinaryChunk</name></member>
+      <member refid="dd/dae/a02294_1aed1a8ade3e7aa65e73874b88d1b764a8" prot="public" virt="non-virtual"><scope>castor3d::BinaryChunk</scope><name>BinaryChunk</name></member>
+      <member refid="dd/dae/a02294_1a7f1fb9ce9dd3bc07fecd4f019350944a" prot="private" virt="non-virtual"><scope>castor3d::BinaryChunk</scope><name>binaryError</name></member>
+      <member refid="dd/dae/a02294_1af711032d94753cb2d482fe2bcf3afb17" prot="public" virt="non-virtual"><scope>castor3d::BinaryChunk</scope><name>checkAvailable</name></member>
+      <member refid="dd/dae/a02294_1ae29dfd79c3cae3e844d9baa06769afed" prot="private" virt="non-virtual"><scope>castor3d::BinaryChunk</scope><name>doRead</name></member>
+      <member refid="dd/dae/a02294_1a08e242acd79584a8c061b89c14f68452" prot="public" virt="non-virtual"><scope>castor3d::BinaryChunk</scope><name>endParse</name></member>
+      <member refid="dd/dae/a02294_1abbed73a8f9ab118d0b9ba81219a919b6" prot="public" virt="non-virtual"><scope>castor3d::BinaryChunk</scope><name>finalise</name></member>
+      <member refid="dd/dae/a02294_1a7c1bb3cf53d6b4a6856c9964c54fac11" prot="public" virt="non-virtual"><scope>castor3d::BinaryChunk</scope><name>get</name></member>
+      <member refid="dd/dae/a02294_1a4b542ea9ab36cf0aaa73e9f1fed8967b" prot="public" virt="non-virtual"><scope>castor3d::BinaryChunk</scope><name>getChunkType</name></member>
+      <member refid="dd/dae/a02294_1a56f8f486a9cd589ac3c6d10ccf83830e" prot="public" virt="non-virtual"><scope>castor3d::BinaryChunk</scope><name>getData</name></member>
+      <member refid="dd/dae/a02294_1a897d1fd01c2b6d1ac85de9c3c501b3a6" prot="public" virt="non-virtual"><scope>castor3d::BinaryChunk</scope><name>getDataSize</name></member>
+      <member refid="dd/dae/a02294_1a2819c7ddf95251296b5a61bf40435358" prot="public" virt="non-virtual"><scope>castor3d::BinaryChunk</scope><name>getRemaining</name></member>
+      <member refid="dd/dae/a02294_1a866e46180b6501c20d8c646b72174ac1" prot="public" virt="non-virtual"><scope>castor3d::BinaryChunk</scope><name>getRemainingData</name></member>
+      <member refid="dd/dae/a02294_1ab3148d763e8fca01e746ec01991db22b" prot="public" virt="non-virtual"><scope>castor3d::BinaryChunk</scope><name>getSubChunk</name></member>
+      <member refid="dd/dae/a02294_1a832aab7e0a978eb5f93cfed8fdee6585" prot="private" virt="non-virtual"><scope>castor3d::BinaryChunk</scope><name>m_addedData</name></member>
+      <member refid="dd/dae/a02294_1a059735da6503db76252c057fc6709ee3" prot="private" virt="non-virtual"><scope>castor3d::BinaryChunk</scope><name>m_data</name></member>
+      <member refid="dd/dae/a02294_1a015fcb63f067ac5b03be85fb8083a343" prot="private" virt="non-virtual"><scope>castor3d::BinaryChunk</scope><name>m_index</name></member>
+      <member refid="dd/dae/a02294_1a5dfb1c3fbdc326cdaf84215c3be977e5" prot="private" virt="non-virtual"><scope>castor3d::BinaryChunk</scope><name>m_type</name></member>
+      <member refid="dd/dae/a02294_1aef0d7f6fbdd6f0ace675b5c4784b4089" prot="public" virt="non-virtual"><scope>castor3d::BinaryChunk</scope><name>read</name></member>
+      <member refid="dd/dae/a02294_1a7a755e5c70676c80e150d61574442c2c" prot="public" virt="non-virtual"><scope>castor3d::BinaryChunk</scope><name>resetParse</name></member>
+      <member refid="dd/dae/a02294_1aa21722c40ca9e697b02b6612e81e41c9" prot="public" virt="non-virtual"><scope>castor3d::BinaryChunk</scope><name>setData</name></member>
+      <member refid="dd/dae/a02294_1ae0ed432fd2e24e10f545b4d34d1d9a82" prot="public" virt="non-virtual"><scope>castor3d::BinaryChunk</scope><name>write</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

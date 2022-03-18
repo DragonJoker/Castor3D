@@ -1,33 +1,80 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d5/d6b/a03428" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkDisplayModeProperties2KHR &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d5/d6b/a03428_1aec9ff21c58039c206703631d6ff652ab" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkDisplayModeProperties2KHR &gt;::value</definition>
+    <compoundname>castor3d::SubmeshAnimationBuffer</compoundname>
+    <includes local="no">SubmeshModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d5/d6b/a03428_1aa36e83398b5ee0a2ed09aa315a99a0ab" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/df5/a01395_1a56e63531cb249a631d9bca1767624584" kindref="member">InterleavedVertexArray</ref></type>
+        <definition>InterleavedVertexArray castor3d::SubmeshAnimationBuffer::buffer</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_DISPLAY_MODE_PROPERTIES_2_KHR</initializer>
+        <name>buffer</name>
+        <qualifiedname>castor3d::SubmeshAnimationBuffer::buffer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The vertex buffer. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="268" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="268" bodyend="-1"/>
+        <location file="Model/Mesh/Submesh/SubmeshModule.hpp" line="39" column="24" bodyfile="Model/Mesh/Submesh/SubmeshModule.hpp" bodystart="39" bodyend="-1"/>
+        <referencedby refid="d2/df5/a01395_1a690e921dba7f5c14fee703d89de7565c" compoundref="d5/db1/a00140" startline="1268" endline="1274">castor3d::prepareChunkData</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d6b/a03428_1ae406d6c59e29adbcb2510c79c3ace4f1" prot="public" static="no" mutable="no">
+        <type>castor::BoundingBox</type>
+        <definition>castor::BoundingBox castor3d::SubmeshAnimationBuffer::boundingBox</definition>
+        <argsstring></argsstring>
+        <name>boundingBox</name>
+        <qualifiedname>castor3d::SubmeshAnimationBuffer::boundingBox</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The bounding box. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/SubmeshModule.hpp" line="42" column="21" bodyfile="Model/Mesh/Submesh/SubmeshModule.hpp" bodystart="42" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="268" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="268" bodyend="268"/>
+    <collaborationgraph>
+      <node id="5">
+        <label>T</label>
+      </node>
+      <node id="3">
+        <label>castor3d::InterleavedVertex</label>
+        <link refid="d8/db3/a03488"/>
+      </node>
+      <node id="1">
+        <label>castor3d::SubmeshAnimationBuffer</label>
+        <link refid="d5/d6b/a03428"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>buffer</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::vector&lt; InterleavedVertex &gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; InterleavedVertex &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/Submesh/SubmeshModule.hpp" line="35" column="1" bodyfile="Model/Mesh/Submesh/SubmeshModule.hpp" bodystart="36" bodyend="43"/>
     <listofallmembers>
-      <member refid="d5/d6b/a03428_1aec9ff21c58039c206703631d6ff652ab" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkDisplayModeProperties2KHR &gt;</scope><name>value</name></member>
+      <member refid="d5/d6b/a03428_1ae406d6c59e29adbcb2510c79c3ace4f1" prot="public" virt="non-virtual"><scope>castor3d::SubmeshAnimationBuffer</scope><name>boundingBox</name></member>
+      <member refid="d5/d6b/a03428_1aa36e83398b5ee0a2ed09aa315a99a0ab" prot="public" virt="non-virtual"><scope>castor3d::SubmeshAnimationBuffer</scope><name>buffer</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

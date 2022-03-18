@@ -1,33 +1,199 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d5/d04/a03303" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkSwapchainCounterCreateInfoEXT &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d5/d04/a03303_1aacb18921443da7ef9c15da188d69294e" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkSwapchainCounterCreateInfoEXT &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d5/d04/a03303" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Cube</compoundname>
+    <basecompoundref refid="d9/dc9/a03347" prot="public" virt="non-virtual">castor3d::MeshGenerator</basecompoundref>
+    <includes local="no">Cube.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d5/d04/a03303_1a3d268c313081efbac3927472c1f33fb6" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::Cube::m_height</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_SWAPCHAIN_COUNTER_CREATE_INFO_EXT</initializer>
+        <name>m_height</name>
+        <qualifiedname>castor3d::Cube::m_height</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="242" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="242" bodyend="-1"/>
+        <location file="Model/Mesh/Generator/Cube.hpp" line="32" column="7" bodyfile="Model/Mesh/Generator/Cube.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d04/a03303_1ad1767a067db63ea52d3a6eed8df999c5" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::Cube::m_width</definition>
+        <argsstring></argsstring>
+        <name>m_width</name>
+        <qualifiedname>castor3d::Cube::m_width</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Cube.hpp" line="33" column="7" bodyfile="Model/Mesh/Generator/Cube.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d04/a03303_1a24b37b6031aa100a3dec2dd6c12517a3" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::Cube::m_depth</definition>
+        <argsstring></argsstring>
+        <name>m_depth</name>
+        <qualifiedname>castor3d::Cube::m_depth</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Cube.hpp" line="34" column="7" bodyfile="Model/Mesh/Generator/Cube.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/d04/a03303_1a078076d81df069f7b3225c30445b1279" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Cube::Cube</definition>
+        <argsstring>()</argsstring>
+        <name>Cube</name>
+        <qualifiedname>castor3d::Cube::Cube</qualifiedname>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Cube.hpp" line="21" column="9"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d5/d04/a03303_1a77e1b64b5598bed7fca6e26bd44db17c" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> MeshGeneratorSPtr</type>
+        <definition>static C3D_API MeshGeneratorSPtr castor3d::Cube::create</definition>
+        <argsstring>()</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::Cube::create</qualifiedname>
+        <briefdescription>
+<para>Creation function, used by Factory. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><ref refid="dc/dc1/a03307" kindref="compound">Cylinder</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Cube.hpp" line="25" column="34"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d5/d04/a03303_1afca3aad8d1a794108a5ed55f024f3302" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::Cube::doGenerate</definition>
+        <argsstring>(Mesh &amp;mesh, Parameters const &amp;parameters) override</argsstring>
+        <name>doGenerate</name>
+        <qualifiedname>castor3d::Cube::doGenerate</qualifiedname>
+        <reimplements refid="d9/dc9/a03347_1a690745122d7e670b311e317ae86c9b45">doGenerate</reimplements>
+        <param>
+          <type><ref refid="d1/d13/a03339" kindref="compound">Mesh</ref> &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para>Generates the mesh. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mesh. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The generator parameters. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Cube.hpp" line="28" column="22"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="d5/d04/a03303_1af59a66495562fe65848760dfd24f73c2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::ostream &amp;</type>
+        <definition>std::ostream &amp; operator&lt;&lt;</definition>
+        <argsstring>(std::ostream &amp;o, Cube const &amp;c)</argsstring>
+        <name>operator&lt;&lt;</name>
+        <qualifiedname>castor3d::Cube::operator&lt;&lt;</qualifiedname>
+        <param>
+          <type>std::ostream &amp;</type>
+          <declname>o</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d04/a03303" kindref="compound">Cube</ref> const &amp;</type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Cube.hpp" line="35" column="8" bodyfile="Model/Mesh/Generator/Cube.hpp" bodystart="39" bodyend="42"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="242" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="242" bodyend="242"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::Cube</label>
+        <link refid="d5/d04/a03303"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::MeshGenerator</label>
+        <link refid="d9/dc9/a03347"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::Cube</label>
+        <link refid="d5/d04/a03303"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::MeshGenerator</label>
+        <link refid="d9/dc9/a03347"/>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/Generator/Cube.hpp" line="11" column="1" bodyfile="Model/Mesh/Generator/Cube.hpp" bodystart="13" bodyend="37"/>
     <listofallmembers>
-      <member refid="d5/d04/a03303_1aacb18921443da7ef9c15da188d69294e" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkSwapchainCounterCreateInfoEXT &gt;</scope><name>value</name></member>
+      <member refid="d9/dc9/a03347_1a3207825be521c851f6fc654751f54cf1" prot="public" virt="virtual"><scope>castor3d::Cube</scope><name>computeNormals</name></member>
+      <member refid="d5/d04/a03303_1a77e1b64b5598bed7fca6e26bd44db17c" prot="public" virt="non-virtual"><scope>castor3d::Cube</scope><name>create</name></member>
+      <member refid="d5/d04/a03303_1a078076d81df069f7b3225c30445b1279" prot="public" virt="non-virtual"><scope>castor3d::Cube</scope><name>Cube</name></member>
+      <member refid="d5/d04/a03303_1afca3aad8d1a794108a5ed55f024f3302" prot="private" virt="virtual"><scope>castor3d::Cube</scope><name>doGenerate</name></member>
+      <member refid="d9/dc9/a03347_1a9fdc140f2d871ca6cb81029250c346ae" prot="public" virt="virtual"><scope>castor3d::Cube</scope><name>generate</name></member>
+      <member refid="d5/d04/a03303_1a24b37b6031aa100a3dec2dd6c12517a3" prot="private" virt="non-virtual"><scope>castor3d::Cube</scope><name>m_depth</name></member>
+      <member refid="d5/d04/a03303_1a3d268c313081efbac3927472c1f33fb6" prot="private" virt="non-virtual"><scope>castor3d::Cube</scope><name>m_height</name></member>
+      <member refid="d5/d04/a03303_1ad1767a067db63ea52d3a6eed8df999c5" prot="private" virt="non-virtual"><scope>castor3d::Cube</scope><name>m_width</name></member>
+      <member refid="d9/dc9/a03347_1a3ccec3fd88667bbca33c6e81afdeff19" prot="public" virt="non-virtual"><scope>castor3d::Cube</scope><name>MeshGenerator</name></member>
+      <member refid="d5/d04/a03303_1af59a66495562fe65848760dfd24f73c2" prot="private" virt="non-virtual"><scope>castor3d::Cube</scope><name>operator&lt;&lt;</name></member>
+      <member refid="d9/dc9/a03347_1adee42c7c921b0dff4cbbc99c29faf31f" prot="public" virt="virtual"><scope>castor3d::Cube</scope><name>~MeshGenerator</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

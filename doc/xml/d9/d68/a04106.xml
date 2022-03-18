@@ -1,37 +1,64 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d9/d68/a04106" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::OverlayFactory</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">castor::Factory&lt; OverlayCategory, OverlayType &gt;</basecompoundref>
-    <includes local="no">OverlayFactory.hpp</includes>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d9/d68/a04106_1aa44bc6e7bb3bff7b7ea4f7a0477da430" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::OverlayFactory::OverlayFactory</definition>
-        <argsstring>()</argsstring>
-        <name>OverlayFactory</name>
+    <compoundname>castor3d::RenderWindow::EvtHandler</compoundname>
+    <basecompoundref refid="dd/deb/a02766" prot="public" virt="non-virtual">castor3d::MouseEventHandler</basecompoundref>
+    <includes local="no">RenderWindow.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d9/d68/a04106_1a6a96609250d45b8c6950bce068a131b9" prot="private" static="no" mutable="no">
+        <type><ref refid="df/d4e/a04094" kindref="compound">RenderWindow</ref> *</type>
+        <definition>RenderWindow* castor3d::RenderWindow::EvtHandler::m_window</definition>
+        <argsstring></argsstring>
+        <name>m_window</name>
+        <qualifiedname>castor3d::RenderWindow::EvtHandler::m_window</qualifiedname>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/OverlayFactory.hpp" line="23" column="1"/>
+        <location file="Render/RenderWindow.hpp" line="107" column="15" bodyfile="Render/RenderWindow.hpp" bodystart="107" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="d9/d68/a04106_1a1641b6641ed4763a801163c2d38676b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>virtual C3D_API castor3d::OverlayFactory::~OverlayFactory</definition>
-        <argsstring>()</argsstring>
-        <name>~OverlayFactory</name>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/d68/a04106_1a4dbd23f1c90753b2a0fd464450f80f56" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::RenderWindow::EvtHandler::EvtHandler</definition>
+        <argsstring>(RenderWindow &amp;window)</argsstring>
+        <name>EvtHandler</name>
+        <qualifiedname>castor3d::RenderWindow::EvtHandler::EvtHandler</qualifiedname>
+        <param>
+          <type><ref refid="df/d4e/a04094" kindref="compound">RenderWindow</ref> &amp;</type>
+          <declname>window</declname>
+        </param>
         <briefdescription>
-<para>Destructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/OverlayFactory.hpp" line="30" column="1"/>
+        <location file="Render/RenderWindow.hpp" line="97" column="10" bodyfile="Render/RenderWindow.hpp" bodystart="97" bodyend="101"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d9/d68/a04106_1ad44ae02ac3bdcaa80d4c9bf2f8029715" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderWindow::EvtHandler::doProcessMouseEvent</definition>
+        <argsstring>(MouseEventSPtr event) override</argsstring>
+        <name>doProcessMouseEvent</name>
+        <qualifiedname>castor3d::RenderWindow::EvtHandler::doProcessMouseEvent</qualifiedname>
+        <reimplements refid="d2/d93/a02758_1a08d1276605f56b95cbdc14f4dcd042f2">doProcessMouseEvent</reimplements>
+        <param>
+          <type>MouseEventSPtr</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderWindow.hpp" line="104" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -39,31 +66,176 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="2455">
-        <label>castor3d::OverlayFactory</label>
-        <link refid="d9/d68/a04106"/>
-        <childnode refid="2456" relation="public-inheritance">
+      <node id="3">
+        <label>castor3d::EventHandler</label>
+        <link refid="d2/d93/a02758"/>
+      </node>
+      <node id="2">
+        <label>castor3d::MouseEventHandler</label>
+        <link refid="dd/deb/a02766"/>
+        <childnode refid="3" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="2456">
-        <label>castor::Factory&lt; OverlayCategory, OverlayType &gt;</label>
+      <node id="1">
+        <label>castor3d::RenderWindow::EvtHandler</label>
+        <link refid="d9/d68/a04106"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="2457">
-        <label>castor3d::OverlayFactory</label>
-        <link refid="d9/d68/a04106"/>
-        <childnode refid="2458" relation="public-inheritance">
+      <node id="6">
+        <label>T</label>
+      </node>
+      <node id="13">
+        <label>std::array&lt; OnClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; OnClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="2458">
-        <label>castor::Factory&lt; OverlayCategory, OverlayType &gt;</label>
+      <node id="10">
+        <label>std::array&lt; OnClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; OnClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::array&lt; OnClientMouseEvent, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; OnClientMouseEvent, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>std::array&lt; std::vector&lt; OnClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="15" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>std::array&lt; std::vector&lt; OnClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="12" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::array&lt; std::vector&lt; OnClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="8" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::EventHandler</label>
+        <link refid="d2/d93/a02758"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_mouseSlots</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_mouseSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_keyboardSlots</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>m_keyboardSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>m_handlerSlots</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>m_handlerSlotsConnections</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::MouseEventHandler</label>
+        <link refid="dd/deb/a02766"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::RenderWindow::EvtHandler</label>
+        <link refid="d9/d68/a04106"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>std::vector&lt; OnClientHandlerEventConnection &gt;</label>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; OnClientHandlerEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>std::vector&lt; OnClientKeyboardEventConnection &gt;</label>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; OnClientKeyboardEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::vector&lt; OnClientMouseEventConnection &gt;</label>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; OnClientMouseEventConnection &gt;</edgelabel>
+        </childnode>
       </node>
     </collaborationgraph>
-    <location file="Overlay/OverlayFactory.hpp" line="15" column="1" bodyfile="Overlay/OverlayFactory.hpp" bodystart="13" bodyend="31"/>
+    <location file="Render/RenderWindow.hpp" line="93" column="1" bodyfile="Render/RenderWindow.hpp" bodystart="95" bodyend="108"/>
     <listofallmembers>
-      <member refid="d9/d68/a04106_1aa44bc6e7bb3bff7b7ea4f7a0477da430" prot="public" virt="non-virtual"><scope>castor3d::OverlayFactory</scope><name>OverlayFactory</name></member>
-      <member refid="d9/d68/a04106_1a1641b6641ed4763a801163c2d38676b3" prot="public" virt="virtual"><scope>castor3d::OverlayFactory</scope><name>~OverlayFactory</name></member>
+      <member refid="d2/d93/a02758_1af9b127733fe059b464db3d7857142075" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>catchesMouseEvents</name></member>
+      <member refid="d2/d93/a02758_1a3941edcde2e8ac2ed205548386e1bf46" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>catchesReturnKey</name></member>
+      <member refid="d2/d93/a02758_1a312bd6454656d77b7906ac620216b84d" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>catchesTabKey</name></member>
+      <member refid="d2/d93/a02758_1a44a9a40d9e96a4527000479b4702ae79" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>ClientHandlerFunction</name></member>
+      <member refid="d2/d93/a02758_1a0d16d006a598b652f004c2541855d916" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>ClientKeyboardFunction</name></member>
+      <member refid="d2/d93/a02758_1abf8b7cff9d28a78406eeee8b7b6ebd86" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>ClientMouseFunction</name></member>
+      <member refid="d2/d93/a02758_1a6f95a70a6d584295f3d3ccfec0cb17fd" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>connect</name></member>
+      <member refid="d2/d93/a02758_1a072131ef43a320ea20a8177f64db0199" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>connect</name></member>
+      <member refid="d2/d93/a02758_1a27234b5982660ef259a8e869da4e6da0" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>connect</name></member>
+      <member refid="d9/d68/a04106_1ad44ae02ac3bdcaa80d4c9bf2f8029715" prot="private" virt="virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>doProcessMouseEvent</name></member>
+      <member refid="d2/d93/a02758_1ae729a5b9c40a30b16b62817bbc58c63d" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>EventHandler</name></member>
+      <member refid="d2/d93/a02758_1ad79273cdd0dcc5dfe45dcc6293a72301" prot="protected" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>EventHandlerFunction</name></member>
+      <member refid="d2/d93/a02758_1a3398c38b57677976456d795fbf36844a" prot="protected" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>EventQueue</name></member>
+      <member refid="d9/d68/a04106_1a4dbd23f1c90753b2a0fd464450f80f56" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>EvtHandler</name></member>
+      <member refid="d2/d93/a02758_1a9ed160c89e5f742d420f00215b7c1d7b" prot="protected" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>m_handlerSlots</name></member>
+      <member refid="d2/d93/a02758_1a5e84dac1e70311d98ec5d815d81e4fe0" prot="protected" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>m_handlerSlotsConnections</name></member>
+      <member refid="d2/d93/a02758_1aac73eda577b38c43edf34b595cff8b59" prot="protected" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>m_keyboardSlots</name></member>
+      <member refid="d2/d93/a02758_1a66f89c17f733ba4033afc5771e7a827c" prot="protected" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>m_keyboardSlotsConnections</name></member>
+      <member refid="d2/d93/a02758_1a187f36449604532ccf230440b8e446c9" prot="protected" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>m_mouseSlots</name></member>
+      <member refid="d2/d93/a02758_1a4f97f319d54b0d877d7b105cca6cc965" prot="protected" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>m_mouseSlotsConnections</name></member>
+      <member refid="d9/d68/a04106_1a6a96609250d45b8c6950bce068a131b9" prot="private" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>m_window</name></member>
+      <member refid="dd/deb/a02766_1a70c194b6cacf99e3674b9cd12c924d7a" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>MouseEventHandler</name></member>
+      <member refid="d2/d93/a02758_1a03b0c5def88fd068283f5de7ddb165ae" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>OnClientHandlerEvent</name></member>
+      <member refid="d2/d93/a02758_1a2653d4d0452400e29c14ed60898ca603" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>OnClientHandlerEventConnection</name></member>
+      <member refid="d2/d93/a02758_1a377a0f15c155e02ba27203acc311e6cf" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>OnClientKeyboardEvent</name></member>
+      <member refid="d2/d93/a02758_1ac4b2cfd7995c7d2d49025aead38eec7b" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>OnClientKeyboardEventConnection</name></member>
+      <member refid="d2/d93/a02758_1a071f4627b0ab9424a4ea58bff380c291" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>OnClientMouseEvent</name></member>
+      <member refid="d2/d93/a02758_1a677bb241c46644f4dc5774e5f9951cd1" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>OnClientMouseEventConnection</name></member>
+      <member refid="d2/d93/a02758_1a0da445b1ae561fcaf1d226ea46116a29" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>processEvents</name></member>
+      <member refid="d2/d93/a02758_1a6f5e82d7f867ea1c015027b0ea61291d" prot="protected" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>processHandlerEvent</name></member>
+      <member refid="d2/d93/a02758_1a7e1a8377cb8e9ef612c4b7a73f189ee7" prot="protected" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>processKeyboardEvent</name></member>
+      <member refid="d2/d93/a02758_1a7384ac0af4155b281bc24ec8c2ff4010" prot="protected" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>processMouseEvent</name></member>
+      <member refid="d2/d93/a02758_1a16401c9f0cb928edaab9f56c5ebcbc08" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>pushEvent</name></member>
+      <member refid="d2/d93/a02758_1afc92e893bf044425b1e80c3113cb3cca" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>pushEvent</name></member>
+      <member refid="d2/d93/a02758_1a278a37b0923a7b266c684251d37961cb" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>pushEvent</name></member>
+      <member refid="d2/d93/a02758_1a4d1cc6560e55cec04ae727c8d2b5f106" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>setCatchesMouseEvents</name></member>
+      <member refid="d2/d93/a02758_1ad34a3c576978d4afac873aac492d3e03" prot="public" virt="virtual"><scope>castor3d::RenderWindow::EvtHandler</scope><name>~EventHandler</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

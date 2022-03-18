@@ -1,257 +1,520 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dd/db6/a04580" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::PipelineFlags</compoundname>
-    <includes local="no">RenderModule.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="dd/db6/a04580_1aab051b1ee46ace763681dfea200198d2" prot="public" static="no" mutable="no">
-        <type><ref refid="da/d1e/a01479_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
-        <definition>BlendMode castor3d::PipelineFlags::colourBlendMode</definition>
-        <argsstring></argsstring>
-        <name>colourBlendMode</name>
-        <initializer>{ <ref refid="da/d1e/a01479_1a840ab6fd50c1a08fcc1b6dc3f98d90faa12c10e6e0388d587340cfbe98b5045ae" kindref="member">BlendMode::eNoBlend</ref> }</initializer>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dd/db6/a04580" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::ParticleSystemImpl</compoundname>
+    <derivedcompoundref refid="d6/dad/a04540" prot="public" virt="non-virtual">castor3d::ComputeParticleSystem</derivedcompoundref>
+    <derivedcompoundref refid="dd/d61/a04548" prot="public" virt="non-virtual">castor3d::CpuParticleSystem</derivedcompoundref>
+    <includes local="no">ParticleSystemImpl.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="enum" id="dd/db6/a04580_1a68c487749293661310e8aad9a36f6b64" prot="public" static="no" strong="yes">
+        <type></type>
+        <name>Type</name>
+        <qualifiedname>castor3d::ParticleSystemImpl::Type</qualifiedname>
+        <enumvalue id="dd/db6/a04580_1a68c487749293661310e8aad9a36f6b64a9956939b39d3ac89c89ca10af12b9ea5" prot="public">
+          <name>eCpu</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Particles are updated on CPU. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="dd/db6/a04580_1a68c487749293661310e8aad9a36f6b64a5db3af75538cd1435e8f0f50abf21dfc" prot="public">
+          <name>eTransformFeedback</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Particles are updated using <ref refid="d0/d0c/a04484" kindref="compound">Geometry</ref> shader and Transform feedback. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="dd/db6/a04580_1a68c487749293661310e8aad9a36f6b64ab2180b6dee7d17196b5c6abd572f7c5e" prot="public">
+          <name>eComputeShader</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Particles are updated using a compute shader. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="dd/db6/a04580_1a68c487749293661310e8aad9a36f6b64ae558bb69fadec037d9eae46601a4df8e" prot="public">
+          <name>eCount</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="dd/db6/a04580_1a68c487749293661310e8aad9a36f6b64abd967862789968b1f8571ca888fffc77" prot="public">
+          <name>eMin</name>
+          <initializer>=  eCpu</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="dd/db6/a04580_1a68c487749293661310e8aad9a36f6b64a66119c64f8564b693324347fd2bea820" prot="public">
+          <name>eMax</name>
+          <initializer>=eCount-1</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
         <briefdescription>
+<para><ref refid="d0/df1/a04552" kindref="compound">Particle</ref> system implementation types enumeration. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="249" column="1" bodyfile="Render/RenderModule.hpp" bodystart="249" bodyend="-1"/>
+        <location file="Scene/ParticleSystem/ParticleSystemImpl.hpp" line="21" column="1" bodyfile="Scene/ParticleSystem/ParticleSystemImpl.hpp" bodystart="22" bodyend="33"/>
       </memberdef>
-      <memberdef kind="variable" id="dd/db6/a04580_1a0831b5262611024fcac18f42f7a29f92" prot="public" static="no" mutable="no">
-        <type><ref refid="da/d1e/a01479_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
-        <definition>BlendMode castor3d::PipelineFlags::alphaBlendMode</definition>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="dd/db6/a04580_1a37bc57bd0e70805a0dd0864661e144cb" prot="protected" static="no" mutable="no">
+        <type><ref refid="d8/d2e/a04576" kindref="compound">ParticleSystem</ref> &amp;</type>
+        <definition>ParticleSystem&amp; castor3d::ParticleSystemImpl::m_parent</definition>
         <argsstring></argsstring>
-        <name>alphaBlendMode</name>
-        <initializer>{ <ref refid="da/d1e/a01479_1a840ab6fd50c1a08fcc1b6dc3f98d90faa12c10e6e0388d587340cfbe98b5045ae" kindref="member">BlendMode::eNoBlend</ref> }</initializer>
+        <name>m_parent</name>
+        <qualifiedname>castor3d::ParticleSystemImpl::m_parent</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The parent particle system. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="250" column="1" bodyfile="Render/RenderModule.hpp" bodystart="250" bodyend="-1"/>
+        <location file="Scene/ParticleSystem/ParticleSystemImpl.hpp" line="131" column="17" bodyfile="Scene/ParticleSystem/ParticleSystemImpl.hpp" bodystart="131" bodyend="-1"/>
+        <referencedby refid="dd/db6/a04580_1a99d68cfdabb0559f24203f7163f96ddb" compoundref="dd/d09/a01118" startline="123" endline="126">getParent</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="dd/db6/a04580_1add12a9fda8077540029ee2482cb3dd31" prot="public" static="no" mutable="no">
-        <type><ref refid="da/d1e/a01479_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref></type>
-        <definition>PassFlags castor3d::PipelineFlags::passFlags</definition>
+      <memberdef kind="variable" id="dd/db6/a04580_1a99d513ff315e6521e3dbd37af40de96e" prot="protected" static="no" mutable="no">
+        <type><ref refid="dd/db6/a04580_1a68c487749293661310e8aad9a36f6b64" kindref="member">Type</ref></type>
+        <definition>Type castor3d::ParticleSystemImpl::m_type</definition>
         <argsstring></argsstring>
-        <name>passFlags</name>
-        <initializer>{ <ref refid="da/d1e/a01479_1ad372dd0cc65f28ad7f558f07c78becb7abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">PassFlag::eNone</ref> }</initializer>
+        <name>m_type</name>
+        <qualifiedname>castor3d::ParticleSystemImpl::m_type</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The implementation type. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="251" column="1" bodyfile="Render/RenderModule.hpp" bodystart="251" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dd/db6/a04580_1a84af70d15122942aac813f3e8aecddaa" prot="public" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::PipelineFlags::heightMapIndex</definition>
-        <argsstring></argsstring>
-        <name>heightMapIndex</name>
-        <initializer>{ <ref refid="da/d1e/a01479_1a2533c48f44e5f343ab52f930f7fec110" kindref="member">InvalidIndex</ref> }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="252" column="1" bodyfile="Render/RenderModule.hpp" bodystart="252" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dd/db6/a04580_1aa3db54fd73e1d41fa2e66989fea924c1" prot="public" static="no" mutable="no">
-        <type><ref refid="da/d1e/a01479_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
-        <definition>ProgramFlags castor3d::PipelineFlags::programFlags</definition>
-        <argsstring></argsstring>
-        <name>programFlags</name>
-        <initializer>{ <ref refid="da/d1e/a01479_1ad372dd0cc65f28ad7f558f07c78becb7abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">ProgramFlag::eNone</ref> }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="253" column="1" bodyfile="Render/RenderModule.hpp" bodystart="253" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dd/db6/a04580_1a8572e6b81c50a0a8a39d0104ecdad193" prot="public" static="no" mutable="no">
-        <type><ref refid="da/d1e/a01479_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref></type>
-        <definition>SceneFlags castor3d::PipelineFlags::sceneFlags</definition>
-        <argsstring></argsstring>
-        <name>sceneFlags</name>
-        <initializer>{ <ref refid="da/d1e/a01479_1ad372dd0cc65f28ad7f558f07c78becb7abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">SceneFlag::eNone</ref> }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="254" column="1" bodyfile="Render/RenderModule.hpp" bodystart="254" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dd/db6/a04580_1a82e267d99f0d0f3103eb76e4ab1a22b2" prot="public" static="no" mutable="no">
-        <type>VkPrimitiveTopology</type>
-        <definition>VkPrimitiveTopology castor3d::PipelineFlags::topology</definition>
-        <argsstring></argsstring>
-        <name>topology</name>
-        <initializer>{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="255" column="1" bodyfile="Render/RenderModule.hpp" bodystart="255" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dd/db6/a04580_1a8eaf995825164170240006c2402e4997" prot="public" static="no" mutable="no">
-        <type>VkCompareOp</type>
-        <definition>VkCompareOp castor3d::PipelineFlags::alphaFunc</definition>
-        <argsstring></argsstring>
-        <name>alphaFunc</name>
-        <initializer>{ VK_COMPARE_OP_ALWAYS }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="256" column="1" bodyfile="Render/RenderModule.hpp" bodystart="256" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dd/db6/a04580_1a62246d4d0ff4e40f9c38229b202af418" prot="public" static="no" mutable="no">
-        <type><ref refid="da/d1e/a01479_1afa51b269ca00eaeff4f95f361bf2208f" kindref="member">TextureFlagsArray</ref></type>
-        <definition>TextureFlagsArray castor3d::PipelineFlags::textures</definition>
-        <argsstring></argsstring>
-        <name>textures</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="257" column="1" bodyfile="Render/RenderModule.hpp" bodystart="257" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dd/db6/a04580_1a6b531356772b3895871068b0b1d292c4" prot="public" static="no" mutable="no">
-        <type><ref refid="da/d1e/a01479_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref></type>
-        <definition>TextureFlags castor3d::PipelineFlags::texturesFlags</definition>
-        <argsstring></argsstring>
-        <name>texturesFlags</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="258" column="1" bodyfile="Render/RenderModule.hpp" bodystart="258" bodyend="-1"/>
+        <location file="Scene/ParticleSystem/ParticleSystemImpl.hpp" line="134" column="6" bodyfile="Scene/ParticleSystem/ParticleSystemImpl.hpp" bodystart="134" bodyend="-1"/>
+        <referencedby refid="dd/db6/a04580_1ae3b9349259ea0f58000533333f19e45f" compoundref="dd/d09/a01118" startline="113" endline="116">getType</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="dd/db6/a04580_1a7d17e8872319b5b4fd0f862a545669ba" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::PipelineFlags::PipelineFlags</definition>
-        <argsstring>(BlendMode colourBlendMode=BlendMode::eNoBlend, BlendMode alphaBlendMode=BlendMode::eNoBlend, PassFlags passFlags=PassFlag::eNone, uint32_t heightMapIndex=InvalidIndex, ProgramFlags programFlags=ProgramFlag::eNone, SceneFlags sceneFlags=SceneFlag::eNone, VkPrimitiveTopology topology=VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VkCompareOp alphaFunc=VK_COMPARE_OP_ALWAYS, TextureFlagsArray textures={})</argsstring>
-        <name>PipelineFlags</name>
+      <memberdef kind="function" id="dd/db6/a04580_1a0baafdbf0bc8704985cbad0cbb714f11" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ParticleSystemImpl::ParticleSystemImpl</definition>
+        <argsstring>(Type type, ParticleSystem &amp;parent)</argsstring>
+        <name>ParticleSystemImpl</name>
+        <qualifiedname>castor3d::ParticleSystemImpl::ParticleSystemImpl</qualifiedname>
         <param>
-          <type><ref refid="da/d1e/a01479_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
-          <declname>colourBlendMode</declname>
-          <defval><ref refid="da/d1e/a01479_1a840ab6fd50c1a08fcc1b6dc3f98d90faa12c10e6e0388d587340cfbe98b5045ae" kindref="member">BlendMode::eNoBlend</ref></defval>
+          <type><ref refid="dd/db6/a04580_1a68c487749293661310e8aad9a36f6b64" kindref="member">Type</ref></type>
+          <declname>type</declname>
         </param>
         <param>
-          <type><ref refid="da/d1e/a01479_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
-          <declname>alphaBlendMode</declname>
-          <defval><ref refid="da/d1e/a01479_1a840ab6fd50c1a08fcc1b6dc3f98d90faa12c10e6e0388d587340cfbe98b5045ae" kindref="member">BlendMode::eNoBlend</ref></defval>
-        </param>
-        <param>
-          <type><ref refid="da/d1e/a01479_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref></type>
-          <declname>passFlags</declname>
-          <defval><ref refid="da/d1e/a01479_1ad372dd0cc65f28ad7f558f07c78becb7abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">PassFlag::eNone</ref></defval>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>heightMapIndex</declname>
-          <defval><ref refid="da/d1e/a01479_1a2533c48f44e5f343ab52f930f7fec110" kindref="member">InvalidIndex</ref></defval>
-        </param>
-        <param>
-          <type><ref refid="da/d1e/a01479_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
-          <declname>programFlags</declname>
-          <defval><ref refid="da/d1e/a01479_1ad372dd0cc65f28ad7f558f07c78becb7abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">ProgramFlag::eNone</ref></defval>
-        </param>
-        <param>
-          <type><ref refid="da/d1e/a01479_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref></type>
-          <declname>sceneFlags</declname>
-          <defval><ref refid="da/d1e/a01479_1ad372dd0cc65f28ad7f558f07c78becb7abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">SceneFlag::eNone</ref></defval>
-        </param>
-        <param>
-          <type>VkPrimitiveTopology</type>
-          <declname>topology</declname>
-          <defval>VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST</defval>
-        </param>
-        <param>
-          <type>VkCompareOp</type>
-          <declname>alphaFunc</declname>
-          <defval>VK_COMPARE_OP_ALWAYS</defval>
-        </param>
-        <param>
-          <type><ref refid="da/d1e/a01479_1afa51b269ca00eaeff4f95f361bf2208f" kindref="member">TextureFlagsArray</ref></type>
-          <declname>textures</declname>
-          <defval>{}</defval>
+          <type><ref refid="d8/d2e/a04576" kindref="compound">ParticleSystem</ref> &amp;</type>
+          <declname>parent</declname>
         </param>
         <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The implementation type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent particle system. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleSystemImpl.hpp" line="46" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db6/a04580_1a759714fb8ef9487de8bc28687fc551bf" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::ParticleSystemImpl::~ParticleSystemImpl</definition>
+        <argsstring>()</argsstring>
+        <name>~ParticleSystemImpl</name>
+        <qualifiedname>castor3d::ParticleSystemImpl::~ParticleSystemImpl</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="227" column="1" bodyfile="Render/RenderModule.hpp" bodystart="227" bodyend="247"/>
+        <location file="Scene/ParticleSystem/ParticleSystemImpl.hpp" line="53" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db6/a04580_1a15116afb02d14395677a0ecfbfe8048a" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::ParticleSystemImpl::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device)=0</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::ParticleSystemImpl::initialise</qualifiedname>
+        <reimplementedby refid="d6/dad/a04540_1a0f708359f8644baa1d072b397c2c4be2">initialise</reimplementedby>
+        <reimplementedby refid="dd/d61/a04548_1a9c61c258ca7a160c39de3cc9daeee577">initialise</reimplementedby>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Initialises the implementation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The current device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> if all is OK. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleSystemImpl.hpp" line="64" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db6/a04580_1a3e66a4283ec662354f4f5bcee495eb9e" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::ParticleSystemImpl::cleanup</definition>
+        <argsstring>(RenderDevice const &amp;device)=0</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor3d::ParticleSystemImpl::cleanup</qualifiedname>
+        <reimplementedby refid="d6/dad/a04540_1a018a8fe8400dd53216507a3f4a619cc0">cleanup</reimplementedby>
+        <reimplementedby refid="dd/d61/a04548_1af5177e33c6a50fa2ab79fc07433edf53">cleanup</reimplementedby>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Cleans the implementation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The current device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleSystemImpl.hpp" line="73" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db6/a04580_1a5f80503a4bb525d090dbf8836feb5785" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::ParticleSystemImpl::addParticleVariable</definition>
+        <argsstring>(castor::String const &amp;name, ParticleFormat type, castor::String const &amp;defaultValue)=0</argsstring>
+        <name>addParticleVariable</name>
+        <qualifiedname>castor3d::ParticleSystemImpl::addParticleVariable</qualifiedname>
+        <reimplementedby refid="d6/dad/a04540_1aa69cc7c4fcc2f875423ec93cf64d65c1">addParticleVariable</reimplementedby>
+        <reimplementedby refid="dd/d61/a04548_1a5f4715cb4ffac48f4835202e4c30b510">addParticleVariable</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a4fdd8bd8042f3a3ae81042067e1ac250" kindref="member">ParticleFormat</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>defaultValue</declname>
+        </param>
+        <briefdescription>
+<para>adds a particle variable. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The variable name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The variable type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">defaultValue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The variable default value. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleSystemImpl.hpp" line="86" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db6/a04580_1a801b0450eb33126c92e11a55ee5f35bf" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::ParticleSystemImpl::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)=0</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::ParticleSystemImpl::update</qualifiedname>
+        <reimplementedby refid="dd/d61/a04548_1a459eb212d7a04c56ff89cc9af2f5f2d3">update</reimplementedby>
+        <reimplementedby refid="d6/dad/a04540_1aa8dec5df1359ac7852f1d6f8368b43a9">update</reimplementedby>
+        <param>
+          <type><ref refid="db/d69/a04040" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, CPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleSystemImpl.hpp" line="97" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db6/a04580_1a8897e0ae4c894f736ebe83374ee04e1b" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>virtual C3D_API uint32_t castor3d::ParticleSystemImpl::update</definition>
+        <argsstring>(GpuUpdater &amp;updater)=0</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::ParticleSystemImpl::update</qualifiedname>
+        <reimplementedby refid="dd/d61/a04548_1ab369284cf747e474a6497722001488cb">update</reimplementedby>
+        <reimplementedby refid="d6/dad/a04540_1a2a3e1139e0c6572dd55b67f011c8835f">update</reimplementedby>
+        <param>
+          <type><ref refid="d1/dc7/a04044" kindref="compound">GpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, GPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleSystemImpl.hpp" line="106" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db6/a04580_1ae3b9349259ea0f58000533333f19e45f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/db6/a04580_1a68c487749293661310e8aad9a36f6b64" kindref="member">Type</ref></type>
+        <definition>Type castor3d::ParticleSystemImpl::getType</definition>
+        <argsstring>()</argsstring>
+        <name>getType</name>
+        <qualifiedname>castor3d::ParticleSystemImpl::getType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The implementation type. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleSystemImpl.hpp" line="113" column="13" bodyfile="Scene/ParticleSystem/ParticleSystemImpl.hpp" bodystart="113" bodyend="116"/>
+        <references refid="dd/db6/a04580_1a99d513ff315e6521e3dbd37af40de96e" compoundref="dd/d09/a01118" startline="134">m_type</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/db6/a04580_1a99d68cfdabb0559f24203f7163f96ddb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d8/d2e/a04576" kindref="compound">ParticleSystem</ref> const &amp;</type>
+        <definition>ParticleSystem const  &amp; castor3d::ParticleSystemImpl::getParent</definition>
+        <argsstring>() const</argsstring>
+        <name>getParent</name>
+        <qualifiedname>castor3d::ParticleSystemImpl::getParent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The parent particle system. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleSystemImpl.hpp" line="123" column="30" bodyfile="Scene/ParticleSystem/ParticleSystemImpl.hpp" bodystart="123" bodyend="126"/>
+        <references refid="dd/db6/a04580_1a37bc57bd0e70805a0dd0864661e144cb" compoundref="dd/d09/a01118" startline="131">m_parent</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Pipeline flags. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::ComputeParticleSystem</label>
+        <link refid="d6/dad/a04540"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::CpuParticleSystem</label>
+        <link refid="dd/d61/a04548"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ParticleSystemImpl</label>
+        <link refid="dd/db6/a04580"/>
+      </node>
+    </inheritancegraph>
     <collaborationgraph>
-      <node id="2691">
+      <node id="8">
+        <label>Animable</label>
+        <link refid="d8/d5f/a02216"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>K</label>
+      </node>
+      <node id="13">
         <label>T</label>
       </node>
-      <node id="2690">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="2691" relation="usage">
-          <edgelabel>elements</edgelabel>
+      <node id="14">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d8/d5f/a02216"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_animations</edgelabel>
         </childnode>
       </node>
-      <node id="2689">
-        <label>castor3d::TextureFlagsId</label>
-        <link refid="d4/d61/a02588"/>
+      <node id="3">
+        <label>castor3d::MovableObject</label>
+        <link refid="d9/dbb/a04524"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
       </node>
-      <node id="2687">
-        <label>castor3d::PipelineFlags</label>
+      <node id="16">
+        <label>castor3d::ParticleDeclaration</label>
+        <link refid="d4/d81/a04556"/>
+      </node>
+      <node id="2">
+        <label>castor3d::ParticleSystem</label>
+        <link refid="d8/d2e/a04576"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="16" relation="usage">
+          <edgelabel>m_inputs</edgelabel>
+        </childnode>
+        <childnode refid="1" relation="usage">
+          <edgelabel>m_impl</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ParticleSystemImpl</label>
         <link refid="dd/db6/a04580"/>
-        <childnode refid="2688" relation="usage">
-          <edgelabel>textures</edgelabel>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_parent</edgelabel>
         </childnode>
       </node>
-      <node id="2688">
-        <label>std::vector&lt; TextureFlagsId &gt;</label>
-        <childnode refid="2689" relation="usage">
-          <edgelabel>elements</edgelabel>
+      <node id="6">
+        <label>castor3d::SceneNode</label>
+        <link refid="d4/d6d/a04636"/>
+        <childnode refid="7" relation="public-inheritance">
         </childnode>
-        <childnode refid="2690" relation="template-instance">
-          <edgelabel>&lt; TextureFlagsId &gt;</edgelabel>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::Named</label>
+      </node>
+      <node id="15">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="9">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="10">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
+      </node>
+      <node id="11">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="12" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>elements</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Render/RenderModule.hpp" line="226" column="1" bodyfile="Render/RenderModule.hpp" bodystart="225" bodyend="259"/>
+    <location file="Scene/ParticleSystem/ParticleSystemImpl.hpp" line="12" column="1" bodyfile="Scene/ParticleSystem/ParticleSystemImpl.hpp" bodystart="13" bodyend="135"/>
     <listofallmembers>
-      <member refid="dd/db6/a04580_1a0831b5262611024fcac18f42f7a29f92" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>alphaBlendMode</name></member>
-      <member refid="dd/db6/a04580_1a8eaf995825164170240006c2402e4997" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>alphaFunc</name></member>
-      <member refid="dd/db6/a04580_1aab051b1ee46ace763681dfea200198d2" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>colourBlendMode</name></member>
-      <member refid="dd/db6/a04580_1a84af70d15122942aac813f3e8aecddaa" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>heightMapIndex</name></member>
-      <member refid="dd/db6/a04580_1add12a9fda8077540029ee2482cb3dd31" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>passFlags</name></member>
-      <member refid="dd/db6/a04580_1a7d17e8872319b5b4fd0f862a545669ba" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>PipelineFlags</name></member>
-      <member refid="dd/db6/a04580_1aa3db54fd73e1d41fa2e66989fea924c1" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>programFlags</name></member>
-      <member refid="dd/db6/a04580_1a8572e6b81c50a0a8a39d0104ecdad193" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>sceneFlags</name></member>
-      <member refid="dd/db6/a04580_1a62246d4d0ff4e40f9c38229b202af418" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>textures</name></member>
-      <member refid="dd/db6/a04580_1a6b531356772b3895871068b0b1d292c4" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>texturesFlags</name></member>
-      <member refid="dd/db6/a04580_1a82e267d99f0d0f3103eb76e4ab1a22b2" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>topology</name></member>
+      <member refid="dd/db6/a04580_1a5f80503a4bb525d090dbf8836feb5785" prot="public" virt="pure-virtual"><scope>castor3d::ParticleSystemImpl</scope><name>addParticleVariable</name></member>
+      <member refid="dd/db6/a04580_1a3e66a4283ec662354f4f5bcee495eb9e" prot="public" virt="pure-virtual"><scope>castor3d::ParticleSystemImpl</scope><name>cleanup</name></member>
+      <member refid="dd/db6/a04580_1a99d68cfdabb0559f24203f7163f96ddb" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystemImpl</scope><name>getParent</name></member>
+      <member refid="dd/db6/a04580_1ae3b9349259ea0f58000533333f19e45f" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystemImpl</scope><name>getType</name></member>
+      <member refid="dd/db6/a04580_1a15116afb02d14395677a0ecfbfe8048a" prot="public" virt="pure-virtual"><scope>castor3d::ParticleSystemImpl</scope><name>initialise</name></member>
+      <member refid="dd/db6/a04580_1a37bc57bd0e70805a0dd0864661e144cb" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystemImpl</scope><name>m_parent</name></member>
+      <member refid="dd/db6/a04580_1a99d513ff315e6521e3dbd37af40de96e" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystemImpl</scope><name>m_type</name></member>
+      <member refid="dd/db6/a04580_1a0baafdbf0bc8704985cbad0cbb714f11" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystemImpl</scope><name>ParticleSystemImpl</name></member>
+      <member refid="dd/db6/a04580_1a68c487749293661310e8aad9a36f6b64" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystemImpl</scope><name>Type</name></member>
+      <member refid="dd/db6/a04580_1a801b0450eb33126c92e11a55ee5f35bf" prot="public" virt="pure-virtual"><scope>castor3d::ParticleSystemImpl</scope><name>update</name></member>
+      <member refid="dd/db6/a04580_1a8897e0ae4c894f736ebe83374ee04e1b" prot="public" virt="pure-virtual"><scope>castor3d::ParticleSystemImpl</scope><name>update</name></member>
+      <member refid="dd/db6/a04580_1a759714fb8ef9487de8bc28687fc551bf" prot="public" virt="virtual"><scope>castor3d::ParticleSystemImpl</scope><name>~ParticleSystemImpl</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,44 +1,313 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d5/df8/a04978" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::Texture3DTo2DData</compoundname>
-    <includes local="no">Texture3DTo2D.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d5/df8/a04978_1ac484e8b1cd41e6796749dbf7fcac722b" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::Texture3DTo2DData::gridCenterCellSize</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d5/df8/a04978" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ShadowMapUbo</compoundname>
+    <includes local="no">ShadowMapUbo.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d5/df8/a04978_1a1e87d2bd828b4d232e057f9f5d3c0a01" prot="public" static="no">
+        <type><ref refid="d8/d5f/a05046" kindref="compound">ShadowMapUboConfiguration</ref></type>
+        <definition>using castor3d::ShadowMapUbo::Configuration =  ShadowMapUboConfiguration</definition>
         <argsstring></argsstring>
-        <name>gridCenterCellSize</name>
+        <name>Configuration</name>
+        <qualifiedname>castor3d::ShadowMapUbo::Configuration</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="24" column="1" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="24" bodyend="-1"/>
+        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="52" column="1" bodyfile="Shader/Ubos/ShadowMapUbo.hpp" bodystart="52" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d5/df8/a04978_1a16f45e8aa1962787b03a9ea1948f4c9d" prot="public" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::Texture3DTo2DData::gridSize</definition>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d5/df8/a04978_1aed321c1d47b55eeecf8e39b789069a2d" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::ShadowMapUbo::BufferShadowMap</definition>
         <argsstring></argsstring>
-        <name>gridSize</name>
+        <name>BufferShadowMap</name>
+        <qualifiedname>castor3d::ShadowMapUbo::BufferShadowMap</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="25" column="1" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="25" bodyend="-1"/>
+        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="92" column="37" bodyfile="Shader/Ubos/ShadowMapUbo.hpp" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/df8/a04978_1a2b46ba45612588c3f2e1f1876dc24052" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::ShadowMapUbo::ShadowMapData</definition>
+        <argsstring></argsstring>
+        <name>ShadowMapData</name>
+        <qualifiedname>castor3d::ShadowMapUbo::ShadowMapData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="93" column="37" bodyfile="Shader/Ubos/ShadowMapUbo.hpp" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d5/df8/a04978_1a0b0e57f2e9f2885720bab2e609a58cc7" prot="private" static="no" mutable="no">
+        <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::ShadowMapUbo::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::ShadowMapUbo::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="96" column="21" bodyfile="Shader/Ubos/ShadowMapUbo.hpp" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/df8/a04978_1aeeebd7aecc2b053d85c91e6e046979b7" prot="private" static="no" mutable="no">
+        <type><ref refid="df/d9b/a02514" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d5/df8/a04978_1a1e87d2bd828b4d232e057f9f5d3c0a01" kindref="member">Configuration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::ShadowMapUbo::m_ubo</definition>
+        <argsstring></argsstring>
+        <name>m_ubo</name>
+        <qualifiedname>castor3d::ShadowMapUbo::m_ubo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="97" column="22" bodyfile="Shader/Ubos/ShadowMapUbo.hpp" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/df8/a04978_1a69e89405d80ea31f547389482153b7f3" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ShadowMapUbo::ShadowMapUbo</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>ShadowMapUbo</name>
+        <qualifiedname>castor3d::ShadowMapUbo::ShadowMapUbo</qualifiedname>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="55" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/df8/a04978_1a9941d5af52ed26b91446e178bd830dc6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ShadowMapUbo::ShadowMapUbo</definition>
+        <argsstring>(ShadowMapUbo const &amp;rhs)=delete</argsstring>
+        <name>ShadowMapUbo</name>
+        <qualifiedname>castor3d::ShadowMapUbo::ShadowMapUbo</qualifiedname>
+        <param>
+          <type><ref refid="d5/df8/a04978" kindref="compound">ShadowMapUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="56" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/df8/a04978_1afc8651634286edeb040e2edd326c145c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/df8/a04978" kindref="compound">ShadowMapUbo</ref> &amp;</type>
+        <definition>C3D_API ShadowMapUbo &amp; castor3d::ShadowMapUbo::operator=</definition>
+        <argsstring>(ShadowMapUbo const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::ShadowMapUbo::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d5/df8/a04978" kindref="compound">ShadowMapUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="57" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/df8/a04978_1a67e003e92375f9edaca1e732f57e648b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ShadowMapUbo::ShadowMapUbo</definition>
+        <argsstring>(ShadowMapUbo &amp;&amp;rhs)=default</argsstring>
+        <name>ShadowMapUbo</name>
+        <qualifiedname>castor3d::ShadowMapUbo::ShadowMapUbo</qualifiedname>
+        <param>
+          <type><ref refid="d5/df8/a04978" kindref="compound">ShadowMapUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="58" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/df8/a04978_1a9533f236daafa9a3855a641deda330f9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/df8/a04978" kindref="compound">ShadowMapUbo</ref> &amp;</type>
+        <definition>C3D_API ShadowMapUbo &amp; castor3d::ShadowMapUbo::operator=</definition>
+        <argsstring>(ShadowMapUbo &amp;&amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::ShadowMapUbo::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d5/df8/a04978" kindref="compound">ShadowMapUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="59" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/df8/a04978_1a966f4ab3785fd596d6ebdea11842ddbf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ShadowMapUbo::~ShadowMapUbo</definition>
+        <argsstring>()</argsstring>
+        <name>~ShadowMapUbo</name>
+        <qualifiedname>castor3d::ShadowMapUbo::~ShadowMapUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="60" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/df8/a04978_1a86340d303a05fe01dc2f44b5b61295af" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ShadowMapUbo::update</definition>
+        <argsstring>(Light const &amp;light, uint32_t index)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::ShadowMapUbo::update</qualifiedname>
+        <param>
+          <type><ref refid="d7/dba/a04502" kindref="compound">Light</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Updates the UBO from given values. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">light</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The light source from which the shadow map is generated. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The shadow pass index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="71" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/df8/a04978_1a33ff803524d407253ea98caeeb038418" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ShadowMapUbo::createSizedBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</argsstring>
+        <name>createSizedBinding</name>
+        <qualifiedname>castor3d::ShadowMapUbo::createSizedBinding</qualifiedname>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>layoutBinding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="74" column="6" bodyfile="Shader/Ubos/ShadowMapUbo.hpp" bodystart="74" bodyend="78"/>
+        <references refid="df/d9b/a02514_1a2c6ad146d4910651544564c25ca7dccd" compoundref="de/db1/a00197" startline="96" endline="105">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/df8/a04978_1a587585de7c15fb59c8a7f3456dbae3f8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::WriteDescriptorSet</type>
+        <definition>ashes::WriteDescriptorSet castor3d::ShadowMapUbo::getDescriptorWrite</definition>
+        <argsstring>(uint32_t dstBinding, uint32_t dstArrayElement=0u) const</argsstring>
+        <name>getDescriptorWrite</name>
+        <qualifiedname>castor3d::ShadowMapUbo::getDescriptorWrite</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstArrayElement</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="80" column="27" bodyfile="Shader/Ubos/ShadowMapUbo.hpp" bodystart="80" bodyend="84"/>
+        <references refid="df/d9b/a02514_1ad7dcad7c96a620540d10eb85f3d4586b" compoundref="de/db1/a00197" startline="107" endline="120">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getDescriptorWrite</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/df8/a04978_1a080a7459fe8d0e2bdf6180705829dd61" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="df/d9b/a02514" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d5/df8/a04978_1a1e87d2bd828b4d232e057f9f5d3c0a01" kindref="member">Configuration</ref> &gt; const &amp;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; const  &amp; castor3d::ShadowMapUbo::getUbo</definition>
+        <argsstring>() const</argsstring>
+        <name>getUbo</name>
+        <qualifiedname>castor3d::ShadowMapUbo::getUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="86" column="29" bodyfile="Shader/Ubos/ShadowMapUbo.hpp" bodystart="86" bodyend="89"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/ToTexture/Texture3DTo2D.hpp" line="23" column="1" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="22" bodyend="26"/>
+    <location file="Shader/Ubos/ShadowMapUbo.hpp" line="49" column="1" bodyfile="Shader/Ubos/ShadowMapUbo.hpp" bodystart="50" bodyend="98"/>
     <listofallmembers>
-      <member refid="d5/df8/a04978_1ac484e8b1cd41e6796749dbf7fcac722b" prot="public" virt="non-virtual"><scope>castor3d::Texture3DTo2DData</scope><name>gridCenterCellSize</name></member>
-      <member refid="d5/df8/a04978_1a16f45e8aa1962787b03a9ea1948f4c9d" prot="public" virt="non-virtual"><scope>castor3d::Texture3DTo2DData</scope><name>gridSize</name></member>
+      <member refid="d5/df8/a04978_1aed321c1d47b55eeecf8e39b789069a2d" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>BufferShadowMap</name></member>
+      <member refid="d5/df8/a04978_1a1e87d2bd828b4d232e057f9f5d3c0a01" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>Configuration</name></member>
+      <member refid="d5/df8/a04978_1a33ff803524d407253ea98caeeb038418" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>createSizedBinding</name></member>
+      <member refid="d5/df8/a04978_1a587585de7c15fb59c8a7f3456dbae3f8" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>getDescriptorWrite</name></member>
+      <member refid="d5/df8/a04978_1a080a7459fe8d0e2bdf6180705829dd61" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>getUbo</name></member>
+      <member refid="d5/df8/a04978_1a0b0e57f2e9f2885720bab2e609a58cc7" prot="private" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>m_device</name></member>
+      <member refid="d5/df8/a04978_1aeeebd7aecc2b053d85c91e6e046979b7" prot="private" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>m_ubo</name></member>
+      <member refid="d5/df8/a04978_1afc8651634286edeb040e2edd326c145c" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>operator=</name></member>
+      <member refid="d5/df8/a04978_1a9533f236daafa9a3855a641deda330f9" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>operator=</name></member>
+      <member refid="d5/df8/a04978_1a2b46ba45612588c3f2e1f1876dc24052" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>ShadowMapData</name></member>
+      <member refid="d5/df8/a04978_1a69e89405d80ea31f547389482153b7f3" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>ShadowMapUbo</name></member>
+      <member refid="d5/df8/a04978_1a9941d5af52ed26b91446e178bd830dc6" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>ShadowMapUbo</name></member>
+      <member refid="d5/df8/a04978_1a67e003e92375f9edaca1e732f57e648b" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>ShadowMapUbo</name></member>
+      <member refid="d5/df8/a04978_1a86340d303a05fe01dc2f44b5b61295af" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>update</name></member>
+      <member refid="d5/df8/a04978_1a966f4ab3785fd596d6ebdea11842ddbf" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>~ShadowMapUbo</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,19 +1,405 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d3/d46/a04311" kind="struct" language="C++" prot="public">
-    <compoundname>castor::Deleter&lt; castor3d::SceneCulledRenderNodes &gt;</compoundname>
-    <includes local="no">RenderNodeModule.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d3/d46/a04311_1a89c64936806001091026580ebb2f81e3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor::Deleter&lt; castor3d::SceneCulledRenderNodes &gt;::operator()</definition>
-        <argsstring>(castor3d::SceneCulledRenderNodes *ptr) noexcept</argsstring>
-        <name>operator()</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d3/d46/a04311" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::WeightedBlendRendering</compoundname>
+    <includes local="no">WeightedBlendRendering.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d3/d46/a04311_1a02a5dbbee1894d7a2b1afb572c34c007" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>crg::FramePass const &amp;</type>
+        <definition>crg::FramePass const  &amp; castor3d::WeightedBlendRendering::getLastPass</definition>
+        <argsstring>() const</argsstring>
+        <name>getLastPass</name>
+        <qualifiedname>castor3d::WeightedBlendRendering::getLastPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="65" column="23" bodyfile="Render/Technique/Transparent/WeightedBlendRendering.hpp" bodystart="65" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d46/a04311_1aee042fabc96e2bb4c4d22dcf92efca1b" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>static uint32_t castor3d::WeightedBlendRendering::countInitialisationSteps</definition>
+        <argsstring>()</argsstring>
+        <name>countInitialisationSteps</name>
+        <qualifiedname>castor3d::WeightedBlendRendering::countInitialisationSteps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="70" column="17" bodyfile="Render/Technique/Transparent/WeightedBlendRendering.hpp" bodystart="70" bodyend="75"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d3/d46/a04311_1a05d55336d3621e942d95c7f3217c3496" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::WeightedBlendRendering::enable</definition>
+        <argsstring>(bool value)</argsstring>
+        <name>enable</name>
+        <qualifiedname>castor3d::WeightedBlendRendering::enable</qualifiedname>
         <param>
-          <type><ref refid="d5/d84/a04315" kindref="compound">castor3d::SceneCulledRenderNodes</ref> *</type>
-          <declname>ptr</declname>
+          <type>bool</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Mutators. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="86" column="6" bodyfile="Render/Technique/Transparent/WeightedBlendRendering.hpp" bodystart="86" bodyend="89"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d3/d46/a04311_1aa49d66837ed4b3418d9d947525cd6286" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::WeightedBlendRendering::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::WeightedBlendRendering::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="102" column="21" bodyfile="Render/Technique/Transparent/WeightedBlendRendering.hpp" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d46/a04311_1ac7d7c0401132761379e8c7e26af4f735" prot="private" static="no" mutable="no">
+        <type>crg::FramePassGroup &amp;</type>
+        <definition>crg::FramePassGroup&amp; castor3d::WeightedBlendRendering::m_graph</definition>
+        <argsstring></argsstring>
+        <name>m_graph</name>
+        <qualifiedname>castor3d::WeightedBlendRendering::m_graph</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="103" column="22" bodyfile="Render/Technique/Transparent/WeightedBlendRendering.hpp" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d46/a04311_1a674164bbe428427a0088e2a6732820b5" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/d4e/a04307" kindref="compound">TransparentPassResult</ref> const  &amp;</type>
+        <definition>TransparentPassResult const&amp; castor3d::WeightedBlendRendering::m_transparentPassResult</definition>
+        <argsstring></argsstring>
+        <name>m_transparentPassResult</name>
+        <qualifiedname>castor3d::WeightedBlendRendering::m_transparentPassResult</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="104" column="30" bodyfile="Render/Technique/Transparent/WeightedBlendRendering.hpp" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d46/a04311_1a0791e4e80317ce18b7c71963db6d2c5e" prot="private" static="no" mutable="no">
+        <type>crg::ImageViewId</type>
+        <definition>crg::ImageViewId castor3d::WeightedBlendRendering::m_depthOnlyView</definition>
+        <argsstring></argsstring>
+        <name>m_depthOnlyView</name>
+        <qualifiedname>castor3d::WeightedBlendRendering::m_depthOnlyView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="105" column="18" bodyfile="Render/Technique/Transparent/WeightedBlendRendering.hpp" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d46/a04311_1a5dfd3fe9b9bd04213dcee8b66cfac0d4" prot="private" static="no" mutable="no">
+        <type>castor::Size</type>
+        <definition>castor::Size castor3d::WeightedBlendRendering::m_size</definition>
+        <argsstring></argsstring>
+        <name>m_size</name>
+        <qualifiedname>castor3d::WeightedBlendRendering::m_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="106" column="14" bodyfile="Render/Technique/Transparent/WeightedBlendRendering.hpp" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d46/a04311_1a28ea07dff34c6b17be623d64394fc295" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/d1c/a04747" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::WeightedBlendRendering::m_vertexShader</definition>
+        <argsstring></argsstring>
+        <name>m_vertexShader</name>
+        <qualifiedname>castor3d::WeightedBlendRendering::m_vertexShader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="107" column="14" bodyfile="Render/Technique/Transparent/WeightedBlendRendering.hpp" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d46/a04311_1a509e035e337fb4c778be3989bb72825c" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/d1c/a04747" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::WeightedBlendRendering::m_pixelShader</definition>
+        <argsstring></argsstring>
+        <name>m_pixelShader</name>
+        <qualifiedname>castor3d::WeightedBlendRendering::m_pixelShader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="108" column="14" bodyfile="Render/Technique/Transparent/WeightedBlendRendering.hpp" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d46/a04311_1a0da6a02fe274e3249404a5daa30e5a2e" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineShaderStageCreateInfoArray</type>
+        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::WeightedBlendRendering::m_stages</definition>
+        <argsstring></argsstring>
+        <name>m_stages</name>
+        <qualifiedname>castor3d::WeightedBlendRendering::m_stages</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="109" column="43" bodyfile="Render/Technique/Transparent/WeightedBlendRendering.hpp" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d46/a04311_1a67ff17eb874a57dfa5226bef6955b3da" prot="private" static="no" mutable="no">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass&amp; castor3d::WeightedBlendRendering::m_finalCombinePassDesc</definition>
+        <argsstring></argsstring>
+        <name>m_finalCombinePassDesc</name>
+        <qualifiedname>castor3d::WeightedBlendRendering::m_finalCombinePassDesc</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="110" column="17" bodyfile="Render/Technique/Transparent/WeightedBlendRendering.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d46/a04311_1a4ba9ea7229cdf22edf8fe84e08f3c3d2" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::WeightedBlendRendering::m_enabled</definition>
+        <argsstring></argsstring>
+        <name>m_enabled</name>
+        <qualifiedname>castor3d::WeightedBlendRendering::m_enabled</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="111" column="6" bodyfile="Render/Technique/Transparent/WeightedBlendRendering.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d46/a04311_1acf363e2e9ebb7a1876263c80fde9c178" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::WeightedBlendRendering::WeightedBlendRendering</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, RenderDevice const &amp;device, ProgressBar *progress, crg::FramePass const &amp;transparentPassDesc, TransparentPassResult const &amp;transparentPassResult, crg::ImageViewId const &amp;targetColourView, castor::Size const &amp;size, SceneUbo &amp;sceneUbo, HdrConfigUbo const &amp;hdrConfigUbo, GpInfoUbo const &amp;gpInfoUbo)</argsstring>
+        <name>WeightedBlendRendering</name>
+        <qualifiedname>castor3d::WeightedBlendRendering::WeightedBlendRendering</qualifiedname>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d13/a03271" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>transparentPassDesc</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d4e/a04307" kindref="compound">TransparentPassResult</ref> const &amp;</type>
+          <declname>transparentPassResult</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>targetColourView</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d70/a04967" kindref="compound">SceneUbo</ref> &amp;</type>
+          <declname>sceneUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d46/a04895" kindref="compound">HdrConfigUbo</ref> const &amp;</type>
+          <declname>hdrConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d63/a04887" kindref="compound">GpInfoUbo</ref> const &amp;</type>
+          <declname>gpInfoUbo</declname>
+        </param>
+        <briefdescription>
+<para>Initialises deferred rendering related stuff. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">graph</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The frame graph. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">progress</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The progress bar. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">transparentPassDesc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The transparent nodes render pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">transparentPassResult</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The Weighted Blended OIT result. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">targetColourView</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The target colour buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render dimensions. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sceneUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">hdrConfigUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The HDR configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">gpInfoUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The geometry pass UBO. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="42" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d46/a04311_1aa3d017d625e2598eeca7f64f74b78316" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::WeightedBlendRendering::accept</definition>
+        <argsstring>(RenderTechniqueVisitor &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::WeightedBlendRendering::accept</qualifiedname>
+        <param>
+          <type><ref refid="d6/d9f/a04291" kindref="compound">RenderTechniqueVisitor</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Visitor acceptance function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ... visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="55" column="6"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d3/d46/a04311_1a8e7ace1ae8c437879c09c673139f812a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::WeightedBlendRendering::doCreateFinalCombine</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePass const &amp;transparentPassDesc, crg::ImageViewId const &amp;targetColourView, SceneUbo &amp;sceneUbo, HdrConfigUbo const &amp;hdrConfigUbo, GpInfoUbo const &amp;gpInfoUbo, ProgressBar *progress)</argsstring>
+        <name>doCreateFinalCombine</name>
+        <qualifiedname>castor3d::WeightedBlendRendering::doCreateFinalCombine</qualifiedname>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>transparentPassDesc</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>targetColourView</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d70/a04967" kindref="compound">SceneUbo</ref> &amp;</type>
+          <declname>sceneUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d46/a04895" kindref="compound">HdrConfigUbo</ref> const &amp;</type>
+          <declname>hdrConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d63/a04887" kindref="compound">GpInfoUbo</ref> const &amp;</type>
+          <declname>gpInfoUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d13/a03271" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -21,20 +407,31 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Node/RenderNodeModule.hpp" line="158" column="1"/>
+        <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="93" column="17"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Deleter structure. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="remark"><para>Specialisation to hide implementation in .cpp (to reduce includes dependencies). </para>
-</simplesect>
-</para>
     </detaileddescription>
-    <location file="Render/Node/RenderNodeModule.hpp" line="157" column="1" bodyfile="Render/Node/RenderNodeModule.hpp" bodystart="156" bodyend="159"/>
+    <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="13" column="1" bodyfile="Render/Technique/Transparent/WeightedBlendRendering.hpp" bodystart="14" bodyend="112"/>
     <listofallmembers>
-      <member refid="d3/d46/a04311_1a89c64936806001091026580ebb2f81e3" prot="public" virt="non-virtual"><scope>castor::Deleter&lt; castor3d::SceneCulledRenderNodes &gt;</scope><name>operator()</name></member>
+      <member refid="d3/d46/a04311_1aa3d017d625e2598eeca7f64f74b78316" prot="public" virt="non-virtual"><scope>castor3d::WeightedBlendRendering</scope><name>accept</name></member>
+      <member refid="d3/d46/a04311_1aee042fabc96e2bb4c4d22dcf92efca1b" prot="public" virt="non-virtual"><scope>castor3d::WeightedBlendRendering</scope><name>countInitialisationSteps</name></member>
+      <member refid="d3/d46/a04311_1a8e7ace1ae8c437879c09c673139f812a" prot="private" virt="non-virtual"><scope>castor3d::WeightedBlendRendering</scope><name>doCreateFinalCombine</name></member>
+      <member refid="d3/d46/a04311_1a05d55336d3621e942d95c7f3217c3496" prot="public" virt="non-virtual"><scope>castor3d::WeightedBlendRendering</scope><name>enable</name></member>
+      <member refid="d3/d46/a04311_1a02a5dbbee1894d7a2b1afb572c34c007" prot="public" virt="non-virtual"><scope>castor3d::WeightedBlendRendering</scope><name>getLastPass</name></member>
+      <member refid="d3/d46/a04311_1a0791e4e80317ce18b7c71963db6d2c5e" prot="private" virt="non-virtual"><scope>castor3d::WeightedBlendRendering</scope><name>m_depthOnlyView</name></member>
+      <member refid="d3/d46/a04311_1aa49d66837ed4b3418d9d947525cd6286" prot="private" virt="non-virtual"><scope>castor3d::WeightedBlendRendering</scope><name>m_device</name></member>
+      <member refid="d3/d46/a04311_1a4ba9ea7229cdf22edf8fe84e08f3c3d2" prot="private" virt="non-virtual"><scope>castor3d::WeightedBlendRendering</scope><name>m_enabled</name></member>
+      <member refid="d3/d46/a04311_1a67ff17eb874a57dfa5226bef6955b3da" prot="private" virt="non-virtual"><scope>castor3d::WeightedBlendRendering</scope><name>m_finalCombinePassDesc</name></member>
+      <member refid="d3/d46/a04311_1ac7d7c0401132761379e8c7e26af4f735" prot="private" virt="non-virtual"><scope>castor3d::WeightedBlendRendering</scope><name>m_graph</name></member>
+      <member refid="d3/d46/a04311_1a509e035e337fb4c778be3989bb72825c" prot="private" virt="non-virtual"><scope>castor3d::WeightedBlendRendering</scope><name>m_pixelShader</name></member>
+      <member refid="d3/d46/a04311_1a5dfd3fe9b9bd04213dcee8b66cfac0d4" prot="private" virt="non-virtual"><scope>castor3d::WeightedBlendRendering</scope><name>m_size</name></member>
+      <member refid="d3/d46/a04311_1a0da6a02fe274e3249404a5daa30e5a2e" prot="private" virt="non-virtual"><scope>castor3d::WeightedBlendRendering</scope><name>m_stages</name></member>
+      <member refid="d3/d46/a04311_1a674164bbe428427a0088e2a6732820b5" prot="private" virt="non-virtual"><scope>castor3d::WeightedBlendRendering</scope><name>m_transparentPassResult</name></member>
+      <member refid="d3/d46/a04311_1a28ea07dff34c6b17be623d64394fc295" prot="private" virt="non-virtual"><scope>castor3d::WeightedBlendRendering</scope><name>m_vertexShader</name></member>
+      <member refid="d3/d46/a04311_1acf363e2e9ebb7a1876263c80fde9c178" prot="public" virt="non-virtual"><scope>castor3d::WeightedBlendRendering</scope><name>WeightedBlendRendering</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

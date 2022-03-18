@@ -1,54 +1,393 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d1/d59/a03926" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::Face</compoundname>
-    <includes local="no">Face.hpp</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d1/d59/a03926_1a93076f16a364cd85357482fedf153375" prot="private" static="no" mutable="no">
-        <type><ref refid="d8/d3a/a03930" kindref="compound">FaceIndices</ref></type>
-        <definition>FaceIndices castor3d::Face::m_face</definition>
-        <argsstring></argsstring>
-        <name>m_face</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d1/d59/a03926" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::PostEffect</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; RenderSystem &gt;</basecompoundref>
+    <basecompoundref prot="public" virt="non-virtual">castor::Named</basecompoundref>
+    <includes local="no">PostEffect.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d1/d59/a03926_1aa57c28bb82334d0f8ae04f238dd6418e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::PostEffect::enable</definition>
+        <argsstring>(bool value)</argsstring>
+        <name>enable</name>
+        <qualifiedname>castor3d::PostEffect::enable</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The face vertex indices. </para>
+<para>name Mutators. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/Face.hpp" line="42" column="1" bodyfile="Model/Mesh/Submesh/Component/Face.hpp" bodystart="42" bodyend="-1"/>
+        <location file="Render/PostEffect/PostEffect.hpp" line="140" column="6" bodyfile="Render/PostEffect/PostEffect.hpp" bodystart="140" bodyend="143"/>
+        <references refid="d1/d59/a03926_1ab328c67afe602fd117f15e6608b3e949" compoundref="df/d0c/a00788" startline="251">m_enabled</references>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d1/d59/a03926_1a3b55f392c1b27456bbe20ecafeb45020" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::Face::Face</definition>
-        <argsstring>(uint32_t a, uint32_t b, uint32_t c)</argsstring>
-        <name>Face</name>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d1/d59/a03926_1af90bc947bb2218c77222018d4cf4609b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> crg::FramePass const &amp;</type>
+        <definition>virtual C3D_API crg::FramePass const  &amp; castor3d::PostEffect::getPass</definition>
+        <argsstring>() const =0</argsstring>
+        <name>getPass</name>
+        <qualifiedname>castor3d::PostEffect::getPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="154" column="39"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d59/a03926_1a8eed3b457e1242b432dfe60919d6a2ec" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PostEffect::setParameters</definition>
+        <argsstring>(Parameters parameters)=0</argsstring>
+        <name>setParameters</name>
+        <qualifiedname>castor3d::PostEffect::setParameters</qualifiedname>
         <param>
-          <type>uint32_t</type>
-          <declname>a</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>b</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>c</declname>
+          <type><ref refid="dc/df4/a01401_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref></type>
+          <declname>parameters</declname>
         </param>
         <briefdescription>
-<para>Specified constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="155" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d59/a03926_1a816457fc08857f2a9dc68f0c0c37bc64" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PostEffect::isAfterToneMapping</definition>
+        <argsstring>() const</argsstring>
+        <name>isAfterToneMapping</name>
+        <qualifiedname>castor3d::PostEffect::isAfterToneMapping</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="157" column="6" bodyfile="Render/PostEffect/PostEffect.hpp" bodystart="157" bodyend="160"/>
+        <references refid="d1/d59/a03926_1a5283f32bf24723e61f23204d87f8faeaaa5b8d3dc26224b89242848951b9790bf">eSRGB</references>
+        <references refid="d1/d59/a03926_1aa26ab5b97f8c49b38b74556c5ba7bc5c" compoundref="df/d0c/a00788" startline="248">m_kind</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d59/a03926_1a6521bc23a51122cc9370471ea89c6b08" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>crg::ImageViewId const &amp;</type>
+        <definition>crg::ImageViewId const  &amp; castor3d::PostEffect::getResult</definition>
+        <argsstring>() const</argsstring>
+        <name>getResult</name>
+        <qualifiedname>castor3d::PostEffect::getResult</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="162" column="25" bodyfile="Render/PostEffect/PostEffect.hpp" bodystart="162" bodyend="166"/>
+        <references refid="d1/d59/a03926_1a2efa16b29741b9188ab287488cb1f124" compoundref="df/d0c/a00788" startline="250">m_result</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d59/a03926_1a686548d39de82c584c5a60f9b178084e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::String const &amp;</type>
+        <definition>castor::String const  &amp; castor3d::PostEffect::getFullName</definition>
+        <argsstring>() const</argsstring>
+        <name>getFullName</name>
+        <qualifiedname>castor3d::PostEffect::getFullName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="168" column="23" bodyfile="Render/PostEffect/PostEffect.hpp" bodystart="168" bodyend="171"/>
+        <references refid="d1/d59/a03926_1ade24654435da3775b0e4d2ab02846725" compoundref="df/d0c/a00788" startline="244">m_fullName</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d59/a03926_1ad5edca62b2d8bce488d241efff2b1404" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool const &amp;</type>
+        <definition>bool const  &amp; castor3d::PostEffect::isEnabled</definition>
+        <argsstring>() const</argsstring>
+        <name>isEnabled</name>
+        <qualifiedname>castor3d::PostEffect::isEnabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="173" column="13" bodyfile="Render/PostEffect/PostEffect.hpp" bodystart="173" bodyend="176"/>
+        <references refid="d1/d59/a03926_1ab328c67afe602fd117f15e6608b3e949" compoundref="df/d0c/a00788" startline="251">m_enabled</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-type">
+      <memberdef kind="enum" id="d1/d59/a03926_1a5283f32bf24723e61f23204d87f8faea" prot="public" static="no" strong="yes">
+        <type></type>
+        <name>Kind</name>
+        <qualifiedname>castor3d::PostEffect::Kind</qualifiedname>
+        <enumvalue id="d1/d59/a03926_1a5283f32bf24723e61f23204d87f8faeaa2f0d6401150f6f1c243d23227516686b" prot="public">
+          <name>eHDR</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d1/d59/a03926_1a5283f32bf24723e61f23204d87f8faeaaa5b8d3dc26224b89242848951b9790bf" prot="public">
+          <name>eSRGB</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d1/d59/a03926_1a5283f32bf24723e61f23204d87f8faeaa6fc9880798b6fce8371568a91b9267da" prot="public">
+          <name>eOverlay</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="23" column="1" bodyfile="Render/PostEffect/PostEffect.hpp" bodystart="24" bodyend="28"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d1/d59/a03926_1ade24654435da3775b0e4d2ab02846725" prot="protected" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::PostEffect::m_fullName</definition>
+        <argsstring></argsstring>
+        <name>m_fullName</name>
+        <qualifiedname>castor3d::PostEffect::m_fullName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="244" column="16" bodyfile="Render/PostEffect/PostEffect.hpp" bodystart="244" bodyend="-1"/>
+        <referencedby refid="d1/d59/a03926_1a686548d39de82c584c5a60f9b178084e" compoundref="df/d0c/a00788" startline="168" endline="171">getFullName</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d59/a03926_1a56fc980bcf8a521334b8569a1e6a1e96" prot="protected" static="no" mutable="no">
+        <type><ref refid="db/d64/a04082" kindref="compound">RenderTarget</ref> &amp;</type>
+        <definition>RenderTarget&amp; castor3d::PostEffect::m_renderTarget</definition>
+        <argsstring></argsstring>
+        <name>m_renderTarget</name>
+        <qualifiedname>castor3d::PostEffect::m_renderTarget</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="245" column="15" bodyfile="Render/PostEffect/PostEffect.hpp" bodystart="245" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d59/a03926_1a868d2feec169e0105c341e98f3dded78" prot="protected" static="no" mutable="no">
+        <type>crg::FramePassGroup &amp;</type>
+        <definition>crg::FramePassGroup&amp; castor3d::PostEffect::m_graph</definition>
+        <argsstring></argsstring>
+        <name>m_graph</name>
+        <qualifiedname>castor3d::PostEffect::m_graph</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="246" column="22" bodyfile="Render/PostEffect/PostEffect.hpp" bodystart="246" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d59/a03926_1a41648e1efddc32645a44e1292d8711ab" prot="protected" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::PostEffect::m_passesCount</definition>
+        <argsstring></argsstring>
+        <name>m_passesCount</name>
+        <qualifiedname>castor3d::PostEffect::m_passesCount</qualifiedname>
+        <initializer>{ 1u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="247" column="10" bodyfile="Render/PostEffect/PostEffect.hpp" bodystart="247" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d59/a03926_1aa26ab5b97f8c49b38b74556c5ba7bc5c" prot="protected" static="no" mutable="no">
+        <type><ref refid="d1/d59/a03926_1a5283f32bf24723e61f23204d87f8faea" kindref="member">Kind</ref></type>
+        <definition>Kind castor3d::PostEffect::m_kind</definition>
+        <argsstring></argsstring>
+        <name>m_kind</name>
+        <qualifiedname>castor3d::PostEffect::m_kind</qualifiedname>
+        <initializer>{ <ref refid="d1/d59/a03926_1a5283f32bf24723e61f23204d87f8faeaa2f0d6401150f6f1c243d23227516686b" kindref="member">Kind::eHDR</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="248" column="6" bodyfile="Render/PostEffect/PostEffect.hpp" bodystart="248" bodyend="-1"/>
+        <referencedby refid="d1/d59/a03926_1a816457fc08857f2a9dc68f0c0c37bc64" compoundref="df/d0c/a00788" startline="157" endline="160">isAfterToneMapping</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d59/a03926_1a099f3101344b951ea91829b8bb0ed42b" prot="protected" static="no" mutable="no">
+        <type>crg::ImageViewId const  *</type>
+        <definition>crg::ImageViewId const* castor3d::PostEffect::m_target</definition>
+        <argsstring></argsstring>
+        <name>m_target</name>
+        <qualifiedname>castor3d::PostEffect::m_target</qualifiedname>
+        <initializer>{ nullptr }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="249" column="25" bodyfile="Render/PostEffect/PostEffect.hpp" bodystart="249" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d59/a03926_1a2efa16b29741b9188ab287488cb1f124" prot="protected" static="no" mutable="no">
+        <type>crg::ImageViewId const  *</type>
+        <definition>crg::ImageViewId const* castor3d::PostEffect::m_result</definition>
+        <argsstring></argsstring>
+        <name>m_result</name>
+        <qualifiedname>castor3d::PostEffect::m_result</qualifiedname>
+        <initializer>{ nullptr }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="250" column="25" bodyfile="Render/PostEffect/PostEffect.hpp" bodystart="250" bodyend="-1"/>
+        <referencedby refid="d1/d59/a03926_1a6521bc23a51122cc9370471ea89c6b08" compoundref="df/d0c/a00788" startline="162" endline="166">getResult</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d59/a03926_1ab328c67afe602fd117f15e6608b3e949" prot="protected" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::PostEffect::m_enabled</definition>
+        <argsstring></argsstring>
+        <name>m_enabled</name>
+        <qualifiedname>castor3d::PostEffect::m_enabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="251" column="6" bodyfile="Render/PostEffect/PostEffect.hpp" bodystart="251" bodyend="-1"/>
+        <referencedby refid="d1/d59/a03926_1aa57c28bb82334d0f8ae04f238dd6418e" compoundref="df/d0c/a00788" startline="140" endline="143">enable</referencedby>
+        <referencedby refid="d1/d59/a03926_1ad5edca62b2d8bce488d241efff2b1404" compoundref="df/d0c/a00788" startline="173" endline="176">isEnabled</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d1/d59/a03926_1ae06fc6ca8783a6cfc843557bd9197da2" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::PostEffect::PostEffect</definition>
+        <argsstring>(castor::String const &amp;name, castor::String const &amp;groupName, castor::String const &amp;fullName, RenderTarget &amp;renderTarget, RenderSystem &amp;renderSystem, Parameters const &amp;parameters, uint32_t passesCount=1u, Kind kind=Kind::eHDR)</argsstring>
+        <name>PostEffect</name>
+        <qualifiedname>castor3d::PostEffect::PostEffect</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>groupName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>fullName</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d64/a04082" kindref="compound">RenderTarget</ref> &amp;</type>
+          <declname>renderTarget</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d34/a04078" kindref="compound">RenderSystem</ref> &amp;</type>
+          <declname>renderSystem</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>passesCount</declname>
+          <defval>1u</defval>
+        </param>
+        <param>
+          <type><ref refid="d1/d59/a03926_1a5283f32bf24723e61f23204d87f8faea" kindref="member">Kind</ref></type>
+          <declname>kind</declname>
+          <defval><ref refid="d1/d59/a03926_1a5283f32bf24723e61f23204d87f8faeaa2f0d6401150f6f1c243d23227516686b" kindref="member">Kind::eHDR</ref></defval>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">a</parametername>
-<parametername direction="in">b</parametername>
-<parametername direction="in">c</parametername>
+<parametername direction="in">name</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The three vertices indices </para>
+<para>The effect name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">groupName</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The effect passes group name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">fullName</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The effect full (fancy) name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">renderTarget</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render target to which is attached this effect. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">renderSystem</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render system. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The optional parameters. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">passesCount</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of passes for this post effect. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">kind</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The post effect kind. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -56,49 +395,536 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/Face.hpp" line="22" column="1"/>
+        <location file="Render/PostEffect/PostEffect.hpp" line="53" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d59/a03926_1a9eabd49da77fe21c77805a5047bc0753" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::Face::operator[]</definition>
-        <argsstring>(uint32_t index) const</argsstring>
-        <name>operator[]</name>
+      <memberdef kind="function" id="d1/d59/a03926_1a2a2800203a6cc60e0296a6fe30b870ff" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PostEffect::doCopyImage</definition>
+        <argsstring>(crg::RunnableGraph &amp;graph, crg::RunnablePass const &amp;runnable, crg::RecordContext &amp;context, VkCommandBuffer commandBuffer, uint32_t index, crg::ImageViewId const &amp;source, crg::ImageViewId const &amp;target)</argsstring>
+        <name>doCopyImage</name>
+        <qualifiedname>castor3d::PostEffect::doCopyImage</qualifiedname>
+        <param>
+          <type>crg::RunnableGraph &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::RunnablePass const &amp;</type>
+          <declname>runnable</declname>
+        </param>
+        <param>
+          <type>crg::RecordContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>VkCommandBuffer</type>
+          <declname>commandBuffer</declname>
+        </param>
         <param>
           <type>uint32_t</type>
           <declname>index</declname>
         </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>source</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>target</declname>
+        </param>
         <briefdescription>
-<para>Retrieves the vertex index. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="180" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d59/a03926_1a90649af855522f99f3304207950c232e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::PostEffect::~PostEffect</definition>
+        <argsstring>()</argsstring>
+        <name>~PostEffect</name>
+        <qualifiedname>castor3d::PostEffect::~PostEffect</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="69" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d59/a03926_1a779f17b46790b4fa46b5eb74de953fb2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PostEffect::writeInto</definition>
+        <argsstring>(castor::StringStream &amp;file, castor::String const &amp;tabs)</argsstring>
+        <name>writeInto</name>
+        <qualifiedname>castor3d::PostEffect::writeInto</qualifiedname>
+        <param>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <briefdescription>
+<para>Writes the effect into a text file. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">index</parametername>
+<parametername direction="in">file</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The index of the concerned vertex </para>
+<para>The file. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">tabs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The current indentation. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>The vertex index </para>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="80" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d59/a03926_1a893f614d4a94aa484331f96df535cabb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PostEffect::initialise</definition>
+        <argsstring>(castor3d::RenderDevice const &amp;device, crg::ImageViewId const &amp;texture, crg::FramePass const &amp;previousPass)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::PostEffect::initialise</qualifiedname>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">castor3d::RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>texture</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>previousPass</declname>
+        </param>
+        <briefdescription>
+<para>Initialisation function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">texture</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The target texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">previousPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The previous frame pass. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> if ok. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/Face.hpp" line="33" column="1" bodyfile="Model/Mesh/Submesh/Component/Face.hpp" bodystart="33" bodyend="37"/>
-        <references refid="d8/d3a/a03930_1adf8426df8bab8f2e89269aad090a1d01" compoundref="d9/d34/a00476" startline="17">castor3d::FaceIndices::m_index</references>
+        <location file="Render/PostEffect/PostEffect.hpp" line="96" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d59/a03926_1a7095bdd059e4057a3effa3272ecc21b7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PostEffect::cleanup</definition>
+        <argsstring>(castor3d::RenderDevice const &amp;device)</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor3d::PostEffect::cleanup</qualifiedname>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">castor3d::RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Cleanup function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="107" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d59/a03926_1a2e6b5f102d2afe8404b07dcd1c00c0c4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PostEffect::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::PostEffect::update</qualifiedname>
+        <param>
+          <type><ref refid="d3/d14/a04046" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="114" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d59/a03926_1aee1a9a26a10c2de7a029b2b6aea9a796" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PostEffect::update</definition>
+        <argsstring>(GpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::PostEffect::update</qualifiedname>
+        <param>
+          <type><ref refid="dd/daf/a04050" kindref="compound">GpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="121" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d59/a03926_1af3b04da19b50c2e39c53907a5d2ecb8d" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PostEffect::accept</definition>
+        <argsstring>(PipelineVisitorBase &amp;visitor)=0</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::PostEffect::accept</qualifiedname>
+        <param>
+          <type><ref refid="dc/dbb/a03262" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Visitor acceptance function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ... visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="130" column="22"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d1/d59/a03926_1a447a78438fd4a60fa364e10b0e00f01f" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> crg::ImageViewId const *</type>
+        <definition>virtual C3D_API crg::ImageViewId const  * castor3d::PostEffect::doInitialise</definition>
+        <argsstring>(castor3d::RenderDevice const &amp;device, crg::FramePass const &amp;previousPass)=0</argsstring>
+        <name>doInitialise</name>
+        <qualifiedname>castor3d::PostEffect::doInitialise</qualifiedname>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">castor3d::RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>previousPass</declname>
+        </param>
+        <briefdescription>
+<para>Initialisation function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">previousPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The previous frame pass. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The resulting image view. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="201" column="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d59/a03926_1a97356b244e1318168199127871c24b00" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PostEffect::doCleanup</definition>
+        <argsstring>(castor3d::RenderDevice const &amp;device)=0</argsstring>
+        <name>doCleanup</name>
+        <qualifiedname>castor3d::PostEffect::doCleanup</qualifiedname>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">castor3d::RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Cleanup function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="211" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d59/a03926_1a3b3e69249d4942fd389ea48620b87522" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PostEffect::doCpuUpdate</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>doCpuUpdate</name>
+        <qualifiedname>castor3d::PostEffect::doCpuUpdate</qualifiedname>
+        <param>
+          <type><ref refid="d3/d14/a04046" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, CPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="220" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d59/a03926_1a87729eca86aed8bb7b8309e547f56008" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PostEffect::doGpuUpdate</definition>
+        <argsstring>(GpuUpdater &amp;updater)</argsstring>
+        <name>doGpuUpdate</name>
+        <qualifiedname>castor3d::PostEffect::doGpuUpdate</qualifiedname>
+        <param>
+          <type><ref refid="dd/daf/a04050" kindref="compound">GpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, GPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="229" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d59/a03926_1a809e73594ca0bb7a42ad3e9e5d42496b" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::PostEffect::doWriteInto</definition>
+        <argsstring>(castor::StringStream &amp;file, castor::String const &amp;tabs)=0</argsstring>
+        <name>doWriteInto</name>
+        <qualifiedname>castor3d::PostEffect::doWriteInto</qualifiedname>
+        <param>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <briefdescription>
+<para>Writes the effect into a text file. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The file. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">tabs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The current indentation. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffect.hpp" line="240" column="22"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Model/Mesh/Submesh/Component/Face.hpp" line="12" column="1" bodyfile="Model/Mesh/Submesh/Component/Face.hpp" bodystart="11" bodyend="43"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::PostEffect</label>
+        <link refid="d1/d59/a03926"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; RenderSystem &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::PostEffect</label>
+        <link refid="d1/d59/a03926"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_renderTarget</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::RenderTarget</label>
+        <link refid="db/d64/a04082"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+      <node id="6">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; RenderSystem &gt;</label>
+      </node>
+      <node id="5">
+        <label>std::enable_shared_from_this&lt; RenderTarget &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Render/PostEffect/PostEffect.hpp" line="18" column="1" bodyfile="Render/PostEffect/PostEffect.hpp" bodystart="21" bodyend="252"/>
     <listofallmembers>
-      <member refid="d1/d59/a03926_1a3b55f392c1b27456bbe20ecafeb45020" prot="public" virt="non-virtual"><scope>castor3d::Face</scope><name>Face</name></member>
-      <member refid="d1/d59/a03926_1a93076f16a364cd85357482fedf153375" prot="private" virt="non-virtual"><scope>castor3d::Face</scope><name>m_face</name></member>
-      <member refid="d1/d59/a03926_1a9eabd49da77fe21c77805a5047bc0753" prot="public" virt="non-virtual"><scope>castor3d::Face</scope><name>operator[]</name></member>
+      <member refid="d1/d59/a03926_1af3b04da19b50c2e39c53907a5d2ecb8d" prot="public" virt="pure-virtual"><scope>castor3d::PostEffect</scope><name>accept</name></member>
+      <member refid="d1/d59/a03926_1a7095bdd059e4057a3effa3272ecc21b7" prot="public" virt="non-virtual"><scope>castor3d::PostEffect</scope><name>cleanup</name></member>
+      <member refid="d1/d59/a03926_1a97356b244e1318168199127871c24b00" prot="private" virt="pure-virtual"><scope>castor3d::PostEffect</scope><name>doCleanup</name></member>
+      <member refid="d1/d59/a03926_1a2a2800203a6cc60e0296a6fe30b870ff" prot="protected" virt="non-virtual"><scope>castor3d::PostEffect</scope><name>doCopyImage</name></member>
+      <member refid="d1/d59/a03926_1a3b3e69249d4942fd389ea48620b87522" prot="private" virt="virtual"><scope>castor3d::PostEffect</scope><name>doCpuUpdate</name></member>
+      <member refid="d1/d59/a03926_1a87729eca86aed8bb7b8309e547f56008" prot="private" virt="virtual"><scope>castor3d::PostEffect</scope><name>doGpuUpdate</name></member>
+      <member refid="d1/d59/a03926_1a447a78438fd4a60fa364e10b0e00f01f" prot="private" virt="pure-virtual"><scope>castor3d::PostEffect</scope><name>doInitialise</name></member>
+      <member refid="d1/d59/a03926_1a809e73594ca0bb7a42ad3e9e5d42496b" prot="private" virt="pure-virtual"><scope>castor3d::PostEffect</scope><name>doWriteInto</name></member>
+      <member refid="d1/d59/a03926_1aa57c28bb82334d0f8ae04f238dd6418e" prot="public" virt="non-virtual"><scope>castor3d::PostEffect</scope><name>enable</name></member>
+      <member refid="d1/d59/a03926_1a686548d39de82c584c5a60f9b178084e" prot="public" virt="non-virtual"><scope>castor3d::PostEffect</scope><name>getFullName</name></member>
+      <member refid="d1/d59/a03926_1af90bc947bb2218c77222018d4cf4609b" prot="public" virt="pure-virtual"><scope>castor3d::PostEffect</scope><name>getPass</name></member>
+      <member refid="d1/d59/a03926_1a6521bc23a51122cc9370471ea89c6b08" prot="public" virt="non-virtual"><scope>castor3d::PostEffect</scope><name>getResult</name></member>
+      <member refid="d1/d59/a03926_1a893f614d4a94aa484331f96df535cabb" prot="public" virt="non-virtual"><scope>castor3d::PostEffect</scope><name>initialise</name></member>
+      <member refid="d1/d59/a03926_1a816457fc08857f2a9dc68f0c0c37bc64" prot="public" virt="non-virtual"><scope>castor3d::PostEffect</scope><name>isAfterToneMapping</name></member>
+      <member refid="d1/d59/a03926_1ad5edca62b2d8bce488d241efff2b1404" prot="public" virt="non-virtual"><scope>castor3d::PostEffect</scope><name>isEnabled</name></member>
+      <member refid="d1/d59/a03926_1a5283f32bf24723e61f23204d87f8faea" prot="public" virt="non-virtual"><scope>castor3d::PostEffect</scope><name>Kind</name></member>
+      <member refid="d1/d59/a03926_1ab328c67afe602fd117f15e6608b3e949" prot="protected" virt="non-virtual"><scope>castor3d::PostEffect</scope><name>m_enabled</name></member>
+      <member refid="d1/d59/a03926_1ade24654435da3775b0e4d2ab02846725" prot="protected" virt="non-virtual"><scope>castor3d::PostEffect</scope><name>m_fullName</name></member>
+      <member refid="d1/d59/a03926_1a868d2feec169e0105c341e98f3dded78" prot="protected" virt="non-virtual"><scope>castor3d::PostEffect</scope><name>m_graph</name></member>
+      <member refid="d1/d59/a03926_1aa26ab5b97f8c49b38b74556c5ba7bc5c" prot="protected" virt="non-virtual"><scope>castor3d::PostEffect</scope><name>m_kind</name></member>
+      <member refid="d1/d59/a03926_1a41648e1efddc32645a44e1292d8711ab" prot="protected" virt="non-virtual"><scope>castor3d::PostEffect</scope><name>m_passesCount</name></member>
+      <member refid="d1/d59/a03926_1a56fc980bcf8a521334b8569a1e6a1e96" prot="protected" virt="non-virtual"><scope>castor3d::PostEffect</scope><name>m_renderTarget</name></member>
+      <member refid="d1/d59/a03926_1a2efa16b29741b9188ab287488cb1f124" prot="protected" virt="non-virtual"><scope>castor3d::PostEffect</scope><name>m_result</name></member>
+      <member refid="d1/d59/a03926_1a099f3101344b951ea91829b8bb0ed42b" prot="protected" virt="non-virtual"><scope>castor3d::PostEffect</scope><name>m_target</name></member>
+      <member refid="d1/d59/a03926_1ae06fc6ca8783a6cfc843557bd9197da2" prot="protected" virt="non-virtual"><scope>castor3d::PostEffect</scope><name>PostEffect</name></member>
+      <member refid="d1/d59/a03926_1a8eed3b457e1242b432dfe60919d6a2ec" prot="public" virt="pure-virtual"><scope>castor3d::PostEffect</scope><name>setParameters</name></member>
+      <member refid="d1/d59/a03926_1a2e6b5f102d2afe8404b07dcd1c00c0c4" prot="public" virt="non-virtual"><scope>castor3d::PostEffect</scope><name>update</name></member>
+      <member refid="d1/d59/a03926_1aee1a9a26a10c2de7a029b2b6aea9a796" prot="public" virt="non-virtual"><scope>castor3d::PostEffect</scope><name>update</name></member>
+      <member refid="d1/d59/a03926_1a779f17b46790b4fa46b5eb74de953fb2" prot="public" virt="non-virtual"><scope>castor3d::PostEffect</scope><name>writeInto</name></member>
+      <member refid="d1/d59/a03926_1a90649af855522f99f3304207950c232e" prot="public" virt="virtual"><scope>castor3d::PostEffect</scope><name>~PostEffect</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

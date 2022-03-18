@@ -1,96 +1,100 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d9/d37/a04335" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::SkinningRenderNode</compoundname>
-    <basecompoundref refid="d1/df6/a04299" prot="public" virt="non-virtual">castor3d::ObjectRenderNode&lt; Submesh, Geometry &gt;</basecompoundref>
-    <includes local="no">SkinningRenderNode.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d9/d37/a04335_1a9ede920d33f0e7d04c8d77db4d879051" prot="public" static="no" mutable="no">
-        <type><ref refid="d1/d9f/a05035" kindref="compound">AnimatedSkeleton</ref> &amp;</type>
-        <definition>AnimatedSkeleton&amp; castor3d::SkinningRenderNode::skeleton</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d9/d37/a04335" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::EquirectangularToCube</compoundname>
+    <basecompoundref refid="df/d59/a04343" prot="private" virt="non-virtual">castor3d::RenderCube</basecompoundref>
+    <includes local="no">EquirectangularToCube.hpp</includes>
+    <innerclass refid="d6/dac/a04339" prot="private">castor3d::EquirectangularToCube::FrameBuffer</innerclass>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d9/d37/a04335_1a4bf0311628e058cc502b380fbbc1655f" prot="private" static="no" mutable="no">
+        <type>std::array&lt; FrameBuffer, 6u &gt;</type>
+        <definition>std::array&lt; FrameBuffer, 6u &gt; castor3d::EquirectangularToCube::m_frameBuffers</definition>
         <argsstring></argsstring>
-        <name>skeleton</name>
+        <name>m_frameBuffers</name>
+        <qualifiedname>castor3d::EquirectangularToCube::m_frameBuffers</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The animated skeleton. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Node/SkinningRenderNode.hpp" line="32" column="1" bodyfile="Render/Node/SkinningRenderNode.hpp" bodystart="32" bodyend="-1"/>
+        <location file="Render/ToTexture/EquirectangularToCube.hpp" line="31" column="12" bodyfile="Render/ToTexture/EquirectangularToCube.hpp" bodystart="31" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d9/d37/a04335_1abd383900870f7e3f1557606df103d0ad" prot="public" static="no" mutable="no">
-        <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d6/d66/a05595" kindref="compound">SkinningUboConfiguration</ref> &gt;</type>
-        <definition>UniformBufferOffsetT&lt; SkinningUboConfiguration &gt; castor3d::SkinningRenderNode::skinningUbo</definition>
+      <memberdef kind="variable" id="d9/d37/a04335_1ae9cd9a4fb5116e3ac2781cbc89932666" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::EquirectangularToCube::m_device</definition>
         <argsstring></argsstring>
-        <name>skinningUbo</name>
+        <name>m_device</name>
+        <qualifiedname>castor3d::EquirectangularToCube::m_device</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The animation UBO. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Node/SkinningRenderNode.hpp" line="35" column="1" bodyfile="Render/Node/SkinningRenderNode.hpp" bodystart="35" bodyend="-1"/>
+        <location file="Render/ToTexture/EquirectangularToCube.hpp" line="32" column="21" bodyfile="Render/ToTexture/EquirectangularToCube.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d37/a04335_1a38157871c0f4e721522f882af12716f9" prot="private" static="no" mutable="no">
+        <type>ashes::CommandBufferPtr</type>
+        <definition>ashes::CommandBufferPtr castor3d::EquirectangularToCube::m_commandBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_commandBuffer</name>
+        <qualifiedname>castor3d::EquirectangularToCube::m_commandBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/EquirectangularToCube.hpp" line="33" column="25" bodyfile="Render/ToTexture/EquirectangularToCube.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d37/a04335_1a846628d422e5669c05fc6ace76c4fe82" prot="private" static="no" mutable="no">
+        <type>ashes::ImageView const  &amp;</type>
+        <definition>ashes::ImageView const&amp; castor3d::EquirectangularToCube::m_view</definition>
+        <argsstring></argsstring>
+        <name>m_view</name>
+        <qualifiedname>castor3d::EquirectangularToCube::m_view</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/EquirectangularToCube.hpp" line="34" column="25" bodyfile="Render/ToTexture/EquirectangularToCube.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d37/a04335_1a8234017deeff5ab377fc07907362887e" prot="private" static="no" mutable="no">
+        <type>ashes::RenderPassPtr</type>
+        <definition>ashes::RenderPassPtr castor3d::EquirectangularToCube::m_renderPass</definition>
+        <argsstring></argsstring>
+        <name>m_renderPass</name>
+        <qualifiedname>castor3d::EquirectangularToCube::m_renderPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/EquirectangularToCube.hpp" line="35" column="22" bodyfile="Render/ToTexture/EquirectangularToCube.hpp" bodystart="35" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d9/d37/a04335_1a7181b7eba36943b249a2ebaca6b827b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::SkinningRenderNode::SkinningRenderNode</definition>
-        <argsstring>(RenderPipeline &amp;pipeline, PassRenderNode &amp;&amp;passNode, UniformBufferOffsetT&lt; ModelMatrixUboConfiguration &gt; modelMatrixBuffer, UniformBufferOffsetT&lt; ModelUboConfiguration &gt; modelBuffer, UniformBufferOffsetT&lt; PickingUboConfiguration &gt; pickingBuffer, UniformBufferOffsetT&lt; TexturesUboConfiguration &gt; texturesBuffer, UniformBufferOffsetT&lt; ModelInstancesUboConfiguration &gt; modelInstancesBuffer, GeometryBuffers const &amp;buffers, SceneNode &amp;sceneNode, DataType &amp;data, InstanceType &amp;instance, AnimatedSkeleton &amp;skeleton, UniformBufferOffsetT&lt; SkinningUboConfiguration &gt; skinningUbo)</argsstring>
-        <name>SkinningRenderNode</name>
+      <memberdef kind="function" id="d9/d37/a04335_1a08bb82ddda0e8dd0e0a81216032bee12" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::EquirectangularToCube::EquirectangularToCube</definition>
+        <argsstring>(TextureLayout const &amp;equiRectangular, RenderDevice const &amp;device, TextureLayout const &amp;target)</argsstring>
+        <name>EquirectangularToCube</name>
+        <qualifiedname>castor3d::EquirectangularToCube::EquirectangularToCube</qualifiedname>
         <param>
-          <type><ref refid="dd/dec/a04595" kindref="compound">RenderPipeline</ref> &amp;</type>
-          <declname>pipeline</declname>
+          <type><ref refid="de/d87/a02939" kindref="compound">TextureLayout</ref> const &amp;</type>
+          <declname>equiRectangular</declname>
         </param>
         <param>
-          <type><ref refid="d2/dc7/a04303" kindref="compound">PassRenderNode</ref> &amp;&amp;</type>
-          <declname>passNode</declname>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
         </param>
         <param>
-          <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d5/d7e/a05563" kindref="compound">ModelMatrixUboConfiguration</ref> &gt;</type>
-          <declname>modelMatrixBuffer</declname>
-        </param>
-        <param>
-          <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d2/d72/a05567" kindref="compound">ModelUboConfiguration</ref> &gt;</type>
-          <declname>modelBuffer</declname>
-        </param>
-        <param>
-          <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="de/d98/a05579" kindref="compound">PickingUboConfiguration</ref> &gt;</type>
-          <declname>pickingBuffer</declname>
-        </param>
-        <param>
-          <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d8/d26/a05599" kindref="compound">TexturesUboConfiguration</ref> &gt;</type>
-          <declname>texturesBuffer</declname>
-        </param>
-        <param>
-          <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d6/d63/a05559" kindref="compound">ModelInstancesUboConfiguration</ref> &gt;</type>
-          <declname>modelInstancesBuffer</declname>
-        </param>
-        <param>
-          <type><ref refid="df/d04/a02287" kindref="compound">GeometryBuffers</ref> const &amp;</type>
-          <declname>buffers</declname>
-        </param>
-        <param>
-          <type><ref refid="d8/dd0/a05235" kindref="compound">SceneNode</ref> &amp;</type>
-          <declname>sceneNode</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/df6/a04299_1ac978b6ccff4e9775582dcafd1399dc2e" kindref="member">DataType</ref> &amp;</type>
-          <declname>data</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/df6/a04299_1aee832b75502f22fbf4b9a886f2b11487" kindref="member">InstanceType</ref> &amp;</type>
-          <declname>instance</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/d9f/a05035" kindref="compound">AnimatedSkeleton</ref> &amp;</type>
-          <declname>skeleton</declname>
-        </param>
-        <param>
-          <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d6/d66/a05595" kindref="compound">SkinningUboConfiguration</ref> &gt;</type>
-          <declname>skinningUbo</declname>
+          <type><ref refid="de/d87/a02939" kindref="compound">TextureLayout</ref> const &amp;</type>
+          <declname>target</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -98,7 +102,25 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Node/SkinningRenderNode.hpp" line="16" column="1"/>
+        <location file="Render/ToTexture/EquirectangularToCube.hpp" line="20" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d37/a04335_1a2da4513144f02ad4f1814f439dd59622" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EquirectangularToCube::render</definition>
+        <argsstring>(QueueData const &amp;queueData)</argsstring>
+        <name>render</name>
+        <qualifiedname>castor3d::EquirectangularToCube::render</qualifiedname>
+        <param>
+          <type><ref refid="da/d1d/a03947" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/EquirectangularToCube.hpp" line="23" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -106,314 +128,82 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="4032">
-        <label>castor3d::SkinningRenderNode</label>
+      <node id="1">
+        <label>castor3d::EquirectangularToCube</label>
         <link refid="d9/d37/a04335"/>
-        <childnode refid="4033" relation="public-inheritance">
+        <childnode refid="2" relation="private-inheritance">
         </childnode>
       </node>
-      <node id="4033">
-        <label>SubmeshRenderNode</label>
-        <link refid="d1/df6/a04299"/>
+      <node id="2">
+        <label>castor3d::RenderCube</label>
+        <link refid="df/d59/a04343"/>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="4041">
-        <label>castor::OwnedBy&lt; Material &gt;</label>
-      </node>
-      <node id="4064">
-        <label>castor3d::Mesh</label>
-        <link refid="d5/d45/a03887"/>
-        <childnode refid="4065" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4056" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4058">
-        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
-        <childnode refid="4059" relation="template-instance">
-          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4060">
-        <label>K</label>
-      </node>
-      <node id="4061">
+      <node id="9">
         <label>T</label>
       </node>
-      <node id="4066">
-        <label>castor3d::Geometry</label>
-        <link refid="db/d6b/a05139"/>
-        <childnode refid="4067" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4071" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4047">
-        <label>castor3d::SceneNode</label>
-        <link refid="d8/dd0/a05235"/>
-        <childnode refid="4048" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4049" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4050" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4034">
-        <label>castor3d::SkinningRenderNode</label>
+      <node id="1">
+        <label>castor3d::EquirectangularToCube</label>
         <link refid="d9/d37/a04335"/>
-        <childnode refid="4035" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4052" relation="usage">
-          <edgelabel>skinningUbo</edgelabel>
-        </childnode>
-        <childnode refid="4053" relation="usage">
-          <edgelabel>skeleton</edgelabel>
+        <childnode refid="2" relation="private-inheritance">
         </childnode>
       </node>
-      <node id="4046">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelUboConfiguration &gt;</label>
-        <link refid="d2/dd2/a02279"/>
-        <childnode refid="4038" relation="template-instance">
-          <edgelabel>&lt; castor3d::ModelUboConfiguration &gt;</edgelabel>
+      <node id="7">
+        <label>castor3d::QueuesData</label>
+        <link refid="d5/d04/a03955"/>
+      </node>
+      <node id="2">
+        <label>castor3d::RenderCube</label>
+        <link refid="df/d59/a04343"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_device</edgelabel>
         </childnode>
       </node>
-      <node id="4044">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::PickingUboConfiguration &gt;</label>
-        <link refid="d2/dd2/a02279"/>
-        <childnode refid="4038" relation="template-instance">
-          <edgelabel>&lt; castor3d::PickingUboConfiguration &gt;</edgelabel>
+      <node id="3">
+        <label>castor3d::RenderDevice</label>
+        <link refid="d4/d87/a03963"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>queueFamilies</edgelabel>
         </childnode>
       </node>
-      <node id="4049">
-        <label>castor::OwnedBy&lt; Scene &gt;</label>
-      </node>
-      <node id="4043">
-        <label>castor::OwnedBy&lt; SceneRenderPass &gt;</label>
-      </node>
-      <node id="4052">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::SkinningUboConfiguration &gt;</label>
-        <link refid="d2/dd2/a02279"/>
-        <childnode refid="4038" relation="template-instance">
-          <edgelabel>&lt; castor3d::SkinningUboConfiguration &gt;</edgelabel>
+      <node id="4">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d3/d9a/a04075"/>
+        <childnode refid="5" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="4059">
-        <label>std::map&lt; K, T &gt;</label>
-        <childnode refid="4060" relation="usage">
-          <edgelabel>keys</edgelabel>
-        </childnode>
-        <childnode refid="4061" relation="usage">
+      <node id="5">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="8">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="9" relation="usage">
           <edgelabel>elements</edgelabel>
         </childnode>
       </node>
-      <node id="4038">
-        <label>castor3d::UniformBufferOffsetT&lt; DataT &gt;</label>
-        <link refid="d2/dd2/a02279"/>
-      </node>
-      <node id="4048">
-        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
-      </node>
-      <node id="4065">
-        <label>castor::Resource&lt; Mesh &gt;</label>
-      </node>
-      <node id="4067">
-        <label>castor3d::MovableObject</label>
-        <link refid="dc/d66/a05171"/>
-        <childnode refid="4056" relation="public-inheritance">
+      <node id="6">
+        <label>std::vector&lt; QueuesData &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>elements</edgelabel>
         </childnode>
-        <childnode refid="4050" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4047" relation="usage">
-          <edgelabel>m_sceneNode</edgelabel>
-        </childnode>
-        <childnode refid="4068" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-      </node>
-      <node id="4050">
-        <label>Named</label>
-      </node>
-      <node id="4071">
-        <label>castor3d::RenderedObject</label>
-        <link refid="d8/d9b/a05219"/>
-        <childnode refid="4072" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4051">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelInstancesUboConfiguration &gt;</label>
-        <link refid="d2/dd2/a02279"/>
-        <childnode refid="4038" relation="template-instance">
-          <edgelabel>&lt; castor3d::ModelInstancesUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4054">
-        <label>castor3d::AnimatedObject</label>
-        <link refid="d1/d82/a05027"/>
-        <childnode refid="4050" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4057">
-        <label>castor::OwnedBy&lt; Engine  &gt;</label>
-      </node>
-      <node id="4053">
-        <label>castor3d::AnimatedSkeleton</label>
-        <link refid="d1/d9f/a05035"/>
-        <childnode refid="4054" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4055" relation="usage">
-          <edgelabel>m_skeleton</edgelabel>
-        </childnode>
-        <childnode refid="4064" relation="usage">
-          <edgelabel>m_mesh</edgelabel>
-        </childnode>
-        <childnode refid="4066" relation="usage">
-          <edgelabel>m_geometry</edgelabel>
-        </childnode>
-      </node>
-      <node id="4035">
-        <label>SubmeshRenderNode</label>
-        <link refid="d1/df6/a04299"/>
-        <childnode refid="4036" relation="usage">
-          <edgelabel>buffers</edgelabel>
-        </childnode>
-        <childnode refid="4037" relation="usage">
-          <edgelabel>modelMatrixUbo</edgelabel>
-        </childnode>
-        <childnode refid="4039" relation="usage">
-          <edgelabel>passNode</edgelabel>
-        </childnode>
-        <childnode refid="4042" relation="usage">
-          <edgelabel>pipeline</edgelabel>
-        </childnode>
-        <childnode refid="4044" relation="usage">
-          <edgelabel>pickingUbo</edgelabel>
-        </childnode>
-        <childnode refid="4045" relation="usage">
-          <edgelabel>texturesUbo</edgelabel>
-        </childnode>
-        <childnode refid="4046" relation="usage">
-          <edgelabel>modelUbo</edgelabel>
-        </childnode>
-        <childnode refid="4047" relation="usage">
-          <edgelabel>sceneNode</edgelabel>
-        </childnode>
-        <childnode refid="4051" relation="usage">
-          <edgelabel>modelInstancesUbo</edgelabel>
-        </childnode>
-      </node>
-      <node id="4062">
-        <label>castor3d::AnimableT&lt; AnimableHanlerT &gt;</label>
-        <link refid="de/d0a/a02015"/>
-        <childnode refid="4063" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4058" relation="usage">
-          <edgelabel>m_animations</edgelabel>
-        </childnode>
-      </node>
-      <node id="4069">
-        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
-      </node>
-      <node id="4056">
-        <label>Animable</label>
-        <link refid="de/d0a/a02015"/>
-        <childnode refid="4057" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4058" relation="usage">
-          <edgelabel>m_animations</edgelabel>
-        </childnode>
-        <childnode refid="4062" relation="template-instance">
-          <edgelabel>&lt; Engine &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4037">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelMatrixUboConfiguration &gt;</label>
-        <link refid="d2/dd2/a02279"/>
-        <childnode refid="4038" relation="template-instance">
-          <edgelabel>&lt; castor3d::ModelMatrixUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4063">
-        <label>castor::OwnedBy&lt; AnimableHanlerT &gt;</label>
-      </node>
-      <node id="4070">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="4036">
-        <label>castor3d::GeometryBuffers</label>
-        <link refid="df/d04/a02287"/>
-      </node>
-      <node id="4040">
-        <label>castor3d::Pass</label>
-        <link refid="db/d39/a02575"/>
-        <childnode refid="4041" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4042">
-        <label>castor3d::RenderPipeline</label>
-        <link refid="dd/dec/a04595"/>
-        <childnode refid="4043" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4072">
-        <label>std::enable_shared_from_this&lt; RenderedObject &gt;</label>
-      </node>
-      <node id="4068">
-        <label>castor3d::Scene</label>
-        <link refid="d7/d00/a05223"/>
-        <childnode refid="4069" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4070" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4050" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4039">
-        <label>castor3d::PassRenderNode</label>
-        <link refid="d2/dc7/a04303"/>
-        <childnode refid="4040" relation="usage">
-          <edgelabel>pass</edgelabel>
-        </childnode>
-      </node>
-      <node id="4045">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::TexturesUboConfiguration &gt;</label>
-        <link refid="d2/dd2/a02279"/>
-        <childnode refid="4038" relation="template-instance">
-          <edgelabel>&lt; castor3d::TexturesUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4055">
-        <label>castor3d::Skeleton</label>
-        <link refid="d7/d30/a04011"/>
-        <childnode refid="4056" relation="public-inheritance">
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; QueuesData &gt;</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Render/Node/SkinningRenderNode.hpp" line="15" column="1" bodyfile="Render/Node/SkinningRenderNode.hpp" bodystart="13" bodyend="36"/>
+    <location file="Render/ToTexture/EquirectangularToCube.hpp" line="16" column="1" bodyfile="Render/ToTexture/EquirectangularToCube.hpp" bodystart="18" bodyend="36"/>
     <listofallmembers>
-      <member refid="d1/df6/a04299_1a255ba78335d0f74d664f226339c29450" prot="public" virt="non-virtual"><scope>castor3d::SkinningRenderNode</scope><name>buffers</name></member>
-      <member refid="d1/df6/a04299_1ac681909d031a28cfae6906b915b41d28" prot="public" virt="non-virtual"><scope>castor3d::SkinningRenderNode</scope><name>data</name></member>
-      <member refid="d1/df6/a04299_1ac978b6ccff4e9775582dcafd1399dc2e" prot="public" virt="non-virtual"><scope>castor3d::SkinningRenderNode</scope><name>DataType</name></member>
-      <member refid="d1/df6/a04299_1a06e411bd5fd7949c61eecb155ed01faf" prot="public" virt="non-virtual"><scope>castor3d::SkinningRenderNode</scope><name>instance</name></member>
-      <member refid="d1/df6/a04299_1aee832b75502f22fbf4b9a886f2b11487" prot="public" virt="non-virtual"><scope>castor3d::SkinningRenderNode</scope><name>InstanceType</name></member>
-      <member refid="d1/df6/a04299_1ae95cccedfb7320b95deed2662a0121ab" prot="public" virt="non-virtual"><scope>castor3d::SkinningRenderNode</scope><name>modelInstancesUbo</name></member>
-      <member refid="d1/df6/a04299_1a6d24c32231b61a32cb31deae21dee74d" prot="public" virt="non-virtual"><scope>castor3d::SkinningRenderNode</scope><name>modelMatrixUbo</name></member>
-      <member refid="d1/df6/a04299_1a9d1dba37b0ef889fb3a8f19ef7d9488e" prot="public" virt="non-virtual"><scope>castor3d::SkinningRenderNode</scope><name>modelUbo</name></member>
-      <member refid="d1/df6/a04299_1a5a57f8e86f0be7bd7db41380961bb670" prot="public" virt="non-virtual"><scope>castor3d::SkinningRenderNode</scope><name>ObjectRenderNode</name></member>
-      <member refid="d1/df6/a04299_1a336e57376fdc842314baf596b26b9334" prot="public" virt="non-virtual"><scope>castor3d::SkinningRenderNode</scope><name>ObjectRenderNode</name></member>
-      <member refid="d1/df6/a04299_1aee731fd52a1af46ece31c023b85a2680" prot="public" virt="non-virtual"><scope>castor3d::SkinningRenderNode</scope><name>ObjectRenderNode</name></member>
-      <member refid="d1/df6/a04299_1ac20c1daa2684bf81e39d76a40ece6c81" prot="public" virt="non-virtual"><scope>castor3d::SkinningRenderNode</scope><name>operator=</name></member>
-      <member refid="d1/df6/a04299_1acc1593a55eb5d814e132c85e14bc72a3" prot="public" virt="non-virtual"><scope>castor3d::SkinningRenderNode</scope><name>operator=</name></member>
-      <member refid="d1/df6/a04299_1ac4131c5f2757aa2c624b2fb286bfe316" prot="public" virt="non-virtual"><scope>castor3d::SkinningRenderNode</scope><name>passNode</name></member>
-      <member refid="d1/df6/a04299_1a3f68f6599e5724288b23d12793346010" prot="public" virt="non-virtual"><scope>castor3d::SkinningRenderNode</scope><name>pickingUbo</name></member>
-      <member refid="d1/df6/a04299_1a5dc38e49cff2eb5cdea2446b978f047f" prot="public" virt="non-virtual"><scope>castor3d::SkinningRenderNode</scope><name>pipeline</name></member>
-      <member refid="d1/df6/a04299_1a79244663521a4e43b1e025764bd59815" prot="public" virt="non-virtual"><scope>castor3d::SkinningRenderNode</scope><name>sceneNode</name></member>
-      <member refid="d9/d37/a04335_1a9ede920d33f0e7d04c8d77db4d879051" prot="public" virt="non-virtual"><scope>castor3d::SkinningRenderNode</scope><name>skeleton</name></member>
-      <member refid="d9/d37/a04335_1a7181b7eba36943b249a2ebaca6b827b3" prot="public" virt="non-virtual"><scope>castor3d::SkinningRenderNode</scope><name>SkinningRenderNode</name></member>
-      <member refid="d9/d37/a04335_1abd383900870f7e3f1557606df103d0ad" prot="public" virt="non-virtual"><scope>castor3d::SkinningRenderNode</scope><name>skinningUbo</name></member>
-      <member refid="d1/df6/a04299_1a3465b01cb839a12f604d1e65530a676f" prot="public" virt="non-virtual"><scope>castor3d::SkinningRenderNode</scope><name>texDescriptorSet</name></member>
-      <member refid="d1/df6/a04299_1aa4539c98bce1d3e94e4ad471e3eb8487" prot="public" virt="non-virtual"><scope>castor3d::SkinningRenderNode</scope><name>texturesUbo</name></member>
-      <member refid="d1/df6/a04299_1a35ac48ae1cc8b7d679465d822a324cdc" prot="public" virt="non-virtual"><scope>castor3d::SkinningRenderNode</scope><name>uboDescriptorSet</name></member>
+      <member refid="d9/d37/a04335_1a08bb82ddda0e8dd0e0a81216032bee12" prot="public" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>EquirectangularToCube</name></member>
+      <member refid="d9/d37/a04335_1a38157871c0f4e721522f882af12716f9" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>m_commandBuffer</name></member>
+      <member refid="d9/d37/a04335_1ae9cd9a4fb5116e3ac2781cbc89932666" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>m_device</name></member>
+      <member refid="d9/d37/a04335_1a4bf0311628e058cc502b380fbbc1655f" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>m_frameBuffers</name></member>
+      <member refid="d9/d37/a04335_1a8234017deeff5ab377fc07907362887e" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>m_renderPass</name></member>
+      <member refid="d9/d37/a04335_1a846628d422e5669c05fc6ace76c4fe82" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>m_view</name></member>
+      <member refid="d9/d37/a04335_1a2da4513144f02ad4f1814f439dd59622" prot="public" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>render</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

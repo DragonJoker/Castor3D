@@ -1,33 +1,22 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d1/dc1/a02706" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkSubmitInfo &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
+    <compoundname>castor3d::PtrCacheTraitsT</compoundname>
     <templateparamlist>
+      <param>
+        <type>typename ResT</type>
+      </param>
+      <param>
+        <type>typename KeyT</type>
+      </param>
     </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d1/dc1/a02706_1abbe051ec9aaeb65f3b24cd2394278f0a" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkSubmitInfo &gt;::value</definition>
-        <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_SUBMIT_INFO</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="18" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="18" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
+<para>Helper structure to specialise a cache behaviour. </para>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="18" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="18" bodyend="18"/>
+    <location file="Castor3DModule.hpp" line="72" column="1" bodyfile="Castor3DModule.hpp" bodystart="72" bodyend="-1"/>
     <listofallmembers>
-      <member refid="d1/dc1/a02706_1abbe051ec9aaeb65f3b24cd2394278f0a" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkSubmitInfo &gt;</scope><name>value</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

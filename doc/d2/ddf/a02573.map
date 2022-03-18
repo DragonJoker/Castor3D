@@ -1,5 +1,6 @@
-<map id="castor3d::UserInputListener" name="castor3d::UserInputListener">
-<area shape="rect" id="node1" title=" " alt="" coords="8,80,189,107"/>
-<area shape="rect" id="node3" href="$d7/d0f/a04638.html" title=" " alt="" coords="15,155,182,196"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,192,32"/>
+<map id="castor3d::ObjectBufferPool::ModelBuffers" name="castor3d::ObjectBufferPool::ModelBuffers">
+<area shape="rect" id="node1" title=" " alt="" coords="16,304,193,345"/>
+<area shape="rect" id="node2" href="$d0/d7c/a02499.html" title=" " alt="" coords="5,185,204,227"/>
+<area shape="rect" id="node3" href="$d7/d7d/a02527.html" title=" " alt="" coords="35,5,201,32"/>
+<area shape="rect" id="node4" href="$d0/d7c/a02499.html" title="A GPU buffer, that uses a buddy allocator to allocate sub&#45;buffers." alt="" coords="121,81,265,123"/>
 </map>

@@ -1,7 +1,9 @@
-<map id="castor3d::ShadowMap" name="castor3d::ShadowMap">
-<area shape="rect" id="node1" title=" " alt="" coords="257,80,408,107"/>
-<area shape="rect" id="node3" href="$db/de2/a04650.html" title=" " alt="" coords="5,155,217,181"/>
-<area shape="rect" id="node4" href="$d7/de4/a04674.html" title=" " alt="" coords="242,155,423,181"/>
-<area shape="rect" id="node5" href="$d8/d18/a04690.html" title=" " alt="" coords="447,155,626,181"/>
-<area shape="rect" id="node2" title=" " alt="" coords="239,5,426,32"/>
+<map id="castor3d::SceneNode" name="castor3d::SceneNode">
+<area shape="rect" id="node1" title=" " alt="" coords="168,291,315,317"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,200,179,241"/>
+<area shape="rect" id="node3" href="$d6/d41/a02222.html" title=" " alt="" coords="203,207,279,234"/>
+<area shape="rect" id="node4" title=" " alt="" coords="127,103,313,130"/>
+<area shape="rect" id="node5" href="$d6/d41/a02222.html" title="Animable public interface." alt="" coords="338,96,489,137"/>
+<area shape="rect" id="node6" title=" " alt="" coords="319,5,507,47"/>
+<area shape="rect" id="node7" title=" " alt="" coords="304,207,411,234"/>
 </map>

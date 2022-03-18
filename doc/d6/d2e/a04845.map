@@ -1,5 +1,4 @@
-<map id="castor3d::LayeredLightVolumeGIPass" name="castor3d::LayeredLightVolumeGIPass">
-<area shape="rect" id="node1" title=" " alt="" coords="5,155,204,196"/>
-<area shape="rect" id="node2" href="$d8/d1f/a04450.html" title=" " alt="" coords="29,80,181,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="73,5,136,32"/>
+<map id="castor3d::shader::TextureAnimData" name="castor3d::shader::TextureAnimData">
+<area shape="rect" id="node1" title=" " alt="" coords="5,80,176,121"/>
+<area shape="rect" id="node2" title=" " alt="" coords="22,5,159,32"/>
 </map>

@@ -1,33 +1,320 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d3/d7e/a02768" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPipelineShaderStageCreateInfo &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d3/d7e/a02768_1a33272abf874d1365b678e8bd599501fe" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPipelineShaderStageCreateInfo &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d3/d7e/a02768" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::KeyboardEvent</compoundname>
+    <basecompoundref refid="d5/dba/a02776" prot="public" virt="non-virtual">castor3d::UserInputEvent</basecompoundref>
+    <includes local="no">KeyboardEvent.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d3/d7e/a02768_1ad86715e7cf4fd5a132a05c8655b8476e" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/df5/a01395_1a1fb074d51d95c6d176d6227ff879a4dc" kindref="member">KeyboardEventType</ref> const</type>
+        <definition>KeyboardEventType const castor3d::KeyboardEvent::m_keyboardEventType</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO</initializer>
+        <name>m_keyboardEventType</name>
+        <qualifiedname>castor3d::KeyboardEvent::m_keyboardEventType</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="32" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="32" bodyend="-1"/>
+        <location file="Event/UserInput/KeyboardEvent.hpp" line="140" column="25" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d7e/a02768_1a785aad0fb85b3b280041333a92dc97ed" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/df5/a01395_1ad372dd0cc65f28ad7f558f07c78becb7" kindref="member">KeyboardKey</ref> const</type>
+        <definition>KeyboardKey const castor3d::KeyboardEvent::m_key</definition>
+        <argsstring></argsstring>
+        <name>m_key</name>
+        <qualifiedname>castor3d::KeyboardEvent::m_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/KeyboardEvent.hpp" line="141" column="19" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d7e/a02768_1a25e90cb41e40f46bb15a0e88a6886b69" prot="private" static="no" mutable="no">
+        <type>castor::String const</type>
+        <definition>castor::String const castor3d::KeyboardEvent::m_char</definition>
+        <argsstring></argsstring>
+        <name>m_char</name>
+        <qualifiedname>castor3d::KeyboardEvent::m_char</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/KeyboardEvent.hpp" line="142" column="22" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d7e/a02768_1a94b7f5577bc3cb30b69f6f36b4449f18" prot="private" static="no" mutable="no">
+        <type>bool const</type>
+        <definition>bool const castor3d::KeyboardEvent::m_ctrl</definition>
+        <argsstring></argsstring>
+        <name>m_ctrl</name>
+        <qualifiedname>castor3d::KeyboardEvent::m_ctrl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/KeyboardEvent.hpp" line="143" column="12" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="143" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d7e/a02768_1a2ec7ebeada1bffe2af801abeb4386e67" prot="private" static="no" mutable="no">
+        <type>bool const</type>
+        <definition>bool const castor3d::KeyboardEvent::m_alt</definition>
+        <argsstring></argsstring>
+        <name>m_alt</name>
+        <qualifiedname>castor3d::KeyboardEvent::m_alt</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/KeyboardEvent.hpp" line="144" column="12" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="144" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d7e/a02768_1a6bbfe170e8fd6361a0abeb38b3bac3d3" prot="private" static="no" mutable="no">
+        <type>bool const</type>
+        <definition>bool const castor3d::KeyboardEvent::m_shift</definition>
+        <argsstring></argsstring>
+        <name>m_shift</name>
+        <qualifiedname>castor3d::KeyboardEvent::m_shift</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/KeyboardEvent.hpp" line="145" column="12" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="145" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d7e/a02768_1adeeca90d77dfc1929d6204d27561cd8a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::KeyboardEvent::KeyboardEvent</definition>
+        <argsstring>(KeyboardEventType type, KeyboardKey key, bool ctrl, bool alt, bool shift)</argsstring>
+        <name>KeyboardEvent</name>
+        <qualifiedname>castor3d::KeyboardEvent::KeyboardEvent</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a1fb074d51d95c6d176d6227ff879a4dc" kindref="member">KeyboardEventType</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1ad372dd0cc65f28ad7f558f07c78becb7" kindref="member">KeyboardKey</ref></type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>ctrl</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>alt</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>shift</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/KeyboardEvent.hpp" line="31" column="1" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="31" bodyend="44"/>
+        <references refid="d2/df5/a01395_1abdf15c31ed466fee351daf42b2b45ad5a94367f202738af3ba279dbcd33c328c2">castor3d::eKeyboard</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/d7e/a02768_1ae2c1b38c023a8cec795086cab927b1f0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::KeyboardEvent::KeyboardEvent</definition>
+        <argsstring>(KeyboardEventType type, KeyboardKey key, castor::String const &amp;c, bool ctrl, bool alt, bool shift)</argsstring>
+        <name>KeyboardEvent</name>
+        <qualifiedname>castor3d::KeyboardEvent::KeyboardEvent</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a1fb074d51d95c6d176d6227ff879a4dc" kindref="member">KeyboardEventType</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1ad372dd0cc65f28ad7f558f07c78becb7" kindref="member">KeyboardKey</ref></type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>c</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>ctrl</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>alt</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>shift</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/KeyboardEvent.hpp" line="63" column="1" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="63" bodyend="77"/>
+        <references refid="d2/df5/a01395_1abdf15c31ed466fee351daf42b2b45ad5a94367f202738af3ba279dbcd33c328c2">castor3d::eKeyboard</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/d7e/a02768_1a3681b552fbdc9d2eff738f3d7adcf0b2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/df5/a01395_1a1fb074d51d95c6d176d6227ff879a4dc" kindref="member">KeyboardEventType</ref></type>
+        <definition>KeyboardEventType castor3d::KeyboardEvent::getKeyboardEventType</definition>
+        <argsstring>() const</argsstring>
+        <name>getKeyboardEventType</name>
+        <qualifiedname>castor3d::KeyboardEvent::getKeyboardEventType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The keyboard event type. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/KeyboardEvent.hpp" line="84" column="19" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="84" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d7e/a02768_1a1be055833a6b81b399490211b3b2e9b5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/df5/a01395_1ad372dd0cc65f28ad7f558f07c78becb7" kindref="member">KeyboardKey</ref></type>
+        <definition>KeyboardKey castor3d::KeyboardEvent::getKey</definition>
+        <argsstring>() const</argsstring>
+        <name>getKey</name>
+        <qualifiedname>castor3d::KeyboardEvent::getKey</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The key code. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/KeyboardEvent.hpp" line="94" column="13" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="94" bodyend="97"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d7e/a02768_1a571cb525e479db3a9a55410dcb7f58e6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::String const &amp;</type>
+        <definition>castor::String const  &amp; castor3d::KeyboardEvent::getChar</definition>
+        <argsstring>() const</argsstring>
+        <name>getChar</name>
+        <qualifiedname>castor3d::KeyboardEvent::getChar</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The character corresponding to the key code. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/KeyboardEvent.hpp" line="104" column="23" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="104" bodyend="107"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d7e/a02768_1a96945c97723a96394b6f2107fd798a6e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::KeyboardEvent::isCtrlDown</definition>
+        <argsstring>() const</argsstring>
+        <name>isCtrlDown</name>
+        <qualifiedname>castor3d::KeyboardEvent::isCtrlDown</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The Ctrl key down status. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/KeyboardEvent.hpp" line="114" column="6" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="114" bodyend="117"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d7e/a02768_1afaa5cdb187ceb1df1c18bd37a7433809" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::KeyboardEvent::isAltDown</definition>
+        <argsstring>() const</argsstring>
+        <name>isAltDown</name>
+        <qualifiedname>castor3d::KeyboardEvent::isAltDown</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The Alt key down status. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/KeyboardEvent.hpp" line="124" column="6" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="124" bodyend="127"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d7e/a02768_1a7eae0a27f784924f86f65473cf8fa903" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::KeyboardEvent::isShiftDown</definition>
+        <argsstring>() const</argsstring>
+        <name>isShiftDown</name>
+        <qualifiedname>castor3d::KeyboardEvent::isShiftDown</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The Shift key down status. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/KeyboardEvent.hpp" line="134" column="6" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="134" bodyend="137"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="32" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="32" bodyend="32"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::KeyboardEvent</label>
+        <link refid="d3/d7e/a02768"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::UserInputEvent</label>
+        <link refid="d5/dba/a02776"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::KeyboardEvent</label>
+        <link refid="d3/d7e/a02768"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::UserInputEvent</label>
+        <link refid="d5/dba/a02776"/>
+      </node>
+    </collaborationgraph>
+    <location file="Event/UserInput/KeyboardEvent.hpp" line="11" column="1" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="13" bodyend="146"/>
     <listofallmembers>
-      <member refid="d3/d7e/a02768_1a33272abf874d1365b678e8bd599501fe" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPipelineShaderStageCreateInfo &gt;</scope><name>value</name></member>
+      <member refid="d3/d7e/a02768_1a571cb525e479db3a9a55410dcb7f58e6" prot="public" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>getChar</name></member>
+      <member refid="d5/dba/a02776_1ab45ab37b6687ae9a35165ea5b18f0a71" prot="public" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>getEventType</name></member>
+      <member refid="d3/d7e/a02768_1a1be055833a6b81b399490211b3b2e9b5" prot="public" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>getKey</name></member>
+      <member refid="d3/d7e/a02768_1a3681b552fbdc9d2eff738f3d7adcf0b2" prot="public" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>getKeyboardEventType</name></member>
+      <member refid="d3/d7e/a02768_1afaa5cdb187ceb1df1c18bd37a7433809" prot="public" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>isAltDown</name></member>
+      <member refid="d3/d7e/a02768_1a96945c97723a96394b6f2107fd798a6e" prot="public" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>isCtrlDown</name></member>
+      <member refid="d3/d7e/a02768_1a7eae0a27f784924f86f65473cf8fa903" prot="public" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>isShiftDown</name></member>
+      <member refid="d3/d7e/a02768_1adeeca90d77dfc1929d6204d27561cd8a" prot="public" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>KeyboardEvent</name></member>
+      <member refid="d3/d7e/a02768_1ae2c1b38c023a8cec795086cab927b1f0" prot="public" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>KeyboardEvent</name></member>
+      <member refid="d3/d7e/a02768_1a2ec7ebeada1bffe2af801abeb4386e67" prot="private" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>m_alt</name></member>
+      <member refid="d3/d7e/a02768_1a25e90cb41e40f46bb15a0e88a6886b69" prot="private" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>m_char</name></member>
+      <member refid="d3/d7e/a02768_1a94b7f5577bc3cb30b69f6f36b4449f18" prot="private" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>m_ctrl</name></member>
+      <member refid="d3/d7e/a02768_1a785aad0fb85b3b280041333a92dc97ed" prot="private" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>m_key</name></member>
+      <member refid="d3/d7e/a02768_1ad86715e7cf4fd5a132a05c8655b8476e" prot="private" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>m_keyboardEventType</name></member>
+      <member refid="d3/d7e/a02768_1a6bbfe170e8fd6361a0abeb38b3bac3d3" prot="private" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>m_shift</name></member>
+      <member refid="d5/dba/a02776_1a1d946a77fa49158379ee4e5dfb84a556" prot="public" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>UserInputEvent</name></member>
+      <member refid="d5/dba/a02776_1aeb147bea0593ab4b7e1ad4217d383948" prot="public" virt="virtual"><scope>castor3d::KeyboardEvent</scope><name>~UserInputEvent</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

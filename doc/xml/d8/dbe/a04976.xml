@@ -1,43 +1,55 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d8/dbe/a04976" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::RenderCube::FacePipeline</compoundname>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d8/dbe/a04976" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::SkinningData</compoundname>
+    <includes local="no">SkinningUbo.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d8/dbe/a04976_1af01e034cb8e8f29d8acb9c2f1e0fa28f" prot="public" static="no" mutable="no">
-        <type>ashes::GraphicsPipelinePtr</type>
-        <definition>ashes::GraphicsPipelinePtr castor3d::RenderCube::FacePipeline::pipeline</definition>
+      <memberdef kind="variable" id="d8/dbe/a04976_1a93ddeaef382b1c0558d8d27b9c84ea82" prot="public" static="no" mutable="no">
+        <type>std::unique_ptr&lt; sdw::ArraySsboT&lt; sdw::Mat4 &gt; &gt;</type>
+        <definition>std::unique_ptr&lt; sdw::ArraySsboT&lt; sdw::Mat4 &gt; &gt; castor3d::shader::SkinningData::transforms</definition>
         <argsstring></argsstring>
-        <name>pipeline</name>
+        <name>transforms</name>
+        <qualifiedname>castor3d::shader::SkinningData::transforms</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/RenderCube.hpp" line="212" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="212" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/dbe/a04976_1adddb10892fc8f084e7b65a9c0d52a3eb" prot="public" static="no" mutable="no">
-        <type>ashes::DescriptorSetPtr</type>
-        <definition>ashes::DescriptorSetPtr castor3d::RenderCube::FacePipeline::descriptorSet</definition>
-        <argsstring></argsstring>
-        <name>descriptorSet</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ToTexture/RenderCube.hpp" line="213" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="213" bodyend="-1"/>
+        <location file="Shader/Ubos/SkinningUbo.hpp" line="21" column="17" bodyfile="Shader/Ubos/SkinningUbo.hpp" bodystart="21" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/ToTexture/RenderCube.hpp" line="211" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="210" bodyend="214"/>
+    <collaborationgraph>
+      <node id="4">
+        <label>T</label>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::SkinningData</label>
+        <link refid="d8/dbe/a04976"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>transforms</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::unique_ptr&lt; sdw::ArraySsboT&lt; sdw::Mat4 &gt; &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; sdw::ArraySsboT&lt; sdw::Mat4 &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Ubos/SkinningUbo.hpp" line="19" column="1" bodyfile="Shader/Ubos/SkinningUbo.hpp" bodystart="20" bodyend="22"/>
     <listofallmembers>
-      <member refid="d8/dbe/a04976_1adddb10892fc8f084e7b65a9c0d52a3eb" prot="public" virt="non-virtual"><scope>castor3d::RenderCube::FacePipeline</scope><name>descriptorSet</name></member>
-      <member refid="d8/dbe/a04976_1af01e034cb8e8f29d8acb9c2f1e0fa28f" prot="public" virt="non-virtual"><scope>castor3d::RenderCube::FacePipeline</scope><name>pipeline</name></member>
+      <member refid="d8/dbe/a04976_1a93ddeaef382b1c0558d8d27b9c84ea82" prot="public" virt="non-virtual"><scope>castor3d::shader::SkinningData</scope><name>transforms</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

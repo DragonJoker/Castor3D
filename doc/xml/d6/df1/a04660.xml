@@ -1,126 +1,558 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d6/df1/a04660" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::ShadowMapDirectional::FrameBuffer</compoundname>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d6/df1/a04660_1a68e2fb26da1e22cd43188fd6d1cff924" prot="public" static="no" mutable="no">
-        <type>ashes::FrameBufferPtr</type>
-        <definition>ashes::FrameBufferPtr castor3d::ShadowMapDirectional::FrameBuffer::frameBuffer</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d6/df1/a04660" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ShaderBuffer</compoundname>
+    <includes local="no">ShaderBuffer.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d6/df1/a04660_1a7889414572c013160df175629b1d284e" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::ShaderBuffer::m_device</definition>
         <argsstring></argsstring>
-        <name>frameBuffer</name>
+        <name>m_device</name>
+        <qualifiedname>castor3d::ShaderBuffer::m_device</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapDirectional.hpp" line="61" column="1" bodyfile="Render/ShadowMap/ShadowMapDirectional.hpp" bodystart="61" bodyend="-1"/>
+        <location file="Shader/ShaderBuffer.hpp" line="152" column="21" bodyfile="Shader/ShaderBuffer.hpp" bodystart="152" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/df1/a04660_1aaebe0bfd00eb3e7c1d70298a86c64f7f" prot="public" static="no" mutable="no">
-        <type>ashes::ImageView</type>
-        <definition>ashes::ImageView castor3d::ShadowMapDirectional::FrameBuffer::depthView</definition>
+      <memberdef kind="variable" id="d6/df1/a04660_1ac1bd3ea6ce930d9e2b6a9d448d1dbe68" prot="private" static="no" mutable="no">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::ShaderBuffer::m_size</definition>
         <argsstring></argsstring>
-        <name>depthView</name>
+        <name>m_size</name>
+        <qualifiedname>castor3d::ShaderBuffer::m_size</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapDirectional.hpp" line="62" column="1" bodyfile="Render/ShadowMap/ShadowMapDirectional.hpp" bodystart="62" bodyend="-1"/>
+        <location file="Shader/ShaderBuffer.hpp" line="153" column="14" bodyfile="Shader/ShaderBuffer.hpp" bodystart="153" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/df1/a04660_1a590eb1e176ca9994333b6a2702f7d6a3" prot="public" static="no" mutable="no">
-        <type>ashes::ImageView</type>
-        <definition>ashes::ImageView castor3d::ShadowMapDirectional::FrameBuffer::linearView</definition>
+      <memberdef kind="variable" id="d6/df1/a04660_1a085d9c93c6020b70c8478eeb214d3aec" prot="private" static="no" mutable="no">
+        <type>ashes::BufferBasePtr</type>
+        <definition>ashes::BufferBasePtr castor3d::ShaderBuffer::m_buffer</definition>
         <argsstring></argsstring>
-        <name>linearView</name>
+        <name>m_buffer</name>
+        <qualifiedname>castor3d::ShaderBuffer::m_buffer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapDirectional.hpp" line="63" column="1" bodyfile="Render/ShadowMap/ShadowMapDirectional.hpp" bodystart="63" bodyend="-1"/>
+        <location file="Shader/ShaderBuffer.hpp" line="154" column="22" bodyfile="Shader/ShaderBuffer.hpp" bodystart="154" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/df1/a04660_1a2d2986ddda1b2ec0f84eef9bb0a39cf0" prot="public" static="no" mutable="no">
-        <type>ashes::ImageView</type>
-        <definition>ashes::ImageView castor3d::ShadowMapDirectional::FrameBuffer::varianceView</definition>
+      <memberdef kind="variable" id="d6/df1/a04660_1a98e65f6529032c0e5da1e852f639f19d" prot="private" static="no" mutable="no">
+        <type>ashes::BufferViewPtr</type>
+        <definition>ashes::BufferViewPtr castor3d::ShaderBuffer::m_bufferView</definition>
         <argsstring></argsstring>
-        <name>varianceView</name>
+        <name>m_bufferView</name>
+        <qualifiedname>castor3d::ShaderBuffer::m_bufferView</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapDirectional.hpp" line="64" column="1" bodyfile="Render/ShadowMap/ShadowMapDirectional.hpp" bodystart="64" bodyend="-1"/>
+        <location file="Shader/ShaderBuffer.hpp" line="155" column="22" bodyfile="Shader/ShaderBuffer.hpp" bodystart="155" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/df1/a04660_1aabeb02dc4632bc1abdd2932842ddae0c" prot="public" static="no" mutable="no">
-        <type>ashes::ImageView</type>
-        <definition>ashes::ImageView castor3d::ShadowMapDirectional::FrameBuffer::positionView</definition>
+      <memberdef kind="variable" id="d6/df1/a04660_1a380a8329cbdbdfaf105fac02e165bd1f" prot="private" static="no" mutable="no">
+        <type>ashes::StagingBufferPtr</type>
+        <definition>ashes::StagingBufferPtr castor3d::ShaderBuffer::m_staging</definition>
         <argsstring></argsstring>
-        <name>positionView</name>
+        <name>m_staging</name>
+        <qualifiedname>castor3d::ShaderBuffer::m_staging</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapDirectional.hpp" line="65" column="1" bodyfile="Render/ShadowMap/ShadowMapDirectional.hpp" bodystart="65" bodyend="-1"/>
+        <location file="Shader/ShaderBuffer.hpp" line="156" column="25" bodyfile="Shader/ShaderBuffer.hpp" bodystart="156" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/df1/a04660_1a8e9a9e29d66a0490b3ce978d91dd2b4b" prot="public" static="no" mutable="no">
-        <type>ashes::ImageView</type>
-        <definition>ashes::ImageView castor3d::ShadowMapDirectional::FrameBuffer::fluxView</definition>
+      <memberdef kind="variable" id="d6/df1/a04660_1a1b4287abd9a29a96927bd54055ca9fed" prot="private" static="no" mutable="no">
+        <type>VkDescriptorType</type>
+        <definition>VkDescriptorType castor3d::ShaderBuffer::m_type</definition>
         <argsstring></argsstring>
-        <name>fluxView</name>
+        <name>m_type</name>
+        <qualifiedname>castor3d::ShaderBuffer::m_type</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapDirectional.hpp" line="66" column="1" bodyfile="Render/ShadowMap/ShadowMapDirectional.hpp" bodystart="66" bodyend="-1"/>
+        <location file="Shader/ShaderBuffer.hpp" line="157" column="18" bodyfile="Shader/ShaderBuffer.hpp" bodystart="157" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/df1/a04660_1a5f50d88b35481f98babb923224b0e4c4" prot="public" static="no" mutable="no">
-        <type><ref refid="d1/da6/a04380" kindref="compound">CommandsSemaphore</ref></type>
-        <definition>CommandsSemaphore castor3d::ShadowMapDirectional::FrameBuffer::blurCommands</definition>
+      <memberdef kind="variable" id="d6/df1/a04660_1aaac2f1505b7b80e493770713c9805cff" prot="private" static="no" mutable="no">
+        <type>uint8_t *</type>
+        <definition>uint8_t* castor3d::ShaderBuffer::m_data</definition>
         <argsstring></argsstring>
-        <name>blurCommands</name>
-        <initializer>{ nullptr, nullptr }</initializer>
+        <name>m_data</name>
+        <qualifiedname>castor3d::ShaderBuffer::m_data</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapDirectional.hpp" line="67" column="1" bodyfile="Render/ShadowMap/ShadowMapDirectional.hpp" bodystart="67" bodyend="-1"/>
+        <location file="Shader/ShaderBuffer.hpp" line="158" column="10" bodyfile="Shader/ShaderBuffer.hpp" bodystart="158" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/df1/a04660_1ac6f507899c3f4ffaba128c6796c7c5c3" prot="private" static="no" mutable="no">
+        <type>VkAccessFlags</type>
+        <definition>VkAccessFlags castor3d::ShaderBuffer::m_targetAccess</definition>
+        <argsstring></argsstring>
+        <name>m_targetAccess</name>
+        <qualifiedname>castor3d::ShaderBuffer::m_targetAccess</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffer.hpp" line="159" column="15" bodyfile="Shader/ShaderBuffer.hpp" bodystart="159" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/df1/a04660_1a23cc1979d740ba1847c661d6348fb51f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ShaderBuffer::ShaderBuffer</definition>
+        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, uint32_t size, castor::String name, VkFormat tboFormat=VK_FORMAT_R32G32B32A32_SFLOAT)</argsstring>
+        <name>ShaderBuffer</name>
+        <qualifiedname>castor3d::ShaderBuffer::ShaderBuffer</qualifiedname>
+        <param>
+          <type><ref refid="d7/d73/a02708" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>castor::String</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>tboFormat</declname>
+          <defval>VK_FORMAT_R32G32B32A32_SFLOAT</defval>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer size. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The shader buffer name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">tboFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The format wanted for the TBO. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffer.hpp" line="35" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/df1/a04660_1a7b26bb9381365044add653f04b860e2a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ShaderBuffer::upload</definition>
+        <argsstring>(ashes::CommandBuffer const &amp;commandBuffer) const</argsstring>
+        <name>upload</name>
+        <qualifiedname>castor3d::ShaderBuffer::upload</qualifiedname>
+        <param>
+          <type>ashes::CommandBuffer const &amp;</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <briefdescription>
+<para>Updates the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffer.hpp" line="46" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/df1/a04660_1ae970586f6920e628fc5f33277c79c82d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ShaderBuffer::upload</definition>
+        <argsstring>(ashes::CommandBuffer const &amp;commandBuffer, VkDeviceSize offset, VkDeviceSize size) const</argsstring>
+        <name>upload</name>
+        <qualifiedname>castor3d::ShaderBuffer::upload</qualifiedname>
+        <param>
+          <type>ashes::CommandBuffer const &amp;</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Updates the buffer on GPU. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The starting offset. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update range. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffer.hpp" line="57" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/df1/a04660_1af41e5031daa84ddf0159ab484a953e96" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkDescriptorSetLayoutBinding</type>
+        <definition>C3D_API VkDescriptorSetLayoutBinding castor3d::ShaderBuffer::createLayoutBinding</definition>
+        <argsstring>(uint32_t index=0u) const</argsstring>
+        <name>createLayoutBinding</name>
+        <qualifiedname>castor3d::ShaderBuffer::createLayoutBinding</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+<para>Creates the descriptor set layout binding at given point. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The binding point index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffer.hpp" line="68" column="38"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/df1/a04660_1a17decf193ad65d025db29e58b752291e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ShaderBuffer::createPassBinding</definition>
+        <argsstring>(crg::FramePass &amp;pass, castor::String const &amp;name, uint32_t binding) const</argsstring>
+        <name>createPassBinding</name>
+        <qualifiedname>castor3d::ShaderBuffer::createPassBinding</qualifiedname>
+        <param>
+          <type>crg::FramePass &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+<para>Creates a frame pass binding. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffer.hpp" line="75" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/df1/a04660_1a93f0aee47e767adf01e73c5d900f7221" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::WriteDescriptorSet</type>
+        <definition>C3D_API ashes::WriteDescriptorSet castor3d::ShaderBuffer::getBinding</definition>
+        <argsstring>(uint32_t binding, VkDeviceSize offset, VkDeviceSize size) const</argsstring>
+        <name>getBinding</name>
+        <qualifiedname>castor3d::ShaderBuffer::getBinding</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Creates the descriptor write for this buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">binding</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The descriptor set layout binding. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffer.hpp" line="86" column="35"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/df1/a04660_1a5bc244919421f9f5505dd91c2adbf624" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::WriteDescriptorSet</type>
+        <definition>C3D_API ashes::WriteDescriptorSet castor3d::ShaderBuffer::getBinding</definition>
+        <argsstring>(uint32_t binding) const</argsstring>
+        <name>getBinding</name>
+        <qualifiedname>castor3d::ShaderBuffer::getBinding</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+<para>Creates the descriptor write for this buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">binding</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The descriptor set layout binding. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffer.hpp" line="97" column="35"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/df1/a04660_1ac9c9b5bd6bfa38c10d1e83d5ca74967b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ShaderBuffer::createBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;binding) const</argsstring>
+        <name>createBinding</name>
+        <qualifiedname>castor3d::ShaderBuffer::createBinding</qualifiedname>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+<para>Creates the descriptor set binding at given point. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">descriptorSet</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the created binding. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">binding</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The descriptor set layout binding. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffer.hpp" line="108" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/df1/a04660_1a4fcf4ffabfc41ab525819285b87fdbfe" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint8_t *</type>
+        <definition>uint8_t * castor3d::ShaderBuffer::getPtr</definition>
+        <argsstring>()</argsstring>
+        <name>getPtr</name>
+        <qualifiedname>castor3d::ShaderBuffer::getPtr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The pointer to the buffer. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffer.hpp" line="116" column="10" bodyfile="Shader/ShaderBuffer.hpp" bodystart="116" bodyend="119"/>
+        <referencedby refid="d1/d62/a04664_1a629c503482fc13878ce7321f2c3f91c8" compoundref="d5/d16/a01154" startline="225" endline="228">castor3d::LightBuffer::getPtr</referencedby>
+        <referencedby refid="d7/d11/a04696_1a637b892b348055fbd6954b027bfb97d2" compoundref="d9/d25/a01157" startline="188" endline="191">castor3d::PassBuffer::getPtr</referencedby>
+        <referencedby refid="df/d38/a04716_1aa457ff04e1c0b47ec5c95aba565097bf" compoundref="d6/d27/a01163" startline="138" endline="141">castor3d::SssProfileBuffer::getPtr</referencedby>
+        <referencedby refid="d7/deb/a04732_1aba6cc4fd2d7e29489b14e422fada3669" compoundref="dc/dee/a01166" startline="99" endline="102">castor3d::TextureAnimationBuffer::getPtr</referencedby>
+        <referencedby refid="d4/da9/a04736_1a670c55556390fc06774f7073ae36b3bb" compoundref="d7/daf/a01169" startline="98" endline="101">castor3d::TextureConfigurationBuffer::getPtr</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d6/df1/a04660_1acd2539e81c8c9df843ec155be76cf103" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::ShaderBuffer::getSize</definition>
+        <argsstring>()</argsstring>
+        <name>getSize</name>
+        <qualifiedname>castor3d::ShaderBuffer::getSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The buffer size. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffer.hpp" line="126" column="14" bodyfile="Shader/ShaderBuffer.hpp" bodystart="126" bodyend="129"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/df1/a04660_1af2f96b3009aab4ce4e94558176e51ffa" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkDescriptorType</type>
+        <definition>VkDescriptorType castor3d::ShaderBuffer::getType</definition>
+        <argsstring>() const</argsstring>
+        <name>getType</name>
+        <qualifiedname>castor3d::ShaderBuffer::getType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The buffer descriptor type. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffer.hpp" line="136" column="18" bodyfile="Shader/ShaderBuffer.hpp" bodystart="136" bodyend="139"/>
+        <referencedby refid="d1/d62/a04664_1a994e44d474203a9b4187fadd8ad095fb" compoundref="d5/d16/a01154" startline="230" endline="233">castor3d::LightBuffer::getType</referencedby>
+        <referencedby refid="d7/d11/a04696_1abbc49bff4fe676720b61b0684e38b0c4" compoundref="d9/d25/a01157" startline="198" endline="201">castor3d::PassBuffer::getType</referencedby>
+        <referencedby refid="df/d38/a04716_1a93deee779a69e5e4ce8caa9b1f592553" compoundref="d6/d27/a01163" startline="148" endline="151">castor3d::SssProfileBuffer::getType</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d6/df1/a04660_1ade8347264014f58051deccb7d337e37e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+        <definition>RenderDevice const  &amp; castor3d::ShaderBuffer::getDevice</definition>
+        <argsstring>() const</argsstring>
+        <name>getDevice</name>
+        <qualifiedname>castor3d::ShaderBuffer::getDevice</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffer.hpp" line="141" column="21" bodyfile="Shader/ShaderBuffer.hpp" bodystart="141" bodyend="144"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d6/df1/a04660_1add9c917fa36d9dddf52d42d1f72ba884" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ShaderBuffer::doUpload</definition>
+        <argsstring>(ashes::CommandBuffer const &amp;commandBuffer, VkDeviceSize offset, VkDeviceSize size) const</argsstring>
+        <name>doUpload</name>
+        <qualifiedname>castor3d::ShaderBuffer::doUpload</qualifiedname>
+        <param>
+          <type>ashes::CommandBuffer const &amp;</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffer.hpp" line="147" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="3677">
-        <label>castor3d::ShadowMapDirectional::FrameBuffer</label>
-        <childnode refid="3678" relation="usage">
-          <edgelabel>blurCommands</edgelabel>
-        </childnode>
-      </node>
-      <node id="3678">
-        <label>castor3d::CommandsSemaphore</label>
-        <link refid="d1/da6/a04380"/>
-      </node>
-    </collaborationgraph>
-    <location file="Render/ShadowMap/ShadowMapDirectional.hpp" line="60" column="1" bodyfile="Render/ShadowMap/ShadowMapDirectional.hpp" bodystart="59" bodyend="68"/>
+    <location file="Shader/ShaderBuffer.hpp" line="16" column="1" bodyfile="Shader/ShaderBuffer.hpp" bodystart="17" bodyend="160"/>
     <listofallmembers>
-      <member refid="d6/df1/a04660_1a5f50d88b35481f98babb923224b0e4c4" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapDirectional::FrameBuffer</scope><name>blurCommands</name></member>
-      <member refid="d6/df1/a04660_1aaebe0bfd00eb3e7c1d70298a86c64f7f" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapDirectional::FrameBuffer</scope><name>depthView</name></member>
-      <member refid="d6/df1/a04660_1a8e9a9e29d66a0490b3ce978d91dd2b4b" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapDirectional::FrameBuffer</scope><name>fluxView</name></member>
-      <member refid="d6/df1/a04660_1a68e2fb26da1e22cd43188fd6d1cff924" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapDirectional::FrameBuffer</scope><name>frameBuffer</name></member>
-      <member refid="d6/df1/a04660_1a590eb1e176ca9994333b6a2702f7d6a3" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapDirectional::FrameBuffer</scope><name>linearView</name></member>
-      <member refid="d6/df1/a04660_1aabeb02dc4632bc1abdd2932842ddae0c" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapDirectional::FrameBuffer</scope><name>positionView</name></member>
-      <member refid="d6/df1/a04660_1a2d2986ddda1b2ec0f84eef9bb0a39cf0" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapDirectional::FrameBuffer</scope><name>varianceView</name></member>
+      <member refid="d6/df1/a04660_1ac9c9b5bd6bfa38c10d1e83d5ca74967b" prot="public" virt="non-virtual"><scope>castor3d::ShaderBuffer</scope><name>createBinding</name></member>
+      <member refid="d6/df1/a04660_1af41e5031daa84ddf0159ab484a953e96" prot="public" virt="non-virtual"><scope>castor3d::ShaderBuffer</scope><name>createLayoutBinding</name></member>
+      <member refid="d6/df1/a04660_1a17decf193ad65d025db29e58b752291e" prot="public" virt="non-virtual"><scope>castor3d::ShaderBuffer</scope><name>createPassBinding</name></member>
+      <member refid="d6/df1/a04660_1add9c917fa36d9dddf52d42d1f72ba884" prot="private" virt="non-virtual"><scope>castor3d::ShaderBuffer</scope><name>doUpload</name></member>
+      <member refid="d6/df1/a04660_1a93f0aee47e767adf01e73c5d900f7221" prot="public" virt="non-virtual"><scope>castor3d::ShaderBuffer</scope><name>getBinding</name></member>
+      <member refid="d6/df1/a04660_1a5bc244919421f9f5505dd91c2adbf624" prot="public" virt="non-virtual"><scope>castor3d::ShaderBuffer</scope><name>getBinding</name></member>
+      <member refid="d6/df1/a04660_1ade8347264014f58051deccb7d337e37e" prot="public" virt="non-virtual"><scope>castor3d::ShaderBuffer</scope><name>getDevice</name></member>
+      <member refid="d6/df1/a04660_1a4fcf4ffabfc41ab525819285b87fdbfe" prot="public" virt="non-virtual"><scope>castor3d::ShaderBuffer</scope><name>getPtr</name></member>
+      <member refid="d6/df1/a04660_1acd2539e81c8c9df843ec155be76cf103" prot="public" virt="non-virtual"><scope>castor3d::ShaderBuffer</scope><name>getSize</name></member>
+      <member refid="d6/df1/a04660_1af2f96b3009aab4ce4e94558176e51ffa" prot="public" virt="non-virtual"><scope>castor3d::ShaderBuffer</scope><name>getType</name></member>
+      <member refid="d6/df1/a04660_1a085d9c93c6020b70c8478eeb214d3aec" prot="private" virt="non-virtual"><scope>castor3d::ShaderBuffer</scope><name>m_buffer</name></member>
+      <member refid="d6/df1/a04660_1a98e65f6529032c0e5da1e852f639f19d" prot="private" virt="non-virtual"><scope>castor3d::ShaderBuffer</scope><name>m_bufferView</name></member>
+      <member refid="d6/df1/a04660_1aaac2f1505b7b80e493770713c9805cff" prot="private" virt="non-virtual"><scope>castor3d::ShaderBuffer</scope><name>m_data</name></member>
+      <member refid="d6/df1/a04660_1a7889414572c013160df175629b1d284e" prot="private" virt="non-virtual"><scope>castor3d::ShaderBuffer</scope><name>m_device</name></member>
+      <member refid="d6/df1/a04660_1ac1bd3ea6ce930d9e2b6a9d448d1dbe68" prot="private" virt="non-virtual"><scope>castor3d::ShaderBuffer</scope><name>m_size</name></member>
+      <member refid="d6/df1/a04660_1a380a8329cbdbdfaf105fac02e165bd1f" prot="private" virt="non-virtual"><scope>castor3d::ShaderBuffer</scope><name>m_staging</name></member>
+      <member refid="d6/df1/a04660_1ac6f507899c3f4ffaba128c6796c7c5c3" prot="private" virt="non-virtual"><scope>castor3d::ShaderBuffer</scope><name>m_targetAccess</name></member>
+      <member refid="d6/df1/a04660_1a1b4287abd9a29a96927bd54055ca9fed" prot="private" virt="non-virtual"><scope>castor3d::ShaderBuffer</scope><name>m_type</name></member>
+      <member refid="d6/df1/a04660_1a23cc1979d740ba1847c661d6348fb51f" prot="public" virt="non-virtual"><scope>castor3d::ShaderBuffer</scope><name>ShaderBuffer</name></member>
+      <member refid="d6/df1/a04660_1a7b26bb9381365044add653f04b860e2a" prot="public" virt="non-virtual"><scope>castor3d::ShaderBuffer</scope><name>upload</name></member>
+      <member refid="d6/df1/a04660_1ae970586f6920e628fc5f33277c79c82d" prot="public" virt="non-virtual"><scope>castor3d::ShaderBuffer</scope><name>upload</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

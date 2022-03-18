@@ -1,59 +1,55 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d3/d0f/a04507" kind="struct" language="C++" prot="protected">
-    <compoundname>castor3d::RenderLoop::UploadResources</compoundname>
-    <includes local="no">RenderLoop.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d3/d0f/a04507_1a3256790fc4ca73c472ea54741399c8f1" prot="public" static="no" mutable="no">
-        <type><ref refid="dd/d20/a04359" kindref="compound">CommandsSemaphore</ref></type>
-        <definition>CommandsSemaphore castor3d::RenderLoop::UploadResources::commands</definition>
-        <argsstring></argsstring>
-        <name>commands</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d3/d0f/a04507" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::LightFactory</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::Factory&lt; LightCategory, LightType, LightCategoryUPtr, std::function&lt; LightCategoryUPtr(Light &amp;) &gt; &gt;</basecompoundref>
+    <includes local="no">LightFactory.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d0f/a04507_1a7ebdf8ce1805960773ba9c2a2d36ac53" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LightFactory::LightFactory</definition>
+        <argsstring>()</argsstring>
+        <name>LightFactory</name>
+        <qualifiedname>castor3d::LightFactory::LightFactory</qualifiedname>
         <briefdescription>
+<para>Registers default light types. </para>
         </briefdescription>
         <detaileddescription>
-<para>The command buffer and semaphore used for UBO uploads. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderLoop.hpp" line="266" column="1" bodyfile="Render/RenderLoop.hpp" bodystart="266" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d0f/a04507_1a393a05e19e5313dc0158a20344363ee6" prot="public" static="no" mutable="no">
-        <type>ashes::FencePtr</type>
-        <definition>ashes::FencePtr castor3d::RenderLoop::UploadResources::fence</definition>
-        <argsstring></argsstring>
-        <name>fence</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The fence and semaphore used for UBO uploads. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoop.hpp" line="269" column="1" bodyfile="Render/RenderLoop.hpp" bodystart="269" bodyend="-1"/>
+        <location file="Scene/Light/LightFactory.hpp" line="25" column="9"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="2949">
-        <label>castor3d::RenderLoop::UploadResources</label>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::LightFactory</label>
         <link refid="d3/d0f/a04507"/>
-        <childnode refid="2950" relation="usage">
-          <edgelabel>commands</edgelabel>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="2950">
-        <label>castor3d::CommandsSemaphore</label>
-        <link refid="dd/d20/a04359"/>
+      <node id="2">
+        <label>castor::Factory&lt; LightCategory, LightType, LightCategoryUPtr, std::function&lt; LightCategoryUPtr(Light &amp;) &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::LightFactory</label>
+        <link refid="d3/d0f/a04507"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Factory&lt; LightCategory, LightType, LightCategoryUPtr, std::function&lt; LightCategoryUPtr(Light &amp;) &gt; &gt;</label>
       </node>
     </collaborationgraph>
-    <location file="Render/RenderLoop.hpp" line="263" column="1" bodyfile="Render/RenderLoop.hpp" bodystart="262" bodyend="270"/>
+    <location file="Scene/Light/LightFactory.hpp" line="13" column="1" bodyfile="Scene/Light/LightFactory.hpp" bodystart="15" bodyend="26"/>
     <listofallmembers>
-      <member refid="d3/d0f/a04507_1a3256790fc4ca73c472ea54741399c8f1" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop::UploadResources</scope><name>commands</name></member>
-      <member refid="d3/d0f/a04507_1a393a05e19e5313dc0158a20344363ee6" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop::UploadResources</scope><name>fence</name></member>
+      <member refid="d3/d0f/a04507_1a7ebdf8ce1805960773ba9c2a2d36ac53" prot="public" virt="non-virtual"><scope>castor3d::LightFactory</scope><name>LightFactory</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

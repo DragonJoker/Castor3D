@@ -1,102 +1,80 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d1/d0c/a02570" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::MouseState</compoundname>
-    <includes local="no">UserInputEventModule.hpp</includes>
+    <compoundname>castor3d::VertexBufferPool::ModelBuffers</compoundname>
+    <includes local="no">ObjectBufferPool.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d1/d0c/a02570_1adbdf5d0b354c06a50c13d2d4528828ef" prot="public" static="no" mutable="no">
-        <type>castor::Position</type>
-        <definition>castor::Position castor3d::MouseState::position</definition>
+      <memberdef kind="variable" id="d1/d0c/a02570_1afc367c22500db7aebdc184ed0cbfb096" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a7616d1d27aba8f61289a44545c397f8d" kindref="member">GpuPackedBuffer</ref></type>
+        <definition>GpuPackedBuffer castor3d::VertexBufferPool::ModelBuffers::vertex</definition>
         <argsstring></argsstring>
-        <name>position</name>
+        <name>vertex</name>
+        <qualifiedname>castor3d::VertexBufferPool::ModelBuffers::vertex</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The current position. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/UserInputEventModule.hpp" line="291" column="1" bodyfile="Event/UserInput/UserInputEventModule.hpp" bodystart="291" bodyend="-1"/>
-        <referencedby refid="dc/db2/a02574_1a8f2f3e6202e7c077a169ae4f177e4ef5" compoundref="d0/d39/a00314" startline="72" endline="75">castor3d::UserInputListener::getMousePosition</referencedby>
+        <location file="Buffer/ObjectBufferPool.hpp" line="27" column="17" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="27" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d0c/a02570_1a2b58db85e725616152a8bbea76a7f806" prot="public" static="no" mutable="no">
-        <type>castor::Position</type>
-        <definition>castor::Position castor3d::MouseState::wheel</definition>
-        <argsstring></argsstring>
-        <name>wheel</name>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d0c/a02570_1ac96ca687ec408f798b64167a064a9bb1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::VertexBufferPool::ModelBuffers::ModelBuffers</definition>
+        <argsstring>(GpuPackedBuffer vtx)</argsstring>
+        <name>ModelBuffers</name>
+        <qualifiedname>castor3d::VertexBufferPool::ModelBuffers::ModelBuffers</qualifiedname>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a7616d1d27aba8f61289a44545c397f8d" kindref="member">GpuPackedBuffer</ref></type>
+          <declname>vtx</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The wheel position. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/UserInputEventModule.hpp" line="294" column="1" bodyfile="Event/UserInput/UserInputEventModule.hpp" bodystart="294" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/d0c/a02570_1a5ab2e2eba0f976a8bb928ce1a39738cd" prot="public" static="no" mutable="no">
-        <type>std::array&lt; bool, size_t(<ref refid="de/d13/a01473_1a087f824502cd45431879fc5c96607682ae558bb69fadec037d9eae46601a4df8e" kindref="member">MouseButton::eCount</ref>) &gt;</type>
-        <definition>std::array&lt; bool, size_t( MouseButton::eCount ) &gt; castor3d::MouseState::buttons</definition>
-        <argsstring></argsstring>
-        <name>buttons</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The buttons state (true = down). </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputEventModule.hpp" line="297" column="1" bodyfile="Event/UserInput/UserInputEventModule.hpp" bodystart="297" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/d0c/a02570_1a81e8749da34a72c7489ae8f6652016b5" prot="public" static="no" mutable="no">
-        <type><ref refid="de/d13/a01473_1a087f824502cd45431879fc5c96607682" kindref="member">MouseButton</ref></type>
-        <definition>MouseButton castor3d::MouseState::changed</definition>
-        <argsstring></argsstring>
-        <name>changed</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The button which had the last change. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputEventModule.hpp" line="300" column="1" bodyfile="Event/UserInput/UserInputEventModule.hpp" bodystart="300" bodyend="-1"/>
+        <location file="Buffer/ObjectBufferPool.hpp" line="22" column="1" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="22" bodyend="25"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Mouse state. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
     <collaborationgraph>
-      <node id="2160">
-        <label>T</label>
-      </node>
-      <node id="2158">
-        <label>std::array&lt; bool, size_t(MouseButton::eCount) &gt;</label>
-        <childnode refid="2159" relation="template-instance">
-          <edgelabel>&lt; bool, size_t(MouseButton::eCount) &gt;</edgelabel>
+      <node id="2">
+        <label>castor3d::GpuBufferT&lt; GpuBufferPackedAllocator &gt;</label>
+        <link refid="db/d09/a02502"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; GpuBufferPackedAllocator &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="2159">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="2160" relation="usage">
-          <edgelabel>elements</edgelabel>
+      <node id="3">
+        <label>castor3d::GpuBufferBase</label>
+        <link refid="d3/d41/a02530"/>
+      </node>
+      <node id="4">
+        <label>castor3d::GpuBufferT&lt; AllocatorT &gt;</label>
+        <link refid="db/d09/a02502"/>
+        <childnode refid="3" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="2157">
-        <label>castor3d::MouseState</label>
+      <node id="1">
+        <label>castor3d::VertexBufferPool::ModelBuffers</label>
         <link refid="d1/d0c/a02570"/>
-        <childnode refid="2158" relation="usage">
-          <edgelabel>buttons</edgelabel>
+        <childnode refid="2" relation="usage">
+          <edgelabel>vertex</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Event/UserInput/UserInputEventModule.hpp" line="288" column="1" bodyfile="Event/UserInput/UserInputEventModule.hpp" bodystart="287" bodyend="301"/>
+    <location file="Buffer/ObjectBufferPool.hpp" line="20" column="1" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="21" bodyend="28"/>
     <listofallmembers>
-      <member refid="d1/d0c/a02570_1a5ab2e2eba0f976a8bb928ce1a39738cd" prot="public" virt="non-virtual"><scope>castor3d::MouseState</scope><name>buttons</name></member>
-      <member refid="d1/d0c/a02570_1a81e8749da34a72c7489ae8f6652016b5" prot="public" virt="non-virtual"><scope>castor3d::MouseState</scope><name>changed</name></member>
-      <member refid="d1/d0c/a02570_1adbdf5d0b354c06a50c13d2d4528828ef" prot="public" virt="non-virtual"><scope>castor3d::MouseState</scope><name>position</name></member>
-      <member refid="d1/d0c/a02570_1a2b58db85e725616152a8bbea76a7f806" prot="public" virt="non-virtual"><scope>castor3d::MouseState</scope><name>wheel</name></member>
+      <member refid="d1/d0c/a02570_1ac96ca687ec408f798b64167a064a9bb1" prot="public" virt="non-virtual"><scope>castor3d::VertexBufferPool::ModelBuffers</scope><name>ModelBuffers</name></member>
+      <member refid="d1/d0c/a02570_1afc367c22500db7aebdc184ed0cbfb096" prot="public" virt="non-virtual"><scope>castor3d::VertexBufferPool::ModelBuffers</scope><name>vertex</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

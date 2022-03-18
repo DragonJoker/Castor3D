@@ -1,33 +1,388 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d2/d2e/a03408" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPhysicalDeviceSurfaceInfo2KHR &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d2/d2e/a03408" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::SecondaryUVComponent</compoundname>
+    <basecompoundref refid="d4/d57/a03412" prot="public" virt="non-virtual">castor3d::SubmeshComponent</basecompoundref>
+    <includes local="no">SecondaryUVComponent.hpp</includes>
       <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d2/d2e/a03408_1af3264d714e6896a86bf090244d840e45" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPhysicalDeviceSurfaceInfo2KHR &gt;::value</definition>
+      <memberdef kind="variable" id="d2/d2e/a03408_1a2f7ea2ab6e5abdc40fe84a190f5ae1ae" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SecondaryUVComponent::Name</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR</initializer>
+        <name>Name</name>
+        <qualifiedname>castor3d::SecondaryUVComponent::Name</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="263" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="263" bodyend="-1"/>
+        <location file="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" line="76" column="37" bodyfile="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d2e/a03408_1a87060f724b97646fbda2e6b76c166d96" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t constexpr</type>
+        <definition>C3D_API uint32_t constexpr castor3d::SecondaryUVComponent::BindingPoint</definition>
+        <argsstring></argsstring>
+        <name>BindingPoint</name>
+        <qualifiedname>castor3d::SecondaryUVComponent::BindingPoint</qualifiedname>
+        <initializer>= 4u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" line="77" column="35" bodyfile="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/d2e/a03408_1a00e96fb65915d16d515ca38c7cb33dba" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/dad/a02500" kindref="compound">GpuBufferOffsetT</ref>&lt; castor::Point3f &gt;</type>
+        <definition>GpuBufferOffsetT&lt; castor::Point3f &gt; castor3d::SecondaryUVComponent::m_buffer</definition>
+        <argsstring></argsstring>
+        <name>m_buffer</name>
+        <qualifiedname>castor3d::SecondaryUVComponent::m_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" line="80" column="18" bodyfile="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d2e/a03408_1a2afa262d2e619d8afd86c40124c9e52e" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; castor::Point3f &gt;</type>
+        <definition>std::vector&lt; castor::Point3f &gt; castor3d::SecondaryUVComponent::m_data</definition>
+        <argsstring></argsstring>
+        <name>m_data</name>
+        <qualifiedname>castor3d::SecondaryUVComponent::m_data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" line="81" column="13" bodyfile="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d2e/a03408_1af359aae7b629f529c9427216849f1e0e" prot="private" static="no" mutable="no">
+        <type>std::unordered_map&lt; uint32_t, ashes::PipelineVertexInputStateCreateInfo &gt;</type>
+        <definition>std::unordered_map&lt; uint32_t, ashes::PipelineVertexInputStateCreateInfo &gt; castor3d::SecondaryUVComponent::m_layouts</definition>
+        <argsstring></argsstring>
+        <name>m_layouts</name>
+        <qualifiedname>castor3d::SecondaryUVComponent::m_layouts</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" line="82" column="20" bodyfile="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/d2e/a03408_1a9a4637a0861b8af0fd2fc78dae7dfda0" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SecondaryUVComponent::SecondaryUVComponent</definition>
+        <argsstring>(Submesh &amp;submesh)</argsstring>
+        <name>SecondaryUVComponent</name>
+        <qualifiedname>castor3d::SecondaryUVComponent::SecondaryUVComponent</qualifiedname>
+        <param>
+          <type><ref refid="dc/dc7/a03424" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent submesh. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" line="29" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d2e/a03408_1a80ca58b08c1846c79584ce37ecb774cc" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SecondaryUVComponent::gather</definition>
+        <argsstring>(ShaderFlags const &amp;shaderFlags, ProgramFlags const &amp;programFlags, MaterialRPtr material, ashes::BufferCRefArray &amp;buffers, std::vector&lt; uint64_t &gt; &amp;offsets, ashes::PipelineVertexInputStateCreateInfoCRefArray &amp;layouts, TextureFlagsArray const &amp;mask, uint32_t &amp;currentLocation) override</argsstring>
+        <name>gather</name>
+        <qualifiedname>castor3d::SecondaryUVComponent::gather</qualifiedname>
+        <reimplements refid="d4/d57/a03412_1a11e289eda9fe27f92d372e0a42911628">gather</reimplements>
+        <param>
+          <type><ref refid="d2/df5/a01395_1af8308e78be327186fc4533308ee5cd19" kindref="member">ShaderFlags</ref> const &amp;</type>
+          <declname>shaderFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref> const &amp;</type>
+          <declname>programFlags</declname>
+        </param>
+        <param>
+          <type>MaterialRPtr</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type>ashes::BufferCRefArray &amp;</type>
+          <declname>buffers</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; uint64_t &gt; &amp;</type>
+          <declname>offsets</declname>
+        </param>
+        <param>
+          <type>ashes::PipelineVertexInputStateCreateInfoCRefArray &amp;</type>
+          <declname>layouts</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1afa51b269ca00eaeff4f95f361bf2208f" kindref="member">TextureFlagsArray</ref> const &amp;</type>
+          <declname>mask</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>currentLocation</declname>
+        </param>
+        <briefdescription>
+<para>Gathers buffers that need to go in a VAO. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" line="33" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d2e/a03408_1aeffbf9a5e23f55120f30545bcc62f02f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> SubmeshComponentSPtr</type>
+        <definition>C3D_API SubmeshComponentSPtr castor3d::SecondaryUVComponent::clone</definition>
+        <argsstring>(Submesh &amp;submesh) const override</argsstring>
+        <name>clone</name>
+        <qualifiedname>castor3d::SecondaryUVComponent::clone</qualifiedname>
+        <reimplements refid="d4/d57/a03412_1af23b7cb5e0e0f3bbfd1bd07fbae9f24a">clone</reimplements>
+        <param>
+          <type><ref refid="dc/dc7/a03424" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Clones this component. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" line="44" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d2e/a03408_1a07b1d29dba234e40092fa31f30986fdc" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d2/df5/a01395_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
+        <definition>ProgramFlags castor3d::SecondaryUVComponent::getProgramFlags</definition>
+        <argsstring>(MaterialRPtr material) const override</argsstring>
+        <name>getProgramFlags</name>
+        <qualifiedname>castor3d::SecondaryUVComponent::getProgramFlags</qualifiedname>
+        <reimplements refid="d4/d57/a03412_1a662ae3e52ad028a13e0fbcb45142b8b7">getProgramFlags</reimplements>
+        <param>
+          <type>MaterialRPtr</type>
+          <declname>material</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The shader program flags. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" line="48" column="14" bodyfile="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" bodystart="48" bodyend="51"/>
+        <references refid="d2/df5/a01395_1a6dbeb5480c4a424e0c24ace65835778bac0e8b2f103d013df2edad9861926a543">castor3d::eSecondaryUV</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d2e/a03408_1ad4bcc38b73c21dddb45237ccff6adb5f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SecondaryUVComponent::addTexcoords</definition>
+        <argsstring>(std::vector&lt; castor::Point3f &gt; const &amp;uvs)</argsstring>
+        <name>addTexcoords</name>
+        <qualifiedname>castor3d::SecondaryUVComponent::addTexcoords</qualifiedname>
+        <param>
+          <type>std::vector&lt; castor::Point3f &gt; const &amp;</type>
+          <declname>uvs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" line="53" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d2e/a03408_1a880f640373221131613346d61c87e5b5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/dad/a02500" kindref="compound">GpuBufferOffsetT</ref>&lt; castor::Point3f &gt; const &amp;</type>
+        <definition>GpuBufferOffsetT&lt; castor::Point3f &gt; const  &amp; castor3d::SecondaryUVComponent::getAnimationBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>getAnimationBuffer</name>
+        <qualifiedname>castor3d::SecondaryUVComponent::getAnimationBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" line="55" column="25" bodyfile="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" bodystart="55" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d2e/a03408_1a10357bd47188f99eb073161b9759d886" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/dad/a02500" kindref="compound">GpuBufferOffsetT</ref>&lt; castor::Point3f &gt; &amp;</type>
+        <definition>GpuBufferOffsetT&lt; castor::Point3f &gt; &amp; castor3d::SecondaryUVComponent::getAnimationBuffer</definition>
+        <argsstring>()</argsstring>
+        <name>getAnimationBuffer</name>
+        <qualifiedname>castor3d::SecondaryUVComponent::getAnimationBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" line="60" column="19" bodyfile="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" bodystart="60" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d2e/a03408_1a5fc5e9f31cd534b9bc2711a8b189a98f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::vector&lt; castor::Point3f &gt; &amp;</type>
+        <definition>std::vector&lt; castor::Point3f &gt; &amp; castor3d::SecondaryUVComponent::getData</definition>
+        <argsstring>()</argsstring>
+        <name>getData</name>
+        <qualifiedname>castor3d::SecondaryUVComponent::getData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" line="65" column="14" bodyfile="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" bodystart="65" bodyend="68"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d2/d2e/a03408_1a62302f7667f828585d465eea466d1d17" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool castor3d::SecondaryUVComponent::doInitialise</definition>
+        <argsstring>(RenderDevice const &amp;device) override</argsstring>
+        <name>doInitialise</name>
+        <qualifiedname>castor3d::SecondaryUVComponent::doInitialise</qualifiedname>
+        <reimplements refid="d4/d57/a03412_1a02633de92cd3a940ea28bc2ee63cdefb">doInitialise</reimplements>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" line="71" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d2e/a03408_1a8d2ac54b75267a216e7950f12aa73d82" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::SecondaryUVComponent::doCleanup</definition>
+        <argsstring>(RenderDevice const &amp;device) override</argsstring>
+        <name>doCleanup</name>
+        <qualifiedname>castor3d::SecondaryUVComponent::doCleanup</qualifiedname>
+        <reimplements refid="d4/d57/a03412_1a038f333e5365ecd8afe4ede6a4a428d7">doCleanup</reimplements>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" line="72" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d2e/a03408_1afb106fb72e97ba570c213decbcd432f8" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::SecondaryUVComponent::doUpload</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpload</name>
+        <qualifiedname>castor3d::SecondaryUVComponent::doUpload</qualifiedname>
+        <reimplements refid="d4/d57/a03412_1a66e01bf8274e1d77bd20a669cb637a2e">doUpload</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" line="73" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="263" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="263" bodyend="263"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::SecondaryUVComponent</label>
+        <link refid="d2/d2e/a03408"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SubmeshComponent</label>
+        <link refid="d4/d57/a03412"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Submesh &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::SecondaryUVComponent</label>
+        <link refid="d2/d2e/a03408"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SubmeshComponent</label>
+        <link refid="d4/d57/a03412"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Submesh &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" line="17" column="1" bodyfile="Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp" bodystart="19" bodyend="83"/>
     <listofallmembers>
-      <member refid="d2/d2e/a03408_1af3264d714e6896a86bf090244d840e45" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPhysicalDeviceSurfaceInfo2KHR &gt;</scope><name>value</name></member>
+      <member refid="d2/d2e/a03408_1ad4bcc38b73c21dddb45237ccff6adb5f" prot="public" virt="non-virtual"><scope>castor3d::SecondaryUVComponent</scope><name>addTexcoords</name></member>
+      <member refid="d2/d2e/a03408_1a87060f724b97646fbda2e6b76c166d96" prot="public" virt="non-virtual"><scope>castor3d::SecondaryUVComponent</scope><name>BindingPoint</name></member>
+      <member refid="d4/d57/a03412_1abdbf83eb05497bd5765a2aed22ebc429" prot="public" virt="non-virtual"><scope>castor3d::SecondaryUVComponent</scope><name>cleanup</name></member>
+      <member refid="d2/d2e/a03408_1aeffbf9a5e23f55120f30545bcc62f02f" prot="public" virt="virtual"><scope>castor3d::SecondaryUVComponent</scope><name>clone</name></member>
+      <member refid="d2/d2e/a03408_1a8d2ac54b75267a216e7950f12aa73d82" prot="private" virt="virtual"><scope>castor3d::SecondaryUVComponent</scope><name>doCleanup</name></member>
+      <member refid="d2/d2e/a03408_1a62302f7667f828585d465eea466d1d17" prot="private" virt="virtual"><scope>castor3d::SecondaryUVComponent</scope><name>doInitialise</name></member>
+      <member refid="d2/d2e/a03408_1afb106fb72e97ba570c213decbcd432f8" prot="private" virt="virtual"><scope>castor3d::SecondaryUVComponent</scope><name>doUpload</name></member>
+      <member refid="d2/d2e/a03408_1a80ca58b08c1846c79584ce37ecb774cc" prot="public" virt="virtual"><scope>castor3d::SecondaryUVComponent</scope><name>gather</name></member>
+      <member refid="d2/d2e/a03408_1a880f640373221131613346d61c87e5b5" prot="public" virt="non-virtual"><scope>castor3d::SecondaryUVComponent</scope><name>getAnimationBuffer</name></member>
+      <member refid="d2/d2e/a03408_1a10357bd47188f99eb073161b9759d886" prot="public" virt="non-virtual"><scope>castor3d::SecondaryUVComponent</scope><name>getAnimationBuffer</name></member>
+      <member refid="d2/d2e/a03408_1a5fc5e9f31cd534b9bc2711a8b189a98f" prot="public" virt="non-virtual"><scope>castor3d::SecondaryUVComponent</scope><name>getData</name></member>
+      <member refid="d4/d57/a03412_1a98577223b3e5556ec5027ecdc6d4e184" prot="public" virt="non-virtual"><scope>castor3d::SecondaryUVComponent</scope><name>getID</name></member>
+      <member refid="d2/d2e/a03408_1a07b1d29dba234e40092fa31f30986fdc" prot="public" virt="virtual"><scope>castor3d::SecondaryUVComponent</scope><name>getProgramFlags</name></member>
+      <member refid="d4/d57/a03412_1abc8fcfaed4a21cec91176b0394cca0cd" prot="public" virt="non-virtual"><scope>castor3d::SecondaryUVComponent</scope><name>getType</name></member>
+      <member refid="d4/d57/a03412_1a1aef8af9949b1ca401d65bd6b8abdb4d" prot="public" virt="virtual"><scope>castor3d::SecondaryUVComponent</scope><name>getUsageFlags</name></member>
+      <member refid="d4/d57/a03412_1a98c6ad3457d19448c1eaa261598103ad" prot="public" virt="non-virtual"><scope>castor3d::SecondaryUVComponent</scope><name>initialise</name></member>
+      <member refid="d2/d2e/a03408_1a00e96fb65915d16d515ca38c7cb33dba" prot="private" virt="non-virtual"><scope>castor3d::SecondaryUVComponent</scope><name>m_buffer</name></member>
+      <member refid="d2/d2e/a03408_1a2afa262d2e619d8afd86c40124c9e52e" prot="private" virt="non-virtual"><scope>castor3d::SecondaryUVComponent</scope><name>m_data</name></member>
+      <member refid="d2/d2e/a03408_1af359aae7b629f529c9427216849f1e0e" prot="private" virt="non-virtual"><scope>castor3d::SecondaryUVComponent</scope><name>m_layouts</name></member>
+      <member refid="d2/d2e/a03408_1a2f7ea2ab6e5abdc40fe84a190f5ae1ae" prot="public" virt="non-virtual"><scope>castor3d::SecondaryUVComponent</scope><name>Name</name></member>
+      <member refid="d4/d57/a03412_1a7e21e4eda223d50b6751c40cb44f77a7" prot="public" virt="non-virtual"><scope>castor3d::SecondaryUVComponent</scope><name>needsUpdate</name></member>
+      <member refid="d2/d2e/a03408_1a9a4637a0861b8af0fd2fc78dae7dfda0" prot="public" virt="non-virtual"><scope>castor3d::SecondaryUVComponent</scope><name>SecondaryUVComponent</name></member>
+      <member refid="d4/d57/a03412_1a4cee79e84bacc48828a48a42555c6977" prot="public" virt="non-virtual"><scope>castor3d::SecondaryUVComponent</scope><name>SubmeshComponent</name></member>
+      <member refid="d4/d57/a03412_1a2dbcda2b8c26f4c9c52db78a5740a0f8" prot="public" virt="non-virtual"><scope>castor3d::SecondaryUVComponent</scope><name>upload</name></member>
+      <member refid="d4/d57/a03412_1a30231a167367ba38b41f9bf5b3bcd005" prot="public" virt="virtual"><scope>castor3d::SecondaryUVComponent</scope><name>~SubmeshComponent</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

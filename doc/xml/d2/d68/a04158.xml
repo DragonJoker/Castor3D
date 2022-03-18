@@ -1,68 +1,54 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d2/d68/a04158" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::TextOverlay::DisplayableChar</compoundname>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d2/d68/a04158_1a9e4bb5efb7a4edc4df3c4f4fe756a255" prot="public" static="no" mutable="no">
-        <type>castor::Point2d</type>
-        <definition>castor::Point2d castor3d::TextOverlay::DisplayableChar::m_position</definition>
+    <compoundname>castor3d::SsaoBlurPass::RenderQuad</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">crg::RenderQuad</basecompoundref>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/d68/a04158_1a2327f595405404cd07c66012d44d49dd" prot="private" static="no" mutable="no">
+        <type><ref refid="da/dea/a04170" kindref="compound">SsaoConfig</ref> const  &amp;</type>
+        <definition>SsaoConfig const&amp; castor3d::SsaoBlurPass::RenderQuad::ssaoConfig</definition>
         <argsstring></argsstring>
-        <name>m_position</name>
+        <name>ssaoConfig</name>
+        <qualifiedname>castor3d::SsaoBlurPass::RenderQuad::ssaoConfig</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The character position, relative to its line. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/TextOverlay.hpp" line="295" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="295" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d68/a04158_1af84b833128db6996ffd0ae27d2978640" prot="public" static="no" mutable="no">
-        <type>castor::Point2d</type>
-        <definition>castor::Point2d castor3d::TextOverlay::DisplayableChar::m_size</definition>
-        <argsstring></argsstring>
-        <name>m_size</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The character dimensions. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/TextOverlay.hpp" line="298" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="298" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d68/a04158_1aa7c0972fe90e078a4cd5a0d6ce875a9d" prot="public" static="no" mutable="no">
-        <type>castor::Glyph const  &amp;</type>
-        <definition>castor::Glyph const&amp; castor3d::TextOverlay::DisplayableChar::m_glyph</definition>
-        <argsstring></argsstring>
-        <name>m_glyph</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The character to display. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/TextOverlay.hpp" line="301" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="301" bodyend="-1"/>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="135" column="19" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="135" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d2/d68/a04158_1ab698c99baf19934b02c2d6021edb2fd3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="d2/d68/a04158_1a0c24a05a47788007779426bc635aacc7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
-        <definition>castor3d::TextOverlay::DisplayableChar::DisplayableChar</definition>
-        <argsstring>(castor::Point2d const &amp;position, castor::Point2d const &amp;size, castor::Glyph const &amp;glyph)</argsstring>
-        <name>DisplayableChar</name>
+        <definition>castor3d::SsaoBlurPass::RenderQuad::RenderQuad</definition>
+        <argsstring>(crg::FramePass const &amp;pass, crg::GraphContext &amp;context, crg::RunnableGraph &amp;graph, crg::rq::Config rqConfig, crg::ru::Config ruConfig, SsaoConfig const &amp;ssaoConfig)</argsstring>
+        <name>RenderQuad</name>
+        <qualifiedname>castor3d::SsaoBlurPass::RenderQuad::RenderQuad</qualifiedname>
         <param>
-          <type>castor::Point2d const &amp;</type>
-          <declname>position</declname>
+          <type>crg::FramePass const &amp;</type>
+          <declname>pass</declname>
         </param>
         <param>
-          <type>castor::Point2d const &amp;</type>
-          <declname>size</declname>
+          <type>crg::GraphContext &amp;</type>
+          <declname>context</declname>
         </param>
         <param>
-          <type>castor::Glyph const &amp;</type>
-          <declname>glyph</declname>
+          <type>crg::RunnableGraph &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::rq::Config</type>
+          <declname>rqConfig</declname>
+        </param>
+        <param>
+          <type>crg::ru::Config</type>
+          <declname>ruConfig</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dea/a04170" kindref="compound">SsaoConfig</ref> const &amp;</type>
+          <declname>ssaoConfig</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -70,97 +56,54 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/TextOverlay.hpp" line="303" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="303" bodyend="310"/>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="124" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="d2/d68/a04158_1acfd1f3bd9cf4b469d3fab2c5096eb08a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::TextOverlay::DisplayableChar::DisplayableChar</definition>
-        <argsstring>(DisplayableChar const &amp;rhs)</argsstring>
-        <name>DisplayableChar</name>
-        <param>
-          <type>DisplayableChar const &amp;</type>
-          <declname>rhs</declname>
-        </param>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d2/d68/a04158_1ae0615ef40b88c42e4279797516670802" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::SsaoBlurPass::RenderQuad::doGetPassIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>doGetPassIndex</name>
+        <qualifiedname>castor3d::SsaoBlurPass::RenderQuad::doGetPassIndex</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/TextOverlay.hpp" line="312" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="312" bodyend="317"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d68/a04158_1aa72bc9794b7d66d99a0d1c9a57f423f8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::TextOverlay::DisplayableChar::DisplayableChar</definition>
-        <argsstring>(DisplayableChar &amp;&amp;rhs) noexcept</argsstring>
-        <name>DisplayableChar</name>
-        <param>
-          <type>DisplayableChar &amp;&amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/TextOverlay.hpp" line="319" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="319" bodyend="324"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d68/a04158_1a2307728d8e6b6e8a25c081492a302ab5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>DisplayableChar &amp;</type>
-        <definition>DisplayableChar&amp; castor3d::TextOverlay::DisplayableChar::operator=</definition>
-        <argsstring>(DisplayableChar const &amp;rhs)</argsstring>
-        <name>operator=</name>
-        <param>
-          <type>DisplayableChar const &amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/TextOverlay.hpp" line="326" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="326" bodyend="331"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d68/a04158_1a1e5fc84d8a0c58558e4763ddf3288eb1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>DisplayableChar &amp;</type>
-        <definition>DisplayableChar&amp; castor3d::TextOverlay::DisplayableChar::operator=</definition>
-        <argsstring>(DisplayableChar &amp;&amp;rhs) noexcept</argsstring>
-        <name>operator=</name>
-        <param>
-          <type>DisplayableChar &amp;&amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/TextOverlay.hpp" line="333" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="333" bodyend="342"/>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="132" column="10"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>A character, along with its size and relative position. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
-</simplesect>
-<simplesect kind="date"><para>28/01/2016 </para>
-</simplesect>
-</para>
     </detaileddescription>
-    <location file="Overlay/TextOverlay.hpp" line="292" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="291" bodyend="343"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::SsaoBlurPass::RenderQuad</label>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>crg::RenderQuad</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::SsaoBlurPass::RenderQuad</label>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>crg::RenderQuad</label>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Ssao/SsaoBlurPass.hpp" line="121" column="1" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="123" bodyend="136"/>
     <listofallmembers>
-      <member refid="d2/d68/a04158_1ab698c99baf19934b02c2d6021edb2fd3" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>DisplayableChar</name></member>
-      <member refid="d2/d68/a04158_1acfd1f3bd9cf4b469d3fab2c5096eb08a" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>DisplayableChar</name></member>
-      <member refid="d2/d68/a04158_1aa72bc9794b7d66d99a0d1c9a57f423f8" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>DisplayableChar</name></member>
-      <member refid="d2/d68/a04158_1aa7c0972fe90e078a4cd5a0d6ce875a9d" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>m_glyph</name></member>
-      <member refid="d2/d68/a04158_1a9e4bb5efb7a4edc4df3c4f4fe756a255" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>m_position</name></member>
-      <member refid="d2/d68/a04158_1af84b833128db6996ffd0ae27d2978640" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>m_size</name></member>
-      <member refid="d2/d68/a04158_1a2307728d8e6b6e8a25c081492a302ab5" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>operator=</name></member>
-      <member refid="d2/d68/a04158_1a1e5fc84d8a0c58558e4763ddf3288eb1" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>operator=</name></member>
+      <member refid="d2/d68/a04158_1ae0615ef40b88c42e4279797516670802" prot="protected" virt="non-virtual"><scope>castor3d::SsaoBlurPass::RenderQuad</scope><name>doGetPassIndex</name></member>
+      <member refid="d2/d68/a04158_1a0c24a05a47788007779426bc635aacc7" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass::RenderQuad</scope><name>RenderQuad</name></member>
+      <member refid="d2/d68/a04158_1a2327f595405404cd07c66012d44d49dd" prot="private" virt="non-virtual"><scope>castor3d::SsaoBlurPass::RenderQuad</scope><name>ssaoConfig</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

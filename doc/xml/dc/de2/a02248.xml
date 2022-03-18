@@ -1,115 +1,121 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dc/de2/a02248" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::BinaryWriter&lt; Submesh &gt;</compoundname>
-    <basecompoundref refid="dd/d3f/a02156" prot="public" virt="non-virtual">castor3d::BinaryWriterBase&lt; Submesh &gt;</basecompoundref>
-    <includes local="no">BinarySubmesh.hpp</includes>
+    <compoundname>castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;</compoundname>
+    <basecompoundref refid="de/dfd/a02228" prot="public" virt="non-virtual">castor3d::Interpolator&lt; castor::Quaternion &gt;</basecompoundref>
+    <includes local="no">Interpolator.hpp</includes>
     <templateparamlist>
     </templateparamlist>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="dc/de2/a02248_1a2e106060645a94fe21d58a6cd5735079" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::BinaryWriter&lt; Submesh &gt;::doWrite</definition>
-        <argsstring>(Submesh const &amp;obj) override</argsstring>
-        <name>doWrite</name>
-        <reimplements refid="dd/d3f/a02156_1a720ab792b3e53c6556c3cb4e5b0e2d06">doWrite</reimplements>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/de2/a02248_1a910141885b8ae03c0ab795586cc9f345" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>castor::Quaternion</type>
+        <definition>castor::Quaternion castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;::interpolate</definition>
+        <argsstring>(castor::Quaternion const &amp;src, castor::Quaternion const &amp;dst, float percent) const override</argsstring>
+        <name>interpolate</name>
+        <qualifiedname>castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;::interpolate</qualifiedname>
+        <reimplements refid="de/dfd/a02228_1a38c4c864a411f0fbc92d8af20d4ec52f">interpolate</reimplements>
         <param>
-          <type><ref refid="d9/d0c/a03992" kindref="compound">Submesh</ref> const &amp;</type>
-          <declname>obj</declname>
+          <type>castor::Quaternion const &amp;</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type>castor::Quaternion const &amp;</type>
+          <declname>dst</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>percent</declname>
         </param>
         <briefdescription>
-<para>Function used to fill the chunk from specific data. </para>
+<para>Interpolation function. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">obj</parametername>
+<parametername direction="in">src</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The object to write. </para>
+<para>The start. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dst</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The end. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">percent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The percentage. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
-</simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Binary/BinarySubmesh.hpp" line="53" column="1"/>
+        <location file="Animation/Interpolator.hpp" line="137" column="20" bodyfile="Animation/Interpolator.hpp" bodystart="137" bodyend="157"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para><ref refid="d9/d4a/a05192" kindref="compound">MovableObject</ref> loader. </para>
+<para>Handles the Quaternion linear interpolations. </para>
     </briefdescription>
     <detaileddescription>
 <para><simplesect kind="author"><para>Sylvain DOREMUS </para>
 </simplesect>
-<simplesect kind="date"><para>14/02/2010</para>
+<simplesect kind="version"><para>0.1 </para>
 </simplesect>
-Loader de <ref refid="d9/d4a/a05192" kindref="compound">MovableObject</ref> </para>
+<simplesect kind="date"><para>09/02/2010 </para>
+</simplesect>
+</para>
     </detaileddescription>
     <inheritancegraph>
-      <node id="449">
-        <label>castor3d::BinaryWriterBase&lt; TWritten &gt;</label>
-        <link refid="dd/d3f/a02156"/>
-      </node>
-      <node id="447">
-        <label>castor3d::BinaryWriter&lt; Submesh &gt;</label>
-        <link refid="dc/de2/a02248"/>
-        <childnode refid="448" relation="public-inheritance">
+      <node id="2">
+        <label>castor3d::Interpolator&lt; castor::Quaternion &gt;</label>
+        <link refid="de/dfd/a02228"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; castor::Quaternion &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="448">
-        <label>castor3d::BinaryWriterBase&lt; Submesh &gt;</label>
-        <link refid="dd/d3f/a02156"/>
-        <childnode refid="449" relation="template-instance">
-          <edgelabel>&lt; Submesh &gt;</edgelabel>
+      <node id="3">
+        <label>castor3d::Interpolator&lt; DataT &gt;</label>
+        <link refid="de/dfd/a02228"/>
+      </node>
+      <node id="1">
+        <label>castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;</label>
+        <link refid="dc/de2/a02248"/>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="453">
-        <label>castor3d::BinaryWriterBase&lt; TWritten &gt;</label>
-        <link refid="dd/d3f/a02156"/>
-        <childnode refid="452" relation="usage">
-          <edgelabel>m_chunk</edgelabel>
+      <node id="2">
+        <label>castor3d::Interpolator&lt; castor::Quaternion &gt;</label>
+        <link refid="de/dfd/a02228"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; castor::Quaternion &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="452">
-        <label>castor3d::BinaryChunk</label>
-        <link refid="d8/dd8/a02108"/>
+      <node id="3">
+        <label>castor3d::Interpolator&lt; DataT &gt;</label>
+        <link refid="de/dfd/a02228"/>
       </node>
-      <node id="450">
-        <label>castor3d::BinaryWriter&lt; Submesh &gt;</label>
+      <node id="1">
+        <label>castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;</label>
         <link refid="dc/de2/a02248"/>
-        <childnode refid="451" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="451">
-        <label>castor3d::BinaryWriterBase&lt; Submesh &gt;</label>
-        <link refid="dd/d3f/a02156"/>
-        <childnode refid="452" relation="usage">
-          <edgelabel>m_chunk</edgelabel>
-        </childnode>
-        <childnode refid="453" relation="template-instance">
-          <edgelabel>&lt; Submesh &gt;</edgelabel>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Binary/BinarySubmesh.hpp" line="41" column="1" bodyfile="Binary/BinarySubmesh.hpp" bodystart="39" bodyend="54"/>
+    <location file="Animation/Interpolator.hpp" line="121" column="1" bodyfile="Animation/Interpolator.hpp" bodystart="123" bodyend="158"/>
     <listofallmembers>
-      <member refid="dc/de2/a02248_1a2e106060645a94fe21d58a6cd5735079" prot="private" virt="virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWrite</name></member>
-      <member refid="dd/d3f/a02156_1a95685db95521fe46169767620976688c" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteChunk</name></member>
-      <member refid="dd/d3f/a02156_1ac978d1019caf2d37ad181911c78dde33" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteChunk</name></member>
-      <member refid="dd/d3f/a02156_1a5eef4da7e3bbce50e00c878bd7b32516" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteChunk</name></member>
-      <member refid="dd/d3f/a02156_1a5b782961d4526354e5d0e84e78c6bbbb" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteChunk</name></member>
-      <member refid="dd/d3f/a02156_1a3bd1cb047e1f2872668a4397496bd7c4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteChunk</name></member>
-      <member refid="dd/d3f/a02156_1a7bdb655caf767fdde8a4267602e06191" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteChunk</name></member>
-      <member refid="dd/d3f/a02156_1a8828d359b7a61ea2b657d5aada2dd87b" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteHeader</name></member>
-      <member refid="dd/d3f/a02156_1ad6c66bdde51dd57ab2b27f4ddc8db513" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>m_chunk</name></member>
-      <member refid="dd/d3f/a02156_1a21e7985d2f99ff20a6056d198aac07c5" prot="public" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>write</name></member>
-      <member refid="dd/d3f/a02156_1a3b4ae75e6ecd0bdf9f5dc26381633dab" prot="public" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>write</name></member>
+      <member refid="dc/de2/a02248_1a910141885b8ae03c0ab795586cc9f345" prot="public" virt="virtual"><scope>castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;</scope><name>interpolate</name></member>
+      <member refid="de/dfd/a02228_1a86511dc9c5cf1b7f36a57452e147cfef" prot="protected" virt="virtual"><scope>castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;</scope><name>~Interpolator</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

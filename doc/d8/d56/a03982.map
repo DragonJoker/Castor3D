@@ -1,6 +1,5 @@
-<map id="castor3d::TriFaceMapping" name="castor3d::TriFaceMapping">
-<area shape="rect" id="node1" title=" " alt="" coords="20,229,192,256"/>
-<area shape="rect" id="node2" href="$d3/d4a/a03948.html" title=" " alt="" coords="26,155,186,181"/>
-<area shape="rect" id="node3" href="$dd/d78/a03980.html" title=" " alt="" coords="5,80,207,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,5,207,32"/>
+<map id="castor3d::RenderLoopSync" name="castor3d::RenderLoopSync">
+<area shape="rect" id="node1" title=" " alt="" coords="9,155,188,181"/>
+<area shape="rect" id="node2" href="$d0/dce/a03971.html" title=" " alt="" coords="24,80,173,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,192,32"/>
 </map>

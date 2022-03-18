@@ -1,0 +1,166 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d6/dd6/a04338" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::RenderNodesT</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename</type>
+        <declname>NodeType</declname>
+        <defname>NodeType</defname>
+      </param>
+      <param>
+        <type>typename</type>
+        <declname>MapType</declname>
+        <defname>MapType</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/dd6/a04338_1a5e9a30f96da43050f242c1256db1d3de" prot="public" static="no" mutable="no">
+        <type>MapType</type>
+        <definition>MapType castor3d::RenderNodesT&lt; NodeType, MapType &gt;::frontCulled</definition>
+        <argsstring></argsstring>
+        <name>frontCulled</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The geometries, sorted by shader program. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="18" column="1" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="18" bodyend="-1"/>
+        <referencedby refid="db/d6b/a04330_1a9ad8a7253def8e69c037ae31564aa573" compoundref="d4/d6a/a00704" startline="54" endline="68">castor3d::SceneCulledRenderNodes::hasNodes</referencedby>
+        <referencedby refid="d4/dcb/a04342_1ace4c873a85b167a87eca23469296709d" compoundref="d4/deb/a00710" startline="82" endline="96">castor3d::SceneRenderNodes::hasNodes</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d6/dd6/a04338_1a78b19f283ba543e7ff6b5c1d3067d0d0" prot="public" static="no" mutable="no">
+        <type>MapType</type>
+        <definition>MapType castor3d::RenderNodesT&lt; NodeType, MapType &gt;::backCulled</definition>
+        <argsstring></argsstring>
+        <name>backCulled</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The geometries, sorted by shader program. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="21" column="1" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="21" bodyend="-1"/>
+        <referencedby refid="db/d6b/a04330_1a9ad8a7253def8e69c037ae31564aa573" compoundref="d4/d6a/a00704" startline="54" endline="68">castor3d::SceneCulledRenderNodes::hasNodes</referencedby>
+        <referencedby refid="d4/dcb/a04342_1ace4c873a85b167a87eca23469296709d" compoundref="d4/deb/a00710" startline="82" endline="96">castor3d::SceneRenderNodes::hasNodes</referencedby>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>The render nodes for a specific scene. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2987">
+        <label>castor3d::RenderNodesT&lt; SkinningRenderNode, SubmeshSkinningRenderNodesPtrByPipelineMap &gt;</label>
+        <link refid="d6/dd6/a04338"/>
+        <childnode refid="2981" relation="template-instance">
+          <edgelabel>&lt; SkinningRenderNode, SubmeshSkinningRenderNodesPtrByPipelineMap &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2981">
+        <label>castor3d::RenderNodesT&lt; NodeType, MapType &gt;</label>
+        <link refid="d6/dd6/a04338"/>
+      </node>
+      <node id="2992">
+        <label>castor3d::RenderNodesT&lt; BillboardRenderNode, BillboardRenderNodesPtrByPipelineMap &gt;</label>
+        <link refid="d6/dd6/a04338"/>
+        <childnode refid="2981" relation="template-instance">
+          <edgelabel>&lt; BillboardRenderNode, BillboardRenderNodesPtrByPipelineMap &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2993">
+        <label>castor3d::RenderNodesT&lt; BillboardRenderNode, BillboardRenderNodesByPipelineMap &gt;</label>
+        <link refid="d6/dd6/a04338"/>
+        <childnode refid="2981" relation="template-instance">
+          <edgelabel>&lt; BillboardRenderNode, BillboardRenderNodesByPipelineMap &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2990">
+        <label>castor3d::RenderNodesT&lt; StaticRenderNode, SubmeshStaticRenderNodesByPipelineMap &gt;</label>
+        <link refid="d6/dd6/a04338"/>
+        <childnode refid="2981" relation="template-instance">
+          <edgelabel>&lt; StaticRenderNode, SubmeshStaticRenderNodesByPipelineMap &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2982">
+        <label>castor3d::RenderNodesT&lt; MorphingRenderNode, MorphingRenderNodesByPipelineMap &gt;</label>
+        <link refid="d6/dd6/a04338"/>
+        <childnode refid="2981" relation="template-instance">
+          <edgelabel>&lt; MorphingRenderNode, MorphingRenderNodesByPipelineMap &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2983">
+        <label>castor3d::RenderNodesT&lt; SkinningRenderNode, SubmeshSkinningRenderNodesByPipelineMap &gt;</label>
+        <link refid="d6/dd6/a04338"/>
+        <childnode refid="2981" relation="template-instance">
+          <edgelabel>&lt; SkinningRenderNode, SubmeshSkinningRenderNodesByPipelineMap &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2986">
+        <label>castor3d::RenderNodesT&lt; SkinningRenderNode, SkinningRenderNodesPtrByPipelineMap &gt;</label>
+        <link refid="d6/dd6/a04338"/>
+        <childnode refid="2981" relation="template-instance">
+          <edgelabel>&lt; SkinningRenderNode, SkinningRenderNodesPtrByPipelineMap &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2991">
+        <label>castor3d::RenderNodesT&lt; SkinningRenderNode, SkinningRenderNodesByPipelineMap &gt;</label>
+        <link refid="d6/dd6/a04338"/>
+        <childnode refid="2981" relation="template-instance">
+          <edgelabel>&lt; SkinningRenderNode, SkinningRenderNodesByPipelineMap &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2989">
+        <label>castor3d::RenderNodesT&lt; MorphingRenderNode, MorphingRenderNodesPtrByPipelineMap &gt;</label>
+        <link refid="d6/dd6/a04338"/>
+        <childnode refid="2981" relation="template-instance">
+          <edgelabel>&lt; MorphingRenderNode, MorphingRenderNodesPtrByPipelineMap &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2988">
+        <label>castor3d::RenderNodesT&lt; StaticRenderNode, StaticRenderNodesByPipelineMap &gt;</label>
+        <link refid="d6/dd6/a04338"/>
+        <childnode refid="2981" relation="template-instance">
+          <edgelabel>&lt; StaticRenderNode, StaticRenderNodesByPipelineMap &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2985">
+        <label>castor3d::RenderNodesT&lt; StaticRenderNode, StaticRenderNodesPtrByPipelineMap &gt;</label>
+        <link refid="d6/dd6/a04338"/>
+        <childnode refid="2981" relation="template-instance">
+          <edgelabel>&lt; StaticRenderNode, StaticRenderNodesPtrByPipelineMap &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2984">
+        <label>castor3d::RenderNodesT&lt; StaticRenderNode, SubmeshStaticRenderNodesPtrByPipelineMap &gt;</label>
+        <link refid="d6/dd6/a04338"/>
+        <childnode refid="2981" relation="template-instance">
+          <edgelabel>&lt; StaticRenderNode, SubmeshStaticRenderNodesPtrByPipelineMap &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2995">
+        <label>MapType</label>
+      </node>
+      <node id="2994">
+        <label>castor3d::RenderNodesT&lt; NodeType, MapType &gt;</label>
+        <link refid="d6/dd6/a04338"/>
+        <childnode refid="2995" relation="usage">
+          <edgelabel>frontCulled</edgelabel>
+          <edgelabel>backCulled</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Node/SceneRenderNodes.hpp" line="15" column="1" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="14" bodyend="22"/>
+    <listofallmembers>
+      <member refid="d6/dd6/a04338_1a78b19f283ba543e7ff6b5c1d3067d0d0" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesT</scope><name>backCulled</name></member>
+      <member refid="d6/dd6/a04338_1a5e9a30f96da43050f242c1256db1d3de" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesT</scope><name>frontCulled</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,5 +1,10 @@
-<map id="castor3d::Sampler" name="castor3d::Sampler">
-<area shape="rect" id="node1" title=" " alt="" coords="109,80,237,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,192,32"/>
-<area shape="rect" id="node3" title=" " alt="" coords="217,5,279,32"/>
+<map id="castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;" name="castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;">
+<area shape="rect" id="node1" title="BillboardList cache." alt="" coords="1211,61,1413,117"/>
+<area shape="rect" id="node2" href="$dd/dc4/a02632.html" title=" " alt="" coords="959,61,1161,117"/>
+<area shape="rect" id="node3" title=" " alt="" coords="228,179,411,205"/>
+<area shape="rect" id="node7" href="$dd/dc4/a02632.html" title=" " alt="" coords="533,117,719,158"/>
+<area shape="rect" id="node4" title=" " alt="" coords="523,36,729,92"/>
+<area shape="rect" id="node5" href="$d7/d73/a02708.html" title=" " alt="" coords="259,31,379,57"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,31,176,57"/>
+<area shape="rect" id="node8" title=" " alt="" coords="225,109,413,150"/>
 </map>

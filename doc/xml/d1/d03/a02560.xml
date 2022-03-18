@@ -1,257 +1,244 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d1/d03/a02560" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::KeyboardEvent</compoundname>
-    <basecompoundref refid="dc/d81/a02568" prot="public" virt="non-virtual">castor3d::UserInputEvent</basecompoundref>
-    <includes local="no">KeyboardEvent.hpp</includes>
+    <compoundname>castor3d::VertexBufferPool</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; RenderSystem &gt;</basecompoundref>
+    <includes local="no">ObjectBufferPool.hpp</includes>
+    <innerclass refid="db/d44/a02564" prot="public">castor3d::VertexBufferPool::ModelBuffers</innerclass>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d1/d03/a02560_1afad282e47ef4ab750068b878c75918a4" prot="public" static="no">
+        <type>std::vector&lt; std::unique_ptr&lt; <ref refid="db/d44/a02564" kindref="compound">ModelBuffers</ref> &gt; &gt;</type>
+        <definition>using castor3d::VertexBufferPool::BufferArray =  std::vector&lt; std::unique_ptr&lt; ModelBuffers &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>BufferArray</name>
+        <qualifiedname>castor3d::VertexBufferPool::BufferArray</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="29" column="1" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d1/d03/a02560_1ad86715e7cf4fd5a132a05c8655b8476e" prot="private" static="no" mutable="no">
-        <type><ref refid="da/d1e/a01479_1a1fb074d51d95c6d176d6227ff879a4dc" kindref="member">KeyboardEventType</ref> const</type>
-        <definition>KeyboardEventType const castor3d::KeyboardEvent::m_keyboardEventType</definition>
+      <memberdef kind="variable" id="d1/d03/a02560_1aa53c5d10dd360cd49639f52d5199576b" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::VertexBufferPool::m_device</definition>
         <argsstring></argsstring>
-        <name>m_keyboardEventType</name>
+        <name>m_device</name>
+        <qualifiedname>castor3d::VertexBufferPool::m_device</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/KeyboardEvent.hpp" line="140" column="1" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="140" bodyend="-1"/>
+        <location file="Buffer/ObjectBufferPool.hpp" line="87" column="21" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="87" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d03/a02560_1a785aad0fb85b3b280041333a92dc97ed" prot="private" static="no" mutable="no">
-        <type><ref refid="da/d1e/a01479_1ad372dd0cc65f28ad7f558f07c78becb7" kindref="member">KeyboardKey</ref> const</type>
-        <definition>KeyboardKey const castor3d::KeyboardEvent::m_key</definition>
+      <memberdef kind="variable" id="d1/d03/a02560_1a90327daba0b6c1d709061c39c188646f" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::VertexBufferPool::m_debugName</definition>
         <argsstring></argsstring>
-        <name>m_key</name>
+        <name>m_debugName</name>
+        <qualifiedname>castor3d::VertexBufferPool::m_debugName</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/KeyboardEvent.hpp" line="141" column="1" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="141" bodyend="-1"/>
+        <location file="Buffer/ObjectBufferPool.hpp" line="88" column="16" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="88" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d03/a02560_1a25e90cb41e40f46bb15a0e88a6886b69" prot="private" static="no" mutable="no">
-        <type>castor::String const</type>
-        <definition>castor::String const castor3d::KeyboardEvent::m_char</definition>
+      <memberdef kind="variable" id="d1/d03/a02560_1af660d9f7be302d03c4d9309444d9a35d" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/d03/a02560_1afad282e47ef4ab750068b878c75918a4" kindref="member">BufferArray</ref></type>
+        <definition>BufferArray castor3d::VertexBufferPool::m_buffers</definition>
         <argsstring></argsstring>
-        <name>m_char</name>
+        <name>m_buffers</name>
+        <qualifiedname>castor3d::VertexBufferPool::m_buffers</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/KeyboardEvent.hpp" line="142" column="1" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="142" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/d03/a02560_1a94b7f5577bc3cb30b69f6f36b4449f18" prot="private" static="no" mutable="no">
-        <type>bool const</type>
-        <definition>bool const castor3d::KeyboardEvent::m_ctrl</definition>
-        <argsstring></argsstring>
-        <name>m_ctrl</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/KeyboardEvent.hpp" line="143" column="1" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="143" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/d03/a02560_1a2ec7ebeada1bffe2af801abeb4386e67" prot="private" static="no" mutable="no">
-        <type>bool const</type>
-        <definition>bool const castor3d::KeyboardEvent::m_alt</definition>
-        <argsstring></argsstring>
-        <name>m_alt</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/KeyboardEvent.hpp" line="144" column="1" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="144" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/d03/a02560_1a6bbfe170e8fd6361a0abeb38b3bac3d3" prot="private" static="no" mutable="no">
-        <type>bool const</type>
-        <definition>bool const castor3d::KeyboardEvent::m_shift</definition>
-        <argsstring></argsstring>
-        <name>m_shift</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/KeyboardEvent.hpp" line="145" column="1" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="145" bodyend="-1"/>
+        <location file="Buffer/ObjectBufferPool.hpp" line="89" column="13" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="89" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d1/d03/a02560_1adeeca90d77dfc1929d6204d27561cd8a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::KeyboardEvent::KeyboardEvent</definition>
-        <argsstring>(KeyboardEventType type, KeyboardKey key, bool ctrl, bool alt, bool shift)</argsstring>
-        <name>KeyboardEvent</name>
+      <memberdef kind="function" id="d1/d03/a02560_1a2187e5f9d54ce11c516484737be7ab09" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::VertexBufferPool::VertexBufferPool</definition>
+        <argsstring>(RenderDevice const &amp;device, castor::String debugName)</argsstring>
+        <name>VertexBufferPool</name>
+        <qualifiedname>castor3d::VertexBufferPool::VertexBufferPool</qualifiedname>
         <param>
-          <type><ref refid="da/d1e/a01479_1a1fb074d51d95c6d176d6227ff879a4dc" kindref="member">KeyboardEventType</ref></type>
-          <declname>type</declname>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
         </param>
         <param>
-          <type><ref refid="da/d1e/a01479_1ad372dd0cc65f28ad7f558f07c78becb7" kindref="member">KeyboardKey</ref></type>
-          <declname>key</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>ctrl</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>alt</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>shift</declname>
+          <type>castor::String</type>
+          <declname>debugName</declname>
         </param>
         <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">debugName</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The debug name. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="42" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d03/a02560_1a36f53006ad04358a2bdb417665f0967c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::VertexBufferPool::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor3d::VertexBufferPool::cleanup</qualifiedname>
+        <briefdescription>
+<para>Cleans up all GPU buffers. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/KeyboardEvent.hpp" line="31" column="1" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="31" bodyend="44"/>
-        <references refid="da/d1e/a01479_1abdf15c31ed466fee351daf42b2b45ad5a94367f202738af3ba279dbcd33c328c2">castor3d::eKeyboard</references>
+        <location file="Buffer/ObjectBufferPool.hpp" line="50" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d03/a02560_1ae2c1b38c023a8cec795086cab927b1f0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::KeyboardEvent::KeyboardEvent</definition>
-        <argsstring>(KeyboardEventType type, KeyboardKey key, castor::String const &amp;c, bool ctrl, bool alt, bool shift)</argsstring>
-        <name>KeyboardEvent</name>
+      <memberdef kind="function" id="d1/d03/a02560_1a1d6db49873c867956eda7f99b6004878" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::VertexBufferPool::upload</definition>
+        <argsstring>(ashes::CommandBuffer const &amp;cb)</argsstring>
+        <name>upload</name>
+        <qualifiedname>castor3d::VertexBufferPool::upload</qualifiedname>
         <param>
-          <type><ref refid="da/d1e/a01479_1a1fb074d51d95c6d176d6227ff879a4dc" kindref="member">KeyboardEventType</ref></type>
-          <declname>type</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d1e/a01479_1ad372dd0cc65f28ad7f558f07c78becb7" kindref="member">KeyboardKey</ref></type>
-          <declname>key</declname>
-        </param>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>c</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>ctrl</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>alt</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>shift</declname>
+          <type>ashes::CommandBuffer const &amp;</type>
+          <declname>cb</declname>
         </param>
         <briefdescription>
+<para>Uploads all GPU buffers to VRAM. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">cb</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The command buffer on which transfer commands are recorded. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/KeyboardEvent.hpp" line="63" column="1" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="63" bodyend="77"/>
-        <references refid="da/d1e/a01479_1abdf15c31ed466fee351daf42b2b45ad5a94367f202738af3ba279dbcd33c328c2">castor3d::eKeyboard</references>
+        <location file="Buffer/ObjectBufferPool.hpp" line="59" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d03/a02560_1a3681b552fbdc9d2eff738f3d7adcf0b2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="da/d1e/a01479_1a1fb074d51d95c6d176d6227ff879a4dc" kindref="member">KeyboardEventType</ref></type>
-        <definition>KeyboardEventType castor3d::KeyboardEvent::getKeyboardEventType</definition>
-        <argsstring>() const</argsstring>
-        <name>getKeyboardEventType</name>
+      <memberdef kind="function" id="d1/d03/a02560_1afe52952de162c864c29351e3b275be45" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename VertexT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="dc/d32/a02556" kindref="compound">ObjectBufferOffset</ref></type>
+        <definition>ObjectBufferOffset castor3d::VertexBufferPool::getBuffer</definition>
+        <argsstring>(VkDeviceSize vertexCount)</argsstring>
+        <name>getBuffer</name>
+        <qualifiedname>castor3d::VertexBufferPool::getBuffer</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>vertexCount</declname>
+        </param>
         <briefdescription>
+<para>Retrieves a GPU buffer with the given size. </para>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The keyboard event type. </para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">vertexCount</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The wanted buffer element count. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The GPU buffer. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/KeyboardEvent.hpp" line="84" column="1" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="84" bodyend="87"/>
+        <location file="Buffer/ObjectBufferPool.hpp" line="71" column="20"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d03/a02560_1a1be055833a6b81b399490211b3b2e9b5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="da/d1e/a01479_1ad372dd0cc65f28ad7f558f07c78becb7" kindref="member">KeyboardKey</ref></type>
-        <definition>KeyboardKey castor3d::KeyboardEvent::getKey</definition>
-        <argsstring>() const</argsstring>
-        <name>getKey</name>
+      <memberdef kind="function" id="d1/d03/a02560_1a3c71affbf981e3697491d9f29b001bf3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::VertexBufferPool::putBuffer</definition>
+        <argsstring>(ObjectBufferOffset const &amp;bufferOffset)</argsstring>
+        <name>putBuffer</name>
+        <qualifiedname>castor3d::VertexBufferPool::putBuffer</qualifiedname>
+        <param>
+          <type><ref refid="dc/d32/a02556" kindref="compound">ObjectBufferOffset</ref> const &amp;</type>
+          <declname>bufferOffset</declname>
+        </param>
         <briefdescription>
+<para>Releases a GPU buffer. </para>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The key code. </para>
-</simplesect>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferOffset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer offset to release. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/KeyboardEvent.hpp" line="94" column="1" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="94" bodyend="97"/>
+        <location file="Buffer/ObjectBufferPool.hpp" line="80" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d03/a02560_1a8d8469397987dca93e6aa15cdfc48096" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::String const  &amp;</type>
-        <definition>castor::String const&amp; castor3d::KeyboardEvent::getChar</definition>
-        <argsstring>() const</argsstring>
-        <name>getChar</name>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d1/d03/a02560_1a3a7ff459e62ca003ee9c3d2b15a69695" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> BufferArray::iterator</type>
+        <definition>C3D_API BufferArray::iterator castor3d::VertexBufferPool::doFindBuffer</definition>
+        <argsstring>(VkDeviceSize size, BufferArray &amp;array)</argsstring>
+        <name>doFindBuffer</name>
+        <qualifiedname>castor3d::VertexBufferPool::doFindBuffer</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d03/a02560_1afad282e47ef4ab750068b878c75918a4" kindref="member">BufferArray</ref> &amp;</type>
+          <declname>array</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The character corresponding to the key code. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/KeyboardEvent.hpp" line="104" column="1" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="104" bodyend="107"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d03/a02560_1a96945c97723a96394b6f2107fd798a6e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::KeyboardEvent::isCtrlDown</definition>
-        <argsstring>() const</argsstring>
-        <name>isCtrlDown</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The Ctrl key down status. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/KeyboardEvent.hpp" line="114" column="1" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="114" bodyend="117"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d03/a02560_1afaa5cdb187ceb1df1c18bd37a7433809" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::KeyboardEvent::isAltDown</definition>
-        <argsstring>() const</argsstring>
-        <name>isAltDown</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The Alt key down status. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/KeyboardEvent.hpp" line="124" column="1" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="124" bodyend="127"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d03/a02560_1a7eae0a27f784924f86f65473cf8fa903" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::KeyboardEvent::isShiftDown</definition>
-        <argsstring>() const</argsstring>
-        <name>isShiftDown</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The Shift key down status. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/KeyboardEvent.hpp" line="134" column="1" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="134" bodyend="137"/>
+        <location file="Buffer/ObjectBufferPool.hpp" line="83" column="31"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -259,48 +246,39 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="1486">
-        <label>castor3d::UserInputEvent</label>
-        <link refid="dc/d81/a02568"/>
-      </node>
-      <node id="1485">
-        <label>castor3d::KeyboardEvent</label>
+      <node id="1">
+        <label>castor3d::VertexBufferPool</label>
         <link refid="d1/d03/a02560"/>
-        <childnode refid="1486" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; RenderSystem &gt;</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="1488">
-        <label>castor3d::UserInputEvent</label>
-        <link refid="dc/d81/a02568"/>
-      </node>
-      <node id="1487">
-        <label>castor3d::KeyboardEvent</label>
+      <node id="1">
+        <label>castor3d::VertexBufferPool</label>
         <link refid="d1/d03/a02560"/>
-        <childnode refid="1488" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; RenderSystem &gt;</label>
+      </node>
     </collaborationgraph>
-    <location file="Event/UserInput/KeyboardEvent.hpp" line="13" column="1" bodyfile="Event/UserInput/KeyboardEvent.hpp" bodystart="11" bodyend="146"/>
+    <location file="Buffer/ObjectBufferPool.hpp" line="16" column="1" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="18" bodyend="90"/>
     <listofallmembers>
-      <member refid="d1/d03/a02560_1a8d8469397987dca93e6aa15cdfc48096" prot="public" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>getChar</name></member>
-      <member refid="dc/d81/a02568_1ab45ab37b6687ae9a35165ea5b18f0a71" prot="public" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>getEventType</name></member>
-      <member refid="d1/d03/a02560_1a1be055833a6b81b399490211b3b2e9b5" prot="public" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>getKey</name></member>
-      <member refid="d1/d03/a02560_1a3681b552fbdc9d2eff738f3d7adcf0b2" prot="public" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>getKeyboardEventType</name></member>
-      <member refid="d1/d03/a02560_1afaa5cdb187ceb1df1c18bd37a7433809" prot="public" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>isAltDown</name></member>
-      <member refid="d1/d03/a02560_1a96945c97723a96394b6f2107fd798a6e" prot="public" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>isCtrlDown</name></member>
-      <member refid="d1/d03/a02560_1a7eae0a27f784924f86f65473cf8fa903" prot="public" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>isShiftDown</name></member>
-      <member refid="d1/d03/a02560_1adeeca90d77dfc1929d6204d27561cd8a" prot="public" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>KeyboardEvent</name></member>
-      <member refid="d1/d03/a02560_1ae2c1b38c023a8cec795086cab927b1f0" prot="public" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>KeyboardEvent</name></member>
-      <member refid="d1/d03/a02560_1a2ec7ebeada1bffe2af801abeb4386e67" prot="private" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>m_alt</name></member>
-      <member refid="d1/d03/a02560_1a25e90cb41e40f46bb15a0e88a6886b69" prot="private" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>m_char</name></member>
-      <member refid="d1/d03/a02560_1a94b7f5577bc3cb30b69f6f36b4449f18" prot="private" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>m_ctrl</name></member>
-      <member refid="d1/d03/a02560_1a785aad0fb85b3b280041333a92dc97ed" prot="private" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>m_key</name></member>
-      <member refid="d1/d03/a02560_1ad86715e7cf4fd5a132a05c8655b8476e" prot="private" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>m_keyboardEventType</name></member>
-      <member refid="d1/d03/a02560_1a6bbfe170e8fd6361a0abeb38b3bac3d3" prot="private" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>m_shift</name></member>
-      <member refid="dc/d81/a02568_1a1d946a77fa49158379ee4e5dfb84a556" prot="public" virt="non-virtual"><scope>castor3d::KeyboardEvent</scope><name>UserInputEvent</name></member>
-      <member refid="dc/d81/a02568_1a520eaa4deaa4a2c25ee217105e289b78" prot="public" virt="virtual"><scope>castor3d::KeyboardEvent</scope><name>~UserInputEvent</name></member>
+      <member refid="d1/d03/a02560_1afad282e47ef4ab750068b878c75918a4" prot="public" virt="non-virtual"><scope>castor3d::VertexBufferPool</scope><name>BufferArray</name></member>
+      <member refid="d1/d03/a02560_1a36f53006ad04358a2bdb417665f0967c" prot="public" virt="non-virtual"><scope>castor3d::VertexBufferPool</scope><name>cleanup</name></member>
+      <member refid="d1/d03/a02560_1a3a7ff459e62ca003ee9c3d2b15a69695" prot="private" virt="non-virtual"><scope>castor3d::VertexBufferPool</scope><name>doFindBuffer</name></member>
+      <member refid="d1/d03/a02560_1afe52952de162c864c29351e3b275be45" prot="public" virt="non-virtual"><scope>castor3d::VertexBufferPool</scope><name>getBuffer</name></member>
+      <member refid="d1/d03/a02560_1af660d9f7be302d03c4d9309444d9a35d" prot="private" virt="non-virtual"><scope>castor3d::VertexBufferPool</scope><name>m_buffers</name></member>
+      <member refid="d1/d03/a02560_1a90327daba0b6c1d709061c39c188646f" prot="private" virt="non-virtual"><scope>castor3d::VertexBufferPool</scope><name>m_debugName</name></member>
+      <member refid="d1/d03/a02560_1aa53c5d10dd360cd49639f52d5199576b" prot="private" virt="non-virtual"><scope>castor3d::VertexBufferPool</scope><name>m_device</name></member>
+      <member refid="d1/d03/a02560_1a3c71affbf981e3697491d9f29b001bf3" prot="public" virt="non-virtual"><scope>castor3d::VertexBufferPool</scope><name>putBuffer</name></member>
+      <member refid="d1/d03/a02560_1a1d6db49873c867956eda7f99b6004878" prot="public" virt="non-virtual"><scope>castor3d::VertexBufferPool</scope><name>upload</name></member>
+      <member refid="d1/d03/a02560_1a2187e5f9d54ce11c516484737be7ab09" prot="public" virt="non-virtual"><scope>castor3d::VertexBufferPool</scope><name>VertexBufferPool</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

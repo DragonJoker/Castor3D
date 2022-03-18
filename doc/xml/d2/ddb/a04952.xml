@@ -1,50 +1,189 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d2/ddb/a04952" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::HdrConfig</compoundname>
-    <includes local="no">HdrConfig.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d2/ddb/a04952" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::RsmConfigData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">RsmConfigUbo.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d2/ddb/a04952_1ac8fd9583280cdc34d0a26e1237764a0d" prot="public" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::HdrConfig::exposure</definition>
+      <memberdef kind="variable" id="d2/ddb/a04952_1adaae6164149ff01a442a2975a621e0c2" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::RsmConfigData::rsmIntensity</definition>
         <argsstring></argsstring>
-        <name>exposure</name>
-        <initializer>{ 1.0f }</initializer>
+        <name>rsmIntensity</name>
+        <qualifiedname>castor3d::shader::RsmConfigData::rsmIntensity</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The exposure value. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToneMapping/HdrConfig.hpp" line="18" column="1" bodyfile="Render/ToneMapping/HdrConfig.hpp" bodystart="18" bodyend="-1"/>
-        <referencedby refid="d5/d9c/a05152_1a3164f41de67e9bb9b4df3e39a3bc4433" compoundref="da/d4e/a01106" startline="264" endline="268">castor3d::Camera::setExposure</referencedby>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="33" column="12" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="33" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d2/ddb/a04952_1a9d5123b1dbd5da1ebb2517854c23fb26" prot="public" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::HdrConfig::gamma</definition>
+      <memberdef kind="variable" id="d2/ddb/a04952_1a5378e4b40341dc589d50594305cac747" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::RsmConfigData::rsmRMax</definition>
         <argsstring></argsstring>
-        <name>gamma</name>
-        <initializer>{ 2.2f }</initializer>
+        <name>rsmRMax</name>
+        <qualifiedname>castor3d::shader::RsmConfigData::rsmRMax</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The gamma correction value. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToneMapping/HdrConfig.hpp" line="21" column="1" bodyfile="Render/ToneMapping/HdrConfig.hpp" bodystart="21" bodyend="-1"/>
-        <referencedby refid="d5/d9c/a05152_1af59eaccd54cff1df69b3ef0f406a2e06" compoundref="da/d4e/a01106" startline="270" endline="274">castor3d::Camera::setGamma</referencedby>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="34" column="12" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/ddb/a04952_1a2ef0b869eed5dc41b1e63202220b500f" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::RsmConfigData::rsmSampleCount</definition>
+        <argsstring></argsstring>
+        <name>rsmSampleCount</name>
+        <qualifiedname>castor3d::shader::RsmConfigData::rsmSampleCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="35" column="11" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/ddb/a04952_1ae7e61311101f1bffe630d6c8ec2d579b" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::RsmConfigData::rsmIndex</definition>
+        <argsstring></argsstring>
+        <name>rsmIndex</name>
+        <qualifiedname>castor3d::shader::RsmConfigData::rsmIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="36" column="11" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/ddb/a04952_1a1533166fce74bd74f4e0f6597e0a0e75" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::RsmConfigData::RsmConfigData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>RsmConfigData</name>
+        <qualifiedname>castor3d::shader::RsmConfigData::RsmConfigData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="25" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/ddb/a04952_1ad276d9c141bf10db90f3d0a21fc4b95e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::RsmConfigData::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, RsmConfigData)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::RsmConfigData::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        </param>
+        <param>
+          <type><ref refid="d2/ddb/a04952" kindref="compound">RsmConfigData</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="28" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d2/ddb/a04952_1a5e9fd629c9074786dcde7a70a25a0595" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
+        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::RsmConfigData::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::RsmConfigData::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="30" column="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/ddb/a04952_1a61a731d489fda36272a89a42c5cd0d05" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::RsmConfigData::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::RsmConfigData::declare</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="31" column="32"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/ToneMapping/HdrConfig.hpp" line="14" column="1" bodyfile="Render/ToneMapping/HdrConfig.hpp" bodystart="13" bodyend="22"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::RsmConfigData</label>
+        <link refid="d2/ddb/a04952"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::RsmConfigData</label>
+        <link refid="d2/ddb/a04952"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Ubos/RsmConfigUbo.hpp" line="22" column="1" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="24" bodyend="41"/>
     <listofallmembers>
-      <member refid="d2/ddb/a04952_1ac8fd9583280cdc34d0a26e1237764a0d" prot="public" virt="non-virtual"><scope>castor3d::HdrConfig</scope><name>exposure</name></member>
-      <member refid="d2/ddb/a04952_1a9d5123b1dbd5da1ebb2517854c23fb26" prot="public" virt="non-virtual"><scope>castor3d::HdrConfig</scope><name>gamma</name></member>
+      <member refid="d2/ddb/a04952_1a61a731d489fda36272a89a42c5cd0d05" prot="public" virt="non-virtual"><scope>castor3d::shader::RsmConfigData</scope><name>declare</name></member>
+      <member refid="d2/ddb/a04952_1a5e9fd629c9074786dcde7a70a25a0595" prot="public" virt="non-virtual"><scope>castor3d::shader::RsmConfigData</scope><name>makeType</name></member>
+      <member refid="d2/ddb/a04952_1a1533166fce74bd74f4e0f6597e0a0e75" prot="public" virt="non-virtual"><scope>castor3d::shader::RsmConfigData</scope><name>RsmConfigData</name></member>
+      <member refid="d2/ddb/a04952_1ae7e61311101f1bffe630d6c8ec2d579b" prot="public" virt="non-virtual"><scope>castor3d::shader::RsmConfigData</scope><name>rsmIndex</name></member>
+      <member refid="d2/ddb/a04952_1adaae6164149ff01a442a2975a621e0c2" prot="public" virt="non-virtual"><scope>castor3d::shader::RsmConfigData</scope><name>rsmIntensity</name></member>
+      <member refid="d2/ddb/a04952_1a5378e4b40341dc589d50594305cac747" prot="public" virt="non-virtual"><scope>castor3d::shader::RsmConfigData</scope><name>rsmRMax</name></member>
+      <member refid="d2/ddb/a04952_1a2ef0b869eed5dc41b1e63202220b500f" prot="public" virt="non-virtual"><scope>castor3d::shader::RsmConfigData</scope><name>rsmSampleCount</name></member>
+      <member refid="d2/ddb/a04952_1ad276d9c141bf10db90f3d0a21fc4b95e" prot="public" virt="non-virtual"><scope>castor3d::shader::RsmConfigData</scope><name>SDW_DeclStructInstance</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,58 +1,78 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d1/dae/a04084" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::DebugOverlays::PassOverlays::TimeOverlays</compoundname>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d1/dae/a04084" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::RenderWindowDesc</compoundname>
+    <includes local="no">RenderWindow.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d1/dae/a04084_1a4583a7d7de39ceaed715397a0d33834d" prot="public" static="no" mutable="no">
-        <type>castor::Nanoseconds</type>
-        <definition>castor::Nanoseconds castor3d::DebugOverlays::PassOverlays::TimeOverlays::time</definition>
-        <argsstring></argsstring>
-        <name>time</name>
-        <initializer>{ 0_ns }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="214" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="214" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/dae/a04084_1a6289f9b5dbc09eb9182faae071761949" prot="public" static="no" mutable="no">
-        <type>TextOverlaySPtr</type>
-        <definition>TextOverlaySPtr castor3d::DebugOverlays::PassOverlays::TimeOverlays::name</definition>
+      <memberdef kind="variable" id="d1/dae/a04084_1a7f84f415a603250474656c7a4f1e27b3" prot="public" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::RenderWindowDesc::name</definition>
         <argsstring></argsstring>
         <name>name</name>
+        <qualifiedname>castor3d::RenderWindowDesc::name</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="215" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="215" bodyend="-1"/>
+        <location file="Render/RenderWindow.hpp" line="43" column="16" bodyfile="Render/RenderWindow.hpp" bodystart="43" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/dae/a04084_1a9bedf4e81f9a555db53181c08a99c869" prot="public" static="no" mutable="no">
-        <type>TextOverlaySPtr</type>
-        <definition>TextOverlaySPtr castor3d::DebugOverlays::PassOverlays::TimeOverlays::value</definition>
+      <memberdef kind="variable" id="d1/dae/a04084_1a329663d53d382711f8865e01e5646c8e" prot="public" static="no" mutable="no">
+        <type>RenderTargetSPtr</type>
+        <definition>RenderTargetSPtr castor3d::RenderWindowDesc::renderTarget</definition>
         <argsstring></argsstring>
-        <name>value</name>
+        <name>renderTarget</name>
+        <qualifiedname>castor3d::RenderWindowDesc::renderTarget</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="216" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="216" bodyend="-1"/>
+        <location file="Render/RenderWindow.hpp" line="44" column="18" bodyfile="Render/RenderWindow.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dae/a04084_1a962046e9382c5c9eba20c22dae2d56dc" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderWindowDesc::enableVSync</definition>
+        <argsstring></argsstring>
+        <name>enableVSync</name>
+        <qualifiedname>castor3d::RenderWindowDesc::enableVSync</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderWindow.hpp" line="45" column="6" bodyfile="Render/RenderWindow.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dae/a04084_1abb366356c5f5de8e057a4738894a5324" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderWindowDesc::fullscreen</definition>
+        <argsstring></argsstring>
+        <name>fullscreen</name>
+        <qualifiedname>castor3d::RenderWindowDesc::fullscreen</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderWindow.hpp" line="46" column="6" bodyfile="Render/RenderWindow.hpp" bodystart="46" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Overlay/DebugOverlays.hpp" line="213" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="212" bodyend="217"/>
+    <location file="Render/RenderWindow.hpp" line="41" column="1" bodyfile="Render/RenderWindow.hpp" bodystart="42" bodyend="47"/>
     <listofallmembers>
-      <member refid="d1/dae/a04084_1a6289f9b5dbc09eb9182faae071761949" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays::TimeOverlays</scope><name>name</name></member>
-      <member refid="d1/dae/a04084_1a4583a7d7de39ceaed715397a0d33834d" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays::TimeOverlays</scope><name>time</name></member>
-      <member refid="d1/dae/a04084_1a9bedf4e81f9a555db53181c08a99c869" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays::TimeOverlays</scope><name>value</name></member>
+      <member refid="d1/dae/a04084_1a962046e9382c5c9eba20c22dae2d56dc" prot="public" virt="non-virtual"><scope>castor3d::RenderWindowDesc</scope><name>enableVSync</name></member>
+      <member refid="d1/dae/a04084_1abb366356c5f5de8e057a4738894a5324" prot="public" virt="non-virtual"><scope>castor3d::RenderWindowDesc</scope><name>fullscreen</name></member>
+      <member refid="d1/dae/a04084_1a7f84f415a603250474656c7a4f1e27b3" prot="public" virt="non-virtual"><scope>castor3d::RenderWindowDesc</scope><name>name</name></member>
+      <member refid="d1/dae/a04084_1a329663d53d382711f8865e01e5646c8e" prot="public" virt="non-virtual"><scope>castor3d::RenderWindowDesc</scope><name>renderTarget</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

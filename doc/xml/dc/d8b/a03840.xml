@@ -1,44 +1,278 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dc/d8b/a03840" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::PipelineVisitorBase::Config</compoundname>
-    <includes local="no">PipelineVisitor.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="dc/d8b/a03840_1a26740e849dcb7faea5d4090540762a49" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::PipelineVisitorBase::Config::forceSubPassesVisit</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dc/d8b/a03840" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::OverlayPass</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">crg::RunnablePass</basecompoundref>
+    <includes local="no">OverlayPass.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dc/d8b/a03840_1a405ada6713f4037396b923144c411589" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::OverlayPass::m_device</definition>
         <argsstring></argsstring>
-        <name>forceSubPassesVisit</name>
+        <name>m_device</name>
+        <qualifiedname>castor3d::OverlayPass::m_device</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/PipelineVisitor.hpp" line="23" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="23" bodyend="-1"/>
+        <location file="Render/Passes/OverlayPass.hpp" line="61" column="21" bodyfile="Render/Passes/OverlayPass.hpp" bodystart="61" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dc/d8b/a03840_1af3e4f344f815da354dd14a32e162024a" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::PipelineVisitorBase::Config::forceMiplevelsVisit</definition>
+      <memberdef kind="variable" id="dc/d8b/a03840_1a9b8574a7c7ad1933ad5d070ae197649a" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d34/a04592" kindref="compound">Scene</ref> const  &amp;</type>
+        <definition>Scene const&amp; castor3d::OverlayPass::m_scene</definition>
         <argsstring></argsstring>
-        <name>forceMiplevelsVisit</name>
+        <name>m_scene</name>
+        <qualifiedname>castor3d::OverlayPass::m_scene</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/PipelineVisitor.hpp" line="24" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="24" bodyend="-1"/>
+        <location file="Render/Passes/OverlayPass.hpp" line="62" column="14" bodyfile="Render/Passes/OverlayPass.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d8b/a03840_1a514720ad8a1e01e8eb208c34456ab775" prot="private" static="no" mutable="no">
+        <type>crg::RenderPassHolder</type>
+        <definition>crg::RenderPassHolder castor3d::OverlayPass::m_renderPass</definition>
+        <argsstring></argsstring>
+        <name>m_renderPass</name>
+        <qualifiedname>castor3d::OverlayPass::m_renderPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/OverlayPass.hpp" line="63" column="23" bodyfile="Render/Passes/OverlayPass.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d8b/a03840_1af541661e98d96191d54074a147d12d6b" prot="private" static="no" mutable="no">
+        <type>OverlayRendererUPtr</type>
+        <definition>OverlayRendererUPtr castor3d::OverlayPass::m_renderer</definition>
+        <argsstring></argsstring>
+        <name>m_renderer</name>
+        <qualifiedname>castor3d::OverlayPass::m_renderer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/OverlayPass.hpp" line="64" column="21" bodyfile="Render/Passes/OverlayPass.hpp" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d8b/a03840_1a336fd8dc213a3a80132fba3bbba57047" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::OverlayPass::OverlayPass</definition>
+        <argsstring>(crg::FramePass const &amp;pass, crg::GraphContext &amp;context, crg::RunnableGraph &amp;graph, RenderDevice const &amp;device, Scene const &amp;scene, VkExtent2D const &amp;size, Texture const &amp;output)</argsstring>
+        <name>OverlayPass</name>
+        <qualifiedname>castor3d::OverlayPass::OverlayPass</qualifiedname>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>crg::GraphContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>crg::RunnableGraph &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d34/a04592" kindref="compound">Scene</ref> const &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type>VkExtent2D const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d46/a04312" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/OverlayPass.hpp" line="19" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d8b/a03840_1ae494a4b9ecd4c86e2aaf650892f91e4d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::OverlayPass::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::OverlayPass::update</qualifiedname>
+        <param>
+          <type><ref refid="db/d69/a04040" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, CPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/OverlayPass.hpp" line="34" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d8b/a03840_1ada914b28431992ece079348d6e4181a7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::OverlayPass::update</definition>
+        <argsstring>(GpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::OverlayPass::update</qualifiedname>
+        <param>
+          <type><ref refid="d1/dc7/a04044" kindref="compound">GpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, GPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/OverlayPass.hpp" line="43" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d8b/a03840_1a59942c64469cd0ce55216632efadfcb0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::OverlayPass::upload</definition>
+        <argsstring>(ashes::CommandBuffer const &amp;cb)</argsstring>
+        <name>upload</name>
+        <qualifiedname>castor3d::OverlayPass::upload</qualifiedname>
+        <param>
+          <type>ashes::CommandBuffer const &amp;</type>
+          <declname>cb</declname>
+        </param>
+        <briefdescription>
+<para>Uploads overlays GPU buffers to VRAM. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">cb</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The command buffer on which transfer commands are recorded. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/OverlayPass.hpp" line="52" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="dc/d8b/a03840_1a10a7b01c69330ba8704e598d64a833a1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::OverlayPass::doInitialise</definition>
+        <argsstring>()</argsstring>
+        <name>doInitialise</name>
+        <qualifiedname>castor3d::OverlayPass::doInitialise</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/OverlayPass.hpp" line="55" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d8b/a03840_1af90907ee85d938eda45e2d0b5b9e56f3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::OverlayPass::doRecordInto</definition>
+        <argsstring>(crg::RecordContext &amp;context, VkCommandBuffer commandBuffer, uint32_t index)</argsstring>
+        <name>doRecordInto</name>
+        <qualifiedname>castor3d::OverlayPass::doRecordInto</qualifiedname>
+        <param>
+          <type>crg::RecordContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>VkCommandBuffer</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/OverlayPass.hpp" line="56" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/PipelineVisitor.hpp" line="22" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="21" bodyend="25"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::OverlayPass</label>
+        <link refid="dc/d8b/a03840"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>crg::RunnablePass</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::OverlayPass</label>
+        <link refid="dc/d8b/a03840"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>crg::RunnablePass</label>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Passes/OverlayPass.hpp" line="15" column="1" bodyfile="Render/Passes/OverlayPass.hpp" bodystart="17" bodyend="65"/>
     <listofallmembers>
-      <member refid="dc/d8b/a03840_1af3e4f344f815da354dd14a32e162024a" prot="public" virt="non-virtual"><scope>castor3d::PipelineVisitorBase::Config</scope><name>forceMiplevelsVisit</name></member>
-      <member refid="dc/d8b/a03840_1a26740e849dcb7faea5d4090540762a49" prot="public" virt="non-virtual"><scope>castor3d::PipelineVisitorBase::Config</scope><name>forceSubPassesVisit</name></member>
+      <member refid="dc/d8b/a03840_1a10a7b01c69330ba8704e598d64a833a1" prot="private" virt="non-virtual"><scope>castor3d::OverlayPass</scope><name>doInitialise</name></member>
+      <member refid="dc/d8b/a03840_1af90907ee85d938eda45e2d0b5b9e56f3" prot="private" virt="non-virtual"><scope>castor3d::OverlayPass</scope><name>doRecordInto</name></member>
+      <member refid="dc/d8b/a03840_1a405ada6713f4037396b923144c411589" prot="private" virt="non-virtual"><scope>castor3d::OverlayPass</scope><name>m_device</name></member>
+      <member refid="dc/d8b/a03840_1af541661e98d96191d54074a147d12d6b" prot="private" virt="non-virtual"><scope>castor3d::OverlayPass</scope><name>m_renderer</name></member>
+      <member refid="dc/d8b/a03840_1a514720ad8a1e01e8eb208c34456ab775" prot="private" virt="non-virtual"><scope>castor3d::OverlayPass</scope><name>m_renderPass</name></member>
+      <member refid="dc/d8b/a03840_1a9b8574a7c7ad1933ad5d070ae197649a" prot="private" virt="non-virtual"><scope>castor3d::OverlayPass</scope><name>m_scene</name></member>
+      <member refid="dc/d8b/a03840_1a336fd8dc213a3a80132fba3bbba57047" prot="public" virt="non-virtual"><scope>castor3d::OverlayPass</scope><name>OverlayPass</name></member>
+      <member refid="dc/d8b/a03840_1ae494a4b9ecd4c86e2aaf650892f91e4d" prot="public" virt="non-virtual"><scope>castor3d::OverlayPass</scope><name>update</name></member>
+      <member refid="dc/d8b/a03840_1ada914b28431992ece079348d6e4181a7" prot="public" virt="non-virtual"><scope>castor3d::OverlayPass</scope><name>update</name></member>
+      <member refid="dc/d8b/a03840_1a59942c64469cd0ce55216632efadfcb0" prot="public" virt="non-virtual"><scope>castor3d::OverlayPass</scope><name>upload</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,57 +1,34 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="db/dc8/a04760" kind="struct" language="C++" prot="protected">
-    <compoundname>castor3d::LightPass::RenderPass</compoundname>
-    <includes local="no">LightPass.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="db/dc8/a04760_1a2b85e860baa157a0b7a51c9d55dd6d16" prot="public" static="no" mutable="no">
-        <type>ashes::RenderPassPtr</type>
-        <definition>ashes::RenderPassPtr castor3d::LightPass::RenderPass::renderPass</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="db/dc8/a04760" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::Fog</compoundname>
+    <includes local="no">GlslFog.hpp</includes>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="db/dc8/a04760_1a818ce0c5e2394483e664a8ea9a245220" prot="protected" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec4, sdw::InVec4, sdw::InVec4, sdw::InVec3, InSceneData &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec4 , sdw::InVec4 , sdw::InVec4 , sdw::InVec3 , InSceneData &gt; castor3d::shader::Fog::m_fog</definition>
         <argsstring></argsstring>
-        <name>renderPass</name>
+        <name>m_fog</name>
+        <qualifiedname>castor3d::shader::Fog::m_fog</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="39" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="39" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="db/dc8/a04760_1acb70804b63ec8651d8edb8e81ef9073c" prot="public" static="no" mutable="no">
-        <type>ashes::FrameBufferPtr</type>
-        <definition>ashes::FrameBufferPtr castor3d::LightPass::RenderPass::frameBuffer</definition>
-        <argsstring></argsstring>
-        <name>frameBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="40" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="40" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslFog.hpp" line="31" column="2" bodyfile="Shader/Shaders/GlslFog.hpp" bodystart="31" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="db/dc8/a04760_1ac00fa53d066af78eb7ae961fe6ee2820" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::LightPass::RenderPass::RenderPass</definition>
-        <argsstring>(std::string const &amp;name, ashes::RenderPassPtr renderPass, LightPassResult const &amp;lpResult, bool generatesIndirect)</argsstring>
-        <name>RenderPass</name>
+      <memberdef kind="function" id="db/dc8/a04760_1a7413ef23e75baa5f273030d019702918" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::Fog::Fog</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>Fog</name>
+        <qualifiedname>castor3d::shader::Fog::Fog</qualifiedname>
         <param>
-          <type>std::string const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type>ashes::RenderPassPtr</type>
-          <declname>renderPass</declname>
-        </param>
-        <param>
-          <type><ref refid="db/d2a/a04776" kindref="compound">LightPassResult</ref> const &amp;</type>
-          <declname>lpResult</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>generatesIndirect</declname>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -59,18 +36,48 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="35" column="1"/>
+        <location file="Shader/Shaders/GlslFog.hpp" line="20" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc8/a04760_1a948e9e44f98b28496ea045301de03d04" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::Fog::apply</definition>
+        <argsstring>(sdw::Vec4 const &amp;bgColour, sdw::Vec4 const &amp;colour, sdw::Vec3 const &amp;wsPosition, SceneData const &amp;sceneData)</argsstring>
+        <name>apply</name>
+        <qualifiedname>castor3d::shader::Fog::apply</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>bgColour</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsPosition</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d0f/a04960" kindref="compound">SceneData</ref> const &amp;</type>
+          <declname>sceneData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslFog.hpp" line="21" column="19"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="34" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="33" bodyend="41"/>
+    <location file="Shader/Shaders/GlslFog.hpp" line="17" column="1" bodyfile="Shader/Shaders/GlslFog.hpp" bodystart="18" bodyend="32"/>
     <listofallmembers>
-      <member refid="db/dc8/a04760_1acb70804b63ec8651d8edb8e81ef9073c" prot="public" virt="non-virtual"><scope>castor3d::LightPass::RenderPass</scope><name>frameBuffer</name></member>
-      <member refid="db/dc8/a04760_1ac00fa53d066af78eb7ae961fe6ee2820" prot="public" virt="non-virtual"><scope>castor3d::LightPass::RenderPass</scope><name>RenderPass</name></member>
-      <member refid="db/dc8/a04760_1a2b85e860baa157a0b7a51c9d55dd6d16" prot="public" virt="non-virtual"><scope>castor3d::LightPass::RenderPass</scope><name>renderPass</name></member>
+      <member refid="db/dc8/a04760_1a948e9e44f98b28496ea045301de03d04" prot="public" virt="non-virtual"><scope>castor3d::shader::Fog</scope><name>apply</name></member>
+      <member refid="db/dc8/a04760_1a7413ef23e75baa5f273030d019702918" prot="public" virt="non-virtual"><scope>castor3d::shader::Fog</scope><name>Fog</name></member>
+      <member refid="db/dc8/a04760_1a818ce0c5e2394483e664a8ea9a245220" prot="protected" virt="non-virtual"><scope>castor3d::shader::Fog</scope><name>m_fog</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

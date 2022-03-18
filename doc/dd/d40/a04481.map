@@ -1,4 +1,6 @@
-<map id="castor3d::RadianceComputer" name="castor3d::RadianceComputer">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,196,107"/>
-<area shape="rect" id="node2" href="$d6/d5a/a04966.html" title=" " alt="" coords="25,5,176,32"/>
+<map id="castor3d::Camera" name="castor3d::Camera">
+<area shape="rect" id="node1" title=" " alt="" coords="118,155,243,181"/>
+<area shape="rect" id="node2" href="$d1/d4a/a04530.html" title=" " alt="" coords="98,80,263,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,188,32"/>
+<area shape="rect" id="node4" title=" " alt="" coords="213,5,319,32"/>
 </map>

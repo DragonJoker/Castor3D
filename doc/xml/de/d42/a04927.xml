@@ -1,215 +1,234 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="de/d42/a04927" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::WeightedBlendRendering</compoundname>
-    <includes local="no">WeightedBlendRendering.hpp</includes>
+    <compoundname>castor3d::MatrixUbo</compoundname>
+    <includes local="no">MatrixUbo.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="de/d42/a04927_1ab366057cde7f2778837daab6f7a4ab03" prot="public" static="no">
+        <type><ref refid="de/d93/a05019" kindref="compound">MatrixUboConfiguration</ref></type>
+        <definition>using castor3d::MatrixUbo::Configuration =  MatrixUboConfiguration</definition>
+        <argsstring></argsstring>
+        <name>Configuration</name>
+        <qualifiedname>castor3d::MatrixUbo::Configuration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="89" column="1" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="de/d42/a04927_1a54c17749bf08eadf66747e7de5ff1726" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::MatrixUbo::BufferMatrix</definition>
+        <argsstring></argsstring>
+        <name>BufferMatrix</name>
+        <qualifiedname>castor3d::MatrixUbo::BufferMatrix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="147" column="37" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="147" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d42/a04927_1a7bfe7dbcbbd1fd786a31b59cd1dd23c9" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::MatrixUbo::MatrixData</definition>
+        <argsstring></argsstring>
+        <name>MatrixData</name>
+        <qualifiedname>castor3d::MatrixUbo::MatrixData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="148" column="37" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="148" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="de/d42/a04927_1a5fcd35559eeb17bafc219ac83eaeccc4" prot="private" static="no" mutable="no">
-        <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
-        <definition>Engine&amp; castor3d::WeightedBlendRendering::m_engine</definition>
+      <memberdef kind="variable" id="de/d42/a04927_1a8feea146f7985be47c55ceeae04d0b4d" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::MatrixUbo::m_device</definition>
         <argsstring></argsstring>
-        <name>m_engine</name>
+        <name>m_device</name>
+        <qualifiedname>castor3d::MatrixUbo::m_device</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="96" column="1" bodyfile="Render/Technique/Transparent/WeightedBlendRendering.hpp" bodystart="96" bodyend="-1"/>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="151" column="21" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="151" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="de/d42/a04927_1a7fd5ad235fba789fa00c4f30119d9a09" prot="private" static="no" mutable="no">
-        <type><ref refid="d7/dda/a04911" kindref="compound">TransparentPass</ref> &amp;</type>
-        <definition>TransparentPass&amp; castor3d::WeightedBlendRendering::m_transparentPass</definition>
+      <memberdef kind="variable" id="de/d42/a04927_1ac6539544071116d0f2712177bc47e4a0" prot="private" static="no" mutable="no">
+        <type><ref refid="d0/d01/a02511" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="de/d42/a04927_1ab366057cde7f2778837daab6f7a4ab03" kindref="member">Configuration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::MatrixUbo::m_ubo</definition>
         <argsstring></argsstring>
-        <name>m_transparentPass</name>
+        <name>m_ubo</name>
+        <qualifiedname>castor3d::MatrixUbo::m_ubo</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="97" column="1" bodyfile="Render/Technique/Transparent/WeightedBlendRendering.hpp" bodystart="97" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/d42/a04927_1a5dfd3fe9b9bd04213dcee8b66cfac0d4" prot="private" static="no" mutable="no">
-        <type>castor::Size</type>
-        <definition>castor::Size castor3d::WeightedBlendRendering::m_size</definition>
-        <argsstring></argsstring>
-        <name>m_size</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="98" column="1" bodyfile="Render/Technique/Transparent/WeightedBlendRendering.hpp" bodystart="98" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/d42/a04927_1a0d3ffc70d1e2d5ff327d02b6b9fc3248" prot="private" static="no" mutable="no">
-        <type><ref refid="da/dea/a04915" kindref="compound">TransparentPassResult</ref></type>
-        <definition>TransparentPassResult castor3d::WeightedBlendRendering::m_transparentPassResult</definition>
-        <argsstring></argsstring>
-        <name>m_transparentPassResult</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="99" column="1" bodyfile="Render/Technique/Transparent/WeightedBlendRendering.hpp" bodystart="99" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/d42/a04927_1a61a1ecb28dd47cbfff804586ab0bdacb" prot="private" static="no" mutable="no">
-        <type><ref refid="d9/d52/a04923" kindref="compound">TransparentResolvePass</ref></type>
-        <definition>TransparentResolvePass castor3d::WeightedBlendRendering::m_finalCombinePass</definition>
-        <argsstring></argsstring>
-        <name>m_finalCombinePass</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="100" column="1" bodyfile="Render/Technique/Transparent/WeightedBlendRendering.hpp" bodystart="100" bodyend="-1"/>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="152" column="22" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="152" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="de/d42/a04927_1a7faa6d1ecea3571d8518262121a471d0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::WeightedBlendRendering::WeightedBlendRendering</definition>
-        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, TransparentPass &amp;transparentPass, TextureUnit const &amp;depthView, ashes::ImageView const &amp;colourView, TextureUnit const &amp;velocityTexture, castor::Size const &amp;size, Scene const &amp;scene, HdrConfigUbo const &amp;hdrConfigUbo, GpInfoUbo const &amp;gpInfoUbo, LightVolumePassResult const &amp;lpvResult)</argsstring>
-        <name>WeightedBlendRendering</name>
+      <memberdef kind="function" id="de/d42/a04927_1af18b73c719151cf79ac99b0e95ea31f1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MatrixUbo::MatrixUbo</definition>
+        <argsstring>(MatrixUbo const &amp;rhs)=delete</argsstring>
+        <name>MatrixUbo</name>
+        <qualifiedname>castor3d::MatrixUbo::MatrixUbo</qualifiedname>
         <param>
-          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
+          <type><ref refid="de/d42/a04927" kindref="compound">MatrixUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
         </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="90" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d42/a04927_1af5131f15f6a5566acafd12e27f6854cd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="de/d42/a04927" kindref="compound">MatrixUbo</ref> &amp;</type>
+        <definition>C3D_API MatrixUbo &amp; castor3d::MatrixUbo::operator=</definition>
+        <argsstring>(MatrixUbo const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::MatrixUbo::operator=</qualifiedname>
         <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <type><ref refid="de/d42/a04927" kindref="compound">MatrixUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="91" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d42/a04927_1afc6eab32a9bf5172b55e954b68e56258" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MatrixUbo::MatrixUbo</definition>
+        <argsstring>(MatrixUbo &amp;&amp;rhs)=default</argsstring>
+        <name>MatrixUbo</name>
+        <qualifiedname>castor3d::MatrixUbo::MatrixUbo</qualifiedname>
+        <param>
+          <type><ref refid="de/d42/a04927" kindref="compound">MatrixUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="92" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d42/a04927_1ac329f024fddcd5bd0e742d3e959a8333" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="de/d42/a04927" kindref="compound">MatrixUbo</ref> &amp;</type>
+        <definition>C3D_API MatrixUbo &amp; castor3d::MatrixUbo::operator=</definition>
+        <argsstring>(MatrixUbo &amp;&amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::MatrixUbo::operator=</qualifiedname>
+        <param>
+          <type><ref refid="de/d42/a04927" kindref="compound">MatrixUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="93" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d42/a04927_1af5e23ce07ed3cbe07143718c77061d3e" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MatrixUbo::MatrixUbo</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>MatrixUbo</name>
+        <qualifiedname>castor3d::MatrixUbo::MatrixUbo</qualifiedname>
+        <param>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
           <declname>device</declname>
         </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="94" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d42/a04927_1adbc27d788bd181b321e04df02ee0a531" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MatrixUbo::~MatrixUbo</definition>
+        <argsstring>()</argsstring>
+        <name>~MatrixUbo</name>
+        <qualifiedname>castor3d::MatrixUbo::~MatrixUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="95" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d42/a04927_1a6a00775f136350227e835e042607dfd6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::MatrixUbo::cpuUpdate</definition>
+        <argsstring>(castor::Matrix4x4f const &amp;view, castor::Matrix4x4f const &amp;projection, castor::Point2f const &amp;jitter=castor::Point2f{})</argsstring>
+        <name>cpuUpdate</name>
+        <qualifiedname>castor3d::MatrixUbo::cpuUpdate</qualifiedname>
         <param>
-          <type><ref refid="d7/dda/a04911" kindref="compound">TransparentPass</ref> &amp;</type>
-          <declname>transparentPass</declname>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>view</declname>
         </param>
         <param>
-          <type><ref refid="d8/dd7/a02643" kindref="compound">TextureUnit</ref> const &amp;</type>
-          <declname>depthView</declname>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>projection</declname>
         </param>
         <param>
-          <type>ashes::ImageView const &amp;</type>
-          <declname>colourView</declname>
-        </param>
-        <param>
-          <type><ref refid="d8/dd7/a02643" kindref="compound">TextureUnit</ref> const &amp;</type>
-          <declname>velocityTexture</declname>
-        </param>
-        <param>
-          <type>castor::Size const &amp;</type>
-          <declname>size</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/d00/a05223" kindref="compound">Scene</ref> const &amp;</type>
-          <declname>scene</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/db0/a05447" kindref="compound">HdrConfigUbo</ref> const &amp;</type>
-          <declname>hdrConfigUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="dd/d83/a05443" kindref="compound">GpInfoUbo</ref> const &amp;</type>
-          <declname>gpInfoUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="dc/d23/a04275" kindref="compound">LightVolumePassResult</ref> const &amp;</type>
-          <declname>lpvResult</declname>
+          <type>castor::Point2f const &amp;</type>
+          <declname>jitter</declname>
+          <defval>castor::Point2f{}</defval>
         </param>
         <briefdescription>
-<para>Initialises deferred rendering related stuff. </para>
+<para>Updates the UBO from given values. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">engine</parametername>
+<parametername direction="in">view</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The engine. </para>
+<para>The new view matrix. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">device</parametername>
+<parametername direction="in">projection</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The GPU device. </para>
+<para>The new projection matrix. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">transparentPass</parametername>
+<parametername direction="in">jitter</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The transparent nodes render pass. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">depthView</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The target depth buffer. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">colourView</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The target colour buffer. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">velocityTexture</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The velocity buffer. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">size</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render dimensions. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">scene</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The rendered scene. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">hdrConfigUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The HDR configuration UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">gpInfoUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The geometry pass UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">lpvResult</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The LPV result. </para>
+<para>The jittering value. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -217,161 +236,147 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="46" column="1"/>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="108" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="de/d42/a04927_1abe190e8fcb10df24266c10e8354f88a9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="de/d42/a04927_1ac9222d9b95b0e141d7e13cc43cc5d06f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::MatrixUbo::cpuUpdate</definition>
+        <argsstring>(castor::Matrix4x4f const &amp;projection)</argsstring>
+        <name>cpuUpdate</name>
+        <qualifiedname>castor3d::MatrixUbo::cpuUpdate</qualifiedname>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>projection</declname>
+        </param>
+        <briefdescription>
+<para>Updates the UBO from given values. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>View matrix won&apos;t be updated. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">projection</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new projection matrix. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="121" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d42/a04927_1a0b734b908500ac9be255f78b8c07b2d3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::WeightedBlendRendering::update</definition>
-        <argsstring>(CpuUpdater &amp;updater)</argsstring>
-        <name>update</name>
+        <definition>void castor3d::MatrixUbo::createPassBinding</definition>
+        <argsstring>(crg::FramePass &amp;pass, uint32_t binding) const</argsstring>
+        <name>createPassBinding</name>
+        <qualifiedname>castor3d::MatrixUbo::createPassBinding</qualifiedname>
         <param>
-          <type><ref refid="db/d82/a04567" kindref="compound">CpuUpdater</ref> &amp;</type>
-          <declname>updater</declname>
+          <type>crg::FramePass &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
         </param>
         <briefdescription>
-<para>Updates the render pass, CPU wise. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="inout">updater</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The update data. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="65" column="1"/>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="123" column="6" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="123" bodyend="127"/>
+        <references refid="d0/d01/a02511_1ae2c055477d81767157b9832b18baa027" compoundref="dc/d57/a00194" startline="86" endline="94">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createPassBinding</references>
       </memberdef>
-      <memberdef kind="function" id="de/d42/a04927_1af605d9dd18945f22d56bfa2cf522150e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="de/d42/a04927_1ac31062a614833908640fbbeed9cb92fe" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::WeightedBlendRendering::update</definition>
-        <argsstring>(GpuUpdater &amp;updater)</argsstring>
-        <name>update</name>
+        <definition>void castor3d::MatrixUbo::createSizedBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</argsstring>
+        <name>createSizedBinding</name>
+        <qualifiedname>castor3d::MatrixUbo::createSizedBinding</qualifiedname>
         <param>
-          <type><ref refid="d0/dff/a04571" kindref="compound">GpuUpdater</ref> &amp;</type>
-          <declname>updater</declname>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>layoutBinding</declname>
         </param>
         <briefdescription>
-<para>Updates the render pass, GPU wise. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="inout">updater</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The update data. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="74" column="1"/>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="129" column="6" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="129" bodyend="133"/>
+        <references refid="d0/d01/a02511_1a2c6ad146d4910651544564c25ca7dccd" compoundref="dc/d57/a00194" startline="96" endline="105">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</references>
       </memberdef>
-      <memberdef kind="function" id="de/d42/a04927_1abf361bcfacaadbae99a910b0ff40f45e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>ashes::Semaphore const  &amp;</type>
-        <definition>ashes::Semaphore const&amp; castor3d::WeightedBlendRendering::render</definition>
-        <argsstring>(RenderDevice const &amp;device, Scene const &amp;scene, ashes::Semaphore const &amp;toWait)</argsstring>
-        <name>render</name>
+      <memberdef kind="function" id="de/d42/a04927_1a4872797ae1ca5fc2943359a8f257ef43" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::WriteDescriptorSet</type>
+        <definition>ashes::WriteDescriptorSet castor3d::MatrixUbo::getDescriptorWrite</definition>
+        <argsstring>(uint32_t dstBinding, uint32_t dstArrayElement=0u) const</argsstring>
+        <name>getDescriptorWrite</name>
+        <qualifiedname>castor3d::MatrixUbo::getDescriptorWrite</qualifiedname>
         <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
+          <type>uint32_t</type>
+          <declname>dstBinding</declname>
         </param>
         <param>
-          <type><ref refid="d7/d00/a05223" kindref="compound">Scene</ref> const &amp;</type>
-          <declname>scene</declname>
-        </param>
-        <param>
-          <type>ashes::Semaphore const &amp;</type>
-          <declname>toWait</declname>
+          <type>uint32_t</type>
+          <declname>dstArrayElement</declname>
+          <defval>0u</defval>
         </param>
         <briefdescription>
-<para>Renders opaque nodes. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">scene</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The rendered scene. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">toWait</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The semaphore to wait for. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="87" column="1"/>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="135" column="27" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="135" bodyend="139"/>
+        <references refid="d0/d01/a02511_1ad7dcad7c96a620540d10eb85f3d4586b" compoundref="dc/d57/a00194" startline="107" endline="120">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getDescriptorWrite</references>
       </memberdef>
-      <memberdef kind="function" id="de/d42/a04927_1aa3d017d625e2598eeca7f64f74b78316" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::WeightedBlendRendering::accept</definition>
-        <argsstring>(RenderTechniqueVisitor &amp;visitor)</argsstring>
-        <name>accept</name>
-        <param>
-          <type><ref refid="d6/d45/a04907" kindref="compound">RenderTechniqueVisitor</ref> &amp;</type>
-          <declname>visitor</declname>
-        </param>
+      <memberdef kind="function" id="de/d42/a04927_1a8c8a37f84e646933b8c21cf2514bff6a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d0/d01/a02511" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="de/d42/a04927_1ab366057cde7f2778837daab6f7a4ab03" kindref="member">Configuration</ref> &gt; const &amp;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; const  &amp; castor3d::MatrixUbo::getUbo</definition>
+        <argsstring>() const</argsstring>
+        <name>getUbo</name>
+        <qualifiedname>castor3d::MatrixUbo::getUbo</qualifiedname>
         <briefdescription>
-<para>Visitor acceptance function. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername>visitor</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The ... visitor. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="93" column="1"/>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="141" column="29" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="141" bodyend="144"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Technique/Transparent/WeightedBlendRendering.hpp" line="16" column="1" bodyfile="Render/Technique/Transparent/WeightedBlendRendering.hpp" bodystart="15" bodyend="101"/>
+    <location file="Shader/Ubos/MatrixUbo.hpp" line="86" column="1" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="87" bodyend="153"/>
     <listofallmembers>
-      <member refid="de/d42/a04927_1aa3d017d625e2598eeca7f64f74b78316" prot="public" virt="non-virtual"><scope>castor3d::WeightedBlendRendering</scope><name>accept</name></member>
-      <member refid="de/d42/a04927_1a5fcd35559eeb17bafc219ac83eaeccc4" prot="private" virt="non-virtual"><scope>castor3d::WeightedBlendRendering</scope><name>m_engine</name></member>
-      <member refid="de/d42/a04927_1a61a1ecb28dd47cbfff804586ab0bdacb" prot="private" virt="non-virtual"><scope>castor3d::WeightedBlendRendering</scope><name>m_finalCombinePass</name></member>
-      <member refid="de/d42/a04927_1a5dfd3fe9b9bd04213dcee8b66cfac0d4" prot="private" virt="non-virtual"><scope>castor3d::WeightedBlendRendering</scope><name>m_size</name></member>
-      <member refid="de/d42/a04927_1a7fd5ad235fba789fa00c4f30119d9a09" prot="private" virt="non-virtual"><scope>castor3d::WeightedBlendRendering</scope><name>m_transparentPass</name></member>
-      <member refid="de/d42/a04927_1a0d3ffc70d1e2d5ff327d02b6b9fc3248" prot="private" virt="non-virtual"><scope>castor3d::WeightedBlendRendering</scope><name>m_transparentPassResult</name></member>
-      <member refid="de/d42/a04927_1abf361bcfacaadbae99a910b0ff40f45e" prot="public" virt="non-virtual"><scope>castor3d::WeightedBlendRendering</scope><name>render</name></member>
-      <member refid="de/d42/a04927_1abe190e8fcb10df24266c10e8354f88a9" prot="public" virt="non-virtual"><scope>castor3d::WeightedBlendRendering</scope><name>update</name></member>
-      <member refid="de/d42/a04927_1af605d9dd18945f22d56bfa2cf522150e" prot="public" virt="non-virtual"><scope>castor3d::WeightedBlendRendering</scope><name>update</name></member>
-      <member refid="de/d42/a04927_1a7faa6d1ecea3571d8518262121a471d0" prot="public" virt="non-virtual"><scope>castor3d::WeightedBlendRendering</scope><name>WeightedBlendRendering</name></member>
+      <member refid="de/d42/a04927_1a54c17749bf08eadf66747e7de5ff1726" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>BufferMatrix</name></member>
+      <member refid="de/d42/a04927_1ab366057cde7f2778837daab6f7a4ab03" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>Configuration</name></member>
+      <member refid="de/d42/a04927_1a6a00775f136350227e835e042607dfd6" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>cpuUpdate</name></member>
+      <member refid="de/d42/a04927_1ac9222d9b95b0e141d7e13cc43cc5d06f" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>cpuUpdate</name></member>
+      <member refid="de/d42/a04927_1a0b734b908500ac9be255f78b8c07b2d3" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>createPassBinding</name></member>
+      <member refid="de/d42/a04927_1ac31062a614833908640fbbeed9cb92fe" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>createSizedBinding</name></member>
+      <member refid="de/d42/a04927_1a4872797ae1ca5fc2943359a8f257ef43" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>getDescriptorWrite</name></member>
+      <member refid="de/d42/a04927_1a8c8a37f84e646933b8c21cf2514bff6a" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>getUbo</name></member>
+      <member refid="de/d42/a04927_1a8feea146f7985be47c55ceeae04d0b4d" prot="private" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>m_device</name></member>
+      <member refid="de/d42/a04927_1ac6539544071116d0f2712177bc47e4a0" prot="private" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>m_ubo</name></member>
+      <member refid="de/d42/a04927_1a7bfe7dbcbbd1fd786a31b59cd1dd23c9" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>MatrixData</name></member>
+      <member refid="de/d42/a04927_1af18b73c719151cf79ac99b0e95ea31f1" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>MatrixUbo</name></member>
+      <member refid="de/d42/a04927_1afc6eab32a9bf5172b55e954b68e56258" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>MatrixUbo</name></member>
+      <member refid="de/d42/a04927_1af5e23ce07ed3cbe07143718c77061d3e" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>MatrixUbo</name></member>
+      <member refid="de/d42/a04927_1af5131f15f6a5566acafd12e27f6854cd" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>operator=</name></member>
+      <member refid="de/d42/a04927_1ac329f024fddcd5bd0e742d3e959a8333" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>operator=</name></member>
+      <member refid="de/d42/a04927_1adbc27d788bd181b321e04df02ee0a531" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>~MatrixUbo</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,92 +1,519 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d5/d22/a04394" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::GaussianBlur::RenderQuad</compoundname>
-    <basecompoundref refid="d8/d1f/a04450" prot="public" virt="non-virtual">castor3d::RenderQuad</basecompoundref>
-    <includes local="no">GaussianBlur.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d5/d22/a04394_1aead1d90ed18c80590ce46c04835cd290" prot="public" static="no" mutable="no">
-        <type>ashes::ImageView</type>
-        <definition>ashes::ImageView castor3d::GaussianBlur::RenderQuad::srcView</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d5/d22/a04394" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::AnimationInstance</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; AnimatedObject &gt;</basecompoundref>
+    <derivedcompoundref refid="d4/d61/a04406" prot="public" virt="non-virtual">castor3d::MeshAnimationInstance</derivedcompoundref>
+    <derivedcompoundref refid="da/d48/a04414" prot="public" virt="non-virtual">castor3d::SceneNodeAnimationInstance</derivedcompoundref>
+    <derivedcompoundref refid="df/de5/a04426" prot="public" virt="non-virtual">castor3d::SkeletonAnimationInstance</derivedcompoundref>
+    <derivedcompoundref refid="dc/da0/a04446" prot="public" virt="non-virtual">castor3d::TextureAnimationInstance</derivedcompoundref>
+    <includes local="no">AnimationInstance.hpp</includes>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d5/d22/a04394_1a4ea27648adc0879b6d44149b089c0295" prot="protected" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a8b18030cabc04d1bc6651049b78e9874" kindref="member">Animation</ref> const  &amp;</type>
+        <definition>Animation const&amp; castor3d::AnimationInstance::m_animation</definition>
         <argsstring></argsstring>
-        <name>srcView</name>
+        <name>m_animation</name>
+        <qualifiedname>castor3d::AnimationInstance::m_animation</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The animation. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="206" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="206" bodyend="-1"/>
+        <location file="Scene/Animation/AnimationInstance.hpp" line="194" column="18" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="194" bodyend="-1"/>
+        <referencedby refid="d5/d22/a04394_1a93cfeca7ce3c773eec960c1b90286483" compoundref="df/dbc/a01004" startline="177" endline="180">getAnimation</referencedby>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d5/d22/a04394_1a962ebd18309d532c90d8de8282a2674e" prot="private" static="no" mutable="no">
-        <type><ref refid="dd/dae/a02294" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d5/de5/a04390" kindref="compound">Configuration</ref> &gt; const  &amp;</type>
-        <definition>UniformBufferOffsetT&lt; Configuration &gt; const&amp; castor3d::GaussianBlur::RenderQuad::m_blurUbo</definition>
+      <memberdef kind="variable" id="d5/d22/a04394_1aa313a440c453a3433cc6261e06b43a8a" prot="protected" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::AnimationInstance::m_scale</definition>
         <argsstring></argsstring>
-        <name>m_blurUbo</name>
+        <name>m_scale</name>
+        <qualifiedname>castor3d::AnimationInstance::m_scale</qualifiedname>
+        <initializer>{ 1.0f }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The animation time scale. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="209" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="209" bodyend="-1"/>
+        <location file="Scene/Animation/AnimationInstance.hpp" line="197" column="7" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="197" bodyend="-1"/>
+        <referencedby refid="d5/d22/a04394_1a3170af477f4a163dfc67f240baafa55d" compoundref="df/dbc/a01004" startline="79" endline="82">getScale</referencedby>
+        <referencedby refid="d5/d22/a04394_1a338ffe9fbc76c64938f1fe8b072bbd41" compoundref="df/dbc/a01004" startline="91" endline="94">setScale</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d22/a04394_1a5064a319a11f8d3928c81a4a629b5982" prot="protected" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::AnimationInstance::m_looped</definition>
+        <argsstring></argsstring>
+        <name>m_looped</name>
+        <qualifiedname>castor3d::AnimationInstance::m_looped</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Tells whether or not the animation is looped. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationInstance.hpp" line="200" column="6" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="200" bodyend="-1"/>
+        <referencedby refid="d5/d22/a04394_1a914538daf4453ee5ee35a32986d5dbec" compoundref="df/dbc/a01004" startline="155" endline="158">isLooped</referencedby>
+        <referencedby refid="d5/d22/a04394_1a060d6999c9e24ab73e28400cb7e8850b" compoundref="df/dbc/a01004" startline="167" endline="170">setLooped</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d22/a04394_1a1948260ac64b862bc876124d06f34673" prot="protected" static="no" mutable="no">
+        <type>castor::Milliseconds</type>
+        <definition>castor::Milliseconds castor3d::AnimationInstance::m_startingPoint</definition>
+        <argsstring></argsstring>
+        <name>m_startingPoint</name>
+        <qualifiedname>castor3d::AnimationInstance::m_startingPoint</qualifiedname>
+        <initializer>{ 0 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The starting point. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationInstance.hpp" line="203" column="22" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="203" bodyend="-1"/>
+        <referencedby refid="d5/d22/a04394_1aac09e282b3696b2e46f820a86449918f" compoundref="df/dbc/a01004" startline="101" endline="104">getStartingPoint</referencedby>
+        <referencedby refid="d5/d22/a04394_1ab6dd01f7c83349132cd6e4d205e33e3a" compoundref="df/dbc/a01004" startline="113" endline="121">setStartingPoint</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d22/a04394_1abd1d4de3d4e507ac453f0531026dd9db" prot="protected" static="no" mutable="no">
+        <type>castor::Milliseconds</type>
+        <definition>castor::Milliseconds castor3d::AnimationInstance::m_stoppingPoint</definition>
+        <argsstring></argsstring>
+        <name>m_stoppingPoint</name>
+        <qualifiedname>castor3d::AnimationInstance::m_stoppingPoint</qualifiedname>
+        <initializer>{ 0 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The stopping point. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationInstance.hpp" line="206" column="22" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="206" bodyend="-1"/>
+        <referencedby refid="d5/d22/a04394_1a6b8de0d470c6d060cc7f835c599ec4ae" compoundref="df/dbc/a01004" startline="128" endline="131">getStoppingPoint</referencedby>
+        <referencedby refid="d5/d22/a04394_1aab7fdd5bb07392f6faba0743e1c6073b" compoundref="df/dbc/a01004" startline="140" endline="148">setStoppingPoint</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d22/a04394_1a5a7017dbf729b5ddf98c80548804cf8f" prot="protected" static="no" mutable="no">
+        <type>castor::Milliseconds</type>
+        <definition>castor::Milliseconds castor3d::AnimationInstance::m_currentTime</definition>
+        <argsstring></argsstring>
+        <name>m_currentTime</name>
+        <qualifiedname>castor3d::AnimationInstance::m_currentTime</qualifiedname>
+        <initializer>{ 0 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The current playing time. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationInstance.hpp" line="209" column="22" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="209" bodyend="-1"/>
+        <referencedby refid="d5/d22/a04394_1ab6dd01f7c83349132cd6e4d205e33e3a" compoundref="df/dbc/a01004" startline="113" endline="121">setStartingPoint</referencedby>
+        <referencedby refid="d5/d22/a04394_1aab7fdd5bb07392f6faba0743e1c6073b" compoundref="df/dbc/a01004" startline="140" endline="148">setStoppingPoint</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d22/a04394_1a2e5b588a84db6b90580577a93d9f5d20" prot="protected" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a2405dedd7ac8a7be93c2a8c1f8848e04" kindref="member">AnimationState</ref></type>
+        <definition>AnimationState castor3d::AnimationInstance::m_state</definition>
+        <argsstring></argsstring>
+        <name>m_state</name>
+        <qualifiedname>castor3d::AnimationInstance::m_state</qualifiedname>
+        <initializer>{ <ref refid="dc/df4/a01401_1a2405dedd7ac8a7be93c2a8c1f8848e04a018b60c4ea3e0441c86b65daf5b82b5f" kindref="member">AnimationState::eStopped</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The current state of the animation. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationInstance.hpp" line="212" column="16" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="212" bodyend="-1"/>
+        <referencedby refid="d5/d22/a04394_1ab2197aab90f85806400a9e4087761cc3" compoundref="df/dbc/a01004" startline="69" endline="72">getState</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d5/d22/a04394_1afa28c70c240f146e7dd4671540a9efd7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::GaussianBlur::RenderQuad::RenderQuad</definition>
-        <argsstring>(RenderSystem &amp;renderSystem, RenderDevice const &amp;device, castor::String const &amp;name, ashes::ImageView const &amp;src, VkImageSubresourceRange const &amp;srcRange, UniformBufferOffsetT&lt; Configuration &gt; const &amp;blurUbo, ShaderModule const &amp;vertexShader, ShaderModule const &amp;pixelShader, ashes::RenderPass const &amp;renderPass, VkExtent2D const &amp;textureSize)</argsstring>
-        <name>RenderQuad</name>
+      <memberdef kind="function" id="d5/d22/a04394_1a23a7bfcdfcd7c97de734734aff4cd3c5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::AnimationInstance::AnimationInstance</definition>
+        <argsstring>(AnimatedObject &amp;object, Animation &amp;animation)</argsstring>
+        <name>AnimationInstance</name>
+        <qualifiedname>castor3d::AnimationInstance::AnimationInstance</qualifiedname>
         <param>
-          <type><ref refid="d1/d9a/a04618" kindref="compound">RenderSystem</ref> &amp;</type>
-          <declname>renderSystem</declname>
+          <type><ref refid="db/da9/a04374" kindref="compound">AnimatedObject</ref> &amp;</type>
+          <declname>object</declname>
         </param>
         <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type>ashes::ImageView const &amp;</type>
-          <declname>src</declname>
-        </param>
-        <param>
-          <type>VkImageSubresourceRange const &amp;</type>
-          <declname>srcRange</declname>
-        </param>
-        <param>
-          <type><ref refid="dd/dae/a02294" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d5/de5/a04390" kindref="compound">Configuration</ref> &gt; const &amp;</type>
-          <declname>blurUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="d2/d63/a05306" kindref="compound">ShaderModule</ref> const &amp;</type>
-          <declname>vertexShader</declname>
-        </param>
-        <param>
-          <type><ref refid="d2/d63/a05306" kindref="compound">ShaderModule</ref> const &amp;</type>
-          <declname>pixelShader</declname>
-        </param>
-        <param>
-          <type>ashes::RenderPass const &amp;</type>
-          <declname>renderPass</declname>
-        </param>
-        <param>
-          <type>VkExtent2D const &amp;</type>
-          <declname>textureSize</declname>
+          <type><ref refid="dc/df4/a01401_1a8b18030cabc04d1bc6651049b78e9874" kindref="member">Animation</ref> &amp;</type>
+          <declname>animation</declname>
         </param>
         <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">object</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent <ref refid="db/da9/a04374" kindref="compound">AnimatedObject</ref>. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">animation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationInstance.hpp" line="25" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d22/a04394_1a0158953847a97616e136c1b9ba68d93d" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::AnimationInstance::~AnimationInstance</definition>
+        <argsstring>()=default</argsstring>
+        <name>~AnimationInstance</name>
+        <qualifiedname>castor3d::AnimationInstance::~AnimationInstance</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="194" column="1"/>
+        <location file="Scene/Animation/AnimationInstance.hpp" line="32" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d22/a04394_1a3f89c5c509bba8c43af73cb0f068745b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimationInstance::update</definition>
+        <argsstring>(castor::Milliseconds const &amp;elapsed)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::AnimationInstance::update</qualifiedname>
+        <param>
+          <type>castor::Milliseconds const &amp;</type>
+          <declname>elapsed</declname>
+        </param>
+        <briefdescription>
+<para>Updates the animation, updates the key frame at the good time index. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">elapsed</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The time since the last frame. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationInstance.hpp" line="41" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d22/a04394_1a59bea7025b5c52e5b09df209e95e4c6b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimationInstance::play</definition>
+        <argsstring>()</argsstring>
+        <name>play</name>
+        <qualifiedname>castor3d::AnimationInstance::play</qualifiedname>
+        <briefdescription>
+<para>Plays the animation. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationInstance.hpp" line="48" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d22/a04394_1ad18010efe608f7087115754ef77a3f7e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimationInstance::pause</definition>
+        <argsstring>()</argsstring>
+        <name>pause</name>
+        <qualifiedname>castor3d::AnimationInstance::pause</qualifiedname>
+        <briefdescription>
+<para>Pauses the animation. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationInstance.hpp" line="55" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d22/a04394_1aeb6466ce1395148bbbed32cacfe49291" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimationInstance::stop</definition>
+        <argsstring>()</argsstring>
+        <name>stop</name>
+        <qualifiedname>castor3d::AnimationInstance::stop</qualifiedname>
+        <briefdescription>
+<para>Stops the animation. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationInstance.hpp" line="62" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d22/a04394_1ab2197aab90f85806400a9e4087761cc3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dc/df4/a01401_1a2405dedd7ac8a7be93c2a8c1f8848e04" kindref="member">AnimationState</ref></type>
+        <definition>AnimationState castor3d::AnimationInstance::getState</definition>
+        <argsstring>() const</argsstring>
+        <name>getState</name>
+        <qualifiedname>castor3d::AnimationInstance::getState</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The animation state. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationInstance.hpp" line="69" column="16" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="69" bodyend="72"/>
+        <references refid="d5/d22/a04394_1a2e5b588a84db6b90580577a93d9f5d20" compoundref="df/dbc/a01004" startline="212">m_state</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/d22/a04394_1a3170af477f4a163dfc67f240baafa55d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::AnimationInstance::getScale</definition>
+        <argsstring>() const</argsstring>
+        <name>getScale</name>
+        <qualifiedname>castor3d::AnimationInstance::getScale</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The animation time scale. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationInstance.hpp" line="79" column="7" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="79" bodyend="82"/>
+        <references refid="d5/d22/a04394_1aa313a440c453a3433cc6261e06b43a8a" compoundref="df/dbc/a01004" startline="197">m_scale</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/d22/a04394_1a338ffe9fbc76c64938f1fe8b072bbd41" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::AnimationInstance::setScale</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setScale</name>
+        <qualifiedname>castor3d::AnimationInstance::setScale</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Sets the animation time scale. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationInstance.hpp" line="91" column="6" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="91" bodyend="94"/>
+        <references refid="d5/d22/a04394_1aa313a440c453a3433cc6261e06b43a8a" compoundref="df/dbc/a01004" startline="197">m_scale</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/d22/a04394_1aac09e282b3696b2e46f820a86449918f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Milliseconds</type>
+        <definition>castor::Milliseconds castor3d::AnimationInstance::getStartingPoint</definition>
+        <argsstring>() const</argsstring>
+        <name>getStartingPoint</name>
+        <qualifiedname>castor3d::AnimationInstance::getStartingPoint</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The animation stopping point. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationInstance.hpp" line="101" column="22" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="101" bodyend="104"/>
+        <references refid="d5/d22/a04394_1a1948260ac64b862bc876124d06f34673" compoundref="df/dbc/a01004" startline="203">m_startingPoint</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/d22/a04394_1ab6dd01f7c83349132cd6e4d205e33e3a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::AnimationInstance::setStartingPoint</definition>
+        <argsstring>(castor::Milliseconds value)</argsstring>
+        <name>setStartingPoint</name>
+        <qualifiedname>castor3d::AnimationInstance::setStartingPoint</qualifiedname>
+        <param>
+          <type>castor::Milliseconds</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Sets the animation stopping point. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationInstance.hpp" line="113" column="6" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="113" bodyend="121"/>
+        <references refid="d5/d22/a04394_1a5a7017dbf729b5ddf98c80548804cf8f" compoundref="df/dbc/a01004" startline="209">m_currentTime</references>
+        <references refid="d5/d22/a04394_1a1948260ac64b862bc876124d06f34673" compoundref="df/dbc/a01004" startline="203">m_startingPoint</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/d22/a04394_1a6b8de0d470c6d060cc7f835c599ec4ae" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Milliseconds</type>
+        <definition>castor::Milliseconds castor3d::AnimationInstance::getStoppingPoint</definition>
+        <argsstring>() const</argsstring>
+        <name>getStoppingPoint</name>
+        <qualifiedname>castor3d::AnimationInstance::getStoppingPoint</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The animation stopping point. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationInstance.hpp" line="128" column="22" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="128" bodyend="131"/>
+        <references refid="d5/d22/a04394_1abd1d4de3d4e507ac453f0531026dd9db" compoundref="df/dbc/a01004" startline="206">m_stoppingPoint</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/d22/a04394_1aab7fdd5bb07392f6faba0743e1c6073b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::AnimationInstance::setStoppingPoint</definition>
+        <argsstring>(castor::Milliseconds value)</argsstring>
+        <name>setStoppingPoint</name>
+        <qualifiedname>castor3d::AnimationInstance::setStoppingPoint</qualifiedname>
+        <param>
+          <type>castor::Milliseconds</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Sets the animation stopping point. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationInstance.hpp" line="140" column="6" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="140" bodyend="148"/>
+        <references refid="d5/d22/a04394_1a5a7017dbf729b5ddf98c80548804cf8f" compoundref="df/dbc/a01004" startline="209">m_currentTime</references>
+        <references refid="d5/d22/a04394_1abd1d4de3d4e507ac453f0531026dd9db" compoundref="df/dbc/a01004" startline="206">m_stoppingPoint</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/d22/a04394_1a914538daf4453ee5ee35a32986d5dbec" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::AnimationInstance::isLooped</definition>
+        <argsstring>() const</argsstring>
+        <name>isLooped</name>
+        <qualifiedname>castor3d::AnimationInstance::isLooped</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The animation loop status. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationInstance.hpp" line="155" column="6" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="155" bodyend="158"/>
+        <references refid="d5/d22/a04394_1a5064a319a11f8d3928c81a4a629b5982" compoundref="df/dbc/a01004" startline="200">m_looped</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/d22/a04394_1a060d6999c9e24ab73e28400cb7e8850b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::AnimationInstance::setLooped</definition>
+        <argsstring>(bool value)</argsstring>
+        <name>setLooped</name>
+        <qualifiedname>castor3d::AnimationInstance::setLooped</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Sets the animation loop status. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationInstance.hpp" line="167" column="6" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="167" bodyend="170"/>
+        <references refid="d5/d22/a04394_1a5064a319a11f8d3928c81a4a629b5982" compoundref="df/dbc/a01004" startline="200">m_looped</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/d22/a04394_1a93cfeca7ce3c773eec960c1b90286483" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dc/df4/a01401_1a8b18030cabc04d1bc6651049b78e9874" kindref="member">Animation</ref> const &amp;</type>
+        <definition>Animation const  &amp; castor3d::AnimationInstance::getAnimation</definition>
+        <argsstring>() const</argsstring>
+        <name>getAnimation</name>
+        <qualifiedname>castor3d::AnimationInstance::getAnimation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The animation. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationInstance.hpp" line="177" column="18" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="177" bodyend="180"/>
+        <references refid="d5/d22/a04394_1a4ea27648adc0879b6d44149b089c0295" compoundref="df/dbc/a01004" startline="194">m_animation</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d5/d22/a04394_1a3ae30f9d3201f11bb86ac99d8c5b58e7" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::AnimationInstance::doUpdate</definition>
+        <argsstring>()=0</argsstring>
+        <name>doUpdate</name>
+        <qualifiedname>castor3d::AnimationInstance::doUpdate</qualifiedname>
+        <reimplementedby refid="d4/d61/a04406_1a0b80de77ce6f39af0ed72ecfaed6dedc">doUpdate</reimplementedby>
+        <reimplementedby refid="da/d48/a04414_1aa2982fe7943d03b9e6ee3603081c6c83">doUpdate</reimplementedby>
+        <reimplementedby refid="df/de5/a04426_1aab94a772ee5bc6288efb521e327b8840">doUpdate</reimplementedby>
+        <reimplementedby refid="dc/da0/a04446_1ad571df38dde9162db24f1247ae3dc6f9">doUpdate</reimplementedby>
+        <briefdescription>
+<para>Updates the animation, updates the key frame at the good time index. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimationInstance.hpp" line="189" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -94,123 +521,94 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="1252">
-        <label>castor3d::GaussianBlur::RenderQuad</label>
+      <node id="1">
+        <label>castor3d::AnimationInstance</label>
         <link refid="d5/d22/a04394"/>
-        <childnode refid="1253" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="1253">
-        <label>castor3d::RenderQuad</label>
-        <link refid="d8/d1f/a04450"/>
-        <childnode refid="1254" relation="public-inheritance">
+      <node id="3">
+        <label>castor3d::MeshAnimationInstance</label>
+        <link refid="d4/d61/a04406"/>
+        <childnode refid="1" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="1254">
-        <label>Named</label>
+      <node id="4">
+        <label>castor3d::SceneNodeAnimationInstance</label>
+        <link refid="da/d48/a04414"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::SkeletonAnimationInstance</label>
+        <link refid="df/de5/a04426"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::TextureAnimationInstance</label>
+        <link refid="dc/da0/a04446"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; AnimatedObject &gt;</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="1258">
-        <label>castor3d::RenderSystem</label>
-        <link refid="d1/d9a/a04618"/>
-        <childnode refid="1259" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1255">
-        <label>castor3d::GaussianBlur::RenderQuad</label>
+      <node id="1">
+        <label>castor3d::AnimationInstance</label>
         <link refid="d5/d22/a04394"/>
-        <childnode refid="1256" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_animation</edgelabel>
         </childnode>
       </node>
-      <node id="1256">
-        <label>castor3d::RenderQuad</label>
-        <link refid="d8/d1f/a04450"/>
-        <childnode refid="1257" relation="public-inheritance">
+      <node id="3">
+        <label>castor3d::AnimationT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d3/d10/a02226"/>
+        <childnode refid="4" relation="public-inheritance">
         </childnode>
-        <childnode refid="1258" relation="usage">
-          <edgelabel>m_renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="1260" relation="usage">
-          <edgelabel>m_device</edgelabel>
+        <childnode refid="5" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="1263">
-        <label>T</label>
+      <node id="4">
+        <label>castor::Named</label>
       </node>
-      <node id="1265">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="1263" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
+      <node id="5">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
       </node>
-      <node id="1262">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="1263" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="1264">
-        <label>std::vector&lt; ashes::CommandPoolPtr &gt;</label>
-        <childnode refid="1265" relation="template-instance">
-          <edgelabel>&lt; ashes::CommandPoolPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1261">
-        <label>std::array&lt; uint32_t, 4u &gt;</label>
-        <childnode refid="1262" relation="template-instance">
-          <edgelabel>&lt; uint32_t, 4u &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1257">
-        <label>Named</label>
-      </node>
-      <node id="1259">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="1260">
-        <label>castor3d::RenderDevice</label>
-        <link refid="d8/d4c/a04506"/>
-        <childnode refid="1261" relation="usage">
-          <edgelabel>queueFamiliesIndex</edgelabel>
-        </childnode>
-        <childnode refid="1258" relation="usage">
-          <edgelabel>renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="1264" relation="usage">
-          <edgelabel>commandPools</edgelabel>
-        </childnode>
+      <node id="2">
+        <label>castor::OwnedBy&lt; AnimatedObject &gt;</label>
       </node>
     </collaborationgraph>
-    <location file="Render/Passes/GaussianBlur.hpp" line="192" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="190" bodyend="210"/>
+    <location file="Scene/Animation/AnimationInstance.hpp" line="11" column="1" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="13" bodyend="213"/>
     <listofallmembers>
-      <member refid="d8/d1f/a04450_1ab31f1f028639e2280dc81a5207c19361" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>cleanup</name></member>
-      <member refid="d8/d1f/a04450_1a2d8f7fe31e95ec7563ab7e49d47f847f" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>createPipeline</name></member>
-      <member refid="d8/d1f/a04450_1a9eed2ab1f518d2d215e10f79dd66b980" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>createPipelineAndPass</name></member>
-      <member refid="d8/d1f/a04450_1a208ae566cd29dc14e874ec5381a40676" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>getDevice</name></member>
-      <member refid="d8/d1f/a04450_1adf3b0cdd23bb9558df6d7f1b87b74ac6" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>getRenderSystem</name></member>
-      <member refid="d8/d1f/a04450_1a2b4ea1f81bda3deace1e6f5b159f90db" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>getSampler</name></member>
-      <member refid="d8/d1f/a04450_1a434520ea0e0f0a1ae885e7c9e19306a8" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>initialisePasses</name></member>
-      <member refid="d5/d22/a04394_1a962ebd18309d532c90d8de8282a2674e" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>m_blurUbo</name></member>
-      <member refid="d8/d1f/a04450_1ac07074df6fa0bb86ec6e9c76bf23f867" prot="protected" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>m_config</name></member>
-      <member refid="d8/d1f/a04450_1a0e0d911b83650f310a1d773e6774788c" prot="protected" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>m_device</name></member>
-      <member refid="d8/d1f/a04450_1a67e531e63c3eef4d22c89cd5dcf26d39" prot="protected" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>m_renderSystem</name></member>
-      <member refid="d8/d1f/a04450_1ac424bcc12b49f4788b6a78e181e7d8c9" prot="protected" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>m_sampler</name></member>
-      <member refid="d8/d1f/a04450_1aba30b821ed0f043349148de3f91e1e28" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d8/d1f/a04450_1abb76aa593ad380a88d949bd26fea0202" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d8/d1f/a04450_1a612d681d62631e6bb92d9601c660b48e" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d8/d1f/a04450_1af64b5bc8b9a9a3013e46accb200156f5" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d8/d1f/a04450_1a43bab20a96e9bea365bc98d8667c977e" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d8/d1f/a04450_1afacd916c61c3a5b315a0d3e94a8ba84d" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d8/d1f/a04450_1a046a2ac1ba39bbd6114dfe87d4aaaf11" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d8/d1f/a04450_1ac0cf400425c8050429e895099c971715" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>registerPass</name></member>
-      <member refid="d8/d1f/a04450_1a62f21f0ecc9017c47eb029d0bc19e396" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>registerPass</name></member>
-      <member refid="d8/d1f/a04450_1a367adcd9b6cc6ac6b1c68a28b2580eb2" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>registerPassInputs</name></member>
-      <member refid="d5/d22/a04394_1afa28c70c240f146e7dd4671540a9efd7" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>RenderQuad</name></member>
-      <member refid="d8/d1f/a04450_1a48a49fffd036c545328e87e1449e141d" prot="protected" virt="non-virtual" ambiguityscope="castor3d::RenderQuad::"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>RenderQuad</name></member>
-      <member refid="d8/d1f/a04450_1aeaeeae8d7065de723f0a710360bab119" prot="public" virt="non-virtual" ambiguityscope="castor3d::RenderQuad::"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>RenderQuad</name></member>
-      <member refid="d5/d22/a04394_1aead1d90ed18c80590ce46c04835cd290" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>srcView</name></member>
-      <member refid="d8/d1f/a04450_1a8a01faf0243638f02d6f052ff9e85b4b" prot="public" virt="virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>~RenderQuad</name></member>
+      <member refid="d5/d22/a04394_1a23a7bfcdfcd7c97de734734aff4cd3c5" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>AnimationInstance</name></member>
+      <member refid="d5/d22/a04394_1a3ae30f9d3201f11bb86ac99d8c5b58e7" prot="private" virt="pure-virtual"><scope>castor3d::AnimationInstance</scope><name>doUpdate</name></member>
+      <member refid="d5/d22/a04394_1a93cfeca7ce3c773eec960c1b90286483" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>getAnimation</name></member>
+      <member refid="d5/d22/a04394_1a3170af477f4a163dfc67f240baafa55d" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>getScale</name></member>
+      <member refid="d5/d22/a04394_1aac09e282b3696b2e46f820a86449918f" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>getStartingPoint</name></member>
+      <member refid="d5/d22/a04394_1ab2197aab90f85806400a9e4087761cc3" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>getState</name></member>
+      <member refid="d5/d22/a04394_1a6b8de0d470c6d060cc7f835c599ec4ae" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>getStoppingPoint</name></member>
+      <member refid="d5/d22/a04394_1a914538daf4453ee5ee35a32986d5dbec" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>isLooped</name></member>
+      <member refid="d5/d22/a04394_1a4ea27648adc0879b6d44149b089c0295" prot="protected" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>m_animation</name></member>
+      <member refid="d5/d22/a04394_1a5a7017dbf729b5ddf98c80548804cf8f" prot="protected" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>m_currentTime</name></member>
+      <member refid="d5/d22/a04394_1a5064a319a11f8d3928c81a4a629b5982" prot="protected" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>m_looped</name></member>
+      <member refid="d5/d22/a04394_1aa313a440c453a3433cc6261e06b43a8a" prot="protected" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>m_scale</name></member>
+      <member refid="d5/d22/a04394_1a1948260ac64b862bc876124d06f34673" prot="protected" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>m_startingPoint</name></member>
+      <member refid="d5/d22/a04394_1a2e5b588a84db6b90580577a93d9f5d20" prot="protected" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>m_state</name></member>
+      <member refid="d5/d22/a04394_1abd1d4de3d4e507ac453f0531026dd9db" prot="protected" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>m_stoppingPoint</name></member>
+      <member refid="d5/d22/a04394_1ad18010efe608f7087115754ef77a3f7e" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>pause</name></member>
+      <member refid="d5/d22/a04394_1a59bea7025b5c52e5b09df209e95e4c6b" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>play</name></member>
+      <member refid="d5/d22/a04394_1a060d6999c9e24ab73e28400cb7e8850b" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>setLooped</name></member>
+      <member refid="d5/d22/a04394_1a338ffe9fbc76c64938f1fe8b072bbd41" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>setScale</name></member>
+      <member refid="d5/d22/a04394_1ab6dd01f7c83349132cd6e4d205e33e3a" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>setStartingPoint</name></member>
+      <member refid="d5/d22/a04394_1aab7fdd5bb07392f6faba0743e1c6073b" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>setStoppingPoint</name></member>
+      <member refid="d5/d22/a04394_1aeb6466ce1395148bbbed32cacfe49291" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>stop</name></member>
+      <member refid="d5/d22/a04394_1a3f89c5c509bba8c43af73cb0f068745b" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>update</name></member>
+      <member refid="d5/d22/a04394_1a0158953847a97616e136c1b9ba68d93d" prot="public" virt="virtual"><scope>castor3d::AnimationInstance</scope><name>~AnimationInstance</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,92 +1,95 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d9/d2e/a04900" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::ReflectiveShadowMapping</compoundname>
-    <includes local="no">ReflectiveShadowMapping.hpp</includes>
+    <compoundname>castor3d::LayeredLpvGridConfigUbo</compoundname>
+    <includes local="no">LayeredLpvGridConfigUbo.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d9/d2e/a04900_1a769c65d7b0402a70a4c46d71abd1cad9" prot="public" static="no">
+        <type><ref refid="db/dd9/a05012" kindref="compound">LayeredLpvGridConfigUboConfiguration</ref></type>
+        <definition>using castor3d::LayeredLpvGridConfigUbo::Configuration =  LayeredLpvGridConfigUboConfiguration</definition>
+        <argsstring></argsstring>
+        <name>Configuration</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::Configuration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="49" column="1" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d9/d2e/a04900_1a284b826fb0b63a21c505618474de0fb3" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const std::string</type>
+        <definition>C3D_API const std::string castor3d::LayeredLpvGridConfigUbo::LayeredLpvConfig</definition>
+        <argsstring></argsstring>
+        <name>LayeredLpvConfig</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::LayeredLpvConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="86" column="34" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d2e/a04900_1ac77af4de9827db0fc857226d2f2582b8" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const std::string</type>
+        <definition>C3D_API const std::string castor3d::LayeredLpvGridConfigUbo::LayeredLpvGridData</definition>
+        <argsstring></argsstring>
+        <name>LayeredLpvGridData</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::LayeredLpvGridData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="87" column="34" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d9/d2e/a04900_1a6527ab3aa785201c66341c09ffd5e2cc" prot="private" static="no" mutable="no">
-        <type>sdw::ShaderWriter &amp;</type>
-        <definition>sdw::ShaderWriter&amp; castor3d::ReflectiveShadowMapping::m_writer</definition>
+      <memberdef kind="variable" id="d9/d2e/a04900_1a61a29c30322bb38bbd3d8e759f6bc0f0" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::LayeredLpvGridConfigUbo::m_device</definition>
         <argsstring></argsstring>
-        <name>m_writer</name>
+        <name>m_device</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::m_device</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" line="49" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" bodystart="49" bodyend="-1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="90" column="21" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="90" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d9/d2e/a04900_1a43630b8a35c450cf25b6e958bb4290ce" prot="private" static="no" mutable="no">
-        <type>sdw::ArraySsboT&lt; sdw::Vec2 &gt; &amp;</type>
-        <definition>sdw::ArraySsboT&lt; sdw::Vec2 &gt;&amp; castor3d::ReflectiveShadowMapping::m_rsmSamples</definition>
+      <memberdef kind="variable" id="d9/d2e/a04900_1a736e4489cbf7021a9071e6ebd079600f" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/de2/a02508" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d9/d2e/a04900_1a769c65d7b0402a70a4c46d71abd1cad9" kindref="member">Configuration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::LayeredLpvGridConfigUbo::m_ubo</definition>
         <argsstring></argsstring>
-        <name>m_rsmSamples</name>
+        <name>m_ubo</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::m_ubo</qualifiedname>
+        <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" line="50" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" bodystart="50" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/d2e/a04900_1a1e7907cac127d44ad4ec1e4941fd5ceb" prot="private" static="no" mutable="no">
-        <type>sdw::Function&lt; sdw::Vec3, shader::InDirectionalLight, sdw::InVec3, sdw::InVec3, sdw::InVec3, sdw::InFloat, sdw::InFloat, sdw::InUInt &gt;</type>
-        <definition>sdw::Function&lt; sdw::Vec3 , shader::InDirectionalLight , sdw::InVec3 , sdw::InVec3 , sdw::InVec3 , sdw::InFloat , sdw::InFloat , sdw::InUInt &gt; castor3d::ReflectiveShadowMapping::m_directional</definition>
-        <argsstring></argsstring>
-        <name>m_directional</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" line="58" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" bodystart="58" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/d2e/a04900_1aaff68cc0c6112399e5961263d12aef9f" prot="private" static="no" mutable="no">
-        <type>sdw::Function&lt; sdw::Vec3, shader::InPointLight, sdw::InVec3, sdw::InVec3, sdw::InFloat, sdw::InFloat, sdw::InUInt, sdw::InUInt &gt;</type>
-        <definition>sdw::Function&lt; sdw::Vec3 , shader::InPointLight , sdw::InVec3 , sdw::InVec3 , sdw::InFloat , sdw::InFloat , sdw::InUInt , sdw::InUInt &gt; castor3d::ReflectiveShadowMapping::m_point</definition>
-        <argsstring></argsstring>
-        <name>m_point</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" line="66" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" bodystart="66" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/d2e/a04900_1a480564205b0df009e8c93ec758263c5d" prot="private" static="no" mutable="no">
-        <type>sdw::Function&lt; sdw::Vec3, shader::InSpotLight, sdw::InVec3, sdw::InVec3, sdw::InFloat, sdw::InFloat, sdw::InUInt, sdw::InUInt &gt;</type>
-        <definition>sdw::Function&lt; sdw::Vec3 , shader::InSpotLight , sdw::InVec3 , sdw::InVec3 , sdw::InFloat , sdw::InFloat , sdw::InUInt , sdw::InUInt &gt; castor3d::ReflectiveShadowMapping::m_spot</definition>
-        <argsstring></argsstring>
-        <name>m_spot</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" line="74" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" bodystart="74" bodyend="-1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="91" column="22" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="91" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d9/d2e/a04900_1a283723ff6049be591d86fef30344354b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::ReflectiveShadowMapping::ReflectiveShadowMapping</definition>
-        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::ArraySsboT&lt; sdw::Vec2 &gt; &amp;rsmSamples, LightType lightType)</argsstring>
-        <name>ReflectiveShadowMapping</name>
+      <memberdef kind="function" id="d9/d2e/a04900_1a7a5150122b5a74bdd222ab2f6ab1df2f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LayeredLpvGridConfigUbo::LayeredLpvGridConfigUbo</definition>
+        <argsstring>(LayeredLpvGridConfigUbo const &amp;rhs)=delete</argsstring>
+        <name>LayeredLpvGridConfigUbo</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::LayeredLpvGridConfigUbo</qualifiedname>
         <param>
-          <type>sdw::ShaderWriter &amp;</type>
-          <declname>writer</declname>
-        </param>
-        <param>
-          <type>sdw::ArraySsboT&lt; sdw::Vec2 &gt; &amp;</type>
-          <declname>rsmSamples</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d1e/a01479_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
-          <declname>lightType</declname>
+          <type><ref refid="d9/d2e/a04900" kindref="compound">LayeredLpvGridConfigUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -94,40 +97,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" line="18" column="1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="52" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d9/d2e/a04900_1a387b29ab00623dba580c3cace0c64007" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
-        <definition>C3D_API sdw::Vec3 castor3d::ReflectiveShadowMapping::directional</definition>
-        <argsstring>(shader::DirectionalLight const &amp;light, sdw::Vec3 const &amp;viewPosition, sdw::Vec3 const &amp;worldPosition, sdw::Vec3 const &amp;worldNormal, sdw::Float const &amp;rsmRMax, sdw::Float const &amp;rsmIntensity, sdw::UInt const &amp;rsmSampleCount)</argsstring>
-        <name>directional</name>
+      <memberdef kind="function" id="d9/d2e/a04900_1a8dda16689984409a22b33e8fce307f5a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/d2e/a04900" kindref="compound">LayeredLpvGridConfigUbo</ref> &amp;</type>
+        <definition>C3D_API LayeredLpvGridConfigUbo &amp; castor3d::LayeredLpvGridConfigUbo::operator=</definition>
+        <argsstring>(LayeredLpvGridConfigUbo const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::operator=</qualifiedname>
         <param>
-          <type><ref refid="d0/d8d/a05340" kindref="compound">shader::DirectionalLight</ref> const &amp;</type>
-          <declname>light</declname>
-        </param>
-        <param>
-          <type>sdw::Vec3 const &amp;</type>
-          <declname>viewPosition</declname>
-        </param>
-        <param>
-          <type>sdw::Vec3 const &amp;</type>
-          <declname>worldPosition</declname>
-        </param>
-        <param>
-          <type>sdw::Vec3 const &amp;</type>
-          <declname>worldNormal</declname>
-        </param>
-        <param>
-          <type>sdw::Float const &amp;</type>
-          <declname>rsmRMax</declname>
-        </param>
-        <param>
-          <type>sdw::Float const &amp;</type>
-          <declname>rsmIntensity</declname>
-        </param>
-        <param>
-          <type>sdw::UInt const &amp;</type>
-          <declname>rsmSampleCount</declname>
+          <type><ref refid="d9/d2e/a04900" kindref="compound">LayeredLpvGridConfigUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -135,40 +115,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" line="21" column="1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="53" column="34"/>
       </memberdef>
-      <memberdef kind="function" id="d9/d2e/a04900_1aa8d04436cfb0b19d1c78111fa4e57352" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
-        <definition>C3D_API sdw::Vec3 castor3d::ReflectiveShadowMapping::point</definition>
-        <argsstring>(shader::PointLight const &amp;light, sdw::Vec3 const &amp;worldPosition, sdw::Vec3 const &amp;worldNormal, sdw::Float const &amp;rsmRMax, sdw::Float const &amp;rsmIntensity, sdw::UInt const &amp;rsmSampleCount, sdw::UInt const &amp;rsmIndex)</argsstring>
-        <name>point</name>
+      <memberdef kind="function" id="d9/d2e/a04900_1a3e4a352decae6f2437333bccdb360db6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LayeredLpvGridConfigUbo::LayeredLpvGridConfigUbo</definition>
+        <argsstring>(LayeredLpvGridConfigUbo &amp;&amp;rhs)=default</argsstring>
+        <name>LayeredLpvGridConfigUbo</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::LayeredLpvGridConfigUbo</qualifiedname>
         <param>
-          <type><ref refid="da/def/a05344" kindref="compound">shader::PointLight</ref> const &amp;</type>
-          <declname>light</declname>
-        </param>
-        <param>
-          <type>sdw::Vec3 const &amp;</type>
-          <declname>worldPosition</declname>
-        </param>
-        <param>
-          <type>sdw::Vec3 const &amp;</type>
-          <declname>worldNormal</declname>
-        </param>
-        <param>
-          <type>sdw::Float const &amp;</type>
-          <declname>rsmRMax</declname>
-        </param>
-        <param>
-          <type>sdw::Float const &amp;</type>
-          <declname>rsmIntensity</declname>
-        </param>
-        <param>
-          <type>sdw::UInt const &amp;</type>
-          <declname>rsmSampleCount</declname>
-        </param>
-        <param>
-          <type>sdw::UInt const &amp;</type>
-          <declname>rsmIndex</declname>
+          <type><ref refid="d9/d2e/a04900" kindref="compound">LayeredLpvGridConfigUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -176,40 +133,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" line="28" column="1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="54" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d9/d2e/a04900_1a687510f454e5219349a0108d51a534db" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
-        <definition>C3D_API sdw::Vec3 castor3d::ReflectiveShadowMapping::spot</definition>
-        <argsstring>(shader::SpotLight const &amp;light, sdw::Vec3 const &amp;worldPosition, sdw::Vec3 const &amp;worldNormal, sdw::Float const &amp;rsmRMax, sdw::Float const &amp;rsmIntensity, sdw::UInt const &amp;rsmSampleCount, sdw::UInt const &amp;rsmIndex)</argsstring>
-        <name>spot</name>
+      <memberdef kind="function" id="d9/d2e/a04900_1a6aec14aab49de8ea494a21ddd08afa41" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/d2e/a04900" kindref="compound">LayeredLpvGridConfigUbo</ref> &amp;</type>
+        <definition>C3D_API LayeredLpvGridConfigUbo &amp; castor3d::LayeredLpvGridConfigUbo::operator=</definition>
+        <argsstring>(LayeredLpvGridConfigUbo &amp;&amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::operator=</qualifiedname>
         <param>
-          <type><ref refid="d8/dd6/a05348" kindref="compound">shader::SpotLight</ref> const &amp;</type>
-          <declname>light</declname>
-        </param>
-        <param>
-          <type>sdw::Vec3 const &amp;</type>
-          <declname>worldPosition</declname>
-        </param>
-        <param>
-          <type>sdw::Vec3 const &amp;</type>
-          <declname>worldNormal</declname>
-        </param>
-        <param>
-          <type>sdw::Float const &amp;</type>
-          <declname>rsmRMax</declname>
-        </param>
-        <param>
-          <type>sdw::Float const &amp;</type>
-          <declname>rsmIntensity</declname>
-        </param>
-        <param>
-          <type>sdw::UInt const &amp;</type>
-          <declname>rsmSampleCount</declname>
-        </param>
-        <param>
-          <type>sdw::UInt const &amp;</type>
-          <declname>rsmIndex</declname>
+          <type><ref refid="d9/d2e/a04900" kindref="compound">LayeredLpvGridConfigUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -217,68 +151,187 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" line="35" column="1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="55" column="34"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d9/d2e/a04900_1a777172925e492c33805a394eb3f43bc0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::ReflectiveShadowMapping::doDeclareDirectional</definition>
+      <memberdef kind="function" id="d9/d2e/a04900_1ad75e80b0da0b692532555481e5590892" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LayeredLpvGridConfigUbo::LayeredLpvGridConfigUbo</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>LayeredLpvGridConfigUbo</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::LayeredLpvGridConfigUbo</qualifiedname>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="56" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d2e/a04900_1a347c8a11f1f218a9971c6d85b3e22c01" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LayeredLpvGridConfigUbo::~LayeredLpvGridConfigUbo</definition>
         <argsstring>()</argsstring>
-        <name>doDeclareDirectional</name>
+        <name>~LayeredLpvGridConfigUbo</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::~LayeredLpvGridConfigUbo</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" line="44" column="1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="57" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d9/d2e/a04900_1a7c2cf34dc262b68cb8116e972d3d5016" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::ReflectiveShadowMapping::doDeclarePoint</definition>
-        <argsstring>()</argsstring>
-        <name>doDeclarePoint</name>
+      <memberdef kind="function" id="d9/d2e/a04900_1a970adafc29769c83cbdc8591c2703fdb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LayeredLpvGridConfigUbo::cpuUpdate</definition>
+        <argsstring>(std::array&lt; castor::Grid const *, shader::LpvMaxCascadesCount &gt; const &amp;grids, float indirectAttenuation)</argsstring>
+        <name>cpuUpdate</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::cpuUpdate</qualifiedname>
+        <param>
+          <type>std::array&lt; castor::Grid const *, <ref refid="d7/d1c/a01397_1a51b2822a5ca0ee8b3805ce188ad0589b" kindref="member">shader::LpvMaxCascadesCount</ref> &gt; const &amp;</type>
+          <declname>grids</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>indirectAttenuation</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" line="45" column="1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="59" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d9/d2e/a04900_1a1155ab803fce25bfcee2f02e8360b104" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d9/d2e/a04900_1abf797b052c74d7d258377d758b0383a0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::ReflectiveShadowMapping::doDeclareSpot</definition>
-        <argsstring>()</argsstring>
-        <name>doDeclareSpot</name>
+        <definition>void castor3d::LayeredLpvGridConfigUbo::createPassBinding</definition>
+        <argsstring>(crg::FramePass &amp;pass, uint32_t dstBinding) const</argsstring>
+        <name>createPassBinding</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::createPassBinding</qualifiedname>
+        <param>
+          <type>crg::FramePass &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstBinding</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" line="46" column="1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="62" column="6" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="62" bodyend="66"/>
+        <references refid="d9/de2/a02508_1ae2c055477d81767157b9832b18baa027" compoundref="d9/dd0/a00191" startline="86" endline="94">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createPassBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/d2e/a04900_1ab75a8a861f800ea0ac6a5f95b39b3683" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LayeredLpvGridConfigUbo::createSizedBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</argsstring>
+        <name>createSizedBinding</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::createSizedBinding</qualifiedname>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>layoutBinding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="68" column="6" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="68" bodyend="72"/>
+        <references refid="d9/de2/a02508_1a2c6ad146d4910651544564c25ca7dccd" compoundref="d9/dd0/a00191" startline="96" endline="105">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/d2e/a04900_1ab52a7b1884fb67ab3d0a4513bc761f0f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::WriteDescriptorSet</type>
+        <definition>ashes::WriteDescriptorSet castor3d::LayeredLpvGridConfigUbo::getDescriptorWrite</definition>
+        <argsstring>(uint32_t dstBinding, uint32_t dstArrayElement=0u) const</argsstring>
+        <name>getDescriptorWrite</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::getDescriptorWrite</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstArrayElement</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="74" column="27" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="74" bodyend="78"/>
+        <references refid="d9/de2/a02508_1ad7dcad7c96a620540d10eb85f3d4586b" compoundref="d9/dd0/a00191" startline="107" endline="120">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getDescriptorWrite</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/d2e/a04900_1ad71ab16cc8cfd64d584d0b907a30baa3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/de2/a02508" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d9/d2e/a04900_1a769c65d7b0402a70a4c46d71abd1cad9" kindref="member">Configuration</ref> &gt; const &amp;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; const  &amp; castor3d::LayeredLpvGridConfigUbo::getUbo</definition>
+        <argsstring>() const</argsstring>
+        <name>getUbo</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::getUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="80" column="29" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="80" bodyend="83"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" line="16" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" bodystart="15" bodyend="75"/>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::LayeredLpvGridConfigUbo</label>
+        <link refid="d9/d2e/a04900"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>LayeredLpvConfig</edgelabel>
+          <edgelabel>LayeredLpvGridData</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::string</label>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="46" column="1" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="47" bodyend="92"/>
     <listofallmembers>
-      <member refid="d9/d2e/a04900_1a387b29ab00623dba580c3cace0c64007" prot="public" virt="non-virtual"><scope>castor3d::ReflectiveShadowMapping</scope><name>directional</name></member>
-      <member refid="d9/d2e/a04900_1a777172925e492c33805a394eb3f43bc0" prot="private" virt="non-virtual"><scope>castor3d::ReflectiveShadowMapping</scope><name>doDeclareDirectional</name></member>
-      <member refid="d9/d2e/a04900_1a7c2cf34dc262b68cb8116e972d3d5016" prot="private" virt="non-virtual"><scope>castor3d::ReflectiveShadowMapping</scope><name>doDeclarePoint</name></member>
-      <member refid="d9/d2e/a04900_1a1155ab803fce25bfcee2f02e8360b104" prot="private" virt="non-virtual"><scope>castor3d::ReflectiveShadowMapping</scope><name>doDeclareSpot</name></member>
-      <member refid="d9/d2e/a04900_1a1e7907cac127d44ad4ec1e4941fd5ceb" prot="private" virt="non-virtual"><scope>castor3d::ReflectiveShadowMapping</scope><name>m_directional</name></member>
-      <member refid="d9/d2e/a04900_1aaff68cc0c6112399e5961263d12aef9f" prot="private" virt="non-virtual"><scope>castor3d::ReflectiveShadowMapping</scope><name>m_point</name></member>
-      <member refid="d9/d2e/a04900_1a43630b8a35c450cf25b6e958bb4290ce" prot="private" virt="non-virtual"><scope>castor3d::ReflectiveShadowMapping</scope><name>m_rsmSamples</name></member>
-      <member refid="d9/d2e/a04900_1a480564205b0df009e8c93ec758263c5d" prot="private" virt="non-virtual"><scope>castor3d::ReflectiveShadowMapping</scope><name>m_spot</name></member>
-      <member refid="d9/d2e/a04900_1a6527ab3aa785201c66341c09ffd5e2cc" prot="private" virt="non-virtual"><scope>castor3d::ReflectiveShadowMapping</scope><name>m_writer</name></member>
-      <member refid="d9/d2e/a04900_1aa8d04436cfb0b19d1c78111fa4e57352" prot="public" virt="non-virtual"><scope>castor3d::ReflectiveShadowMapping</scope><name>point</name></member>
-      <member refid="d9/d2e/a04900_1a283723ff6049be591d86fef30344354b" prot="public" virt="non-virtual"><scope>castor3d::ReflectiveShadowMapping</scope><name>ReflectiveShadowMapping</name></member>
-      <member refid="d9/d2e/a04900_1a687510f454e5219349a0108d51a534db" prot="public" virt="non-virtual"><scope>castor3d::ReflectiveShadowMapping</scope><name>spot</name></member>
+      <member refid="d9/d2e/a04900_1a769c65d7b0402a70a4c46d71abd1cad9" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>Configuration</name></member>
+      <member refid="d9/d2e/a04900_1a970adafc29769c83cbdc8591c2703fdb" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>cpuUpdate</name></member>
+      <member refid="d9/d2e/a04900_1abf797b052c74d7d258377d758b0383a0" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>createPassBinding</name></member>
+      <member refid="d9/d2e/a04900_1ab75a8a861f800ea0ac6a5f95b39b3683" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>createSizedBinding</name></member>
+      <member refid="d9/d2e/a04900_1ab52a7b1884fb67ab3d0a4513bc761f0f" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>getDescriptorWrite</name></member>
+      <member refid="d9/d2e/a04900_1ad71ab16cc8cfd64d584d0b907a30baa3" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>getUbo</name></member>
+      <member refid="d9/d2e/a04900_1a284b826fb0b63a21c505618474de0fb3" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>LayeredLpvConfig</name></member>
+      <member refid="d9/d2e/a04900_1a7a5150122b5a74bdd222ab2f6ab1df2f" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>LayeredLpvGridConfigUbo</name></member>
+      <member refid="d9/d2e/a04900_1a3e4a352decae6f2437333bccdb360db6" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>LayeredLpvGridConfigUbo</name></member>
+      <member refid="d9/d2e/a04900_1ad75e80b0da0b692532555481e5590892" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>LayeredLpvGridConfigUbo</name></member>
+      <member refid="d9/d2e/a04900_1ac77af4de9827db0fc857226d2f2582b8" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>LayeredLpvGridData</name></member>
+      <member refid="d9/d2e/a04900_1a61a29c30322bb38bbd3d8e759f6bc0f0" prot="private" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>m_device</name></member>
+      <member refid="d9/d2e/a04900_1a736e4489cbf7021a9071e6ebd079600f" prot="private" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>m_ubo</name></member>
+      <member refid="d9/d2e/a04900_1a8dda16689984409a22b33e8fce307f5a" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>operator=</name></member>
+      <member refid="d9/d2e/a04900_1a6aec14aab49de8ea494a21ddd08afa41" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>operator=</name></member>
+      <member refid="d9/d2e/a04900_1a347c8a11f1f218a9971c6d85b3e22c01" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>~LayeredLpvGridConfigUbo</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

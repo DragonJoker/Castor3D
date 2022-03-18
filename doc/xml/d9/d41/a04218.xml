@@ -1,200 +1,31 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d9/d41/a04218" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::CulledSubmesh</compoundname>
-    <includes local="no">SceneCuller.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d9/d41/a04218_1a96fa74fd66959274cfbe3a4a89700aed" prot="public" static="no" mutable="no">
-        <type><ref refid="d9/dcb/a05154" kindref="compound">Geometry</ref> &amp;</type>
-        <definition>Geometry&amp; castor3d::CulledSubmesh::instance</definition>
-        <argsstring></argsstring>
-        <name>instance</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d9/d41/a04218" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::MeshLightPass</compoundname>
+    <includes local="no">MeshLightPass.hpp</includes>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d9/d41/a04218_1a2100681fa05cda3bc7d3f06e4dab9a29" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/df4/a01401_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
+        <definition>static ShaderPtr castor3d::MeshLightPass::getVertexShaderSource</definition>
+        <argsstring>()</argsstring>
+        <name>getVertexShaderSource</name>
+        <qualifiedname>castor3d::MeshLightPass::getVertexShaderSource</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Culling/SceneCuller.hpp" line="15" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="15" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/d41/a04218_1a4b14e97b622a762d06d9d49c065c21bf" prot="public" static="no" mutable="no">
-        <type><ref refid="d7/df2/a03986" kindref="compound">Submesh</ref> &amp;</type>
-        <definition>Submesh&amp; castor3d::CulledSubmesh::data</definition>
-        <argsstring></argsstring>
-        <name>data</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Culling/SceneCuller.hpp" line="16" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="16" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/d41/a04218_1ab74e4cda1b777b998c871498ce1c9b29" prot="public" static="no" mutable="no">
-        <type>PassSPtr</type>
-        <definition>PassSPtr castor3d::CulledSubmesh::pass</definition>
-        <argsstring></argsstring>
-        <name>pass</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Culling/SceneCuller.hpp" line="17" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="17" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/d41/a04218_1ac548faa68a758d6f3d334fd0b05253c0" prot="public" static="no" mutable="no">
-        <type><ref refid="d8/de7/a05250" kindref="compound">SceneNode</ref> &amp;</type>
-        <definition>SceneNode&amp; castor3d::CulledSubmesh::sceneNode</definition>
-        <argsstring></argsstring>
-        <name>sceneNode</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Culling/SceneCuller.hpp" line="18" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="18" bodyend="-1"/>
+        <location file="Render/Technique/Opaque/Lighting/MeshLightPass.hpp" line="14" column="18"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="877">
-        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
-        <childnode refid="878" relation="template-instance">
-          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="879">
-        <label>K</label>
-      </node>
-      <node id="880">
-        <label>T</label>
-      </node>
-      <node id="873">
-        <label>castor3d::Geometry</label>
-        <link refid="d9/dcb/a05154"/>
-        <childnode refid="874" relation="public-inheritance">
-        </childnode>
-        <childnode refid="888" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="882">
-        <label>castor3d::SceneNode</label>
-        <link refid="d8/de7/a05250"/>
-        <childnode refid="883" relation="public-inheritance">
-        </childnode>
-        <childnode refid="884" relation="public-inheritance">
-        </childnode>
-        <childnode refid="881" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="869">
-        <label>castor3d::CulledSubmesh</label>
-        <link refid="d9/d41/a04218"/>
-        <childnode refid="870" relation="usage">
-          <edgelabel>data</edgelabel>
-        </childnode>
-        <childnode refid="873" relation="usage">
-          <edgelabel>instance</edgelabel>
-        </childnode>
-        <childnode refid="882" relation="usage">
-          <edgelabel>sceneNode</edgelabel>
-        </childnode>
-      </node>
-      <node id="884">
-        <label>castor::OwnedBy&lt; Scene &gt;</label>
-      </node>
-      <node id="878">
-        <label>std::map&lt; K, T &gt;</label>
-        <childnode refid="879" relation="usage">
-          <edgelabel>keys</edgelabel>
-        </childnode>
-        <childnode refid="880" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="883">
-        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
-      </node>
-      <node id="874">
-        <label>castor3d::MovableObject</label>
-        <link refid="db/d21/a05186"/>
-        <childnode refid="875" relation="public-inheritance">
-        </childnode>
-        <childnode refid="881" relation="public-inheritance">
-        </childnode>
-        <childnode refid="882" relation="usage">
-          <edgelabel>m_sceneNode</edgelabel>
-        </childnode>
-        <childnode refid="885" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-      </node>
-      <node id="881">
-        <label>Named</label>
-      </node>
-      <node id="888">
-        <label>castor3d::RenderedObject</label>
-        <link refid="d6/de6/a05234"/>
-        <childnode refid="889" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="886">
-        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
-      </node>
-      <node id="871">
-        <label>castor::OwnedBy&lt; Mesh &gt;</label>
-      </node>
-      <node id="875">
-        <label>Animable</label>
-        <link refid="d8/de7/a02030"/>
-        <childnode refid="876" relation="public-inheritance">
-        </childnode>
-        <childnode refid="877" relation="usage">
-          <edgelabel>m_animations</edgelabel>
-        </childnode>
-      </node>
-      <node id="876">
-        <label>castor::OwnedBy&lt; AnimableHanlerT &gt;</label>
-      </node>
-      <node id="887">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="870">
-        <label>castor3d::Submesh</label>
-        <link refid="d7/df2/a03986"/>
-        <childnode refid="871" relation="public-inheritance">
-        </childnode>
-        <childnode refid="872" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="889">
-        <label>std::enable_shared_from_this&lt; RenderedObject &gt;</label>
-      </node>
-      <node id="885">
-        <label>castor3d::Scene</label>
-        <link refid="d6/d66/a05238"/>
-        <childnode refid="886" relation="public-inheritance">
-        </childnode>
-        <childnode refid="887" relation="public-inheritance">
-        </childnode>
-        <childnode refid="881" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="872">
-        <label>std::enable_shared_from_this&lt; Submesh &gt;</label>
-      </node>
-    </collaborationgraph>
-    <location file="Render/Culling/SceneCuller.hpp" line="14" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="13" bodyend="19"/>
+    <location file="Render/Technique/Opaque/Lighting/MeshLightPass.hpp" line="11" column="1" bodyfile="Render/Technique/Opaque/Lighting/MeshLightPass.hpp" bodystart="12" bodyend="15"/>
     <listofallmembers>
-      <member refid="d9/d41/a04218_1a4b14e97b622a762d06d9d49c065c21bf" prot="public" virt="non-virtual"><scope>castor3d::CulledSubmesh</scope><name>data</name></member>
-      <member refid="d9/d41/a04218_1a96fa74fd66959274cfbe3a4a89700aed" prot="public" virt="non-virtual"><scope>castor3d::CulledSubmesh</scope><name>instance</name></member>
-      <member refid="d9/d41/a04218_1ab74e4cda1b777b998c871498ce1c9b29" prot="public" virt="non-virtual"><scope>castor3d::CulledSubmesh</scope><name>pass</name></member>
-      <member refid="d9/d41/a04218_1ac548faa68a758d6f3d334fd0b05253c0" prot="public" virt="non-virtual"><scope>castor3d::CulledSubmesh</scope><name>sceneNode</name></member>
+      <member refid="d9/d41/a04218_1a2100681fa05cda3bc7d3f06e4dab9a29" prot="public" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>getVertexShaderSource</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

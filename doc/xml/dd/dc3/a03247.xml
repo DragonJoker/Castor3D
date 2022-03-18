@@ -1,33 +1,152 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dd/dc3/a03247" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkMemoryGetFdInfoKHR &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="dd/dc3/a03247_1ae84dad0d6e4e4c9f95e57325d41e21b8" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkMemoryGetFdInfoKHR &gt;::value</definition>
+    <compoundname>castor3d::TextureFactors</compoundname>
+    <includes local="no">MiscellaneousModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dd/dc3/a03247_1ae47d89d7405413d19717281467a6dcb7" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::TextureFactors::multiply</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_MEMORY_GET_FD_INFO_KHR</initializer>
+        <name>multiply</name>
+        <qualifiedname>castor3d::TextureFactors::multiply</qualifiedname>
+        <initializer>{ 1.0f, 1.0f, 1.0f }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="220" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="220" bodyend="-1"/>
+        <location file="Miscellaneous/MiscellaneousModule.hpp" line="103" column="17" bodyfile="Miscellaneous/MiscellaneousModule.hpp" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dc3/a03247_1a7b75c2685543e55320f716bbea863d1c" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::TextureFactors::add</definition>
+        <argsstring></argsstring>
+        <name>add</name>
+        <qualifiedname>castor3d::TextureFactors::add</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/MiscellaneousModule.hpp" line="104" column="17" bodyfile="Miscellaneous/MiscellaneousModule.hpp" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dc3/a03247_1a97468a3f18526c0f5968f0f84ee49a67" prot="public" static="no" mutable="no">
+        <type>castor::Point4f const  *</type>
+        <definition>castor::Point4f const* castor3d::TextureFactors::grid</definition>
+        <argsstring></argsstring>
+        <name>grid</name>
+        <qualifiedname>castor3d::TextureFactors::grid</qualifiedname>
+        <initializer>{ nullptr }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/MiscellaneousModule.hpp" line="105" column="24" bodyfile="Miscellaneous/MiscellaneousModule.hpp" bodystart="105" bodyend="-1"/>
+        <referencedby refid="dd/dc3/a03247_1a8c8521009541bfab4259af3a20fdab0c" compoundref="d7/d00/a00401" startline="117" endline="122">tex3D</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dc3/a03247_1accb710b669eb34ca3bac4a7f46a537fe" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::TextureFactors::invertY</definition>
+        <argsstring></argsstring>
+        <name>invertY</name>
+        <qualifiedname>castor3d::TextureFactors::invertY</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/MiscellaneousModule.hpp" line="106" column="6" bodyfile="Miscellaneous/MiscellaneousModule.hpp" bodystart="106" bodyend="-1"/>
+        <referencedby refid="dd/dc3/a03247_1a739d0bb92428ead96ecb4d7fa92ec4ab" compoundref="d7/d00/a00401" startline="124" endline="128">invert</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="dd/dc3/a03247_1a88623c83bfc10333e975c66cad2ac047" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/dc3/a03247" kindref="compound">TextureFactors</ref></type>
+        <definition>static TextureFactors castor3d::TextureFactors::tex2D</definition>
+        <argsstring>(castor::Point3f multiply=castor::Point3f{ 1.0f, 1.0f, 1.0f }, castor::Point3f add=castor::Point3f{})</argsstring>
+        <name>tex2D</name>
+        <qualifiedname>castor3d::TextureFactors::tex2D</qualifiedname>
+        <param>
+          <type>castor::Point3f</type>
+          <declname>multiply</declname>
+          <defval>castor::Point3f{ 1.0f, 1.0f, 1.0f }</defval>
+        </param>
+        <param>
+          <type>castor::Point3f</type>
+          <declname>add</declname>
+          <defval>castor::Point3f{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/MiscellaneousModule.hpp" line="108" column="23" bodyfile="Miscellaneous/MiscellaneousModule.hpp" bodystart="108" bodyend="115"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dc3/a03247_1a8c8521009541bfab4259af3a20fdab0c" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/dc3/a03247" kindref="compound">TextureFactors</ref></type>
+        <definition>static TextureFactors castor3d::TextureFactors::tex3D</definition>
+        <argsstring>(castor::Point4f const *grid)</argsstring>
+        <name>tex3D</name>
+        <qualifiedname>castor3d::TextureFactors::tex3D</qualifiedname>
+        <param>
+          <type>castor::Point4f const *</type>
+          <declname>grid</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/MiscellaneousModule.hpp" line="117" column="23" bodyfile="Miscellaneous/MiscellaneousModule.hpp" bodystart="117" bodyend="122"/>
+        <references refid="dd/dc3/a03247_1a97468a3f18526c0f5968f0f84ee49a67" compoundref="d7/d00/a00401" startline="105">grid</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/dc3/a03247_1a739d0bb92428ead96ecb4d7fa92ec4ab" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/dc3/a03247" kindref="compound">TextureFactors</ref> &amp;</type>
+        <definition>TextureFactors &amp; castor3d::TextureFactors::invert</definition>
+        <argsstring>(bool value)</argsstring>
+        <name>invert</name>
+        <qualifiedname>castor3d::TextureFactors::invert</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/MiscellaneousModule.hpp" line="124" column="17" bodyfile="Miscellaneous/MiscellaneousModule.hpp" bodystart="124" bodyend="128"/>
+        <references refid="dd/dc3/a03247_1accb710b669eb34ca3bac4a7f46a537fe" compoundref="d7/d00/a00401" startline="106">invertY</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>Factors applied when displaying a debug texture. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="220" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="220" bodyend="220"/>
+    <location file="Miscellaneous/MiscellaneousModule.hpp" line="101" column="1" bodyfile="Miscellaneous/MiscellaneousModule.hpp" bodystart="102" bodyend="129"/>
     <listofallmembers>
-      <member refid="dd/dc3/a03247_1ae84dad0d6e4e4c9f95e57325d41e21b8" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkMemoryGetFdInfoKHR &gt;</scope><name>value</name></member>
+      <member refid="dd/dc3/a03247_1a7b75c2685543e55320f716bbea863d1c" prot="public" virt="non-virtual"><scope>castor3d::TextureFactors</scope><name>add</name></member>
+      <member refid="dd/dc3/a03247_1a97468a3f18526c0f5968f0f84ee49a67" prot="public" virt="non-virtual"><scope>castor3d::TextureFactors</scope><name>grid</name></member>
+      <member refid="dd/dc3/a03247_1a739d0bb92428ead96ecb4d7fa92ec4ab" prot="public" virt="non-virtual"><scope>castor3d::TextureFactors</scope><name>invert</name></member>
+      <member refid="dd/dc3/a03247_1accb710b669eb34ca3bac4a7f46a537fe" prot="public" virt="non-virtual"><scope>castor3d::TextureFactors</scope><name>invertY</name></member>
+      <member refid="dd/dc3/a03247_1ae47d89d7405413d19717281467a6dcb7" prot="public" virt="non-virtual"><scope>castor3d::TextureFactors</scope><name>multiply</name></member>
+      <member refid="dd/dc3/a03247_1a88623c83bfc10333e975c66cad2ac047" prot="public" virt="non-virtual"><scope>castor3d::TextureFactors</scope><name>tex2D</name></member>
+      <member refid="dd/dc3/a03247_1a8c8521009541bfab4259af3a20fdab0c" prot="public" virt="non-virtual"><scope>castor3d::TextureFactors</scope><name>tex3D</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

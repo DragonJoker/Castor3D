@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$d0/d60/a03936.html" title=" " alt="" coords="5,5,156,32"/>
+<area shape="rect" id="node1" href="$d7/d7d/a02527.html" title=" " alt="" coords="5,46,172,73"/>
+<area shape="rect" id="node2" href="$d0/d7c/a02499.html" title=" " alt="" coords="220,5,419,47"/>
+<area shape="rect" id="node3" href="$d0/d7c/a02499.html" title="A GPU buffer, that uses a buddy allocator to allocate sub&#45;buffers." alt="" coords="247,71,391,112"/>
 </map>

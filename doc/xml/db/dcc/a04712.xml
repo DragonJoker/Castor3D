@@ -1,310 +1,156 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="db/dcc/a04712" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::SsaoConfig</compoundname>
-    <includes local="no">SsaoConfig.hpp</includes>
+    <compoundname>castor3d::PassBuffer::PassDataPtr</compoundname>
+    <includes local="no">PassBuffer.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="db/dcc/a04712_1a6e7398a8f5b1db7a06abccc148a2ed37" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::SsaoConfig::enabled</definition>
+      <memberdef kind="variable" id="db/dcc/a04712_1a3d9d1f68bed16591fa6b83948ee8e23e" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d88/a04704" kindref="compound">RgbaColour</ref> *</type>
+        <definition>RgbaColour* castor3d::PassBuffer::PassDataPtr::colourDiv</definition>
         <argsstring></argsstring>
-        <name>enabled</name>
-        <initializer>{ false }</initializer>
+        <name>colourDiv</name>
+        <qualifiedname>castor3d::PassBuffer::PassDataPtr::colourDiv</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The effect activation status. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="24" column="1" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="24" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="87" column="13" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="87" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="db/dcc/a04712_1a7fd733973f8fa2f36b123df0b7a3cad8" prot="public" static="no" mutable="no">
-        <type>castor::RangedValue&lt; int32_t &gt;</type>
-        <definition>castor::RangedValue&lt; int32_t &gt; castor3d::SsaoConfig::logMaxOffset</definition>
+      <memberdef kind="variable" id="db/dcc/a04712_1ab57cdd9554680316c5cc350b4dca987e" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d88/a04704" kindref="compound">RgbaColour</ref> *</type>
+        <definition>RgbaColour* castor3d::PassBuffer::PassDataPtr::specDiv</definition>
         <argsstring></argsstring>
-        <name>logMaxOffset</name>
-        <initializer>{ 3u, castor::makeRange( 2, 6 ) }</initializer>
+        <name>specDiv</name>
+        <qualifiedname>castor3d::PassBuffer::PassDataPtr::specDiv</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The log of the maximum pixel offset. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="27" column="1" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="27" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="88" column="13" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="88" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="db/dcc/a04712_1a7ae9a14ac80dfb8a2a42013fdfc63398" prot="public" static="no" mutable="no">
-        <type>int32_t</type>
-        <definition>int32_t castor3d::SsaoConfig::maxMipLevel</definition>
+      <memberdef kind="variable" id="db/dcc/a04712_1a446bf41cd0bd536874db2882f6aa8ff3" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d88/a04704" kindref="compound">RgbaColour</ref> *</type>
+        <definition>RgbaColour* castor3d::PassBuffer::PassDataPtr::edgeFactors</definition>
         <argsstring></argsstring>
-        <name>maxMipLevel</name>
-        <initializer>{ 5 }</initializer>
+        <name>edgeFactors</name>
+        <qualifiedname>castor3d::PassBuffer::PassDataPtr::edgeFactors</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="28" column="1" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="28" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="89" column="13" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="89" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="db/dcc/a04712_1a5c00f100857f71a46adb1dfbc8905ca5" prot="public" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::SsaoConfig::minRadius</definition>
+      <memberdef kind="variable" id="db/dcc/a04712_1a842da938c98f3e8a1f145e3e01621a0e" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d88/a04704" kindref="compound">RgbaColour</ref> *</type>
+        <definition>RgbaColour* castor3d::PassBuffer::PassDataPtr::edgeColour</definition>
         <argsstring></argsstring>
-        <name>minRadius</name>
-        <initializer>{ 1.0f }</initializer>
+        <name>edgeColour</name>
+        <qualifiedname>castor3d::PassBuffer::PassDataPtr::edgeColour</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>Minimal sample radius to compute AO. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="31" column="1" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="31" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="90" column="13" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="90" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="db/dcc/a04712_1ab6c094a6537836b1f6e58497e26bcfd8" prot="public" static="no" mutable="no">
-        <type>int32_t</type>
-        <definition>int32_t castor3d::SsaoConfig::variation</definition>
+      <memberdef kind="variable" id="db/dcc/a04712_1abd17a2e289f7113396b4700ae04e2a36" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d88/a04704" kindref="compound">RgbaColour</ref> *</type>
+        <definition>RgbaColour* castor3d::PassBuffer::PassDataPtr::specific</definition>
         <argsstring></argsstring>
-        <name>variation</name>
-        <initializer>{ 0 }</initializer>
+        <name>specific</name>
+        <qualifiedname>castor3d::PassBuffer::PassDataPtr::specific</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="32" column="1" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="32" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="91" column="13" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="91" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="db/dcc/a04712_1af06d7cc7c149df11f4281b7a7bacc9d0" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::SsaoConfig::highQuality</definition>
+      <memberdef kind="variable" id="db/dcc/a04712_1aa30bcdafa28c466a3a3c84d4af924257" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d88/a04704" kindref="compound">RgbaColour</ref> *</type>
+        <definition>RgbaColour* castor3d::PassBuffer::PassDataPtr::common</definition>
         <argsstring></argsstring>
-        <name>highQuality</name>
-        <initializer>{ false }</initializer>
+        <name>common</name>
+        <qualifiedname>castor3d::PassBuffer::PassDataPtr::common</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The high quality activation status. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="35" column="1" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="35" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="92" column="13" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="92" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="db/dcc/a04712_1a593d6b80cbeef54b968771f32965b3a8" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::SsaoConfig::useNormalsBuffer</definition>
+      <memberdef kind="variable" id="db/dcc/a04712_1a4820d4109cf89a5a29f8d3968a352345" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d88/a04704" kindref="compound">RgbaColour</ref> *</type>
+        <definition>RgbaColour* castor3d::PassBuffer::PassDataPtr::opacity</definition>
         <argsstring></argsstring>
-        <name>useNormalsBuffer</name>
-        <initializer>{ false }</initializer>
+        <name>opacity</name>
+        <qualifiedname>castor3d::PassBuffer::PassDataPtr::opacity</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The normals buffer usage status. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="38" column="1" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="38" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="93" column="13" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="93" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="db/dcc/a04712_1a9c6a7dd2205dc53dda3e935c7b923c85" prot="public" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::SsaoConfig::radius</definition>
+      <memberdef kind="variable" id="db/dcc/a04712_1aa44ed627d3d310f6f489b7164571e847" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d88/a04704" kindref="compound">RgbaColour</ref> *</type>
+        <definition>RgbaColour* castor3d::PassBuffer::PassDataPtr::reflRefr</definition>
         <argsstring></argsstring>
-        <name>radius</name>
-        <initializer>{ 0.5f }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The effect radius. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="41" column="1" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="41" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="db/dcc/a04712_1a10c74f27ce7ead70ea43df6cc0a2baa4" prot="public" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::SsaoConfig::bias</definition>
-        <argsstring></argsstring>
-        <name>bias</name>
-        <initializer>{ 0.025f }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The effect bias. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="44" column="1" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="44" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="db/dcc/a04712_1a551820443946351a8b2c35d631ff4e44" prot="public" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::SsaoConfig::intensity</definition>
-        <argsstring></argsstring>
-        <name>intensity</name>
-        <initializer>{ 1.0f }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The effect intensity. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="47" column="1" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="47" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="db/dcc/a04712_1a94c88bfe04532417ccedf6a24b658856" prot="public" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::SsaoConfig::numSamples</definition>
-        <argsstring></argsstring>
-        <name>numSamples</name>
-        <initializer>{ 19u }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The samples count pixel. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="50" column="1" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="50" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="db/dcc/a04712_1a656080a608965d5cc362b2d1dbdaa71d" prot="public" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::SsaoConfig::edgeSharpness</definition>
-        <argsstring></argsstring>
-        <name>edgeSharpness</name>
-        <initializer>{ 1.0f }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The edge sharpness, increase to make depth edges crisper, decrease to reduce flicker. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="53" column="1" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="53" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="db/dcc/a04712_1a90b5f5c6fdaa124ae3a68d6e2621d5af" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::SsaoConfig::blurHighQuality</definition>
-        <argsstring></argsstring>
-        <name>blurHighQuality</name>
-        <initializer>{ false }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The high quality activation status for the blur. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="56" column="1" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="56" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="db/dcc/a04712_1afae83535e7ed32b2e830ac5f1b8ea070" prot="public" static="no" mutable="no">
-        <type>castor::ChangeTracked&lt; castor::RangedValue&lt; uint32_t &gt; &gt;</type>
-        <definition>castor::ChangeTracked&lt; castor::RangedValue&lt; uint32_t &gt; &gt; castor3d::SsaoConfig::blurStepSize</definition>
-        <argsstring></argsstring>
-        <name>blurStepSize</name>
-        <initializer>{ { 2u, castor::makeRange( 1u, 60u ) } }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>Step in 2-pixel intervals since we already blurred against neighbors in the first AO pass. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="59" column="1" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="59" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="db/dcc/a04712_1a39510aea40f0964299910d74aedbfb0d" prot="public" static="no" mutable="no">
-        <type>castor::ChangeTracked&lt; castor::RangedValue&lt; int32_t &gt; &gt;</type>
-        <definition>castor::ChangeTracked&lt; castor::RangedValue&lt; int32_t &gt; &gt; castor3d::SsaoConfig::blurRadius</definition>
-        <argsstring></argsstring>
-        <name>blurRadius</name>
-        <initializer>{ { 4, castor::makeRange( 1, 6 ) } }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>VkFilter radius in pixels. This will be multiplied by m_blurStepSize. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="62" column="1" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="62" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="db/dcc/a04712_1ae50750d6b0b73142825482e10f0b45e5" prot="public" static="no" mutable="no">
-        <type>castor::RangedValue&lt; int32_t &gt;</type>
-        <definition>castor::RangedValue&lt; int32_t &gt; castor3d::SsaoConfig::bendStepCount</definition>
-        <argsstring></argsstring>
-        <name>bendStepCount</name>
-        <initializer>{ 4, castor::makeRange( 1, 60 ) }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The normals bending ray marching steps count. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="65" column="1" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="65" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="db/dcc/a04712_1ad65ee5938729989a3b95a870b21d360f" prot="public" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::SsaoConfig::bendStepSize</definition>
-        <argsstring></argsstring>
-        <name>bendStepSize</name>
-        <initializer>{ 0.5f }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The normals bending ray marching step size. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="68" column="1" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="68" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="db/dcc/a04712_1a2f79a962e2ae52b8e7f3ec0e1f3c2b5e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SsaoConfig::accept</definition>
-        <argsstring>(castor::String const &amp;name, PipelineVisitorBase &amp;visitor)</argsstring>
-        <name>accept</name>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type><ref refid="d5/d73/a03836" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
-          <declname>visitor</declname>
-        </param>
+        <name>reflRefr</name>
+        <qualifiedname>castor3d::PassBuffer::PassDataPtr::reflRefr</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="19" column="1"/>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="94" column="13" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="94" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Ssao/SsaoConfig.hpp" line="18" column="1" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="17" bodyend="69"/>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::PassBuffer::PassDataPtr</label>
+        <link refid="db/dcc/a04712"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>colourDiv</edgelabel>
+          <edgelabel>common</edgelabel>
+          <edgelabel>edgeColour</edgelabel>
+          <edgelabel>edgeFactors</edgelabel>
+          <edgelabel>opacity</edgelabel>
+          <edgelabel>reflRefr</edgelabel>
+          <edgelabel>specDiv</edgelabel>
+          <edgelabel>specific</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::PassBuffer::RgbaColour</label>
+        <link refid="d2/d88/a04704"/>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="85" column="1" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="86" bodyend="95"/>
     <listofallmembers>
-      <member refid="db/dcc/a04712_1a2f79a962e2ae52b8e7f3ec0e1f3c2b5e" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>accept</name></member>
-      <member refid="db/dcc/a04712_1ae50750d6b0b73142825482e10f0b45e5" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>bendStepCount</name></member>
-      <member refid="db/dcc/a04712_1ad65ee5938729989a3b95a870b21d360f" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>bendStepSize</name></member>
-      <member refid="db/dcc/a04712_1a10c74f27ce7ead70ea43df6cc0a2baa4" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>bias</name></member>
-      <member refid="db/dcc/a04712_1a90b5f5c6fdaa124ae3a68d6e2621d5af" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>blurHighQuality</name></member>
-      <member refid="db/dcc/a04712_1a39510aea40f0964299910d74aedbfb0d" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>blurRadius</name></member>
-      <member refid="db/dcc/a04712_1afae83535e7ed32b2e830ac5f1b8ea070" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>blurStepSize</name></member>
-      <member refid="db/dcc/a04712_1a656080a608965d5cc362b2d1dbdaa71d" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>edgeSharpness</name></member>
-      <member refid="db/dcc/a04712_1a6e7398a8f5b1db7a06abccc148a2ed37" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>enabled</name></member>
-      <member refid="db/dcc/a04712_1af06d7cc7c149df11f4281b7a7bacc9d0" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>highQuality</name></member>
-      <member refid="db/dcc/a04712_1a551820443946351a8b2c35d631ff4e44" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>intensity</name></member>
-      <member refid="db/dcc/a04712_1a7fd733973f8fa2f36b123df0b7a3cad8" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>logMaxOffset</name></member>
-      <member refid="db/dcc/a04712_1a7ae9a14ac80dfb8a2a42013fdfc63398" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>maxMipLevel</name></member>
-      <member refid="db/dcc/a04712_1a5c00f100857f71a46adb1dfbc8905ca5" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>minRadius</name></member>
-      <member refid="db/dcc/a04712_1a94c88bfe04532417ccedf6a24b658856" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>numSamples</name></member>
-      <member refid="db/dcc/a04712_1a9c6a7dd2205dc53dda3e935c7b923c85" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>radius</name></member>
-      <member refid="db/dcc/a04712_1a593d6b80cbeef54b968771f32965b3a8" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>useNormalsBuffer</name></member>
-      <member refid="db/dcc/a04712_1ab6c094a6537836b1f6e58497e26bcfd8" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>variation</name></member>
+      <member refid="db/dcc/a04712_1a3d9d1f68bed16591fa6b83948ee8e23e" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassDataPtr</scope><name>colourDiv</name></member>
+      <member refid="db/dcc/a04712_1aa30bcdafa28c466a3a3c84d4af924257" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassDataPtr</scope><name>common</name></member>
+      <member refid="db/dcc/a04712_1a842da938c98f3e8a1f145e3e01621a0e" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassDataPtr</scope><name>edgeColour</name></member>
+      <member refid="db/dcc/a04712_1a446bf41cd0bd536874db2882f6aa8ff3" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassDataPtr</scope><name>edgeFactors</name></member>
+      <member refid="db/dcc/a04712_1a4820d4109cf89a5a29f8d3968a352345" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassDataPtr</scope><name>opacity</name></member>
+      <member refid="db/dcc/a04712_1aa44ed627d3d310f6f489b7164571e847" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassDataPtr</scope><name>reflRefr</name></member>
+      <member refid="db/dcc/a04712_1ab57cdd9554680316c5cc350b4dca987e" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassDataPtr</scope><name>specDiv</name></member>
+      <member refid="db/dcc/a04712_1abd17a2e289f7113396b4700ae04e2a36" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassDataPtr</scope><name>specific</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

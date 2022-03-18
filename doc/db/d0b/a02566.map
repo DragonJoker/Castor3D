@@ -1,6 +1,4 @@
-<map id="castor3d::MipView" name="castor3d::MipView">
-<area shape="rect" id="node1" title=" " alt="" coords="23,288,153,315"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,184,171,225"/>
-<area shape="rect" id="node3" title="STL class." alt="" coords="31,95,145,121"/>
-<area shape="rect" id="node4" title=" " alt="" coords="69,5,107,32"/>
+<map id="castor3d::ObjectBufferPool" name="castor3d::ObjectBufferPool">
+<area shape="rect" id="node1" title=" " alt="" coords="33,80,210,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,237,32"/>
 </map>

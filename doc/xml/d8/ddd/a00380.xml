@@ -1,105 +1,118 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d8/ddd/a00380" kind="file" language="C++">
-    <compoundname>GpuInformations.hpp</compoundname>
-    <includes refid="d4/d27/a00392" local="yes">MiscellaneousModule.hpp</includes>
-    <includedby refid="d3/d60/a00818" local="yes">Render/RenderSystem.hpp</includedby>
+    <compoundname>DebugCallbacks.hpp</compoundname>
+    <includes refid="d7/d00/a00401" local="yes">MiscellaneousModule.hpp</includes>
+    <includes local="no">memory</includes>
+    <includedby refid="dc/d1b/a00827" local="yes">Render/RenderSystem.hpp</includedby>
     <incdepgraph>
-      <node id="7422">
-        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
-      </node>
-      <node id="7425">
-        <label>ashespp/AshesPPPrerequisites.hpp</label>
-      </node>
-      <node id="7426">
-        <label>cstdint</label>
-      </node>
-      <node id="7424">
-        <label>CastorUtils/Math/Point.hpp</label>
-      </node>
-      <node id="7417">
-        <label>Castor3D/Castor3DModule.hpp</label>
-        <link refid="d5/d35/a00266"/>
-        <childnode refid="7418" relation="include">
-        </childnode>
-        <childnode refid="7419" relation="include">
-        </childnode>
-        <childnode refid="7420" relation="include">
-        </childnode>
-        <childnode refid="7421" relation="include">
-        </childnode>
-        <childnode refid="7422" relation="include">
-        </childnode>
-        <childnode refid="7423" relation="include">
-        </childnode>
-        <childnode refid="7424" relation="include">
-        </childnode>
-        <childnode refid="7425" relation="include">
-        </childnode>
-        <childnode refid="7426" relation="include">
-        </childnode>
-        <childnode refid="7427" relation="include">
-        </childnode>
-        <childnode refid="7428" relation="include">
-        </childnode>
-        <childnode refid="7429" relation="include">
-        </childnode>
-      </node>
-      <node id="7428">
-        <label>string</label>
-      </node>
-      <node id="7421">
-        <label>CastorUtils/Exception/Assertion.hpp</label>
-      </node>
-      <node id="7418">
-        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
-      </node>
-      <node id="7420">
-        <label>CastorUtils/Design/OwnedBy.hpp</label>
-      </node>
-      <node id="7416">
-        <label>MiscellaneousModule.hpp</label>
-        <link refid="d4/d27/a00392"/>
-        <childnode refid="7417" relation="include">
-        </childnode>
-      </node>
-      <node id="7419">
+      <node id="5">
         <label>CastorUtils/Design/FlagCombination.hpp</label>
       </node>
-      <node id="7429">
-        <label>vector</label>
+      <node id="6">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
       </node>
-      <node id="7423">
+      <node id="7">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="8">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="9">
+        <label>CastorUtils/Graphics/Size.hpp</label>
+      </node>
+      <node id="10">
         <label>CastorUtils/Math/Coords.hpp</label>
       </node>
-      <node id="7415">
-        <label>Miscellaneous/GpuInformations.hpp</label>
-        <link refid="d8/ddd/a00380"/>
-        <childnode refid="7416" relation="include">
+      <node id="11">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="4">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="13">
+        <label>RenderGraph/FrameGraphPrerequisites.hpp</label>
+      </node>
+      <node id="3">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d6/d22/a00245"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
         </childnode>
       </node>
-      <node id="7427">
+      <node id="1">
+        <label>Miscellaneous/DebugCallbacks.hpp</label>
+        <link refid="d8/ddd/a00380"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>MiscellaneousModule.hpp</label>
+        <link refid="d7/d00/a00401"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="14">
+        <label>cstdint</label>
+      </node>
+      <node id="15">
         <label>memory</label>
+      </node>
+      <node id="16">
+        <label>string</label>
+      </node>
+      <node id="17">
+        <label>vector</label>
       </node>
     </incdepgraph>
     <invincdepgraph>
-      <node id="7431">
-        <label>Render/RenderSystem.hpp</label>
-        <link refid="d3/d60/a00818"/>
-      </node>
-      <node id="7430">
-        <label>Miscellaneous/GpuInformations.hpp</label>
+      <node id="1">
+        <label>Miscellaneous/DebugCallbacks.hpp</label>
         <link refid="d8/ddd/a00380"/>
-        <childnode refid="7431" relation="include">
+        <childnode refid="2" relation="include">
         </childnode>
       </node>
+      <node id="2">
+        <label>Render/RenderSystem.hpp</label>
+        <link refid="dc/d1b/a00827"/>
+      </node>
     </invincdepgraph>
-    <innerclass refid="df/d97/a02676" prot="public">castor3d::GpuInformations</innerclass>
-    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <innerclass refid="dd/d81/a02967" prot="public">castor3d::DebugCallbacks</innerclass>
+    <innernamespace refid="da/de3/a01398">castor3d</innernamespace>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/GpuInformations.hpp"/>
+    <location file="Miscellaneous/DebugCallbacks.hpp"/>
   </compounddef>
 </doxygen>

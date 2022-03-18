@@ -1,5 +1,4 @@
-<map id="castor3d::PostEffect" name="castor3d::PostEffect">
-<area shape="rect" id="node1" title=" " alt="" coords="137,80,277,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,237,32"/>
-<area shape="rect" id="node3" title=" " alt="" coords="262,5,325,32"/>
+<map id="castor3d::DirectionalLight" name="castor3d::DirectionalLight">
+<area shape="rect" id="node1" title=" " alt="" coords="5,80,175,107"/>
+<area shape="rect" id="node2" href="$d2/d71/a04503.html" title=" " alt="" coords="10,5,170,32"/>
 </map>

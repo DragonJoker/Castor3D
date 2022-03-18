@@ -1,5 +1,5 @@
-<map id="castor3d::Cache&lt; Plugin, castor::String &gt;" name="castor3d::Cache&lt; Plugin, castor::String &gt;">
-<area shape="rect" id="node1" title="Plug&#45;ins cache." alt="" coords="11,200,181,241"/>
-<area shape="rect" id="node2" href="$dc/dfd/a02370.html" title=" " alt="" coords="12,109,180,151"/>
-<area shape="rect" id="node3" href="$dc/dfd/a02370.html" title="Base class for an element cache." alt="" coords="5,5,187,47"/>
+<map id="castor3d::GpuBufferOffsetT&lt; DataT &gt;" name="castor3d::GpuBufferOffsetT&lt; DataT &gt;">
+<area shape="rect" id="node1" title="An offset and range of a GpuBuffer." alt="" coords="94,95,265,136"/>
+<area shape="rect" id="node2" href="$d7/d7d/a02527.html" title=" " alt="" coords="5,5,172,32"/>
+<area shape="rect" id="node3" href="$d9/dce/a02519.html" title="A memory range, in bytes." alt="" coords="197,5,343,32"/>
 </map>

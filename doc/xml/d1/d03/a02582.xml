@@ -1,44 +1,295 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d1/d03/a02582" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::TextureFlagsId</compoundname>
-    <includes local="no">MaterialModule.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d1/d03/a02582_1ad57186504176a62f6e78d36337fb9221" prot="public" static="no" mutable="no">
-        <type><ref refid="de/d13/a01473_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref></type>
-        <definition>TextureFlags castor3d::TextureFlagsId::flags</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d1/d03/a02582" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::SkinnedObjectBufferPool</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; RenderSystem &gt;</basecompoundref>
+    <includes local="no">ObjectBufferPool.hpp</includes>
+    <innerclass refid="df/d44/a02586" prot="public">castor3d::SkinnedObjectBufferPool::ModelBuffers</innerclass>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d1/d03/a02582_1a32815789514f6c432c4faeed125180c7" prot="public" static="no">
+        <type>std::vector&lt; std::unique_ptr&lt; <ref refid="df/d44/a02586" kindref="compound">ModelBuffers</ref> &gt; &gt;</type>
+        <definition>using castor3d::SkinnedObjectBufferPool::BufferArray =  std::vector&lt; std::unique_ptr&lt; ModelBuffers &gt; &gt;</definition>
         <argsstring></argsstring>
-        <name>flags</name>
+        <name>BufferArray</name>
+        <qualifiedname>castor3d::SkinnedObjectBufferPool::BufferArray</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/MaterialModule.hpp" line="109" column="1" bodyfile="Material/MaterialModule.hpp" bodystart="109" bodyend="-1"/>
+        <location file="Buffer/ObjectBufferPool.hpp" line="193" column="1" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="193" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d03/a02582_1add8db50fa1f749d90e7950caa4c691e8" prot="public" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::TextureFlagsId::id</definition>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/d03/a02582_1a583d8ee4123418ebba3b8a51e035adeb" prot="private" static="no" mutable="no">
+        <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::SkinnedObjectBufferPool::m_device</definition>
         <argsstring></argsstring>
-        <name>id</name>
+        <name>m_device</name>
+        <qualifiedname>castor3d::SkinnedObjectBufferPool::m_device</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/MaterialModule.hpp" line="110" column="1" bodyfile="Material/MaterialModule.hpp" bodystart="110" bodyend="-1"/>
+        <location file="Buffer/ObjectBufferPool.hpp" line="254" column="21" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="254" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d03/a02582_1a16230acb9d8b55b178166ef6364edead" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::SkinnedObjectBufferPool::m_debugName</definition>
+        <argsstring></argsstring>
+        <name>m_debugName</name>
+        <qualifiedname>castor3d::SkinnedObjectBufferPool::m_debugName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="255" column="16" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="255" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d03/a02582_1a223f3a2e841167debf4a211497aedefd" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/d03/a02582_1a32815789514f6c432c4faeed125180c7" kindref="member">BufferArray</ref></type>
+        <definition>BufferArray castor3d::SkinnedObjectBufferPool::m_buffers</definition>
+        <argsstring></argsstring>
+        <name>m_buffers</name>
+        <qualifiedname>castor3d::SkinnedObjectBufferPool::m_buffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="256" column="13" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="256" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d03/a02582_1ac8b186adb509b2f1fe0884fa9895441e" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SkinnedObjectBufferPool::SkinnedObjectBufferPool</definition>
+        <argsstring>(RenderDevice const &amp;device, castor::String debugName)</argsstring>
+        <name>SkinnedObjectBufferPool</name>
+        <qualifiedname>castor3d::SkinnedObjectBufferPool::SkinnedObjectBufferPool</qualifiedname>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String</type>
+          <declname>debugName</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">debugName</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The debug name. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="206" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d03/a02582_1a0db1c8341177a536ac1ef9139da11d36" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SkinnedObjectBufferPool::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor3d::SkinnedObjectBufferPool::cleanup</qualifiedname>
+        <briefdescription>
+<para>Cleans up all GPU buffers. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="214" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d03/a02582_1a89b24a7f4b7cc45e8b648f91b4f9d51b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SkinnedObjectBufferPool::upload</definition>
+        <argsstring>(ashes::CommandBuffer const &amp;cb)</argsstring>
+        <name>upload</name>
+        <qualifiedname>castor3d::SkinnedObjectBufferPool::upload</qualifiedname>
+        <param>
+          <type>ashes::CommandBuffer const &amp;</type>
+          <declname>cb</declname>
+        </param>
+        <briefdescription>
+<para>Uploads all GPU buffers to VRAM. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">cb</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The command buffer on which transfer commands are recorded. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="223" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d03/a02582_1a75f9adb8c21fb5df67bc5a775c455fd1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/d66/a02562" kindref="compound">ObjectBufferOffset</ref></type>
+        <definition>C3D_API ObjectBufferOffset castor3d::SkinnedObjectBufferPool::getBuffer</definition>
+        <argsstring>(VkDeviceSize vertexCount, VkDeviceSize indexCount)</argsstring>
+        <name>getBuffer</name>
+        <qualifiedname>castor3d::SkinnedObjectBufferPool::getBuffer</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>vertexCount</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>indexCount</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves a GPU buffer with the given size. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">vertexCount</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The wanted vertex count. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">indexCount</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The wanted index count. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The GPU buffer. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="236" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d03/a02582_1a332b5b2aa19f32e129317372035640eb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SkinnedObjectBufferPool::putBuffer</definition>
+        <argsstring>(ObjectBufferOffset const &amp;bufferOffset)</argsstring>
+        <name>putBuffer</name>
+        <qualifiedname>castor3d::SkinnedObjectBufferPool::putBuffer</qualifiedname>
+        <param>
+          <type><ref refid="d9/d66/a02562" kindref="compound">ObjectBufferOffset</ref> const &amp;</type>
+          <declname>bufferOffset</declname>
+        </param>
+        <briefdescription>
+<para>Releases a GPU buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferOffset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer offset to release. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="246" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d1/d03/a02582_1a7332216375581387588e95c3f57c2863" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> BufferArray::iterator</type>
+        <definition>C3D_API BufferArray::iterator castor3d::SkinnedObjectBufferPool::doFindBuffer</definition>
+        <argsstring>(VkDeviceSize vertexCount, VkDeviceSize indexCount, BufferArray &amp;array)</argsstring>
+        <name>doFindBuffer</name>
+        <qualifiedname>castor3d::SkinnedObjectBufferPool::doFindBuffer</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>vertexCount</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>indexCount</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d03/a02582_1a32815789514f6c432c4faeed125180c7" kindref="member">BufferArray</ref> &amp;</type>
+          <declname>array</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="249" column="31"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Material/MaterialModule.hpp" line="108" column="1" bodyfile="Material/MaterialModule.hpp" bodystart="107" bodyend="111"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::SkinnedObjectBufferPool</label>
+        <link refid="d1/d03/a02582"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; RenderSystem &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::SkinnedObjectBufferPool</label>
+        <link refid="d1/d03/a02582"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; RenderSystem &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Buffer/ObjectBufferPool.hpp" line="174" column="1" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="176" bodyend="257"/>
     <listofallmembers>
-      <member refid="d1/d03/a02582_1ad57186504176a62f6e78d36337fb9221" prot="public" virt="non-virtual"><scope>castor3d::TextureFlagsId</scope><name>flags</name></member>
-      <member refid="d1/d03/a02582_1add8db50fa1f749d90e7950caa4c691e8" prot="public" virt="non-virtual"><scope>castor3d::TextureFlagsId</scope><name>id</name></member>
+      <member refid="d1/d03/a02582_1a32815789514f6c432c4faeed125180c7" prot="public" virt="non-virtual"><scope>castor3d::SkinnedObjectBufferPool</scope><name>BufferArray</name></member>
+      <member refid="d1/d03/a02582_1a0db1c8341177a536ac1ef9139da11d36" prot="public" virt="non-virtual"><scope>castor3d::SkinnedObjectBufferPool</scope><name>cleanup</name></member>
+      <member refid="d1/d03/a02582_1a7332216375581387588e95c3f57c2863" prot="private" virt="non-virtual"><scope>castor3d::SkinnedObjectBufferPool</scope><name>doFindBuffer</name></member>
+      <member refid="d1/d03/a02582_1a75f9adb8c21fb5df67bc5a775c455fd1" prot="public" virt="non-virtual"><scope>castor3d::SkinnedObjectBufferPool</scope><name>getBuffer</name></member>
+      <member refid="d1/d03/a02582_1a223f3a2e841167debf4a211497aedefd" prot="private" virt="non-virtual"><scope>castor3d::SkinnedObjectBufferPool</scope><name>m_buffers</name></member>
+      <member refid="d1/d03/a02582_1a16230acb9d8b55b178166ef6364edead" prot="private" virt="non-virtual"><scope>castor3d::SkinnedObjectBufferPool</scope><name>m_debugName</name></member>
+      <member refid="d1/d03/a02582_1a583d8ee4123418ebba3b8a51e035adeb" prot="private" virt="non-virtual"><scope>castor3d::SkinnedObjectBufferPool</scope><name>m_device</name></member>
+      <member refid="d1/d03/a02582_1a332b5b2aa19f32e129317372035640eb" prot="public" virt="non-virtual"><scope>castor3d::SkinnedObjectBufferPool</scope><name>putBuffer</name></member>
+      <member refid="d1/d03/a02582_1ac8b186adb509b2f1fe0884fa9895441e" prot="public" virt="non-virtual"><scope>castor3d::SkinnedObjectBufferPool</scope><name>SkinnedObjectBufferPool</name></member>
+      <member refid="d1/d03/a02582_1a89b24a7f4b7cc45e8b648f91b4f9d51b" prot="public" virt="non-virtual"><scope>castor3d::SkinnedObjectBufferPool</scope><name>upload</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

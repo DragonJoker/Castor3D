@@ -1,5 +1,12 @@
-<map id="castor3d::Sampler" name="castor3d::Sampler">
-<area shape="rect" id="node1" title=" " alt="" coords="109,80,237,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,192,32"/>
-<area shape="rect" id="node3" title=" " alt="" coords="217,5,279,32"/>
+<map id="castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;" name="castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="243,113,428,155"/>
+<area shape="rect" id="node4" href="$dd/d32/a02636.html" title=" " alt="" coords="685,5,848,47"/>
+<area shape="rect" id="node5" href="$dd/dc4/a02632.html" title=" " alt="" coords="665,71,868,127"/>
+<area shape="rect" id="node7" href="$dd/dc4/a02632.html" title=" " alt="" coords="673,151,861,207"/>
+<area shape="rect" id="node9" href="$dd/dc4/a02632.html" title=" " alt="" coords="674,231,859,287"/>
+<area shape="rect" id="node2" title=" " alt="" coords="8,91,191,118"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,143,193,184"/>
+<area shape="rect" id="node6" href="$d6/dfc/a02612.html" title="BillboardList cache." alt="" coords="917,71,1120,127"/>
+<area shape="rect" id="node8" href="$d2/d5a/a02652.html" title="Geometry cache." alt="" coords="928,151,1109,207"/>
+<area shape="rect" id="node10" href="$de/d7b/a02660.html" title="Light cache." alt="" coords="937,231,1100,287"/>
 </map>

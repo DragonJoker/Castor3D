@@ -1,227 +1,281 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d7/d1c/a04747" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::LightPass::Pipeline</compoundname>
-    <includes local="no">LightPass.hpp</includes>
+    <compoundname>castor3d::ShaderModule</compoundname>
+    <includes local="no">ShaderModule.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d7/d1c/a04747_1ac7cea183781025e2af4e0da729601076" prot="public" static="no" mutable="no">
-        <type><ref refid="d9/d06/a04735_1a07c410d7f0d4b6b0a2d9f7c73d459d23" kindref="member">ProgramPtr</ref></type>
-        <definition>ProgramPtr castor3d::LightPass::Pipeline::program</definition>
+      <memberdef kind="variable" id="d7/d1c/a04747_1a428803e0813e289a4e34b54e7f46be94" prot="public" static="no" mutable="no">
+        <type>VkShaderStageFlagBits</type>
+        <definition>VkShaderStageFlagBits castor3d::ShaderModule::stage</definition>
         <argsstring></argsstring>
-        <name>program</name>
+        <name>stage</name>
+        <qualifiedname>castor3d::ShaderModule::stage</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="347" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="347" bodyend="-1"/>
+        <location file="Shader/ShaderModule.hpp" line="48" column="23" bodyfile="Shader/ShaderModule.hpp" bodystart="48" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d7/d1c/a04747_1ae3f1dbeb6d9356e05f8b5fdd215b6a7f" prot="public" static="no" mutable="no">
-        <type>ashes::DescriptorSetPtr</type>
-        <definition>ashes::DescriptorSetPtr castor3d::LightPass::Pipeline::uboDescriptorSet</definition>
+      <memberdef kind="variable" id="d7/d1c/a04747_1abcb1dc7987193f9c3a6d35823ee0a81b" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string castor3d::ShaderModule::name</definition>
         <argsstring></argsstring>
-        <name>uboDescriptorSet</name>
+        <name>name</name>
+        <qualifiedname>castor3d::ShaderModule::name</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="348" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="348" bodyend="-1"/>
+        <location file="Shader/ShaderModule.hpp" line="49" column="13" bodyfile="Shader/ShaderModule.hpp" bodystart="49" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d7/d1c/a04747_1a5bfb0ec8524bd2e9c93b63a2e77243e0" prot="public" static="no" mutable="no">
-        <type>ashes::WriteDescriptorSetArray</type>
-        <definition>ashes::WriteDescriptorSetArray castor3d::LightPass::Pipeline::textureWrites</definition>
+      <memberdef kind="variable" id="d7/d1c/a04747_1a3c0059e6aaeafb95753588ee7caecb18" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string castor3d::ShaderModule::source</definition>
         <argsstring></argsstring>
-        <name>textureWrites</name>
+        <name>source</name>
+        <qualifiedname>castor3d::ShaderModule::source</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="349" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="349" bodyend="-1"/>
+        <location file="Shader/ShaderModule.hpp" line="50" column="13" bodyfile="Shader/ShaderModule.hpp" bodystart="50" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d7/d1c/a04747_1afa6790d3b50c51a9a39352e5a05623a8" prot="public" static="no" mutable="no">
-        <type>ashes::DescriptorSetPtr</type>
-        <definition>ashes::DescriptorSetPtr castor3d::LightPass::Pipeline::textureDescriptorSet</definition>
+      <memberdef kind="variable" id="d7/d1c/a04747_1ae7377c33dfa458a5065bf2f5e93f1b6c" prot="public" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
+        <definition>ShaderPtr castor3d::ShaderModule::shader</definition>
         <argsstring></argsstring>
-        <name>textureDescriptorSet</name>
+        <name>shader</name>
+        <qualifiedname>castor3d::ShaderModule::shader</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="350" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="350" bodyend="-1"/>
+        <location file="Shader/ShaderModule.hpp" line="51" column="11" bodyfile="Shader/ShaderModule.hpp" bodystart="51" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d7/d1c/a04747_1a02809d192ca2151acdfde0599f895821" prot="public" static="no" mutable="no">
-        <type>ashes::CommandBufferPtr</type>
-        <definition>ashes::CommandBufferPtr castor3d::LightPass::Pipeline::firstCommandBuffer</definition>
-        <argsstring></argsstring>
-        <name>firstCommandBuffer</name>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/d1c/a04747_1a990703e9e11d654950a9e29ae6dc38e0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ShaderModule::ShaderModule</definition>
+        <argsstring>(ShaderModule const &amp;)=delete</argsstring>
+        <name>ShaderModule</name>
+        <qualifiedname>castor3d::ShaderModule::ShaderModule</qualifiedname>
+        <param>
+          <type><ref refid="d7/d1c/a04747" kindref="compound">ShaderModule</ref> const &amp;</type>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="351" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="351" bodyend="-1"/>
+        <location file="Shader/ShaderModule.hpp" line="31" column="1"/>
       </memberdef>
-      <memberdef kind="variable" id="d7/d1c/a04747_1a0a524428d0a0b3f3794473893a8865a6" prot="public" static="no" mutable="no">
-        <type>ashes::CommandBufferPtr</type>
-        <definition>ashes::CommandBufferPtr castor3d::LightPass::Pipeline::blendCommandBuffer</definition>
-        <argsstring></argsstring>
-        <name>blendCommandBuffer</name>
+      <memberdef kind="function" id="d7/d1c/a04747_1af9eeb3f2b6125df4e53a0953c3daa840" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d7/d1c/a04747" kindref="compound">ShaderModule</ref> &amp;</type>
+        <definition>ShaderModule &amp; castor3d::ShaderModule::operator=</definition>
+        <argsstring>(ShaderModule const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::ShaderModule::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d7/d1c/a04747" kindref="compound">ShaderModule</ref> const &amp;</type>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="352" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="352" bodyend="-1"/>
+        <location file="Shader/ShaderModule.hpp" line="32" column="15"/>
       </memberdef>
-      <memberdef kind="variable" id="d7/d1c/a04747_1a5128d10e6f566b14c4aa1fd038bcf981" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::LightPass::Pipeline::isFirstSet</definition>
-        <argsstring></argsstring>
-        <name>isFirstSet</name>
-        <initializer>{ false }</initializer>
+      <memberdef kind="function" id="d7/d1c/a04747_1a888b545beb34e5798399ece09cfaf8d0" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ShaderModule::ShaderModule</definition>
+        <argsstring>(ShaderModule &amp;&amp;rhs) noexcept</argsstring>
+        <name>ShaderModule</name>
+        <qualifiedname>castor3d::ShaderModule::ShaderModule</qualifiedname>
+        <param>
+          <type><ref refid="d7/d1c/a04747" kindref="compound">ShaderModule</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="353" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="353" bodyend="-1"/>
+        <location file="Shader/ShaderModule.hpp" line="34" column="9"/>
       </memberdef>
-      <memberdef kind="variable" id="d7/d1c/a04747_1a284d9c565d0238a58342a3be76bb7808" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::LightPass::Pipeline::isBlendSet</definition>
-        <argsstring></argsstring>
-        <name>isBlendSet</name>
-        <initializer>{ false }</initializer>
+      <memberdef kind="function" id="d7/d1c/a04747_1a1847074e6f52a8559bf92c496e19cd70" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/d1c/a04747" kindref="compound">ShaderModule</ref> &amp;</type>
+        <definition>C3D_API ShaderModule &amp; castor3d::ShaderModule::operator=</definition>
+        <argsstring>(ShaderModule &amp;&amp;rhs) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::ShaderModule::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d7/d1c/a04747" kindref="compound">ShaderModule</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="354" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="354" bodyend="-1"/>
+        <location file="Shader/ShaderModule.hpp" line="35" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d1c/a04747_1a11184df230700a731f26d54d773710ab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ShaderModule::ShaderModule</definition>
+        <argsstring>()=default</argsstring>
+        <name>ShaderModule</name>
+        <qualifiedname>castor3d::ShaderModule::ShaderModule</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderModule.hpp" line="37" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d1c/a04747_1ab41211fd99a34a4d7e66821d3678fbe8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ShaderModule::ShaderModule</definition>
+        <argsstring>(VkShaderStageFlagBits stage, std::string const &amp;name)</argsstring>
+        <name>ShaderModule</name>
+        <qualifiedname>castor3d::ShaderModule::ShaderModule</qualifiedname>
+        <param>
+          <type>VkShaderStageFlagBits</type>
+          <declname>stage</declname>
+        </param>
+        <param>
+          <type>std::string const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderModule.hpp" line="39" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d1c/a04747_1a2bbb15187ff44fc7be9424e600eb77be" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ShaderModule::ShaderModule</definition>
+        <argsstring>(VkShaderStageFlagBits stage, std::string const &amp;name, std::string source)</argsstring>
+        <name>ShaderModule</name>
+        <qualifiedname>castor3d::ShaderModule::ShaderModule</qualifiedname>
+        <param>
+          <type>VkShaderStageFlagBits</type>
+          <declname>stage</declname>
+        </param>
+        <param>
+          <type>std::string const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>std::string</type>
+          <declname>source</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderModule.hpp" line="41" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d1c/a04747_1a96e773e8e8fa0c1aac478e68158b768b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ShaderModule::ShaderModule</definition>
+        <argsstring>(VkShaderStageFlagBits stage, std::string const &amp;name, ShaderPtr shader)</argsstring>
+        <name>ShaderModule</name>
+        <qualifiedname>castor3d::ShaderModule::ShaderModule</qualifiedname>
+        <param>
+          <type>VkShaderStageFlagBits</type>
+          <declname>stage</declname>
+        </param>
+        <param>
+          <type>std::string const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
+          <declname>shader</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderModule.hpp" line="44" column="9"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>A non compiled shader module, with its source. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
     <collaborationgraph>
-      <node id="1629">
-        <label>castor3d::RenderSystem</label>
-        <link refid="d6/d55/a04603"/>
-        <childnode refid="1630" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1628">
+      <node id="6">
         <label>T</label>
       </node>
-      <node id="1632">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="1628" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="1627">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="1628" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="1631">
-        <label>std::vector&lt; ashes::CommandPoolPtr &gt;</label>
-        <childnode refid="1632" relation="template-instance">
-          <edgelabel>&lt; ashes::CommandPoolPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1626">
-        <label>std::array&lt; uint32_t, 4u &gt;</label>
-        <childnode refid="1627" relation="template-instance">
-          <edgelabel>&lt; uint32_t, 4u &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1633">
-        <label>std::unique_ptr&lt; T &gt;</label>
-        <childnode refid="1628" relation="usage">
-          <edgelabel>ptr</edgelabel>
-        </childnode>
-      </node>
-      <node id="1622">
-        <label>Named</label>
-      </node>
-      <node id="1624">
-        <label>castor::Unique&lt; Engine &gt;</label>
-      </node>
-      <node id="1619">
-        <label>castor3d::LightPass::Pipeline</label>
+      <node id="1">
+        <label>castor3d::ShaderModule</label>
         <link refid="d7/d1c/a04747"/>
-        <childnode refid="1620" relation="usage">
-          <edgelabel>program</edgelabel>
+        <childnode refid="2" relation="usage">
+          <edgelabel>name</edgelabel>
+          <edgelabel>source</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>shader</edgelabel>
         </childnode>
       </node>
-      <node id="1630">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
       </node>
-      <node id="1621">
-        <label>castor3d::LightPass::Program</label>
-        <link refid="dd/d07/a04743"/>
-        <childnode refid="1622" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1623" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="1625" relation="usage">
-          <edgelabel>m_device</edgelabel>
+      <node id="2">
+        <label>std::string</label>
+        <childnode refid="3" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="1620">
-        <label>std::unique_ptr&lt; Program &gt;</label>
-        <childnode refid="1621" relation="usage">
+      <node id="5">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="6" relation="usage">
           <edgelabel>ptr</edgelabel>
         </childnode>
-        <childnode refid="1633" relation="template-instance">
-          <edgelabel>&lt; Program &gt;</edgelabel>
-        </childnode>
       </node>
-      <node id="1623">
-        <label>castor3d::Engine</label>
-        <link refid="d0/d7c/a02499"/>
-        <childnode refid="1624" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1625">
-        <label>castor3d::RenderDevice</label>
-        <link refid="de/ddb/a04491"/>
-        <childnode refid="1626" relation="usage">
-          <edgelabel>queueFamiliesIndex</edgelabel>
-        </childnode>
-        <childnode refid="1629" relation="usage">
-          <edgelabel>renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="1631" relation="usage">
-          <edgelabel>commandPools</edgelabel>
+      <node id="4">
+        <label>std::unique_ptr&lt; ast::Shader &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; ast::Shader &gt;</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="346" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="345" bodyend="355"/>
+    <location file="Shader/ShaderModule.hpp" line="29" column="1" bodyfile="Shader/ShaderModule.hpp" bodystart="30" bodyend="52"/>
     <listofallmembers>
-      <member refid="d7/d1c/a04747_1a0a524428d0a0b3f3794473893a8865a6" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Pipeline</scope><name>blendCommandBuffer</name></member>
-      <member refid="d7/d1c/a04747_1a02809d192ca2151acdfde0599f895821" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Pipeline</scope><name>firstCommandBuffer</name></member>
-      <member refid="d7/d1c/a04747_1a284d9c565d0238a58342a3be76bb7808" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Pipeline</scope><name>isBlendSet</name></member>
-      <member refid="d7/d1c/a04747_1a5128d10e6f566b14c4aa1fd038bcf981" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Pipeline</scope><name>isFirstSet</name></member>
-      <member refid="d7/d1c/a04747_1ac7cea183781025e2af4e0da729601076" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Pipeline</scope><name>program</name></member>
-      <member refid="d7/d1c/a04747_1afa6790d3b50c51a9a39352e5a05623a8" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Pipeline</scope><name>textureDescriptorSet</name></member>
-      <member refid="d7/d1c/a04747_1a5bfb0ec8524bd2e9c93b63a2e77243e0" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Pipeline</scope><name>textureWrites</name></member>
-      <member refid="d7/d1c/a04747_1ae3f1dbeb6d9356e05f8b5fdd215b6a7f" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Pipeline</scope><name>uboDescriptorSet</name></member>
+      <member refid="d7/d1c/a04747_1abcb1dc7987193f9c3a6d35823ee0a81b" prot="public" virt="non-virtual"><scope>castor3d::ShaderModule</scope><name>name</name></member>
+      <member refid="d7/d1c/a04747_1af9eeb3f2b6125df4e53a0953c3daa840" prot="public" virt="non-virtual"><scope>castor3d::ShaderModule</scope><name>operator=</name></member>
+      <member refid="d7/d1c/a04747_1a1847074e6f52a8559bf92c496e19cd70" prot="public" virt="non-virtual"><scope>castor3d::ShaderModule</scope><name>operator=</name></member>
+      <member refid="d7/d1c/a04747_1ae7377c33dfa458a5065bf2f5e93f1b6c" prot="public" virt="non-virtual"><scope>castor3d::ShaderModule</scope><name>shader</name></member>
+      <member refid="d7/d1c/a04747_1a990703e9e11d654950a9e29ae6dc38e0" prot="public" virt="non-virtual"><scope>castor3d::ShaderModule</scope><name>ShaderModule</name></member>
+      <member refid="d7/d1c/a04747_1a888b545beb34e5798399ece09cfaf8d0" prot="public" virt="non-virtual"><scope>castor3d::ShaderModule</scope><name>ShaderModule</name></member>
+      <member refid="d7/d1c/a04747_1a11184df230700a731f26d54d773710ab" prot="public" virt="non-virtual"><scope>castor3d::ShaderModule</scope><name>ShaderModule</name></member>
+      <member refid="d7/d1c/a04747_1ab41211fd99a34a4d7e66821d3678fbe8" prot="public" virt="non-virtual"><scope>castor3d::ShaderModule</scope><name>ShaderModule</name></member>
+      <member refid="d7/d1c/a04747_1a2bbb15187ff44fc7be9424e600eb77be" prot="public" virt="non-virtual"><scope>castor3d::ShaderModule</scope><name>ShaderModule</name></member>
+      <member refid="d7/d1c/a04747_1a96e773e8e8fa0c1aac478e68158b768b" prot="public" virt="non-virtual"><scope>castor3d::ShaderModule</scope><name>ShaderModule</name></member>
+      <member refid="d7/d1c/a04747_1a3c0059e6aaeafb95753588ee7caecb18" prot="public" virt="non-virtual"><scope>castor3d::ShaderModule</scope><name>source</name></member>
+      <member refid="d7/d1c/a04747_1a428803e0813e289a4e34b54e7f46be94" prot="public" virt="non-virtual"><scope>castor3d::ShaderModule</scope><name>stage</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

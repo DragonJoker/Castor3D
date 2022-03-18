@@ -1,33 +1,90 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d3/d6c/a03744" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkCheckpointDataNV &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d3/d6c/a03744_1a3df7f4cf9c096a698685be82d8aff337" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkCheckpointDataNV &gt;::value</definition>
+    <compoundname>castor3d::VoxelBufferToTexture::Pipeline</compoundname>
+    <includes local="no">VoxelBufferToTexture.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/d6c/a03744_1a65077f193322303d3896f42e4879856f" prot="public" static="no" mutable="no">
+        <type><ref refid="d8/d0e/a04744" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::VoxelBufferToTexture::Pipeline::shader</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_CHECKPOINT_DATA_NV</initializer>
+        <name>shader</name>
+        <qualifiedname>castor3d::VoxelBufferToTexture::Pipeline::shader</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="347" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="347" bodyend="-1"/>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" line="27" column="14" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d6c/a03744_1af7dbf9245968453e6388e4fe726b062d" prot="public" static="no" mutable="no">
+        <type>ashes::ComputePipelinePtr</type>
+        <definition>ashes::ComputePipelinePtr castor3d::VoxelBufferToTexture::Pipeline::pipeline</definition>
+        <argsstring></argsstring>
+        <name>pipeline</name>
+        <qualifiedname>castor3d::VoxelBufferToTexture::Pipeline::pipeline</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" line="28" column="27" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" bodystart="28" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="347" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="347" bodyend="347"/>
+    <collaborationgraph>
+      <node id="7">
+        <label>T</label>
+      </node>
+      <node id="2">
+        <label>castor3d::ShaderModule</label>
+        <link refid="d8/d0e/a04744"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>name</edgelabel>
+          <edgelabel>source</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>shader</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::VoxelBufferToTexture::Pipeline</label>
+        <link refid="d3/d6c/a03744"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>shader</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="3">
+        <label>std::string</label>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::unique_ptr&lt; ast::Shader &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; ast::Shader &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" line="25" column="1" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" bodystart="26" bodyend="29"/>
     <listofallmembers>
-      <member refid="d3/d6c/a03744_1a3df7f4cf9c096a698685be82d8aff337" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkCheckpointDataNV &gt;</scope><name>value</name></member>
+      <member refid="d3/d6c/a03744_1af7dbf9245968453e6388e4fe726b062d" prot="public" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture::Pipeline</scope><name>pipeline</name></member>
+      <member refid="d3/d6c/a03744_1a65077f193322303d3896f42e4879856f" prot="public" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture::Pipeline</scope><name>shader</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

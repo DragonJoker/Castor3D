@@ -1,33 +1,46 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dc/d5c/a03483" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkImageFormatListCreateInfoKHR &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="dc/d5c/a03483_1a40fff62de42470f229a7b04fcac0abc6" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkImageFormatListCreateInfoKHR &gt;::value</definition>
+    <compoundname>castor3d::VertexBoneData::Weights::weights</compoundname>
+    <includes local="no">VertexBoneData.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/d5c/a03483_1acf40628e9abc3101fae5e16ea9ab945e" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::VertexBoneData::Weights::weights::weight0</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR</initializer>
+        <name>weight0</name>
+        <qualifiedname>castor3d::VertexBoneData::Weights::weights::weight0</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="287" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="287" bodyend="-1"/>
+        <location file="Model/Skeleton/VertexBoneData.hpp" line="107" column="17" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d5c/a03483_1adc631aa4a11633f4bea00eddec0a4a2c" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::VertexBoneData::Weights::weights::weight1</definition>
+        <argsstring></argsstring>
+        <name>weight1</name>
+        <qualifiedname>castor3d::VertexBoneData::Weights::weights::weight1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/VertexBoneData.hpp" line="108" column="17" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="108" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="287" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="287" bodyend="287"/>
+    <location file="Model/Skeleton/VertexBoneData.hpp" line="105" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="106" bodyend="109"/>
     <listofallmembers>
-      <member refid="dc/d5c/a03483_1a40fff62de42470f229a7b04fcac0abc6" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkImageFormatListCreateInfoKHR &gt;</scope><name>value</name></member>
+      <member refid="dc/d5c/a03483_1acf40628e9abc3101fae5e16ea9ab945e" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Weights::weights</scope><name>weight0</name></member>
+      <member refid="dc/d5c/a03483_1adc631aa4a11633f4bea00eddec0a4a2c" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Weights::weights</scope><name>weight1</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

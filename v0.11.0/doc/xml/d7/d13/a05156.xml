@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d7/d13/a05156" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Fog</compoundname>
+    <includes local="no">Fog.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d7/d13/a05156_1aa335665572c9bc485e59e03415b27c4b" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d1e/a01479_1a99a6b51dbe68abcf95c70f03008dd3a3" kindref="member">FogType</ref></type>
+        <definition>FogType castor3d::Fog::m_type</definition>
+        <argsstring></argsstring>
+        <name>m_type</name>
+        <initializer>{ <ref refid="da/d1e/a01479_1a99a6b51dbe68abcf95c70f03008dd3a3ab32b520e58e1334ea07d4df5a4c5c402" kindref="member">FogType::eDisabled</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Fog.hpp" line="60" column="1" bodyfile="Scene/Fog.hpp" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d13/a05156_1a9c71be33bfb8286212d196e10ee4a9ea" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::Fog::m_density</definition>
+        <argsstring></argsstring>
+        <name>m_density</name>
+        <initializer>{ 0.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Fog.hpp" line="61" column="1" bodyfile="Scene/Fog.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/d13/a05156_1a8d3651269c2eaa72f82f733e6e6ad5a6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::Fog::getDensity</definition>
+        <argsstring>() const</argsstring>
+        <name>getDensity</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The fog&apos;s density. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Fog.hpp" line="20" column="1" bodyfile="Scene/Fog.hpp" bodystart="20" bodyend="23"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d13/a05156_1a40727e4aeb3f250f47241951510f6051" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Fog::setDensity</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setDensity</name>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Sets the fog&apos;s density. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Fog.hpp" line="32" column="1" bodyfile="Scene/Fog.hpp" bodystart="32" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d13/a05156_1a17321980e758b1ae9093f548f0feddd8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d1e/a01479_1a99a6b51dbe68abcf95c70f03008dd3a3" kindref="member">FogType</ref></type>
+        <definition>FogType castor3d::Fog::getType</definition>
+        <argsstring>() const</argsstring>
+        <name>getType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The fog type. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Fog.hpp" line="42" column="1" bodyfile="Scene/Fog.hpp" bodystart="42" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d13/a05156_1a22f56909dc877e7713ece4e753e125be" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Fog::setType</definition>
+        <argsstring>(FogType value)</argsstring>
+        <name>setType</name>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a99a6b51dbe68abcf95c70f03008dd3a3" kindref="member">FogType</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Sets the fog type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Fog.hpp" line="54" column="1" bodyfile="Scene/Fog.hpp" bodystart="54" bodyend="57"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Scene/Fog.hpp" line="12" column="1" bodyfile="Scene/Fog.hpp" bodystart="11" bodyend="62"/>
+    <listofallmembers>
+      <member refid="d7/d13/a05156_1a8d3651269c2eaa72f82f733e6e6ad5a6" prot="public" virt="non-virtual"><scope>castor3d::Fog</scope><name>getDensity</name></member>
+      <member refid="d7/d13/a05156_1a17321980e758b1ae9093f548f0feddd8" prot="public" virt="non-virtual"><scope>castor3d::Fog</scope><name>getType</name></member>
+      <member refid="d7/d13/a05156_1a9c71be33bfb8286212d196e10ee4a9ea" prot="private" virt="non-virtual"><scope>castor3d::Fog</scope><name>m_density</name></member>
+      <member refid="d7/d13/a05156_1aa335665572c9bc485e59e03415b27c4b" prot="private" virt="non-virtual"><scope>castor3d::Fog</scope><name>m_type</name></member>
+      <member refid="d7/d13/a05156_1a40727e4aeb3f250f47241951510f6051" prot="public" virt="non-virtual"><scope>castor3d::Fog</scope><name>setDensity</name></member>
+      <member refid="d7/d13/a05156_1a22f56909dc877e7713ece4e753e125be" prot="public" virt="non-virtual"><scope>castor3d::Fog</scope><name>setType</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

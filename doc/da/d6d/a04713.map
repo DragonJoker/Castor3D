@@ -1,15 +1,4 @@
-<map id="castor3d::DirectionalLightPass::Program" name="castor3d::DirectionalLightPass::Program">
-<area shape="rect" id="node1" title="Directional light pass program." alt="" coords="1352,49,1521,90"/>
-<area shape="rect" id="node2" href="$dd/d07/a04743.html" title="Base class for all light pass programs." alt="" coords="1164,49,1303,90"/>
-<area shape="rect" id="node3" title=" " alt="" coords="944,5,1007,32"/>
-<area shape="rect" id="node4" href="$d0/d7c/a02499.html" title=" " alt="" coords="915,56,1035,83"/>
-<area shape="rect" id="node5" title=" " alt="" coords="557,39,728,65"/>
-<area shape="rect" id="node6" href="$de/ddb/a04491.html" title=" " alt="" coords="896,140,1055,167"/>
-<area shape="rect" id="node7" title=" " alt="" coords="581,90,705,131"/>
-<area shape="rect" id="node8" title="STL class." alt="" coords="189,100,297,127"/>
-<area shape="rect" id="node9" title=" " alt="" coords="5,128,44,155"/>
-<area shape="rect" id="node13" title="STL class." alt="" coords="186,157,299,184"/>
-<area shape="rect" id="node10" href="$d6/d55/a04603.html" title=" " alt="" coords="559,221,726,248"/>
-<area shape="rect" id="node11" title=" " alt="" coords="149,221,336,248"/>
-<area shape="rect" id="node12" title=" " alt="" coords="571,155,715,197"/>
+<map id="castor3d::PassBuffer::PassDataPtr" name="castor3d::PassBuffer::PassDataPtr">
+<area shape="rect" id="node1" title=" " alt="" coords="5,212,148,253"/>
+<area shape="rect" id="node2" href="$d6/d7d/a04707.html" title="4 components colour." alt="" coords="5,5,148,47"/>
 </map>

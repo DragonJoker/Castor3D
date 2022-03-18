@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dd/d61/a04548" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TexturedQuad</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+    <innerclass refid="d0/df1/a04552" prot="public">castor3d::TexturedQuad::Vertex</innerclass>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dd/d61/a04548_1aff91a561df99650c86eb2d046f4c6919" prot="public" static="no" mutable="no">
+        <type><ref refid="d0/df1/a04552" kindref="compound">Vertex</ref></type>
+        <definition>Vertex castor3d::TexturedQuad::vertex[6]</definition>
+        <argsstring>[6]</argsstring>
+        <name>vertex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="41" column="1" bodyfile="Render/RenderModule.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4417">
+        <label>castor3d::TexturedQuad::Vertex</label>
+        <link refid="d0/df1/a04552"/>
+      </node>
+      <node id="4416">
+        <label>castor3d::TexturedQuad</label>
+        <link refid="dd/d61/a04548"/>
+        <childnode refid="4417" relation="usage">
+          <edgelabel>vertex</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/RenderModule.hpp" line="34" column="1" bodyfile="Render/RenderModule.hpp" bodystart="33" bodyend="42"/>
+    <listofallmembers>
+      <member refid="dd/d61/a04548_1aff91a561df99650c86eb2d046f4c6919" prot="public" virt="non-virtual"><scope>castor3d::TexturedQuad</scope><name>vertex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

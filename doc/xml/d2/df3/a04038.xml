@@ -1,44 +1,70 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d2/df3/a04038" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VertexBoneData::Ids::ids</compoundname>
-    <includes local="no">VertexBoneData.hpp</includes>
+    <compoundname>castor3d::ShadowMapLightIds</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d2/df3/a04038_1a7536e50be127b44b8bcbe4d960bd7f87" prot="public" static="no" mutable="no">
-        <type>castor::Point4ui</type>
-        <definition>castor::Point4ui castor3d::VertexBoneData::Ids::ids::id0</definition>
+      <memberdef kind="variable" id="d2/df3/a04038_1ad6138080c0e1adc3128d72e38fc52720" prot="public" static="no" mutable="no">
+        <type>std::reference_wrapper&lt; <ref refid="d2/d0e/a04114" kindref="compound">ShadowMap</ref> &gt;</type>
+        <definition>std::reference_wrapper&lt; ShadowMap &gt; castor3d::ShadowMapLightIds::shadowMap</definition>
         <argsstring></argsstring>
-        <name>id0</name>
+        <name>shadowMap</name>
+        <qualifiedname>castor3d::ShadowMapLightIds::shadowMap</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="38" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="38" bodyend="-1"/>
+        <location file="Render/RenderModule.hpp" line="614" column="24" bodyfile="Render/RenderModule.hpp" bodystart="614" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d2/df3/a04038_1adfd4ecca8226ca3b10ab1115e17f1f85" prot="public" static="no" mutable="no">
-        <type>castor::Point4ui</type>
-        <definition>castor::Point4ui castor3d::VertexBoneData::Ids::ids::id1</definition>
+      <memberdef kind="variable" id="d2/df3/a04038_1a0cb3178cf64569ec52a1d2ddddb26e06" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a2563a5635546e66343df0038b6af826a" kindref="member">LightIdArray</ref></type>
+        <definition>LightIdArray castor3d::ShadowMapLightIds::ids</definition>
         <argsstring></argsstring>
-        <name>id1</name>
+        <name>ids</name>
+        <qualifiedname>castor3d::ShadowMapLightIds::ids</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="39" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="39" bodyend="-1"/>
+        <location file="Render/RenderModule.hpp" line="615" column="14" bodyfile="Render/RenderModule.hpp" bodystart="615" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Model/Skeleton/VertexBoneData.hpp" line="37" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="36" bodyend="40"/>
+    <collaborationgraph>
+      <node id="4">
+        <label>T</label>
+      </node>
+      <node id="1">
+        <label>castor3d::ShadowMapLightIds</label>
+        <link refid="d2/df3/a04038"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>ids</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::vector&lt; std::pair&lt; Light *, uint32_t &gt; &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; std::pair&lt; Light *, uint32_t &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/RenderModule.hpp" line="612" column="1" bodyfile="Render/RenderModule.hpp" bodystart="613" bodyend="616"/>
     <listofallmembers>
-      <member refid="d2/df3/a04038_1a7536e50be127b44b8bcbe4d960bd7f87" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids::ids</scope><name>id0</name></member>
-      <member refid="d2/df3/a04038_1adfd4ecca8226ca3b10ab1115e17f1f85" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids::ids</scope><name>id1</name></member>
+      <member refid="d2/df3/a04038_1a0cb3178cf64569ec52a1d2ddddb26e06" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapLightIds</scope><name>ids</name></member>
+      <member refid="d2/df3/a04038_1ad6138080c0e1adc3128d72e38fc52720" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapLightIds</scope><name>shadowMap</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

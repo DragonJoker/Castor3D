@@ -1,17 +1,17 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_eddf2ff1f2f73ff4c7ae36625ceded65" kind="dir">
     <compoundname>Scene/ParticleSystem</compoundname>
-    <innerfile refid="d5/d3e/a01139">ComputeParticleSystem.hpp</innerfile>
-    <innerfile refid="d3/ddc/a01142">CpuParticleSystem.hpp</innerfile>
-    <innerfile refid="d9/d65/a01145">Particle.hpp</innerfile>
-    <innerfile refid="db/d17/a01148">ParticleDeclaration.hpp</innerfile>
-    <innerfile refid="de/df1/a01151">ParticleElementDeclaration.hpp</innerfile>
-    <innerfile refid="d5/d16/a01154">ParticleEmitter.hpp</innerfile>
-    <innerfile refid="d9/d25/a01157">ParticleModule.hpp</innerfile>
-    <innerfile refid="da/d20/a01160">ParticleSystem.hpp</innerfile>
-    <innerfile refid="d6/d27/a01163">ParticleSystemImpl.hpp</innerfile>
-    <innerfile refid="dc/dee/a01166">ParticleUpdater.hpp</innerfile>
+    <innerfile refid="d1/dfa/a01097">ComputeParticleSystem.hpp</innerfile>
+    <innerfile refid="d3/dbd/a01100">CpuParticleSystem.hpp</innerfile>
+    <innerfile refid="d9/d10/a01103">Particle.hpp</innerfile>
+    <innerfile refid="da/d4e/a01106">ParticleDeclaration.hpp</innerfile>
+    <innerfile refid="d8/dbf/a01109">ParticleElementDeclaration.hpp</innerfile>
+    <innerfile refid="d0/d39/a01112">ParticleEmitter.hpp</innerfile>
+    <innerfile refid="df/dd5/a01115">ParticleModule.hpp</innerfile>
+    <innerfile refid="dd/d09/a01118">ParticleSystem.hpp</innerfile>
+    <innerfile refid="dd/de4/a01121">ParticleSystemImpl.hpp</innerfile>
+    <innerfile refid="d0/dc8/a01124">ParticleUpdater.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

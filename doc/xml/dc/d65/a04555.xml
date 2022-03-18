@@ -1,44 +1,364 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dc/d65/a04555" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::TexturedCube::Quad::Vertex</compoundname>
-    <includes local="no">RenderModule.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="dc/d65/a04555_1a7ef8a8209466dd503ad13edcff8c1000" prot="public" static="no" mutable="no">
-        <type>castor::Point3f</type>
-        <definition>castor::Point3f castor3d::TexturedCube::Quad::Vertex::position</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dc/d65/a04555" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Particle</compoundname>
+    <includes local="no">Particle.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dc/d65/a04555_1ab6119d5c0abffd672cfb892fc306db57" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/dce/a04559" kindref="compound">ParticleDeclaration</ref> const  &amp;</type>
+        <definition>ParticleDeclaration const&amp; castor3d::Particle::m_description</definition>
         <argsstring></argsstring>
-        <name>position</name>
+        <name>m_description</name>
+        <qualifiedname>castor3d::Particle::m_description</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="65" column="1" bodyfile="Render/RenderModule.hpp" bodystart="65" bodyend="-1"/>
+        <location file="Scene/ParticleSystem/Particle.hpp" line="122" column="28" bodyfile="Scene/ParticleSystem/Particle.hpp" bodystart="122" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dc/d65/a04555_1aa9a9454b27908c961300b87f7df52784" prot="public" static="no" mutable="no">
-        <type>castor::Point2f</type>
-        <definition>castor::Point2f castor3d::TexturedCube::Quad::Vertex::texture</definition>
+      <memberdef kind="variable" id="dc/d65/a04555_1a16495a6b3585f1b48bebdcb4e2307b47" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; uint8_t &gt;</type>
+        <definition>std::vector&lt; uint8_t &gt; castor3d::Particle::m_data</definition>
         <argsstring></argsstring>
-        <name>texture</name>
+        <name>m_data</name>
+        <qualifiedname>castor3d::Particle::m_data</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="66" column="1" bodyfile="Render/RenderModule.hpp" bodystart="66" bodyend="-1"/>
+        <location file="Scene/ParticleSystem/Particle.hpp" line="123" column="13" bodyfile="Scene/ParticleSystem/Particle.hpp" bodystart="123" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d65/a04555_1a1c9845a3c4dfa38076266762cf498e39" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Particle::Particle</definition>
+        <argsstring>(ParticleDeclaration const &amp;description, castor::StrStrMap const &amp;defaultValues)</argsstring>
+        <name>Particle</name>
+        <qualifiedname>castor3d::Particle::Particle</qualifiedname>
+        <param>
+          <type><ref refid="d1/dce/a04559" kindref="compound">ParticleDeclaration</ref> const &amp;</type>
+          <declname>description</declname>
+        </param>
+        <param>
+          <type>castor::StrStrMap const &amp;</type>
+          <declname>defaultValues</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">description</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The particle&apos;s elements description. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">defaultValues</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The default values for the particle&apos;s elements. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/Particle.hpp" line="28" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a04555_1ad290f8e3498ab1e07891f4254971a83e" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Particle::Particle</definition>
+        <argsstring>(ParticleDeclaration const &amp;description)</argsstring>
+        <name>Particle</name>
+        <qualifiedname>castor3d::Particle::Particle</qualifiedname>
+        <param>
+          <type><ref refid="d1/dce/a04559" kindref="compound">ParticleDeclaration</ref> const &amp;</type>
+          <declname>description</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">description</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The particle&apos;s elements description. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/Particle.hpp" line="38" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a04555_1a4a3bfe32c2ede29c61ece32ada1aaed5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Particle::Particle</definition>
+        <argsstring>(Particle const &amp;rhs)</argsstring>
+        <name>Particle</name>
+        <qualifiedname>castor3d::Particle::Particle</qualifiedname>
+        <param>
+          <type><ref refid="dc/d65/a04555" kindref="compound">Particle</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Copy constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to copy. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/Particle.hpp" line="47" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a04555_1a00671506d1d7389cfb8801801cd75e35" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Particle::Particle</definition>
+        <argsstring>(Particle &amp;&amp;rhs) noexcept</argsstring>
+        <name>Particle</name>
+        <qualifiedname>castor3d::Particle::Particle</qualifiedname>
+        <param>
+          <type><ref refid="dc/d65/a04555" kindref="compound">Particle</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Move constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to move. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/Particle.hpp" line="56" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a04555_1a111785e4200e0c759d8fd3f295d1b24e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dc/d65/a04555" kindref="compound">Particle</ref> &amp;</type>
+        <definition>C3D_API Particle &amp; castor3d::Particle::operator=</definition>
+        <argsstring>(Particle const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::Particle::operator=</qualifiedname>
+        <param>
+          <type><ref refid="dc/d65/a04555" kindref="compound">Particle</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Copy assignment operator. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to copy. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/Particle.hpp" line="65" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a04555_1a1f40b089ddc2888bc5be2af0f15782c4" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dc/d65/a04555" kindref="compound">Particle</ref> &amp;</type>
+        <definition>C3D_API Particle &amp; castor3d::Particle::operator=</definition>
+        <argsstring>(Particle &amp;&amp;rhs) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::Particle::operator=</qualifiedname>
+        <param>
+          <type><ref refid="dc/d65/a04555" kindref="compound">Particle</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Move assignment operator. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to move. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/Particle.hpp" line="74" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a04555_1ab72898fcd1792b23eb3808cf5e5bfa85" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type><ref refid="da/de3/a01398_1a4fdd8bd8042f3a3ae81042067e1ac250" kindref="member">ParticleFormat</ref></type>
+            <declname>Type</declname>
+            <defname>Type</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::Particle::setValue</definition>
+        <argsstring>(uint32_t index, typename ElementTyper&lt; Type &gt;::Type const &amp;value)</argsstring>
+        <name>setValue</name>
+        <qualifiedname>castor3d::Particle::setValue</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>typename <ref refid="d0/dff/a04571" kindref="compound">ElementTyper</ref>&lt; Type &gt;::Type const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Sets the particle variable&apos;s value at given index. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The variable index. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The variable value. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/Particle.hpp" line="86" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a04555_1aea22b3a1bc883898794c31f2836214fe" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type><ref refid="da/de3/a01398_1a4fdd8bd8042f3a3ae81042067e1ac250" kindref="member">ParticleFormat</ref></type>
+            <declname>Type</declname>
+            <defname>Type</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d0/dff/a04571" kindref="compound">ElementTyper</ref>&lt; Type &gt;::Type</type>
+        <definition>ElementTyper&lt; Type &gt;::Type castor3d::Particle::getValue</definition>
+        <argsstring>(uint32_t index) const</argsstring>
+        <name>getValue</name>
+        <qualifiedname>castor3d::Particle::getValue</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Sets the particle variable&apos;s value at given index. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The variable index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The variable value. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/Particle.hpp" line="99" column="37"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a04555_1a2d0a329d177331cd7347823ccf698858" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint8_t const *</type>
+        <definition>uint8_t const  * castor3d::Particle::getData</definition>
+        <argsstring>() const</argsstring>
+        <name>getData</name>
+        <qualifiedname>castor3d::Particle::getData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The particle data. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/Particle.hpp" line="106" column="16" bodyfile="Scene/ParticleSystem/Particle.hpp" bodystart="106" bodyend="109"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a04555_1ac233236d08956e241431dda134c353d9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint8_t *</type>
+        <definition>uint8_t * castor3d::Particle::getData</definition>
+        <argsstring>()</argsstring>
+        <name>getData</name>
+        <qualifiedname>castor3d::Particle::getData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The particle data. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/Particle.hpp" line="116" column="10" bodyfile="Scene/ParticleSystem/Particle.hpp" bodystart="116" bodyend="119"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/RenderModule.hpp" line="64" column="1" bodyfile="Render/RenderModule.hpp" bodystart="63" bodyend="67"/>
+    <location file="Scene/ParticleSystem/Particle.hpp" line="15" column="1" bodyfile="Scene/ParticleSystem/Particle.hpp" bodystart="16" bodyend="124"/>
     <listofallmembers>
-      <member refid="dc/d65/a04555_1a7ef8a8209466dd503ad13edcff8c1000" prot="public" virt="non-virtual"><scope>castor3d::TexturedCube::Quad::Vertex</scope><name>position</name></member>
-      <member refid="dc/d65/a04555_1aa9a9454b27908c961300b87f7df52784" prot="public" virt="non-virtual"><scope>castor3d::TexturedCube::Quad::Vertex</scope><name>texture</name></member>
+      <member refid="dc/d65/a04555_1a2d0a329d177331cd7347823ccf698858" prot="public" virt="non-virtual"><scope>castor3d::Particle</scope><name>getData</name></member>
+      <member refid="dc/d65/a04555_1ac233236d08956e241431dda134c353d9" prot="public" virt="non-virtual"><scope>castor3d::Particle</scope><name>getData</name></member>
+      <member refid="dc/d65/a04555_1aea22b3a1bc883898794c31f2836214fe" prot="public" virt="non-virtual"><scope>castor3d::Particle</scope><name>getValue</name></member>
+      <member refid="dc/d65/a04555_1a16495a6b3585f1b48bebdcb4e2307b47" prot="private" virt="non-virtual"><scope>castor3d::Particle</scope><name>m_data</name></member>
+      <member refid="dc/d65/a04555_1ab6119d5c0abffd672cfb892fc306db57" prot="private" virt="non-virtual"><scope>castor3d::Particle</scope><name>m_description</name></member>
+      <member refid="dc/d65/a04555_1a111785e4200e0c759d8fd3f295d1b24e" prot="public" virt="non-virtual"><scope>castor3d::Particle</scope><name>operator=</name></member>
+      <member refid="dc/d65/a04555_1a1f40b089ddc2888bc5be2af0f15782c4" prot="public" virt="non-virtual"><scope>castor3d::Particle</scope><name>operator=</name></member>
+      <member refid="dc/d65/a04555_1a1c9845a3c4dfa38076266762cf498e39" prot="public" virt="non-virtual"><scope>castor3d::Particle</scope><name>Particle</name></member>
+      <member refid="dc/d65/a04555_1ad290f8e3498ab1e07891f4254971a83e" prot="public" virt="non-virtual"><scope>castor3d::Particle</scope><name>Particle</name></member>
+      <member refid="dc/d65/a04555_1a4a3bfe32c2ede29c61ece32ada1aaed5" prot="public" virt="non-virtual"><scope>castor3d::Particle</scope><name>Particle</name></member>
+      <member refid="dc/d65/a04555_1a00671506d1d7389cfb8801801cd75e35" prot="public" virt="non-virtual"><scope>castor3d::Particle</scope><name>Particle</name></member>
+      <member refid="dc/d65/a04555_1ab72898fcd1792b23eb3808cf5e5bfa85" prot="public" virt="non-virtual"><scope>castor3d::Particle</scope><name>setValue</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

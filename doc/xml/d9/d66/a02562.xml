@@ -1,35 +1,529 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d9/d66/a02562" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::UserInputEvent</compoundname>
-    <derivedcompoundref refid="d8/d4a/a02550" prot="public" virt="non-virtual">castor3d::HandlerEvent</derivedcompoundref>
-    <derivedcompoundref refid="d1/dfc/a02554" prot="public" virt="non-virtual">castor3d::KeyboardEvent</derivedcompoundref>
-    <derivedcompoundref refid="df/d23/a02558" prot="public" virt="non-virtual">castor3d::MouseEvent</derivedcompoundref>
-    <includes local="no">UserInputEvent.hpp</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d9/d66/a02562_1a5973899c9785c2dffaae34250aec448b" prot="private" static="no" mutable="no">
-        <type><ref refid="de/d13/a01473_1abdf15c31ed466fee351daf42b2b45ad5" kindref="member">UserInputEventType</ref></type>
-        <definition>UserInputEventType castor3d::UserInputEvent::m_eventType</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d9/d66/a02562" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ObjectBufferOffset</compoundname>
+    <includes local="no">ObjectBufferOffset.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/d66/a02562_1aa45f214669f52c76b1ee4afd10445097" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a7616d1d27aba8f61289a44545c397f8d" kindref="member">GpuPackedBuffer</ref> *</type>
+        <definition>GpuPackedBuffer* castor3d::ObjectBufferOffset::vtxBuffer</definition>
         <argsstring></argsstring>
-        <name>m_eventType</name>
+        <name>vtxBuffer</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::vtxBuffer</qualifiedname>
+        <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/UserInputEvent.hpp" line="58" column="1" bodyfile="Event/UserInput/UserInputEvent.hpp" bodystart="58" bodyend="-1"/>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="17" column="18" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="17" bodyend="-1"/>
+        <referencedby refid="d9/d66/a02562_1a801f606247b1560fabe21f575381a268" compoundref="d7/d25/a00182" startline="34" endline="37">getVertexBuffer</referencedby>
+        <referencedby refid="d9/d66/a02562_1a812844899cb02530ed9556969353e02c" compoundref="d7/d25/a00182" startline="68" endline="73">getVertexData</referencedby>
+        <referencedby refid="d9/d66/a02562_1a1de8378b29ce99d89dd43b2438907f95" compoundref="d7/d25/a00182" startline="144" endline="151">markVertexDirty</referencedby>
+        <referencedby refid="d9/d66/a02562_1a4abab85ee83943b53c1c3ff3bb6c04ac" compoundref="d7/d25/a00182" startline="24" endline="27">operator bool</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d66/a02562_1aa991ea046fe6d575c94f844e17d40452" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a7616d1d27aba8f61289a44545c397f8d" kindref="member">GpuPackedBuffer</ref> *</type>
+        <definition>GpuPackedBuffer* castor3d::ObjectBufferOffset::idxBuffer</definition>
+        <argsstring></argsstring>
+        <name>idxBuffer</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::idxBuffer</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="18" column="18" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="18" bodyend="-1"/>
+        <referencedby refid="d9/d66/a02562_1a13f508b50ff059287380d597539b586d" compoundref="d7/d25/a00182" startline="29" endline="32">getIndexBuffer</referencedby>
+        <referencedby refid="d9/d66/a02562_1a61bc3e37e6a74ec6fd084ac0342cdda9" compoundref="d7/d25/a00182" startline="60" endline="65">getIndexData</referencedby>
+        <referencedby refid="d9/d66/a02562_1a49454eb5619d9141d118bd3e0730d518" compoundref="d7/d25/a00182" startline="153" endline="160">markIndexDirty</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d66/a02562_1af964043ec7868b1fd0c43be0ad2ae41c" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a7616d1d27aba8f61289a44545c397f8d" kindref="member">GpuPackedBuffer</ref> *</type>
+        <definition>GpuPackedBuffer* castor3d::ObjectBufferOffset::bonBuffer</definition>
+        <argsstring></argsstring>
+        <name>bonBuffer</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::bonBuffer</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="19" column="18" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="19" bodyend="-1"/>
+        <referencedby refid="d9/d66/a02562_1a78ff41feec92e694e8f44141e6e06b0b" compoundref="d7/d25/a00182" startline="75" endline="80">getBoneData</referencedby>
+        <referencedby refid="d9/d66/a02562_1abd2a18b67e20307f0b946a0bc16e0f2b" compoundref="d7/d25/a00182" startline="39" endline="42">getBonesBuffer</referencedby>
+        <referencedby refid="d9/d66/a02562_1a57a1562087eb0cec6b650c6dbebb7c17" compoundref="d7/d25/a00182" startline="162" endline="169">markBonesDirty</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d66/a02562_1a59f8d59689cc4de0650a79bd63fb51dd" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/da8/a02522" kindref="compound">MemChunk</ref></type>
+        <definition>MemChunk castor3d::ObjectBufferOffset::vtxChunk</definition>
+        <argsstring></argsstring>
+        <name>vtxChunk</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::vtxChunk</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="20" column="10" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="20" bodyend="-1"/>
+        <referencedby refid="d9/d66/a02562_1ad19f83829fabe87220a22feed65921f7" compoundref="d7/d25/a00182" startline="118" endline="121">getVertexOffset</referencedby>
+        <referencedby refid="d9/d66/a02562_1a591a91670083d2547df3868afa985da2" compoundref="d7/d25/a00182" startline="87" endline="90">getVertexSize</referencedby>
+        <referencedby refid="d9/d66/a02562_1a64672cd7440e38a42592c26fb1928c2b" compoundref="d7/d25/a00182" startline="49" endline="52">hasVertices</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d66/a02562_1aaaed4098407a14b7264f14d02e7207f3" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/da8/a02522" kindref="compound">MemChunk</ref></type>
+        <definition>MemChunk castor3d::ObjectBufferOffset::idxChunk</definition>
+        <argsstring></argsstring>
+        <name>idxChunk</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::idxChunk</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="21" column="10" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="21" bodyend="-1"/>
+        <referencedby refid="d9/d66/a02562_1a61bc3e37e6a74ec6fd084ac0342cdda9" compoundref="d7/d25/a00182" startline="60" endline="65">getIndexData</referencedby>
+        <referencedby refid="d9/d66/a02562_1a002ec5ae64c21e2c9190ea4cad309aee" compoundref="d7/d25/a00182" startline="113" endline="116">getIndexOffset</referencedby>
+        <referencedby refid="d9/d66/a02562_1af19e7ffc551f44b60e46f4e6a59e2e0f" compoundref="d7/d25/a00182" startline="82" endline="85">getIndexSize</referencedby>
+        <referencedby refid="d9/d66/a02562_1a5c1738643933256b574cd135984b907f" compoundref="d7/d25/a00182" startline="44" endline="47">hasIndices</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d66/a02562_1ae56799d39b9b4e5f864654c8b04d2ef0" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/da8/a02522" kindref="compound">MemChunk</ref></type>
+        <definition>MemChunk castor3d::ObjectBufferOffset::bonChunk</definition>
+        <argsstring></argsstring>
+        <name>bonChunk</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::bonChunk</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="22" column="10" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="22" bodyend="-1"/>
+        <referencedby refid="d9/d66/a02562_1ae0ecc43b9a8ae40265e2d8626a5fe670" compoundref="d7/d25/a00182" startline="123" endline="126">getBonesOffset</referencedby>
+        <referencedby refid="d9/d66/a02562_1abda4e1ee0e76478fb211f837add9d494" compoundref="d7/d25/a00182" startline="92" endline="95">getBonesSize</referencedby>
+        <referencedby refid="d9/d66/a02562_1ae06b0fff9a30187995ec76507e85143b" compoundref="d7/d25/a00182" startline="54" endline="57">hasBones</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d9/d66/a02562_1a1d946a77fa49158379ee4e5dfb84a556" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="d9/d66/a02562_1a4abab85ee83943b53c1c3ff3bb6c04ac" prot="public" static="no" const="yes" explicit="yes" inline="yes" virt="non-virtual">
         <type></type>
-        <definition>castor3d::UserInputEvent::UserInputEvent</definition>
-        <argsstring>(UserInputEventType type)</argsstring>
-        <name>UserInputEvent</name>
+        <definition>castor3d::ObjectBufferOffset::operator bool</definition>
+        <argsstring>() const</argsstring>
+        <name>operator bool</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::operator bool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="24" column="10" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="24" bodyend="27"/>
+        <references refid="d9/d66/a02562_1aa45f214669f52c76b1ee4afd10445097" compoundref="d7/d25/a00182" startline="17">vtxBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/d66/a02562_1a13f508b50ff059287380d597539b586d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::BufferBase const &amp;</type>
+        <definition>ashes::BufferBase const  &amp; castor3d::ObjectBufferOffset::getIndexBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>getIndexBuffer</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getIndexBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="29" column="26" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="29" bodyend="32"/>
+        <references refid="d3/d41/a02530_1a2e96ae884d0c9c48a92282e0c9d1b816" compoundref="db/ddf/a00164" startline="122" endline="125">castor3d::GpuBufferBase::getBuffer</references>
+        <references refid="d9/d66/a02562_1aa991ea046fe6d575c94f844e17d40452" compoundref="d7/d25/a00182" startline="18">idxBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/d66/a02562_1a801f606247b1560fabe21f575381a268" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::BufferBase const &amp;</type>
+        <definition>ashes::BufferBase const  &amp; castor3d::ObjectBufferOffset::getVertexBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>getVertexBuffer</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getVertexBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="34" column="26" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="34" bodyend="37"/>
+        <references refid="d3/d41/a02530_1a2e96ae884d0c9c48a92282e0c9d1b816" compoundref="db/ddf/a00164" startline="122" endline="125">castor3d::GpuBufferBase::getBuffer</references>
+        <references refid="d9/d66/a02562_1aa45f214669f52c76b1ee4afd10445097" compoundref="d7/d25/a00182" startline="17">vtxBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/d66/a02562_1abd2a18b67e20307f0b946a0bc16e0f2b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::BufferBase const &amp;</type>
+        <definition>ashes::BufferBase const  &amp; castor3d::ObjectBufferOffset::getBonesBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>getBonesBuffer</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getBonesBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="39" column="26" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="39" bodyend="42"/>
+        <references refid="d9/d66/a02562_1af964043ec7868b1fd0c43be0ad2ae41c" compoundref="d7/d25/a00182" startline="19">bonBuffer</references>
+        <references refid="d3/d41/a02530_1a2e96ae884d0c9c48a92282e0c9d1b816" compoundref="db/ddf/a00164" startline="122" endline="125">castor3d::GpuBufferBase::getBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/d66/a02562_1a5c1738643933256b574cd135984b907f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ObjectBufferOffset::hasIndices</definition>
+        <argsstring>() const</argsstring>
+        <name>hasIndices</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::hasIndices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="44" column="6" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="44" bodyend="47"/>
+        <references refid="d7/da8/a02522_1a5f876cf7f1c47c40d002bb5e9f962510" compoundref="d6/db8/a00158" startline="208">castor3d::MemChunk::askedSize</references>
+        <references refid="d9/d66/a02562_1aaaed4098407a14b7264f14d02e7207f3" compoundref="d7/d25/a00182" startline="21">idxChunk</references>
+        <referencedby refid="d9/d66/a02562_1a61bc3e37e6a74ec6fd084ac0342cdda9" compoundref="d7/d25/a00182" startline="60" endline="65">getIndexData</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d9/d66/a02562_1a64672cd7440e38a42592c26fb1928c2b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ObjectBufferOffset::hasVertices</definition>
+        <argsstring>() const</argsstring>
+        <name>hasVertices</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::hasVertices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="49" column="6" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="49" bodyend="52"/>
+        <references refid="d7/da8/a02522_1a5f876cf7f1c47c40d002bb5e9f962510" compoundref="d6/db8/a00158" startline="208">castor3d::MemChunk::askedSize</references>
+        <references refid="d9/d66/a02562_1a59f8d59689cc4de0650a79bd63fb51dd" compoundref="d7/d25/a00182" startline="20">vtxChunk</references>
+        <referencedby refid="d9/d66/a02562_1a812844899cb02530ed9556969353e02c" compoundref="d7/d25/a00182" startline="68" endline="73">getVertexData</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d9/d66/a02562_1ae06b0fff9a30187995ec76507e85143b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ObjectBufferOffset::hasBones</definition>
+        <argsstring>() const</argsstring>
+        <name>hasBones</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::hasBones</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="54" column="6" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="54" bodyend="57"/>
+        <references refid="d7/da8/a02522_1a5f876cf7f1c47c40d002bb5e9f962510" compoundref="d6/db8/a00158" startline="208">castor3d::MemChunk::askedSize</references>
+        <references refid="d9/d66/a02562_1ae56799d39b9b4e5f864654c8b04d2ef0" compoundref="d7/d25/a00182" startline="22">bonChunk</references>
+        <referencedby refid="d9/d66/a02562_1a78ff41feec92e694e8f44141e6e06b0b" compoundref="d7/d25/a00182" startline="75" endline="80">getBoneData</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d9/d66/a02562_1a61bc3e37e6a74ec6fd084ac0342cdda9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename IndexT</type>
+          </param>
+        </templateparamlist>
+        <type>castor::ArrayView&lt; IndexT &gt;</type>
+        <definition>castor::ArrayView&lt; IndexT &gt; castor3d::ObjectBufferOffset::getIndexData</definition>
+        <argsstring>() const</argsstring>
+        <name>getIndexData</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getIndexData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="60" column="19" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="60" bodyend="65"/>
+        <references refid="d7/da8/a02522_1a5f876cf7f1c47c40d002bb5e9f962510" compoundref="d6/db8/a00158" startline="208">castor3d::MemChunk::askedSize</references>
+        <references refid="d3/d41/a02530_1ae81d18fb4565a12c2d525b775cb4e27f" compoundref="db/ddf/a00164" startline="188" endline="191">castor3d::GpuBufferBase::getDatas</references>
+        <references refid="d9/d66/a02562_1a002ec5ae64c21e2c9190ea4cad309aee" compoundref="d7/d25/a00182" startline="113" endline="116">getIndexOffset</references>
+        <references refid="d9/d66/a02562_1a5c1738643933256b574cd135984b907f" compoundref="d7/d25/a00182" startline="44" endline="47">hasIndices</references>
+        <references refid="d9/d66/a02562_1aa991ea046fe6d575c94f844e17d40452" compoundref="d7/d25/a00182" startline="18">idxBuffer</references>
+        <references refid="d9/d66/a02562_1aaaed4098407a14b7264f14d02e7207f3" compoundref="d7/d25/a00182" startline="21">idxChunk</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/d66/a02562_1a812844899cb02530ed9556969353e02c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename VertexT</type>
+          </param>
+        </templateparamlist>
+        <type>castor::ArrayView&lt; VertexT &gt;</type>
+        <definition>castor::ArrayView&lt; VertexT &gt; castor3d::ObjectBufferOffset::getVertexData</definition>
+        <argsstring>() const</argsstring>
+        <name>getVertexData</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getVertexData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="68" column="19" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="68" bodyend="73"/>
+        <references refid="d3/d41/a02530_1ae81d18fb4565a12c2d525b775cb4e27f" compoundref="db/ddf/a00164" startline="188" endline="191">castor3d::GpuBufferBase::getDatas</references>
+        <references refid="d9/d66/a02562_1ad19f83829fabe87220a22feed65921f7" compoundref="d7/d25/a00182" startline="118" endline="121">getVertexOffset</references>
+        <references refid="d9/d66/a02562_1a64672cd7440e38a42592c26fb1928c2b" compoundref="d7/d25/a00182" startline="49" endline="52">hasVertices</references>
+        <references refid="d9/d66/a02562_1aa45f214669f52c76b1ee4afd10445097" compoundref="d7/d25/a00182" startline="17">vtxBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/d66/a02562_1a78ff41feec92e694e8f44141e6e06b0b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::ArrayView&lt; <ref refid="df/d5c/a03470" kindref="compound">VertexBoneData</ref> &gt;</type>
+        <definition>castor::ArrayView&lt; VertexBoneData &gt; castor3d::ObjectBufferOffset::getBoneData</definition>
+        <argsstring>() const</argsstring>
+        <name>getBoneData</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getBoneData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="75" column="19" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="75" bodyend="80"/>
+        <references refid="d9/d66/a02562_1af964043ec7868b1fd0c43be0ad2ae41c" compoundref="d7/d25/a00182" startline="19">bonBuffer</references>
+        <references refid="d9/d66/a02562_1a85f10f2832948308bc2805e00badb3bf" compoundref="d7/d25/a00182" startline="108" endline="111">getBonesCount</references>
+        <references refid="d9/d66/a02562_1ae0ecc43b9a8ae40265e2d8626a5fe670" compoundref="d7/d25/a00182" startline="123" endline="126">getBonesOffset</references>
+        <references refid="d3/d41/a02530_1ae81d18fb4565a12c2d525b775cb4e27f" compoundref="db/ddf/a00164" startline="188" endline="191">castor3d::GpuBufferBase::getDatas</references>
+        <references refid="d9/d66/a02562_1ae06b0fff9a30187995ec76507e85143b" compoundref="d7/d25/a00182" startline="54" endline="57">hasBones</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/d66/a02562_1af19e7ffc551f44b60e46f4e6a59e2e0f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectBufferOffset::getIndexSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getIndexSize</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getIndexSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="82" column="10" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="82" bodyend="85"/>
+        <references refid="d7/da8/a02522_1a5f876cf7f1c47c40d002bb5e9f962510" compoundref="d6/db8/a00158" startline="208">castor3d::MemChunk::askedSize</references>
+        <references refid="d9/d66/a02562_1aaaed4098407a14b7264f14d02e7207f3" compoundref="d7/d25/a00182" startline="21">idxChunk</references>
+        <referencedby refid="d9/d66/a02562_1a14dee16a57de2055d90b8bb8078ec018" compoundref="d7/d25/a00182" startline="97" endline="100">getIndexCount</referencedby>
+        <referencedby refid="d9/d66/a02562_1a49454eb5619d9141d118bd3e0730d518" compoundref="d7/d25/a00182" startline="153" endline="160">markIndexDirty</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d9/d66/a02562_1a591a91670083d2547df3868afa985da2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectBufferOffset::getVertexSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getVertexSize</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getVertexSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="87" column="10" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="87" bodyend="90"/>
+        <references refid="d7/da8/a02522_1a5f876cf7f1c47c40d002bb5e9f962510" compoundref="d6/db8/a00158" startline="208">castor3d::MemChunk::askedSize</references>
+        <references refid="d9/d66/a02562_1a59f8d59689cc4de0650a79bd63fb51dd" compoundref="d7/d25/a00182" startline="20">vtxChunk</references>
+        <referencedby refid="d9/d66/a02562_1a43c1bcf1de99e225cb117ee99ba221a5" compoundref="d7/d25/a00182" startline="103" endline="106">getVertexCount</referencedby>
+        <referencedby refid="d9/d66/a02562_1a1de8378b29ce99d89dd43b2438907f95" compoundref="d7/d25/a00182" startline="144" endline="151">markVertexDirty</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d9/d66/a02562_1abda4e1ee0e76478fb211f837add9d494" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectBufferOffset::getBonesSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getBonesSize</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getBonesSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="92" column="10" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="92" bodyend="95"/>
+        <references refid="d7/da8/a02522_1a5f876cf7f1c47c40d002bb5e9f962510" compoundref="d6/db8/a00158" startline="208">castor3d::MemChunk::askedSize</references>
+        <references refid="d9/d66/a02562_1ae56799d39b9b4e5f864654c8b04d2ef0" compoundref="d7/d25/a00182" startline="22">bonChunk</references>
+        <referencedby refid="d9/d66/a02562_1a85f10f2832948308bc2805e00badb3bf" compoundref="d7/d25/a00182" startline="108" endline="111">getBonesCount</referencedby>
+        <referencedby refid="d9/d66/a02562_1a57a1562087eb0cec6b650c6dbebb7c17" compoundref="d7/d25/a00182" startline="162" endline="169">markBonesDirty</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d9/d66/a02562_1a14dee16a57de2055d90b8bb8078ec018" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectBufferOffset::getIndexCount</definition>
+        <argsstring>() const</argsstring>
+        <name>getIndexCount</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getIndexCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="97" column="10" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="97" bodyend="100"/>
+        <references refid="d9/d66/a02562_1af19e7ffc551f44b60e46f4e6a59e2e0f" compoundref="d7/d25/a00182" startline="82" endline="85">getIndexSize</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/d66/a02562_1a43c1bcf1de99e225cb117ee99ba221a5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename VertexT</type>
+          </param>
+        </templateparamlist>
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectBufferOffset::getVertexCount</definition>
+        <argsstring>() const</argsstring>
+        <name>getVertexCount</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getVertexCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="103" column="10" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="103" bodyend="106"/>
+        <references refid="d9/d66/a02562_1a591a91670083d2547df3868afa985da2" compoundref="d7/d25/a00182" startline="87" endline="90">getVertexSize</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/d66/a02562_1a85f10f2832948308bc2805e00badb3bf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectBufferOffset::getBonesCount</definition>
+        <argsstring>() const</argsstring>
+        <name>getBonesCount</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getBonesCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="108" column="10" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="108" bodyend="111"/>
+        <references refid="d9/d66/a02562_1abda4e1ee0e76478fb211f837add9d494" compoundref="d7/d25/a00182" startline="92" endline="95">getBonesSize</references>
+        <referencedby refid="d9/d66/a02562_1a78ff41feec92e694e8f44141e6e06b0b" compoundref="d7/d25/a00182" startline="75" endline="80">getBoneData</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d9/d66/a02562_1a002ec5ae64c21e2c9190ea4cad309aee" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::ObjectBufferOffset::getIndexOffset</definition>
+        <argsstring>() const</argsstring>
+        <name>getIndexOffset</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getIndexOffset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="113" column="14" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="113" bodyend="116"/>
+        <references refid="d9/d66/a02562_1aaaed4098407a14b7264f14d02e7207f3" compoundref="d7/d25/a00182" startline="21">idxChunk</references>
+        <references refid="d7/da8/a02522_1ae4819cf2e478269cde2e24ff1e187765" compoundref="d6/db8/a00158" startline="206">castor3d::MemChunk::offset</references>
+        <referencedby refid="d9/d66/a02562_1a34df6ddb3102d1662e9d38146e54cfe4" compoundref="d7/d25/a00182" startline="128" endline="131">getFirstIndex</referencedby>
+        <referencedby refid="d9/d66/a02562_1a61bc3e37e6a74ec6fd084ac0342cdda9" compoundref="d7/d25/a00182" startline="60" endline="65">getIndexData</referencedby>
+        <referencedby refid="d9/d66/a02562_1a49454eb5619d9141d118bd3e0730d518" compoundref="d7/d25/a00182" startline="153" endline="160">markIndexDirty</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d9/d66/a02562_1ad19f83829fabe87220a22feed65921f7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::ObjectBufferOffset::getVertexOffset</definition>
+        <argsstring>() const</argsstring>
+        <name>getVertexOffset</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getVertexOffset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="118" column="14" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="118" bodyend="121"/>
+        <references refid="d7/da8/a02522_1ae4819cf2e478269cde2e24ff1e187765" compoundref="d6/db8/a00158" startline="206">castor3d::MemChunk::offset</references>
+        <references refid="d9/d66/a02562_1a59f8d59689cc4de0650a79bd63fb51dd" compoundref="d7/d25/a00182" startline="20">vtxChunk</references>
+        <referencedby refid="d9/d66/a02562_1aa589c47a2d6f7559de3f806209dc8094" compoundref="d7/d25/a00182" startline="134" endline="137">getFirstVertex</referencedby>
+        <referencedby refid="d9/d66/a02562_1a812844899cb02530ed9556969353e02c" compoundref="d7/d25/a00182" startline="68" endline="73">getVertexData</referencedby>
+        <referencedby refid="d9/d66/a02562_1a1de8378b29ce99d89dd43b2438907f95" compoundref="d7/d25/a00182" startline="144" endline="151">markVertexDirty</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d9/d66/a02562_1ae0ecc43b9a8ae40265e2d8626a5fe670" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::ObjectBufferOffset::getBonesOffset</definition>
+        <argsstring>() const</argsstring>
+        <name>getBonesOffset</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getBonesOffset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="123" column="14" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="123" bodyend="126"/>
+        <references refid="d9/d66/a02562_1ae56799d39b9b4e5f864654c8b04d2ef0" compoundref="d7/d25/a00182" startline="22">bonChunk</references>
+        <references refid="d7/da8/a02522_1ae4819cf2e478269cde2e24ff1e187765" compoundref="d6/db8/a00158" startline="206">castor3d::MemChunk::offset</references>
+        <referencedby refid="d9/d66/a02562_1a78ff41feec92e694e8f44141e6e06b0b" compoundref="d7/d25/a00182" startline="75" endline="80">getBoneData</referencedby>
+        <referencedby refid="d9/d66/a02562_1a5422ae93da19b4766b8312ebd656b00c" compoundref="d7/d25/a00182" startline="139" endline="142">getFirstBone</referencedby>
+        <referencedby refid="d9/d66/a02562_1a57a1562087eb0cec6b650c6dbebb7c17" compoundref="d7/d25/a00182" startline="162" endline="169">markBonesDirty</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d9/d66/a02562_1a34df6ddb3102d1662e9d38146e54cfe4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectBufferOffset::getFirstIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>getFirstIndex</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getFirstIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="128" column="10" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="128" bodyend="131"/>
+        <references refid="d9/d66/a02562_1a002ec5ae64c21e2c9190ea4cad309aee" compoundref="d7/d25/a00182" startline="113" endline="116">getIndexOffset</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/d66/a02562_1aa589c47a2d6f7559de3f806209dc8094" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename VertexT</type>
+          </param>
+        </templateparamlist>
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectBufferOffset::getFirstVertex</definition>
+        <argsstring>() const</argsstring>
+        <name>getFirstVertex</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getFirstVertex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="134" column="10" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="134" bodyend="137"/>
+        <references refid="d9/d66/a02562_1ad19f83829fabe87220a22feed65921f7" compoundref="d7/d25/a00182" startline="118" endline="121">getVertexOffset</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/d66/a02562_1a5422ae93da19b4766b8312ebd656b00c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectBufferOffset::getFirstBone</definition>
+        <argsstring>() const</argsstring>
+        <name>getFirstBone</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getFirstBone</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="139" column="10" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="139" bodyend="142"/>
+        <references refid="d9/d66/a02562_1ae0ecc43b9a8ae40265e2d8626a5fe670" compoundref="d7/d25/a00182" startline="123" endline="126">getBonesOffset</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/d66/a02562_1a1de8378b29ce99d89dd43b2438907f95" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ObjectBufferOffset::markVertexDirty</definition>
+        <argsstring>(VkAccessFlags dstAccessFlags=VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, VkPipelineStageFlags dstPipelineFlags=VK_PIPELINE_STAGE_VERTEX_INPUT_BIT) const</argsstring>
+        <name>markVertexDirty</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::markVertexDirty</qualifiedname>
         <param>
-          <type><ref refid="de/d13/a01473_1abdf15c31ed466fee351daf42b2b45ad5" kindref="member">UserInputEventType</ref></type>
-          <declname>type</declname>
+          <type>VkAccessFlags</type>
+          <declname>dstAccessFlags</declname>
+          <defval>VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT</defval>
+        </param>
+        <param>
+          <type>VkPipelineStageFlags</type>
+          <declname>dstPipelineFlags</declname>
+          <defval>VK_PIPELINE_STAGE_VERTEX_INPUT_BIT</defval>
         </param>
         <briefdescription>
         </briefdescription>
@@ -37,82 +531,136 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/UserInputEvent.hpp" line="33" column="1" bodyfile="Event/UserInput/UserInputEvent.hpp" bodystart="33" bodyend="36"/>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="144" column="6" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="144" bodyend="151"/>
+        <references refid="d9/d66/a02562_1ad19f83829fabe87220a22feed65921f7" compoundref="d7/d25/a00182" startline="118" endline="121">getVertexOffset</references>
+        <references refid="d9/d66/a02562_1a591a91670083d2547df3868afa985da2" compoundref="d7/d25/a00182" startline="87" endline="90">getVertexSize</references>
+        <references refid="d3/d41/a02530_1a06f1c510406ae4dd17d134022e94a497">castor3d::GpuBufferBase::markDirty</references>
+        <references refid="d9/d66/a02562_1aa45f214669f52c76b1ee4afd10445097" compoundref="d7/d25/a00182" startline="17">vtxBuffer</references>
       </memberdef>
-      <memberdef kind="function" id="d9/d66/a02562_1a520eaa4deaa4a2c25ee217105e289b78" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
-        <type></type>
-        <definition>virtual castor3d::UserInputEvent::~UserInputEvent</definition>
-        <argsstring>()</argsstring>
-        <name>~UserInputEvent</name>
+      <memberdef kind="function" id="d9/d66/a02562_1a49454eb5619d9141d118bd3e0730d518" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ObjectBufferOffset::markIndexDirty</definition>
+        <argsstring>(VkAccessFlags dstAccessFlags=VK_ACCESS_INDEX_READ_BIT, VkPipelineStageFlags dstPipelineFlags=VK_PIPELINE_STAGE_VERTEX_INPUT_BIT) const</argsstring>
+        <name>markIndexDirty</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::markIndexDirty</qualifiedname>
+        <param>
+          <type>VkAccessFlags</type>
+          <declname>dstAccessFlags</declname>
+          <defval>VK_ACCESS_INDEX_READ_BIT</defval>
+        </param>
+        <param>
+          <type>VkPipelineStageFlags</type>
+          <declname>dstPipelineFlags</declname>
+          <defval>VK_PIPELINE_STAGE_VERTEX_INPUT_BIT</defval>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/UserInputEvent.hpp" line="43" column="1" bodyfile="Event/UserInput/UserInputEvent.hpp" bodystart="43" bodyend="45"/>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="153" column="6" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="153" bodyend="160"/>
+        <references refid="d9/d66/a02562_1a002ec5ae64c21e2c9190ea4cad309aee" compoundref="d7/d25/a00182" startline="113" endline="116">getIndexOffset</references>
+        <references refid="d9/d66/a02562_1af19e7ffc551f44b60e46f4e6a59e2e0f" compoundref="d7/d25/a00182" startline="82" endline="85">getIndexSize</references>
+        <references refid="d9/d66/a02562_1aa991ea046fe6d575c94f844e17d40452" compoundref="d7/d25/a00182" startline="18">idxBuffer</references>
+        <references refid="d3/d41/a02530_1a06f1c510406ae4dd17d134022e94a497">castor3d::GpuBufferBase::markDirty</references>
       </memberdef>
-      <memberdef kind="function" id="d9/d66/a02562_1ab45ab37b6687ae9a35165ea5b18f0a71" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="de/d13/a01473_1abdf15c31ed466fee351daf42b2b45ad5" kindref="member">UserInputEventType</ref></type>
-        <definition>UserInputEventType castor3d::UserInputEvent::getEventType</definition>
-        <argsstring>() const</argsstring>
-        <name>getEventType</name>
+      <memberdef kind="function" id="d9/d66/a02562_1a57a1562087eb0cec6b650c6dbebb7c17" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ObjectBufferOffset::markBonesDirty</definition>
+        <argsstring>(VkAccessFlags dstAccessFlags=VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, VkPipelineStageFlags dstPipelineFlags=VK_PIPELINE_STAGE_VERTEX_INPUT_BIT) const</argsstring>
+        <name>markBonesDirty</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::markBonesDirty</qualifiedname>
+        <param>
+          <type>VkAccessFlags</type>
+          <declname>dstAccessFlags</declname>
+          <defval>VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT</defval>
+        </param>
+        <param>
+          <type>VkPipelineStageFlags</type>
+          <declname>dstPipelineFlags</declname>
+          <defval>VK_PIPELINE_STAGE_VERTEX_INPUT_BIT</defval>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The user input event type. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/UserInputEvent.hpp" line="52" column="1" bodyfile="Event/UserInput/UserInputEvent.hpp" bodystart="52" bodyend="55"/>
+        <location file="Buffer/ObjectBufferOffset.hpp" line="162" column="6" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="162" bodyend="169"/>
+        <references refid="d9/d66/a02562_1af964043ec7868b1fd0c43be0ad2ae41c" compoundref="d7/d25/a00182" startline="19">bonBuffer</references>
+        <references refid="d9/d66/a02562_1ae0ecc43b9a8ae40265e2d8626a5fe670" compoundref="d7/d25/a00182" startline="123" endline="126">getBonesOffset</references>
+        <references refid="d9/d66/a02562_1abda4e1ee0e76478fb211f837add9d494" compoundref="d7/d25/a00182" startline="92" endline="95">getBonesSize</references>
+        <references refid="d3/d41/a02530_1a06f1c510406ae4dd17d134022e94a497">castor3d::GpuBufferBase::markDirty</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Description of a user input event. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
-</simplesect>
-<simplesect kind="date"><para>17/04/2016 </para>
-</simplesect>
-<simplesect kind="version"><para>0.9.0</para>
-</simplesect>
-<simplesect kind="remark"><para>You may use this one, but prefer using <ref refid="df/d23/a02558" kindref="compound">MouseEvent</ref> or <ref refid="d1/dfc/a02554" kindref="compound">KeyboardEvent</ref>. </para>
-</simplesect>
-</para>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="4634">
-        <label>castor3d::UserInputEvent</label>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor3d::GpuBufferBase</label>
+        <link refid="d3/d41/a02530"/>
+      </node>
+      <node id="2">
+        <label>castor3d::GpuBufferT&lt; AllocatorT &gt;</label>
+        <link refid="db/d09/a02502"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::MemChunk</label>
+        <link refid="d7/da8/a02522"/>
+      </node>
+      <node id="1">
+        <label>castor3d::ObjectBufferOffset</label>
         <link refid="d9/d66/a02562"/>
-      </node>
-      <node id="4637">
-        <label>castor3d::MouseEvent</label>
-        <link refid="df/d23/a02558"/>
-        <childnode refid="4634" relation="public-inheritance">
+        <childnode refid="2" relation="usage">
+          <edgelabel>bonBuffer</edgelabel>
+          <edgelabel>idxBuffer</edgelabel>
+          <edgelabel>vtxBuffer</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>bonChunk</edgelabel>
+          <edgelabel>idxChunk</edgelabel>
+          <edgelabel>vtxChunk</edgelabel>
         </childnode>
       </node>
-      <node id="4635">
-        <label>castor3d::HandlerEvent</label>
-        <link refid="d8/d4a/a02550"/>
-        <childnode refid="4634" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4636">
-        <label>castor3d::KeyboardEvent</label>
-        <link refid="d1/dfc/a02554"/>
-        <childnode refid="4634" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <location file="Event/UserInput/UserInputEvent.hpp" line="23" column="1" bodyfile="Event/UserInput/UserInputEvent.hpp" bodystart="22" bodyend="59"/>
+    </collaborationgraph>
+    <location file="Buffer/ObjectBufferOffset.hpp" line="14" column="1" bodyfile="Buffer/ObjectBufferOffset.hpp" bodystart="15" bodyend="170"/>
     <listofallmembers>
-      <member refid="d9/d66/a02562_1ab45ab37b6687ae9a35165ea5b18f0a71" prot="public" virt="non-virtual"><scope>castor3d::UserInputEvent</scope><name>getEventType</name></member>
-      <member refid="d9/d66/a02562_1a5973899c9785c2dffaae34250aec448b" prot="private" virt="non-virtual"><scope>castor3d::UserInputEvent</scope><name>m_eventType</name></member>
-      <member refid="d9/d66/a02562_1a1d946a77fa49158379ee4e5dfb84a556" prot="public" virt="non-virtual"><scope>castor3d::UserInputEvent</scope><name>UserInputEvent</name></member>
-      <member refid="d9/d66/a02562_1a520eaa4deaa4a2c25ee217105e289b78" prot="public" virt="virtual"><scope>castor3d::UserInputEvent</scope><name>~UserInputEvent</name></member>
+      <member refid="d9/d66/a02562_1af964043ec7868b1fd0c43be0ad2ae41c" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>bonBuffer</name></member>
+      <member refid="d9/d66/a02562_1ae56799d39b9b4e5f864654c8b04d2ef0" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>bonChunk</name></member>
+      <member refid="d9/d66/a02562_1a78ff41feec92e694e8f44141e6e06b0b" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getBoneData</name></member>
+      <member refid="d9/d66/a02562_1abd2a18b67e20307f0b946a0bc16e0f2b" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getBonesBuffer</name></member>
+      <member refid="d9/d66/a02562_1a85f10f2832948308bc2805e00badb3bf" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getBonesCount</name></member>
+      <member refid="d9/d66/a02562_1ae0ecc43b9a8ae40265e2d8626a5fe670" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getBonesOffset</name></member>
+      <member refid="d9/d66/a02562_1abda4e1ee0e76478fb211f837add9d494" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getBonesSize</name></member>
+      <member refid="d9/d66/a02562_1a5422ae93da19b4766b8312ebd656b00c" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getFirstBone</name></member>
+      <member refid="d9/d66/a02562_1a34df6ddb3102d1662e9d38146e54cfe4" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getFirstIndex</name></member>
+      <member refid="d9/d66/a02562_1aa589c47a2d6f7559de3f806209dc8094" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getFirstVertex</name></member>
+      <member refid="d9/d66/a02562_1a13f508b50ff059287380d597539b586d" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getIndexBuffer</name></member>
+      <member refid="d9/d66/a02562_1a14dee16a57de2055d90b8bb8078ec018" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getIndexCount</name></member>
+      <member refid="d9/d66/a02562_1a61bc3e37e6a74ec6fd084ac0342cdda9" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getIndexData</name></member>
+      <member refid="d9/d66/a02562_1a002ec5ae64c21e2c9190ea4cad309aee" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getIndexOffset</name></member>
+      <member refid="d9/d66/a02562_1af19e7ffc551f44b60e46f4e6a59e2e0f" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getIndexSize</name></member>
+      <member refid="d9/d66/a02562_1a801f606247b1560fabe21f575381a268" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getVertexBuffer</name></member>
+      <member refid="d9/d66/a02562_1a43c1bcf1de99e225cb117ee99ba221a5" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getVertexCount</name></member>
+      <member refid="d9/d66/a02562_1a812844899cb02530ed9556969353e02c" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getVertexData</name></member>
+      <member refid="d9/d66/a02562_1ad19f83829fabe87220a22feed65921f7" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getVertexOffset</name></member>
+      <member refid="d9/d66/a02562_1a591a91670083d2547df3868afa985da2" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getVertexSize</name></member>
+      <member refid="d9/d66/a02562_1ae06b0fff9a30187995ec76507e85143b" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>hasBones</name></member>
+      <member refid="d9/d66/a02562_1a5c1738643933256b574cd135984b907f" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>hasIndices</name></member>
+      <member refid="d9/d66/a02562_1a64672cd7440e38a42592c26fb1928c2b" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>hasVertices</name></member>
+      <member refid="d9/d66/a02562_1aa991ea046fe6d575c94f844e17d40452" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>idxBuffer</name></member>
+      <member refid="d9/d66/a02562_1aaaed4098407a14b7264f14d02e7207f3" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>idxChunk</name></member>
+      <member refid="d9/d66/a02562_1a57a1562087eb0cec6b650c6dbebb7c17" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>markBonesDirty</name></member>
+      <member refid="d9/d66/a02562_1a49454eb5619d9141d118bd3e0730d518" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>markIndexDirty</name></member>
+      <member refid="d9/d66/a02562_1a1de8378b29ce99d89dd43b2438907f95" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>markVertexDirty</name></member>
+      <member refid="d9/d66/a02562_1a4abab85ee83943b53c1c3ff3bb6c04ac" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>operator bool</name></member>
+      <member refid="d9/d66/a02562_1aa45f214669f52c76b1ee4afd10445097" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>vtxBuffer</name></member>
+      <member refid="d9/d66/a02562_1a59f8d59689cc4de0650a79bd63fb51dd" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>vtxChunk</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

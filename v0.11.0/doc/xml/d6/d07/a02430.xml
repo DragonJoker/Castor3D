@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d6/d07/a02430" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ObjectCacheTraits</compoundname>
+    <includes local="no">CacheModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ElementType</type>
+      </param>
+      <param>
+        <type>typename KeyType</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>Helper structure to specialise a scene objects cache behaviour. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Must hold: <itemizedlist>
+<listitem>
+<para>Name: The element type name. </para>
+</listitem>
+<listitem>
+<para>Producer: The element creation function prototype. </para>
+</listitem>
+<listitem>
+<para>Merger: The prototype of the function use to merge a cache element into another cache. </para>
+</listitem>
+</itemizedlist>
+</para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="Cache/CacheModule.hpp" line="352" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="352" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

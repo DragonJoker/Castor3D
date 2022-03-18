@@ -1,452 +1,445 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d4/d10/a04839" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::LightPassVolumePropagationShadowT</compoundname>
-    <basecompoundref refid="dc/d43/a04727" prot="public" virt="non-virtual">castor3d::LightPassShadow&lt; LtType &gt;</basecompoundref>
-    <includes local="no">LightVolumeGIModule.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d4/d10/a04839" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::FragmentSurfaceT</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">GlslSurface.hpp</includes>
     <templateparamlist>
       <param>
-        <type><ref refid="d7/dd1/a01458_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
-        <declname>LtType</declname>
-        <defname>LtType</defname>
+        <type>ast::var::Flag</type>
+        <declname>FlagT</declname>
+        <defname>FlagT</defname>
       </param>
     </templateparamlist>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="d4/d10/a04839_1aee442f7d677440837f5c3b6989d12782" prot="public" static="no">
-        <type><ref refid="dc/d12/a04723" kindref="compound">LightPassShadowTraits</ref>&lt; LtType &gt;</type>
-        <definition>using castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;::my_traits =  LightPassShadowTraits&lt; LtType &gt;</definition>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/d10/a04839_1a5b19c3b5337a11c796c547a63c5a4d64" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::worldPosition</definition>
         <argsstring></argsstring>
-        <name>my_traits</name>
+        <name>worldPosition</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::worldPosition</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" line="34" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" bodystart="34" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="142" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="142" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="typedef" id="d4/d10/a04839_1a808695bc9df9cee8267a0d7e46e36214" prot="public" static="no">
-        <type>typename my_traits::light_type</type>
-        <definition>using castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;::my_light_type =  typename my_traits::light_type</definition>
+      <memberdef kind="variable" id="d4/d10/a04839_1a93a5c6877bccc34fe02a2de8f8eeb8c4" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::viewPosition</definition>
         <argsstring></argsstring>
-        <name>my_light_type</name>
+        <name>viewPosition</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::viewPosition</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" line="35" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" bodystart="35" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="143" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="143" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="typedef" id="d4/d10/a04839_1a03f5e0b8a26e8f17207a487f7896174a" prot="public" static="no">
-        <type>typename my_traits::light_pass_type</type>
-        <definition>using castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;::my_pass_type =  typename my_traits::light_pass_type</definition>
+      <memberdef kind="variable" id="d4/d10/a04839_1a85cbd7adf9d98b169fc902c5f0e84cd7" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::curPosition</definition>
         <argsstring></argsstring>
-        <name>my_pass_type</name>
+        <name>curPosition</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::curPosition</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" line="36" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" bodystart="36" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="144" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="144" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="typedef" id="d4/d10/a04839_1a8d8f013a88078d4319cf8640b9915d9b" prot="public" static="no">
-        <type>typename my_traits::shadow_pass_type</type>
-        <definition>using castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;::my_shadow_pass_type =  typename my_traits::shadow_pass_type</definition>
+      <memberdef kind="variable" id="d4/d10/a04839_1a38989e06df6acb1aaabfc8acd08a084d" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::prvPosition</definition>
         <argsstring></argsstring>
-        <name>my_shadow_pass_type</name>
+        <name>prvPosition</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::prvPosition</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" line="37" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" bodystart="37" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="145" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="145" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d4/d10/a04839_1a9c618f62fe316f9fb268152d2d60c86f" prot="public" static="yes" mutable="no">
-        <type>constexpr uint32_t</type>
-        <definition>constexpr uint32_t castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;::MaxPropagationSteps</definition>
+      <memberdef kind="variable" id="d4/d10/a04839_1a0ebc4e507505f10a560739718e7987f5" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::tangentSpaceFragPosition</definition>
         <argsstring></argsstring>
-        <name>MaxPropagationSteps</name>
-        <initializer>= 8u</initializer>
+        <name>tangentSpaceFragPosition</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::tangentSpaceFragPosition</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" line="39" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" bodystart="39" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="146" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="146" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d4/d10/a04839_1a044b6184688893dc5e35b260cb53cbd9" prot="private" static="no" mutable="no">
-        <type><ref refid="da/d9f/a04859" kindref="compound">OpaquePassResult</ref> const  &amp;</type>
-        <definition>OpaquePassResult const&amp; castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;::m_gpResult</definition>
+      <memberdef kind="variable" id="d4/d10/a04839_1a1c18269ce39b8e9fe84af651fe628f51" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::tangentSpaceViewPosition</definition>
         <argsstring></argsstring>
-        <name>m_gpResult</name>
+        <name>tangentSpaceViewPosition</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::tangentSpaceViewPosition</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" line="135" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" bodystart="135" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="147" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="147" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d4/d10/a04839_1af66b851dc83e520ea29a2a216d34b0ce" prot="private" static="no" mutable="no">
-        <type><ref refid="db/dc1/a04671" kindref="compound">ShadowMapResult</ref> const  &amp;</type>
-        <definition>ShadowMapResult const&amp; castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;::m_smResult</definition>
+      <memberdef kind="variable" id="d4/d10/a04839_1adc28a56d9039a84ab12907386f0ac135" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::normal</definition>
         <argsstring></argsstring>
-        <name>m_smResult</name>
+        <name>normal</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::normal</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" line="136" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" bodystart="136" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="148" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="148" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d4/d10/a04839_1ac66bf02692cc87507d264fbc5acc1952" prot="private" static="no" mutable="no">
-        <type><ref refid="df/d9b/a04755" kindref="compound">LightPassResult</ref> const  &amp;</type>
-        <definition>LightPassResult const&amp; castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;::m_lpResult</definition>
+      <memberdef kind="variable" id="d4/d10/a04839_1ad8de92a8c13ebaec3f79c53e885db9ef" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::tangent</definition>
         <argsstring></argsstring>
-        <name>m_lpResult</name>
+        <name>tangent</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::tangent</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" line="137" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" bodystart="137" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="149" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="149" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d4/d10/a04839_1ae0253b19fd4c03bec043524ab1cb6b1e" prot="private" static="no" mutable="no">
-        <type><ref refid="dc/d23/a04275" kindref="compound">LightVolumePassResult</ref> const  &amp;</type>
-        <definition>LightVolumePassResult const&amp; castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;::m_lpvResult</definition>
+      <memberdef kind="variable" id="d4/d10/a04839_1a1ae31ecdd6529ec1298721b36d94f521" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::bitangent</definition>
         <argsstring></argsstring>
-        <name>m_lpvResult</name>
+        <name>bitangent</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::bitangent</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" line="138" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" bodystart="138" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="150" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="150" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d4/d10/a04839_1a77778bd16f66abaaf45c112df71b0f58" prot="private" static="no" mutable="no">
-        <type><ref refid="dd/d83/a05443" kindref="compound">GpInfoUbo</ref> const  &amp;</type>
-        <definition>GpInfoUbo const&amp; castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;::m_gpInfoUbo</definition>
+      <memberdef kind="variable" id="d4/d10/a04839_1ac94d313073975881adab72f2fd7a1e38" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::texture0</definition>
         <argsstring></argsstring>
-        <name>m_gpInfoUbo</name>
+        <name>texture0</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::texture0</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" line="139" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" bodystart="139" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="151" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="151" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d4/d10/a04839_1a7d0fe5930a36240b30c5deeb2564deec" prot="private" static="no" mutable="no">
-        <type><ref refid="da/d34/a05463" kindref="compound">LpvGridConfigUbo</ref> const  &amp;</type>
-        <definition>LpvGridConfigUbo const&amp; castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;::m_lpvConfigUbo</definition>
+      <memberdef kind="variable" id="d4/d10/a04839_1a1a14c10cc98a3aedac1ece848e549915" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::texture1</definition>
         <argsstring></argsstring>
-        <name>m_lpvConfigUbo</name>
+        <name>texture1</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::texture1</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" line="140" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" bodystart="140" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="152" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="152" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d4/d10/a04839_1a72ae083724c8567f3c97bb238bac096f" prot="private" static="no" mutable="no">
-        <type>LightVolumeGIPassArray</type>
-        <definition>LightVolumeGIPassArray castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;::m_lightVolumeGIPasses</definition>
+      <memberdef kind="variable" id="d4/d10/a04839_1a861f0c5edb7b09ef661a306912965080" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::instanceId</definition>
         <argsstring></argsstring>
-        <name>m_lightVolumeGIPasses</name>
+        <name>instanceId</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::instanceId</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" line="141" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" bodystart="141" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="153" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="153" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d10/a04839_1ae8f98464d85948e184a60ce59a3462a7" prot="public" static="no" mutable="no">
+        <type>sdw::Int</type>
+        <definition>sdw::Int castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::nodeId</definition>
+        <argsstring></argsstring>
+        <name>nodeId</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::nodeId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="154" column="10" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="154" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d4/d10/a04839_1a3cc321c9e48683bfef24686a3ff09586" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="d4/d10/a04839_1ae920008654b7998f5a182f94ec5fe17a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
-        <definition>castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;::LightPassVolumePropagationShadowT</definition>
-        <argsstring>(RenderDevice const &amp;device, LpvLightPassConfig lpConfig)</argsstring>
-        <name>LightPassVolumePropagationShadowT</name>
+        <definition>castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::FragmentSurfaceT</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>FragmentSurfaceT</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::FragmentSurfaceT</qualifiedname>
         <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
         </param>
         <param>
-          <type><ref refid="d7/dd1/a01458_1a807feaa5cfe837a23c4a3c4edf22d370" kindref="member">LpvLightPassConfig</ref></type>
-          <declname>lpConfig</declname>
+          <type>sdw::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">lpConfig</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The light pass configuration. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" line="52" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" bodystart="52" bodyend="64"/>
-        <references refid="dd/dca/a04847_1a9953dd65711dfed8d2155a7e0c95cb38" compoundref="da/dd6/a00896" startline="86">castor3d::LpvLightPassConfigT&lt; LpvResultT, LpvGridConfigUboT &gt;::base</references>
-        <references refid="dc/d6b/a04731_1ad1b519a143e49a165eee407645b29fa4" compoundref="d2/d5e/a00860" startline="203">castor3d::LightPassConfig::gpInfoUbo</references>
-        <references refid="dc/d6b/a04731_1ad5e3ccefa9799287321c57d513245a12" compoundref="d2/d5e/a00860" startline="202">castor3d::LightPassConfig::lpResult</references>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="109" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="d4/d10/a04839_1acdec4fd9c33cd4120e3b29c5b27e6a43" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="d4/d10/a04839_1a1212b64be1ed116a1fbbd9d5501979a1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::SDW_DeclStructInstance</definition>
+        <argsstring>(, FragmentSurfaceT)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="d4/d10/a04839" kindref="compound">FragmentSurfaceT</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="113" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a8193140f413de33070733862130c44f9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;::initialise</definition>
-        <argsstring>(Scene const &amp;scene, OpaquePassResult const &amp;gp, SceneUbo &amp;sceneUbo, RenderPassTimer &amp;timer) override</argsstring>
-        <name>initialise</name>
+        <definition>void castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::computeVelocity</definition>
+        <argsstring>(MatrixData const &amp;matrixData, sdw::Vec4 &amp;curPos, sdw::Vec4 &amp;prvPos)</argsstring>
+        <name>computeVelocity</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::computeVelocity</qualifiedname>
         <param>
-          <type><ref refid="d7/d00/a05223" kindref="compound">Scene</ref> const &amp;</type>
-          <declname>scene</declname>
+          <type><ref refid="d9/d52/a04923" kindref="compound">MatrixData</ref> const &amp;</type>
+          <declname>matrixData</declname>
         </param>
         <param>
-          <type><ref refid="da/d9f/a04859" kindref="compound">OpaquePassResult</ref> const &amp;</type>
-          <declname>gp</declname>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>curPos</declname>
         </param>
         <param>
-          <type><ref refid="d0/d2f/a05507" kindref="compound">SceneUbo</ref> &amp;</type>
-          <declname>sceneUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/db9/a04591" kindref="compound">RenderPassTimer</ref> &amp;</type>
-          <declname>timer</declname>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>prvPos</declname>
         </param>
         <briefdescription>
-<para>Initialises the light pass. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">scene</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The scene. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">gp</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The geometry pass buffers. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">sceneUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The scene UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">timer</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render pass timer. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" line="68" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" bodystart="68" bodyend="95"/>
-        <references refid="d7/dd1/a01458_1a840ab6fd50c1a08fcc1b6dc3f98d90faa0b80141c50fc5876012b5102b1fcb1f7">castor3d::eAdditive</references>
-        <references refid="d7/dd1/a01458_1ad9c2eac495497ef40705cc770a05c4f3a714901740a2cbc9e8a322cbdb7d9255f">castor3d::eIndirectDiffuse</references>
-        <references refid="d7/dd1/a01458_1a840ab6fd50c1a08fcc1b6dc3f98d90faa12c10e6e0388d587340cfbe98b5045ae">castor3d::eNoBlend</references>
-        <references refid="d7/dd1/a01458_1a5691da845a89609231c90071fccdfc20">castor3d::getName</references>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="123" column="6"/>
       </memberdef>
-      <memberdef kind="function" id="d4/d10/a04839_1a87fd08f69a97404bdbf6e2095dbd01b6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="d4/d10/a04839_1ad9bf5d88c07092af5cb086cdee86e6e3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;::cleanup</definition>
-        <argsstring>() override</argsstring>
-        <name>cleanup</name>
+        <definition>void castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::computeTangentSpace</definition>
+        <argsstring>(ProgramFlags programFlags, sdw::Vec3 const &amp;cameraPosition, sdw::Vec3 const &amp;worldPos, sdw::Mat3 const &amp;mtx, sdw::Vec4 const &amp;nml, sdw::Vec4 const &amp;tan)</argsstring>
+        <name>computeTangentSpace</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::computeTangentSpace</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
+          <declname>programFlags</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>cameraPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldPos</declname>
+        </param>
+        <param>
+          <type>sdw::Mat3 const &amp;</type>
+          <declname>mtx</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>nml</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>tan</declname>
+        </param>
         <briefdescription>
-<para>Cleans up the light pass. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" line="99" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" bodystart="99" bodyend="103"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="126" column="6"/>
       </memberdef>
-      <memberdef kind="function" id="d4/d10/a04839_1a5fadf6bae75eec058dbb0211ead4866b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::Semaphore const  &amp;</type>
-        <definition>ashes::Semaphore const&amp; castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;::render</definition>
-        <argsstring>(uint32_t index, ashes::Semaphore const &amp;toWait) override</argsstring>
-        <name>render</name>
-        <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
-        </param>
-        <param>
-          <type>ashes::Semaphore const &amp;</type>
-          <declname>toWait</declname>
-        </param>
-        <briefdescription>
-<para>Renders the light pass. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">index</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render pass index. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">toWait</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The semaphore from the previous render pass. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" line="107" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" bodystart="107" bodyend="114"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/d10/a04839_1a7f7c1c8248c11d55dda36c8db2adaddf" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="d4/d10/a04839_1abc6e5e1b8fe696bd586c0bd0cc0fe316" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;::accept</definition>
-        <argsstring>(PipelineVisitorBase &amp;visitor) override</argsstring>
-        <name>accept</name>
+        <definition>void castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::computeTangentSpace</definition>
+        <argsstring>(sdw::Vec3 const &amp;cameraPosition, sdw::Vec3 const &amp;worldPos, sdw::Vec3 const &amp;nml, sdw::Vec3 const &amp;tan, sdw::Vec3 const &amp;bin)</argsstring>
+        <name>computeTangentSpace</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::computeTangentSpace</qualifiedname>
         <param>
-          <type><ref refid="d7/dab/a03815" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
-          <declname>visitor</declname>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>cameraPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldPos</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>nml</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>tan</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>bin</declname>
         </param>
         <briefdescription>
-<para>Visitor acceptance function. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername>visitor</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The ... visitor. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" line="118" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" bodystart="118" bodyend="126"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="132" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a39f9d2d2dd573ef34bac311bf64eff08" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Vec2</type>
+        <definition>sdw::Vec2 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::getVelocity</definition>
+        <argsstring>() const</argsstring>
+        <name>getVelocity</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::getVelocity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="139" column="11"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d4/d10/a04839_1a26cb32198bb89df49fa1c2b572c356ca" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>VkClearValue</type>
-        <definition>VkClearValue castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;::doGetIndirectClearColor</definition>
-        <argsstring>() const override</argsstring>
-        <name>doGetIndirectClearColor</name>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d4/d10/a04839_1a8517c545d0cf12e21164c7e6d8ceb163" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ast::type::IOStructPtr</type>
+        <definition>static ast::type::IOStructPtr castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::makeIOType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache, ProgramFlags programFlags, ShaderFlags shaderFlags, FilteredTextureFlags textureFlags, PassFlags passFlags, bool hasTextures)</argsstring>
+        <name>makeIOType</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::makeIOType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
+          <declname>programFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1af8308e78be327186fc4533308ee5cd19" kindref="member">ShaderFlags</ref></type>
+          <declname>shaderFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1ab813dd8c4ac91695c9ba9e13a16b89d1" kindref="member">FilteredTextureFlags</ref></type>
+          <declname>textureFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref></type>
+          <declname>passFlags</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>hasTextures</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" line="129" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" bodystart="129" bodyend="132"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="115" column="31"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Base class for all light passes with light propagation volumes. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="1714">
-        <label>castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;</label>
+      <node id="1">
+        <label>castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;</label>
         <link refid="d4/d10/a04839"/>
-        <childnode refid="1715" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="1715">
-        <label>castor3d::LightPassShadow&lt; LtType &gt;</label>
-        <link refid="dc/d43/a04727"/>
-        <childnode refid="1716" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1716">
-        <label>LightPassShadowTraits::light_pass_type&lt; LtType &gt;</label>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="1717">
-        <label>castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;</label>
+      <node id="1">
+        <label>castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;</label>
         <link refid="d4/d10/a04839"/>
-        <childnode refid="1718" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="1718">
-        <label>castor3d::LightPassShadow&lt; LtType &gt;</label>
-        <link refid="dc/d43/a04727"/>
-        <childnode refid="1719" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1719">
-        <label>LightPassShadowTraits::light_pass_type&lt; LtType &gt;</label>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </collaborationgraph>
-    <location file="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" line="32" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp" bodystart="30" bodyend="142"/>
+    <location file="Shader/Shaders/GlslSurface.hpp" line="105" column="1" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="107" bodyend="155"/>
     <listofallmembers>
-      <member refid="d4/d10/a04839_1a7f7c1c8248c11d55dda36c8db2adaddf" prot="public" virt="non-virtual"><scope>castor3d::LightPassVolumePropagationShadowT</scope><name>accept</name></member>
-      <member refid="d4/d10/a04839_1a87fd08f69a97404bdbf6e2095dbd01b6" prot="public" virt="non-virtual"><scope>castor3d::LightPassVolumePropagationShadowT</scope><name>cleanup</name></member>
-      <member refid="dc/d43/a04727_1a9e825ffbf45cea4a802bce65b2c49b8d" prot="protected" virt="non-virtual"><scope>castor3d::LightPassVolumePropagationShadowT</scope><name>doCreateProgram</name></member>
-      <member refid="d4/d10/a04839_1a26cb32198bb89df49fa1c2b572c356ca" prot="private" virt="non-virtual"><scope>castor3d::LightPassVolumePropagationShadowT</scope><name>doGetIndirectClearColor</name></member>
-      <member refid="d4/d10/a04839_1acdec4fd9c33cd4120e3b29c5b27e6a43" prot="public" virt="non-virtual"><scope>castor3d::LightPassVolumePropagationShadowT</scope><name>initialise</name></member>
-      <member refid="dc/d43/a04727_1afbf1abefd9c154581a1f308df55dfcdc" prot="public" virt="non-virtual"><scope>castor3d::LightPassVolumePropagationShadowT</scope><name>LightPassShadow</name></member>
-      <member refid="dc/d43/a04727_1ae320654976bc3926d02d9ed2b8bb9985" prot="public" virt="non-virtual"><scope>castor3d::LightPassVolumePropagationShadowT</scope><name>LightPassShadow</name></member>
-      <member refid="d4/d10/a04839_1a3cc321c9e48683bfef24686a3ff09586" prot="public" virt="non-virtual"><scope>castor3d::LightPassVolumePropagationShadowT</scope><name>LightPassVolumePropagationShadowT</name></member>
-      <member refid="d4/d10/a04839_1a77778bd16f66abaaf45c112df71b0f58" prot="private" virt="non-virtual"><scope>castor3d::LightPassVolumePropagationShadowT</scope><name>m_gpInfoUbo</name></member>
-      <member refid="d4/d10/a04839_1a044b6184688893dc5e35b260cb53cbd9" prot="private" virt="non-virtual"><scope>castor3d::LightPassVolumePropagationShadowT</scope><name>m_gpResult</name></member>
-      <member refid="d4/d10/a04839_1a72ae083724c8567f3c97bb238bac096f" prot="private" virt="non-virtual"><scope>castor3d::LightPassVolumePropagationShadowT</scope><name>m_lightVolumeGIPasses</name></member>
-      <member refid="d4/d10/a04839_1ac66bf02692cc87507d264fbc5acc1952" prot="private" virt="non-virtual"><scope>castor3d::LightPassVolumePropagationShadowT</scope><name>m_lpResult</name></member>
-      <member refid="d4/d10/a04839_1a7d0fe5930a36240b30c5deeb2564deec" prot="private" virt="non-virtual"><scope>castor3d::LightPassVolumePropagationShadowT</scope><name>m_lpvConfigUbo</name></member>
-      <member refid="d4/d10/a04839_1ae0253b19fd4c03bec043524ab1cb6b1e" prot="private" virt="non-virtual"><scope>castor3d::LightPassVolumePropagationShadowT</scope><name>m_lpvResult</name></member>
-      <member refid="d4/d10/a04839_1af66b851dc83e520ea29a2a216d34b0ce" prot="private" virt="non-virtual"><scope>castor3d::LightPassVolumePropagationShadowT</scope><name>m_smResult</name></member>
-      <member refid="d4/d10/a04839_1a9c618f62fe316f9fb268152d2d60c86f" prot="public" virt="non-virtual"><scope>castor3d::LightPassVolumePropagationShadowT</scope><name>MaxPropagationSteps</name></member>
-      <member refid="d4/d10/a04839_1a808695bc9df9cee8267a0d7e46e36214" prot="public" virt="non-virtual"><scope>castor3d::LightPassVolumePropagationShadowT</scope><name>my_light_type</name></member>
-      <member refid="d4/d10/a04839_1a03f5e0b8a26e8f17207a487f7896174a" prot="public" virt="non-virtual"><scope>castor3d::LightPassVolumePropagationShadowT</scope><name>my_pass_type</name></member>
-      <member refid="dc/d43/a04727_1a22ca9dcec229a6fb1bb13fd52a1373cb" prot="public" virt="non-virtual"><scope>castor3d::LightPassVolumePropagationShadowT</scope><name>my_shadow_matype</name></member>
-      <member refid="d4/d10/a04839_1a8d8f013a88078d4319cf8640b9915d9b" prot="public" virt="non-virtual"><scope>castor3d::LightPassVolumePropagationShadowT</scope><name>my_shadow_pass_type</name></member>
-      <member refid="d4/d10/a04839_1aee442f7d677440837f5c3b6989d12782" prot="public" virt="non-virtual"><scope>castor3d::LightPassVolumePropagationShadowT</scope><name>my_traits</name></member>
-      <member refid="d4/d10/a04839_1a5fadf6bae75eec058dbb0211ead4866b" prot="public" virt="non-virtual"><scope>castor3d::LightPassVolumePropagationShadowT</scope><name>render</name></member>
+      <member refid="d4/d10/a04839_1a1ae31ecdd6529ec1298721b36d94f521" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>bitangent</name></member>
+      <member refid="d4/d10/a04839_1ad9bf5d88c07092af5cb086cdee86e6e3" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>computeTangentSpace</name></member>
+      <member refid="d4/d10/a04839_1abc6e5e1b8fe696bd586c0bd0cc0fe316" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>computeTangentSpace</name></member>
+      <member refid="d4/d10/a04839_1a8193140f413de33070733862130c44f9" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>computeVelocity</name></member>
+      <member refid="d4/d10/a04839_1a85cbd7adf9d98b169fc902c5f0e84cd7" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>curPosition</name></member>
+      <member refid="d4/d10/a04839_1ae920008654b7998f5a182f94ec5fe17a" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>FragmentSurfaceT</name></member>
+      <member refid="d4/d10/a04839_1a39f9d2d2dd573ef34bac311bf64eff08" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>getVelocity</name></member>
+      <member refid="d4/d10/a04839_1a861f0c5edb7b09ef661a306912965080" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>instanceId</name></member>
+      <member refid="d4/d10/a04839_1a8517c545d0cf12e21164c7e6d8ceb163" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>makeIOType</name></member>
+      <member refid="d4/d10/a04839_1ae8f98464d85948e184a60ce59a3462a7" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>nodeId</name></member>
+      <member refid="d4/d10/a04839_1adc28a56d9039a84ab12907386f0ac135" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>normal</name></member>
+      <member refid="d4/d10/a04839_1a38989e06df6acb1aaabfc8acd08a084d" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>prvPosition</name></member>
+      <member refid="d4/d10/a04839_1a1212b64be1ed116a1fbbd9d5501979a1" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="d4/d10/a04839_1ad8de92a8c13ebaec3f79c53e885db9ef" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>tangent</name></member>
+      <member refid="d4/d10/a04839_1a0ebc4e507505f10a560739718e7987f5" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>tangentSpaceFragPosition</name></member>
+      <member refid="d4/d10/a04839_1a1c18269ce39b8e9fe84af651fe628f51" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>tangentSpaceViewPosition</name></member>
+      <member refid="d4/d10/a04839_1ac94d313073975881adab72f2fd7a1e38" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>texture0</name></member>
+      <member refid="d4/d10/a04839_1a1a14c10cc98a3aedac1ece848e549915" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>texture1</name></member>
+      <member refid="d4/d10/a04839_1a93a5c6877bccc34fe02a2de8f8eeb8c4" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>viewPosition</name></member>
+      <member refid="d4/d10/a04839_1a5b19c3b5337a11c796c547a63c5a4d64" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>worldPosition</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

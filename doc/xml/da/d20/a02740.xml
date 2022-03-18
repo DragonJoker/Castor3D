@@ -1,33 +1,376 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="da/d20/a02740" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkQueryPoolCreateInfo &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="da/d20/a02740_1ad096050d8da8d5e47375759b9eef8953" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkQueryPoolCreateInfo &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="da/d20/a02740" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::FrameListener</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::Named</basecompoundref>
+    <includes local="no">FrameListener.hpp</includes>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="da/d20/a02740_1a9af77d499ee6abb82b349492bc87f759" prot="protected" static="no" mutable="no">
+        <type>std::array&lt; CpuFrameEventPtrArray, size_t(<ref refid="d2/df5/a01395_1ad442bf3c1ba8a06ac36f710ba30b2870ae558bb69fadec037d9eae46601a4df8e" kindref="member">EventType::eCount</ref>) &gt;</type>
+        <definition>std::array&lt; CpuFrameEventPtrArray, size_t( EventType::eCount ) &gt; castor3d::FrameListener::m_cpuEvents</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO</initializer>
+        <name>m_cpuEvents</name>
+        <qualifiedname>castor3d::FrameListener::m_cpuEvents</qualifiedname>
         <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The CPU events arrays. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/FrameListener.hpp" line="107" column="12" bodyfile="Event/Frame/FrameListener.hpp" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d20/a02740_1a72f1425020cf11f3bbb31b88926ddd6c" prot="protected" static="no" mutable="no">
+        <type>std::array&lt; GpuFrameEventPtrArray, size_t(<ref refid="d2/df5/a01395_1ad442bf3c1ba8a06ac36f710ba30b2870ae558bb69fadec037d9eae46601a4df8e" kindref="member">EventType::eCount</ref>) &gt;</type>
+        <definition>std::array&lt; GpuFrameEventPtrArray, size_t( EventType::eCount ) &gt; castor3d::FrameListener::m_gpuEvents</definition>
+        <argsstring></argsstring>
+        <name>m_gpuEvents</name>
+        <qualifiedname>castor3d::FrameListener::m_gpuEvents</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The GPU events arrays. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/FrameListener.hpp" line="110" column="12" bodyfile="Event/Frame/FrameListener.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d20/a02740_1a93e737a2b96c7055ff61d5693760645e" prot="protected" static="no" mutable="no">
+        <type>std::recursive_mutex</type>
+        <definition>std::recursive_mutex castor3d::FrameListener::m_mutex</definition>
+        <argsstring></argsstring>
+        <name>m_mutex</name>
+        <qualifiedname>castor3d::FrameListener::m_mutex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Mutex to make this class thread safe. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/FrameListener.hpp" line="113" column="22" bodyfile="Event/Frame/FrameListener.hpp" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/d20/a02740_1a64b32864fdc87929f37bf48346c227e7" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::FrameListener::FrameListener</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>FrameListener</name>
+        <qualifiedname>castor3d::FrameListener::FrameListener</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The listener&apos;s name. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/FrameListener.hpp" line="26" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d20/a02740_1a2ab0f844d5890952e2fcb555cd5a7be2" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::FrameListener::~FrameListener</definition>
+        <argsstring>()</argsstring>
+        <name>~FrameListener</name>
+        <qualifiedname>castor3d::FrameListener::~FrameListener</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="25" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="25" bodyend="-1"/>
+        <location file="Event/Frame/FrameListener.hpp" line="33" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d20/a02740_1a658666c30883ca63d72257bf78aea02b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::FrameListener::flush</definition>
+        <argsstring>()</argsstring>
+        <name>flush</name>
+        <qualifiedname>castor3d::FrameListener::flush</qualifiedname>
+        <briefdescription>
+<para>Empties the event lists. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/FrameListener.hpp" line="40" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d20/a02740_1a2c62573911a7ed3c2149fd37a7de9df0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::FrameListener::postEvent</definition>
+        <argsstring>(CpuFrameEventUPtr event)</argsstring>
+        <name>postEvent</name>
+        <qualifiedname>castor3d::FrameListener::postEvent</qualifiedname>
+        <param>
+          <type>CpuFrameEventUPtr</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+<para>Puts an event in the corresponding array. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The event to put. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/FrameListener.hpp" line="49" column="14"/>
+        <referencedby refid="d5/d95/a02720_1a44e4dda8e201c29d9349587ba4c55f1f" compoundref="d9/d39/a00257" startline="116" endline="119">castor3d::CpuEventInitialiserT&lt; CacheT &gt;::operator()</referencedby>
+        <referencedby refid="d7/deb/a02724_1afe1d4e1fb082e6ef3ff59a15b84b509b" compoundref="d9/d39/a00257" startline="134" endline="137">castor3d::CpuEventCleanerT&lt; CacheT &gt;::operator()</referencedby>
+        <referencedby refid="d7/d1c/a02732_1ac39ad25122a42c42858573c48b06f8a0" compoundref="d5/d42/a00269" startline="119" endline="122">castor3d::GpuEventInitialiserT&lt; CacheT &gt;::operator()</referencedby>
+        <referencedby refid="da/dd3/a02736_1a46ed639594b040664061bb864c8d38c1" compoundref="d5/d42/a00269" startline="137" endline="140">castor3d::GpuEventCleanerT&lt; CacheT &gt;::operator()</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="da/d20/a02740_1ab787d573e00427a919f198f7ddab4be2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::FrameListener::postEvent</definition>
+        <argsstring>(GpuFrameEventUPtr event)</argsstring>
+        <name>postEvent</name>
+        <qualifiedname>castor3d::FrameListener::postEvent</qualifiedname>
+        <param>
+          <type>GpuFrameEventUPtr</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+<para>Puts an event in the corresponding array. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The event to put. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/FrameListener.hpp" line="58" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d20/a02740_1a8ade5761841f8eae01d0bda29d99e000" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::FrameListener::fireEvents</definition>
+        <argsstring>(EventType type, RenderDevice const &amp;device, QueueData const &amp;queueData)</argsstring>
+        <name>fireEvents</name>
+        <qualifiedname>castor3d::FrameListener::fireEvents</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1ad442bf3c1ba8a06ac36f710ba30b2870" kindref="member">EventType</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dde/a03944" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <briefdescription>
+<para>Applies all events of a given type, then discards them. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of events to fire. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si tous les évènements se sont exécutés sans erreur. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/FrameListener.hpp" line="71" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d20/a02740_1a92434ace05937d07300e2180cb7e997d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::FrameListener::fireEvents</definition>
+        <argsstring>(EventType type)</argsstring>
+        <name>fireEvents</name>
+        <qualifiedname>castor3d::FrameListener::fireEvents</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1ad442bf3c1ba8a06ac36f710ba30b2870" kindref="member">EventType</ref></type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+<para>Applies all events of a given type, then discards them. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of events to fire. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si tous les évènements se sont exécutés sans erreur. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/FrameListener.hpp" line="84" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d20/a02740_1a2a54c785e4fc7043a3045f85e866c09f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::FrameListener::flushEvents</definition>
+        <argsstring>(EventType type)</argsstring>
+        <name>flushEvents</name>
+        <qualifiedname>castor3d::FrameListener::flushEvents</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1ad442bf3c1ba8a06ac36f710ba30b2870" kindref="member">EventType</ref></type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+<para>Discards all events of a given type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of events to fire. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/FrameListener.hpp" line="93" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="da/d20/a02740_1a89005d31cf015a87d21e0742d742bb7b" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::FrameListener::doFlush</definition>
+        <argsstring>()</argsstring>
+        <name>doFlush</name>
+        <qualifiedname>castor3d::FrameListener::doFlush</qualifiedname>
+        <briefdescription>
+<para>Empties the event lists. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/FrameListener.hpp" line="102" column="22" bodyfile="Event/Frame/FrameListener.hpp" bodystart="102" bodyend="102"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="25" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="25" bodyend="25"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::FrameListener</label>
+        <link refid="da/d20/a02740"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5">
+        <label>T</label>
+      </node>
+      <node id="3">
+        <label>std::array&lt; CpuFrameEventPtrArray, size_t(EventType::eCount) &gt;</label>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; CpuFrameEventPtrArray, size_t(EventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::array&lt; GpuFrameEventPtrArray, size_t(EventType::eCount) &gt;</label>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; GpuFrameEventPtrArray, size_t(EventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::FrameListener</label>
+        <link refid="da/d20/a02740"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_cpuEvents</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_gpuEvents</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_mutex</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+      </node>
+      <node id="4">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::recursive_mutex</label>
+      </node>
+    </collaborationgraph>
+    <location file="Event/Frame/FrameListener.hpp" line="14" column="1" bodyfile="Event/Frame/FrameListener.hpp" bodystart="16" bodyend="114"/>
     <listofallmembers>
-      <member refid="da/d20/a02740_1ad096050d8da8d5e47375759b9eef8953" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkQueryPoolCreateInfo &gt;</scope><name>value</name></member>
+      <member refid="da/d20/a02740_1a89005d31cf015a87d21e0742d742bb7b" prot="protected" virt="virtual"><scope>castor3d::FrameListener</scope><name>doFlush</name></member>
+      <member refid="da/d20/a02740_1a8ade5761841f8eae01d0bda29d99e000" prot="public" virt="non-virtual"><scope>castor3d::FrameListener</scope><name>fireEvents</name></member>
+      <member refid="da/d20/a02740_1a92434ace05937d07300e2180cb7e997d" prot="public" virt="non-virtual"><scope>castor3d::FrameListener</scope><name>fireEvents</name></member>
+      <member refid="da/d20/a02740_1a658666c30883ca63d72257bf78aea02b" prot="public" virt="non-virtual"><scope>castor3d::FrameListener</scope><name>flush</name></member>
+      <member refid="da/d20/a02740_1a2a54c785e4fc7043a3045f85e866c09f" prot="public" virt="non-virtual"><scope>castor3d::FrameListener</scope><name>flushEvents</name></member>
+      <member refid="da/d20/a02740_1a64b32864fdc87929f37bf48346c227e7" prot="public" virt="non-virtual"><scope>castor3d::FrameListener</scope><name>FrameListener</name></member>
+      <member refid="da/d20/a02740_1a9af77d499ee6abb82b349492bc87f759" prot="protected" virt="non-virtual"><scope>castor3d::FrameListener</scope><name>m_cpuEvents</name></member>
+      <member refid="da/d20/a02740_1a72f1425020cf11f3bbb31b88926ddd6c" prot="protected" virt="non-virtual"><scope>castor3d::FrameListener</scope><name>m_gpuEvents</name></member>
+      <member refid="da/d20/a02740_1a93e737a2b96c7055ff61d5693760645e" prot="protected" virt="non-virtual"><scope>castor3d::FrameListener</scope><name>m_mutex</name></member>
+      <member refid="da/d20/a02740_1a2c62573911a7ed3c2149fd37a7de9df0" prot="public" virt="non-virtual"><scope>castor3d::FrameListener</scope><name>postEvent</name></member>
+      <member refid="da/d20/a02740_1ab787d573e00427a919f198f7ddab4be2" prot="public" virt="non-virtual"><scope>castor3d::FrameListener</scope><name>postEvent</name></member>
+      <member refid="da/d20/a02740_1a2ab0f844d5890952e2fcb555cd5a7be2" prot="public" virt="virtual"><scope>castor3d::FrameListener</scope><name>~FrameListener</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

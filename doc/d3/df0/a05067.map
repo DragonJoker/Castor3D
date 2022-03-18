@@ -1,6 +1,4 @@
-<map id="castor3d::BillboardBase" name="castor3d::BillboardBase">
-<area shape="rect" id="node1" title=" " alt="" coords="25,169,185,196"/>
-<area shape="rect" id="node4" href="$d1/ddd/a05076.html" title=" " alt="" coords="29,244,180,271"/>
-<area shape="rect" id="node2" href="$df/d18/a05168.html" title=" " alt="" coords="18,95,191,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,204,47"/>
+<map id="castor::TextWriter&lt; castor3d::BillboardList &gt;" name="castor::TextWriter&lt; castor3d::BillboardList &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="5,95,180,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="17,5,168,47"/>
 </map>

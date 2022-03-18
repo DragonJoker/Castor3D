@@ -1,9 +1,9 @@
-<map id="castor3d::ShadowMapResult" name="castor3d::ShadowMapResult">
-<area shape="rect" id="node1" title=" " alt="" coords="83,365,271,392"/>
-<area shape="rect" id="node2" href="$d1/dcc/a04250.html" title=" " alt="" coords="112,275,243,316"/>
-<area shape="rect" id="node3" href="$d1/d5a/a04246.html" title=" " alt="" coords="186,81,339,108"/>
-<area shape="rect" id="node7" href="$d1/dcc/a04250.html" title=" " alt="" coords="121,171,252,212"/>
-<area shape="rect" id="node4" title=" " alt="" coords="231,5,294,32"/>
-<area shape="rect" id="node5" href="$df/d9b/a02514.html" title=" " alt="" coords="31,81,151,108"/>
-<area shape="rect" id="node6" title=" " alt="" coords="5,5,176,32"/>
+<map id="castor3d::LightBuffer::LightData" name="castor3d::LightBuffer::LightData">
+<area shape="rect" id="node1" title=" " alt="" coords="5,585,147,627"/>
+<area shape="rect" id="node2" href="$dd/d22/a04662.html" title=" " alt="" coords="91,5,232,47"/>
+<area shape="rect" id="node3" href="$d8/dca/a04670.html" title=" " alt="" coords="145,481,287,523"/>
+<area shape="rect" id="node5" href="$d7/d54/a04666.html" title=" " alt="" coords="200,153,341,195"/>
+<area shape="rect" id="node4" title=" " alt="" coords="354,361,537,403"/>
+<area shape="rect" id="node6" title=" " alt="" coords="391,161,499,187"/>
+<area shape="rect" id="node7" title=" " alt="" coords="426,13,465,39"/>
 </map>

@@ -1,0 +1,225 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d4/de5/a00503" kind="file" language="C++">
+    <compoundname>MorphComponent.hpp</compoundname>
+    <includes refid="d4/d1f/a00506" local="yes">Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp</includes>
+    <incdepgraph>
+      <node id="9404">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="9415">
+        <label>Castor3D/Material/MaterialModule.hpp</label>
+        <link refid="d8/d23/a00326"/>
+        <childnode refid="9399" relation="include">
+        </childnode>
+        <childnode refid="9416" relation="include">
+        </childnode>
+      </node>
+      <node id="9417">
+        <label>Castor3D/Render/RenderModule.hpp</label>
+        <link refid="d5/d72/a00803"/>
+        <childnode refid="9418" relation="include">
+        </childnode>
+        <childnode refid="9419" relation="include">
+        </childnode>
+        <childnode refid="9420" relation="include">
+        </childnode>
+        <childnode refid="9421" relation="include">
+        </childnode>
+        <childnode refid="9422" relation="include">
+        </childnode>
+        <childnode refid="9423" relation="include">
+        </childnode>
+        <childnode refid="9426" relation="include">
+        </childnode>
+      </node>
+      <node id="9407">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="9414">
+        <label>CastorUtils/Graphics/BoundingSphere.hpp</label>
+      </node>
+      <node id="9408">
+        <label>cstdint</label>
+      </node>
+      <node id="9395">
+        <label>ComponentModule.hpp</label>
+        <link refid="d9/d34/a00476"/>
+        <childnode refid="9396" relation="include">
+        </childnode>
+      </node>
+      <node id="9416">
+        <label>CastorUtils/Design/Signal.hpp</label>
+      </node>
+      <node id="9406">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="9424">
+        <label>ShaderAST/Shader.hpp</label>
+      </node>
+      <node id="9399">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="9400" relation="include">
+        </childnode>
+        <childnode refid="9401" relation="include">
+        </childnode>
+        <childnode refid="9402" relation="include">
+        </childnode>
+        <childnode refid="9403" relation="include">
+        </childnode>
+        <childnode refid="9404" relation="include">
+        </childnode>
+        <childnode refid="9405" relation="include">
+        </childnode>
+        <childnode refid="9406" relation="include">
+        </childnode>
+        <childnode refid="9407" relation="include">
+        </childnode>
+        <childnode refid="9408" relation="include">
+        </childnode>
+        <childnode refid="9409" relation="include">
+        </childnode>
+        <childnode refid="9410" relation="include">
+        </childnode>
+        <childnode refid="9411" relation="include">
+        </childnode>
+      </node>
+      <node id="9410">
+        <label>string</label>
+      </node>
+      <node id="9398">
+        <label>Castor3D/Model/ModelModule.hpp</label>
+        <link refid="d7/def/a00521"/>
+        <childnode refid="9399" relation="include">
+        </childnode>
+      </node>
+      <node id="9403">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="9400">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="9396">
+        <label>Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp</label>
+        <link refid="dc/d19/a00515"/>
+        <childnode refid="9397" relation="include">
+        </childnode>
+        <childnode refid="9413" relation="include">
+        </childnode>
+        <childnode refid="9414" relation="include">
+        </childnode>
+      </node>
+      <node id="9422">
+        <label>Castor3D/Material/Texture/TextureModule.hpp</label>
+        <link refid="de/dd7/a00362"/>
+        <childnode refid="9415" relation="include">
+        </childnode>
+        <childnode refid="9416" relation="include">
+        </childnode>
+      </node>
+      <node id="9413">
+        <label>CastorUtils/Graphics/BoundingBox.hpp</label>
+      </node>
+      <node id="9402">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="9418">
+        <label>Castor3D/Miscellaneous/MiscellaneousModule.hpp</label>
+        <link refid="d4/d27/a00392"/>
+        <childnode refid="9399" relation="include">
+        </childnode>
+      </node>
+      <node id="9419">
+        <label>Castor3D/Scene/SceneModule.hpp</label>
+        <link refid="de/db5/a01181"/>
+        <childnode refid="9415" relation="include">
+        </childnode>
+        <childnode refid="9396" relation="include">
+        </childnode>
+        <childnode refid="9416" relation="include">
+        </childnode>
+      </node>
+      <node id="9393">
+        <label>Model/Mesh/Submesh/Component/MorphComponent.hpp</label>
+        <link refid="d4/de5/a00503"/>
+        <childnode refid="9394" relation="include">
+        </childnode>
+      </node>
+      <node id="9420">
+        <label>Castor3D/Scene/Light/LightModule.hpp</label>
+        <link refid="d9/d5b/a01127"/>
+        <childnode refid="9419" relation="include">
+        </childnode>
+      </node>
+      <node id="9401">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="9397">
+        <label>Castor3D/Model/Mesh/MeshModule.hpp</label>
+        <link refid="d2/d9d/a00464"/>
+        <childnode refid="9398" relation="include">
+        </childnode>
+        <childnode refid="9412" relation="include">
+        </childnode>
+      </node>
+      <node id="9411">
+        <label>vector</label>
+      </node>
+      <node id="9405">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="9421">
+        <label>Castor3D/Material/Pass/PassModule.hpp</label>
+        <link refid="df/d91/a00335"/>
+        <childnode refid="9415" relation="include">
+        </childnode>
+        <childnode refid="9416" relation="include">
+        </childnode>
+      </node>
+      <node id="9426">
+        <label>ashespp/Image/ImageView.hpp</label>
+      </node>
+      <node id="9425">
+        <label>ShaderWriter/ShaderWriterPrerequisites.hpp</label>
+      </node>
+      <node id="9394">
+        <label>Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp</label>
+        <link refid="d4/d1f/a00506"/>
+        <childnode refid="9395" relation="include">
+        </childnode>
+        <childnode refid="9415" relation="include">
+        </childnode>
+        <childnode refid="9417" relation="include">
+        </childnode>
+        <childnode refid="9423" relation="include">
+        </childnode>
+      </node>
+      <node id="9412">
+        <label>CastorUtils/Design/Factory.hpp</label>
+      </node>
+      <node id="9423">
+        <label>Castor3D/Shader/ShaderModule.hpp</label>
+        <link refid="d5/d32/a01214"/>
+        <childnode refid="9399" relation="include">
+        </childnode>
+        <childnode refid="9424" relation="include">
+        </childnode>
+        <childnode refid="9425" relation="include">
+        </childnode>
+        <childnode refid="9401" relation="include">
+        </childnode>
+      </node>
+      <node id="9409">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="d1/df0/a03976" prot="public">castor3d::MorphComponent</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp"/>
+  </compounddef>
+</doxygen>

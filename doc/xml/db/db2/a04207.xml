@@ -1,148 +1,140 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="db/db2/a04207" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::CulledBillboard</compoundname>
-    <includes local="no">SceneCuller.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="db/db2/a04207_1af23762d685cbd509029be528f1e2913f" prot="public" static="no" mutable="no">
-        <type><ref refid="d3/d91/a05119" kindref="compound">BillboardBase</ref> &amp;</type>
-        <definition>BillboardBase&amp; castor3d::CulledBillboard::instance</definition>
-        <argsstring></argsstring>
-        <name>instance</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="db/db2/a04207" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::LightPass</compoundname>
+    <includes local="no">LightPass.hpp</includes>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="db/db2/a04207_1abe55a05df6386ae05f0443e872921be2" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="da/de3/a01398_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
+        <definition>static ShaderPtr castor3d::LightPass::getVertexShaderSource</definition>
+        <argsstring>(LightType lightType)</argsstring>
+        <name>getVertexShaderSource</name>
+        <qualifiedname>castor3d::LightPass::getVertexShaderSource</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>lightType</declname>
+        </param>
         <briefdescription>
+<para>Retrieves the vertex shader source for a light type. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lightType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The light type. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The source. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Culling/SceneCuller.hpp" line="30" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="30" bodyend="-1"/>
+        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="26" column="18"/>
       </memberdef>
-      <memberdef kind="variable" id="db/db2/a04207_1a53104ec474ff12b7f6d74ae108a62199" prot="public" static="no" mutable="no">
-        <type><ref refid="d3/d91/a05119" kindref="compound">BillboardBase</ref> &amp;</type>
-        <definition>BillboardBase&amp; castor3d::CulledBillboard::data</definition>
-        <argsstring></argsstring>
-        <name>data</name>
+      <memberdef kind="function" id="db/db2/a04207_1a79191646f64f6bb80d998c7362dd3fb9" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="da/de3/a01398_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
+        <definition>static ShaderPtr castor3d::LightPass::getPixelShaderSource</definition>
+        <argsstring>(PassTypeID passType, RenderSystem const &amp;renderSystem, SceneFlags const &amp;sceneFlags, LightType lightType, ShadowType shadowType, bool shadows)</argsstring>
+        <name>getPixelShaderSource</name>
+        <qualifiedname>castor3d::LightPass::getPixelShaderSource</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1a773fcfeb825d3fe54eb4a3dce23bca11" kindref="member">PassTypeID</ref></type>
+          <declname>passType</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d9a/a04075" kindref="compound">RenderSystem</ref> const &amp;</type>
+          <declname>renderSystem</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref> const &amp;</type>
+          <declname>sceneFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>lightType</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a90275671c44e791e9556c4bed9033935" kindref="member">ShadowType</ref></type>
+          <declname>shadowType</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>shadows</declname>
+        </param>
         <briefdescription>
+<para>Retrieves the pixel shader source for a light type. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">passType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The material pass type ID. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">renderSystem</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render system. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sceneFlags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene flags. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lightType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The light source type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">shadowType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The shadow type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">shadows</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tells if shadows are used. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The source. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Culling/SceneCuller.hpp" line="31" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="31" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="db/db2/a04207_1ae4f8d304c705f419bb7860d1546beeef" prot="public" static="no" mutable="no">
-        <type>PassSPtr</type>
-        <definition>PassSPtr castor3d::CulledBillboard::pass</definition>
-        <argsstring></argsstring>
-        <name>pass</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Culling/SceneCuller.hpp" line="32" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="32" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="db/db2/a04207_1aa1b96c823d4ce4607ae776a4462171f6" prot="public" static="no" mutable="no">
-        <type><ref refid="d8/dd0/a05235" kindref="compound">SceneNode</ref> &amp;</type>
-        <definition>SceneNode&amp; castor3d::CulledBillboard::sceneNode</definition>
-        <argsstring></argsstring>
-        <name>sceneNode</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Culling/SceneCuller.hpp" line="33" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="33" bodyend="-1"/>
+        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="47" column="18"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="856">
-        <label>castor3d::CulledBillboard</label>
-        <link refid="db/db2/a04207"/>
-        <childnode refid="857" relation="usage">
-          <edgelabel>data</edgelabel>
-          <edgelabel>instance</edgelabel>
-        </childnode>
-        <childnode refid="861" relation="usage">
-          <edgelabel>sceneNode</edgelabel>
-        </childnode>
-      </node>
-      <node id="861">
-        <label>castor3d::SceneNode</label>
-        <link refid="d8/dd0/a05235"/>
-        <childnode refid="862" relation="public-inheritance">
-        </childnode>
-        <childnode refid="863" relation="public-inheritance">
-        </childnode>
-        <childnode refid="864" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="863">
-        <label>castor::OwnedBy&lt; Scene &gt;</label>
-      </node>
-      <node id="862">
-        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
-      </node>
-      <node id="864">
-        <label>Named</label>
-      </node>
-      <node id="858">
-        <label>castor3d::RenderedObject</label>
-        <link refid="d8/d9b/a05219"/>
-        <childnode refid="859" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="857">
-        <label>castor3d::BillboardBase</label>
-        <link refid="d3/d91/a05119"/>
-        <childnode refid="858" relation="public-inheritance">
-        </childnode>
-        <childnode refid="860" relation="usage">
-          <edgelabel>m_geometryBuffers</edgelabel>
-        </childnode>
-        <childnode refid="861" relation="usage">
-          <edgelabel>m_node</edgelabel>
-        </childnode>
-        <childnode refid="865" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-      </node>
-      <node id="866">
-        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
-      </node>
-      <node id="867">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="860">
-        <label>castor3d::GeometryBuffers</label>
-        <link refid="df/d04/a02287"/>
-      </node>
-      <node id="859">
-        <label>std::enable_shared_from_this&lt; RenderedObject &gt;</label>
-      </node>
-      <node id="865">
-        <label>castor3d::Scene</label>
-        <link refid="d7/d00/a05223"/>
-        <childnode refid="866" relation="public-inheritance">
-        </childnode>
-        <childnode refid="867" relation="public-inheritance">
-        </childnode>
-        <childnode refid="864" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Render/Culling/SceneCuller.hpp" line="29" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="28" bodyend="34"/>
+    <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="13" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="14" bodyend="53"/>
     <listofallmembers>
-      <member refid="db/db2/a04207_1a53104ec474ff12b7f6d74ae108a62199" prot="public" virt="non-virtual"><scope>castor3d::CulledBillboard</scope><name>data</name></member>
-      <member refid="db/db2/a04207_1af23762d685cbd509029be528f1e2913f" prot="public" virt="non-virtual"><scope>castor3d::CulledBillboard</scope><name>instance</name></member>
-      <member refid="db/db2/a04207_1ae4f8d304c705f419bb7860d1546beeef" prot="public" virt="non-virtual"><scope>castor3d::CulledBillboard</scope><name>pass</name></member>
-      <member refid="db/db2/a04207_1aa1b96c823d4ce4607ae776a4462171f6" prot="public" virt="non-virtual"><scope>castor3d::CulledBillboard</scope><name>sceneNode</name></member>
+      <member refid="db/db2/a04207_1a79191646f64f6bb80d998c7362dd3fb9" prot="public" virt="non-virtual"><scope>castor3d::LightPass</scope><name>getPixelShaderSource</name></member>
+      <member refid="db/db2/a04207_1abe55a05df6386ae05f0443e872921be2" prot="public" virt="non-virtual"><scope>castor3d::LightPass</scope><name>getVertexShaderSource</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,533 +1,486 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d6/d5a/a04966" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::RenderCube</compoundname>
-    <derivedcompoundref refid="d1/dd4/a04958" prot="private" virt="non-virtual">castor3d::EquirectangularToCube</derivedcompoundref>
-    <derivedcompoundref refid="d7/d2e/a04482" prot="private" virt="non-virtual">castor3d::RadianceComputer</derivedcompoundref>
-    <derivedcompoundref refid="d4/dbc/a04994" prot="private" virt="non-virtual">castor3d::TextureProjectionToCube</derivedcompoundref>
-    <includes local="no">RenderCube.hpp</includes>
-    <innerclass refid="db/db8/a04970" prot="private">castor3d::RenderCube::FacePipeline</innerclass>
-      <sectiondef kind="protected-attrib">
-      <memberdef kind="variable" id="d6/d5a/a04966_1af9d5218505481d37eec6dc49f638039a" prot="protected" static="no" mutable="no">
-        <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const  &amp;</type>
-        <definition>RenderDevice const&amp; castor3d::RenderCube::m_device</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d6/d5a/a04966" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::SceneData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">SceneUbo.hpp</includes>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="d6/d5a/a04966_1a9bb6aa488de293114ff892ef18876df3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>struct</type>
+        <definition>friend struct BillboardData</definition>
         <argsstring></argsstring>
-        <name>m_device</name>
+        <name>BillboardData</name>
+        <qualifiedname>castor3d::shader::SceneData::BillboardData</qualifiedname>
+        <param>
+          <type><ref refid="dd/d60/a04878" kindref="compound">BillboardData</ref></type>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/RenderCube.hpp" line="205" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="205" bodyend="-1"/>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="24" column="15" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="24" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d5a/a04966_1a09a2fc9d7fe9809ad64836ab33c3f2a8" prot="protected" static="no" mutable="no">
-        <type>SamplerSPtr</type>
-        <definition>SamplerSPtr castor3d::RenderCube::m_sampler</definition>
+      <memberdef kind="friend" id="d6/d5a/a04966_1a2bf8221f37d85662fe58e1093d087032" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class Fog</definition>
         <argsstring></argsstring>
-        <name>m_sampler</name>
+        <name>Fog</name>
+        <qualifiedname>castor3d::shader::SceneData::Fog</qualifiedname>
+        <param>
+          <type><ref refid="d3/d1e/a04766" kindref="compound">Fog</ref></type>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/RenderCube.hpp" line="206" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="206" bodyend="-1"/>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="25" column="14" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="25" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d5a/a04966_1a84414b79673d6fe5e891f6078bc8b782" prot="protected" static="no" mutable="no">
-        <type>ashes::PipelineLayoutPtr</type>
-        <definition>ashes::PipelineLayoutPtr castor3d::RenderCube::m_pipelineLayout</definition>
+      <memberdef kind="friend" id="d6/d5a/a04966_1a19ee4d0654cd9bcc717206e25d4823a4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class CommonFog</definition>
         <argsstring></argsstring>
-        <name>m_pipelineLayout</name>
+        <name>CommonFog</name>
+        <qualifiedname>castor3d::shader::SceneData::CommonFog</qualifiedname>
+        <param>
+          <type>CommonFog</type>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/RenderCube.hpp" line="207" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="207" bodyend="-1"/>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="26" column="14" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="26" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d6/d5a/a04966_1ac0230e7ade3a7dc4108eac4b8f250f8c" prot="private" static="no" mutable="no">
-        <type>ashes::CommandBufferPtr</type>
-        <definition>ashes::CommandBufferPtr castor3d::RenderCube::m_commandBuffer</definition>
+      <memberdef kind="variable" id="d6/d5a/a04966_1afc49e4eb9c6a77a8b800892a192a9545" prot="private" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::SceneData::m_ambientLight</definition>
         <argsstring></argsstring>
-        <name>m_commandBuffer</name>
+        <name>m_ambientLight</name>
+        <qualifiedname>castor3d::shader::SceneData::m_ambientLight</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/RenderCube.hpp" line="216" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="216" bodyend="-1"/>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="51" column="11" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="51" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d5a/a04966_1abaa28d5a015f7592ad09e9bd4878d1e0" prot="private" static="no" mutable="no">
-        <type>UniformBufferUPtrT&lt; castor::Matrix4x4f &gt;</type>
-        <definition>UniformBufferUPtrT&lt; castor::Matrix4x4f &gt; castor3d::RenderCube::m_matrixUbo</definition>
+      <memberdef kind="variable" id="d6/d5a/a04966_1a3c25c702704a5ac4a29f1bb9432f9aff" prot="private" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::SceneData::m_backgroundColour</definition>
         <argsstring></argsstring>
-        <name>m_matrixUbo</name>
+        <name>m_backgroundColour</name>
+        <qualifiedname>castor3d::shader::SceneData::m_backgroundColour</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/RenderCube.hpp" line="217" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="217" bodyend="-1"/>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="52" column="11" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="52" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d5a/a04966_1a2ad3b1abde77e72c051f77144499154c" prot="private" static="no" mutable="no">
-        <type>ashes::VertexBufferPtr&lt; castor::Point4f &gt;</type>
-        <definition>ashes::VertexBufferPtr&lt; castor::Point4f &gt; castor3d::RenderCube::m_vertexBuffer</definition>
+      <memberdef kind="variable" id="d6/d5a/a04966_1a0a4041aed47a22306e42c8997943488e" prot="private" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::SceneData::m_lightsCount</definition>
         <argsstring></argsstring>
-        <name>m_vertexBuffer</name>
+        <name>m_lightsCount</name>
+        <qualifiedname>castor3d::shader::SceneData::m_lightsCount</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/RenderCube.hpp" line="218" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="218" bodyend="-1"/>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="53" column="11" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="53" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d5a/a04966_1ac62bd3fdbc4a02e0c015bd267f5f90c3" prot="private" static="no" mutable="no">
-        <type>ashes::PipelineVertexInputStateCreateInfoPtr</type>
-        <definition>ashes::PipelineVertexInputStateCreateInfoPtr castor3d::RenderCube::m_vertexLayout</definition>
+      <memberdef kind="variable" id="d6/d5a/a04966_1a499d88646e0a981c4741830030970aca" prot="private" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::SceneData::m_cameraPosition</definition>
         <argsstring></argsstring>
-        <name>m_vertexLayout</name>
+        <name>m_cameraPosition</name>
+        <qualifiedname>castor3d::shader::SceneData::m_cameraPosition</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/RenderCube.hpp" line="219" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="219" bodyend="-1"/>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="54" column="11" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="54" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d5a/a04966_1a0140fce87dab1a6ce53cece996d37752" prot="private" static="no" mutable="no">
-        <type>ashes::DescriptorSetLayoutPtr</type>
-        <definition>ashes::DescriptorSetLayoutPtr castor3d::RenderCube::m_descriptorLayout</definition>
+      <memberdef kind="variable" id="d6/d5a/a04966_1a6b17ba7191d88077e26f9124841e34fa" prot="private" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::SceneData::m_clipInfo</definition>
         <argsstring></argsstring>
-        <name>m_descriptorLayout</name>
+        <name>m_clipInfo</name>
+        <qualifiedname>castor3d::shader::SceneData::m_clipInfo</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/RenderCube.hpp" line="220" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="220" bodyend="-1"/>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="55" column="11" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="55" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d5a/a04966_1ae82fb076eb4d1e030388516be626230d" prot="private" static="no" mutable="no">
-        <type>ashes::DescriptorSetPoolPtr</type>
-        <definition>ashes::DescriptorSetPoolPtr castor3d::RenderCube::m_descriptorPool</definition>
+      <memberdef kind="variable" id="d6/d5a/a04966_1a675e19a92b657739ab1d5f4294e6bcec" prot="private" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::SceneData::m_fogInfo</definition>
         <argsstring></argsstring>
-        <name>m_descriptorPool</name>
+        <name>m_fogInfo</name>
+        <qualifiedname>castor3d::shader::SceneData::m_fogInfo</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/RenderCube.hpp" line="221" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="221" bodyend="-1"/>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="56" column="11" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="56" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d5a/a04966_1a0ad322f90558682850d230821f7e6802" prot="private" static="no" mutable="no">
-        <type>std::array&lt; FacePipeline, 6u &gt;</type>
-        <definition>std::array&lt; FacePipeline, 6u &gt; castor3d::RenderCube::m_faces</definition>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/d5a/a04966_1aedf8ad43d39eaf5ab30b17522aa91b1f" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::SceneData::fogType</definition>
         <argsstring></argsstring>
-        <name>m_faces</name>
+        <name>fogType</name>
+        <qualifiedname>castor3d::shader::SceneData::fogType</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/RenderCube.hpp" line="222" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="222" bodyend="-1"/>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="59" column="11" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5a/a04966_1a022809b3250aabfe25db89b0d8149154" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::SceneData::fogDensity</definition>
+        <argsstring></argsstring>
+        <name>fogDensity</name>
+        <qualifiedname>castor3d::shader::SceneData::fogDensity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="60" column="12" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5a/a04966_1ac6b1bccf02bb55bcd4e1fa5c699b56b1" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::SceneData::ambientLight</definition>
+        <argsstring></argsstring>
+        <name>ambientLight</name>
+        <qualifiedname>castor3d::shader::SceneData::ambientLight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="61" column="11" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5a/a04966_1a3886c29ffef0393c13f78667dbdb00bb" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::SceneData::cameraPosition</definition>
+        <argsstring></argsstring>
+        <name>cameraPosition</name>
+        <qualifiedname>castor3d::shader::SceneData::cameraPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="62" column="11" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5a/a04966_1a36c133367cd13724c6bba38a148e310a" prot="public" static="no" mutable="no">
+        <type>sdw::Vec2</type>
+        <definition>sdw::Vec2 castor3d::shader::SceneData::renderSize</definition>
+        <argsstring></argsstring>
+        <name>renderSize</name>
+        <qualifiedname>castor3d::shader::SceneData::renderSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="63" column="11" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5a/a04966_1a4e6e05fdc2d3284777b57307a7509db2" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::SceneData::nearPlane</definition>
+        <argsstring></argsstring>
+        <name>nearPlane</name>
+        <qualifiedname>castor3d::shader::SceneData::nearPlane</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="64" column="12" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5a/a04966_1af820c68d2a318961504d7b05a9a0c08a" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::SceneData::farPlane</definition>
+        <argsstring></argsstring>
+        <name>farPlane</name>
+        <qualifiedname>castor3d::shader::SceneData::farPlane</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="65" column="12" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5a/a04966_1ac3edd0cd659b7f6abf1baa8022c63398" prot="public" static="no" mutable="no">
+        <type>sdw::Int</type>
+        <definition>sdw::Int castor3d::shader::SceneData::directionalLightCount</definition>
+        <argsstring></argsstring>
+        <name>directionalLightCount</name>
+        <qualifiedname>castor3d::shader::SceneData::directionalLightCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="66" column="10" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5a/a04966_1a06ccc00b3bb181e086b157b09511b67e" prot="public" static="no" mutable="no">
+        <type>sdw::Int</type>
+        <definition>sdw::Int castor3d::shader::SceneData::pointLightCount</definition>
+        <argsstring></argsstring>
+        <name>pointLightCount</name>
+        <qualifiedname>castor3d::shader::SceneData::pointLightCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="67" column="10" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5a/a04966_1af94d2acf67a58d17b6f5d07b60babe28" prot="public" static="no" mutable="no">
+        <type>sdw::Int</type>
+        <definition>sdw::Int castor3d::shader::SceneData::spotLightCount</definition>
+        <argsstring></argsstring>
+        <name>spotLightCount</name>
+        <qualifiedname>castor3d::shader::SceneData::spotLightCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="68" column="10" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5a/a04966_1a2512c9076934103f5aacd1af0add5c0a" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::SceneData::gamma</definition>
+        <argsstring></argsstring>
+        <name>gamma</name>
+        <qualifiedname>castor3d::shader::SceneData::gamma</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="69" column="12" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="69" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d6/d5a/a04966_1a442e2372083596ae51f50d6aa8709e60" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>virtual C3D_API castor3d::RenderCube::~RenderCube</definition>
-        <argsstring>()</argsstring>
-        <name>~RenderCube</name>
+      <memberdef kind="function" id="d6/d5a/a04966_1a9fcf85ed6dcb2e207887f9699071e7ca" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::SceneData::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, SceneData)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::SceneData::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        </param>
+        <param>
+          <type><ref refid="d6/d5a/a04966" kindref="compound">SceneData</ref></type>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/RenderCube.hpp" line="27" column="1"/>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="22" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="d6/d5a/a04966_1ac600349f4887fe9d7765ecc3224b2992" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::RenderCube::RenderCube</definition>
-        <argsstring>(RenderDevice const &amp;device, bool nearest, SamplerSPtr sampler=nullptr)</argsstring>
-        <name>RenderCube</name>
+      <memberdef kind="function" id="d6/d5a/a04966_1a62dec21f5dbb099abdd559394e52eab7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::SceneData::SceneData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>SceneData</name>
+        <qualifiedname>castor3d::shader::SceneData::SceneData</qualifiedname>
         <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
         </param>
         <param>
           <type>bool</type>
-          <declname>nearest</declname>
-        </param>
-        <param>
-          <type>SamplerSPtr</type>
-          <declname>sampler</declname>
-          <defval>nullptr</defval>
+          <declname>enabled</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">nearest</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if the sampler needs a Nearest filter or not, if <computeroutput>sampler</computeroutput> is nullptr. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">sampler</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The sampler to use. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/RenderCube.hpp" line="48" column="1"/>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="28" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d6/d5a/a04966_1ae58f4e4abbd017b821ad1ce07bd1898c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderCube::createPipelines</definition>
-        <argsstring>(VkExtent2D const &amp;size, castor::Position const &amp;position, ashes::PipelineShaderStageCreateInfoArray const &amp;program, ashes::ImageView const &amp;view, ashes::RenderPass const &amp;renderPass, ashes::VkPushConstantRangeArray const &amp;pushRanges)</argsstring>
-        <name>createPipelines</name>
+      <memberdef kind="function" id="d6/d5a/a04966_1ae23b70a2b39be8e81410737fb640bfcc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::SceneData::transformCamera</definition>
+        <argsstring>(sdw::Mat3 const &amp;transform) const</argsstring>
+        <name>transformCamera</name>
+        <qualifiedname>castor3d::shader::SceneData::transformCamera</qualifiedname>
         <param>
-          <type>VkExtent2D const &amp;</type>
-          <declname>size</declname>
+          <type>sdw::Mat3 const &amp;</type>
+          <declname>transform</declname>
         </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="35" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5a/a04966_1a008e9477003878b28fb56f985bb5cee7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::SceneData::getPosToCamera</definition>
+        <argsstring>(sdw::Vec3 const &amp;position) const</argsstring>
+        <name>getPosToCamera</name>
+        <qualifiedname>castor3d::shader::SceneData::getPosToCamera</qualifiedname>
         <param>
-          <type>castor::Position const &amp;</type>
+          <type>sdw::Vec3 const &amp;</type>
           <declname>position</declname>
         </param>
-        <param>
-          <type>ashes::PipelineShaderStageCreateInfoArray const &amp;</type>
-          <declname>program</declname>
-        </param>
-        <param>
-          <type>ashes::ImageView const &amp;</type>
-          <declname>view</declname>
-        </param>
-        <param>
-          <type>ashes::RenderPass const &amp;</type>
-          <declname>renderPass</declname>
-        </param>
-        <param>
-          <type>ashes::VkPushConstantRangeArray const &amp;</type>
-          <declname>pushRanges</declname>
-        </param>
         <briefdescription>
-<para>Creates the rendering pipelines. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">size</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render size. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">position</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render position. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">program</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The shader program. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">view</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The source view. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">renderPass</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render pass to use. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">pushRanges</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The push constant ranges. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/RenderCube.hpp" line="83" column="1"/>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="36" column="19"/>
       </memberdef>
-      <memberdef kind="function" id="d6/d5a/a04966_1a03e099cd27fb31640352a9925effa710" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderCube::createPipelines</definition>
-        <argsstring>(VkExtent2D const &amp;size, castor::Position const &amp;position, ashes::PipelineShaderStageCreateInfoArray const &amp;program, ashes::ImageView const &amp;view, ashes::RenderPass const &amp;renderPass, ashes::VkPushConstantRangeArray const &amp;pushRanges, ashes::PipelineDepthStencilStateCreateInfo const &amp;dsState)</argsstring>
-        <name>createPipelines</name>
+      <memberdef kind="function" id="d6/d5a/a04966_1a1cf5040c06a1dd8d5db65338024bf04b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::SceneData::getCameraToPos</definition>
+        <argsstring>(sdw::Vec3 const &amp;position) const</argsstring>
+        <name>getCameraToPos</name>
+        <qualifiedname>castor3d::shader::SceneData::getCameraToPos</qualifiedname>
         <param>
-          <type>VkExtent2D const &amp;</type>
-          <declname>size</declname>
-        </param>
-        <param>
-          <type>castor::Position const &amp;</type>
+          <type>sdw::Vec3 const &amp;</type>
           <declname>position</declname>
         </param>
-        <param>
-          <type>ashes::PipelineShaderStageCreateInfoArray const &amp;</type>
-          <declname>program</declname>
-        </param>
-        <param>
-          <type>ashes::ImageView const &amp;</type>
-          <declname>view</declname>
-        </param>
-        <param>
-          <type>ashes::RenderPass const &amp;</type>
-          <declname>renderPass</declname>
-        </param>
-        <param>
-          <type>ashes::VkPushConstantRangeArray const &amp;</type>
-          <declname>pushRanges</declname>
-        </param>
-        <param>
-          <type>ashes::PipelineDepthStencilStateCreateInfo const &amp;</type>
-          <declname>dsState</declname>
-        </param>
         <briefdescription>
-<para>Creates the rendering pipelines. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">size</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render size. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">position</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render position. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">program</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The shader program. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">view</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The source view. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">renderPass</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render pass to use. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">pushRanges</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The push constant ranges. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">dsState</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The depth stencil state to use. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/RenderCube.hpp" line="125" column="1"/>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="37" column="19"/>
       </memberdef>
-      <memberdef kind="function" id="d6/d5a/a04966_1a3f0330fd2cd0b556433e50c505c2cfd0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderCube::cleanup</definition>
-        <argsstring>()</argsstring>
-        <name>cleanup</name>
+      <memberdef kind="function" id="d6/d5a/a04966_1a3c4e2dfd433f190c8909c615c35ba683" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::SceneData::getBackgroundColour</definition>
+        <argsstring>(Utils &amp;utils) const</argsstring>
+        <name>getBackgroundColour</name>
+        <qualifiedname>castor3d::shader::SceneData::getBackgroundColour</qualifiedname>
+        <param>
+          <type><ref refid="d5/daa/a04862" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
         <briefdescription>
-<para>Cleans up GPU objects. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/RenderCube.hpp" line="140" column="1"/>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="38" column="19"/>
       </memberdef>
-      <memberdef kind="function" id="d6/d5a/a04966_1a83fae0b06a6d865e7b3a9a12bf6ee6ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderCube::prepareFrame</definition>
-        <argsstring>(ashes::RenderPass const &amp;renderPass, uint32_t subpassIndex, uint32_t face)</argsstring>
-        <name>prepareFrame</name>
+      <memberdef kind="function" id="d6/d5a/a04966_1a0aea0b3ea49c4c74a97f22250d3bf68a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::SceneData::getBackgroundColour</definition>
+        <argsstring>(HdrConfigData const &amp;hdrConfigData) const</argsstring>
+        <name>getBackgroundColour</name>
+        <qualifiedname>castor3d::shader::SceneData::getBackgroundColour</qualifiedname>
         <param>
-          <type>ashes::RenderPass const &amp;</type>
-          <declname>renderPass</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>subpassIndex</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>face</declname>
+          <type><ref refid="d8/dd4/a04894" kindref="compound">HdrConfigData</ref> const &amp;</type>
+          <declname>hdrConfigData</declname>
         </param>
         <briefdescription>
-<para>Prepares the commands to render one face from the cube. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">renderPass</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render pass to use. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">subpassIndex</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render subpass index. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">face</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The face index. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/RenderCube.hpp" line="161" column="1"/>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="39" column="19"/>
       </memberdef>
-      <memberdef kind="function" id="d6/d5a/a04966_1a4b8c2a6e867159e5545c6ae52e6ed246" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderCube::registerFrame</definition>
-        <argsstring>(ashes::CommandBuffer &amp;commandBuffer, uint32_t face) const</argsstring>
-        <name>registerFrame</name>
+      <memberdef kind="function" id="d6/d5a/a04966_1aa3f54d00f6464958da73aa42028c32f9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::SceneData::computeAccumulation</definition>
+        <argsstring>(Utils &amp;utils, sdw::Float const &amp;depth, sdw::Vec3 const &amp;colour, sdw::Float const &amp;alpha, sdw::Float const &amp;accumulationOperator) const</argsstring>
+        <name>computeAccumulation</name>
+        <qualifiedname>castor3d::shader::SceneData::computeAccumulation</qualifiedname>
         <param>
-          <type>ashes::CommandBuffer &amp;</type>
-          <declname>commandBuffer</declname>
+          <type><ref refid="d5/daa/a04862" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
         </param>
         <param>
-          <type>uint32_t</type>
-          <declname>face</declname>
+          <type>sdw::Float const &amp;</type>
+          <declname>depth</declname>
         </param>
-        <briefdescription>
-<para>Prepares the commands to render one face from the cube, inside given command buffer. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="inout">commandBuffer</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The command buffer. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">face</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The face index. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ToTexture/RenderCube.hpp" line="180" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d6/d5a/a04966_1aee72d95a1c9e3b4e7bf221867f1a80d5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::CommandBuffer const  &amp;</type>
-        <definition>ashes::CommandBuffer const&amp; castor3d::RenderCube::getCommandBuffer</definition>
-        <argsstring>() const</argsstring>
-        <name>getCommandBuffer</name>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>alpha</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>accumulationOperator</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The command buffer to render the quad. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/RenderCube.hpp" line="190" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="190" bodyend="194"/>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="40" column="19"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d6/d5a/a04966_1ad4e0afbe9a46484f314ab81cebf27f56" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>virtual C3D_API void castor3d::RenderCube::doFillDescriptorLayoutBindings</definition>
-        <argsstring>(ashes::VkDescriptorSetLayoutBindingArray &amp;bindings)</argsstring>
-        <name>doFillDescriptorLayoutBindings</name>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d6/d5a/a04966_1a77f2de748c286f05de46ac8e35a4cd60" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
+        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::SceneData::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::SceneData::makeType</qualifiedname>
         <param>
-          <type>ashes::VkDescriptorSetLayoutBindingArray &amp;</type>
-          <declname>bindings</declname>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -535,24 +488,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/RenderCube.hpp" line="197" column="1"/>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="32" column="41"/>
       </memberdef>
-      <memberdef kind="function" id="d6/d5a/a04966_1a1b26bf5ad6bf2341929fdb80f82bfee7" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>virtual C3D_API void castor3d::RenderCube::doFillDescriptorSet</definition>
-        <argsstring>(ashes::DescriptorSetLayout &amp;descriptorSetLayout, ashes::DescriptorSet &amp;descriptorSet, uint32_t face)</argsstring>
-        <name>doFillDescriptorSet</name>
+      <memberdef kind="function" id="d6/d5a/a04966_1ab036684abc67dc9973aad635f350431f" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::SceneData::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::SceneData::declare</qualifiedname>
         <param>
-          <type>ashes::DescriptorSetLayout &amp;</type>
-          <declname>descriptorSetLayout</declname>
-        </param>
-        <param>
-          <type>ashes::DescriptorSet &amp;</type>
-          <declname>descriptorSet</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>face</declname>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -560,28 +506,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/RenderCube.hpp" line="198" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d6/d5a/a04966_1a76c0cb3a9bbd308e8155f41d4bc50a26" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>virtual C3D_API void castor3d::RenderCube::doRegisterFrame</definition>
-        <argsstring>(ashes::CommandBuffer &amp;commandBuffer, uint32_t face) const</argsstring>
-        <name>doRegisterFrame</name>
-        <param>
-          <type>ashes::CommandBuffer &amp;</type>
-          <declname>commandBuffer</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>face</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ToTexture/RenderCube.hpp" line="201" column="1"/>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="33" column="32"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -589,110 +514,59 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="2847">
-        <label>castor3d::RenderCube</label>
+      <node id="1">
+        <label>castor3d::shader::SceneData</label>
         <link refid="d6/d5a/a04966"/>
-      </node>
-      <node id="2850">
-        <label>castor3d::TextureProjectionToCube</label>
-        <link refid="d4/dbc/a04994"/>
-        <childnode refid="2847" relation="private-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="2848">
-        <label>castor3d::EquirectangularToCube</label>
-        <link refid="d1/dd4/a04958"/>
-        <childnode refid="2847" relation="private-inheritance">
-        </childnode>
-      </node>
-      <node id="2849">
-        <label>castor3d::RadianceComputer</label>
-        <link refid="d7/d2e/a04482"/>
-        <childnode refid="2847" relation="private-inheritance">
-        </childnode>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="2856">
-        <label>castor3d::RenderSystem</label>
-        <link refid="d1/d9a/a04618"/>
-        <childnode refid="2857" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2855">
-        <label>T</label>
-      </node>
-      <node id="2851">
-        <label>castor3d::RenderCube</label>
+      <node id="1">
+        <label>castor3d::shader::SceneData</label>
         <link refid="d6/d5a/a04966"/>
-        <childnode refid="2852" relation="usage">
-          <edgelabel>m_device</edgelabel>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="2859">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="2855" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="2854">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="2855" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="2858">
-        <label>std::vector&lt; ashes::CommandPoolPtr &gt;</label>
-        <childnode refid="2859" relation="template-instance">
-          <edgelabel>&lt; ashes::CommandPoolPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2853">
-        <label>std::array&lt; uint32_t, 4u &gt;</label>
-        <childnode refid="2854" relation="template-instance">
-          <edgelabel>&lt; uint32_t, 4u &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2857">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="2852">
-        <label>castor3d::RenderDevice</label>
-        <link refid="d8/d4c/a04506"/>
-        <childnode refid="2853" relation="usage">
-          <edgelabel>queueFamiliesIndex</edgelabel>
-        </childnode>
-        <childnode refid="2856" relation="usage">
-          <edgelabel>renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="2858" relation="usage">
-          <edgelabel>commandPools</edgelabel>
-        </childnode>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </collaborationgraph>
-    <location file="Render/ToTexture/RenderCube.hpp" line="25" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="24" bodyend="223"/>
+    <location file="Shader/Ubos/SceneUbo.hpp" line="19" column="1" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="21" bodyend="70"/>
     <listofallmembers>
-      <member refid="d6/d5a/a04966_1a3f0330fd2cd0b556433e50c505c2cfd0" prot="public" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>cleanup</name></member>
-      <member refid="d6/d5a/a04966_1ae58f4e4abbd017b821ad1ce07bd1898c" prot="public" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>createPipelines</name></member>
-      <member refid="d6/d5a/a04966_1a03e099cd27fb31640352a9925effa710" prot="public" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>createPipelines</name></member>
-      <member refid="d6/d5a/a04966_1ad4e0afbe9a46484f314ab81cebf27f56" prot="private" virt="virtual"><scope>castor3d::RenderCube</scope><name>doFillDescriptorLayoutBindings</name></member>
-      <member refid="d6/d5a/a04966_1a1b26bf5ad6bf2341929fdb80f82bfee7" prot="private" virt="virtual"><scope>castor3d::RenderCube</scope><name>doFillDescriptorSet</name></member>
-      <member refid="d6/d5a/a04966_1a76c0cb3a9bbd308e8155f41d4bc50a26" prot="private" virt="virtual"><scope>castor3d::RenderCube</scope><name>doRegisterFrame</name></member>
-      <member refid="d6/d5a/a04966_1aee72d95a1c9e3b4e7bf221867f1a80d5" prot="public" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>getCommandBuffer</name></member>
-      <member refid="d6/d5a/a04966_1ac0230e7ade3a7dc4108eac4b8f250f8c" prot="private" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>m_commandBuffer</name></member>
-      <member refid="d6/d5a/a04966_1a0140fce87dab1a6ce53cece996d37752" prot="private" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>m_descriptorLayout</name></member>
-      <member refid="d6/d5a/a04966_1ae82fb076eb4d1e030388516be626230d" prot="private" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>m_descriptorPool</name></member>
-      <member refid="d6/d5a/a04966_1af9d5218505481d37eec6dc49f638039a" prot="protected" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>m_device</name></member>
-      <member refid="d6/d5a/a04966_1a0ad322f90558682850d230821f7e6802" prot="private" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>m_faces</name></member>
-      <member refid="d6/d5a/a04966_1abaa28d5a015f7592ad09e9bd4878d1e0" prot="private" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>m_matrixUbo</name></member>
-      <member refid="d6/d5a/a04966_1a84414b79673d6fe5e891f6078bc8b782" prot="protected" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>m_pipelineLayout</name></member>
-      <member refid="d6/d5a/a04966_1a09a2fc9d7fe9809ad64836ab33c3f2a8" prot="protected" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>m_sampler</name></member>
-      <member refid="d6/d5a/a04966_1a2ad3b1abde77e72c051f77144499154c" prot="private" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>m_vertexBuffer</name></member>
-      <member refid="d6/d5a/a04966_1ac62bd3fdbc4a02e0c015bd267f5f90c3" prot="private" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>m_vertexLayout</name></member>
-      <member refid="d6/d5a/a04966_1a83fae0b06a6d865e7b3a9a12bf6ee6ff" prot="public" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>prepareFrame</name></member>
-      <member refid="d6/d5a/a04966_1a4b8c2a6e867159e5545c6ae52e6ed246" prot="public" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>registerFrame</name></member>
-      <member refid="d6/d5a/a04966_1ac600349f4887fe9d7765ecc3224b2992" prot="public" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>RenderCube</name></member>
-      <member refid="d6/d5a/a04966_1a442e2372083596ae51f50d6aa8709e60" prot="public" virt="virtual"><scope>castor3d::RenderCube</scope><name>~RenderCube</name></member>
+      <member refid="d6/d5a/a04966_1ac6b1bccf02bb55bcd4e1fa5c699b56b1" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>ambientLight</name></member>
+      <member refid="d6/d5a/a04966_1a9bb6aa488de293114ff892ef18876df3" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>BillboardData</name></member>
+      <member refid="d6/d5a/a04966_1a3886c29ffef0393c13f78667dbdb00bb" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>cameraPosition</name></member>
+      <member refid="d6/d5a/a04966_1a19ee4d0654cd9bcc717206e25d4823a4" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>CommonFog</name></member>
+      <member refid="d6/d5a/a04966_1aa3f54d00f6464958da73aa42028c32f9" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>computeAccumulation</name></member>
+      <member refid="d6/d5a/a04966_1ab036684abc67dc9973aad635f350431f" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>declare</name></member>
+      <member refid="d6/d5a/a04966_1ac3edd0cd659b7f6abf1baa8022c63398" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>directionalLightCount</name></member>
+      <member refid="d6/d5a/a04966_1af820c68d2a318961504d7b05a9a0c08a" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>farPlane</name></member>
+      <member refid="d6/d5a/a04966_1a2bf8221f37d85662fe58e1093d087032" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>Fog</name></member>
+      <member refid="d6/d5a/a04966_1a022809b3250aabfe25db89b0d8149154" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>fogDensity</name></member>
+      <member refid="d6/d5a/a04966_1aedf8ad43d39eaf5ab30b17522aa91b1f" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>fogType</name></member>
+      <member refid="d6/d5a/a04966_1a2512c9076934103f5aacd1af0add5c0a" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>gamma</name></member>
+      <member refid="d6/d5a/a04966_1a3c4e2dfd433f190c8909c615c35ba683" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>getBackgroundColour</name></member>
+      <member refid="d6/d5a/a04966_1a0aea0b3ea49c4c74a97f22250d3bf68a" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>getBackgroundColour</name></member>
+      <member refid="d6/d5a/a04966_1a1cf5040c06a1dd8d5db65338024bf04b" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>getCameraToPos</name></member>
+      <member refid="d6/d5a/a04966_1a008e9477003878b28fb56f985bb5cee7" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>getPosToCamera</name></member>
+      <member refid="d6/d5a/a04966_1afc49e4eb9c6a77a8b800892a192a9545" prot="private" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>m_ambientLight</name></member>
+      <member refid="d6/d5a/a04966_1a3c25c702704a5ac4a29f1bb9432f9aff" prot="private" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>m_backgroundColour</name></member>
+      <member refid="d6/d5a/a04966_1a499d88646e0a981c4741830030970aca" prot="private" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>m_cameraPosition</name></member>
+      <member refid="d6/d5a/a04966_1a6b17ba7191d88077e26f9124841e34fa" prot="private" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>m_clipInfo</name></member>
+      <member refid="d6/d5a/a04966_1a675e19a92b657739ab1d5f4294e6bcec" prot="private" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>m_fogInfo</name></member>
+      <member refid="d6/d5a/a04966_1a0a4041aed47a22306e42c8997943488e" prot="private" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>m_lightsCount</name></member>
+      <member refid="d6/d5a/a04966_1a77f2de748c286f05de46ac8e35a4cd60" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>makeType</name></member>
+      <member refid="d6/d5a/a04966_1a4e6e05fdc2d3284777b57307a7509db2" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>nearPlane</name></member>
+      <member refid="d6/d5a/a04966_1a06ccc00b3bb181e086b157b09511b67e" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>pointLightCount</name></member>
+      <member refid="d6/d5a/a04966_1a36c133367cd13724c6bba38a148e310a" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>renderSize</name></member>
+      <member refid="d6/d5a/a04966_1a62dec21f5dbb099abdd559394e52eab7" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>SceneData</name></member>
+      <member refid="d6/d5a/a04966_1a9fcf85ed6dcb2e207887f9699071e7ca" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="d6/d5a/a04966_1af94d2acf67a58d17b6f5d07b60babe28" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>spotLightCount</name></member>
+      <member refid="d6/d5a/a04966_1ae23b70a2b39be8e81410737fb640bfcc" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>transformCamera</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

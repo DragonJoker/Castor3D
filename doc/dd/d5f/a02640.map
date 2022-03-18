@@ -1,8 +1,8 @@
-<map id="castor3d::ArrayView&lt; ViewT &gt;" name="castor3d::ArrayView&lt; ViewT &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="49,389,188,431"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,249,147,276"/>
-<area shape="rect" id="node3" title="STL class." alt="" coords="69,95,182,121"/>
-<area shape="rect" id="node6" title=" " alt="" coords="120,184,285,225"/>
-<area shape="rect" id="node4" title=" " alt="" coords="106,5,145,32"/>
-<area shape="rect" id="node5" href="$df/d0c/a02634.html" title=" " alt="" coords="141,300,270,327"/>
+<map id="castor3d::ObjectCacheT&lt; ObjT, KeyT, TraitsT &gt;" name="castor3d::ObjectCacheT&lt; ObjT, KeyT, TraitsT &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="757,57,920,98"/>
+<area shape="rect" id="node2" href="$d8/dab/a02638.html" title=" " alt="" coords="523,57,708,98"/>
+<area shape="rect" id="node3" title=" " alt="" coords="228,5,411,32"/>
+<area shape="rect" id="node4" title=" " alt="" coords="225,57,413,98"/>
+<area shape="rect" id="node5" href="$d1/d3c/a02714.html" title=" " alt="" coords="259,123,379,149"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,123,176,149"/>
 </map>

@@ -1,33 +1,22 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d9/d6c/a02710" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkMemoryAllocateInfo &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
+    <compoundname>castor3d::ResourceCacheTraitsT</compoundname>
     <templateparamlist>
+      <param>
+        <type>typename ResT</type>
+      </param>
+      <param>
+        <type>typename KeyT</type>
+      </param>
     </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d9/d6c/a02710_1a12ae3c95460e5a4fd8d6e051f87b1347" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkMemoryAllocateInfo &gt;::value</definition>
-        <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="19" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="19" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
+<para>Helper structure to specialise a cache behaviour. </para>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="19" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="19" bodyend="19"/>
+    <location file="Castor3DModule.hpp" line="80" column="1" bodyfile="Castor3DModule.hpp" bodystart="80" bodyend="-1"/>
     <listofallmembers>
-      <member refid="d9/d6c/a02710_1a12ae3c95460e5a4fd8d6e051f87b1347" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkMemoryAllocateInfo &gt;</scope><name>value</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

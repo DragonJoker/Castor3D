@@ -1,115 +1,137 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d5/dc0/a02272" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::ChunkWriterBase</compoundname>
-    <derivedcompoundref refid="d2/d81/a02276" prot="public" virt="non-virtual">castor3d::ChunkWriter&lt; T &gt;</derivedcompoundref>
-    <derivedcompoundref refid="d3/d81/a02284" prot="public" virt="non-virtual">castor3d::ChunkWriter&lt; castor::Path &gt;</derivedcompoundref>
-    <derivedcompoundref refid="da/d68/a02280" prot="public" virt="non-virtual">castor3d::ChunkWriter&lt; castor::String &gt;</derivedcompoundref>
-    <includes local="no">ChunkWriter.hpp</includes>
-      <sectiondef kind="public-static-func">
-      <memberdef kind="function" id="d5/dc0/a02272_1a6d5639d69c83f6b59094817e85f17398" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>static bool castor3d::ChunkWriterBase::write</definition>
-        <argsstring>(uint8_t const *begin, uint8_t const *end, ChunkType type, BinaryChunk &amp;chunk)</argsstring>
-        <name>write</name>
+    <compoundname>castor3d::BinaryParser&lt; Bone &gt;</compoundname>
+    <basecompoundref refid="db/d83/a02328" prot="public" virt="non-virtual">castor3d::BinaryParserBase&lt; Bone &gt;</basecompoundref>
+    <includes local="no">BinaryBone.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d5/dc0/a02272_1a55428e2af7eb3e14ee428f427c9c994c" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BinaryParser&lt; Bone &gt;::doParse</definition>
+        <argsstring>(Bone &amp;obj) override</argsstring>
+        <name>doParse</name>
+        <qualifiedname>castor3d::BinaryParser&lt; Bone &gt;::doParse</qualifiedname>
+        <reimplements refid="db/d83/a02328_1a020a66d5fc1b452dc76c82702d72bbb1">doParse</reimplements>
         <param>
-          <type>uint8_t const *</type>
-          <declname>begin</declname>
-        </param>
-        <param>
-          <type>uint8_t const *</type>
-          <declname>end</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d1e/a01479_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref></type>
-          <declname>type</declname>
-        </param>
-        <param>
-          <type><ref refid="d8/dd8/a02108" kindref="compound">BinaryChunk</ref> &amp;</type>
-          <declname>chunk</declname>
+          <type><ref refid="d6/d36/a03456" kindref="compound">Bone</ref> &amp;</type>
+          <declname>obj</declname>
         </param>
         <briefdescription>
-<para>Writes a subchunk value into a chunk. </para>
+<para>Function used to retrieve specific data from the chunk. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">begin</parametername>
+<parametername direction="out">obj</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The values begin </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">end</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The values end </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">type</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The subchunk type </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">chunk</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The chunk </para>
+<para>The object to read. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Binary/ChunkWriter.hpp" line="32" column="1" bodyfile="Binary/ChunkWriter.hpp" bodystart="32" bodyend="51"/>
-        <references refid="d8/dd8/a02108_1a05ffb50a92f97be91612f8f91ceeed8e">castor3d::BinaryChunk::addSubChunk</references>
-        <references refid="d8/dd8/a02108_1aa21722c40ca9e697b02b6612e81e41c9" compoundref="d1/d44/a00098" startline="303" endline="307">castor3d::BinaryChunk::setData</references>
-        <referencedby refid="d2/d81/a02276_1ac4cf51584e348def2f360b81e6ec7a9a" compoundref="d9/db6/a00146" startline="83" endline="99">castor3d::ChunkWriter&lt; T &gt;::write</referencedby>
-        <referencedby refid="da/d68/a02280_1a3f0c739cc3dd42610e348f722ee20506" compoundref="d9/db6/a00146" startline="153" endline="171">castor3d::ChunkWriter&lt; castor::String &gt;::write</referencedby>
-        <referencedby refid="d3/d81/a02284_1afdeae129e73ddd2c7980afdd4441dba0" compoundref="d9/db6/a00146" startline="201" endline="219">castor3d::ChunkWriter&lt; castor::Path &gt;::write</referencedby>
+        <location file="Binary/BinaryBone.hpp" line="80" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>Animable binary loader. </para>
     </briefdescription>
     <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="version"><para>0.8.0 </para>
+</simplesect>
+<simplesect kind="date"><para>26/01/2016</para>
+</simplesect>
+Loader binaire d&apos;Animable. </para>
     </detaileddescription>
     <inheritancegraph>
-      <node id="719">
-        <label>castor3d::ChunkWriter&lt; castor::String &gt;</label>
-        <link refid="da/d68/a02280"/>
-        <childnode refid="716" relation="public-inheritance">
+      <node id="2">
+        <label>castor3d::BinaryParserBase&lt; Bone &gt;</label>
+        <link refid="db/d83/a02328"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Bone &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="718">
-        <label>castor3d::ChunkWriter&lt; castor::Path &gt;</label>
-        <link refid="d3/d81/a02284"/>
-        <childnode refid="716" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="717">
-        <label>castor3d::ChunkWriter&lt; T &gt;</label>
-        <link refid="d2/d81/a02276"/>
-        <childnode refid="716" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="716">
-        <label>castor3d::ChunkWriterBase</label>
+      <node id="1">
+        <label>castor3d::BinaryParser&lt; Bone &gt;</label>
         <link refid="d5/dc0/a02272"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
+        <link refid="db/d83/a02328"/>
       </node>
     </inheritancegraph>
-    <location file="Binary/ChunkWriter.hpp" line="14" column="1" bodyfile="Binary/ChunkWriter.hpp" bodystart="13" bodyend="52"/>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::BinaryParserBase&lt; Bone &gt;</label>
+        <link refid="db/d83/a02328"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_fileVersion</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; Bone &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::BinaryChunk</label>
+        <link refid="dc/d1a/a02288"/>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryParser&lt; Bone &gt;</label>
+        <link refid="d5/dc0/a02272"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
+        <link refid="db/d83/a02328"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_fileVersion</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::Version</label>
+        <link refid="d0/ded/a03276"/>
+      </node>
+    </collaborationgraph>
+    <location file="Binary/BinaryBone.hpp" line="66" column="1" bodyfile="Binary/BinaryBone.hpp" bodystart="68" bodyend="81"/>
     <listofallmembers>
-      <member refid="d5/dc0/a02272_1a6d5639d69c83f6b59094817e85f17398" prot="public" virt="non-virtual"><scope>castor3d::ChunkWriterBase</scope><name>write</name></member>
+      <member refid="db/d83/a02328_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Bone &gt;</scope><name>checkError</name></member>
+      <member refid="db/d83/a02328_1ae6f4694ede819151fe4e30e33235ff07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Bone &gt;</scope><name>createBinaryParser</name></member>
+      <member refid="db/d83/a02328_1ab5f9ba53ad5865f967b41e5a27ed73a9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Bone &gt;</scope><name>doGetSubChunk</name></member>
+      <member refid="d5/dc0/a02272_1a55428e2af7eb3e14ee428f427c9c994c" prot="private" virt="virtual"><scope>castor3d::BinaryParser&lt; Bone &gt;</scope><name>doParse</name></member>
+      <member refid="db/d83/a02328_1a0e1aa917e3bf897fab03a32d20890062" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Bone &gt;</scope><name>doParseChunk</name></member>
+      <member refid="db/d83/a02328_1a22ca62addb3ab167995e18f49267efcf" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Bone &gt;</scope><name>doParseChunk</name></member>
+      <member refid="db/d83/a02328_1a5a648553ce168f5bc34adeedc8d169a7" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Bone &gt;</scope><name>doParseChunk</name></member>
+      <member refid="db/d83/a02328_1a90df4e46072e5ef14aebebd00cbcc1f5" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Bone &gt;</scope><name>doParseChunk</name></member>
+      <member refid="db/d83/a02328_1a5fac84360102001f5e730be1927c024e" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Bone &gt;</scope><name>doParseChunk</name></member>
+      <member refid="db/d83/a02328_1a035881aba2b64571b30a5efd3faaf3d9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Bone &gt;</scope><name>doParseHeader</name></member>
+      <member refid="db/d83/a02328_1ab3df04f9aa2eb1f7a533ed18631f09c4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Bone &gt;</scope><name>m_chunk</name></member>
+      <member refid="db/d83/a02328_1a455764ca72b659dab2652baf56ce5885" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Bone &gt;</scope><name>m_fileVersion</name></member>
+      <member refid="db/d83/a02328_1ae4820a3ab3e4b282240e5f1b969153c1" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Bone &gt;</scope><name>Name</name></member>
+      <member refid="db/d83/a02328_1a5db83668684ca219f67de3a381898e64" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Bone &gt;</scope><name>parse</name></member>
+      <member refid="db/d83/a02328_1a6bbbb529f463085c7d259600ae1b3e99" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Bone &gt;</scope><name>parse</name></member>
+      <member refid="db/d83/a02328_1a61b02dbf69d89569eff5be22facd5f07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Bone &gt;</scope><name>parse_v1_1</name></member>
+      <member refid="db/d83/a02328_1a95788692ddd6fae91074c299b674aaab" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Bone &gt;</scope><name>parse_v1_2</name></member>
+      <member refid="db/d83/a02328_1a6f39b66d980e4a65660016f71115a89c" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Bone &gt;</scope><name>parse_v1_3</name></member>
+      <member refid="db/d83/a02328_1aabc068daf8d99718497aa35f7a17c346" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Bone &gt;</scope><name>parse_v1_4</name></member>
+      <member refid="db/d83/a02328_1afb9e6fdcdc58e65458de7892d2bf8025" prot="public" virt="virtual"><scope>castor3d::BinaryParser&lt; Bone &gt;</scope><name>~BinaryParserBase</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

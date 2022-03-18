@@ -1,33 +1,91 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d2/dcf/a03586" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkRayTracingPipelineCreateInfoNV &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d2/dcf/a03586_1a5de6e6926f0b611942a001af6f079d5c" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkRayTracingPipelineCreateInfoNV &gt;::value</definition>
+    <compoundname>castor3d::OverlayRenderer::OverlayGeometryBuffers</compoundname>
+    <includes local="no">OverlayRenderer.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/dcf/a03586_1a57455e19b577c00849cea6668f886c95" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/d76/a02526" kindref="compound">GeometryBuffers</ref></type>
+        <definition>GeometryBuffers castor3d::OverlayRenderer::OverlayGeometryBuffers::noTexture</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_RAY_TRACING_PIPELINE_CREATE_INFO_NV</initializer>
+        <name>noTexture</name>
+        <qualifiedname>castor3d::OverlayRenderer::OverlayGeometryBuffers::noTexture</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="309" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="309" bodyend="-1"/>
+        <location file="Overlay/OverlayRenderer.hpp" line="223" column="17" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="223" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dcf/a03586_1aea3cf9053350e45b9c797d398217406e" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/d76/a02526" kindref="compound">GeometryBuffers</ref></type>
+        <definition>GeometryBuffers castor3d::OverlayRenderer::OverlayGeometryBuffers::textured</definition>
+        <argsstring></argsstring>
+        <name>textured</name>
+        <qualifiedname>castor3d::OverlayRenderer::OverlayGeometryBuffers::textured</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="224" column="17" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="224" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="309" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="309" bodyend="309"/>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::GeometryBuffers</label>
+        <link refid="d9/d76/a02526"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>bufferOffset</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::GpuBufferBase</label>
+        <link refid="d3/d41/a02530"/>
+      </node>
+      <node id="4">
+        <label>castor3d::GpuBufferT&lt; AllocatorT &gt;</label>
+        <link refid="db/d09/a02502"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::MemChunk</label>
+        <link refid="d7/da8/a02522"/>
+      </node>
+      <node id="3">
+        <label>castor3d::ObjectBufferOffset</label>
+        <link refid="d9/d66/a02562"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>bonBuffer</edgelabel>
+          <edgelabel>idxBuffer</edgelabel>
+          <edgelabel>vtxBuffer</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>bonChunk</edgelabel>
+          <edgelabel>idxChunk</edgelabel>
+          <edgelabel>vtxChunk</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::OverlayRenderer::OverlayGeometryBuffers</label>
+        <link refid="d2/dcf/a03586"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>noTexture</edgelabel>
+          <edgelabel>textured</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Overlay/OverlayRenderer.hpp" line="221" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="222" bodyend="225"/>
     <listofallmembers>
-      <member refid="d2/dcf/a03586_1a5de6e6926f0b611942a001af6f079d5c" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkRayTracingPipelineCreateInfoNV &gt;</scope><name>value</name></member>
+      <member refid="d2/dcf/a03586_1a57455e19b577c00849cea6668f886c95" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::OverlayGeometryBuffers</scope><name>noTexture</name></member>
+      <member refid="d2/dcf/a03586_1aea3cf9053350e45b9c797d398217406e" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::OverlayGeometryBuffers</scope><name>textured</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

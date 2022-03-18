@@ -1,358 +1,119 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d8/de5/a04902" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::RsmGIPass</compoundname>
-    <basecompoundref refid="d8/d1f/a04450" prot="public" virt="non-virtual">castor3d::RenderQuad</basecompoundref>
-    <includes local="no">RsmGIPass.hpp</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d8/de5/a04902_1a4839229de503e57c4e4299437b24b173" prot="private" static="no" mutable="no">
-        <type><ref refid="de/d13/a01473_1a563d137a64a10483b6a4ba4b5174d05d" kindref="member">LightCache</ref> const  &amp;</type>
-        <definition>LightCache const&amp; castor3d::RsmGIPass::m_lightCache</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d8/de5/a04902" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::LayeredLpvGridData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">LayeredLpvGridConfigUbo.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/de5/a04902_1a0063c6eeb4ec09e811e7126c4c10e70f" prot="public" static="no" mutable="no">
+        <type>sdw::Array&lt; sdw::Vec4 &gt;</type>
+        <definition>sdw::Array&lt; sdw::Vec4 &gt; castor3d::shader::LayeredLpvGridData::allMinVolumeCorners</definition>
         <argsstring></argsstring>
-        <name>m_lightCache</name>
+        <name>allMinVolumeCorners</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::allMinVolumeCorners</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="93" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="93" bodyend="-1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="33" column="12" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="33" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d8/de5/a04902_1a2564ab95c1caaf5c3e3ef8b48937d971" prot="private" static="no" mutable="no">
-        <type><ref refid="d5/d8e/a04874" kindref="compound">OpaquePassResult</ref> const  &amp;</type>
-        <definition>OpaquePassResult const&amp; castor3d::RsmGIPass::m_gpResult</definition>
+      <memberdef kind="variable" id="d8/de5/a04902_1af313723153e566dde7c4b2e74be1e17c" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::LayeredLpvGridData::allCellSizes</definition>
         <argsstring></argsstring>
-        <name>m_gpResult</name>
+        <name>allCellSizes</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::allCellSizes</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="94" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="94" bodyend="-1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="34" column="11" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="34" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d8/de5/a04902_1a598f054c0f3641cbc57c3a02476ab61c" prot="private" static="no" mutable="no">
-        <type><ref refid="d8/d20/a04686" kindref="compound">ShadowMapResult</ref> const  &amp;</type>
-        <definition>ShadowMapResult const&amp; castor3d::RsmGIPass::m_smResult</definition>
+      <memberdef kind="variable" id="d8/de5/a04902_1a7954951ecddf0d1e6e7a9f6cf16597b6" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::LayeredLpvGridData::gridSizesAtt</definition>
         <argsstring></argsstring>
-        <name>m_smResult</name>
+        <name>gridSizesAtt</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::gridSizesAtt</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="95" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="95" bodyend="-1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="35" column="11" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="35" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d8/de5/a04902_1ada7033eda9ce20bf16ea1a0195650a63" prot="private" static="no" mutable="no">
-        <type><ref refid="de/d5f/a05458" kindref="compound">GpInfoUbo</ref> const  &amp;</type>
-        <definition>GpInfoUbo const&amp; castor3d::RsmGIPass::m_gpInfo</definition>
+      <memberdef kind="variable" id="d8/de5/a04902_1aa1a7c7aea39641bd98c059b73d605c37" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::LayeredLpvGridData::gridSizes</definition>
         <argsstring></argsstring>
-        <name>m_gpInfo</name>
+        <name>gridSizes</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::gridSizes</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="96" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="96" bodyend="-1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="37" column="11" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="37" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d8/de5/a04902_1a20388fad15423b23e26f04edd3f8a804" prot="private" static="no" mutable="no">
-        <type>TextureUnitArray</type>
-        <definition>TextureUnitArray castor3d::RsmGIPass::m_result</definition>
+      <memberdef kind="variable" id="d8/de5/a04902_1a6ba460245c93bf387a9b2b2834369dc6" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::LayeredLpvGridData::indirectAttenuation</definition>
         <argsstring></argsstring>
-        <name>m_result</name>
+        <name>indirectAttenuation</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::indirectAttenuation</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="97" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="97" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/de5/a04902_1ae61c71fda608abc251abd3be4f4f4e3d" prot="private" static="no" mutable="no">
-        <type><ref refid="de/d13/a01473_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
-        <definition>LightType castor3d::RsmGIPass::m_lightType</definition>
-        <argsstring></argsstring>
-        <name>m_lightType</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="98" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="98" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/de5/a04902_1a04047247b747e9ac31706aec268102a6" prot="private" static="no" mutable="no">
-        <type><ref refid="d2/d63/a05306" kindref="compound">ShaderModule</ref></type>
-        <definition>ShaderModule castor3d::RsmGIPass::m_vertexShader</definition>
-        <argsstring></argsstring>
-        <name>m_vertexShader</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="99" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="99" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/de5/a04902_1a0ef9e0ce817b5c2072d6e7dc171b228d" prot="private" static="no" mutable="no">
-        <type><ref refid="d2/d63/a05306" kindref="compound">ShaderModule</ref></type>
-        <definition>ShaderModule castor3d::RsmGIPass::m_pixelShader</definition>
-        <argsstring></argsstring>
-        <name>m_pixelShader</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="100" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="100" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/de5/a04902_1ae2fd027906456fea4ee485b9199dbf39" prot="private" static="no" mutable="no">
-        <type><ref refid="d3/d29/a05518" kindref="compound">RsmConfigUbo</ref></type>
-        <definition>RsmConfigUbo castor3d::RsmGIPass::m_rsmConfigUbo</definition>
-        <argsstring></argsstring>
-        <name>m_rsmConfigUbo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="101" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="101" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/de5/a04902_1a341eac59e762e3e73ebeef540165ecaf" prot="private" static="no" mutable="no">
-        <type>ashes::BufferPtr&lt; castor::Point2f &gt;</type>
-        <definition>ashes::BufferPtr&lt; castor::Point2f &gt; castor3d::RsmGIPass::m_rsmSamplesSsbo</definition>
-        <argsstring></argsstring>
-        <name>m_rsmSamplesSsbo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="102" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="102" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/de5/a04902_1a93d159757b1efc5b35407b8a7a31ece4" prot="private" static="no" mutable="no">
-        <type>ashes::RenderPassPtr</type>
-        <definition>ashes::RenderPassPtr castor3d::RsmGIPass::m_renderPass</definition>
-        <argsstring></argsstring>
-        <name>m_renderPass</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="103" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="103" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/de5/a04902_1a08da460846748fee93d1a8e427846a7e" prot="private" static="no" mutable="no">
-        <type>ashes::FrameBufferPtr</type>
-        <definition>ashes::FrameBufferPtr castor3d::RsmGIPass::m_frameBuffer</definition>
-        <argsstring></argsstring>
-        <name>m_frameBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="104" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="104" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/de5/a04902_1a87bf688320dcb26f1ff9674f49c6696e" prot="private" static="no" mutable="no">
-        <type>RenderPassTimerSPtr</type>
-        <definition>RenderPassTimerSPtr castor3d::RsmGIPass::m_timer</definition>
-        <argsstring></argsstring>
-        <name>m_timer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="105" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="105" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/de5/a04902_1ad186662c922d04d64a6439a04402e8ce" prot="private" static="no" mutable="no">
-        <type><ref refid="db/da9/a04374" kindref="compound">CommandsSemaphore</ref></type>
-        <definition>CommandsSemaphore castor3d::RsmGIPass::m_commands</definition>
-        <argsstring></argsstring>
-        <name>m_commands</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="106" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="106" bodyend="-1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="38" column="12" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="38" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d8/de5/a04902_1a040d654edd84d5bfa60e95f1f3e04a2b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::RsmGIPass::RsmGIPass</definition>
-        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, LightCache const &amp;lightCache, LightType lightType, VkExtent2D const &amp;size, GpInfoUbo const &amp;gpInfo, OpaquePassResult const &amp;gpResult, ShadowMapResult const &amp;smResult, TextureUnitArray const &amp;downscaleResult)</argsstring>
-        <name>RsmGIPass</name>
+      <memberdef kind="function" id="d8/de5/a04902_1a8d94301768152db7b7a0fb120f573404" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::LayeredLpvGridData::LayeredLpvGridData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>LayeredLpvGridData</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::LayeredLpvGridData</qualifiedname>
         <param>
-          <type><ref refid="df/d9b/a02514" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
         </param>
         <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
         </param>
         <param>
-          <type><ref refid="de/d13/a01473_1a563d137a64a10483b6a4ba4b5174d05d" kindref="member">LightCache</ref> const &amp;</type>
-          <declname>lightCache</declname>
-        </param>
-        <param>
-          <type><ref refid="de/d13/a01473_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
-          <declname>lightType</declname>
-        </param>
-        <param>
-          <type>VkExtent2D const &amp;</type>
-          <declname>size</declname>
-        </param>
-        <param>
-          <type><ref refid="de/d5f/a05458" kindref="compound">GpInfoUbo</ref> const &amp;</type>
-          <declname>gpInfo</declname>
-        </param>
-        <param>
-          <type><ref refid="d5/d8e/a04874" kindref="compound">OpaquePassResult</ref> const &amp;</type>
-          <declname>gpResult</declname>
-        </param>
-        <param>
-          <type><ref refid="d8/d20/a04686" kindref="compound">ShadowMapResult</ref> const &amp;</type>
-          <declname>smResult</declname>
-        </param>
-        <param>
-          <type>TextureUnitArray const &amp;</type>
-          <declname>downscaleResult</declname>
+          <type>bool</type>
+          <declname>enabled</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">engine</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The engine. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">lightCache</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The lights cache. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">lightType</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The light source type. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">size</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render area dimensions. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">gpInfo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GBuffer configuration UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">gpResult</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GBuffer. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">smResult</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The shadow map. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">downscaleResult</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The downscaled result. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="51" column="1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="24" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d8/de5/a04902_1a9c9ca728e3e8d51935d8c30fe307af45" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Semaphore const  &amp;</type>
-        <definition>C3D_API ashes::Semaphore const&amp; castor3d::RsmGIPass::compute</definition>
-        <argsstring>(ashes::Semaphore const &amp;toWait) const</argsstring>
-        <name>compute</name>
+      <memberdef kind="function" id="d8/de5/a04902_1aede5a62185a9f5ae1b23efd4d4c2b927" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::LayeredLpvGridData::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, LayeredLpvGridData)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::SDW_DeclStructInstance</qualifiedname>
         <param>
-          <type>ashes::Semaphore const &amp;</type>
-          <declname>toWait</declname>
-        </param>
-        <briefdescription>
-<para>Renders the pass. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">toWait</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The semaphore from the previous render pass. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="68" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/de5/a04902_1af4baac2546e19469035ca2a102b59cbb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="db/da9/a04374" kindref="compound">CommandsSemaphore</ref></type>
-        <definition>C3D_API CommandsSemaphore castor3d::RsmGIPass::getCommands</definition>
-        <argsstring>(RenderPassTimer const &amp;timer, uint32_t index) const</argsstring>
-        <name>getCommands</name>
-        <param>
-          <type><ref refid="d6/d76/a04606" kindref="compound">RenderPassTimer</ref> const &amp;</type>
-          <declname>timer</declname>
+          <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
         </param>
         <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
+          <type><ref refid="d8/de5/a04902" kindref="compound">LayeredLpvGridData</ref></type>
         </param>
         <briefdescription>
         </briefdescription>
@@ -360,44 +121,19 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="69" column="1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="27" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="d8/de5/a04902_1a24ee1daf8f0d4e087a92166dcc13ea4f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RsmGIPass::accept</definition>
-        <argsstring>(PipelineVisitorBase &amp;visitor)</argsstring>
-        <name>accept</name>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d8/de5/a04902_1ad2e47aefbd9b56363e9260e41cf0bc37" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
+        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::LayeredLpvGridData::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::makeType</qualifiedname>
         <param>
-          <type><ref refid="d5/de2/a03830" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
-          <declname>visitor</declname>
-        </param>
-        <briefdescription>
-<para>Visitor acceptance function. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername>visitor</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The ... visitor. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="74" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/de5/a04902_1a8950d10d3fcc3bc46f27837dbe2e63a6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RsmGIPass::update</definition>
-        <argsstring>(Light const &amp;light)</argsstring>
-        <name>update</name>
-        <param>
-          <type><ref refid="d4/d69/a05166" kindref="compound">Light</ref> const &amp;</type>
-          <declname>light</declname>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -405,46 +141,25 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="75" column="1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="29" column="41"/>
       </memberdef>
-      <memberdef kind="function" id="d8/de5/a04902_1aa866e32c5bfe4cf9c20477c73859fead" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>TextureUnitArray const  &amp;</type>
-        <definition>TextureUnitArray const&amp; castor3d::RsmGIPass::getResult</definition>
-        <argsstring>() const</argsstring>
-        <name>getResult</name>
+      <memberdef kind="function" id="d8/de5/a04902_1ad6225133c60e87f3d5f41806cfa5401c" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::LayeredLpvGridData::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::declare</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="77" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="77" bodyend="80"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/de5/a04902_1adec8c2db828d1b5f6229c281b9964cab" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d3/d29/a05518" kindref="compound">RsmConfigUbo</ref> const  &amp;</type>
-        <definition>RsmConfigUbo const&amp; castor3d::RsmGIPass::getConfigUbo</definition>
-        <argsstring>() const</argsstring>
-        <name>getConfigUbo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="82" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="82" bodyend="85"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/de5/a04902_1a28521fecc6a807c53fc04c3f33e20bbf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::Buffer&lt; castor::Point2f &gt; const  &amp;</type>
-        <definition>ashes::Buffer&lt; castor::Point2f &gt; const&amp; castor3d::RsmGIPass::getSamplesSsbo</definition>
-        <argsstring>() const</argsstring>
-        <name>getSamplesSsbo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="87" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="87" bodyend="90"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="30" column="32"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -452,142 +167,38 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="3192">
-        <label>castor3d::RenderQuad</label>
-        <link refid="d8/d1f/a04450"/>
-        <childnode refid="3193" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3193">
-        <label>Named</label>
-      </node>
-      <node id="3191">
-        <label>castor3d::RsmGIPass</label>
+      <node id="1">
+        <label>castor3d::shader::LayeredLpvGridData</label>
         <link refid="d8/de5/a04902"/>
-        <childnode refid="3192" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="3197">
-        <label>castor3d::RenderSystem</label>
-        <link refid="d1/d9a/a04618"/>
-        <childnode refid="3198" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3195">
-        <label>castor3d::RenderQuad</label>
-        <link refid="d8/d1f/a04450"/>
-        <childnode refid="3196" relation="public-inheritance">
-        </childnode>
-        <childnode refid="3197" relation="usage">
-          <edgelabel>m_renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="3199" relation="usage">
-          <edgelabel>m_device</edgelabel>
-        </childnode>
-      </node>
-      <node id="3202">
-        <label>T</label>
-      </node>
-      <node id="3204">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="3202" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="3201">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="3202" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="3203">
-        <label>std::vector&lt; ashes::CommandPoolPtr &gt;</label>
-        <childnode refid="3204" relation="template-instance">
-          <edgelabel>&lt; ashes::CommandPoolPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3200">
-        <label>std::array&lt; uint32_t, 4u &gt;</label>
-        <childnode refid="3201" relation="template-instance">
-          <edgelabel>&lt; uint32_t, 4u &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3196">
-        <label>Named</label>
-      </node>
-      <node id="3198">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="3199">
-        <label>castor3d::RenderDevice</label>
-        <link refid="d8/d4c/a04506"/>
-        <childnode refid="3200" relation="usage">
-          <edgelabel>queueFamiliesIndex</edgelabel>
-        </childnode>
-        <childnode refid="3197" relation="usage">
-          <edgelabel>renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="3203" relation="usage">
-          <edgelabel>commandPools</edgelabel>
-        </childnode>
-      </node>
-      <node id="3194">
-        <label>castor3d::RsmGIPass</label>
+      <node id="1">
+        <label>castor3d::shader::LayeredLpvGridData</label>
         <link refid="d8/de5/a04902"/>
-        <childnode refid="3195" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </collaborationgraph>
-    <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" line="25" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp" bodystart="23" bodyend="107"/>
+    <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="21" column="1" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="23" bodyend="43"/>
     <listofallmembers>
-      <member refid="d8/de5/a04902_1a24ee1daf8f0d4e087a92166dcc13ea4f" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>accept</name></member>
-      <member refid="d8/d1f/a04450_1ab31f1f028639e2280dc81a5207c19361" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>cleanup</name></member>
-      <member refid="d8/de5/a04902_1a9c9ca728e3e8d51935d8c30fe307af45" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>compute</name></member>
-      <member refid="d8/d1f/a04450_1a2d8f7fe31e95ec7563ab7e49d47f847f" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>createPipeline</name></member>
-      <member refid="d8/d1f/a04450_1a9eed2ab1f518d2d215e10f79dd66b980" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>createPipelineAndPass</name></member>
-      <member refid="d8/de5/a04902_1af4baac2546e19469035ca2a102b59cbb" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>getCommands</name></member>
-      <member refid="d8/de5/a04902_1adec8c2db828d1b5f6229c281b9964cab" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>getConfigUbo</name></member>
-      <member refid="d8/d1f/a04450_1a208ae566cd29dc14e874ec5381a40676" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>getDevice</name></member>
-      <member refid="d8/d1f/a04450_1adf3b0cdd23bb9558df6d7f1b87b74ac6" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>getRenderSystem</name></member>
-      <member refid="d8/de5/a04902_1aa866e32c5bfe4cf9c20477c73859fead" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>getResult</name></member>
-      <member refid="d8/d1f/a04450_1a2b4ea1f81bda3deace1e6f5b159f90db" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>getSampler</name></member>
-      <member refid="d8/de5/a04902_1a28521fecc6a807c53fc04c3f33e20bbf" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>getSamplesSsbo</name></member>
-      <member refid="d8/d1f/a04450_1a434520ea0e0f0a1ae885e7c9e19306a8" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>initialisePasses</name></member>
-      <member refid="d8/de5/a04902_1ad186662c922d04d64a6439a04402e8ce" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_commands</name></member>
-      <member refid="d8/d1f/a04450_1ac07074df6fa0bb86ec6e9c76bf23f867" prot="protected" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_config</name></member>
-      <member refid="d8/d1f/a04450_1a0e0d911b83650f310a1d773e6774788c" prot="protected" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_device</name></member>
-      <member refid="d8/de5/a04902_1a08da460846748fee93d1a8e427846a7e" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_frameBuffer</name></member>
-      <member refid="d8/de5/a04902_1ada7033eda9ce20bf16ea1a0195650a63" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_gpInfo</name></member>
-      <member refid="d8/de5/a04902_1a2564ab95c1caaf5c3e3ef8b48937d971" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_gpResult</name></member>
-      <member refid="d8/de5/a04902_1a4839229de503e57c4e4299437b24b173" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_lightCache</name></member>
-      <member refid="d8/de5/a04902_1ae61c71fda608abc251abd3be4f4f4e3d" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_lightType</name></member>
-      <member refid="d8/de5/a04902_1a0ef9e0ce817b5c2072d6e7dc171b228d" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_pixelShader</name></member>
-      <member refid="d8/de5/a04902_1a93d159757b1efc5b35407b8a7a31ece4" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_renderPass</name></member>
-      <member refid="d8/d1f/a04450_1a67e531e63c3eef4d22c89cd5dcf26d39" prot="protected" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_renderSystem</name></member>
-      <member refid="d8/de5/a04902_1a20388fad15423b23e26f04edd3f8a804" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_result</name></member>
-      <member refid="d8/de5/a04902_1ae2fd027906456fea4ee485b9199dbf39" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_rsmConfigUbo</name></member>
-      <member refid="d8/de5/a04902_1a341eac59e762e3e73ebeef540165ecaf" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_rsmSamplesSsbo</name></member>
-      <member refid="d8/d1f/a04450_1ac424bcc12b49f4788b6a78e181e7d8c9" prot="protected" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_sampler</name></member>
-      <member refid="d8/de5/a04902_1a598f054c0f3641cbc57c3a02476ab61c" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_smResult</name></member>
-      <member refid="d8/de5/a04902_1a87bf688320dcb26f1ff9674f49c6696e" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_timer</name></member>
-      <member refid="d8/de5/a04902_1a04047247b747e9ac31706aec268102a6" prot="private" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>m_vertexShader</name></member>
-      <member refid="d8/d1f/a04450_1aba30b821ed0f043349148de3f91e1e28" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d8/d1f/a04450_1abb76aa593ad380a88d949bd26fea0202" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d8/d1f/a04450_1a612d681d62631e6bb92d9601c660b48e" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d8/d1f/a04450_1af64b5bc8b9a9a3013e46accb200156f5" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d8/d1f/a04450_1a43bab20a96e9bea365bc98d8667c977e" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d8/d1f/a04450_1afacd916c61c3a5b315a0d3e94a8ba84d" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d8/d1f/a04450_1a046a2ac1ba39bbd6114dfe87d4aaaf11" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d8/d1f/a04450_1ac0cf400425c8050429e895099c971715" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>registerPass</name></member>
-      <member refid="d8/d1f/a04450_1a62f21f0ecc9017c47eb029d0bc19e396" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>registerPass</name></member>
-      <member refid="d8/d1f/a04450_1a367adcd9b6cc6ac6b1c68a28b2580eb2" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>registerPassInputs</name></member>
-      <member refid="d8/d1f/a04450_1a48a49fffd036c545328e87e1449e141d" prot="protected" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>RenderQuad</name></member>
-      <member refid="d8/d1f/a04450_1aeaeeae8d7065de723f0a710360bab119" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>RenderQuad</name></member>
-      <member refid="d8/de5/a04902_1a040d654edd84d5bfa60e95f1f3e04a2b" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>RsmGIPass</name></member>
-      <member refid="d8/de5/a04902_1a8950d10d3fcc3bc46f27837dbe2e63a6" prot="public" virt="non-virtual"><scope>castor3d::RsmGIPass</scope><name>update</name></member>
-      <member refid="d8/d1f/a04450_1a8a01faf0243638f02d6f052ff9e85b4b" prot="public" virt="virtual"><scope>castor3d::RsmGIPass</scope><name>~RenderQuad</name></member>
+      <member refid="d8/de5/a04902_1af313723153e566dde7c4b2e74be1e17c" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>allCellSizes</name></member>
+      <member refid="d8/de5/a04902_1a0063c6eeb4ec09e811e7126c4c10e70f" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>allMinVolumeCorners</name></member>
+      <member refid="d8/de5/a04902_1ad6225133c60e87f3d5f41806cfa5401c" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>declare</name></member>
+      <member refid="d8/de5/a04902_1aa1a7c7aea39641bd98c059b73d605c37" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>gridSizes</name></member>
+      <member refid="d8/de5/a04902_1a7954951ecddf0d1e6e7a9f6cf16597b6" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>gridSizesAtt</name></member>
+      <member refid="d8/de5/a04902_1a6ba460245c93bf387a9b2b2834369dc6" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>indirectAttenuation</name></member>
+      <member refid="d8/de5/a04902_1a8d94301768152db7b7a0fb120f573404" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>LayeredLpvGridData</name></member>
+      <member refid="d8/de5/a04902_1ad2e47aefbd9b56363e9260e41cf0bc37" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>makeType</name></member>
+      <member refid="d8/de5/a04902_1aede5a62185a9f5ae1b23efd4d4c2b927" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>SDW_DeclStructInstance</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

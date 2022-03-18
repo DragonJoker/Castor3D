@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="db/d58/a05143" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::DirectionalLightCascade</compoundname>
+    <includes local="no">DirectionalLight.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/d58/a05143_1a95fa7a197a677e582d2eef1d65d64679" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::DirectionalLightCascade::viewMatrix</definition>
+        <argsstring></argsstring>
+        <name>viewMatrix</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/DirectionalLight.hpp" line="15" column="1" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d58/a05143_1a4adba86dae97c6cd1782cf9effc2a8e8" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::DirectionalLightCascade::projMatrix</definition>
+        <argsstring></argsstring>
+        <name>projMatrix</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/DirectionalLight.hpp" line="16" column="1" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d58/a05143_1af32a8d94125b4825be06641d80eda4d2" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::DirectionalLightCascade::viewProjMatrix</definition>
+        <argsstring></argsstring>
+        <name>viewProjMatrix</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/DirectionalLight.hpp" line="17" column="1" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d58/a05143_1ad4001ac58e529c42799e6985db2dce31" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::DirectionalLightCascade::splitDepthScale</definition>
+        <argsstring></argsstring>
+        <name>splitDepthScale</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/DirectionalLight.hpp" line="18" column="1" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Scene/Light/DirectionalLight.hpp" line="14" column="1" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="13" bodyend="19"/>
+    <listofallmembers>
+      <member refid="db/d58/a05143_1a4adba86dae97c6cd1782cf9effc2a8e8" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLightCascade</scope><name>projMatrix</name></member>
+      <member refid="db/d58/a05143_1ad4001ac58e529c42799e6985db2dce31" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLightCascade</scope><name>splitDepthScale</name></member>
+      <member refid="db/d58/a05143_1a95fa7a197a677e582d2eef1d65d64679" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLightCascade</scope><name>viewMatrix</name></member>
+      <member refid="db/d58/a05143_1af32a8d94125b4825be06641d80eda4d2" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLightCascade</scope><name>viewProjMatrix</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

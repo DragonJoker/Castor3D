@@ -1,33 +1,76 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d3/d5d/a02900" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkMemoryDedicatedRequirements &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d3/d5d/a02900_1a9143efb9b52a0f0b7af2d038fcbd58c9" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkMemoryDedicatedRequirements &gt;::value</definition>
+    <compoundname>castor3d::TextureAnimationData</compoundname>
+    <includes local="no">TextureAnimationModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/d5d/a02900_1a902483f2f506c3bbe4b819c67d43fdaf" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::TextureAnimationData::translate</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_MEMORY_DEDICATED_REQUIREMENTS</initializer>
+        <name>translate</name>
+        <qualifiedname>castor3d::TextureAnimationData::translate</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="65" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="65" bodyend="-1"/>
+        <location file="Material/Texture/Animation/TextureAnimationModule.hpp" line="22" column="17" bodyfile="Material/Texture/Animation/TextureAnimationModule.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d5d/a02900_1ac087d1a92b3380cee326b3f72dad9a5a" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::TextureAnimationData::rotate</definition>
+        <argsstring></argsstring>
+        <name>rotate</name>
+        <qualifiedname>castor3d::TextureAnimationData::rotate</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/Animation/TextureAnimationModule.hpp" line="23" column="17" bodyfile="Material/Texture/Animation/TextureAnimationModule.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d5d/a02900_1a0202ab0627b2f4585593e1a4b1864385" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::TextureAnimationData::scale</definition>
+        <argsstring></argsstring>
+        <name>scale</name>
+        <qualifiedname>castor3d::TextureAnimationData::scale</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/Animation/TextureAnimationModule.hpp" line="24" column="17" bodyfile="Material/Texture/Animation/TextureAnimationModule.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d5d/a02900_1a5e518117fd0e7f18bf212cdbf94c02e2" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::TextureAnimationData::tileSet</definition>
+        <argsstring></argsstring>
+        <name>tileSet</name>
+        <qualifiedname>castor3d::TextureAnimationData::tileSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/Animation/TextureAnimationModule.hpp" line="25" column="17" bodyfile="Material/Texture/Animation/TextureAnimationModule.hpp" bodystart="25" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="65" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="65" bodyend="65"/>
+    <location file="Material/Texture/Animation/TextureAnimationModule.hpp" line="20" column="1" bodyfile="Material/Texture/Animation/TextureAnimationModule.hpp" bodystart="21" bodyend="26"/>
     <listofallmembers>
-      <member refid="d3/d5d/a02900_1a9143efb9b52a0f0b7af2d038fcbd58c9" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkMemoryDedicatedRequirements &gt;</scope><name>value</name></member>
+      <member refid="d3/d5d/a02900_1ac087d1a92b3380cee326b3f72dad9a5a" prot="public" virt="non-virtual"><scope>castor3d::TextureAnimationData</scope><name>rotate</name></member>
+      <member refid="d3/d5d/a02900_1a0202ab0627b2f4585593e1a4b1864385" prot="public" virt="non-virtual"><scope>castor3d::TextureAnimationData</scope><name>scale</name></member>
+      <member refid="d3/d5d/a02900_1a5e518117fd0e7f18bf212cdbf94c02e2" prot="public" virt="non-virtual"><scope>castor3d::TextureAnimationData</scope><name>tileSet</name></member>
+      <member refid="d3/d5d/a02900_1a902483f2f506c3bbe4b819c67d43fdaf" prot="public" virt="non-virtual"><scope>castor3d::TextureAnimationData</scope><name>translate</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_8ec8e5a70d8899ca689964212db092d9" kind="dir">
     <compoundname>Model/Mesh/Animation</compoundname>
-    <innerfile refid="d8/d91/a00410">MeshAnimation.hpp</innerfile>
-    <innerfile refid="da/d9c/a00413">MeshAnimationKeyFrame.hpp</innerfile>
-    <innerfile refid="d2/d19/a07318">MeshAnimationModule.hpp</innerfile>
-    <innerfile refid="d3/d29/a00419">MeshAnimationSubmesh.hpp</innerfile>
+    <innerfile refid="dc/d2f/a00425">MeshAnimation.hpp</innerfile>
+    <innerfile refid="d4/dd3/a00428">MeshAnimationKeyFrame.hpp</innerfile>
+    <innerfile refid="de/d50/a10790">MeshAnimationModule.hpp</innerfile>
+    <innerfile refid="d1/d7e/a00434">MeshAnimationSubmesh.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

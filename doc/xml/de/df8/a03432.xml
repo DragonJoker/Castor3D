@@ -1,33 +1,249 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="de/df8/a03432" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkDisplayPlaneInfo2KHR &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="de/df8/a03432_1a396b24eb51d65e723ccc729daa2f6ee5" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkDisplayPlaneInfo2KHR &gt;::value</definition>
-        <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_DISPLAY_PLANE_INFO_2_KHR</initializer>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="de/df8/a03432" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::SubmeshUtils</compoundname>
+    <includes local="no">SubmeshUtils.hpp</includes>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="de/df8/a03432_1a01dd567b436d0025b6652aaba2aa5cb0" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>static C3D_API void castor3d::SubmeshUtils::computeFacesFromPolygonVertex</definition>
+        <argsstring>(InterleavedVertexArray &amp;points, TriFaceMapping &amp;triFace)</argsstring>
+        <name>computeFacesFromPolygonVertex</name>
+        <qualifiedname>castor3d::SubmeshUtils::computeFacesFromPolygonVertex</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a56e63531cb249a631d9bca1767624584" kindref="member">InterleavedVertexArray</ref> &amp;</type>
+          <declname>points</declname>
+        </param>
+        <param>
+          <type><ref refid="df/df7/a03416" kindref="compound">TriFaceMapping</ref> &amp;</type>
+          <declname>triFace</declname>
+        </param>
         <briefdescription>
+<para>Creates faces from the points. </para>
         </briefdescription>
         <detaileddescription>
+<para><simplesect kind="remark"><para>This function assumes the points are sorted like triangles fan. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The submesh. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">triFace</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The component that will receive the computed triangles. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="269" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="269" bodyend="-1"/>
+        <location file="Model/Mesh/Submesh/SubmeshUtils.hpp" line="34" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="de/df8/a03432_1a652504451b39a5025c90de4e9b21c91d" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>static C3D_API void castor3d::SubmeshUtils::computeNormals</definition>
+        <argsstring>(InterleavedVertexArray &amp;points, TriFaceMapping const &amp;triFace, bool reverted=false)</argsstring>
+        <name>computeNormals</name>
+        <qualifiedname>castor3d::SubmeshUtils::computeNormals</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a56e63531cb249a631d9bca1767624584" kindref="member">InterleavedVertexArray</ref> &amp;</type>
+          <declname>points</declname>
+        </param>
+        <param>
+          <type><ref refid="df/df7/a03416" kindref="compound">TriFaceMapping</ref> const &amp;</type>
+          <declname>triFace</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>reverted</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>Generates normals and tangents. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The submesh. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">reverted</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tells if the normals must be inverted. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">triFace</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The component that will receive the computed triangles. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/SubmeshUtils.hpp" line="48" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="de/df8/a03432_1a746a01f12a8e10d10fdd23298b04b438" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>static C3D_API void castor3d::SubmeshUtils::computeTangentsFromNormals</definition>
+        <argsstring>(InterleavedVertexArray &amp;points, TriFaceMapping const &amp;triFace)</argsstring>
+        <name>computeTangentsFromNormals</name>
+        <qualifiedname>castor3d::SubmeshUtils::computeTangentsFromNormals</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a56e63531cb249a631d9bca1767624584" kindref="member">InterleavedVertexArray</ref> &amp;</type>
+          <declname>points</declname>
+        </param>
+        <param>
+          <type><ref refid="df/df7/a03416" kindref="compound">TriFaceMapping</ref> const &amp;</type>
+          <declname>triFace</declname>
+        </param>
+        <briefdescription>
+<para>Computes tangent for each vertex of the submesh. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>This function supposes the normals are defined. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The submesh. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">triFace</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The component that will receive the computed triangles. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/SubmeshUtils.hpp" line="63" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="de/df8/a03432_1a4b64fdc3a94d9807082c064aa6290127" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>static C3D_API void castor3d::SubmeshUtils::computeNormals</definition>
+        <argsstring>(InterleavedVertexArray &amp;points, Face const &amp;face)</argsstring>
+        <name>computeNormals</name>
+        <qualifiedname>castor3d::SubmeshUtils::computeNormals</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a56e63531cb249a631d9bca1767624584" kindref="member">InterleavedVertexArray</ref> &amp;</type>
+          <declname>points</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/da3/a03360" kindref="compound">Face</ref> const &amp;</type>
+          <declname>face</declname>
+        </param>
+        <briefdescription>
+<para>Computes normal and tangent for each vertex of the given face. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The submesh. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">face</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The face. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/SubmeshUtils.hpp" line="75" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="de/df8/a03432_1ad01a41d3a0e0158a1ce82a97a02ab4b0" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>static C3D_API void castor3d::SubmeshUtils::computeTangents</definition>
+        <argsstring>(InterleavedVertexArray &amp;points, Face const &amp;face)</argsstring>
+        <name>computeTangents</name>
+        <qualifiedname>castor3d::SubmeshUtils::computeTangents</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a56e63531cb249a631d9bca1767624584" kindref="member">InterleavedVertexArray</ref> &amp;</type>
+          <declname>points</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/da3/a03360" kindref="compound">Face</ref> const &amp;</type>
+          <declname>face</declname>
+        </param>
+        <briefdescription>
+<para>Computes tangent for each vertex of the given face. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The submesh. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">face</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The face. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/SubmeshUtils.hpp" line="87" column="21"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para><ref refid="dc/dc7/a03424" kindref="compound">Submesh</ref> utility functions. </para>
     </briefdescription>
     <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="date"><para>14/02/2010 </para>
+</simplesect>
+</para>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="269" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="269" bodyend="269"/>
+    <location file="Model/Mesh/Submesh/SubmeshUtils.hpp" line="19" column="1" bodyfile="Model/Mesh/Submesh/SubmeshUtils.hpp" bodystart="20" bodyend="89"/>
     <listofallmembers>
-      <member refid="de/df8/a03432_1a396b24eb51d65e723ccc729daa2f6ee5" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkDisplayPlaneInfo2KHR &gt;</scope><name>value</name></member>
+      <member refid="de/df8/a03432_1a01dd567b436d0025b6652aaba2aa5cb0" prot="public" virt="non-virtual"><scope>castor3d::SubmeshUtils</scope><name>computeFacesFromPolygonVertex</name></member>
+      <member refid="de/df8/a03432_1a652504451b39a5025c90de4e9b21c91d" prot="public" virt="non-virtual"><scope>castor3d::SubmeshUtils</scope><name>computeNormals</name></member>
+      <member refid="de/df8/a03432_1a4b64fdc3a94d9807082c064aa6290127" prot="public" virt="non-virtual"><scope>castor3d::SubmeshUtils</scope><name>computeNormals</name></member>
+      <member refid="de/df8/a03432_1ad01a41d3a0e0158a1ce82a97a02ab4b0" prot="public" virt="non-virtual"><scope>castor3d::SubmeshUtils</scope><name>computeTangents</name></member>
+      <member refid="de/df8/a03432_1a746a01f12a8e10d10fdd23298b04b438" prot="public" virt="non-virtual"><scope>castor3d::SubmeshUtils</scope><name>computeTangentsFromNormals</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

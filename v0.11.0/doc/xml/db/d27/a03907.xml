@@ -1,0 +1,370 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="db/d27/a03907" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BonesInstantiationComponent</compoundname>
+    <basecompoundref refid="d1/d55/a03959" prot="public" virt="non-virtual">castor3d::SubmeshComponent</basecompoundref>
+    <includes local="no">BonesInstantiationComponent.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="db/d27/a03907_1a047188d2096e53376c70ac5872407f7a" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::BonesInstantiationComponent::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="99" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="db/d27/a03907_1a96a084705ada8643c43fb18b775ebd5c" prot="private" static="no" mutable="no">
+        <type><ref refid="d0/ddf/a03935" kindref="compound">InstantiationComponent</ref> const  &amp;</type>
+        <definition>InstantiationComponent const&amp; castor3d::BonesInstantiationComponent::m_instantiation</definition>
+        <argsstring></argsstring>
+        <name>m_instantiation</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="102" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d27/a03907_1abebbf5128deb57ad647278872ddfec1b" prot="private" static="no" mutable="no">
+        <type><ref refid="d6/db7/a03903" kindref="compound">BonesComponent</ref> const  &amp;</type>
+        <definition>BonesComponent const&amp; castor3d::BonesInstantiationComponent::m_bones</definition>
+        <argsstring></argsstring>
+        <name>m_bones</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="103" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d27/a03907_1a28fd11a2707390b80d4e7b7375a64eb8" prot="private" static="no" mutable="no">
+        <type>ShaderBufferUPtr</type>
+        <definition>ShaderBufferUPtr castor3d::BonesInstantiationComponent::m_instancedBonesBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_instancedBonesBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="104" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d27/a03907_1a30a7fca985626d2d0ffb9786987b3c65" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::BonesInstantiationComponent::BonesInstantiationComponent</definition>
+        <argsstring>(Submesh &amp;submesh, InstantiationComponent const &amp;instantiation, BonesComponent const &amp;bones)</argsstring>
+        <name>BonesInstantiationComponent</name>
+        <param>
+          <type><ref refid="d0/dce/a03971" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/ddf/a03935" kindref="compound">InstantiationComponent</ref> const &amp;</type>
+          <declname>instantiation</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/db7/a03903" kindref="compound">BonesComponent</ref> const &amp;</type>
+          <declname>bones</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent submesh. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">instantiation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The instantiation component. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bones</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The bones component. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="30" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d27/a03907_1a737776e6d0f26fbc51f9b65333f346ae" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BonesInstantiationComponent::gather</definition>
+        <argsstring>(MaterialSPtr material, ashes::BufferCRefArray &amp;buffers, std::vector&lt; uint64_t &gt; &amp;offsets, ashes::PipelineVertexInputStateCreateInfoCRefArray &amp;layouts, uint32_t instanceMult) override</argsstring>
+        <name>gather</name>
+        <reimplements refid="d1/d55/a03959_1a4b992d760e02c3c8dc32137aa43db62b">gather</reimplements>
+        <param>
+          <type>MaterialSPtr</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type>ashes::BufferCRefArray &amp;</type>
+          <declname>buffers</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; uint64_t &gt; &amp;</type>
+          <declname>offsets</declname>
+        </param>
+        <param>
+          <type>ashes::PipelineVertexInputStateCreateInfoCRefArray &amp;</type>
+          <declname>layouts</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>instanceMult</declname>
+        </param>
+        <briefdescription>
+<para>Gathers buffers that need to go in a VAO. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="36" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d27/a03907_1a32e76e1e8642ee9500f1dbcd6aacf2a1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>SkeletonSPtr</type>
+        <definition>SkeletonSPtr castor3d::BonesInstantiationComponent::getSkeleton</definition>
+        <argsstring>() const</argsstring>
+        <name>getSkeleton</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The skeleton. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="47" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="47" bodyend="50"/>
+        <references refid="d6/db7/a03903_1a6c0b7671b616ddd3073f2352bcafc3a5">castor3d::BonesComponent::getSkeleton</references>
+      </memberdef>
+      <memberdef kind="function" id="db/d27/a03907_1a837c880c0ed93a393c2ecf94f8b06096" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BonesInstantiationComponent::hasInstancedBonesBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>hasInstancedBonesBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Tells if the bone instantiation buffer exists. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="57" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="57" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d27/a03907_1a324db0d74a989b387a11285e8ca37604" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/dba/a05287" kindref="compound">ShaderBuffer</ref> const  &amp;</type>
+        <definition>ShaderBuffer const&amp; castor3d::BonesInstantiationComponent::getInstancedBonesBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>getInstancedBonesBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The bone instantiation ShaderStorageBuffer. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="67" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="67" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d27/a03907_1a2622f1b71232bed018dbe0893d445fd5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/dba/a05287" kindref="compound">ShaderBuffer</ref> &amp;</type>
+        <definition>ShaderBuffer&amp; castor3d::BonesInstantiationComponent::getInstancedBonesBuffer</definition>
+        <argsstring>()</argsstring>
+        <name>getInstancedBonesBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The bone instantiation ShaderStorageBuffer. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="77" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="77" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d27/a03907_1a772466b58d0ce73e90caf5fa9262efb1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d7/dd1/a01458_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
+        <definition>ProgramFlags castor3d::BonesInstantiationComponent::getProgramFlags</definition>
+        <argsstring>(MaterialSPtr material) const override</argsstring>
+        <name>getProgramFlags</name>
+        <reimplements refid="d1/d55/a03959_1aa5c81caafcdb1b7fa8610605060775f1">getProgramFlags</reimplements>
+        <param>
+          <type>MaterialSPtr</type>
+          <declname>material</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The shader program flags. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="87" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="87" bodyend="90"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="db/d27/a03907_1a998d4ea20931a7aaf58b37a5cbc9c819" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BonesInstantiationComponent::doInitialise</definition>
+        <argsstring>(RenderDevice const &amp;device) override</argsstring>
+        <name>doInitialise</name>
+        <reimplements refid="d1/d55/a03959_1a02633de92cd3a940ea28bc2ee63cdefb">doInitialise</reimplements>
+        <param>
+          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="93" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d27/a03907_1af743a0fbe57231727307beda937a0437" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::BonesInstantiationComponent::doCleanup</definition>
+        <argsstring>() override</argsstring>
+        <name>doCleanup</name>
+        <reimplements refid="d1/d55/a03959_1a8574c2b5b3efa89e6446423448f4edfd">doCleanup</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="94" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d27/a03907_1a9774841e331a49b878254eb63cc91de0" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::BonesInstantiationComponent::doFill</definition>
+        <argsstring>(RenderDevice const &amp;device) override</argsstring>
+        <name>doFill</name>
+        <reimplements refid="d1/d55/a03959_1a78f22f8994aae0890645c943e42c45c9">doFill</reimplements>
+        <param>
+          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="95" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d27/a03907_1a3610cf6b6e728a6d9e281485ba9f1bd5" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::BonesInstantiationComponent::doUpload</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpload</name>
+        <reimplements refid="d1/d55/a03959_1a66e01bf8274e1d77bd20a669cb637a2e">doUpload</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="96" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="496">
+        <label>castor3d::SubmeshComponent</label>
+        <link refid="d1/d55/a03959"/>
+        <childnode refid="497" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="495">
+        <label>castor3d::BonesInstantiationComponent</label>
+        <link refid="db/d27/a03907"/>
+        <childnode refid="496" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="497">
+        <label>castor::OwnedBy&lt; Submesh &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="499">
+        <label>castor3d::SubmeshComponent</label>
+        <link refid="d1/d55/a03959"/>
+        <childnode refid="500" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="498">
+        <label>castor3d::BonesInstantiationComponent</label>
+        <link refid="db/d27/a03907"/>
+        <childnode refid="499" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="500">
+        <label>castor::OwnedBy&lt; Submesh &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="16" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="14" bodyend="105"/>
+    <listofallmembers>
+      <member refid="db/d27/a03907_1a30a7fca985626d2d0ffb9786987b3c65" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>BonesInstantiationComponent</name></member>
+      <member refid="d1/d55/a03959_1af13d08b9487f0501a06c0f7df4c89f8c" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>cleanup</name></member>
+      <member refid="db/d27/a03907_1af743a0fbe57231727307beda937a0437" prot="private" virt="virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>doCleanup</name></member>
+      <member refid="db/d27/a03907_1a9774841e331a49b878254eb63cc91de0" prot="private" virt="virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>doFill</name></member>
+      <member refid="db/d27/a03907_1a998d4ea20931a7aaf58b37a5cbc9c819" prot="private" virt="virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>doInitialise</name></member>
+      <member refid="db/d27/a03907_1a3610cf6b6e728a6d9e281485ba9f1bd5" prot="private" virt="virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>doUpload</name></member>
+      <member refid="d1/d55/a03959_1a53837125323ab11c28a86acbb187a770" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>fill</name></member>
+      <member refid="db/d27/a03907_1a737776e6d0f26fbc51f9b65333f346ae" prot="public" virt="virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>gather</name></member>
+      <member refid="db/d27/a03907_1a324db0d74a989b387a11285e8ca37604" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>getInstancedBonesBuffer</name></member>
+      <member refid="db/d27/a03907_1a2622f1b71232bed018dbe0893d445fd5" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>getInstancedBonesBuffer</name></member>
+      <member refid="db/d27/a03907_1a772466b58d0ce73e90caf5fa9262efb1" prot="public" virt="virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>getProgramFlags</name></member>
+      <member refid="db/d27/a03907_1a32e76e1e8642ee9500f1dbcd6aacf2a1" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>getSkeleton</name></member>
+      <member refid="d1/d55/a03959_1a3782f6784f793eeccd48e637e85a9d6c" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>getType</name></member>
+      <member refid="db/d27/a03907_1a837c880c0ed93a393c2ecf94f8b06096" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>hasInstancedBonesBuffer</name></member>
+      <member refid="d1/d55/a03959_1a98c6ad3457d19448c1eaa261598103ad" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>initialise</name></member>
+      <member refid="db/d27/a03907_1abebbf5128deb57ad647278872ddfec1b" prot="private" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>m_bones</name></member>
+      <member refid="db/d27/a03907_1a28fd11a2707390b80d4e7b7375a64eb8" prot="private" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>m_instancedBonesBuffer</name></member>
+      <member refid="db/d27/a03907_1a96a084705ada8643c43fb18b775ebd5c" prot="private" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>m_instantiation</name></member>
+      <member refid="db/d27/a03907_1a047188d2096e53376c70ac5872407f7a" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>Name</name></member>
+      <member refid="d1/d55/a03959_1a7e21e4eda223d50b6751c40cb44f77a7" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>needsUpdate</name></member>
+      <member refid="d1/d55/a03959_1a06b2ee9400bab62f5472f8ce8a03ee27" prot="public" virt="virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>setMaterial</name></member>
+      <member refid="d1/d55/a03959_1aafbe6064005a72343870bb444e1e6a1f" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>SubmeshComponent</name></member>
+      <member refid="d1/d55/a03959_1a2dbcda2b8c26f4c9c52db78a5740a0f8" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>upload</name></member>
+      <member refid="d1/d55/a03959_1a30231a167367ba38b41f9bf5b3bcd005" prot="public" virt="virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>~SubmeshComponent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

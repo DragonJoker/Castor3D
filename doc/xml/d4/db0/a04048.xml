@@ -1,281 +1,706 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d4/db0/a04048" kind="union" language="C++" prot="public">
-    <compoundname>castor3d::VertexBoneData::Weights</compoundname>
-    <includes local="no">VertexBoneData.hpp</includes>
-    <innerclass refid="dc/d8b/a04052" prot="public">castor3d::VertexBoneData::Weights::weights</innerclass>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d4/db0/a04048" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::RenderNodesPassDesc</compoundname>
+    <includes local="no">RenderNodesPass.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d4/db0/a04048_1a2d3452a7660781bfca0ac8afbcd57671" prot="public" static="no" mutable="no">
-        <type>std::array&lt; float, <ref refid="da/d1e/a01479_1a646fc2f48009177447cb9476d791b0e8" kindref="member">MaxBonesPerVertex</ref> &gt;</type>
-        <definition>std::array&lt; float, MaxBonesPerVertex &gt; castor3d::VertexBoneData::Weights::data</definition>
+      <memberdef kind="variable" id="d4/db0/a04048_1a8ed2fdbc92a9dd7c3ce918bc6fd2cef2" prot="public" static="no" mutable="no">
+        <type>VkExtent3D</type>
+        <definition>VkExtent3D castor3d::RenderNodesPassDesc::m_size</definition>
         <argsstring></argsstring>
-        <name>data</name>
+        <name>m_size</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_size</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="110" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="110" bodyend="-1"/>
-        <referencedby refid="d4/db0/a04048_1a911eff2686d01b264867d67a318e4902" compoundref="dc/df9/a00554" startline="152" endline="155">begin</referencedby>
-        <referencedby refid="d4/db0/a04048_1a184feab7572d524c6e00aef3f9af12af" compoundref="dc/df9/a00554" startline="160" endline="163">end</referencedby>
-        <referencedby refid="d4/db0/a04048_1a2be915d15dcc50c86cdf5c05e06b062e" compoundref="dc/df9/a00554" startline="126" endline="130">operator=</referencedby>
-        <referencedby refid="d4/db0/a04048_1adcf13d4f454049437a4267e363b12d92" compoundref="dc/df9/a00554" startline="140" endline="143">operator[]</referencedby>
-        <referencedby refid="da/d1e/a01479_1a770ba5e8e6c80ebb02e90284327877d0" compoundref="d5/db1/a00140" startline="1319" endline="1340">castor3d::prepareChunkData</referencedby>
-        <referencedby refid="d4/db0/a04048_1a1480c2c5be97703b5324a853483571f7" compoundref="dc/df9/a00554" startline="148" endline="151">size</referencedby>
-        <referencedby refid="d4/db0/a04048_1a5dfe28526836723cc923450385c7ee6d" compoundref="dc/df9/a00554" startline="115" endline="118">Weights</referencedby>
+        <location file="Render/RenderNodesPass.hpp" line="146" column="12" bodyfile="Render/RenderNodesPass.hpp" bodystart="146" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db0/a04048_1a29236c9e0e26dd0c16b14215108c4f1f" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/db7/a04924" kindref="compound">MatrixUbo</ref> &amp;</type>
+        <definition>MatrixUbo&amp; castor3d::RenderNodesPassDesc::m_matrixUbo</definition>
+        <argsstring></argsstring>
+        <name>m_matrixUbo</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_matrixUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderNodesPass.hpp" line="147" column="12" bodyfile="Render/RenderNodesPass.hpp" bodystart="147" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db0/a04048_1adc6b6c9b01873cd7b353a14c1a551ced" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/df2/a03656" kindref="compound">SceneCuller</ref> &amp;</type>
+        <definition>SceneCuller&amp; castor3d::RenderNodesPassDesc::m_culler</definition>
+        <argsstring></argsstring>
+        <name>m_culler</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_culler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderNodesPass.hpp" line="148" column="14" bodyfile="Render/RenderNodesPass.hpp" bodystart="148" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db0/a04048_1a58651102813d538205dabe3c138d658e" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/df5/a01395_1a908786422cb850b8f90f8992963734d5" kindref="member">RenderMode</ref></type>
+        <definition>RenderMode castor3d::RenderNodesPassDesc::m_mode</definition>
+        <argsstring></argsstring>
+        <name>m_mode</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_mode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderNodesPass.hpp" line="149" column="12" bodyfile="Render/RenderNodesPass.hpp" bodystart="149" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db0/a04048_1a77bd9d12566877c3fcf15ccaeba7117f" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderNodesPassDesc::m_oit</definition>
+        <argsstring></argsstring>
+        <name>m_oit</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_oit</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderNodesPass.hpp" line="150" column="6" bodyfile="Render/RenderNodesPass.hpp" bodystart="150" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db0/a04048_1ad2e42e20cebdd695d43da2c2a16ea28b" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderNodesPassDesc::m_forceTwoSided</definition>
+        <argsstring></argsstring>
+        <name>m_forceTwoSided</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_forceTwoSided</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderNodesPass.hpp" line="151" column="6" bodyfile="Render/RenderNodesPass.hpp" bodystart="151" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db0/a04048_1acd0fd0782cc665ee498cfad805f82b70" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderNodesPassDesc::m_safeBand</definition>
+        <argsstring></argsstring>
+        <name>m_safeBand</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_safeBand</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderNodesPass.hpp" line="152" column="6" bodyfile="Render/RenderNodesPass.hpp" bodystart="152" bodyend="-1"/>
+        <referencedby refid="d4/db0/a04048_1ad8ccbed6034876b2da9f357c1805b7f0" compoundref="d8/d2d/a00815" startline="106" endline="110">safeBand</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db0/a04048_1ac473ff8cada8f79d3cee5d914eb8898b" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/d6d/a04636" kindref="compound">SceneNode</ref> const  *</type>
+        <definition>SceneNode const* castor3d::RenderNodesPassDesc::m_ignored</definition>
+        <argsstring></argsstring>
+        <name>m_ignored</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_ignored</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderNodesPass.hpp" line="153" column="18" bodyfile="Render/RenderNodesPass.hpp" bodystart="153" bodyend="-1"/>
+        <referencedby refid="d4/db0/a04048_1abcf78a5bf38e31afc9e7bb02d7787d21" compoundref="d8/d2d/a00815" startline="95" endline="99">ignored</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db0/a04048_1ab1e84c38e0ddc0654de807e751714780" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderNodesPassDesc::m_index</definition>
+        <argsstring></argsstring>
+        <name>m_index</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_index</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderNodesPass.hpp" line="154" column="10" bodyfile="Render/RenderNodesPass.hpp" bodystart="154" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db0/a04048_1a4f555d451b6df62cd0f594eeb4d6a43e" prot="public" static="no" mutable="no">
+        <type>crg::ru::Config</type>
+        <definition>crg::ru::Config castor3d::RenderNodesPassDesc::m_ruConfig</definition>
+        <argsstring></argsstring>
+        <name>m_ruConfig</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_ruConfig</qualifiedname>
+        <initializer>{ 1u, true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderNodesPass.hpp" line="155" column="17" bodyfile="Render/RenderNodesPass.hpp" bodystart="155" bodyend="-1"/>
+        <referencedby refid="d4/db0/a04048_1ae3578277a5df6e9f67bac83b6ac11237" compoundref="d8/d2d/a00815" startline="139" endline="144">implicitAction</referencedby>
+        <referencedby refid="d4/db0/a04048_1ada75b6f219d0ad827910800b30437c29" compoundref="d8/d2d/a00815" startline="117" endline="121">passCount</referencedby>
+        <referencedby refid="d4/db0/a04048_1a6a4d69515ab56e1662ea9199a278bb56" compoundref="d8/d2d/a00815" startline="128" endline="132">resettable</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d4/db0/a04048_1ab4f349a43e4c7162bb39141aa639014b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="d4/db0/a04048_1a4bebc90d15c182d12b69d6c50c705d03" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
-        <definition>castor3d::VertexBoneData::Weights::Weights</definition>
-        <argsstring>()</argsstring>
-        <name>Weights</name>
+        <definition>castor3d::RenderNodesPassDesc::RenderNodesPassDesc</definition>
+        <argsstring>(VkExtent3D size, MatrixUbo &amp;matrixUbo, SceneCuller &amp;culler, RenderMode mode, bool oit, bool forceTwoSided)</argsstring>
+        <name>RenderNodesPassDesc</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::RenderNodesPassDesc</qualifiedname>
+        <param>
+          <type>VkExtent3D</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/db7/a04924" kindref="compound">MatrixUbo</ref> &amp;</type>
+          <declname>matrixUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/df2/a03656" kindref="compound">SceneCuller</ref> &amp;</type>
+          <declname>culler</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a908786422cb850b8f90f8992963734d5" kindref="member">RenderMode</ref></type>
+          <declname>mode</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>oit</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>forceTwoSided</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="111" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="111" bodyend="114"/>
+        <location file="Render/RenderNodesPass.hpp" line="30" column="1" bodyfile="Render/RenderNodesPass.hpp" bodystart="30" bodyend="43"/>
       </memberdef>
-      <memberdef kind="function" id="d4/db0/a04048_1a5dfe28526836723cc923450385c7ee6d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="d4/db0/a04048_1aaae3940979f6ff8da96732eb284aa6df" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
-        <definition>castor3d::VertexBoneData::Weights::Weights</definition>
-        <argsstring>(Weights const &amp;rhs)</argsstring>
-        <name>Weights</name>
+        <definition>castor3d::RenderNodesPassDesc::RenderNodesPassDesc</definition>
+        <argsstring>(VkExtent3D size, MatrixUbo &amp;matrixUbo, SceneCuller &amp;culler)</argsstring>
+        <name>RenderNodesPassDesc</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::RenderNodesPassDesc</qualifiedname>
         <param>
-          <type><ref refid="d4/db0/a04048" kindref="compound">Weights</ref> const &amp;</type>
-          <declname>rhs</declname>
+          <type>VkExtent3D</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/db7/a04924" kindref="compound">MatrixUbo</ref> &amp;</type>
+          <declname>matrixUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/df2/a03656" kindref="compound">SceneCuller</ref> &amp;</type>
+          <declname>culler</declname>
         </param>
         <briefdescription>
+<para>Constructor for opaque passes. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">matrixUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene matrices UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">culler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene culler for this pass. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="115" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="115" bodyend="118"/>
-        <references refid="d4/db0/a04048_1a2d3452a7660781bfca0ac8afbcd57671" compoundref="dc/df9/a00554" startline="110">data</references>
+        <location file="Render/RenderNodesPass.hpp" line="54" column="1" bodyfile="Render/RenderNodesPass.hpp" bodystart="54" bodyend="64"/>
+        <references refid="d2/df5/a01395_1a908786422cb850b8f90f8992963734d5a3e203591ffa3c07902f8adec13ed9df5">castor3d::eOpaqueOnly</references>
       </memberdef>
-      <memberdef kind="function" id="d4/db0/a04048_1a1b2903f08f5fa7784fb8e7ff260aabe1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="d4/db0/a04048_1aa333dc9302de7288e844101d729d1553" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
-        <definition>castor3d::VertexBoneData::Weights::Weights</definition>
-        <argsstring>(Weights &amp;&amp;rhs) noexcept</argsstring>
-        <name>Weights</name>
+        <definition>castor3d::RenderNodesPassDesc::RenderNodesPassDesc</definition>
+        <argsstring>(VkExtent3D size, MatrixUbo &amp;matrixUbo, SceneCuller &amp;culler, bool oit)</argsstring>
+        <name>RenderNodesPassDesc</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::RenderNodesPassDesc</qualifiedname>
         <param>
-          <type><ref refid="d4/db0/a04048" kindref="compound">Weights</ref> &amp;&amp;</type>
-          <declname>rhs</declname>
+          <type>VkExtent3D</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/db7/a04924" kindref="compound">MatrixUbo</ref> &amp;</type>
+          <declname>matrixUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/df2/a03656" kindref="compound">SceneCuller</ref> &amp;</type>
+          <declname>culler</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>oit</declname>
+        </param>
+        <briefdescription>
+<para>Constructor for transparent passes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">matrixUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene matrices UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">culler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene culler for this pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">oit</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The order independant status. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderNodesPass.hpp" line="77" column="1" bodyfile="Render/RenderNodesPass.hpp" bodystart="77" bodyend="88"/>
+        <references refid="d2/df5/a01395_1a908786422cb850b8f90f8992963734d5acd61240aa7b85fae32bfb98990c65638">castor3d::eTransparentOnly</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/db0/a04048_1abcf78a5bf38e31afc9e7bb02d7787d21" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/db0/a04048" kindref="compound">RenderNodesPassDesc</ref> &amp;</type>
+        <definition>RenderNodesPassDesc &amp; castor3d::RenderNodesPassDesc::ignored</definition>
+        <argsstring>(SceneNode const &amp;value)</argsstring>
+        <name>ignored</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::ignored</qualifiedname>
+        <param>
+          <type><ref refid="d4/d6d/a04636" kindref="compound">SceneNode</ref> const &amp;</type>
+          <declname>value</declname>
         </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene node to ignore during rendering. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="119" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="119" bodyend="122"/>
+        <location file="Render/RenderNodesPass.hpp" line="95" column="22" bodyfile="Render/RenderNodesPass.hpp" bodystart="95" bodyend="99"/>
+        <references refid="d4/db0/a04048_1ac473ff8cada8f79d3cee5d914eb8898b" compoundref="d8/d2d/a00815" startline="153">m_ignored</references>
       </memberdef>
-      <memberdef kind="function" id="d4/db0/a04048_1a9488dba88e7012ea4a1f7dc5ca97bc16" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::VertexBoneData::Weights::~Weights</definition>
-        <argsstring>()</argsstring>
-        <name>~Weights</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="123" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="123" bodyend="125"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/db0/a04048_1a2be915d15dcc50c86cdf5c05e06b062e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d4/db0/a04048" kindref="compound">Weights</ref> &amp;</type>
-        <definition>Weights&amp; castor3d::VertexBoneData::Weights::operator=</definition>
-        <argsstring>(Weights const &amp;rhs)</argsstring>
-        <name>operator=</name>
+      <memberdef kind="function" id="d4/db0/a04048_1ad8ccbed6034876b2da9f357c1805b7f0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/db0/a04048" kindref="compound">RenderNodesPassDesc</ref> &amp;</type>
+        <definition>RenderNodesPassDesc &amp; castor3d::RenderNodesPassDesc::safeBand</definition>
+        <argsstring>(bool value)</argsstring>
+        <name>safeBand</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::safeBand</qualifiedname>
         <param>
-          <type><ref refid="d4/db0/a04048" kindref="compound">Weights</ref> const &amp;</type>
-          <declname>rhs</declname>
+          <type>bool</type>
+          <declname>value</declname>
         </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene node to ignore during rendering. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="126" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="126" bodyend="130"/>
-        <references refid="d4/db0/a04048_1a2d3452a7660781bfca0ac8afbcd57671" compoundref="dc/df9/a00554" startline="110">data</references>
+        <location file="Render/RenderNodesPass.hpp" line="106" column="22" bodyfile="Render/RenderNodesPass.hpp" bodystart="106" bodyend="110"/>
+        <references refid="d4/db0/a04048_1acd0fd0782cc665ee498cfad805f82b70" compoundref="d8/d2d/a00815" startline="152">m_safeBand</references>
       </memberdef>
-      <memberdef kind="function" id="d4/db0/a04048_1ab13d8a64b5b17467ed116d6f971e6e58" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d4/db0/a04048" kindref="compound">Weights</ref> &amp;</type>
-        <definition>Weights&amp; castor3d::VertexBoneData::Weights::operator=</definition>
-        <argsstring>(Weights &amp;&amp;rhs) noexcept</argsstring>
-        <name>operator=</name>
+      <memberdef kind="function" id="d4/db0/a04048_1ada75b6f219d0ad827910800b30437c29" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/db0/a04048" kindref="compound">RenderNodesPassDesc</ref> &amp;</type>
+        <definition>RenderNodesPassDesc &amp; castor3d::RenderNodesPassDesc::passCount</definition>
+        <argsstring>(uint32_t value)</argsstring>
+        <name>passCount</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::passCount</qualifiedname>
         <param>
-          <type><ref refid="d4/db0/a04048" kindref="compound">Weights</ref> &amp;&amp;</type>
-          <declname>rhs</declname>
+          <type>uint32_t</type>
+          <declname>value</declname>
         </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The max frame pass variants count. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="131" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="131" bodyend="139"/>
-        <references refid="d4/db0/a04048_1a2d3452a7660781bfca0ac8afbcd57671" compoundref="dc/df9/a00554" startline="110">data</references>
+        <location file="Render/RenderNodesPass.hpp" line="117" column="22" bodyfile="Render/RenderNodesPass.hpp" bodystart="117" bodyend="121"/>
+        <references refid="d4/db0/a04048_1a4f555d451b6df62cd0f594eeb4d6a43e" compoundref="d8/d2d/a00815" startline="155">m_ruConfig</references>
       </memberdef>
-      <memberdef kind="function" id="d4/db0/a04048_1adcf13d4f454049437a4267e363b12d92" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>float &amp;</type>
-        <definition>float&amp; castor3d::VertexBoneData::Weights::operator[]</definition>
-        <argsstring>(size_t index)</argsstring>
-        <name>operator[]</name>
+      <memberdef kind="function" id="d4/db0/a04048_1a6a4d69515ab56e1662ea9199a278bb56" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/db0/a04048" kindref="compound">RenderNodesPassDesc</ref> &amp;</type>
+        <definition>RenderNodesPassDesc &amp; castor3d::RenderNodesPassDesc::resettable</definition>
+        <argsstring>(bool value)</argsstring>
+        <name>resettable</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::resettable</qualifiedname>
         <param>
-          <type>size_t</type>
-          <declname>index</declname>
+          <type>bool</type>
+          <declname>value</declname>
         </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The frame pass resettable status. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="140" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="140" bodyend="143"/>
-        <references refid="d4/db0/a04048_1a2d3452a7660781bfca0ac8afbcd57671" compoundref="dc/df9/a00554" startline="110">data</references>
+        <location file="Render/RenderNodesPass.hpp" line="128" column="22" bodyfile="Render/RenderNodesPass.hpp" bodystart="128" bodyend="132"/>
+        <references refid="d4/db0/a04048_1a4f555d451b6df62cd0f594eeb4d6a43e" compoundref="d8/d2d/a00815" startline="155">m_ruConfig</references>
       </memberdef>
-      <memberdef kind="function" id="d4/db0/a04048_1a201331404f3ac4853daccd5c9932c140" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>float const  &amp;</type>
-        <definition>float const&amp; castor3d::VertexBoneData::Weights::operator[]</definition>
-        <argsstring>(size_t index) const</argsstring>
-        <name>operator[]</name>
+      <memberdef kind="function" id="d4/db0/a04048_1ae3578277a5df6e9f67bac83b6ac11237" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/db0/a04048" kindref="compound">RenderNodesPassDesc</ref> &amp;</type>
+        <definition>RenderNodesPassDesc &amp; castor3d::RenderNodesPassDesc::implicitAction</definition>
+        <argsstring>(crg::ImageViewId view, crg::RecordContext::ImplicitAction action)</argsstring>
+        <name>implicitAction</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::implicitAction</qualifiedname>
         <param>
-          <type>size_t</type>
-          <declname>index</declname>
+          <type>crg::ImageViewId</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>crg::RecordContext::ImplicitAction</type>
+          <declname>action</declname>
         </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The frame pass resettable status. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="144" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="144" bodyend="147"/>
-        <references refid="d4/db0/a04048_1a2d3452a7660781bfca0ac8afbcd57671" compoundref="dc/df9/a00554" startline="110">data</references>
-      </memberdef>
-      <memberdef kind="function" id="d4/db0/a04048_1a1480c2c5be97703b5324a853483571f7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>size_t</type>
-        <definition>size_t castor3d::VertexBoneData::Weights::size</definition>
-        <argsstring>() const</argsstring>
-        <name>size</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="148" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="148" bodyend="151"/>
-        <references refid="d4/db0/a04048_1a2d3452a7660781bfca0ac8afbcd57671" compoundref="dc/df9/a00554" startline="110">data</references>
-      </memberdef>
-      <memberdef kind="function" id="d4/db0/a04048_1a911eff2686d01b264867d67a318e4902" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>auto</type>
-        <definition>auto castor3d::VertexBoneData::Weights::begin</definition>
-        <argsstring>() const</argsstring>
-        <name>begin</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="152" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="152" bodyend="155"/>
-        <references refid="d4/db0/a04048_1a2d3452a7660781bfca0ac8afbcd57671" compoundref="dc/df9/a00554" startline="110">data</references>
-      </memberdef>
-      <memberdef kind="function" id="d4/db0/a04048_1a321a77245432cfc3c1ad51dea14c6645" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>auto</type>
-        <definition>auto castor3d::VertexBoneData::Weights::begin</definition>
-        <argsstring>()</argsstring>
-        <name>begin</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="156" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="156" bodyend="159"/>
-        <references refid="d4/db0/a04048_1a2d3452a7660781bfca0ac8afbcd57671" compoundref="dc/df9/a00554" startline="110">data</references>
-      </memberdef>
-      <memberdef kind="function" id="d4/db0/a04048_1a184feab7572d524c6e00aef3f9af12af" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>auto</type>
-        <definition>auto castor3d::VertexBoneData::Weights::end</definition>
-        <argsstring>() const</argsstring>
-        <name>end</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="160" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="160" bodyend="163"/>
-        <references refid="d4/db0/a04048_1a2d3452a7660781bfca0ac8afbcd57671" compoundref="dc/df9/a00554" startline="110">data</references>
-      </memberdef>
-      <memberdef kind="function" id="d4/db0/a04048_1a6c4b3a66a37ed913626ad0a6a615e2af" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>auto</type>
-        <definition>auto castor3d::VertexBoneData::Weights::end</definition>
-        <argsstring>()</argsstring>
-        <name>end</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="164" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="164" bodyend="167"/>
-        <references refid="d4/db0/a04048_1a2d3452a7660781bfca0ac8afbcd57671" compoundref="dc/df9/a00554" startline="110">data</references>
+        <location file="Render/RenderNodesPass.hpp" line="139" column="22" bodyfile="Render/RenderNodesPass.hpp" bodystart="139" bodyend="144"/>
+        <references refid="d4/db0/a04048_1a4f555d451b6df62cd0f594eeb4d6a43e" compoundref="d8/d2d/a00815" startline="155">m_ruConfig</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
-<para>The bones weights. </para>
     </detaileddescription>
     <collaborationgraph>
-      <node id="4669">
-        <label>castor3d::VertexBoneData::Weights</label>
-        <link refid="d4/db0/a04048"/>
-        <childnode refid="4670" relation="usage">
-          <edgelabel>data</edgelabel>
+      <node id="10">
+        <label>Animable</label>
+        <link refid="d8/d5f/a02216"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="4672">
+      <node id="14">
+        <label>K</label>
+      </node>
+      <node id="15">
         <label>T</label>
       </node>
-      <node id="4671">
+      <node id="28">
+        <label>std::array&lt; castor3d::RenderNodesPass::PassDescriptors, size_t(RenderNodeType::eCount) &gt;</label>
+        <childnode refid="29" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="30" relation="template-instance">
+          <edgelabel>&lt; castor3d::RenderNodesPass::PassDescriptors, size_t(RenderNodeType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d8/d5f/a02216"/>
+        <childnode refid="17" relation="public-inheritance">
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::Camera</label>
+        <link refid="d1/d73/a04476"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::MatrixUbo</label>
+        <link refid="d1/db7/a04924"/>
+      </node>
+      <node id="5">
+        <label>castor3d::MovableObject</label>
+        <link refid="d9/dbb/a04524"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
+      </node>
+      <node id="25">
+        <label>castor3d::QueuesData</label>
+        <link refid="d3/d70/a03952"/>
+      </node>
+      <node id="22">
+        <label>castor3d::RenderDevice</label>
+        <link refid="d2/df2/a03960"/>
+        <childnode refid="23" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="usage">
+          <edgelabel>queueFamilies</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor3d::RenderNodesPass</label>
+        <link refid="dc/d8b/a04052"/>
+        <childnode refid="20" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="21" relation="public-inheritance">
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+        <childnode refid="23" relation="usage">
+          <edgelabel>m_renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_matrixUbo</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_culler</edgelabel>
+        </childnode>
+        <childnode refid="27" relation="usage">
+          <edgelabel>m_sceneUbo</edgelabel>
+        </childnode>
+        <childnode refid="28" relation="usage">
+          <edgelabel>m_additionalDescriptors</edgelabel>
+        </childnode>
+      </node>
+      <node id="29">
+        <label>castor3d::RenderNodesPass::PassDescriptors</label>
+        <link refid="d4/d3a/a04056"/>
+      </node>
+      <node id="1">
+        <label>castor3d::RenderNodesPassDesc</label>
+        <link refid="d4/db0/a04048"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_matrixUbo</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_culler</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>m_ignored</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d2/dbb/a04072"/>
+        <childnode refid="20" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::SceneCuller</label>
+        <link refid="d7/df2/a03656"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_camera</edgelabel>
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>m_renderPasses</edgelabel>
+        </childnode>
+      </node>
+      <node id="31">
+        <label>castor3d::SceneCuller::RenderPassBuffers</label>
+        <link refid="d0/d99/a03660"/>
+        <childnode refid="32" relation="usage">
+          <edgelabel>nodesIds</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::SceneNode</label>
+        <link refid="d4/d6d/a04636"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>castor3d::SceneUbo</label>
+        <link refid="d1/dc6/a04964"/>
+      </node>
+      <node id="7">
+        <label>castor::Named</label>
+      </node>
+      <node id="17">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="11">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="20">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="6">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="21">
+        <label>crg::RenderPass</label>
+      </node>
+      <node id="18">
+        <label>std::map&lt; castor3d::RenderNodesPass const *, castor3d::SceneCuller::RenderPassBuffers &gt;</label>
+        <childnode refid="19" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="31" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; castor3d::RenderNodesPass const *, castor3d::SceneCuller::RenderPassBuffers &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="30">
         <label>std::array&lt; T &gt;</label>
-        <childnode refid="4672" relation="usage">
+        <childnode refid="15" relation="usage">
           <edgelabel>elements</edgelabel>
         </childnode>
       </node>
-      <node id="4670">
-        <label>std::array&lt; float, MaxBonesPerVertex &gt;</label>
-        <childnode refid="4671" relation="template-instance">
-          <edgelabel>&lt; float, MaxBonesPerVertex &gt;</edgelabel>
+      <node id="9">
+        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
+      </node>
+      <node id="13">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="14" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="26">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="15" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="32">
+        <label>std::vector&lt; PipelineBuffer &gt;</label>
+        <childnode refid="26" relation="template-instance">
+          <edgelabel>&lt; PipelineBuffer &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="24">
+        <label>std::vector&lt; QueuesData &gt;</label>
+        <childnode refid="25" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="26" relation="template-instance">
+          <edgelabel>&lt; QueuesData &gt;</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Model/Skeleton/VertexBoneData.hpp" line="104" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="103" bodyend="168"/>
+    <location file="Render/RenderNodesPass.hpp" line="28" column="1" bodyfile="Render/RenderNodesPass.hpp" bodystart="29" bodyend="156"/>
     <listofallmembers>
-      <member refid="d4/db0/a04048_1a911eff2686d01b264867d67a318e4902" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Weights</scope><name>begin</name></member>
-      <member refid="d4/db0/a04048_1a321a77245432cfc3c1ad51dea14c6645" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Weights</scope><name>begin</name></member>
-      <member refid="d4/db0/a04048_1a2d3452a7660781bfca0ac8afbcd57671" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Weights</scope><name>data</name></member>
-      <member refid="d4/db0/a04048_1a184feab7572d524c6e00aef3f9af12af" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Weights</scope><name>end</name></member>
-      <member refid="d4/db0/a04048_1a6c4b3a66a37ed913626ad0a6a615e2af" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Weights</scope><name>end</name></member>
-      <member refid="d4/db0/a04048_1a2be915d15dcc50c86cdf5c05e06b062e" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Weights</scope><name>operator=</name></member>
-      <member refid="d4/db0/a04048_1ab13d8a64b5b17467ed116d6f971e6e58" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Weights</scope><name>operator=</name></member>
-      <member refid="d4/db0/a04048_1adcf13d4f454049437a4267e363b12d92" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Weights</scope><name>operator[]</name></member>
-      <member refid="d4/db0/a04048_1a201331404f3ac4853daccd5c9932c140" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Weights</scope><name>operator[]</name></member>
-      <member refid="d4/db0/a04048_1a1480c2c5be97703b5324a853483571f7" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Weights</scope><name>size</name></member>
-      <member refid="d4/db0/a04048_1ab4f349a43e4c7162bb39141aa639014b" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Weights</scope><name>Weights</name></member>
-      <member refid="d4/db0/a04048_1a5dfe28526836723cc923450385c7ee6d" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Weights</scope><name>Weights</name></member>
-      <member refid="d4/db0/a04048_1a1b2903f08f5fa7784fb8e7ff260aabe1" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Weights</scope><name>Weights</name></member>
-      <member refid="d4/db0/a04048_1a9488dba88e7012ea4a1f7dc5ca97bc16" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Weights</scope><name>~Weights</name></member>
+      <member refid="d4/db0/a04048_1abcf78a5bf38e31afc9e7bb02d7787d21" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>ignored</name></member>
+      <member refid="d4/db0/a04048_1ae3578277a5df6e9f67bac83b6ac11237" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>implicitAction</name></member>
+      <member refid="d4/db0/a04048_1adc6b6c9b01873cd7b353a14c1a551ced" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_culler</name></member>
+      <member refid="d4/db0/a04048_1ad2e42e20cebdd695d43da2c2a16ea28b" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_forceTwoSided</name></member>
+      <member refid="d4/db0/a04048_1ac473ff8cada8f79d3cee5d914eb8898b" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_ignored</name></member>
+      <member refid="d4/db0/a04048_1ab1e84c38e0ddc0654de807e751714780" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_index</name></member>
+      <member refid="d4/db0/a04048_1a29236c9e0e26dd0c16b14215108c4f1f" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_matrixUbo</name></member>
+      <member refid="d4/db0/a04048_1a58651102813d538205dabe3c138d658e" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_mode</name></member>
+      <member refid="d4/db0/a04048_1a77bd9d12566877c3fcf15ccaeba7117f" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_oit</name></member>
+      <member refid="d4/db0/a04048_1a4f555d451b6df62cd0f594eeb4d6a43e" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_ruConfig</name></member>
+      <member refid="d4/db0/a04048_1acd0fd0782cc665ee498cfad805f82b70" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_safeBand</name></member>
+      <member refid="d4/db0/a04048_1a8ed2fdbc92a9dd7c3ce918bc6fd2cef2" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_size</name></member>
+      <member refid="d4/db0/a04048_1ada75b6f219d0ad827910800b30437c29" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>passCount</name></member>
+      <member refid="d4/db0/a04048_1a4bebc90d15c182d12b69d6c50c705d03" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>RenderNodesPassDesc</name></member>
+      <member refid="d4/db0/a04048_1aaae3940979f6ff8da96732eb284aa6df" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>RenderNodesPassDesc</name></member>
+      <member refid="d4/db0/a04048_1aa333dc9302de7288e844101d729d1553" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>RenderNodesPassDesc</name></member>
+      <member refid="d4/db0/a04048_1a6a4d69515ab56e1662ea9199a278bb56" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>resettable</name></member>
+      <member refid="d4/db0/a04048_1ad8ccbed6034876b2da9f357c1805b7f0" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>safeBand</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

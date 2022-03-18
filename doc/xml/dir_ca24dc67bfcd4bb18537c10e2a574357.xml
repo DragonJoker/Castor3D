@@ -1,16 +1,13 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_ca24dc67bfcd4bb18537c10e2a574357" kind="dir">
     <compoundname>Render/Technique/Opaque/Lighting</compoundname>
-    <innerfile refid="d5/d69/a00878">DirectionalLightPass.hpp</innerfile>
-    <innerfile refid="df/d41/a00881">LightingModule.hpp</innerfile>
-    <innerfile refid="dd/d08/a00884">LightPass.hpp</innerfile>
-    <innerfile refid="d7/d92/a00887">LightPassResult.hpp</innerfile>
-    <innerfile refid="d7/d46/a00890">LightPassShadow.hpp</innerfile>
-    <innerfile refid="dc/d2c/a00893">MeshLightPass.hpp</innerfile>
-    <innerfile refid="da/dd6/a00896">PointLightPass.hpp</innerfile>
-    <innerfile refid="d3/d8a/a00899">SpotLightPass.hpp</innerfile>
-    <innerfile refid="d5/dd3/a00902">SubsurfaceScatteringPass.hpp</innerfile>
+    <innerfile refid="d7/d46/a00890">DirectionalLightPass.hpp</innerfile>
+    <innerfile refid="dc/d2c/a00893">LightingModule.hpp</innerfile>
+    <innerfile refid="da/dd6/a00896">LightPass.hpp</innerfile>
+    <innerfile refid="d3/d8a/a00899">LightPassResult.hpp</innerfile>
+    <innerfile refid="d5/dd3/a00902">MeshLightPass.hpp</innerfile>
+    <innerfile refid="da/d5b/a00905">SubsurfaceScatteringPass.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

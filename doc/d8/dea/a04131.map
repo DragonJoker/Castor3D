@@ -1,5 +1,8 @@
-<map id="castor3d::ToneMappingPlugin" name="castor3d::ToneMappingPlugin">
-<area shape="rect" id="node1" title=" " alt="" coords="5,155,199,181"/>
-<area shape="rect" id="node2" href="$d5/dd1/a04120.html" title=" " alt="" coords="44,80,160,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="9,5,195,32"/>
+<map id="castor3d::ShadowMapPassSpot" name="castor3d::ShadowMapPassSpot">
+<area shape="rect" id="node1" title=" " alt="" coords="165,229,373,256"/>
+<area shape="rect" id="node2" href="$d5/dd1/a04120.html" title=" " alt="" coords="179,155,360,181"/>
+<area shape="rect" id="node3" href="$dc/d8b/a04052.html" title=" " alt="" coords="175,80,363,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,5,192,32"/>
+<area shape="rect" id="node5" title=" " alt="" coords="216,5,323,32"/>
+<area shape="rect" id="node6" title=" " alt="" coords="347,5,466,32"/>
 </map>

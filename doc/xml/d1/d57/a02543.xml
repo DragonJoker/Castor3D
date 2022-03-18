@@ -1,167 +1,224 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d1/d57/a02543" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::MouseEvent</compoundname>
-    <basecompoundref refid="da/d96/a02547" prot="public" virt="non-virtual">castor3d::UserInputEvent</basecompoundref>
-    <includes local="no">MouseEvent.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d1/d57/a02543" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::GpuBufferLinearAllocator</compoundname>
+    <includes local="no">GpuBufferLinearAllocator.hpp</includes>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d1/d57/a02543_1a1ef4cad217e6769acbb9ba9b978f43d5" prot="private" static="no" mutable="no">
-        <type><ref refid="d7/dd1/a01458_1a3c153b6d827714e22164290af1839578" kindref="member">MouseEventType</ref> const</type>
-        <definition>MouseEventType const castor3d::MouseEvent::m_mouseEventType</definition>
+      <memberdef kind="variable" id="d1/d57/a02543_1ac17f4ef74aba189cce377ac6f6194aaf" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::GpuBufferLinearAllocator::m_alignSize</definition>
         <argsstring></argsstring>
-        <name>m_mouseEventType</name>
+        <name>m_alignSize</name>
+        <qualifiedname>castor3d::GpuBufferLinearAllocator::m_alignSize</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/MouseEvent.hpp" line="70" column="1" bodyfile="Event/UserInput/MouseEvent.hpp" bodystart="70" bodyend="-1"/>
+        <location file="Buffer/GpuBufferLinearAllocator.hpp" line="79" column="10" bodyfile="Buffer/GpuBufferLinearAllocator.hpp" bodystart="79" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d57/a02543_1abe5724dfdd7fb705ae4582c074741ce4" prot="private" static="no" mutable="no">
-        <type><ref refid="d7/dd1/a01458_1a087f824502cd45431879fc5c96607682" kindref="member">MouseButton</ref> const</type>
-        <definition>MouseButton const castor3d::MouseEvent::m_button</definition>
+      <memberdef kind="variable" id="d1/d57/a02543_1a69d4de112221b9738ce969b3ef894f7c" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t castor3d::GpuBufferLinearAllocator::m_allocatedSize</definition>
         <argsstring></argsstring>
-        <name>m_button</name>
+        <name>m_allocatedSize</name>
+        <qualifiedname>castor3d::GpuBufferLinearAllocator::m_allocatedSize</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/MouseEvent.hpp" line="71" column="1" bodyfile="Event/UserInput/MouseEvent.hpp" bodystart="71" bodyend="-1"/>
+        <location file="Buffer/GpuBufferLinearAllocator.hpp" line="80" column="8" bodyfile="Buffer/GpuBufferLinearAllocator.hpp" bodystart="80" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d57/a02543_1aa9b251ac2dd7a7c7c000891d8e7b37e9" prot="private" static="no" mutable="no">
-        <type>castor::Position const</type>
-        <definition>castor::Position const castor3d::MouseEvent::m_position</definition>
+      <memberdef kind="variable" id="d1/d57/a02543_1a49b4187075c34cc6faabb9698d53ddfb" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; VkDeviceSize &gt;</type>
+        <definition>std::vector&lt; VkDeviceSize &gt; castor3d::GpuBufferLinearAllocator::m_free</definition>
         <argsstring></argsstring>
-        <name>m_position</name>
+        <name>m_free</name>
+        <qualifiedname>castor3d::GpuBufferLinearAllocator::m_free</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/MouseEvent.hpp" line="72" column="1" bodyfile="Event/UserInput/MouseEvent.hpp" bodystart="72" bodyend="-1"/>
+        <location file="Buffer/GpuBufferLinearAllocator.hpp" line="81" column="13" bodyfile="Buffer/GpuBufferLinearAllocator.hpp" bodystart="81" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d1/d57/a02543_1acacd9e08c4a258a29f22e970118e67c1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::MouseEvent::MouseEvent</definition>
-        <argsstring>(MouseEventType type, castor::Position const &amp;position, MouseButton button=MouseButton::eCount)</argsstring>
-        <name>MouseEvent</name>
+      <memberdef kind="function" id="d1/d57/a02543_1aec711e82683606dd049d2b83223f2d8a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::GpuBufferLinearAllocator::GpuBufferLinearAllocator</definition>
+        <argsstring>(size_t count, uint32_t alignment)</argsstring>
+        <name>GpuBufferLinearAllocator</name>
+        <qualifiedname>castor3d::GpuBufferLinearAllocator::GpuBufferLinearAllocator</qualifiedname>
         <param>
-          <type><ref refid="d7/dd1/a01458_1a3c153b6d827714e22164290af1839578" kindref="member">MouseEventType</ref></type>
-          <declname>type</declname>
+          <type>size_t</type>
+          <declname>count</declname>
         </param>
         <param>
-          <type>castor::Position const &amp;</type>
-          <declname>position</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1a087f824502cd45431879fc5c96607682" kindref="member">MouseButton</ref></type>
-          <declname>button</declname>
-          <defval><ref refid="d7/dd1/a01458_1a087f824502cd45431879fc5c96607682ae558bb69fadec037d9eae46601a4df8e" kindref="member">MouseButton::eCount</ref></defval>
+          <type>uint32_t</type>
+          <declname>alignment</declname>
         </param>
         <briefdescription>
+<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The allocator elements count. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">alignment</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The alignment for one element. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/MouseEvent.hpp" line="29" column="1" bodyfile="Event/UserInput/MouseEvent.hpp" bodystart="29" bodyend="37"/>
-        <references refid="d7/dd1/a01458_1abdf15c31ed466fee351daf42b2b45ad5ad8962f641d3f9ae6a95e6d6ec3d800da">castor3d::eMouse</references>
+        <location file="Buffer/GpuBufferLinearAllocator.hpp" line="25" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d57/a02543_1a228955b6732220e64bdc170887f857a1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d7/dd1/a01458_1a3c153b6d827714e22164290af1839578" kindref="member">MouseEventType</ref></type>
-        <definition>MouseEventType castor3d::MouseEvent::getMouseEventType</definition>
-        <argsstring>() const</argsstring>
-        <name>getMouseEventType</name>
+      <memberdef kind="function" id="d1/d57/a02543_1ac6864d8f358285ef7c9f04731aa50433" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkDeviceSize</type>
+        <definition>C3D_API VkDeviceSize castor3d::GpuBufferLinearAllocator::allocate</definition>
+        <argsstring>(size_t size)</argsstring>
+        <name>allocate</name>
+        <qualifiedname>castor3d::GpuBufferLinearAllocator::allocate</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>size</declname>
+        </param>
         <briefdescription>
+<para>Allocates memory. </para>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The mouse event type. </para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The requested memory size. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The memory chunk. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/MouseEvent.hpp" line="44" column="1" bodyfile="Event/UserInput/MouseEvent.hpp" bodystart="44" bodyend="47"/>
+        <location file="Buffer/GpuBufferLinearAllocator.hpp" line="37" column="22"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d57/a02543_1aa7d9cd30e83103377a44b4a516fe79da" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d7/dd1/a01458_1a087f824502cd45431879fc5c96607682" kindref="member">MouseButton</ref></type>
-        <definition>MouseButton castor3d::MouseEvent::getButton</definition>
+      <memberdef kind="function" id="d1/d57/a02543_1a22925dc9c260c81b16e7e92cf2c975c8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::GpuBufferLinearAllocator::deallocate</definition>
+        <argsstring>(VkDeviceSize pointer)</argsstring>
+        <name>deallocate</name>
+        <qualifiedname>castor3d::GpuBufferLinearAllocator::deallocate</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>pointer</declname>
+        </param>
+        <briefdescription>
+<para>Deallocates memory. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pointer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The memory chunk. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferLinearAllocator.hpp" line="46" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d57/a02543_1a271e7a5ac0c5aed27611421969f9da47" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor3d::GpuBufferLinearAllocator::getTotalSize</definition>
         <argsstring>() const</argsstring>
-        <name>getButton</name>
+        <name>getTotalSize</name>
+        <qualifiedname>castor3d::GpuBufferLinearAllocator::getTotalSize</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The mouse button. </para>
+<para><simplesect kind="return"><para>The allocator size. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/MouseEvent.hpp" line="54" column="1" bodyfile="Event/UserInput/MouseEvent.hpp" bodystart="54" bodyend="57"/>
+        <location file="Buffer/GpuBufferLinearAllocator.hpp" line="53" column="8" bodyfile="Buffer/GpuBufferLinearAllocator.hpp" bodystart="53" bodyend="56"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d57/a02543_1a147fc14d9db4510534d650c800033a62" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::Position const  &amp;</type>
-        <definition>castor::Position const&amp; castor3d::MouseEvent::getPosition</definition>
+      <memberdef kind="function" id="d1/d57/a02543_1ab4f50f4191db9c476b072c989b08afad" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor3d::GpuBufferLinearAllocator::getAlignSize</definition>
         <argsstring>() const</argsstring>
-        <name>getPosition</name>
+        <name>getAlignSize</name>
+        <qualifiedname>castor3d::GpuBufferLinearAllocator::getAlignSize</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The position (wheel or mouse, depending on mouse event type). </para>
+<para><simplesect kind="return"><para>The element aligned size. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/MouseEvent.hpp" line="64" column="1" bodyfile="Event/UserInput/MouseEvent.hpp" bodystart="64" bodyend="67"/>
+        <location file="Buffer/GpuBufferLinearAllocator.hpp" line="63" column="8" bodyfile="Buffer/GpuBufferLinearAllocator.hpp" bodystart="63" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d57/a02543_1af0f91c88b34f256fef4eea59c69c0ba2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::GpuBufferLinearAllocator::hasAvailable</definition>
+        <argsstring>(size_t) const</argsstring>
+        <name>hasAvailable</name>
+        <qualifiedname>castor3d::GpuBufferLinearAllocator::hasAvailable</qualifiedname>
+        <param>
+          <type>size_t</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if there is enough remaining memory for given size. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferLinearAllocator.hpp" line="73" column="6" bodyfile="Buffer/GpuBufferLinearAllocator.hpp" bodystart="73" bodyend="76"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="2136">
-        <label>castor3d::UserInputEvent</label>
-        <link refid="da/d96/a02547"/>
-      </node>
-      <node id="2135">
-        <label>castor3d::MouseEvent</label>
-        <link refid="d1/d57/a02543"/>
-        <childnode refid="2136" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="2138">
-        <label>castor3d::UserInputEvent</label>
-        <link refid="da/d96/a02547"/>
-      </node>
-      <node id="2137">
-        <label>castor3d::MouseEvent</label>
-        <link refid="d1/d57/a02543"/>
-        <childnode refid="2138" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Event/UserInput/MouseEvent.hpp" line="15" column="1" bodyfile="Event/UserInput/MouseEvent.hpp" bodystart="13" bodyend="73"/>
+    <location file="Buffer/GpuBufferLinearAllocator.hpp" line="13" column="1" bodyfile="Buffer/GpuBufferLinearAllocator.hpp" bodystart="14" bodyend="82"/>
     <listofallmembers>
-      <member refid="d1/d57/a02543_1aa7d9cd30e83103377a44b4a516fe79da" prot="public" virt="non-virtual"><scope>castor3d::MouseEvent</scope><name>getButton</name></member>
-      <member refid="da/d96/a02547_1ab45ab37b6687ae9a35165ea5b18f0a71" prot="public" virt="non-virtual"><scope>castor3d::MouseEvent</scope><name>getEventType</name></member>
-      <member refid="d1/d57/a02543_1a228955b6732220e64bdc170887f857a1" prot="public" virt="non-virtual"><scope>castor3d::MouseEvent</scope><name>getMouseEventType</name></member>
-      <member refid="d1/d57/a02543_1a147fc14d9db4510534d650c800033a62" prot="public" virt="non-virtual"><scope>castor3d::MouseEvent</scope><name>getPosition</name></member>
-      <member refid="d1/d57/a02543_1abe5724dfdd7fb705ae4582c074741ce4" prot="private" virt="non-virtual"><scope>castor3d::MouseEvent</scope><name>m_button</name></member>
-      <member refid="d1/d57/a02543_1a1ef4cad217e6769acbb9ba9b978f43d5" prot="private" virt="non-virtual"><scope>castor3d::MouseEvent</scope><name>m_mouseEventType</name></member>
-      <member refid="d1/d57/a02543_1aa9b251ac2dd7a7c7c000891d8e7b37e9" prot="private" virt="non-virtual"><scope>castor3d::MouseEvent</scope><name>m_position</name></member>
-      <member refid="d1/d57/a02543_1acacd9e08c4a258a29f22e970118e67c1" prot="public" virt="non-virtual"><scope>castor3d::MouseEvent</scope><name>MouseEvent</name></member>
-      <member refid="da/d96/a02547_1a1d946a77fa49158379ee4e5dfb84a556" prot="public" virt="non-virtual"><scope>castor3d::MouseEvent</scope><name>UserInputEvent</name></member>
-      <member refid="da/d96/a02547_1a520eaa4deaa4a2c25ee217105e289b78" prot="public" virt="virtual"><scope>castor3d::MouseEvent</scope><name>~UserInputEvent</name></member>
+      <member refid="d1/d57/a02543_1ac6864d8f358285ef7c9f04731aa50433" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferLinearAllocator</scope><name>allocate</name></member>
+      <member refid="d1/d57/a02543_1a22925dc9c260c81b16e7e92cf2c975c8" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferLinearAllocator</scope><name>deallocate</name></member>
+      <member refid="d1/d57/a02543_1ab4f50f4191db9c476b072c989b08afad" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferLinearAllocator</scope><name>getAlignSize</name></member>
+      <member refid="d1/d57/a02543_1a271e7a5ac0c5aed27611421969f9da47" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferLinearAllocator</scope><name>getTotalSize</name></member>
+      <member refid="d1/d57/a02543_1aec711e82683606dd049d2b83223f2d8a" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferLinearAllocator</scope><name>GpuBufferLinearAllocator</name></member>
+      <member refid="d1/d57/a02543_1af0f91c88b34f256fef4eea59c69c0ba2" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferLinearAllocator</scope><name>hasAvailable</name></member>
+      <member refid="d1/d57/a02543_1ac17f4ef74aba189cce377ac6f6194aaf" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferLinearAllocator</scope><name>m_alignSize</name></member>
+      <member refid="d1/d57/a02543_1a69d4de112221b9738ce969b3ef894f7c" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferLinearAllocator</scope><name>m_allocatedSize</name></member>
+      <member refid="d1/d57/a02543_1a49b4187075c34cc6faabb9698d53ddfb" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferLinearAllocator</scope><name>m_free</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

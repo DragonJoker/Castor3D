@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d1/de1/a02435" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ObjectCacheTraits&lt; ParticleSystem, KeyType &gt;</compoundname>
+    <includes local="no">CacheModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename KeyType</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d1/de1/a02435_1ac9c0ce0123a7094926bad63e57565a7b" prot="public" static="no">
+        <type>std::function&lt; std::shared_ptr&lt; <ref refid="d8/d42/a05207" kindref="compound">ParticleSystem</ref> &gt;(KeyType const &amp;, <ref refid="d8/dd0/a05235" kindref="compound">SceneNode</ref> &amp;, uint32_t) &gt;</type>
+        <definition>using castor3d::ObjectCacheTraits&lt; ParticleSystem, KeyType &gt;::Producer =  std::function&lt; std::shared_ptr&lt; ParticleSystem &gt;( KeyType const &amp;, SceneNode &amp;, uint32_t ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>Producer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheModule.hpp" line="461" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="461" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d1/de1/a02435_1afa0f0a037dfcd26335b7f351f51b8d43" prot="public" static="no">
+        <type>std::function&lt; void(<ref refid="d4/dad/a02407" kindref="compound">ObjectCacheBase</ref>&lt; <ref refid="d8/d42/a05207" kindref="compound">ParticleSystem</ref>, KeyType &gt; const &amp;, castor::Collection&lt; <ref refid="d8/d42/a05207" kindref="compound">ParticleSystem</ref>, KeyType &gt; &amp;, std::shared_ptr&lt; <ref refid="d8/d42/a05207" kindref="compound">ParticleSystem</ref> &gt;, SceneNodeSPtr, SceneNodeSPtr) &gt;</type>
+        <definition>using castor3d::ObjectCacheTraits&lt; ParticleSystem, KeyType &gt;::Merger =  std::function&lt; void( ObjectCacheBase&lt; ParticleSystem, KeyType &gt; const &amp; , castor::Collection&lt; ParticleSystem, KeyType &gt; &amp; , std::shared_ptr&lt; ParticleSystem &gt; , SceneNodeSPtr , SceneNodeSPtr ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>Merger</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheModule.hpp" line="462" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="466" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d1/de1/a02435_1adaae6e64f559322f5618ab47fe80d414" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <definition>C3D_API const castor::String castor3d::ObjectCacheTraits&lt; ParticleSystem, KeyType &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheModule.hpp" line="460" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="460" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Helper structure to specialise a scene objects cache behaviour. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Specialisation for <ref refid="d8/d42/a05207" kindref="compound">ParticleSystem</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="Cache/CacheModule.hpp" line="459" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="458" bodyend="467"/>
+    <listofallmembers>
+      <member refid="d1/de1/a02435_1afa0f0a037dfcd26335b7f351f51b8d43" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraits&lt; ParticleSystem, KeyType &gt;</scope><name>Merger</name></member>
+      <member refid="d1/de1/a02435_1adaae6e64f559322f5618ab47fe80d414" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraits&lt; ParticleSystem, KeyType &gt;</scope><name>Name</name></member>
+      <member refid="d1/de1/a02435_1ac9c0ce0123a7094926bad63e57565a7b" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraits&lt; ParticleSystem, KeyType &gt;</scope><name>Producer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

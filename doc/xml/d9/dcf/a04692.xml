@@ -1,159 +1,173 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d9/dcf/a04692" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::ShadowMapResult</compoundname>
-    <basecompoundref refid="d8/dc6/a04256" prot="public" virt="non-virtual">castor3d::GBufferT&lt; SmTexture &gt;</basecompoundref>
-    <includes local="no">ShadowMapResult.hpp</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d9/dcf/a04692_1afe13ade90e0602ce6b2f4c7aa24c1109" prot="private" static="no" mutable="no">
-        <type>TextureUnitArray</type>
-        <definition>TextureUnitArray castor3d::ShadowMapResult::m_owned</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d9/dcf/a04692" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::LightBuffer::LightData</compoundname>
+    <includes local="no">LightBuffer.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/dcf/a04692_1aa8f1d4a50c73a0ba9f2a2ca3d60ff7bc" prot="public" static="no" mutable="no">
+        <type><ref refid="d5/d43/a04668" kindref="compound">Float4</ref></type>
+        <definition>Float4 castor3d::LightBuffer::LightData::colourIndex</definition>
         <argsstring></argsstring>
-        <name>m_owned</name>
+        <name>colourIndex</name>
+        <qualifiedname>castor3d::LightBuffer::LightData::colourIndex</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapResult.hpp" line="24" column="1" bodyfile="Render/ShadowMap/ShadowMapResult.hpp" bodystart="24" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="107" column="8" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="107" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d9/dcf/a04692_1a009e934e6323d4ad938cd97f21a01f35" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::ShadowMapResult::ShadowMapResult</definition>
-        <argsstring>(Engine &amp;engine, castor::String const &amp;prefix, VkImageCreateFlags createFlags, castor::Size const &amp;size, uint32_t layerCount)</argsstring>
-        <name>ShadowMapResult</name>
-        <param>
-          <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
-        </param>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>prefix</declname>
-        </param>
-        <param>
-          <type>VkImageCreateFlags</type>
-          <declname>createFlags</declname>
-        </param>
-        <param>
-          <type>castor::Size const &amp;</type>
-          <declname>size</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>layerCount</declname>
-        </param>
+      <memberdef kind="variable" id="d9/dcf/a04692_1ad136768a0f7dbe07813cee25f318c257" prot="public" static="no" mutable="no">
+        <type><ref refid="d5/d43/a04668" kindref="compound">Float4</ref></type>
+        <definition>Float4 castor3d::LightBuffer::LightData::intensityFarPlane</definition>
+        <argsstring></argsstring>
+        <name>intensityFarPlane</name>
+        <qualifiedname>castor3d::LightBuffer::LightData::intensityFarPlane</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapResult.hpp" line="17" column="1"/>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="108" column="8" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dcf/a04692_1a1256e00ee0917560659557002446a7f3" prot="public" static="no" mutable="no">
+        <type><ref refid="d5/d43/a04668" kindref="compound">Float4</ref></type>
+        <definition>Float4 castor3d::LightBuffer::LightData::volumetric</definition>
+        <argsstring></argsstring>
+        <name>volumetric</name>
+        <qualifiedname>castor3d::LightBuffer::LightData::volumetric</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="109" column="8" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dcf/a04692_1ab62828d6da6a71e98032a686a35b01ba" prot="public" static="no" mutable="no">
+        <type><ref refid="d5/d43/a04668" kindref="compound">Float4</ref></type>
+        <definition>Float4 castor3d::LightBuffer::LightData::shadowsOffsets</definition>
+        <argsstring></argsstring>
+        <name>shadowsOffsets</name>
+        <qualifiedname>castor3d::LightBuffer::LightData::shadowsOffsets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="110" column="8" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dcf/a04692_1a72fdbc95f788eae691cc8b0975cfb8b5" prot="public" static="no" mutable="no">
+        <type><ref refid="d5/d43/a04668" kindref="compound">Float4</ref></type>
+        <definition>Float4 castor3d::LightBuffer::LightData::shadowsVariances</definition>
+        <argsstring></argsstring>
+        <name>shadowsVariances</name>
+        <qualifiedname>castor3d::LightBuffer::LightData::shadowsVariances</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="111" column="8" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dcf/a04692_1abb390b37b5a65cd29a5c0a7f8ae34812" prot="public" static="no" mutable="no">
+        <type><ref refid="d5/def/a04676" kindref="compound">SpecLight</ref></type>
+        <definition>SpecLight castor3d::LightBuffer::LightData::specific</definition>
+        <argsstring></argsstring>
+        <name>specific</name>
+        <qualifiedname>castor3d::LightBuffer::LightData::specific</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="112" column="11" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="112" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="3878">
-        <label>castor3d::ShadowMapResult</label>
-        <link refid="d9/dcf/a04692"/>
-        <childnode refid="3879" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3881">
-        <label>Named</label>
-      </node>
-      <node id="3882">
-        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
-        <link refid="d8/dc6/a04256"/>
-        <childnode refid="3880" relation="private-inheritance">
-        </childnode>
-      </node>
-      <node id="3880">
-        <label>castor3d::GBufferBase</label>
-        <link refid="dc/de4/a04252"/>
-        <childnode refid="3881" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3879">
-        <label>castor3d::GBufferT&lt; SmTexture &gt;</label>
-        <link refid="d8/dc6/a04256"/>
-        <childnode refid="3880" relation="private-inheritance">
-        </childnode>
-        <childnode refid="3882" relation="template-instance">
-          <edgelabel>&lt; SmTexture &gt;</edgelabel>
-        </childnode>
-      </node>
-    </inheritancegraph>
     <collaborationgraph>
-      <node id="3883">
-        <label>castor3d::ShadowMapResult</label>
+      <node id="7">
+        <label>T</label>
+      </node>
+      <node id="4">
+        <label>std::array&lt; castor3d::LightBuffer::Float4x4, 4u &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; castor3d::LightBuffer::Float4x4, 4u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::LightBuffer::Float4</label>
+        <link refid="d5/d43/a04668"/>
+      </node>
+      <node id="5">
+        <label>castor3d::LightBuffer::Float4x4</label>
+        <link refid="d7/d94/a04672"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>c0</edgelabel>
+          <edgelabel>c1</edgelabel>
+          <edgelabel>c2</edgelabel>
+          <edgelabel>c3</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::LightBuffer::LightData</label>
         <link refid="d9/dcf/a04692"/>
-        <childnode refid="3884" relation="public-inheritance">
+        <childnode refid="2" relation="usage">
+          <edgelabel>colourIndex</edgelabel>
+          <edgelabel>intensityFarPlane</edgelabel>
+          <edgelabel>shadowsOffsets</edgelabel>
+          <edgelabel>shadowsVariances</edgelabel>
+          <edgelabel>volumetric</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>specific</edgelabel>
         </childnode>
       </node>
-      <node id="3886">
-        <label>Named</label>
-      </node>
-      <node id="3888">
-        <label>castor::Unique&lt; Engine &gt;</label>
-      </node>
-      <node id="3887">
-        <label>castor3d::Engine</label>
-        <link refid="dc/dbb/a02520"/>
-        <childnode refid="3888" relation="public-inheritance">
+      <node id="3">
+        <label>castor3d::LightBuffer::SpecLight</label>
+        <link refid="d5/def/a04676"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>attenuation</edgelabel>
+          <edgelabel>direction</edgelabel>
+          <edgelabel>directionCount</edgelabel>
+          <edgelabel>exponentCutOff</edgelabel>
+          <edgelabel>position</edgelabel>
+          <edgelabel>splitDepths</edgelabel>
+          <edgelabel>splitScales</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>transforms</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>transform</edgelabel>
         </childnode>
       </node>
-      <node id="3889">
-        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
-        <link refid="d8/dc6/a04256"/>
-        <childnode refid="3885" relation="private-inheritance">
-        </childnode>
-        <childnode refid="3887" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-      </node>
-      <node id="3885">
-        <label>castor3d::GBufferBase</label>
-        <link refid="dc/de4/a04252"/>
-        <childnode refid="3886" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3884">
-        <label>castor3d::GBufferT&lt; SmTexture &gt;</label>
-        <link refid="d8/dc6/a04256"/>
-        <childnode refid="3885" relation="private-inheritance">
-        </childnode>
-        <childnode refid="3887" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="3889" relation="template-instance">
-          <edgelabel>&lt; SmTexture &gt;</edgelabel>
+      <node id="6">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>elements</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Render/ShadowMap/ShadowMapResult.hpp" line="15" column="1" bodyfile="Render/ShadowMap/ShadowMapResult.hpp" bodystart="13" bodyend="25"/>
+    <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="105" column="1" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="106" bodyend="113"/>
     <listofallmembers>
-      <member refid="d8/dc6/a04256_1a07ee2a84c48f234617c05d6d5c4b6c33" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>begin</name></member>
-      <member refid="d8/dc6/a04256_1aa0de394aee0ba9d95e5c04da314a9cb4" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>begin</name></member>
-      <member refid="d8/dc6/a04256_1a77d65937285e0954c33bc1834b099dbf" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>cbegin</name></member>
-      <member refid="d8/dc6/a04256_1a0ca55ac3a4cfb4c27acbd6867f420a41" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>cend</name></member>
-      <member refid="d8/dc6/a04256_1a2dbf9ef234080f55751db9f2ced2db94" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>cleanup</name></member>
-      <member refid="d8/dc6/a04256_1a2ed3e0a1d7b905e8393d6f1e3b67f339" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>end</name></member>
-      <member refid="d8/dc6/a04256_1ad9a2382a1c40e83a016a77209bee05fd" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>end</name></member>
-      <member refid="d8/dc6/a04256_1afc858ac06674fbee5bcc31d1eb051f21" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>GBufferT</name></member>
-      <member refid="d8/dc6/a04256_1a48c1db122e270552414435855b31f23d" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>GBufferT</name></member>
-      <member refid="d8/dc6/a04256_1adbb549264af799a0ca09aafab55df3b8" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>initialise</name></member>
-      <member refid="d8/dc6/a04256_1abfc84e342baf1448ab71cb739138f89b" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>m_engine</name></member>
-      <member refid="d9/dcf/a04692_1afe13ade90e0602ce6b2f4c7aa24c1109" prot="private" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>m_owned</name></member>
-      <member refid="d8/dc6/a04256_1ac693f4659ea2014569d916d03013f68e" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>m_result</name></member>
-      <member refid="d8/dc6/a04256_1a55a704f02c3e73ede1b8ed6fb78e79d5" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>operator[]</name></member>
-      <member refid="d9/dcf/a04692_1a009e934e6323d4ad938cd97f21a01f35" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>ShadowMapResult</name></member>
+      <member refid="d9/dcf/a04692_1aa8f1d4a50c73a0ba9f2a2ca3d60ff7bc" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::LightData</scope><name>colourIndex</name></member>
+      <member refid="d9/dcf/a04692_1ad136768a0f7dbe07813cee25f318c257" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::LightData</scope><name>intensityFarPlane</name></member>
+      <member refid="d9/dcf/a04692_1ab62828d6da6a71e98032a686a35b01ba" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::LightData</scope><name>shadowsOffsets</name></member>
+      <member refid="d9/dcf/a04692_1a72fdbc95f788eae691cc8b0975cfb8b5" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::LightData</scope><name>shadowsVariances</name></member>
+      <member refid="d9/dcf/a04692_1abb390b37b5a65cd29a5c0a7f8ae34812" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::LightData</scope><name>specific</name></member>
+      <member refid="d9/dcf/a04692_1a1256e00ee0917560659557002446a7f3" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::LightData</scope><name>volumetric</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,478 +1,143 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d7/d3f/a04944" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::TransparentResolvePass</compoundname>
-    <includes local="no">TransparentResolvePass.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d7/d3f/a04944" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::OverlayData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">OverlayUbo.hpp</includes>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d7/d3f/a04944_1ab1436076c0953436bdddc1d3abd8ae19" prot="private" static="no" mutable="no">
-        <type>castor::Size</type>
-        <definition>castor::Size castor3d::TransparentResolvePass::m_size</definition>
+      <memberdef kind="variable" id="d7/d3f/a04944_1ad9967d754321f997d51cc6d28da3512b" prot="private" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::OverlayData::m_positionRatio</definition>
         <argsstring></argsstring>
-        <name>m_size</name>
+        <name>m_positionRatio</name>
+        <qualifiedname>castor3d::shader::OverlayData::m_positionRatio</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="124" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="124" bodyend="-1"/>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="38" column="11" bodyfile="Shader/Ubos/OverlayUbo.hpp" bodystart="38" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d7/d3f/a04944_1a0ff20bf8bd6e4090e6cd297dc470b8c1" prot="private" static="no" mutable="no">
-        <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> &amp;</type>
-        <definition>Engine&amp; castor3d::TransparentResolvePass::m_engine</definition>
+      <memberdef kind="variable" id="d7/d3f/a04944_1affe8daf215bdea4aa3b0e13c68b1b2d5" prot="private" static="no" mutable="no">
+        <type>sdw::IVec4</type>
+        <definition>sdw::IVec4 castor3d::shader::OverlayData::m_renderSizeIndex</definition>
         <argsstring></argsstring>
-        <name>m_engine</name>
+        <name>m_renderSizeIndex</name>
+        <qualifiedname>castor3d::shader::OverlayData::m_renderSizeIndex</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="125" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="125" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d3f/a04944_1add475a32fee557ddefe61f01a45aeae2" prot="private" static="no" mutable="no">
-        <type><ref refid="df/d63/a05528" kindref="compound">SceneUbo</ref> &amp;</type>
-        <definition>SceneUbo&amp; castor3d::TransparentResolvePass::m_sceneUbo</definition>
-        <argsstring></argsstring>
-        <name>m_sceneUbo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="126" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="126" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d3f/a04944_1a8e859e8adc8e1884ebae76da50f9c622" prot="private" static="no" mutable="no">
-        <type><ref refid="d1/d22/a05464" kindref="compound">GpInfoUbo</ref> const  &amp;</type>
-        <definition>GpInfoUbo const&amp; castor3d::TransparentResolvePass::m_gpInfo</definition>
-        <argsstring></argsstring>
-        <name>m_gpInfo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="127" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="127" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d3f/a04944_1ad165d3780c0260bf1de701055161c07c" prot="private" static="no" mutable="no">
-        <type><ref refid="dc/de0/a04936" kindref="compound">TransparentPassResult</ref> const  &amp;</type>
-        <definition>TransparentPassResult const&amp; castor3d::TransparentResolvePass::m_wbResult</definition>
-        <argsstring></argsstring>
-        <name>m_wbResult</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="128" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="128" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d3f/a04944_1a732b12fcfdd88a9a56c1622ee984772d" prot="private" static="no" mutable="no">
-        <type>SamplerSPtr</type>
-        <definition>SamplerSPtr castor3d::TransparentResolvePass::m_sampler</definition>
-        <argsstring></argsstring>
-        <name>m_sampler</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="129" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="129" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d3f/a04944_1aca071dc65fe4355e487290fec369708e" prot="private" static="no" mutable="no">
-        <type>ashes::VertexBufferPtr&lt; <ref refid="dd/d61/a04548" kindref="compound">TexturedQuad</ref> &gt;</type>
-        <definition>ashes::VertexBufferPtr&lt; TexturedQuad &gt; castor3d::TransparentResolvePass::m_vertexBuffer</definition>
-        <argsstring></argsstring>
-        <name>m_vertexBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="130" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="130" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d3f/a04944_1a4afbcc2475a9456d9ba0fde646831514" prot="private" static="no" mutable="no">
-        <type>ashes::PipelineVertexInputStateCreateInfoPtr</type>
-        <definition>ashes::PipelineVertexInputStateCreateInfoPtr castor3d::TransparentResolvePass::m_vertexLayout</definition>
-        <argsstring></argsstring>
-        <name>m_vertexLayout</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="131" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="131" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d3f/a04944_1ab04f37e2c1595b94d4ccf1e3337b9a2c" prot="private" static="no" mutable="no">
-        <type>ashes::DescriptorSetLayoutPtr</type>
-        <definition>ashes::DescriptorSetLayoutPtr castor3d::TransparentResolvePass::m_uboDescriptorLayout</definition>
-        <argsstring></argsstring>
-        <name>m_uboDescriptorLayout</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="132" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="132" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d3f/a04944_1af431933dfa683a73aa26c11bd65b16a3" prot="private" static="no" mutable="no">
-        <type>ashes::DescriptorSetPoolPtr</type>
-        <definition>ashes::DescriptorSetPoolPtr castor3d::TransparentResolvePass::m_uboDescriptorPool</definition>
-        <argsstring></argsstring>
-        <name>m_uboDescriptorPool</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="133" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="133" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d3f/a04944_1a1a513fcc0b1429cf27a976cfcefb3be4" prot="private" static="no" mutable="no">
-        <type>ashes::DescriptorSetPtr</type>
-        <definition>ashes::DescriptorSetPtr castor3d::TransparentResolvePass::m_uboDescriptorSet</definition>
-        <argsstring></argsstring>
-        <name>m_uboDescriptorSet</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="134" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="134" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d3f/a04944_1a92cd280822d0c9b9530cf49ce15fb1db" prot="private" static="no" mutable="no">
-        <type>ashes::DescriptorSetLayoutPtr</type>
-        <definition>ashes::DescriptorSetLayoutPtr castor3d::TransparentResolvePass::m_texDescriptorLayout</definition>
-        <argsstring></argsstring>
-        <name>m_texDescriptorLayout</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="135" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="135" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d3f/a04944_1a579acff00cadbef77a1832f2f1c12bf3" prot="private" static="no" mutable="no">
-        <type>ashes::DescriptorSetPoolPtr</type>
-        <definition>ashes::DescriptorSetPoolPtr castor3d::TransparentResolvePass::m_texDescriptorPool</definition>
-        <argsstring></argsstring>
-        <name>m_texDescriptorPool</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="136" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="136" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d3f/a04944_1a54860e18bea247f3baed5124011d5f5c" prot="private" static="no" mutable="no">
-        <type>ashes::DescriptorSetPtr</type>
-        <definition>ashes::DescriptorSetPtr castor3d::TransparentResolvePass::m_texDescriptorSet</definition>
-        <argsstring></argsstring>
-        <name>m_texDescriptorSet</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="137" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="137" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d3f/a04944_1a57872c072cc1c8cf5507fe738a60bc3e" prot="private" static="no" mutable="no">
-        <type>ashes::RenderPassPtr</type>
-        <definition>ashes::RenderPassPtr castor3d::TransparentResolvePass::m_renderPass</definition>
-        <argsstring></argsstring>
-        <name>m_renderPass</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="138" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="138" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d3f/a04944_1a0fc6f5b40275d6de7d6a8539c17ef610" prot="private" static="no" mutable="no">
-        <type>RenderPassTimerSPtr</type>
-        <definition>RenderPassTimerSPtr castor3d::TransparentResolvePass::m_timer</definition>
-        <argsstring></argsstring>
-        <name>m_timer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="139" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="139" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d3f/a04944_1a547446f088819b383b038de825f5676d" prot="private" static="no" mutable="no">
-        <type><ref refid="da/d1e/a01479_1ac02b883edb5fda8b3ba75648eb729f3b" kindref="member">FinalCombineProgramMap</ref></type>
-        <definition>FinalCombineProgramMap castor3d::TransparentResolvePass::m_programs</definition>
-        <argsstring></argsstring>
-        <name>m_programs</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="140" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="140" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d3f/a04944_1a8c4a67c1cbd94416d503974970b6ada8" prot="private" static="no" mutable="no">
-        <type>ashes::FrameBufferPtr</type>
-        <definition>ashes::FrameBufferPtr castor3d::TransparentResolvePass::m_frameBuffer</definition>
-        <argsstring></argsstring>
-        <name>m_frameBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="141" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="141" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d3f/a04944_1a9b8ff00a2e60b0ba07eb04b1b4068793" prot="private" static="no" mutable="no">
-        <type>ashes::SemaphorePtr</type>
-        <definition>ashes::SemaphorePtr castor3d::TransparentResolvePass::m_semaphore</definition>
-        <argsstring></argsstring>
-        <name>m_semaphore</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="142" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="142" bodyend="-1"/>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="39" column="12" bodyfile="Shader/Ubos/OverlayUbo.hpp" bodystart="39" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d7/d3f/a04944_1a9f65f1eeb88f57b60bacf7bbbfc75d23" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d7/d3f/a04944_1a7fada12fa272a841f97cf38b07dc41ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::OverlayData::OverlayData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>OverlayData</name>
+        <qualifiedname>castor3d::shader::OverlayData::OverlayData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="21" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d3f/a04944_1a4747ccef18af340fecaedfbf6faf9fd1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
-        <definition>castor3d::TransparentResolvePass::TransparentResolvePass</definition>
-        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, castor::Size const &amp;size, SceneUbo &amp;sceneUbo, HdrConfigUbo const &amp;hdrConfigUbo, GpInfoUbo const &amp;gpInfoUbo, TransparentPassResult const &amp;wbResult, ashes::ImageView const &amp;colourView)</argsstring>
-        <name>TransparentResolvePass</name>
+        <definition>castor3d::shader::OverlayData::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, OverlayData)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::OverlayData::SDW_DeclStructInstance</qualifiedname>
         <param>
-          <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
+          <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
         </param>
         <param>
-          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>castor::Size const &amp;</type>
-          <declname>size</declname>
-        </param>
-        <param>
-          <type><ref refid="df/d63/a05528" kindref="compound">SceneUbo</ref> &amp;</type>
-          <declname>sceneUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/d06/a05468" kindref="compound">HdrConfigUbo</ref> const &amp;</type>
-          <declname>hdrConfigUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/d22/a05464" kindref="compound">GpInfoUbo</ref> const &amp;</type>
-          <declname>gpInfoUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="dc/de0/a04936" kindref="compound">TransparentPassResult</ref> const &amp;</type>
-          <declname>wbResult</declname>
-        </param>
-        <param>
-          <type>ashes::ImageView const &amp;</type>
-          <declname>colourView</declname>
+          <type><ref refid="d7/d3f/a04944" kindref="compound">OverlayData</ref></type>
         </param>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">engine</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The engine. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">size</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render size. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">sceneUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The scene UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">hdrConfigUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The HDR UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">gpInfoUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The geometry pass UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">wbResult</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The accumulation pass buffers. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">colourView</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The target colour view. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="84" column="1"/>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="24" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="d7/d3f/a04944_1ad42379346985c00e274e15eb78c7f06a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::TransparentResolvePass::~TransparentResolvePass</definition>
-        <argsstring>()</argsstring>
-        <name>~TransparentResolvePass</name>
+      <memberdef kind="function" id="d7/d3f/a04944_1afaffe38eb54fa99c996da05d1c19516b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec2</type>
+        <definition>C3D_API sdw::Vec2 castor3d::shader::OverlayData::getOverlaySize</definition>
+        <argsstring>() const</argsstring>
+        <name>getOverlaySize</name>
+        <qualifiedname>castor3d::shader::OverlayData::getOverlaySize</qualifiedname>
         <briefdescription>
-<para>Destructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="98" column="1"/>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="29" column="19"/>
       </memberdef>
-      <memberdef kind="function" id="d7/d3f/a04944_1a322992f13d6cdab86838c6300b0a1cd3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>ashes::Semaphore const  &amp;</type>
-        <definition>ashes::Semaphore const&amp; castor3d::TransparentResolvePass::render</definition>
-        <argsstring>(RenderDevice const &amp;device, FogType fogType, ashes::Semaphore const &amp;toWait)</argsstring>
-        <name>render</name>
+      <memberdef kind="function" id="d7/d3f/a04944_1a2d8237b2e05e8e6fe00240238a74edb8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec2</type>
+        <definition>C3D_API sdw::Vec2 castor3d::shader::OverlayData::modelToView</definition>
+        <argsstring>(sdw::Vec2 const &amp;pos) const</argsstring>
+        <name>modelToView</name>
+        <qualifiedname>castor3d::shader::OverlayData::modelToView</qualifiedname>
         <param>
-          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d1e/a01479_1a99a6b51dbe68abcf95c70f03008dd3a3" kindref="member">FogType</ref></type>
-          <declname>fogType</declname>
-        </param>
-        <param>
-          <type>ashes::Semaphore const &amp;</type>
-          <declname>toWait</declname>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>pos</declname>
         </param>
         <briefdescription>
-<para>Renders the combine pass. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">fogType</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The fog type. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">toWait</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The semaphore from the previous render pass. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="111" column="1"/>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="30" column="19"/>
       </memberdef>
-      <memberdef kind="function" id="d7/d3f/a04944_1ac2565e039621a039aa31b482d493384e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::TransparentResolvePass::accept</definition>
-        <argsstring>(RenderTechniqueVisitor &amp;visitor)</argsstring>
-        <name>accept</name>
-        <param>
-          <type><ref refid="db/d15/a04928" kindref="compound">RenderTechniqueVisitor</ref> &amp;</type>
-          <declname>visitor</declname>
-        </param>
+      <memberdef kind="function" id="d7/d3f/a04944_1ae037b1f5fdc0aa59edf6d8b25ba6a0b7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::UInt</type>
+        <definition>C3D_API sdw::UInt castor3d::shader::OverlayData::getMaterialIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>getMaterialIndex</name>
+        <qualifiedname>castor3d::shader::OverlayData::getMaterialIndex</qualifiedname>
         <briefdescription>
-<para>Visitor acceptance function. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername>visitor</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The ... visitor. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="117" column="1"/>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="31" column="19"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d7/d3f/a04944_1a392a25ad08763c8b7a37c104b506e927" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="da/d94/a04940" kindref="compound">TransparentResolveProgram</ref> *</type>
-        <definition>TransparentResolveProgram* castor3d::TransparentResolvePass::doGetProgram</definition>
-        <argsstring>(RenderDevice const &amp;device, FogType type)</argsstring>
-        <name>doGetProgram</name>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d7/d3f/a04944_1ac3ee25a5e4724a7febb67999bb9844d9" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
+        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::OverlayData::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::OverlayData::makeType</qualifiedname>
         <param>
-          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d1e/a01479_1a99a6b51dbe68abcf95c70f03008dd3a3" kindref="member">FogType</ref></type>
-          <declname>type</declname>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -480,39 +145,64 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="120" column="1"/>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="26" column="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d3f/a04944_1a18559a70abe19ac0d29839d59170ab08" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::OverlayData::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::OverlayData::declare</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="27" column="32"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="60" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="59" bodyend="143"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::OverlayData</label>
+        <link refid="d7/d3f/a04944"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::OverlayData</label>
+        <link refid="d7/d3f/a04944"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Ubos/OverlayUbo.hpp" line="18" column="1" bodyfile="Shader/Ubos/OverlayUbo.hpp" bodystart="20" bodyend="40"/>
     <listofallmembers>
-      <member refid="d7/d3f/a04944_1ac2565e039621a039aa31b482d493384e" prot="public" virt="non-virtual"><scope>castor3d::TransparentResolvePass</scope><name>accept</name></member>
-      <member refid="d7/d3f/a04944_1a392a25ad08763c8b7a37c104b506e927" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolvePass</scope><name>doGetProgram</name></member>
-      <member refid="d7/d3f/a04944_1a0ff20bf8bd6e4090e6cd297dc470b8c1" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolvePass</scope><name>m_engine</name></member>
-      <member refid="d7/d3f/a04944_1a8c4a67c1cbd94416d503974970b6ada8" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolvePass</scope><name>m_frameBuffer</name></member>
-      <member refid="d7/d3f/a04944_1a8e859e8adc8e1884ebae76da50f9c622" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolvePass</scope><name>m_gpInfo</name></member>
-      <member refid="d7/d3f/a04944_1a547446f088819b383b038de825f5676d" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolvePass</scope><name>m_programs</name></member>
-      <member refid="d7/d3f/a04944_1a57872c072cc1c8cf5507fe738a60bc3e" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolvePass</scope><name>m_renderPass</name></member>
-      <member refid="d7/d3f/a04944_1a732b12fcfdd88a9a56c1622ee984772d" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolvePass</scope><name>m_sampler</name></member>
-      <member refid="d7/d3f/a04944_1add475a32fee557ddefe61f01a45aeae2" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolvePass</scope><name>m_sceneUbo</name></member>
-      <member refid="d7/d3f/a04944_1a9b8ff00a2e60b0ba07eb04b1b4068793" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolvePass</scope><name>m_semaphore</name></member>
-      <member refid="d7/d3f/a04944_1ab1436076c0953436bdddc1d3abd8ae19" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolvePass</scope><name>m_size</name></member>
-      <member refid="d7/d3f/a04944_1a92cd280822d0c9b9530cf49ce15fb1db" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolvePass</scope><name>m_texDescriptorLayout</name></member>
-      <member refid="d7/d3f/a04944_1a579acff00cadbef77a1832f2f1c12bf3" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolvePass</scope><name>m_texDescriptorPool</name></member>
-      <member refid="d7/d3f/a04944_1a54860e18bea247f3baed5124011d5f5c" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolvePass</scope><name>m_texDescriptorSet</name></member>
-      <member refid="d7/d3f/a04944_1a0fc6f5b40275d6de7d6a8539c17ef610" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolvePass</scope><name>m_timer</name></member>
-      <member refid="d7/d3f/a04944_1ab04f37e2c1595b94d4ccf1e3337b9a2c" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolvePass</scope><name>m_uboDescriptorLayout</name></member>
-      <member refid="d7/d3f/a04944_1af431933dfa683a73aa26c11bd65b16a3" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolvePass</scope><name>m_uboDescriptorPool</name></member>
-      <member refid="d7/d3f/a04944_1a1a513fcc0b1429cf27a976cfcefb3be4" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolvePass</scope><name>m_uboDescriptorSet</name></member>
-      <member refid="d7/d3f/a04944_1aca071dc65fe4355e487290fec369708e" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolvePass</scope><name>m_vertexBuffer</name></member>
-      <member refid="d7/d3f/a04944_1a4afbcc2475a9456d9ba0fde646831514" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolvePass</scope><name>m_vertexLayout</name></member>
-      <member refid="d7/d3f/a04944_1ad165d3780c0260bf1de701055161c07c" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolvePass</scope><name>m_wbResult</name></member>
-      <member refid="d7/d3f/a04944_1a322992f13d6cdab86838c6300b0a1cd3" prot="public" virt="non-virtual"><scope>castor3d::TransparentResolvePass</scope><name>render</name></member>
-      <member refid="d7/d3f/a04944_1a9f65f1eeb88f57b60bacf7bbbfc75d23" prot="public" virt="non-virtual"><scope>castor3d::TransparentResolvePass</scope><name>TransparentResolvePass</name></member>
-      <member refid="d7/d3f/a04944_1ad42379346985c00e274e15eb78c7f06a" prot="public" virt="non-virtual"><scope>castor3d::TransparentResolvePass</scope><name>~TransparentResolvePass</name></member>
+      <member refid="d7/d3f/a04944_1a18559a70abe19ac0d29839d59170ab08" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>declare</name></member>
+      <member refid="d7/d3f/a04944_1ae037b1f5fdc0aa59edf6d8b25ba6a0b7" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>getMaterialIndex</name></member>
+      <member refid="d7/d3f/a04944_1afaffe38eb54fa99c996da05d1c19516b" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>getOverlaySize</name></member>
+      <member refid="d7/d3f/a04944_1ad9967d754321f997d51cc6d28da3512b" prot="private" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>m_positionRatio</name></member>
+      <member refid="d7/d3f/a04944_1affe8daf215bdea4aa3b0e13c68b1b2d5" prot="private" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>m_renderSizeIndex</name></member>
+      <member refid="d7/d3f/a04944_1ac3ee25a5e4724a7febb67999bb9844d9" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>makeType</name></member>
+      <member refid="d7/d3f/a04944_1a2d8237b2e05e8e6fe00240238a74edb8" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>modelToView</name></member>
+      <member refid="d7/d3f/a04944_1a7fada12fa272a841f97cf38b07dc41ad" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>OverlayData</name></member>
+      <member refid="d7/d3f/a04944_1a4747ccef18af340fecaedfbf6faf9fd1" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>SDW_DeclStructInstance</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

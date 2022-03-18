@@ -1,599 +1,538 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d0/d8e/a03828" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::ParametersT</compoundname>
-    <includes local="no">Parameter.hpp</includes>
-    <templateparamlist>
-      <param>
-        <type>typename</type>
-        <declname>KeyT</declname>
-        <defname>KeyT</defname>
-      </param>
-    </templateparamlist>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d0/d8e/a03828_1a0b6c14c5ab579f8725c3f0588987eda9" prot="private" static="no" mutable="no">
-        <type>ParamNameMap</type>
-        <definition>ParamNameMap castor3d::ParametersT&lt; KeyT &gt;::m_values</definition>
+    <compoundname>castor3d::GaussianBlur</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <includes local="no">GaussianBlur.hpp</includes>
+    <innerclass refid="d6/d6e/a03832" prot="public">castor3d::GaussianBlur::Configuration</innerclass>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d0/d8e/a03828_1a68f253e5790c042fdd8e5a00746a68a6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>crg::FramePass const &amp;</type>
+        <definition>crg::FramePass const  &amp; castor3d::GaussianBlur::getLastPass</definition>
+        <argsstring>() const</argsstring>
+        <name>getLastPass</name>
+        <qualifiedname>castor3d::GaussianBlur::getLastPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="87" column="23" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="87" bodyend="91"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d0/d8e/a03828_1ad4e5e92fc3459d70640cdc903ecc179b" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::GaussianBlur::Config</definition>
         <argsstring></argsstring>
-        <name>m_values</name>
+        <name>Config</name>
+        <qualifiedname>castor3d::GaussianBlur::Config</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="337" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="337" bodyend="-1"/>
+        <location file="Render/Passes/GaussianBlur.hpp" line="95" column="37" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d8e/a03828_1a3ea0db3cb529a51262383c2989e1db5b" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::GaussianBlur::Coefficients</definition>
+        <argsstring></argsstring>
+        <name>Coefficients</name>
+        <qualifiedname>castor3d::GaussianBlur::Coefficients</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="96" column="37" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d8e/a03828_1ad4e5e21985b62833eb4f0dbf94a7626d" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::GaussianBlur::CoefficientsCount</definition>
+        <argsstring></argsstring>
+        <name>CoefficientsCount</name>
+        <qualifiedname>castor3d::GaussianBlur::CoefficientsCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="97" column="37" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d8e/a03828_1ab2202e518ace50ccc9e2d3330396db0b" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::GaussianBlur::TextureSize</definition>
+        <argsstring></argsstring>
+        <name>TextureSize</name>
+        <qualifiedname>castor3d::GaussianBlur::TextureSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="98" column="37" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d8e/a03828_1af2348a695a12bfe432775545bf4838d3" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> constexpr uint32_t</type>
+        <definition>C3D_API constexpr uint32_t castor3d::GaussianBlur::MaxCoefficients</definition>
+        <argsstring></argsstring>
+        <name>MaxCoefficients</name>
+        <qualifiedname>castor3d::GaussianBlur::MaxCoefficients</qualifiedname>
+        <initializer>{ 60u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="99" column="35" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/d8e/a03828_1a0d61f67c0385ae9f43ef9e2afa136ae2" prot="private" static="no" mutable="no">
+        <type>crg::ImageViewIdArray</type>
+        <definition>crg::ImageViewIdArray castor3d::GaussianBlur::m_sources</definition>
+        <argsstring></argsstring>
+        <name>m_sources</name>
+        <qualifiedname>castor3d::GaussianBlur::m_sources</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="110" column="23" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d8e/a03828_1ab30654eaf6f1313920c4e73b7f740379" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::GaussianBlur::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::GaussianBlur::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="111" column="21" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d8e/a03828_1a34f37b843f71759abddfcba257c9256d" prot="private" static="no" mutable="no">
+        <type>crg::FramePass const  *</type>
+        <definition>crg::FramePass const* castor3d::GaussianBlur::m_lastPass</definition>
+        <argsstring></argsstring>
+        <name>m_lastPass</name>
+        <qualifiedname>castor3d::GaussianBlur::m_lastPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="112" column="23" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d8e/a03828_1a1913346dc6541fd391ac9c55610966c1" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::GaussianBlur::m_prefix</definition>
+        <argsstring></argsstring>
+        <name>m_prefix</name>
+        <qualifiedname>castor3d::GaussianBlur::m_prefix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="113" column="16" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d8e/a03828_1a4a3efe193043cbf7963ad5c8de9739e4" prot="private" static="no" mutable="no">
+        <type>VkExtent2D</type>
+        <definition>VkExtent2D castor3d::GaussianBlur::m_size</definition>
+        <argsstring></argsstring>
+        <name>m_size</name>
+        <qualifiedname>castor3d::GaussianBlur::m_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="114" column="12" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d8e/a03828_1a8d2b56bb09601c8fb3697b292ccbe1d0" prot="private" static="no" mutable="no">
+        <type>VkFormat</type>
+        <definition>VkFormat castor3d::GaussianBlur::m_format</definition>
+        <argsstring></argsstring>
+        <name>m_format</name>
+        <qualifiedname>castor3d::GaussianBlur::m_format</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="115" column="10" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d8e/a03828_1a6253944f00d689355fa2b940e694b0b5" prot="private" static="no" mutable="no">
+        <type>crg::ImageViewId</type>
+        <definition>crg::ImageViewId castor3d::GaussianBlur::m_intermediateView</definition>
+        <argsstring></argsstring>
+        <name>m_intermediateView</name>
+        <qualifiedname>castor3d::GaussianBlur::m_intermediateView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="116" column="18" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d8e/a03828_1a757e0e97a10cd6401ca91bbea7e69973" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/de2/a02508" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d6/d6e/a03832" kindref="compound">Configuration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::GaussianBlur::m_blurUbo</definition>
+        <argsstring></argsstring>
+        <name>m_blurUbo</name>
+        <qualifiedname>castor3d::GaussianBlur::m_blurUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="117" column="22" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d8e/a03828_1a203f1d1f86b229ade84bc64c486dbe78" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; float &gt;</type>
+        <definition>std::vector&lt; float &gt; castor3d::GaussianBlur::m_kernel</definition>
+        <argsstring></argsstring>
+        <name>m_kernel</name>
+        <qualifiedname>castor3d::GaussianBlur::m_kernel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="118" column="13" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="118" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d8e/a03828_1a418fc9a816389c81981f3a078ed5af09" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/d0e/a04744" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::GaussianBlur::m_vertexShader</definition>
+        <argsstring></argsstring>
+        <name>m_vertexShader</name>
+        <qualifiedname>castor3d::GaussianBlur::m_vertexShader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="119" column="14" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="119" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d8e/a03828_1a76c1c568e11817eab9b28da639250dec" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/d0e/a04744" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::GaussianBlur::m_pixelShaderX</definition>
+        <argsstring></argsstring>
+        <name>m_pixelShaderX</name>
+        <qualifiedname>castor3d::GaussianBlur::m_pixelShaderX</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="120" column="14" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d8e/a03828_1abd15274041d5579021c9097389453a69" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/d0e/a04744" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::GaussianBlur::m_pixelShaderY</definition>
+        <argsstring></argsstring>
+        <name>m_pixelShaderY</name>
+        <qualifiedname>castor3d::GaussianBlur::m_pixelShaderY</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="121" column="14" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d8e/a03828_1a9288c9b20182e196f404d6a914fcce22" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineShaderStageCreateInfoArray</type>
+        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::GaussianBlur::m_stagesX</definition>
+        <argsstring></argsstring>
+        <name>m_stagesX</name>
+        <qualifiedname>castor3d::GaussianBlur::m_stagesX</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="122" column="43" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d8e/a03828_1a6c304dadbb7637d55823a0b6fe1c92f0" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineShaderStageCreateInfoArray</type>
+        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::GaussianBlur::m_stagesY</definition>
+        <argsstring></argsstring>
+        <name>m_stagesY</name>
+        <qualifiedname>castor3d::GaussianBlur::m_stagesY</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="123" column="43" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="123" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d0/d8e/a03828_1a3c87031795661b1ec12983dc1c1599fd" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::ParametersT&lt; KeyT &gt;::ParametersT</definition>
-        <argsstring>()</argsstring>
-        <name>ParametersT</name>
+      <memberdef kind="function" id="d0/d8e/a03828_1a1b953d0ef156f450b6814a6d94e852bc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::GaussianBlur::GaussianBlur</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePass const &amp;previousPass, RenderDevice const &amp;device, castor::String const &amp;category, castor::String const &amp;prefix, crg::ImageViewIdArray const &amp;views, crg::ImageViewId const &amp;intermediateView, uint32_t kernelSize)</argsstring>
+        <name>GaussianBlur</name>
+        <qualifiedname>castor3d::GaussianBlur::GaussianBlur</qualifiedname>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>category</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>prefix</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewIdArray const &amp;</type>
+          <declname>views</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>intermediateView</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>kernelSize</declname>
+        </param>
         <briefdescription>
 <para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="25" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="25" bodyend="27"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d8e/a03828_1a60463ea4c2817dcf8633e73a7f307b48" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::ParametersT&lt; KeyT &gt;::~ParametersT</definition>
-        <argsstring>()</argsstring>
-        <name>~ParametersT</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="34" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="34" bodyend="36"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d8e/a03828_1a96cb2145223019c28b190229001f6be5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::ParametersT&lt; KeyT &gt;::parse</definition>
-        <argsstring>(castor::String const &amp;text)</argsstring>
-        <name>parse</name>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>text</declname>
-        </param>
-        <briefdescription>
-<para>Parses the given text into a parameters list. </para>
-        </briefdescription>
-        <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">text</parametername>
+<parametername direction="in">engine</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The source text. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="45" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="45" bodyend="70"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d8e/a03828_1ad5db1be40b7fb695857dd9e36c1fcbff" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename ValueT</type>
-          </param>
-        </templateparamlist>
-        <type>bool</type>
-        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::add</definition>
-        <argsstring>(KeyT const &amp;name, ValueT *values, uint32_t count)</argsstring>
-        <name>add</name>
-        <param>
-          <type>KeyT const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type>ValueT *</type>
-          <declname>values</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>count</declname>
-        </param>
-        <briefdescription>
-<para>adds a parameter </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="remark"><para>If a parameter with the given name already exists, nothing is done </para>
-</simplesect>
-<parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter name </para>
+<para>The engine. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">values</parametername>
+<parametername direction="in">device</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The parameter values </para>
+<para>The GPU device. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">count</parametername>
+<parametername direction="in">prefix</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The values count </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if a parameter with the given name already exists </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="88" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="88" bodyend="104"/>
-        <referencedby refid="d0/d8e/a03828_1a308156a2a8619c89a52f64b2c391efc3" compoundref="db/dbc/a00395" startline="135" endline="139">castor3d::ParametersT&lt; castor::String &gt;::add</referencedby>
-        <referencedby refid="d0/d8e/a03828_1a96cb2145223019c28b190229001f6be5" compoundref="db/dbc/a00395" startline="45" endline="70">castor3d::ParametersT&lt; castor::String &gt;::parse</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="d0/d8e/a03828_1a752ae446e1a04e0bc407260458af0ab8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::ParametersT&lt; KeyT &gt;::add</definition>
-        <argsstring>(ParametersT const &amp;parameters)</argsstring>
-        <name>add</name>
-        <param>
-          <type><ref refid="d0/d8e/a03828" kindref="compound">ParametersT</ref> const &amp;</type>
-          <declname>parameters</declname>
-        </param>
-        <briefdescription>
-<para>adds a parameters list. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">parameters</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameters list. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="113" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="113" bodyend="119"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d8e/a03828_1a308156a2a8619c89a52f64b2c391efc3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename ValueT</type>
-          </param>
-          <param>
-            <type>uint32_t</type>
-            <declname>N</declname>
-            <defname>N</defname>
-          </param>
-        </templateparamlist>
-        <type>bool</type>
-        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::add</definition>
-        <argsstring>(KeyT const &amp;name, ValueT const(&amp;values)[N])</argsstring>
-        <name>add</name>
-        <param>
-          <type>KeyT const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type>ValueT const(&amp;)</type>
-          <declname>values</declname>
-          <array>[N]</array>
-        </param>
-        <briefdescription>
-<para>adds a parameter </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="remark"><para>If a parameter with the given name already exists, nothing is done </para>
-</simplesect>
-<parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter name </para>
+<para>The pass name&apos;s prefix. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">values</parametername>
+<parametername direction="in">view</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The parameter values </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if a parameter with the given name already exists </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="135" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="135" bodyend="139"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d8e/a03828_1ae41f7406dafca84065a61cc27b6fc986" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename ValueT</type>
-          </param>
-        </templateparamlist>
-        <type>bool</type>
-        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::add</definition>
-        <argsstring>(KeyT const &amp;name, ValueT const &amp;value)</argsstring>
-        <name>add</name>
-        <param>
-          <type>KeyT const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type>ValueT const &amp;</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-<para>adds a parameter </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="remark"><para>If a parameter with the given name already exists, nothing is done </para>
-</simplesect>
-<parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter name </para>
+<para>The texture. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">value</parametername>
+<parametername direction="in">kernelSize</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The parameter value </para>
+<para>The kernel coefficients count. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if a parameter with the given name already exists </para>
-</simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="155" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="155" bodyend="159"/>
+        <location file="Render/Passes/GaussianBlur.hpp" line="44" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d0/d8e/a03828_1aa632d31dbf2ec8449dc4ad022c2fac0c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::add</definition>
-        <argsstring>(KeyT const &amp;name, castor::String const &amp;value)</argsstring>
-        <name>add</name>
+      <memberdef kind="function" id="d0/d8e/a03828_1a58eafbb83c781a99a6f4c90e8dd5090e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::GaussianBlur::GaussianBlur</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePass const &amp;previousPass, RenderDevice const &amp;device, castor::String const &amp;category, castor::String const &amp;prefix, crg::ImageViewIdArray const &amp;views, uint32_t kernelSize)</argsstring>
+        <name>GaussianBlur</name>
+        <qualifiedname>castor3d::GaussianBlur::GaussianBlur</qualifiedname>
         <param>
-          <type>KeyT const &amp;</type>
-          <declname>name</declname>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
         </param>
         <param>
           <type>castor::String const &amp;</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-<para>adds a string parameter </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="remark"><para>If a parameter with the given name already exists, nothing is done </para>
-</simplesect>
-<parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter name </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter value </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if a parameter with the given name already exists </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="174" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="174" bodyend="190"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d8e/a03828_1a77dfeca82fa204f525df3fd314fbf9a9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename ValueT</type>
-          </param>
-        </templateparamlist>
-        <type>bool</type>
-        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::set</definition>
-        <argsstring>(KeyT const &amp;name, ValueT const &amp;value)</argsstring>
-        <name>set</name>
-        <param>
-          <type>KeyT const &amp;</type>
-          <declname>name</declname>
+          <declname>category</declname>
         </param>
         <param>
-          <type>ValueT const &amp;</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-<para>Sets a parameter value. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter name </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter value </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if there is no parameter with the given name </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="204" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="204" bodyend="217"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d8e/a03828_1ad96af3a75d355cbb66a288d3c5776117" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename ValueT</type>
-          </param>
-        </templateparamlist>
-        <type>bool</type>
-        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::get</definition>
-        <argsstring>(KeyT const &amp;name, ValueT *values, uint32_t count) const</argsstring>
-        <name>get</name>
-        <param>
-          <type>KeyT const &amp;</type>
-          <declname>name</declname>
+          <type>castor::String const &amp;</type>
+          <declname>prefix</declname>
         </param>
         <param>
-          <type>ValueT *</type>
-          <declname>values</declname>
+          <type>crg::ImageViewIdArray const &amp;</type>
+          <declname>views</declname>
         </param>
         <param>
           <type>uint32_t</type>
-          <declname>count</declname>
+          <declname>kernelSize</declname>
         </param>
         <briefdescription>
-<para>Retrieves a parameter value. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter name </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="out">values</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter values </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">count</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The values available count </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if there is no parameter with the given name </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="233" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="233" bodyend="250"/>
-        <referencedby refid="d0/d8e/a03828_1ab2b2cb427182b47fde46cbbec82a2578" compoundref="db/dbc/a00395" startline="264" endline="268">castor3d::ParametersT&lt; castor::String &gt;::get</referencedby>
+        <location file="Render/Passes/GaussianBlur.hpp" line="52" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d0/d8e/a03828_1ab2b2cb427182b47fde46cbbec82a2578" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename ValueT</type>
-          </param>
-        </templateparamlist>
-        <type>bool</type>
-        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::get</definition>
-        <argsstring>(KeyT const &amp;name, ValueT &amp;value) const</argsstring>
-        <name>get</name>
+      <memberdef kind="function" id="d0/d8e/a03828_1a58c2cf08533cd3d35b199862b125b38c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::GaussianBlur::GaussianBlur</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePass const &amp;previousPass, RenderDevice const &amp;device, castor::String const &amp;category, castor::String const &amp;prefix, crg::ImageViewId const &amp;view, uint32_t kernelSize)</argsstring>
+        <name>GaussianBlur</name>
+        <qualifiedname>castor3d::GaussianBlur::GaussianBlur</qualifiedname>
         <param>
-          <type>KeyT const &amp;</type>
-          <declname>name</declname>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
         </param>
         <param>
-          <type>ValueT &amp;</type>
-          <declname>value</declname>
+          <type>crg::FramePass const &amp;</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>category</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>prefix</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>kernelSize</declname>
         </param>
         <briefdescription>
-<para>Retrieves a parameter value. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter name </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="out">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter value </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if there is no parameter with the given name </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="264" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="264" bodyend="268"/>
+        <location file="Render/Passes/GaussianBlur.hpp" line="59" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d0/d8e/a03828_1a11ebc07545b4a4c273f4ee8f0c04d661" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename ValueT</type>
-          </param>
-          <param>
-            <type>uint32_t</type>
-            <declname>N</declname>
-            <defname>N</defname>
-          </param>
-        </templateparamlist>
-        <type>bool</type>
-        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::get</definition>
-        <argsstring>(KeyT const &amp;name, ValueT(&amp;values)[N]) const</argsstring>
-        <name>get</name>
+      <memberdef kind="function" id="d0/d8e/a03828_1afa81eccee07c6555eed6f32654e9deec" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::GaussianBlur::GaussianBlur</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePass const &amp;previousPass, RenderDevice const &amp;device, castor::String const &amp;category, castor::String const &amp;prefix, crg::ImageViewId const &amp;view, crg::ImageViewId const &amp;intermediateView, uint32_t kernelSize)</argsstring>
+        <name>GaussianBlur</name>
+        <qualifiedname>castor3d::GaussianBlur::GaussianBlur</qualifiedname>
         <param>
-          <type>KeyT const &amp;</type>
-          <declname>name</declname>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
         </param>
         <param>
-          <type>ValueT(&amp;)</type>
-          <declname>values</declname>
-          <array>[N]</array>
+          <type>crg::FramePass const &amp;</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>category</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>prefix</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>intermediateView</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>kernelSize</declname>
         </param>
         <briefdescription>
-<para>Retrieves a parameter value. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter name </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="out">values</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter values </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if there is no parameter with the given name </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="282" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="282" bodyend="286"/>
+        <location file="Render/Passes/GaussianBlur.hpp" line="66" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d0/d8e/a03828_1ad29b8a638f6c203ca2198f6efebd990b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::get</definition>
-        <argsstring>(KeyT const &amp;name, castor::String &amp;value) const</argsstring>
-        <name>get</name>
+      <memberdef kind="function" id="d0/d8e/a03828_1af2e216aa9efeb3c908b1545ed2579a98" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::GaussianBlur::accept</definition>
+        <argsstring>(PipelineVisitorBase &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::GaussianBlur::accept</qualifiedname>
         <param>
-          <type>KeyT const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type>castor::String &amp;</type>
-          <declname>value</declname>
+          <type><ref refid="d3/d55/a03256" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
         </param>
         <briefdescription>
-<para>Retrieves a parameter value. </para>
+<para>Visitor acceptance function. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">name</parametername>
+<parametername>visitor</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The parameter name </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="out">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter value </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if there is no parameter with the given name </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="299" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="299" bodyend="312"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d8e/a03828_1ad57408a3beec0e65cac1ad1076c08e99" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename ValueT</type>
-          </param>
-        </templateparamlist>
-        <type>ValueT</type>
-        <definition>ValueT castor3d::ParametersT&lt; KeyT &gt;::get</definition>
-        <argsstring>(KeyT const &amp;name) const</argsstring>
-        <name>get</name>
-        <param>
-          <type>KeyT const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves a parameter value. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parameter name </para>
+<para>The ... visitor. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -601,107 +540,62 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="322" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="322" bodyend="327"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d8e/a03828_1a788809b2719ae6bd194e186572157ccb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>size_t</type>
-        <definition>size_t castor3d::ParametersT&lt; KeyT &gt;::size</definition>
-        <argsstring>() const</argsstring>
-        <name>size</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="329" column="1" bodyfile="Miscellaneous/Parameter.hpp" bodystart="329" bodyend="332"/>
-        <referencedby refid="d0/d8e/a03828_1aa632d31dbf2ec8449dc4ad022c2fac0c" compoundref="db/dbc/a00395" startline="174" endline="190">castor3d::ParametersT&lt; castor::String &gt;::add</referencedby>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d0/d8e/a03828_1a0a56400136af3687df2e576411636114" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::ParametersT&lt; KeyT &gt;::CU_DeclareVector</definition>
-        <argsstring>(uint8_t, Byte)</argsstring>
-        <name>CU_DeclareVector</name>
-        <param>
-          <type>uint8_t</type>
-        </param>
-        <param>
-          <type>Byte</type>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="335" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d8e/a03828_1a0b812d32700f91d14897935f83d08015" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::ParametersT&lt; KeyT &gt;::CU_DeclareTemplateMap</definition>
-        <argsstring>(KeyT, ByteArray, ParamName)</argsstring>
-        <name>CU_DeclareTemplateMap</name>
-        <param>
-          <type>KeyT</type>
-        </param>
-        <param>
-          <type>ByteArray</type>
-        </param>
-        <param>
-          <type>ParamName</type>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Parameter.hpp" line="336" column="1"/>
+        <location file="Render/Passes/GaussianBlur.hpp" line="77" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Configuration parameters. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="remark"><para>Pair of a name and binary data. </para>
-</simplesect>
-</para>
     </detaileddescription>
     <inheritancegraph>
-      <node id="2518">
-        <label>castor3d::ParametersT&lt; castor::String &gt;</label>
+      <node id="1">
+        <label>castor3d::GaussianBlur</label>
         <link refid="d0/d8e/a03828"/>
-        <childnode refid="2517" relation="template-instance">
-          <edgelabel>&lt; castor::String &gt;</edgelabel>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="2517">
-        <label>castor3d::ParametersT&lt; KeyT &gt;</label>
-        <link refid="d0/d8e/a03828"/>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
       </node>
     </inheritancegraph>
-    <location file="Miscellaneous/MiscellaneousModule.hpp" line="133" column="1" bodyfile="Miscellaneous/MiscellaneousModule.hpp" bodystart="133" bodyend="-1"/>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::GaussianBlur</label>
+        <link refid="d0/d8e/a03828"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Passes/GaussianBlur.hpp" line="24" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="26" bodyend="124"/>
     <listofallmembers>
-      <member refid="d0/d8e/a03828_1ad5db1be40b7fb695857dd9e36c1fcbff" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>add</name></member>
-      <member refid="d0/d8e/a03828_1a752ae446e1a04e0bc407260458af0ab8" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>add</name></member>
-      <member refid="d0/d8e/a03828_1a308156a2a8619c89a52f64b2c391efc3" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>add</name></member>
-      <member refid="d0/d8e/a03828_1ae41f7406dafca84065a61cc27b6fc986" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>add</name></member>
-      <member refid="d0/d8e/a03828_1aa632d31dbf2ec8449dc4ad022c2fac0c" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>add</name></member>
-      <member refid="d0/d8e/a03828_1a0b812d32700f91d14897935f83d08015" prot="private" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>CU_DeclareTemplateMap</name></member>
-      <member refid="d0/d8e/a03828_1a0a56400136af3687df2e576411636114" prot="private" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>CU_DeclareVector</name></member>
-      <member refid="d0/d8e/a03828_1ad96af3a75d355cbb66a288d3c5776117" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>get</name></member>
-      <member refid="d0/d8e/a03828_1ab2b2cb427182b47fde46cbbec82a2578" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>get</name></member>
-      <member refid="d0/d8e/a03828_1a11ebc07545b4a4c273f4ee8f0c04d661" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>get</name></member>
-      <member refid="d0/d8e/a03828_1ad29b8a638f6c203ca2198f6efebd990b" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>get</name></member>
-      <member refid="d0/d8e/a03828_1ad57408a3beec0e65cac1ad1076c08e99" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>get</name></member>
-      <member refid="d0/d8e/a03828_1a0b6c14c5ab579f8725c3f0588987eda9" prot="private" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>m_values</name></member>
-      <member refid="d0/d8e/a03828_1a3c87031795661b1ec12983dc1c1599fd" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>ParametersT</name></member>
-      <member refid="d0/d8e/a03828_1a96cb2145223019c28b190229001f6be5" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>parse</name></member>
-      <member refid="d0/d8e/a03828_1a77dfeca82fa204f525df3fd314fbf9a9" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>set</name></member>
-      <member refid="d0/d8e/a03828_1a788809b2719ae6bd194e186572157ccb" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>size</name></member>
-      <member refid="d0/d8e/a03828_1a60463ea4c2817dcf8633e73a7f307b48" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>~ParametersT</name></member>
+      <member refid="d0/d8e/a03828_1af2e216aa9efeb3c908b1545ed2579a98" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>accept</name></member>
+      <member refid="d0/d8e/a03828_1a3ea0db3cb529a51262383c2989e1db5b" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>Coefficients</name></member>
+      <member refid="d0/d8e/a03828_1ad4e5e21985b62833eb4f0dbf94a7626d" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>CoefficientsCount</name></member>
+      <member refid="d0/d8e/a03828_1ad4e5e92fc3459d70640cdc903ecc179b" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>Config</name></member>
+      <member refid="d0/d8e/a03828_1a1b953d0ef156f450b6814a6d94e852bc" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>GaussianBlur</name></member>
+      <member refid="d0/d8e/a03828_1a58eafbb83c781a99a6f4c90e8dd5090e" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>GaussianBlur</name></member>
+      <member refid="d0/d8e/a03828_1a58c2cf08533cd3d35b199862b125b38c" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>GaussianBlur</name></member>
+      <member refid="d0/d8e/a03828_1afa81eccee07c6555eed6f32654e9deec" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>GaussianBlur</name></member>
+      <member refid="d0/d8e/a03828_1a68f253e5790c042fdd8e5a00746a68a6" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>getLastPass</name></member>
+      <member refid="d0/d8e/a03828_1a757e0e97a10cd6401ca91bbea7e69973" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_blurUbo</name></member>
+      <member refid="d0/d8e/a03828_1ab30654eaf6f1313920c4e73b7f740379" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_device</name></member>
+      <member refid="d0/d8e/a03828_1a8d2b56bb09601c8fb3697b292ccbe1d0" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_format</name></member>
+      <member refid="d0/d8e/a03828_1a6253944f00d689355fa2b940e694b0b5" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_intermediateView</name></member>
+      <member refid="d0/d8e/a03828_1a203f1d1f86b229ade84bc64c486dbe78" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_kernel</name></member>
+      <member refid="d0/d8e/a03828_1a34f37b843f71759abddfcba257c9256d" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_lastPass</name></member>
+      <member refid="d0/d8e/a03828_1a76c1c568e11817eab9b28da639250dec" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_pixelShaderX</name></member>
+      <member refid="d0/d8e/a03828_1abd15274041d5579021c9097389453a69" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_pixelShaderY</name></member>
+      <member refid="d0/d8e/a03828_1a1913346dc6541fd391ac9c55610966c1" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_prefix</name></member>
+      <member refid="d0/d8e/a03828_1a4a3efe193043cbf7963ad5c8de9739e4" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_size</name></member>
+      <member refid="d0/d8e/a03828_1a0d61f67c0385ae9f43ef9e2afa136ae2" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_sources</name></member>
+      <member refid="d0/d8e/a03828_1a9288c9b20182e196f404d6a914fcce22" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_stagesX</name></member>
+      <member refid="d0/d8e/a03828_1a6c304dadbb7637d55823a0b6fe1c92f0" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_stagesY</name></member>
+      <member refid="d0/d8e/a03828_1a418fc9a816389c81981f3a078ed5af09" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_vertexShader</name></member>
+      <member refid="d0/d8e/a03828_1af2348a695a12bfe432775545bf4838d3" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>MaxCoefficients</name></member>
+      <member refid="d0/d8e/a03828_1ab2202e518ace50ccc9e2d3330396db0b" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>TextureSize</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

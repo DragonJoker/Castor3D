@@ -1,117 +1,134 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="db/d43/a00422" kind="file" language="C++">
-    <compoundname>Cone.hpp</compoundname>
-    <includes refid="d5/d5f/a00461" local="yes">Castor3D/Model/Mesh/MeshGenerator.hpp</includes>
+    <compoundname>VersionException.hpp</compoundname>
+    <includes refid="d3/d29/a00419" local="yes">Castor3D/Miscellaneous/Version.hpp</includes>
+    <includes local="no">CastorUtils/Exception/Exception.hpp</includes>
     <incdepgraph>
-      <node id="8210">
-        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      <node id="19">
+        <label>Castor3D/RequiredVersion.hpp</label>
       </node>
-      <node id="8213">
-        <label>ashespp/AshesPPPrerequisites.hpp</label>
-      </node>
-      <node id="8214">
-        <label>cstdint</label>
-      </node>
-      <node id="8212">
-        <label>CastorUtils/Math/Point.hpp</label>
-      </node>
-      <node id="8205">
-        <label>Castor3D/Castor3DModule.hpp</label>
-        <link refid="d5/d35/a00266"/>
-        <childnode refid="8206" relation="include">
-        </childnode>
-        <childnode refid="8207" relation="include">
-        </childnode>
-        <childnode refid="8208" relation="include">
-        </childnode>
-        <childnode refid="8209" relation="include">
-        </childnode>
-        <childnode refid="8210" relation="include">
-        </childnode>
-        <childnode refid="8211" relation="include">
-        </childnode>
-        <childnode refid="8212" relation="include">
-        </childnode>
-        <childnode refid="8213" relation="include">
-        </childnode>
-        <childnode refid="8214" relation="include">
-        </childnode>
-        <childnode refid="8215" relation="include">
-        </childnode>
-        <childnode refid="8216" relation="include">
-        </childnode>
-        <childnode refid="8217" relation="include">
-        </childnode>
-      </node>
-      <node id="8202">
-        <label>Castor3D/Model/Mesh/MeshGenerator.hpp</label>
-        <link refid="d5/d5f/a00461"/>
-        <childnode refid="8203" relation="include">
-        </childnode>
-        <childnode refid="8219" relation="include">
-        </childnode>
-      </node>
-      <node id="8216">
-        <label>string</label>
-      </node>
-      <node id="8204">
-        <label>Castor3D/Model/ModelModule.hpp</label>
-        <link refid="d7/def/a00521"/>
-        <childnode refid="8205" relation="include">
-        </childnode>
-      </node>
-      <node id="8209">
-        <label>CastorUtils/Exception/Assertion.hpp</label>
-      </node>
-      <node id="8206">
-        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
-      </node>
-      <node id="8208">
-        <label>CastorUtils/Design/OwnedBy.hpp</label>
-      </node>
-      <node id="8219">
-        <label>Castor3D/Miscellaneous/MiscellaneousModule.hpp</label>
-        <link refid="d4/d27/a00392"/>
-        <childnode refid="8205" relation="include">
-        </childnode>
-      </node>
-      <node id="8207">
+      <node id="6">
         <label>CastorUtils/Design/FlagCombination.hpp</label>
       </node>
-      <node id="8203">
-        <label>MeshModule.hpp</label>
-        <link refid="d2/d9d/a00464"/>
-        <childnode refid="8204" relation="include">
-        </childnode>
-        <childnode refid="8218" relation="include">
-        </childnode>
+      <node id="7">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
       </node>
-      <node id="8217">
-        <label>vector</label>
+      <node id="8">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
       </node>
-      <node id="8211">
+      <node id="20">
+        <label>CastorUtils/Exception/Exception.hpp</label>
+      </node>
+      <node id="9">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="10">
+        <label>CastorUtils/Graphics/Size.hpp</label>
+      </node>
+      <node id="11">
         <label>CastorUtils/Math/Coords.hpp</label>
       </node>
-      <node id="8218">
-        <label>CastorUtils/Design/Factory.hpp</label>
+      <node id="12">
+        <label>CastorUtils/Math/Point.hpp</label>
       </node>
-      <node id="8201">
-        <label>Model/Mesh/Generator/Cone.hpp</label>
-        <link refid="db/d43/a00422"/>
-        <childnode refid="8202" relation="include">
+      <node id="5">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="14">
+        <label>RenderGraph/FrameGraphPrerequisites.hpp</label>
+      </node>
+      <node id="4">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d6/d22/a00245"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
         </childnode>
       </node>
-      <node id="8215">
+      <node id="3">
+        <label>MiscellaneousModule.hpp</label>
+        <link refid="d7/d00/a00401"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Castor3D/Miscellaneous/Version.hpp</label>
+        <link refid="d3/d29/a00419"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>Miscellaneous/VersionException.hpp</label>
+        <link refid="db/d43/a00422"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="15">
+        <label>cstdint</label>
+      </node>
+      <node id="16">
         <label>memory</label>
       </node>
+      <node id="17">
+        <label>string</label>
+      </node>
+      <node id="18">
+        <label>vector</label>
+      </node>
     </incdepgraph>
-    <innerclass refid="d0/de0/a03868" prot="public">castor3d::Cone</innerclass>
-    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <innerclass refid="d2/dd0/a03283" prot="public">castor3d::VersionException</innerclass>
+    <innernamespace refid="da/de3/a01398">castor3d</innernamespace>
+      <sectiondef kind="define">
+      <memberdef kind="define" id="db/d43/a00422_1a9d9cdc8049e0a356062d1f34e8475837" prot="public" static="no">
+        <name>CASTOR_VERSION_EXCEPTION</name>
+        <param><defname>given</defname></param>
+        <param><defname>expected</defname></param>
+        <initializer>throw <ref refid="d2/dd0/a03283" kindref="compound">castor3d::VersionException</ref>{ given, expected, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/VersionException.hpp" line="41" column="9" bodyfile="Miscellaneous/VersionException.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Model/Mesh/Generator/Cone.hpp"/>
+    <location file="Miscellaneous/VersionException.hpp"/>
   </compounddef>
 </doxygen>

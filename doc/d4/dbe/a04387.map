@@ -1,5 +1,8 @@
-<map id="castor3d::RenderQuadBuilder" name="castor3d::RenderQuadBuilder">
-<area shape="rect" id="node1" title=" " alt="" coords="23,215,215,241"/>
-<area shape="rect" id="node2" href="$db/d20/a04356.html" title=" " alt="" coords="5,124,233,165"/>
-<area shape="rect" id="node3" href="$db/d20/a04356.html" title="Used to create a RenderQuad variable." alt="" coords="23,5,215,47"/>
+<map id="castor3d::AnimationInstance" name="castor3d::AnimationInstance">
+<area shape="rect" id="node1" title=" " alt="" coords="243,97,429,124"/>
+<area shape="rect" id="node3" href="$d0/dd0/a04400.html" title=" " alt="" coords="477,5,696,32"/>
+<area shape="rect" id="node4" href="$d5/dbb/a04408.html" title=" " alt="" coords="484,57,689,98"/>
+<area shape="rect" id="node5" href="$d9/d51/a04420.html" title=" " alt="" coords="492,122,681,163"/>
+<area shape="rect" id="node6" href="$dc/dc7/a04440.html" title=" " alt="" coords="496,187,677,229"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,90,195,131"/>
 </map>

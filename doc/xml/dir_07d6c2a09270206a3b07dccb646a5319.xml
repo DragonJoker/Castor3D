@@ -1,15 +1,13 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_07d6c2a09270206a3b07dccb646a5319" kind="dir">
     <compoundname>Event/Frame</compoundname>
-    <innerfile refid="dc/d5d/a00278">CleanupEvent.hpp</innerfile>
-    <innerfile refid="d2/d04/a00281">CpuFrameEvent.hpp</innerfile>
-    <innerfile refid="db/dc3/a00284">CpuFunctorEvent.hpp</innerfile>
-    <innerfile refid="d6/d7f/a00287">FrameEventModule.hpp</innerfile>
-    <innerfile refid="de/d25/a00290">FrameListener.hpp</innerfile>
-    <innerfile refid="d6/d82/a00293">GpuFrameEvent.hpp</innerfile>
-    <innerfile refid="db/d7b/a00296">GpuFunctorEvent.hpp</innerfile>
-    <innerfile refid="df/d95/a00299">InitialiseEvent.hpp</innerfile>
+    <innerfile refid="d9/d39/a00257">CpuFrameEvent.hpp</innerfile>
+    <innerfile refid="dd/dd7/a00260">CpuFunctorEvent.hpp</innerfile>
+    <innerfile refid="df/da9/a00263">FrameEventModule.hpp</innerfile>
+    <innerfile refid="d5/d35/a00266">FrameListener.hpp</innerfile>
+    <innerfile refid="d5/d42/a00269">GpuFrameEvent.hpp</innerfile>
+    <innerfile refid="d9/dd6/a00272">GpuFunctorEvent.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

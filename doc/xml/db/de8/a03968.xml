@@ -1,57 +1,998 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="db/de8/a03968" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::LineIndices</compoundname>
-    <includes local="no">LineIndices.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="db/de8/a03968_1ac8d2569b7f8e6030b425ffb8e651b617" prot="public" static="no" mutable="no">
-        <type>std::array&lt; uint32_t, 2 &gt;</type>
-        <definition>std::array&lt; uint32_t, 2 &gt; castor3d::LineIndices::m_index</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="db/de8/a03968" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::RenderLoop</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <derivedcompoundref refid="d1/df0/a03976" prot="public" virt="non-virtual">castor3d::RenderLoopAsync</derivedcompoundref>
+    <derivedcompoundref refid="dd/d78/a03980" prot="public" virt="non-virtual">castor3d::RenderLoopSync</derivedcompoundref>
+    <includes local="no">RenderLoop.hpp</includes>
+    <innerclass refid="de/d6f/a03972" prot="protected">castor3d::RenderLoop::UploadResources</innerclass>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="db/de8/a03968_1a886e62492a8383af4e913c392e9c13af" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr uint32_t</type>
+        <definition>constexpr uint32_t castor3d::RenderLoop::UnlimitedFPS</definition>
         <argsstring></argsstring>
-        <name>m_index</name>
+        <name>UnlimitedFPS</name>
+        <qualifiedname>castor3d::RenderLoop::UnlimitedFPS</qualifiedname>
+        <initializer>= 0xFFFFFFFFu</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The indices. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LineIndices.hpp" line="15" column="1" bodyfile="Model/Mesh/Submesh/Component/LineIndices.hpp" bodystart="15" bodyend="-1"/>
-        <referencedby refid="db/dc8/a03964_1acd37f954f3a44a3ae092cd5431253fc7" compoundref="d5/d0f/a00494" startline="33" endline="37">castor3d::Line::operator[]</referencedby>
-        <referencedby refid="da/d1e/a01479_1a1281cbf080321b1041acc691028f9d97" compoundref="d5/db1/a00140" startline="1303" endline="1310">castor3d::prepareChunkData</referencedby>
+        <location file="Render/RenderLoop.hpp" line="28" column="27" bodyfile="Render/RenderLoop.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="db/de8/a03968_1a12c0e4650d67b30b6d3d8af64a6fdea6" prot="protected" static="no" mutable="no">
+        <type><ref refid="d2/dbb/a04072" kindref="compound">RenderSystem</ref> &amp;</type>
+        <definition>RenderSystem&amp; castor3d::RenderLoop::m_renderSystem</definition>
+        <argsstring></argsstring>
+        <name>m_renderSystem</name>
+        <qualifiedname>castor3d::RenderLoop::m_renderSystem</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The current <ref refid="d2/dbb/a04072" kindref="compound">RenderSystem</ref>. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="234" column="15" bodyfile="Render/RenderLoop.hpp" bodystart="234" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/de8/a03968_1aca51dfa60d759d003d2e706b33124933" prot="protected" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderLoop::m_wantedFPS</definition>
+        <argsstring></argsstring>
+        <name>m_wantedFPS</name>
+        <qualifiedname>castor3d::RenderLoop::m_wantedFPS</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The wanted FPS, used in threaded render mode. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="237" column="10" bodyfile="Render/RenderLoop.hpp" bodystart="237" bodyend="-1"/>
+        <referencedby refid="db/de8/a03968_1a4f497f75e762e1308a6d972114f845ac" compoundref="d5/d72/a00803" startline="197" endline="200">getWantedFps</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="db/de8/a03968_1a3fdea4c3d454da13b6874d71d031772a" prot="protected" static="no" mutable="no">
+        <type>castor::Milliseconds</type>
+        <definition>castor::Milliseconds castor3d::RenderLoop::m_frameTime</definition>
+        <argsstring></argsstring>
+        <name>m_frameTime</name>
+        <qualifiedname>castor3d::RenderLoop::m_frameTime</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The wanted time for a frame. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="240" column="22" bodyfile="Render/RenderLoop.hpp" bodystart="240" bodyend="-1"/>
+        <referencedby refid="db/de8/a03968_1abce67ba6a22426d1555dcfb813432242" compoundref="d5/d72/a00803" startline="187" endline="190">getFrameTime</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="db/de8/a03968_1aadd20893be5df0f0a8bdfe52b5f4d148" prot="protected" static="no" mutable="no">
+        <type>std::atomic&lt; castor::Microseconds &gt;</type>
+        <definition>std::atomic&lt; castor::Microseconds &gt; castor3d::RenderLoop::m_lastFrameTime</definition>
+        <argsstring></argsstring>
+        <name>m_lastFrameTime</name>
+        <qualifiedname>castor3d::RenderLoop::m_lastFrameTime</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The elapsed time for the last frame. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="243" column="13" bodyfile="Render/RenderLoop.hpp" bodystart="243" bodyend="-1"/>
+        <referencedby refid="db/de8/a03968_1a74acb481115f9d2c3084bfb81a3dbe3f" compoundref="d5/d72/a00803" startline="207" endline="210">getLastFrameTime</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="db/de8/a03968_1a3df1d0d853b8d30a64f9491ba2b64206" prot="protected" static="no" mutable="no">
+        <type>std::unique_ptr&lt; <ref refid="d4/d5b/a03496" kindref="compound">DebugOverlays</ref> &gt;</type>
+        <definition>std::unique_ptr&lt; DebugOverlays &gt; castor3d::RenderLoop::m_debugOverlays</definition>
+        <argsstring></argsstring>
+        <name>m_debugOverlays</name>
+        <qualifiedname>castor3d::RenderLoop::m_debugOverlays</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The debug overlays. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="246" column="17" bodyfile="Render/RenderLoop.hpp" bodystart="246" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/de8/a03968_1acda37a7285dc00458860bd65822d34a6" prot="protected" static="no" mutable="no">
+        <type>std::mutex</type>
+        <definition>std::mutex castor3d::RenderLoop::m_debugOverlaysMtx</definition>
+        <argsstring></argsstring>
+        <name>m_debugOverlaysMtx</name>
+        <qualifiedname>castor3d::RenderLoop::m_debugOverlaysMtx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="247" column="12" bodyfile="Render/RenderLoop.hpp" bodystart="247" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/de8/a03968_1a110d978875d737faa37572c0d01417f3" prot="protected" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="de/d6f/a03972" kindref="compound">UploadResources</ref>, 2u &gt;</type>
+        <definition>std::array&lt; UploadResources, 2u &gt; castor3d::RenderLoop::m_uploadResources</definition>
+        <argsstring></argsstring>
+        <name>m_uploadResources</name>
+        <qualifiedname>castor3d::RenderLoop::m_uploadResources</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="261" column="12" bodyfile="Render/RenderLoop.hpp" bodystart="261" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/de8/a03968_1a03f6c7a9ec87f3e1e24dfc1bf8868b89" prot="protected" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderLoop::m_currentUpdate</definition>
+        <argsstring></argsstring>
+        <name>m_currentUpdate</name>
+        <qualifiedname>castor3d::RenderLoop::m_currentUpdate</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="262" column="10" bodyfile="Render/RenderLoop.hpp" bodystart="262" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/de8/a03968_1a6ff0941180c29396e2176994260c9fd5" prot="protected" static="no" mutable="no">
+        <type>crg::SemaphoreWaitArray</type>
+        <definition>crg::SemaphoreWaitArray castor3d::RenderLoop::m_toWait</definition>
+        <argsstring></argsstring>
+        <name>m_toWait</name>
+        <qualifiedname>castor3d::RenderLoop::m_toWait</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="263" column="25" bodyfile="Render/RenderLoop.hpp" bodystart="263" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="db/de8/a03968_1ac732a05b63ca16e9203fc139a9e633e8" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderLoop::m_first</definition>
+        <argsstring></argsstring>
+        <name>m_first</name>
+        <qualifiedname>castor3d::RenderLoop::m_first</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="266" column="6" bodyfile="Render/RenderLoop.hpp" bodystart="266" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/de8/a03968_1a988efd95b7ab6cc581a3e663e35616e5" prot="private" static="no" mutable="no">
+        <type><ref refid="dd/dde/a03944" kindref="compound">QueueData</ref> const  *</type>
+        <definition>QueueData const* castor3d::RenderLoop::m_queueData</definition>
+        <argsstring></argsstring>
+        <name>m_queueData</name>
+        <qualifiedname>castor3d::RenderLoop::m_queueData</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="267" column="18" bodyfile="Render/RenderLoop.hpp" bodystart="267" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/de8/a03968_1a7b4ad346335b41bdfa0a52bf5c2b8b9f" prot="private" static="no" mutable="no">
+        <type>std::unordered_set&lt; <ref refid="d6/df1/a04660" kindref="compound">ShaderBuffer</ref> const * &gt;</type>
+        <definition>std::unordered_set&lt; ShaderBuffer const * &gt; castor3d::RenderLoop::m_shaderBuffers</definition>
+        <argsstring></argsstring>
+        <name>m_shaderBuffers</name>
+        <qualifiedname>castor3d::RenderLoop::m_shaderBuffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="268" column="20" bodyfile="Render/RenderLoop.hpp" bodystart="268" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/de8/a03968_1a3b6d4587b9d875ee203a0e312b297e2b" prot="private" static="no" mutable="no">
+        <type>std::mutex</type>
+        <definition>std::mutex castor3d::RenderLoop::m_shaderBuffersMtx</definition>
+        <argsstring></argsstring>
+        <name>m_shaderBuffersMtx</name>
+        <qualifiedname>castor3d::RenderLoop::m_shaderBuffersMtx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="269" column="12" bodyfile="Render/RenderLoop.hpp" bodystart="269" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/de8/a03968_1a4a120c4fe2819ab38ec6e60a1988d2ac" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; crg::FramePassTimer &gt;</type>
+        <definition>std::unique_ptr&lt; crg::FramePassTimer &gt; castor3d::RenderLoop::m_uploadTimer</definition>
+        <argsstring></argsstring>
+        <name>m_uploadTimer</name>
+        <qualifiedname>castor3d::RenderLoop::m_uploadTimer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="270" column="17" bodyfile="Render/RenderLoop.hpp" bodystart="270" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/de8/a03968_1a92f9f97a35dd1d47e537f6e6024952b7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::RenderLoop::RenderLoop</definition>
+        <argsstring>(Engine &amp;engine, uint32_t wantedFPS, bool isAsync)</argsstring>
+        <name>RenderLoop</name>
+        <qualifiedname>castor3d::RenderLoop::RenderLoop</qualifiedname>
+        <param>
+          <type><ref refid="d7/d73/a02708" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>wantedFPS</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isAsync</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">wantedFPS</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The wanted FPS count. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">isAsync</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tells if the render loop is asynchronous. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="43" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="db/de8/a03968_1a98370f8e34e7f81f1c9277129c71b718" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::RenderLoop::~RenderLoop</definition>
+        <argsstring>()</argsstring>
+        <name>~RenderLoop</name>
+        <qualifiedname>castor3d::RenderLoop::~RenderLoop</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="52" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="db/de8/a03968_1ad8988f97407d38c23b3f7ab1c5aa6c91" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderLoop::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor3d::RenderLoop::cleanup</qualifiedname>
+        <briefdescription>
+<para>Cleans up the render loop. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="59" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/de8/a03968_1aebff987d3a1a626374752685dff11c05" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderLoop::showDebugOverlays</definition>
+        <argsstring>(bool show)</argsstring>
+        <name>showDebugOverlays</name>
+        <qualifiedname>castor3d::RenderLoop::showDebugOverlays</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>show</declname>
+        </param>
+        <briefdescription>
+<para>Show or hide debug overlays. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">show</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The status. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="68" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/de8/a03968_1a9920fa7ccc5a06415b08e238e1f4754f" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::RenderLoop::enableVSync</definition>
+        <argsstring>(bool enable)</argsstring>
+        <name>enableVSync</name>
+        <qualifiedname>castor3d::RenderLoop::enableVSync</qualifiedname>
+        <reimplementedby refid="d1/df0/a03976_1a80f64ba0cc5c44dbddcf0d2e4e6c31ce">enableVSync</reimplementedby>
+        <param>
+          <type>bool</type>
+          <declname>enable</declname>
+        </param>
+        <briefdescription>
+<para>Updates the V-Sync status. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">enable</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The status. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="77" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="db/de8/a03968_1ab0cce3459fd96396758d47675c0d0f45" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderLoop::flushEvents</definition>
+        <argsstring>()</argsstring>
+        <name>flushEvents</name>
+        <qualifiedname>castor3d::RenderLoop::flushEvents</qualifiedname>
+        <briefdescription>
+<para>Flushs all events of all frame listeners. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="84" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/de8/a03968_1a26a0b1e129f0ee670917a424b133e012" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::RenderLoop::registerTimer</definition>
+        <argsstring>(castor::String const &amp;category, FramePassTimer &amp;timer)</argsstring>
+        <name>registerTimer</name>
+        <qualifiedname>castor3d::RenderLoop::registerTimer</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>category</declname>
+        </param>
+        <param>
+          <type>FramePassTimer &amp;</type>
+          <declname>timer</declname>
+        </param>
+        <briefdescription>
+<para>Registers a render pass timer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">timer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The timer to register. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The query ID. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="95" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="db/de8/a03968_1a32c564fbdef938f9fd21f10834c028ac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderLoop::unregisterTimer</definition>
+        <argsstring>(castor::String const &amp;category, FramePassTimer &amp;timer)</argsstring>
+        <name>unregisterTimer</name>
+        <qualifiedname>castor3d::RenderLoop::unregisterTimer</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>category</declname>
+        </param>
+        <param>
+          <type>FramePassTimer &amp;</type>
+          <declname>timer</declname>
+        </param>
+        <briefdescription>
+<para>Unregisters a render pass timer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">timer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The timer to unregister. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="105" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/de8/a03968_1a0d67947c5b1193af46bbaf0e0cc7585a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderLoop::registerBuffer</definition>
+        <argsstring>(ShaderBuffer const &amp;buffer)</argsstring>
+        <name>registerBuffer</name>
+        <qualifiedname>castor3d::RenderLoop::registerBuffer</qualifiedname>
+        <param>
+          <type><ref refid="d6/df1/a04660" kindref="compound">ShaderBuffer</ref> const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Registers a <ref refid="d6/df1/a04660" kindref="compound">ShaderBuffer</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="113" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/de8/a03968_1a602c3f0c8a347db8331c9a5926ce0235" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderLoop::unregisterBuffer</definition>
+        <argsstring>(ShaderBuffer const &amp;buffer)</argsstring>
+        <name>unregisterBuffer</name>
+        <qualifiedname>castor3d::RenderLoop::unregisterBuffer</qualifiedname>
+        <param>
+          <type><ref refid="d6/df1/a04660" kindref="compound">ShaderBuffer</ref> const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Unregisters a <ref refid="d6/df1/a04660" kindref="compound">ShaderBuffer</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="120" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/de8/a03968_1a60b8176ab5eb5ca6b25663f955780e3e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::RenderLoop::hasDebugOverlays</definition>
+        <argsstring>() const</argsstring>
+        <name>hasDebugOverlays</name>
+        <qualifiedname>castor3d::RenderLoop::hasDebugOverlays</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The debug overlays shown status. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="127" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/de8/a03968_1a04a7351eb46eba5aa6c227512f3903c3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderLoop::dumpFrameTimes</definition>
+        <argsstring>(Parameters &amp;params) const</argsstring>
+        <name>dumpFrameTimes</name>
+        <qualifiedname>castor3d::RenderLoop::dumpFrameTimes</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> &amp;</type>
+          <declname>params</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The average frame time, in nanoseconds. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="134" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/de8/a03968_1a60e53e14809ebd66fa6fbfbc92e14d58" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Nanoseconds</type>
+        <definition>C3D_API castor::Nanoseconds castor3d::RenderLoop::getAvgFrameTime</definition>
+        <argsstring>() const</argsstring>
+        <name>getAvgFrameTime</name>
+        <qualifiedname>castor3d::RenderLoop::getAvgFrameTime</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The average frame time, in nanoseconds. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="141" column="29"/>
+      </memberdef>
+      <memberdef kind="function" id="db/de8/a03968_1a7842a7d67f402edcc24be8fd09973818" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::RenderLoop::beginRendering</definition>
+        <argsstring>()=0</argsstring>
+        <name>beginRendering</name>
+        <qualifiedname>castor3d::RenderLoop::beginRendering</qualifiedname>
+        <reimplementedby refid="d1/df0/a03976_1a1659e9cacfacd9115e6aa1bad410c9d9">beginRendering</reimplementedby>
+        <reimplementedby refid="dd/d78/a03980_1ac849b8aea69ba1e907d697d8d6fec1a9">beginRendering</reimplementedby>
+        <briefdescription>
+<para>Starts threaded render loop. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="148" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="db/de8/a03968_1aabd4de0429c0e2659058545c6ec1bad2" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::RenderLoop::renderSyncFrame</definition>
+        <argsstring>(castor::Milliseconds tslf=0_ms)=0</argsstring>
+        <name>renderSyncFrame</name>
+        <qualifiedname>castor3d::RenderLoop::renderSyncFrame</qualifiedname>
+        <reimplementedby refid="d1/df0/a03976_1a64cff74d50b270e8dc6fcfac0ff915e0">renderSyncFrame</reimplementedby>
+        <reimplementedby refid="dd/d78/a03980_1ae5926ec23f7697887648816bc68ed00c">renderSyncFrame</reimplementedby>
+        <param>
+          <type>castor::Milliseconds</type>
+          <declname>tslf</declname>
+          <defval>0_ms</defval>
+        </param>
+        <briefdescription>
+<para>Renders one frame, only if not in render loop. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">tslf</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The time elapsed since last frame. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="157" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="db/de8/a03968_1afbc75c36ac22821c05f284e6fee155af" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::RenderLoop::pause</definition>
+        <argsstring>()=0</argsstring>
+        <name>pause</name>
+        <qualifiedname>castor3d::RenderLoop::pause</qualifiedname>
+        <reimplementedby refid="d1/df0/a03976_1a972e43d249ca40bb3120dc7396c6a17b">pause</reimplementedby>
+        <reimplementedby refid="dd/d78/a03980_1aa8e92d2a1df7dbd0a8d5881af5d4bc24">pause</reimplementedby>
+        <briefdescription>
+<para>Pauses the render loop. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="164" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="db/de8/a03968_1ae909f2e21ba004087428391048d8db86" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::RenderLoop::resume</definition>
+        <argsstring>()=0</argsstring>
+        <name>resume</name>
+        <qualifiedname>castor3d::RenderLoop::resume</qualifiedname>
+        <reimplementedby refid="d1/df0/a03976_1a41474a08868fa78570450ff97369f123">resume</reimplementedby>
+        <reimplementedby refid="dd/d78/a03980_1a59027889dfb53d02becb6189b482fda9">resume</reimplementedby>
+        <briefdescription>
+<para>Resumes the render loop. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="171" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="db/de8/a03968_1ad9ec6cf47938ab0fb37512d0cf177a51" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::RenderLoop::endRendering</definition>
+        <argsstring>()=0</argsstring>
+        <name>endRendering</name>
+        <qualifiedname>castor3d::RenderLoop::endRendering</qualifiedname>
+        <reimplementedby refid="d1/df0/a03976_1a7032d625b973c83fc5671654eabf57f0">endRendering</reimplementedby>
+        <reimplementedby refid="dd/d78/a03980_1a3976c0787f2b3fd8c413b15f601aae48">endRendering</reimplementedby>
+        <briefdescription>
+<para>Ends the render, cleans up engine. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Ends the threaded render loop, if any. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="180" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="db/de8/a03968_1abce67ba6a22426d1555dcfb813432242" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Milliseconds</type>
+        <definition>castor::Milliseconds castor3d::RenderLoop::getFrameTime</definition>
+        <argsstring>() const</argsstring>
+        <name>getFrameTime</name>
+        <qualifiedname>castor3d::RenderLoop::getFrameTime</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The wanted frame time, in milliseconds. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="187" column="22" bodyfile="Render/RenderLoop.hpp" bodystart="187" bodyend="190"/>
+        <references refid="db/de8/a03968_1a3fdea4c3d454da13b6874d71d031772a" compoundref="d5/d72/a00803" startline="240">m_frameTime</references>
+      </memberdef>
+      <memberdef kind="function" id="db/de8/a03968_1a4f497f75e762e1308a6d972114f845ac" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderLoop::getWantedFps</definition>
+        <argsstring>() const</argsstring>
+        <name>getWantedFps</name>
+        <qualifiedname>castor3d::RenderLoop::getWantedFps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The wanted refresh rate. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="197" column="10" bodyfile="Render/RenderLoop.hpp" bodystart="197" bodyend="200"/>
+        <references refid="db/de8/a03968_1aca51dfa60d759d003d2e706b33124933" compoundref="d5/d72/a00803" startline="237">m_wantedFPS</references>
+      </memberdef>
+      <memberdef kind="function" id="db/de8/a03968_1a74acb481115f9d2c3084bfb81a3dbe3f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Microseconds</type>
+        <definition>castor::Microseconds castor3d::RenderLoop::getLastFrameTime</definition>
+        <argsstring>() const</argsstring>
+        <name>getLastFrameTime</name>
+        <qualifiedname>castor3d::RenderLoop::getLastFrameTime</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The last frame time, in milliseconds. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="207" column="22" bodyfile="Render/RenderLoop.hpp" bodystart="207" bodyend="210"/>
+        <references refid="db/de8/a03968_1aadd20893be5df0f0a8bdfe52b5f4d148" compoundref="d5/d72/a00803" startline="243">m_lastFrameTime</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="db/de8/a03968_1adb8cd1592c293d4f956365f0e958e92d" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderLoop::doRenderFrame</definition>
+        <argsstring>(castor::Milliseconds tslf=0_ms)</argsstring>
+        <name>doRenderFrame</name>
+        <qualifiedname>castor3d::RenderLoop::doRenderFrame</qualifiedname>
+        <param>
+          <type>castor::Milliseconds</type>
+          <declname>tslf</declname>
+          <defval>0_ms</defval>
+        </param>
+        <briefdescription>
+<para>Starts threaded render loop. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">tslf</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The time elapsed since last frame. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="221" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="db/de8/a03968_1aeeb7bd04a75a01c5730edc4438fb929f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderLoop::doProcessEvents</definition>
+        <argsstring>(EventType eventType)</argsstring>
+        <name>doProcessEvents</name>
+        <qualifiedname>castor3d::RenderLoop::doProcessEvents</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1ad442bf3c1ba8a06ac36f710ba30b2870" kindref="member">EventType</ref></type>
+          <declname>eventType</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="224" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/de8/a03968_1a388da5e91fadfc7572c6f1ccb1e85d9b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderLoop::doProcessEvents</definition>
+        <argsstring>(EventType eventType, RenderDevice const &amp;device, QueueData const &amp;queueData)</argsstring>
+        <name>doProcessEvents</name>
+        <qualifiedname>castor3d::RenderLoop::doProcessEvents</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1ad442bf3c1ba8a06ac36f710ba30b2870" kindref="member">EventType</ref></type>
+          <declname>eventType</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dde/a03944" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="225" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/de8/a03968_1a46b0cc863b92df2de27a18b850f944c9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderLoop::doGpuStep</definition>
+        <argsstring>(RenderInfo &amp;info)</argsstring>
+        <name>doGpuStep</name>
+        <qualifiedname>castor3d::RenderLoop::doGpuStep</qualifiedname>
+        <param>
+          <type><ref refid="db/dc8/a03964" kindref="compound">RenderInfo</ref> &amp;</type>
+          <declname>info</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="228" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/de8/a03968_1a3c52485f195f64ddd2182423c3cf8f91" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderLoop::doCpuStep</definition>
+        <argsstring>(castor::Milliseconds tslf)</argsstring>
+        <name>doCpuStep</name>
+        <qualifiedname>castor3d::RenderLoop::doCpuStep</qualifiedname>
+        <param>
+          <type>castor::Milliseconds</type>
+          <declname>tslf</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="229" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::RenderLoop</label>
+        <link refid="db/de8/a03968"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::RenderLoopAsync</label>
+        <link refid="d1/df0/a03976"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::RenderLoopSync</label>
+        <link refid="dd/d78/a03980"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </inheritancegraph>
     <collaborationgraph>
-      <node id="1790">
+      <node id="6">
         <label>T</label>
       </node>
-      <node id="1789">
+      <node id="11">
+        <label>std::array&lt; castor3d::RenderLoop::UploadResources, 2u &gt;</label>
+        <childnode refid="12" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; castor3d::RenderLoop::UploadResources, 2u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::atomic&lt; castor::Microseconds &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; castor::Microseconds &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::CommandsSemaphore</label>
+        <link refid="d0/dd4/a03812"/>
+      </node>
+      <node id="8">
+        <label>castor3d::DebugOverlays</label>
+        <link refid="d4/d5b/a03496"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::RenderLoop</label>
+        <link refid="db/de8/a03968"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_lastFrameTime</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_debugOverlays</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_debugOverlaysMtx</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>m_uploadResources</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::RenderLoop::UploadResources</label>
+        <link refid="de/d6f/a03972"/>
+        <childnode refid="13" relation="usage">
+          <edgelabel>commands</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d2/dbb/a04072"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="14">
         <label>std::array&lt; T &gt;</label>
-        <childnode refid="1790" relation="usage">
+        <childnode refid="6" relation="usage">
           <edgelabel>elements</edgelabel>
         </childnode>
       </node>
-      <node id="1788">
-        <label>std::array&lt; uint32_t, 2 &gt;</label>
-        <childnode refid="1789" relation="template-instance">
-          <edgelabel>&lt; uint32_t, 2 &gt;</edgelabel>
+      <node id="5">
+        <label>std::atomic&lt; T &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>ptr</edgelabel>
         </childnode>
       </node>
-      <node id="1787">
-        <label>castor3d::LineIndices</label>
-        <link refid="db/de8/a03968"/>
-        <childnode refid="1788" relation="usage">
-          <edgelabel>m_index</edgelabel>
+      <node id="10">
+        <label>std::mutex</label>
+      </node>
+      <node id="9">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::unique_ptr&lt; castor3d::DebugOverlays &gt;</label>
+        <childnode refid="8" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; castor3d::DebugOverlays &gt;</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Model/Mesh/Submesh/Component/LineIndices.hpp" line="12" column="1" bodyfile="Model/Mesh/Submesh/Component/LineIndices.hpp" bodystart="11" bodyend="16"/>
+    <location file="Render/RenderLoop.hpp" line="24" column="1" bodyfile="Render/RenderLoop.hpp" bodystart="26" bodyend="271"/>
     <listofallmembers>
-      <member refid="db/de8/a03968_1ac8d2569b7f8e6030b425ffb8e651b617" prot="public" virt="non-virtual"><scope>castor3d::LineIndices</scope><name>m_index</name></member>
+      <member refid="db/de8/a03968_1a7842a7d67f402edcc24be8fd09973818" prot="public" virt="pure-virtual"><scope>castor3d::RenderLoop</scope><name>beginRendering</name></member>
+      <member refid="db/de8/a03968_1ad8988f97407d38c23b3f7ab1c5aa6c91" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>cleanup</name></member>
+      <member refid="db/de8/a03968_1a3c52485f195f64ddd2182423c3cf8f91" prot="private" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>doCpuStep</name></member>
+      <member refid="db/de8/a03968_1a46b0cc863b92df2de27a18b850f944c9" prot="private" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>doGpuStep</name></member>
+      <member refid="db/de8/a03968_1aeeb7bd04a75a01c5730edc4438fb929f" prot="private" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>doProcessEvents</name></member>
+      <member refid="db/de8/a03968_1a388da5e91fadfc7572c6f1ccb1e85d9b" prot="private" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>doProcessEvents</name></member>
+      <member refid="db/de8/a03968_1adb8cd1592c293d4f956365f0e958e92d" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>doRenderFrame</name></member>
+      <member refid="db/de8/a03968_1a04a7351eb46eba5aa6c227512f3903c3" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>dumpFrameTimes</name></member>
+      <member refid="db/de8/a03968_1a9920fa7ccc5a06415b08e238e1f4754f" prot="public" virt="virtual"><scope>castor3d::RenderLoop</scope><name>enableVSync</name></member>
+      <member refid="db/de8/a03968_1ad9ec6cf47938ab0fb37512d0cf177a51" prot="public" virt="pure-virtual"><scope>castor3d::RenderLoop</scope><name>endRendering</name></member>
+      <member refid="db/de8/a03968_1ab0cce3459fd96396758d47675c0d0f45" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>flushEvents</name></member>
+      <member refid="db/de8/a03968_1a60e53e14809ebd66fa6fbfbc92e14d58" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>getAvgFrameTime</name></member>
+      <member refid="db/de8/a03968_1abce67ba6a22426d1555dcfb813432242" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>getFrameTime</name></member>
+      <member refid="db/de8/a03968_1a74acb481115f9d2c3084bfb81a3dbe3f" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>getLastFrameTime</name></member>
+      <member refid="db/de8/a03968_1a4f497f75e762e1308a6d972114f845ac" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>getWantedFps</name></member>
+      <member refid="db/de8/a03968_1a60b8176ab5eb5ca6b25663f955780e3e" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>hasDebugOverlays</name></member>
+      <member refid="db/de8/a03968_1a03f6c7a9ec87f3e1e24dfc1bf8868b89" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_currentUpdate</name></member>
+      <member refid="db/de8/a03968_1a3df1d0d853b8d30a64f9491ba2b64206" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_debugOverlays</name></member>
+      <member refid="db/de8/a03968_1acda37a7285dc00458860bd65822d34a6" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_debugOverlaysMtx</name></member>
+      <member refid="db/de8/a03968_1ac732a05b63ca16e9203fc139a9e633e8" prot="private" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_first</name></member>
+      <member refid="db/de8/a03968_1a3fdea4c3d454da13b6874d71d031772a" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_frameTime</name></member>
+      <member refid="db/de8/a03968_1aadd20893be5df0f0a8bdfe52b5f4d148" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_lastFrameTime</name></member>
+      <member refid="db/de8/a03968_1a988efd95b7ab6cc581a3e663e35616e5" prot="private" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_queueData</name></member>
+      <member refid="db/de8/a03968_1a12c0e4650d67b30b6d3d8af64a6fdea6" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_renderSystem</name></member>
+      <member refid="db/de8/a03968_1a7b4ad346335b41bdfa0a52bf5c2b8b9f" prot="private" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_shaderBuffers</name></member>
+      <member refid="db/de8/a03968_1a3b6d4587b9d875ee203a0e312b297e2b" prot="private" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_shaderBuffersMtx</name></member>
+      <member refid="db/de8/a03968_1a6ff0941180c29396e2176994260c9fd5" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_toWait</name></member>
+      <member refid="db/de8/a03968_1a110d978875d737faa37572c0d01417f3" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_uploadResources</name></member>
+      <member refid="db/de8/a03968_1a4a120c4fe2819ab38ec6e60a1988d2ac" prot="private" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_uploadTimer</name></member>
+      <member refid="db/de8/a03968_1aca51dfa60d759d003d2e706b33124933" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_wantedFPS</name></member>
+      <member refid="db/de8/a03968_1afbc75c36ac22821c05f284e6fee155af" prot="public" virt="pure-virtual"><scope>castor3d::RenderLoop</scope><name>pause</name></member>
+      <member refid="db/de8/a03968_1a0d67947c5b1193af46bbaf0e0cc7585a" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>registerBuffer</name></member>
+      <member refid="db/de8/a03968_1a26a0b1e129f0ee670917a424b133e012" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>registerTimer</name></member>
+      <member refid="db/de8/a03968_1a92f9f97a35dd1d47e537f6e6024952b7" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>RenderLoop</name></member>
+      <member refid="db/de8/a03968_1aabd4de0429c0e2659058545c6ec1bad2" prot="public" virt="pure-virtual"><scope>castor3d::RenderLoop</scope><name>renderSyncFrame</name></member>
+      <member refid="db/de8/a03968_1ae909f2e21ba004087428391048d8db86" prot="public" virt="pure-virtual"><scope>castor3d::RenderLoop</scope><name>resume</name></member>
+      <member refid="db/de8/a03968_1aebff987d3a1a626374752685dff11c05" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>showDebugOverlays</name></member>
+      <member refid="db/de8/a03968_1a886e62492a8383af4e913c392e9c13af" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>UnlimitedFPS</name></member>
+      <member refid="db/de8/a03968_1a602c3f0c8a347db8331c9a5926ce0235" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>unregisterBuffer</name></member>
+      <member refid="db/de8/a03968_1a32c564fbdef938f9fd21f10834c028ac" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>unregisterTimer</name></member>
+      <member refid="db/de8/a03968_1a98370f8e34e7f81f1c9277129c71b718" prot="public" virt="virtual"><scope>castor3d::RenderLoop</scope><name>~RenderLoop</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

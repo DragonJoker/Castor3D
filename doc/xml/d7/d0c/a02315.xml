@@ -1,447 +1,137 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d7/d0c/a02315" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::UniformBufferPool</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; RenderSystem &gt;</basecompoundref>
-    <includes local="no">UniformBufferPool.hpp</includes>
-    <innerclass refid="dc/d52/a02319" prot="public">castor3d::UniformBufferPool::Buffer</innerclass>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="d7/d0c/a02315_1a0ea7d5631078243e871214bc01420477" prot="public" static="no">
-        <type>std::vector&lt; <ref refid="dc/d52/a02319" kindref="compound">Buffer</ref> &gt;</type>
-        <definition>using castor3d::UniformBufferPool::BufferArray =  std::vector&lt; Buffer &gt;</definition>
-        <argsstring></argsstring>
-        <name>BufferArray</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/UniformBufferPool.hpp" line="26" column="1" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="26" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d7/d0c/a02315_1ad4d27ef7f68c25ebcb34809a9defbbd6" prot="private" static="no" mutable="no">
-        <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const  &amp;</type>
-        <definition>RenderDevice const&amp; castor3d::UniformBufferPool::m_device</definition>
-        <argsstring></argsstring>
-        <name>m_device</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/UniformBufferPool.hpp" line="105" column="1" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="105" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d0c/a02315_1a386040447a914e32fbc5a43be8b592b3" prot="private" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::UniformBufferPool::m_maxUboElemCount</definition>
-        <argsstring></argsstring>
-        <name>m_maxUboElemCount</name>
-        <initializer>{ 0u }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/UniformBufferPool.hpp" line="106" column="1" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="106" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d0c/a02315_1ab4e771e909b7ee1c22efc4072f5c212c" prot="private" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::UniformBufferPool::m_maxUboSize</definition>
-        <argsstring></argsstring>
-        <name>m_maxUboSize</name>
-        <initializer>{ 0u }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/UniformBufferPool.hpp" line="107" column="1" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="107" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d0c/a02315_1a4bc2c7a4077d88312326386aa0b68c5a" prot="private" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::UniformBufferPool::m_maxPoolUboCount</definition>
-        <argsstring></argsstring>
-        <name>m_maxPoolUboCount</name>
-        <initializer>{ 10u }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/UniformBufferPool.hpp" line="108" column="1" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="108" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d0c/a02315_1a748573e727087aa95e8ede0680248e42" prot="private" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::UniformBufferPool::m_currentUboIndex</definition>
-        <argsstring></argsstring>
-        <name>m_currentUboIndex</name>
-        <initializer>{ 0u }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/UniformBufferPool.hpp" line="109" column="1" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="109" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d0c/a02315_1a7f44760d6aac8f6b65614e7a7de2ba81" prot="private" static="no" mutable="no">
-        <type>ashes::StagingBufferPtr</type>
-        <definition>ashes::StagingBufferPtr castor3d::UniformBufferPool::m_stagingBuffer</definition>
-        <argsstring></argsstring>
-        <name>m_stagingBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/UniformBufferPool.hpp" line="110" column="1" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="110" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d0c/a02315_1a386e7ae3c32a6d251f3dcab40558a229" prot="private" static="no" mutable="no">
-        <type>uint8_t *</type>
-        <definition>uint8_t* castor3d::UniformBufferPool::m_stagingData</definition>
-        <argsstring></argsstring>
-        <name>m_stagingData</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/UniformBufferPool.hpp" line="111" column="1" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="111" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d0c/a02315_1a24f1d7f7442261f35694222e541b32d2" prot="private" static="no" mutable="no">
-        <type>std::map&lt; uint32_t, <ref refid="d7/d0c/a02315_1a0ea7d5631078243e871214bc01420477" kindref="member">BufferArray</ref> &gt;</type>
-        <definition>std::map&lt; uint32_t, BufferArray &gt; castor3d::UniformBufferPool::m_buffers</definition>
-        <argsstring></argsstring>
-        <name>m_buffers</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/UniformBufferPool.hpp" line="112" column="1" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="112" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d0c/a02315_1ad7e1feb1fb4b8c31e96e052ff9587379" prot="private" static="no" mutable="no">
-        <type>castor::String</type>
-        <definition>castor::String castor3d::UniformBufferPool::m_debugName</definition>
-        <argsstring></argsstring>
-        <name>m_debugName</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/UniformBufferPool.hpp" line="113" column="1" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="113" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d7/d0c/a02315_1a0b59e202c8c9b2268583a4658b4a8005" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::UniformBufferPool::UniformBufferPool</definition>
-        <argsstring>(RenderSystem &amp;renderSystem, RenderDevice const &amp;device, castor::String debugName)</argsstring>
-        <name>UniformBufferPool</name>
-        <param>
-          <type><ref refid="d6/d55/a04603" kindref="compound">RenderSystem</ref> &amp;</type>
-          <declname>renderSystem</declname>
-        </param>
-        <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>castor::String</type>
-          <declname>debugName</declname>
-        </param>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">renderSystem</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The <ref refid="d6/d55/a04603" kindref="compound">RenderSystem</ref>. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">debugName</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The buffer debug name. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/UniformBufferPool.hpp" line="41" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d0c/a02315_1a0b5632adb68c22c27d21222b24bcb509" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::UniformBufferPool::~UniformBufferPool</definition>
-        <argsstring>()</argsstring>
-        <name>~UniformBufferPool</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/UniformBufferPool.hpp" line="50" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d0c/a02315_1ab89552434457ac675f106a9df0c31bd0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::UniformBufferPool::cleanup</definition>
-        <argsstring>()</argsstring>
-        <name>cleanup</name>
-        <briefdescription>
-<para>Cleans up all GPU buffers. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/UniformBufferPool.hpp" line="57" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d0c/a02315_1a2e93544049d7df3cd8f0a544a61a6fcd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::UniformBufferPool::upload</definition>
-        <argsstring>(ashes::CommandBuffer const &amp;cb) const</argsstring>
-        <name>upload</name>
-        <param>
-          <type>ashes::CommandBuffer const &amp;</type>
-          <declname>cb</declname>
-        </param>
-        <briefdescription>
-<para>Uploads all GPU buffers to VRAM. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">cb</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The command buffer on which transfer commands are recorded. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/UniformBufferPool.hpp" line="66" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d0c/a02315_1a907f89179818583347fdc1d4e94c2de1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename DataT</type>
-          </param>
-        </templateparamlist>
-        <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; DataT &gt;</type>
-        <definition>UniformBufferOffsetT&lt; DataT &gt; castor3d::UniformBufferPool::getBuffer</definition>
-        <argsstring>(VkMemoryPropertyFlags flags)</argsstring>
-        <name>getBuffer</name>
-        <param>
-          <type>VkMemoryPropertyFlags</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves a uniform buffer. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The buffer memory flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The uniform buffer. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/UniformBufferPool.hpp" line="78" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d0c/a02315_1a06647da5ae455e2dae3583a1ffa6e05a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename DataT</type>
-          </param>
-        </templateparamlist>
-        <type>void</type>
-        <definition>void castor3d::UniformBufferPool::putBuffer</definition>
-        <argsstring>(UniformBufferOffsetT&lt; DataT &gt; const &amp;bufferOffset)</argsstring>
-        <name>putBuffer</name>
-        <param>
-          <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; DataT &gt; const &amp;</type>
-          <declname>bufferOffset</declname>
-        </param>
-        <briefdescription>
-<para>Releases a GPU buffer. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">bufferOffset</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The buffer offset to release. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/UniformBufferPool.hpp" line="88" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d0c/a02315_1a4b075518088a79c039934e45feee6771" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
-        <definition>C3D_API uint32_t castor3d::UniformBufferPool::getBufferCount</definition>
-        <argsstring>() const</argsstring>
-        <name>getBufferCount</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The pool buffers count. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/UniformBufferPool.hpp" line="95" column="1"/>
-      </memberdef>
-      </sectiondef>
+    <compoundname>castor3d::BinaryParser&lt; MeshAnimation &gt;</compoundname>
+    <basecompoundref refid="d5/d1b/a02331" prot="public" virt="non-virtual">castor3d::BinaryParserBase&lt; MeshAnimation &gt;</basecompoundref>
+    <includes local="no">BinaryMeshAnimation.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
       <sectiondef kind="private-func">
-      <memberdef kind="function" id="d7/d0c/a02315_1abb170dd6155c01a2753bde5157cf2cf9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> BufferArray::iterator</type>
-        <definition>C3D_API BufferArray::iterator castor3d::UniformBufferPool::doFindBuffer</definition>
-        <argsstring>(BufferArray &amp;array, VkDeviceSize alignedSize)</argsstring>
-        <name>doFindBuffer</name>
+      <memberdef kind="function" id="d7/d0c/a02315_1ab383b7d77eebdc9c6068cd65f0a7afce" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BinaryParser&lt; MeshAnimation &gt;::doParse</definition>
+        <argsstring>(MeshAnimation &amp;obj) override</argsstring>
+        <name>doParse</name>
+        <qualifiedname>castor3d::BinaryParser&lt; MeshAnimation &gt;::doParse</qualifiedname>
+        <reimplements refid="d5/d1b/a02331_1a020a66d5fc1b452dc76c82702d72bbb1">doParse</reimplements>
         <param>
-          <type><ref refid="d7/d0c/a02315_1a0ea7d5631078243e871214bc01420477" kindref="member">BufferArray</ref> &amp;</type>
-          <declname>array</declname>
-        </param>
-        <param>
-          <type>VkDeviceSize</type>
-          <declname>alignedSize</declname>
+          <type><ref refid="d8/dcc/a03287" kindref="compound">MeshAnimation</ref> &amp;</type>
+          <declname>obj</declname>
         </param>
         <briefdescription>
+<para>Function used to retrieve specific data from the chunk. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/UniformBufferPool.hpp" line="98" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d0c/a02315_1a18ebfe544a45be68637e222fc4d8cbb4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::UniformBufferPool::doCreateStagingBuffer</definition>
-        <argsstring>()</argsstring>
-        <name>doCreateStagingBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/UniformBufferPool.hpp" line="100" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d0c/a02315_1aed58b3b64d5225ac4aa3d7a0eb461f0e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> BufferArray::iterator</type>
-        <definition>C3D_API BufferArray::iterator castor3d::UniformBufferPool::doCreatePoolBuffer</definition>
-        <argsstring>(VkMemoryPropertyFlags flags, UniformBufferPool::BufferArray &amp;buffers)</argsstring>
-        <name>doCreatePoolBuffer</name>
-        <param>
-          <type>VkMemoryPropertyFlags</type>
-          <declname>flags</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/d0c/a02315_1a0ea7d5631078243e871214bc01420477" kindref="member">UniformBufferPool::BufferArray</ref> &amp;</type>
-          <declname>buffers</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/UniformBufferPool.hpp" line="101" column="1"/>
+        <location file="Binary/BinaryMeshAnimation.hpp" line="80" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para><ref refid="d8/dcc/a03287" kindref="compound">MeshAnimation</ref> binary loader. </para>
     </briefdescription>
     <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="version"><para>0.8.0 </para>
+</simplesect>
+<simplesect kind="date"><para>26/01/2016</para>
+</simplesect>
+Loader binaire de <ref refid="d8/dcc/a03287" kindref="compound">MeshAnimation</ref>. </para>
     </detaileddescription>
     <inheritancegraph>
-      <node id="4620">
-        <label>castor::OwnedBy&lt; RenderSystem &gt;</label>
-      </node>
-      <node id="4619">
-        <label>castor3d::UniformBufferPool</label>
-        <link refid="d7/d0c/a02315"/>
-        <childnode refid="4620" relation="public-inheritance">
+      <node id="2">
+        <label>castor3d::BinaryParserBase&lt; MeshAnimation &gt;</label>
+        <link refid="d5/d1b/a02331"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; MeshAnimation &gt;</edgelabel>
         </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryParser&lt; MeshAnimation &gt;</label>
+        <link refid="d7/d0c/a02315"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
+        <link refid="d5/d1b/a02331"/>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="4622">
-        <label>castor::OwnedBy&lt; RenderSystem &gt;</label>
-      </node>
-      <node id="4621">
-        <label>castor3d::UniformBufferPool</label>
-        <link refid="d7/d0c/a02315"/>
-        <childnode refid="4622" relation="public-inheritance">
+      <node id="2">
+        <label>castor3d::BinaryParserBase&lt; MeshAnimation &gt;</label>
+        <link refid="d5/d1b/a02331"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_fileVersion</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; MeshAnimation &gt;</edgelabel>
         </childnode>
       </node>
+      <node id="3">
+        <label>castor3d::BinaryChunk</label>
+        <link refid="dd/d3b/a02291"/>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryParser&lt; MeshAnimation &gt;</label>
+        <link refid="d7/d0c/a02315"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
+        <link refid="d5/d1b/a02331"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_fileVersion</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::Version</label>
+        <link refid="d0/de5/a03279"/>
+      </node>
     </collaborationgraph>
-    <location file="Buffer/UniformBufferPool.hpp" line="19" column="1" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="17" bodyend="114"/>
+    <location file="Binary/BinaryMeshAnimation.hpp" line="66" column="1" bodyfile="Binary/BinaryMeshAnimation.hpp" bodystart="68" bodyend="81"/>
     <listofallmembers>
-      <member refid="d7/d0c/a02315_1a0ea7d5631078243e871214bc01420477" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>BufferArray</name></member>
-      <member refid="d7/d0c/a02315_1ab89552434457ac675f106a9df0c31bd0" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>cleanup</name></member>
-      <member refid="d7/d0c/a02315_1aed58b3b64d5225ac4aa3d7a0eb461f0e" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>doCreatePoolBuffer</name></member>
-      <member refid="d7/d0c/a02315_1a18ebfe544a45be68637e222fc4d8cbb4" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>doCreateStagingBuffer</name></member>
-      <member refid="d7/d0c/a02315_1abb170dd6155c01a2753bde5157cf2cf9" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>doFindBuffer</name></member>
-      <member refid="d7/d0c/a02315_1a907f89179818583347fdc1d4e94c2de1" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>getBuffer</name></member>
-      <member refid="d7/d0c/a02315_1a4b075518088a79c039934e45feee6771" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>getBufferCount</name></member>
-      <member refid="d7/d0c/a02315_1a24f1d7f7442261f35694222e541b32d2" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>m_buffers</name></member>
-      <member refid="d7/d0c/a02315_1a748573e727087aa95e8ede0680248e42" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>m_currentUboIndex</name></member>
-      <member refid="d7/d0c/a02315_1ad7e1feb1fb4b8c31e96e052ff9587379" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>m_debugName</name></member>
-      <member refid="d7/d0c/a02315_1ad4d27ef7f68c25ebcb34809a9defbbd6" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>m_device</name></member>
-      <member refid="d7/d0c/a02315_1a4bc2c7a4077d88312326386aa0b68c5a" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>m_maxPoolUboCount</name></member>
-      <member refid="d7/d0c/a02315_1a386040447a914e32fbc5a43be8b592b3" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>m_maxUboElemCount</name></member>
-      <member refid="d7/d0c/a02315_1ab4e771e909b7ee1c22efc4072f5c212c" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>m_maxUboSize</name></member>
-      <member refid="d7/d0c/a02315_1a7f44760d6aac8f6b65614e7a7de2ba81" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>m_stagingBuffer</name></member>
-      <member refid="d7/d0c/a02315_1a386e7ae3c32a6d251f3dcab40558a229" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>m_stagingData</name></member>
-      <member refid="d7/d0c/a02315_1a06647da5ae455e2dae3583a1ffa6e05a" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>putBuffer</name></member>
-      <member refid="d7/d0c/a02315_1a0b59e202c8c9b2268583a4658b4a8005" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>UniformBufferPool</name></member>
-      <member refid="d7/d0c/a02315_1a2e93544049d7df3cd8f0a544a61a6fcd" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>upload</name></member>
-      <member refid="d7/d0c/a02315_1a0b5632adb68c22c27d21222b24bcb509" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferPool</scope><name>~UniformBufferPool</name></member>
+      <member refid="d5/d1b/a02331_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>checkError</name></member>
+      <member refid="d5/d1b/a02331_1ae6f4694ede819151fe4e30e33235ff07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>createBinaryParser</name></member>
+      <member refid="d5/d1b/a02331_1ab5f9ba53ad5865f967b41e5a27ed73a9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>doGetSubChunk</name></member>
+      <member refid="d7/d0c/a02315_1ab383b7d77eebdc9c6068cd65f0a7afce" prot="private" virt="virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>doParse</name></member>
+      <member refid="d5/d1b/a02331_1a0e1aa917e3bf897fab03a32d20890062" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d5/d1b/a02331_1a22ca62addb3ab167995e18f49267efcf" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d5/d1b/a02331_1a5a648553ce168f5bc34adeedc8d169a7" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d5/d1b/a02331_1a90df4e46072e5ef14aebebd00cbcc1f5" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d5/d1b/a02331_1a5fac84360102001f5e730be1927c024e" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d5/d1b/a02331_1a035881aba2b64571b30a5efd3faaf3d9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>doParseHeader</name></member>
+      <member refid="d5/d1b/a02331_1ab3df04f9aa2eb1f7a533ed18631f09c4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>m_chunk</name></member>
+      <member refid="d5/d1b/a02331_1a455764ca72b659dab2652baf56ce5885" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>m_fileVersion</name></member>
+      <member refid="d5/d1b/a02331_1ae4820a3ab3e4b282240e5f1b969153c1" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>Name</name></member>
+      <member refid="d5/d1b/a02331_1a5db83668684ca219f67de3a381898e64" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>parse</name></member>
+      <member refid="d5/d1b/a02331_1a6bbbb529f463085c7d259600ae1b3e99" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>parse</name></member>
+      <member refid="d5/d1b/a02331_1a61b02dbf69d89569eff5be22facd5f07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>parse_v1_1</name></member>
+      <member refid="d5/d1b/a02331_1a95788692ddd6fae91074c299b674aaab" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>parse_v1_2</name></member>
+      <member refid="d5/d1b/a02331_1a6f39b66d980e4a65660016f71115a89c" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>parse_v1_3</name></member>
+      <member refid="d5/d1b/a02331_1aabc068daf8d99718497aa35f7a17c346" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>parse_v1_4</name></member>
+      <member refid="d5/d1b/a02331_1afb9e6fdcdc58e65458de7892d2bf8025" prot="public" virt="virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>~BinaryParserBase</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,35 +1,44 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="da/d74/a02451" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::ElementProducer&lt; ShaderProgram, KeyType &gt;</compoundname>
-    <includes local="no">ElementProducer.hpp</includes>
+    <compoundname>castor3d::ChunkTyper&lt; Submesh &gt;</compoundname>
+    <includes local="no">BinarySubmesh.hpp</includes>
     <templateparamlist>
-      <param>
-        <type>typename KeyType</type>
-      </param>
     </templateparamlist>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="da/d74/a02451_1a65a7d5ff6fe2567cb68282a5446347c9" prot="public" static="no">
-        <type>std::function&lt; std::shared_ptr&lt; <ref refid="da/d2b/a05283" kindref="compound">ShaderProgram</ref> &gt;(KeyType const &amp;) &gt;</type>
-        <definition>using castor3d::ElementProducer&lt; ShaderProgram, KeyType &gt;::Type =  std::function&lt; std::shared_ptr&lt; ShaderProgram &gt;( KeyType const &amp; ) &gt;</definition>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="da/d74/a02451_1a9aa8e9641c55c88cae0e7bb0b59c3e13" prot="public" static="yes" mutable="no">
+        <type><ref refid="da/de3/a01398_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref> const</type>
+        <definition>ChunkType const castor3d::ChunkTyper&lt; Submesh &gt;::Value</definition>
         <argsstring></argsstring>
-        <name>Type</name>
+        <name>Value</name>
+        <qualifiedname>castor3d::ChunkTyper&lt; Submesh &gt;::Value</qualifiedname>
+        <initializer>= <ref refid="da/de3/a01398_1a742783d4e4b7354fac3e375ae107414da1c6e623c4f3ed72ce3d17fb2896ccbfc" kindref="member">ChunkType::eSubmesh</ref></initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/ElementProducer.hpp" line="29" column="1" bodyfile="Cache/ElementProducer.hpp" bodystart="29" bodyend="-1"/>
+        <location file="Binary/BinarySubmesh.hpp" line="28" column="24" bodyfile="Binary/BinarySubmesh.hpp" bodystart="28" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>Helper structure to find ChunkType from a type. </para>
     </briefdescription>
     <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="version"><para>0.9.0 </para>
+</simplesect>
+<simplesect kind="date"><para>28/05/2016</para>
+</simplesect>
+<simplesect kind="remark"><para>Specialisation for <ref refid="d3/da7/a03427" kindref="compound">Submesh</ref>. </para>
+</simplesect>
+</para>
     </detaileddescription>
-    <location file="Cache/ElementProducer.hpp" line="28" column="1" bodyfile="Cache/ElementProducer.hpp" bodystart="27" bodyend="30"/>
+    <location file="Binary/BinarySubmesh.hpp" line="26" column="1" bodyfile="Binary/BinarySubmesh.hpp" bodystart="27" bodyend="29"/>
     <listofallmembers>
-      <member refid="da/d74/a02451_1a65a7d5ff6fe2567cb68282a5446347c9" prot="public" virt="non-virtual"><scope>castor3d::ElementProducer&lt; ShaderProgram, KeyType &gt;</scope><name>Type</name></member>
+      <member refid="da/d74/a02451_1a9aa8e9641c55c88cae0e7bb0b59c3e13" prot="public" virt="non-virtual"><scope>castor3d::ChunkTyper&lt; Submesh &gt;</scope><name>Value</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

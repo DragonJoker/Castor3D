@@ -1,160 +1,137 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dc/d18/a02260" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::ChunkParser</compoundname>
-    <basecompoundref refid="de/dc3/a02256" prot="public" virt="non-virtual">castor3d::ChunkParserBase</basecompoundref>
-    <includes local="no">ChunkParser.hpp</includes>
+    <compoundname>castor3d::BinaryParser&lt; Animation &gt;</compoundname>
+    <basecompoundref refid="db/d83/a02328" prot="public" virt="non-virtual">castor3d::BinaryParserBase&lt; Animation &gt;</basecompoundref>
+    <includes local="no">BinaryAnimation.hpp</includes>
     <templateparamlist>
-      <param>
-        <type>typename T</type>
-      </param>
     </templateparamlist>
-      <sectiondef kind="public-static-func">
-      <memberdef kind="function" id="dc/d18/a02260_1a51aa9cc211a27e96cdfbdb431808cc8f" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>static bool castor3d::ChunkParser&lt; T &gt;::parse</definition>
-        <argsstring>(T *values, size_t count, BinaryChunk &amp;chunk)</argsstring>
-        <name>parse</name>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="dc/d18/a02260_1a7b8d23b4c209a00a927c030f1d49ec81" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BinaryParser&lt; Animation &gt;::doParse</definition>
+        <argsstring>(Animation &amp;obj) override</argsstring>
+        <name>doParse</name>
+        <qualifiedname>castor3d::BinaryParser&lt; Animation &gt;::doParse</qualifiedname>
+        <reimplements refid="db/d83/a02328_1a020a66d5fc1b452dc76c82702d72bbb1">doParse</reimplements>
         <param>
-          <type>T *</type>
-          <declname>values</declname>
-        </param>
-        <param>
-          <type>size_t</type>
-          <declname>count</declname>
-        </param>
-        <param>
-          <type><ref refid="d8/dd8/a02108" kindref="compound">BinaryChunk</ref> &amp;</type>
-          <declname>chunk</declname>
+          <type><ref refid="d2/df5/a01395_1a8b18030cabc04d1bc6651049b78e9874" kindref="member">Animation</ref> &amp;</type>
+          <declname>obj</declname>
         </param>
         <briefdescription>
-<para>Retrieves a value array from a chunk. </para>
+<para>Function used to retrieve specific data from the chunk. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="out">values</parametername>
+<parametername direction="out">obj</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>Receives the parsed values </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="out">count</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The values count </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">chunk</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The chunk containing the values </para>
+<para>The object to read. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Binary/ChunkParser.hpp" line="72" column="1" bodyfile="Binary/ChunkParser.hpp" bodystart="72" bodyend="86"/>
-        <references refid="de/dc3/a02256_1a062463121032ba679336be2382c508d0" compoundref="d7/dce/a00143" startline="30" endline="42">castor3d::ChunkParserBase::parse</references>
-        <references refid="da/d1e/a01479_1a430f3de9071e7d03358bb1b39d07c2b8" compoundref="d1/d44/a00098" startline="127" endline="133">castor3d::prepareChunkData</references>
-        <referencedby refid="d2/d08/a02148_1a0e1aa917e3bf897fab03a32d20890062" compoundref="d3/d00/a00113" startline="400" endline="405">castor3d::BinaryParserBase&lt; Skeleton &gt;::doParseChunk</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="dc/d18/a02260_1ad15c5a1f67d963aaebd202df3e903042" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>static bool castor3d::ChunkParser&lt; T &gt;::parse</definition>
-        <argsstring>(T &amp;value, BinaryChunk &amp;chunk)</argsstring>
-        <name>parse</name>
-        <param>
-          <type>T &amp;</type>
-          <declname>value</declname>
-        </param>
-        <param>
-          <type><ref refid="d8/dd8/a02108" kindref="compound">BinaryChunk</ref> &amp;</type>
-          <declname>chunk</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves a value from a chunk. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="out">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Receives the parsed value </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">chunk</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The chunk containing the value </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Binary/ChunkParser.hpp" line="99" column="1" bodyfile="Binary/ChunkParser.hpp" bodystart="99" bodyend="107"/>
-        <references refid="da/d1e/a01479_1acd91e9630a784a5006a0c4299b0abe2d" compoundref="d5/db1/a00140" startline="47" endline="50">castor3d::getBuffer</references>
-        <references refid="da/d1e/a01479_1a0237c5eefd38c3d0de4466c3fbe0d713" compoundref="d5/db1/a00140" startline="384" endline="387">castor3d::getDataSize</references>
-        <references refid="de/dc3/a02256_1a062463121032ba679336be2382c508d0" compoundref="d7/dce/a00143" startline="30" endline="42">castor3d::ChunkParserBase::parse</references>
-        <references refid="da/d1e/a01479_1a430f3de9071e7d03358bb1b39d07c2b8" compoundref="d1/d44/a00098" startline="127" endline="133">castor3d::prepareChunkData</references>
+        <location file="Binary/BinaryAnimation.hpp" line="80" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Chunk parser. </para>
+<para>Animation binary loader. </para>
     </briefdescription>
     <detaileddescription>
 <para><simplesect kind="author"><para>Sylvain DOREMUS </para>
 </simplesect>
-<simplesect kind="version"><para>0.7.0.0 </para>
+<simplesect kind="version"><para>0.8.0 </para>
 </simplesect>
-<simplesect kind="date"><para>08/04/2014 </para>
+<simplesect kind="date"><para>26/01/2016</para>
 </simplesect>
-</para>
+Loader binaire d&apos;Animation. </para>
     </detaileddescription>
     <inheritancegraph>
-      <node id="660">
-        <label>castor3d::ChunkParserBase</label>
-        <link refid="de/dc3/a02256"/>
-      </node>
-      <node id="659">
-        <label>castor3d::ChunkParser&lt; T &gt;</label>
-        <link refid="dc/d18/a02260"/>
-        <childnode refid="660" relation="public-inheritance">
+      <node id="2">
+        <label>castor3d::BinaryParserBase&lt; Animation &gt;</label>
+        <link refid="db/d83/a02328"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Animation &gt;</edgelabel>
         </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryParser&lt; Animation &gt;</label>
+        <link refid="dc/d18/a02260"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
+        <link refid="db/d83/a02328"/>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="662">
-        <label>castor3d::ChunkParserBase</label>
-        <link refid="de/dc3/a02256"/>
-      </node>
-      <node id="661">
-        <label>castor3d::ChunkParser&lt; T &gt;</label>
-        <link refid="dc/d18/a02260"/>
-        <childnode refid="662" relation="public-inheritance">
+      <node id="2">
+        <label>castor3d::BinaryParserBase&lt; Animation &gt;</label>
+        <link refid="db/d83/a02328"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_fileVersion</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; Animation &gt;</edgelabel>
         </childnode>
       </node>
+      <node id="3">
+        <label>castor3d::BinaryChunk</label>
+        <link refid="dc/d1a/a02288"/>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryParser&lt; Animation &gt;</label>
+        <link refid="dc/d18/a02260"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
+        <link refid="db/d83/a02328"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_fileVersion</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::Version</label>
+        <link refid="d0/ded/a03276"/>
+      </node>
     </collaborationgraph>
-    <location file="Binary/ChunkParser.hpp" line="56" column="1" bodyfile="Binary/ChunkParser.hpp" bodystart="54" bodyend="108"/>
+    <location file="Binary/BinaryAnimation.hpp" line="66" column="1" bodyfile="Binary/BinaryAnimation.hpp" bodystart="68" bodyend="81"/>
     <listofallmembers>
-      <member refid="dc/d18/a02260_1a51aa9cc211a27e96cdfbdb431808cc8f" prot="public" virt="non-virtual"><scope>castor3d::ChunkParser</scope><name>parse</name></member>
-      <member refid="dc/d18/a02260_1ad15c5a1f67d963aaebd202df3e903042" prot="public" virt="non-virtual"><scope>castor3d::ChunkParser</scope><name>parse</name></member>
-      <member refid="de/dc3/a02256_1a062463121032ba679336be2382c508d0" prot="public" virt="non-virtual" ambiguityscope="castor3d::ChunkParserBase::"><scope>castor3d::ChunkParser</scope><name>parse</name></member>
+      <member refid="db/d83/a02328_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Animation &gt;</scope><name>checkError</name></member>
+      <member refid="db/d83/a02328_1ae6f4694ede819151fe4e30e33235ff07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Animation &gt;</scope><name>createBinaryParser</name></member>
+      <member refid="db/d83/a02328_1ab5f9ba53ad5865f967b41e5a27ed73a9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Animation &gt;</scope><name>doGetSubChunk</name></member>
+      <member refid="dc/d18/a02260_1a7b8d23b4c209a00a927c030f1d49ec81" prot="private" virt="virtual"><scope>castor3d::BinaryParser&lt; Animation &gt;</scope><name>doParse</name></member>
+      <member refid="db/d83/a02328_1a0e1aa917e3bf897fab03a32d20890062" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Animation &gt;</scope><name>doParseChunk</name></member>
+      <member refid="db/d83/a02328_1a22ca62addb3ab167995e18f49267efcf" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Animation &gt;</scope><name>doParseChunk</name></member>
+      <member refid="db/d83/a02328_1a5a648553ce168f5bc34adeedc8d169a7" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Animation &gt;</scope><name>doParseChunk</name></member>
+      <member refid="db/d83/a02328_1a90df4e46072e5ef14aebebd00cbcc1f5" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Animation &gt;</scope><name>doParseChunk</name></member>
+      <member refid="db/d83/a02328_1a5fac84360102001f5e730be1927c024e" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Animation &gt;</scope><name>doParseChunk</name></member>
+      <member refid="db/d83/a02328_1a035881aba2b64571b30a5efd3faaf3d9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Animation &gt;</scope><name>doParseHeader</name></member>
+      <member refid="db/d83/a02328_1ab3df04f9aa2eb1f7a533ed18631f09c4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Animation &gt;</scope><name>m_chunk</name></member>
+      <member refid="db/d83/a02328_1a455764ca72b659dab2652baf56ce5885" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Animation &gt;</scope><name>m_fileVersion</name></member>
+      <member refid="db/d83/a02328_1ae4820a3ab3e4b282240e5f1b969153c1" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Animation &gt;</scope><name>Name</name></member>
+      <member refid="db/d83/a02328_1a5db83668684ca219f67de3a381898e64" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Animation &gt;</scope><name>parse</name></member>
+      <member refid="db/d83/a02328_1a6bbbb529f463085c7d259600ae1b3e99" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Animation &gt;</scope><name>parse</name></member>
+      <member refid="db/d83/a02328_1a61b02dbf69d89569eff5be22facd5f07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Animation &gt;</scope><name>parse_v1_1</name></member>
+      <member refid="db/d83/a02328_1a95788692ddd6fae91074c299b674aaab" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Animation &gt;</scope><name>parse_v1_2</name></member>
+      <member refid="db/d83/a02328_1a6f39b66d980e4a65660016f71115a89c" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Animation &gt;</scope><name>parse_v1_3</name></member>
+      <member refid="db/d83/a02328_1aabc068daf8d99718497aa35f7a17c346" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Animation &gt;</scope><name>parse_v1_4</name></member>
+      <member refid="db/d83/a02328_1afb9e6fdcdc58e65458de7892d2bf8025" prot="public" virt="virtual"><scope>castor3d::BinaryParser&lt; Animation &gt;</scope><name>~BinaryParserBase</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

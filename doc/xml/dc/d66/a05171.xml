@@ -1,479 +1,195 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dc/d66/a05171" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::MovableObject</compoundname>
-    <basecompoundref refid="de/d0a/a02015" prot="public" virt="non-virtual">castor3d::AnimableT&lt; Engine &gt;</basecompoundref>
-    <basecompoundref prot="public" virt="non-virtual">Named</basecompoundref>
-    <derivedcompoundref refid="d0/d42/a05127" prot="public" virt="non-virtual">castor3d::BillboardList</derivedcompoundref>
-    <derivedcompoundref refid="d0/dcf/a05131" prot="public" virt="non-virtual">castor3d::Camera</derivedcompoundref>
-    <derivedcompoundref refid="db/d6b/a05139" prot="public" virt="non-virtual">castor3d::Geometry</derivedcompoundref>
-    <derivedcompoundref refid="df/dc5/a05151" prot="public" virt="non-virtual">castor3d::Light</derivedcompoundref>
-    <derivedcompoundref refid="d8/d42/a05207" prot="public" virt="non-virtual">castor3d::ParticleSystem</derivedcompoundref>
-    <includes local="no">MovableObject.hpp</includes>
-      <sectiondef kind="protected-attrib">
-      <memberdef kind="variable" id="dc/d66/a05171_1a3870fc0cca376a6cbab09a432ace4f0a" prot="protected" static="no" mutable="no">
-        <type><ref refid="d7/d00/a05223" kindref="compound">Scene</ref> *</type>
-        <definition>Scene* castor3d::MovableObject::m_scene</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dc/d66/a05171" kind="struct" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::Scene &gt;::Options</compoundname>
+    <includes local="no">TextScene.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/d66/a05171_1a7f20d67f9f2ac307d780c0d4cb485dcd" prot="public" static="no" mutable="no">
+        <type>Path</type>
+        <definition>Path castor::TextWriter&lt; castor3d::Scene &gt;::Options::rootFolder</definition>
         <argsstring></argsstring>
-        <name>m_scene</name>
+        <name>rootFolder</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::Scene &gt;::Options::rootFolder</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/MovableObject.hpp" line="106" column="1" bodyfile="Scene/MovableObject.hpp" bodystart="106" bodyend="-1"/>
-        <referencedby refid="dc/d66/a05171_1a7b093c3d281c312dab1605bd8a189206" compoundref="df/dd5/a01115" startline="100" endline="103">getScene</referencedby>
+        <location file="Text/TextScene.hpp" line="39" column="6" bodyfile="Text/TextScene.hpp" bodystart="39" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dc/d66/a05171_1acf6726e80bb3098468fe1fcd5a1f720e" prot="protected" static="no" mutable="no">
-        <type><ref refid="d7/dd1/a01458_1a3b295abad3147d934a7378cad0a0ebca" kindref="member">MovableType</ref></type>
-        <definition>MovableType castor3d::MovableObject::m_type</definition>
+      <memberdef kind="variable" id="dc/d66/a05171_1a6db6193e538cc32e34d729f6098d5f9f" prot="public" static="no" mutable="no">
+        <type>Path</type>
+        <definition>Path castor::TextWriter&lt; castor3d::Scene &gt;::Options::materialsFile</definition>
         <argsstring></argsstring>
-        <name>m_type</name>
+        <name>materialsFile</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::Scene &gt;::Options::materialsFile</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>Movable object type. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/MovableObject.hpp" line="109" column="1" bodyfile="Scene/MovableObject.hpp" bodystart="109" bodyend="-1"/>
-        <referencedby refid="dc/d66/a05171_1acf2dafd94427b63121981ac18ac652a7" compoundref="df/dd5/a01115" startline="95" endline="98">getType</referencedby>
+        <location file="Text/TextScene.hpp" line="40" column="6" bodyfile="Text/TextScene.hpp" bodystart="40" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dc/d66/a05171_1ab9493ad12e9af9b47db11e76d372a156" prot="protected" static="no" mutable="no">
-        <type>castor::String</type>
-        <definition>castor::String castor3d::MovableObject::m_strNodeName</definition>
+      <memberdef kind="variable" id="dc/d66/a05171_1acabfb1a3546000ce994ca9926e683e2e" prot="public" static="no" mutable="no">
+        <type>Path</type>
+        <definition>Path castor::TextWriter&lt; castor3d::Scene &gt;::Options::meshesFile</definition>
         <argsstring></argsstring>
-        <name>m_strNodeName</name>
+        <name>meshesFile</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::Scene &gt;::Options::meshesFile</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The parent node name. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/MovableObject.hpp" line="112" column="1" bodyfile="Scene/MovableObject.hpp" bodystart="112" bodyend="-1"/>
+        <location file="Text/TextScene.hpp" line="41" column="6" bodyfile="Text/TextScene.hpp" bodystart="41" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dc/d66/a05171_1aa058c86365c45c7d4b85a04ce56a9d22" prot="protected" static="no" mutable="no">
-        <type><ref refid="d8/dd0/a05235" kindref="compound">SceneNode</ref> *</type>
-        <definition>SceneNode* castor3d::MovableObject::m_sceneNode</definition>
+      <memberdef kind="variable" id="dc/d66/a05171_1a3f2edda51944e5bd726db840da682819" prot="public" static="no" mutable="no">
+        <type>Path</type>
+        <definition>Path castor::TextWriter&lt; castor3d::Scene &gt;::Options::nodesFile</definition>
         <argsstring></argsstring>
-        <name>m_sceneNode</name>
+        <name>nodesFile</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::Scene &gt;::Options::nodesFile</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The parent scene node. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/MovableObject.hpp" line="115" column="1" bodyfile="Scene/MovableObject.hpp" bodystart="115" bodyend="-1"/>
-        <referencedby refid="dc/d66/a05171_1aeb1f1e4e6b8dcc933bb8aed4278458ce" compoundref="df/dd5/a01115" startline="83" endline="86">getParent</referencedby>
+        <location file="Text/TextScene.hpp" line="42" column="6" bodyfile="Text/TextScene.hpp" bodystart="42" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dc/d66/a05171_1a8385c7c8fd9aee20a3c6de804cb09514" prot="protected" static="no" mutable="no">
-        <type><ref refid="d7/dd1/a01458_1a93966e91ef2aff33b2963e1e8101cb3e" kindref="member">OnSceneNodeChangedConnection</ref></type>
-        <definition>OnSceneNodeChangedConnection castor3d::MovableObject::m_notifyIndex</definition>
+      <memberdef kind="variable" id="dc/d66/a05171_1a11955cb9af1ef1e969c9d74a6845cb9c" prot="public" static="no" mutable="no">
+        <type>Path</type>
+        <definition>Path castor::TextWriter&lt; castor3d::Scene &gt;::Options::objectsFile</definition>
         <argsstring></argsstring>
-        <name>m_notifyIndex</name>
+        <name>objectsFile</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::Scene &gt;::Options::objectsFile</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The node change notification index. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/MovableObject.hpp" line="118" column="1" bodyfile="Scene/MovableObject.hpp" bodystart="118" bodyend="-1"/>
+        <location file="Text/TextScene.hpp" line="43" column="6" bodyfile="Text/TextScene.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d66/a05171_1add17ae01db985bc64f801d977612c7d3" prot="public" static="no" mutable="no">
+        <type>Path</type>
+        <definition>Path castor::TextWriter&lt; castor3d::Scene &gt;::Options::lightsFile</definition>
+        <argsstring></argsstring>
+        <name>lightsFile</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::Scene &gt;::Options::lightsFile</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextScene.hpp" line="44" column="6" bodyfile="Text/TextScene.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d66/a05171_1ac1d4dcd4b0af205a1bb9a5083ca43d09" prot="public" static="no" mutable="no">
+        <type>String</type>
+        <definition>String castor::TextWriter&lt; castor3d::Scene &gt;::Options::subfolder</definition>
+        <argsstring></argsstring>
+        <name>subfolder</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::Scene &gt;::Options::subfolder</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextScene.hpp" line="45" column="8" bodyfile="Text/TextScene.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d66/a05171_1a98808dcf93c1c25d8b4eb263855c2dac" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor::TextWriter&lt; castor3d::Scene &gt;::Options::scale</definition>
+        <argsstring></argsstring>
+        <name>scale</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::Scene &gt;::Options::scale</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextScene.hpp" line="46" column="7" bodyfile="Text/TextScene.hpp" bodystart="46" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="dc/d66/a05171_1a40b0fe7602fb945cb5b89de71a8cf4d8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::MovableObject::MovableObject</definition>
-        <argsstring>(castor::String const &amp;name, Scene &amp;scene, MovableType type, SceneNode &amp;node)</argsstring>
-        <name>MovableObject</name>
+      <memberdef kind="function" id="dc/d66/a05171_1a945035d0a3867f989a84e4b04c881726" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::TextWriter&lt; castor3d::Scene &gt;::Options::Options</definition>
+        <argsstring>(Path prootFolder={}, Path pmaterialsFile={}, Path pmeshesFile={}, Path pnodesFile={}, Path pobjectsFile={}, Path plightsFile={}, String psubfolder={}, float pscale=1.0f)</argsstring>
+        <name>Options</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::Scene &gt;::Options::Options</qualifiedname>
         <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
+          <type>Path</type>
+          <declname>prootFolder</declname>
+          <defval>{}</defval>
         </param>
         <param>
-          <type><ref refid="d7/d00/a05223" kindref="compound">Scene</ref> &amp;</type>
-          <declname>scene</declname>
+          <type>Path</type>
+          <declname>pmaterialsFile</declname>
+          <defval>{}</defval>
         </param>
         <param>
-          <type><ref refid="d7/dd1/a01458_1a3b295abad3147d934a7378cad0a0ebca" kindref="member">MovableType</ref></type>
-          <declname>type</declname>
+          <type>Path</type>
+          <declname>pmeshesFile</declname>
+          <defval>{}</defval>
         </param>
         <param>
-          <type><ref refid="d8/dd0/a05235" kindref="compound">SceneNode</ref> &amp;</type>
-          <declname>node</declname>
-        </param>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The name </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">scene</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parent scene </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">node</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Parent node </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">type</parametername>
-</parameternamelist>
-<parameterdescription>
-<para><ref refid="dc/d66/a05171" kindref="compound">MovableObject</ref> type </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/MovableObject.hpp" line="35" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="dc/d66/a05171_1acf7517058566afbb2290a7856fc9dfee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::MovableObject::MovableObject</definition>
-        <argsstring>(castor::String const &amp;name, Scene &amp;scene, MovableType type)</argsstring>
-        <name>MovableObject</name>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
+          <type>Path</type>
+          <declname>pnodesFile</declname>
+          <defval>{}</defval>
         </param>
         <param>
-          <type><ref refid="d7/d00/a05223" kindref="compound">Scene</ref> &amp;</type>
-          <declname>scene</declname>
+          <type>Path</type>
+          <declname>pobjectsFile</declname>
+          <defval>{}</defval>
         </param>
         <param>
-          <type><ref refid="d7/dd1/a01458_1a3b295abad3147d934a7378cad0a0ebca" kindref="member">MovableType</ref></type>
-          <declname>type</declname>
+          <type>Path</type>
+          <declname>plightsFile</declname>
+          <defval>{}</defval>
         </param>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The name </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">scene</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parent scene </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">type</parametername>
-</parameternamelist>
-<parameterdescription>
-<para><ref refid="dc/d66/a05171" kindref="compound">MovableObject</ref> type </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/MovableObject.hpp" line="51" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="dc/d66/a05171_1a05bd8e8940d26cb4361fccfa67733b03" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>virtual C3D_API castor3d::MovableObject::~MovableObject</definition>
-        <argsstring>()</argsstring>
-        <name>~MovableObject</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/MovableObject.hpp" line="60" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="dc/d66/a05171_1afbef8194f2a0b9e15c9cc483221a08ee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::MovableObject::detach</definition>
-        <argsstring>()</argsstring>
-        <name>detach</name>
-        <briefdescription>
-<para>Detaches the movable object from it&apos;s parent. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/MovableObject.hpp" line="67" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="dc/d66/a05171_1ab2169299d3e08b4e50066e400d1d86dc" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>virtual C3D_API void castor3d::MovableObject::attachTo</definition>
-        <argsstring>(SceneNode &amp;node)</argsstring>
-        <name>attachTo</name>
-        <reimplementedby refid="d0/dcf/a05131_1a080f008a2f6e09cb5600032f72c2701d">attachTo</reimplementedby>
-        <reimplementedby refid="df/dc5/a05151_1a9e4a42449c5a4edf82d6536d1e7ccc80">attachTo</reimplementedby>
-        <reimplementedby refid="d0/d42/a05127_1a9dd2ca096fbcf603036aedb7c67d0a20">attachTo</reimplementedby>
         <param>
-          <type><ref refid="d8/dd0/a05235" kindref="compound">SceneNode</ref> &amp;</type>
-          <declname>node</declname>
+          <type>String</type>
+          <declname>psubfolder</declname>
+          <defval>{}</defval>
         </param>
-        <briefdescription>
-<para>Attaches the movable object to a node. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/MovableObject.hpp" line="74" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="dc/d66/a05171_1aeb1f1e4e6b8dcc933bb8aed4278458ce" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d8/dd0/a05235" kindref="compound">SceneNode</ref> *</type>
-        <definition>SceneNode* castor3d::MovableObject::getParent</definition>
-        <argsstring>() const</argsstring>
-        <name>getParent</name>
-        <briefdescription>
-<para>Retrieves the parent node. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The value </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/MovableObject.hpp" line="83" column="1" bodyfile="Scene/MovableObject.hpp" bodystart="83" bodyend="86"/>
-        <references refid="dc/d66/a05171_1aa058c86365c45c7d4b85a04ce56a9d22" compoundref="df/dd5/a01115" startline="115">m_sceneNode</references>
-      </memberdef>
-      <memberdef kind="function" id="dc/d66/a05171_1acf2dafd94427b63121981ac18ac652a7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d7/dd1/a01458_1a3b295abad3147d934a7378cad0a0ebca" kindref="member">MovableType</ref></type>
-        <definition>MovableType castor3d::MovableObject::getType</definition>
-        <argsstring>() const</argsstring>
-        <name>getType</name>
-        <briefdescription>
-<para>Retrieves the object type. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The value </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/MovableObject.hpp" line="95" column="1" bodyfile="Scene/MovableObject.hpp" bodystart="95" bodyend="98"/>
-        <references refid="dc/d66/a05171_1acf6726e80bb3098468fe1fcd5a1f720e" compoundref="df/dd5/a01115" startline="109">m_type</references>
-      </memberdef>
-      <memberdef kind="function" id="dc/d66/a05171_1a7b093c3d281c312dab1605bd8a189206" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d7/d00/a05223" kindref="compound">Scene</ref> *</type>
-        <definition>Scene* castor3d::MovableObject::getScene</definition>
-        <argsstring>() const</argsstring>
-        <name>getScene</name>
+        <param>
+          <type>float</type>
+          <declname>pscale</declname>
+          <defval>1.0f</defval>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/MovableObject.hpp" line="100" column="1" bodyfile="Scene/MovableObject.hpp" bodystart="100" bodyend="103"/>
-        <references refid="dc/d66/a05171_1a3870fc0cca376a6cbab09a432ace4f0a" compoundref="df/dd5/a01115" startline="106">m_scene</references>
+        <location file="Text/TextScene.hpp" line="20" column="1" bodyfile="Text/TextScene.hpp" bodystart="20" bodyend="37"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="2167">
-        <label>castor3d::Geometry</label>
-        <link refid="db/d6b/a05139"/>
-        <childnode refid="2161" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2166">
-        <label>castor3d::Camera</label>
-        <link refid="d0/dcf/a05131"/>
-        <childnode refid="2161" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2168">
-        <label>castor3d::Light</label>
-        <link refid="df/dc5/a05151"/>
-        <childnode refid="2161" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2161">
-        <label>castor3d::MovableObject</label>
-        <link refid="dc/d66/a05171"/>
-        <childnode refid="2162" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2164" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2164">
-        <label>Named</label>
-      </node>
-      <node id="2169">
-        <label>castor3d::ParticleSystem</label>
-        <link refid="d8/d42/a05207"/>
-        <childnode refid="2161" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2162">
-        <label>Animable</label>
-        <link refid="de/d0a/a02015"/>
-        <childnode refid="2163" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2163">
-        <label>castor::OwnedBy&lt; AnimableHanlerT &gt;</label>
-      </node>
-      <node id="2165">
-        <label>castor3d::BillboardList</label>
-        <link refid="d0/d42/a05127"/>
-        <childnode refid="2161" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="2173">
-        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
-        <childnode refid="2174" relation="template-instance">
-          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2175">
-        <label>K</label>
-      </node>
-      <node id="2176">
-        <label>T</label>
-      </node>
-      <node id="2178">
-        <label>castor3d::SceneNode</label>
-        <link refid="d8/dd0/a05235"/>
-        <childnode refid="2179" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2180" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2177" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2180">
-        <label>castor::OwnedBy&lt; Scene &gt;</label>
-      </node>
-      <node id="2174">
-        <label>std::map&lt; K, T &gt;</label>
-        <childnode refid="2175" relation="usage">
-          <edgelabel>keys</edgelabel>
-        </childnode>
-        <childnode refid="2176" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="2179">
-        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
-      </node>
-      <node id="2170">
-        <label>castor3d::MovableObject</label>
-        <link refid="dc/d66/a05171"/>
-        <childnode refid="2171" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2177" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2178" relation="usage">
-          <edgelabel>m_sceneNode</edgelabel>
-        </childnode>
-        <childnode refid="2181" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-      </node>
-      <node id="2177">
-        <label>Named</label>
-      </node>
-      <node id="2182">
-        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
-      </node>
-      <node id="2171">
-        <label>Animable</label>
-        <link refid="de/d0a/a02015"/>
-        <childnode refid="2172" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2173" relation="usage">
-          <edgelabel>m_animations</edgelabel>
-        </childnode>
-      </node>
-      <node id="2172">
-        <label>castor::OwnedBy&lt; AnimableHanlerT &gt;</label>
-      </node>
-      <node id="2183">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="2181">
-        <label>castor3d::Scene</label>
-        <link refid="d7/d00/a05223"/>
-        <childnode refid="2182" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2183" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2177" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Scene/MovableObject.hpp" line="19" column="1" bodyfile="Scene/MovableObject.hpp" bodystart="16" bodyend="119"/>
+    <location file="Text/TextScene.hpp" line="18" column="1" bodyfile="Text/TextScene.hpp" bodystart="19" bodyend="47"/>
     <listofallmembers>
-      <member refid="de/d0a/a02015_1ad7eba8a02433ff32863bebcc5969f09e" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>addAnimation</name></member>
-      <member refid="de/d0a/a02015_1a299fd668f3d9d65aeb7d0dbc259f921b" prot="protected" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>AnimableT</name></member>
-      <member refid="de/d0a/a02015_1ad87437d17aba848283c70537eeeea2f9" prot="protected" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>AnimableT</name></member>
-      <member refid="de/d0a/a02015_1a09051c18d0af770f8a622b62f707a90e" prot="protected" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>AnimableT</name></member>
-      <member refid="de/d0a/a02015_1af166df7163a5b574419988ded46251ec" prot="protected" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>Animation</name></member>
-      <member refid="de/d0a/a02015_1aa3dd4f795f385e026ec4137d1b3d53f7" prot="protected" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>AnimationPtr</name></member>
-      <member refid="de/d0a/a02015_1a20eee9b6a0eff7dc185a62905823ce8c" prot="protected" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>AnimationPtrStrMap</name></member>
-      <member refid="dc/d66/a05171_1ab2169299d3e08b4e50066e400d1d86dc" prot="public" virt="virtual"><scope>castor3d::MovableObject</scope><name>attachTo</name></member>
-      <member refid="de/d0a/a02015_1a55e0aa0f614359a89b2c4f8b85c90b96" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>cleanupAnimations</name></member>
-      <member refid="dc/d66/a05171_1afbef8194f2a0b9e15c9cc483221a08ee" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>detach</name></member>
-      <member refid="de/d0a/a02015_1af490514e33d457d6ccb9a5f6417b9857" prot="protected" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>doGetAnimation</name></member>
-      <member refid="de/d0a/a02015_1a5cea5dff71a256fd1f56afd64d4ac065" prot="protected" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>doRemoveAnimation</name></member>
-      <member refid="de/d0a/a02015_1a56b5cc702f8369124b1bd0f74d5de9f8" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>getAnimation</name></member>
-      <member refid="de/d0a/a02015_1a4501da7f825e9b8a41fc8ab4f1aacfb0" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>getAnimation</name></member>
-      <member refid="de/d0a/a02015_1a0f731e4fa9d105d9dda6f409e552a755" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>getAnimations</name></member>
-      <member refid="dc/d66/a05171_1aeb1f1e4e6b8dcc933bb8aed4278458ce" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>getParent</name></member>
-      <member refid="dc/d66/a05171_1a7b093c3d281c312dab1605bd8a189206" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>getScene</name></member>
-      <member refid="dc/d66/a05171_1acf2dafd94427b63121981ac18ac652a7" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>getType</name></member>
-      <member refid="de/d0a/a02015_1a599c19a3b4de9a4b80ad9a04d9dcdce3" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>hasAnimation</name></member>
-      <member refid="de/d0a/a02015_1ae1eba45f60f9583c766623aa1165415e" prot="protected" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>m_animations</name></member>
-      <member refid="dc/d66/a05171_1a8385c7c8fd9aee20a3c6de804cb09514" prot="protected" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>m_notifyIndex</name></member>
-      <member refid="dc/d66/a05171_1a3870fc0cca376a6cbab09a432ace4f0a" prot="protected" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>m_scene</name></member>
-      <member refid="dc/d66/a05171_1aa058c86365c45c7d4b85a04ce56a9d22" prot="protected" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>m_sceneNode</name></member>
-      <member refid="dc/d66/a05171_1ab9493ad12e9af9b47db11e76d372a156" prot="protected" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>m_strNodeName</name></member>
-      <member refid="dc/d66/a05171_1acf6726e80bb3098468fe1fcd5a1f720e" prot="protected" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>m_type</name></member>
-      <member refid="dc/d66/a05171_1a40b0fe7602fb945cb5b89de71a8cf4d8" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>MovableObject</name></member>
-      <member refid="dc/d66/a05171_1acf7517058566afbb2290a7856fc9dfee" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>MovableObject</name></member>
-      <member refid="de/d0a/a02015_1ac175c65ac8b324cee120925fd7d10773" prot="protected" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>operator=</name></member>
-      <member refid="de/d0a/a02015_1a6d58963898645284c95c86d7da5c23ee" prot="protected" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>operator=</name></member>
-      <member refid="de/d0a/a02015_1a31508c53a42741c828ca42c079631d69" prot="protected" virt="virtual"><scope>castor3d::MovableObject</scope><name>~AnimableT</name></member>
-      <member refid="dc/d66/a05171_1a05bd8e8940d26cb4361fccfa67733b03" prot="public" virt="virtual"><scope>castor3d::MovableObject</scope><name>~MovableObject</name></member>
+      <member refid="dc/d66/a05171_1add17ae01db985bc64f801d977612c7d3" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;::Options</scope><name>lightsFile</name></member>
+      <member refid="dc/d66/a05171_1a6db6193e538cc32e34d729f6098d5f9f" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;::Options</scope><name>materialsFile</name></member>
+      <member refid="dc/d66/a05171_1acabfb1a3546000ce994ca9926e683e2e" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;::Options</scope><name>meshesFile</name></member>
+      <member refid="dc/d66/a05171_1a3f2edda51944e5bd726db840da682819" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;::Options</scope><name>nodesFile</name></member>
+      <member refid="dc/d66/a05171_1a11955cb9af1ef1e969c9d74a6845cb9c" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;::Options</scope><name>objectsFile</name></member>
+      <member refid="dc/d66/a05171_1a945035d0a3867f989a84e4b04c881726" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;::Options</scope><name>Options</name></member>
+      <member refid="dc/d66/a05171_1a7f20d67f9f2ac307d780c0d4cb485dcd" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;::Options</scope><name>rootFolder</name></member>
+      <member refid="dc/d66/a05171_1a98808dcf93c1c25d8b4eb263855c2dac" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;::Options</scope><name>scale</name></member>
+      <member refid="dc/d66/a05171_1ac1d4dcd4b0af205a1bb9a5083ca43d09" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;::Options</scope><name>subfolder</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

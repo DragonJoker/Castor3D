@@ -1,570 +1,213 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="db/df9/a03951" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::LinesMapping</compoundname>
-    <basecompoundref refid="d2/da4/a03927" prot="public" virt="non-virtual">castor3d::IndexMapping</basecompoundref>
-    <includes local="no">LinesMapping.hpp</includes>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="db/df9/a03951_1a55d84d8062035324847aaa32608bb033" prot="public" static="yes" mutable="no">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
-        <definition>C3D_API castor::String const castor3d::LinesMapping::Name</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="db/df9/a03951" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::QueueDataWrapper</compoundname>
+    <includes local="no">RenderDevice.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/df9/a03951_1a0bcfdd67de41f4aae9b266a3592b4b20" prot="public" static="no" mutable="no">
+        <type><ref refid="d5/d04/a03955" kindref="compound">QueuesData</ref> *</type>
+        <definition>QueuesData* castor3d::QueueDataWrapper::parent</definition>
         <argsstring></argsstring>
-        <name>Name</name>
+        <name>parent</name>
+        <qualifiedname>castor3d::QueueDataWrapper::parent</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="153" column="1" bodyfile="Model/Mesh/Submesh/Component/LinesMapping.hpp" bodystart="153" bodyend="-1"/>
+        <location file="Render/RenderDevice.hpp" line="207" column="13" bodyfile="Render/RenderDevice.hpp" bodystart="207" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="db/df9/a03951_1a8fb021ac4daf6b40141e247bda411a45" prot="private" static="no" mutable="no">
-        <type><ref refid="d7/dd1/a01458_1ac410f72e00a2bf73b63cc8d803fe4ebc" kindref="member">LineArray</ref></type>
-        <definition>LineArray castor3d::LinesMapping::m_lines</definition>
+      <memberdef kind="variable" id="db/df9/a03951_1a339ecf90937c14aa6a0a578ce629b07c" prot="public" static="no" mutable="no">
+        <type><ref refid="da/d1d/a03947" kindref="compound">QueueData</ref> const  *</type>
+        <definition>QueueData const* castor3d::QueueDataWrapper::data</definition>
         <argsstring></argsstring>
-        <name>m_lines</name>
+        <name>data</name>
+        <qualifiedname>castor3d::QueueDataWrapper::data</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The lines in the submesh. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="158" column="1" bodyfile="Model/Mesh/Submesh/Component/LinesMapping.hpp" bodystart="158" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="db/df9/a03951_1ac80e99c9db81c7fb1a3e222111f212d3" prot="private" static="no" mutable="no">
-        <type>castor::Point3f</type>
-        <definition>castor::Point3f castor3d::LinesMapping::m_cameraPosition</definition>
-        <argsstring></argsstring>
-        <name>m_cameraPosition</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The transformed camera position at last sort. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="161" column="1" bodyfile="Model/Mesh/Submesh/Component/LinesMapping.hpp" bodystart="161" bodyend="-1"/>
+        <location file="Render/RenderDevice.hpp" line="208" column="18" bodyfile="Render/RenderDevice.hpp" bodystart="208" bodyend="-1"/>
+        <referencedby refid="db/df9/a03951_1a9fe4cac3233b0d1b1a4453b8e9acf7e3" compoundref="df/d0e/a00800" startline="202" endline="205">operator*</referencedby>
+        <referencedby refid="db/df9/a03951_1ad019d52fc88e25628e9efa45ca9c1958" compoundref="df/d0e/a00800" startline="197" endline="200">operator-&gt;</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="db/df9/a03951_1ab003dd4140664795cefc3684fe26beb5" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="db/df9/a03951_1a6ef1cb56606ca365396cf64c50879823" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::QueueDataWrapper::QueueDataWrapper</definition>
+        <argsstring>(QueueDataWrapper const &amp;)=delete</argsstring>
+        <name>QueueDataWrapper</name>
+        <qualifiedname>castor3d::QueueDataWrapper::QueueDataWrapper</qualifiedname>
+        <param>
+          <type><ref refid="db/df9/a03951" kindref="compound">QueueDataWrapper</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="189" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/df9/a03951_1a6575a713a0b8ce5cb7840663b000c0fa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/df9/a03951" kindref="compound">QueueDataWrapper</ref> &amp;</type>
+        <definition>QueueDataWrapper &amp; castor3d::QueueDataWrapper::operator=</definition>
+        <argsstring>(QueueDataWrapper const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::QueueDataWrapper::operator=</qualifiedname>
+        <param>
+          <type><ref refid="db/df9/a03951" kindref="compound">QueueDataWrapper</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="190" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/df9/a03951_1a4e895bc16d52f3d29bb275e56417bb6e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::LinesMapping::LinesMapping</definition>
-        <argsstring>(Submesh &amp;submesh)</argsstring>
-        <name>LinesMapping</name>
+        <definition>C3D_API castor3d::QueueDataWrapper::QueueDataWrapper</definition>
+        <argsstring>(QueueDataWrapper &amp;&amp;rhs)</argsstring>
+        <name>QueueDataWrapper</name>
+        <qualifiedname>castor3d::QueueDataWrapper::QueueDataWrapper</qualifiedname>
         <param>
-          <type><ref refid="d0/dce/a03971" kindref="compound">Submesh</ref> &amp;</type>
-          <declname>submesh</declname>
+          <type><ref refid="db/df9/a03951" kindref="compound">QueueDataWrapper</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">submesh</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parent submesh. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="24" column="1"/>
+        <location file="Render/RenderDevice.hpp" line="192" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="db/df9/a03951_1aebfb6c9cdfe0cdd3ed77487990e9e601" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::LinesMapping::clearLines</definition>
+      <memberdef kind="function" id="db/df9/a03951_1ac683062f1999255aafe52a3a6a4e39ce" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="db/df9/a03951" kindref="compound">QueueDataWrapper</ref> &amp;</type>
+        <definition>C3D_API QueueDataWrapper &amp; castor3d::QueueDataWrapper::operator=</definition>
+        <argsstring>(QueueDataWrapper &amp;&amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::QueueDataWrapper::operator=</qualifiedname>
+        <param>
+          <type><ref refid="db/df9/a03951" kindref="compound">QueueDataWrapper</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="193" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="db/df9/a03951_1abefccde6a2c009c388028d895bf99048" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::QueueDataWrapper::QueueDataWrapper</definition>
+        <argsstring>(QueuesData *parent)</argsstring>
+        <name>QueueDataWrapper</name>
+        <qualifiedname>castor3d::QueueDataWrapper::QueueDataWrapper</qualifiedname>
+        <param>
+          <type><ref refid="d5/d04/a03955" kindref="compound">QueuesData</ref> *</type>
+          <declname>parent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="194" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="db/df9/a03951_1ac55457c38ec19ee476b118e1c48ea59d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::QueueDataWrapper::~QueueDataWrapper</definition>
         <argsstring>()</argsstring>
-        <name>clearLines</name>
+        <name>~QueueDataWrapper</name>
+        <qualifiedname>castor3d::QueueDataWrapper::~QueueDataWrapper</qualifiedname>
         <briefdescription>
-<para>Clears the lines array. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="31" column="1"/>
+        <location file="Render/RenderDevice.hpp" line="195" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="db/df9/a03951_1a4f3bb5400fd492281ddccbcdf45715ee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/d0d/a03943" kindref="compound">Line</ref></type>
-        <definition>C3D_API Line castor3d::LinesMapping::addLine</definition>
-        <argsstring>(uint32_t a, uint32_t b)</argsstring>
-        <name>addLine</name>
-        <param>
-          <type>uint32_t</type>
-          <declname>a</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>b</declname>
-        </param>
-        <briefdescription>
-<para>Creates and adds a line to the submesh. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">a</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The first vertex index. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">b</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The second vertex index. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The created face. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="44" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="db/df9/a03951_1ae5de71283d379cbe0914a2a51a9864a8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::LinesMapping::addLineGroup</definition>
-        <argsstring>(LineIndices const *const begin, LineIndices const *const end)</argsstring>
-        <name>addLineGroup</name>
-        <param>
-          <type><ref refid="da/d1d/a03947" kindref="compound">LineIndices</ref> const *const</type>
-          <declname>begin</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d1d/a03947" kindref="compound">LineIndices</ref> const *const</type>
-          <declname>end</declname>
-        </param>
-        <briefdescription>
-<para>Creates and adds lines to the submesh. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">begin</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The faces data begin. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">end</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The faces data end. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="55" column="1"/>
-        <referencedby refid="db/df9/a03951_1a748533947f3c7fef833705b83da3c39f" compoundref="d9/d4a/a00479" startline="81" endline="84">addLineGroup</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="db/df9/a03951_1a3ecc8f95dbc715da28b4d5848671c3bd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
-        <definition>C3D_API uint32_t castor3d::LinesMapping::getCount</definition>
-        <argsstring>() const override</argsstring>
-        <name>getCount</name>
-        <reimplements refid="d2/da4/a03927_1a0fb15d1b3d6cea8907affb64e235b698">getCount</reimplements>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The elements count. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="60" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="db/df9/a03951_1a4d3ebec1a1fc007bb98a819ef98a1edd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
-        <definition>C3D_API uint32_t castor3d::LinesMapping::getComponentsCount</definition>
-        <argsstring>() const override</argsstring>
-        <name>getComponentsCount</name>
-        <reimplements refid="d2/da4/a03927_1a3962862bad288beb93936541cf128e88">getComponentsCount</reimplements>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The components count in an element. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="64" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="db/df9/a03951_1a5b3145c05388d2aecf5d63197ca1a616" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::LinesMapping::sortByDistance</definition>
-        <argsstring>(castor::Point3f const &amp;cameraPosition) override</argsstring>
-        <name>sortByDistance</name>
-        <reimplements refid="d2/da4/a03927_1afe6b9b98aa785d2259f1e39d681e8f1e">sortByDistance</reimplements>
-        <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>cameraPosition</declname>
-        </param>
-        <briefdescription>
-<para>Sorts the face from farthest to nearest from the camera. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">cameraPosition</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The camera position, relative to submesh </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="68" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="db/df9/a03951_1a30d5ab7ad31c300da3d08dc7b36fdb73" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::LinesMapping::computeNormals</definition>
-        <argsstring>(bool reverted=false) override</argsstring>
-        <name>computeNormals</name>
-        <reimplements refid="d2/da4/a03927_1a6f19747b6795855d0048b85952e54521">computeNormals</reimplements>
-        <param>
-          <type>bool</type>
-          <declname>reverted</declname>
-          <defval>false</defval>
-        </param>
-        <briefdescription>
-<para>Generates normals and tangents. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">reverted</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if normals are inverted. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="72" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="db/df9/a03951_1a748533947f3c7fef833705b83da3c39f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::LinesMapping::addLineGroup</definition>
-        <argsstring>(std::vector&lt; LineIndices &gt; const &amp;lines)</argsstring>
-        <name>addLineGroup</name>
-        <param>
-          <type>std::vector&lt; <ref refid="da/d1d/a03947" kindref="compound">LineIndices</ref> &gt; const &amp;</type>
-          <declname>lines</declname>
-        </param>
-        <briefdescription>
-<para>Creates and adds lines to the submesh. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">lines</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The lines. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="81" column="1" bodyfile="Model/Mesh/Submesh/Component/LinesMapping.hpp" bodystart="81" bodyend="84"/>
-        <references refid="db/df9/a03951_1ae5de71283d379cbe0914a2a51a9864a8">addLineGroup</references>
-      </memberdef>
-      <memberdef kind="function" id="db/df9/a03951_1a4e103ba98b8385e83fe7fb9659bf0d58" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>size_t</type>
-            <declname>Count</declname>
-            <defname>Count</defname>
-          </param>
-        </templateparamlist>
-        <type>void</type>
-        <definition>void castor3d::LinesMapping::addLineGroup</definition>
-        <argsstring>(std::array&lt; LineIndices, Count &gt; const &amp;lines)</argsstring>
-        <name>addLineGroup</name>
-        <param>
-          <type>std::array&lt; <ref refid="da/d1d/a03947" kindref="compound">LineIndices</ref>, Count &gt; const &amp;</type>
-          <declname>lines</declname>
-        </param>
-        <briefdescription>
-<para>Creates and adds lines to the submesh. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">lines</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The lines. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="94" column="1" bodyfile="Model/Mesh/Submesh/Component/LinesMapping.hpp" bodystart="94" bodyend="97"/>
-        <references refid="db/df9/a03951_1ae5de71283d379cbe0914a2a51a9864a8">addLineGroup</references>
-      </memberdef>
-      <memberdef kind="function" id="db/df9/a03951_1a6d3c35f1728a96254004476963d25157" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>uint32_t</type>
-            <declname>Count</declname>
-            <defname>Count</defname>
-          </param>
-        </templateparamlist>
-        <type>void</type>
-        <definition>void castor3d::LinesMapping::addLineGroup</definition>
-        <argsstring>(LineIndices(&amp;lines)[Count])</argsstring>
-        <name>addLineGroup</name>
-        <param>
-          <type><ref refid="da/d1d/a03947" kindref="compound">LineIndices</ref>(&amp;)</type>
-          <declname>lines</declname>
-          <array>[Count]</array>
-        </param>
-        <briefdescription>
-<para>Creates and adds lines to the submesh. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">lines</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The lines. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="107" column="1" bodyfile="Model/Mesh/Submesh/Component/LinesMapping.hpp" bodystart="107" bodyend="110"/>
-        <references refid="db/df9/a03951_1ae5de71283d379cbe0914a2a51a9864a8">addLineGroup</references>
-      </memberdef>
-      <memberdef kind="function" id="db/df9/a03951_1a42f9f64028fce8e44171e5d3d551e963" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d7/d0d/a03943" kindref="compound">Line</ref> const  &amp;</type>
-        <definition>Line const&amp; castor3d::LinesMapping::operator[]</definition>
-        <argsstring>(uint32_t index) const</argsstring>
-        <name>operator[]</name>
-        <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves the line at given index. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">index</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The index. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The value. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="121" column="1" bodyfile="Model/Mesh/Submesh/Component/LinesMapping.hpp" bodystart="121" bodyend="125"/>
-      </memberdef>
-      <memberdef kind="function" id="db/df9/a03951_1a2a66c01286ce54f5b00967fd065968ad" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d7/dd1/a01458_1ac410f72e00a2bf73b63cc8d803fe4ebc" kindref="member">LineArray</ref> const  &amp;</type>
-        <definition>LineArray const&amp; castor3d::LinesMapping::getFaces</definition>
-        <argsstring>() const</argsstring>
-        <name>getFaces</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The lines array. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="132" column="1" bodyfile="Model/Mesh/Submesh/Component/LinesMapping.hpp" bodystart="132" bodyend="135"/>
-      </memberdef>
-      <memberdef kind="function" id="db/df9/a03951_1a1a380c412ca9f2d0cd2fe129a26bb13e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d7/dd1/a01458_1ac410f72e00a2bf73b63cc8d803fe4ebc" kindref="member">LineArray</ref> &amp;</type>
-        <definition>LineArray&amp; castor3d::LinesMapping::getFaces</definition>
+      <memberdef kind="function" id="db/df9/a03951_1ad019d52fc88e25628e9efa45ca9c1958" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d1d/a03947" kindref="compound">QueueData</ref> const *</type>
+        <definition>QueueData const  * castor3d::QueueDataWrapper::operator-&gt;</definition>
         <argsstring>()</argsstring>
-        <name>getFaces</name>
+        <name>operator-&gt;</name>
+        <qualifiedname>castor3d::QueueDataWrapper::operator-&gt;</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The lines array. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="142" column="1" bodyfile="Model/Mesh/Submesh/Component/LinesMapping.hpp" bodystart="142" bodyend="145"/>
+        <location file="Render/RenderDevice.hpp" line="197" column="18" bodyfile="Render/RenderDevice.hpp" bodystart="197" bodyend="200"/>
+        <references refid="db/df9/a03951_1a339ecf90937c14aa6a0a578ce629b07c" compoundref="df/d0e/a00800" startline="208">data</references>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="db/df9/a03951_1a0c6f6f0f33effdb8f883ec0d7bec17d8" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::LinesMapping::doCleanup</definition>
-        <argsstring>() override</argsstring>
-        <name>doCleanup</name>
-        <reimplements refid="d2/da4/a03927_1a2c49cc8e20d623d7eafa9e092092ccdc">doCleanup</reimplements>
+      <memberdef kind="function" id="db/df9/a03951_1a9fe4cac3233b0d1b1a4453b8e9acf7e3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d1d/a03947" kindref="compound">QueueData</ref> const &amp;</type>
+        <definition>QueueData const  &amp; castor3d::QueueDataWrapper::operator*</definition>
+        <argsstring>()</argsstring>
+        <name>operator*</name>
+        <qualifiedname>castor3d::QueueDataWrapper::operator*</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="148" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="db/df9/a03951_1ac2c0834c8b7e13a7a53868bb22d0961b" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::LinesMapping::doFill</definition>
-        <argsstring>(RenderDevice const &amp;device) override</argsstring>
-        <name>doFill</name>
-        <reimplements refid="d1/d55/a03959_1a78f22f8994aae0890645c943e42c45c9">doFill</reimplements>
-        <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="149" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="db/df9/a03951_1ae42fec4e72e0087789ca0e9112ab92b1" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::LinesMapping::doUpload</definition>
-        <argsstring>() override</argsstring>
-        <name>doUpload</name>
-        <reimplements refid="d2/da4/a03927_1a0bae680c96d93257ac710bcebb708504">doUpload</reimplements>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="150" column="1"/>
+        <location file="Render/RenderDevice.hpp" line="202" column="18" bodyfile="Render/RenderDevice.hpp" bodystart="202" bodyend="205"/>
+        <references refid="db/df9/a03951_1a339ecf90937c14aa6a0a578ce629b07c" compoundref="df/d0e/a00800" startline="208">data</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="1793">
-        <label>castor3d::SubmeshComponent</label>
-        <link refid="d1/d55/a03959"/>
-        <childnode refid="1794" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1794">
-        <label>castor::OwnedBy&lt; Submesh &gt;</label>
-      </node>
-      <node id="1791">
-        <label>castor3d::LinesMapping</label>
-        <link refid="db/df9/a03951"/>
-        <childnode refid="1792" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1792">
-        <label>castor3d::IndexMapping</label>
-        <link refid="d2/da4/a03927"/>
-        <childnode refid="1793" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
     <collaborationgraph>
-      <node id="1797">
-        <label>castor3d::SubmeshComponent</label>
-        <link refid="d1/d55/a03959"/>
-        <childnode refid="1798" relation="public-inheritance">
+      <node id="3">
+        <label>castor3d::QueueData</label>
+        <link refid="da/d1d/a03947"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>parent</edgelabel>
         </childnode>
       </node>
-      <node id="1798">
-        <label>castor::OwnedBy&lt; Submesh &gt;</label>
-      </node>
-      <node id="1795">
-        <label>castor3d::LinesMapping</label>
+      <node id="1">
+        <label>castor3d::QueueDataWrapper</label>
         <link refid="db/df9/a03951"/>
-        <childnode refid="1796" relation="public-inheritance">
+        <childnode refid="2" relation="usage">
+          <edgelabel>parent</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>data</edgelabel>
         </childnode>
       </node>
-      <node id="1796">
-        <label>castor3d::IndexMapping</label>
-        <link refid="d2/da4/a03927"/>
-        <childnode refid="1797" relation="public-inheritance">
-        </childnode>
+      <node id="2">
+        <label>castor3d::QueuesData</label>
+        <link refid="d5/d04/a03955"/>
       </node>
     </collaborationgraph>
-    <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="14" column="1" bodyfile="Model/Mesh/Submesh/Component/LinesMapping.hpp" bodystart="12" bodyend="162"/>
+    <location file="Render/RenderDevice.hpp" line="187" column="1" bodyfile="Render/RenderDevice.hpp" bodystart="188" bodyend="209"/>
     <listofallmembers>
-      <member refid="db/df9/a03951_1a4f3bb5400fd492281ddccbcdf45715ee" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>addLine</name></member>
-      <member refid="db/df9/a03951_1ae5de71283d379cbe0914a2a51a9864a8" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>addLineGroup</name></member>
-      <member refid="db/df9/a03951_1a748533947f3c7fef833705b83da3c39f" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>addLineGroup</name></member>
-      <member refid="db/df9/a03951_1a4e103ba98b8385e83fe7fb9659bf0d58" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>addLineGroup</name></member>
-      <member refid="db/df9/a03951_1a6d3c35f1728a96254004476963d25157" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>addLineGroup</name></member>
-      <member refid="d1/d55/a03959_1af13d08b9487f0501a06c0f7df4c89f8c" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>cleanup</name></member>
-      <member refid="db/df9/a03951_1aebfb6c9cdfe0cdd3ed77487990e9e601" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>clearLines</name></member>
-      <member refid="db/df9/a03951_1a30d5ab7ad31c300da3d08dc7b36fdb73" prot="public" virt="virtual"><scope>castor3d::LinesMapping</scope><name>computeNormals</name></member>
-      <member refid="db/df9/a03951_1a0c6f6f0f33effdb8f883ec0d7bec17d8" prot="private" virt="virtual"><scope>castor3d::LinesMapping</scope><name>doCleanup</name></member>
-      <member refid="db/df9/a03951_1ac2c0834c8b7e13a7a53868bb22d0961b" prot="private" virt="virtual"><scope>castor3d::LinesMapping</scope><name>doFill</name></member>
-      <member refid="db/df9/a03951_1ae42fec4e72e0087789ca0e9112ab92b1" prot="private" virt="virtual"><scope>castor3d::LinesMapping</scope><name>doUpload</name></member>
-      <member refid="d1/d55/a03959_1a53837125323ab11c28a86acbb187a770" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>fill</name></member>
-      <member refid="d2/da4/a03927_1a10bebffa35ae21fc4ff5d89ae006d821" prot="public" virt="virtual"><scope>castor3d::LinesMapping</scope><name>gather</name></member>
-      <member refid="db/df9/a03951_1a4d3ebec1a1fc007bb98a819ef98a1edd" prot="public" virt="virtual"><scope>castor3d::LinesMapping</scope><name>getComponentsCount</name></member>
-      <member refid="db/df9/a03951_1a3ecc8f95dbc715da28b4d5848671c3bd" prot="public" virt="virtual"><scope>castor3d::LinesMapping</scope><name>getCount</name></member>
-      <member refid="db/df9/a03951_1a2a66c01286ce54f5b00967fd065968ad" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>getFaces</name></member>
-      <member refid="db/df9/a03951_1a1a380c412ca9f2d0cd2fe129a26bb13e" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>getFaces</name></member>
-      <member refid="d2/da4/a03927_1ad94cf3099cec538865eced8135a8d645" prot="public" virt="virtual"><scope>castor3d::LinesMapping</scope><name>getProgramFlags</name></member>
-      <member refid="d1/d55/a03959_1a3782f6784f793eeccd48e637e85a9d6c" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>getType</name></member>
-      <member refid="d2/da4/a03927_1a6bd3086ce38c6a3e4f150efd9f580d38" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>IndexMapping</name></member>
-      <member refid="d1/d55/a03959_1a98c6ad3457d19448c1eaa261598103ad" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>initialise</name></member>
-      <member refid="db/df9/a03951_1ab003dd4140664795cefc3684fe26beb5" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>LinesMapping</name></member>
-      <member refid="db/df9/a03951_1ac80e99c9db81c7fb1a3e222111f212d3" prot="private" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>m_cameraPosition</name></member>
-      <member refid="db/df9/a03951_1a8fb021ac4daf6b40141e247bda411a45" prot="private" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>m_lines</name></member>
-      <member refid="db/df9/a03951_1a55d84d8062035324847aaa32608bb033" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>Name</name></member>
-      <member refid="d1/d55/a03959_1a7e21e4eda223d50b6751c40cb44f77a7" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>needsUpdate</name></member>
-      <member refid="db/df9/a03951_1a42f9f64028fce8e44171e5d3d551e963" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>operator[]</name></member>
-      <member refid="d1/d55/a03959_1a06b2ee9400bab62f5472f8ce8a03ee27" prot="public" virt="virtual"><scope>castor3d::LinesMapping</scope><name>setMaterial</name></member>
-      <member refid="db/df9/a03951_1a5b3145c05388d2aecf5d63197ca1a616" prot="public" virt="virtual"><scope>castor3d::LinesMapping</scope><name>sortByDistance</name></member>
-      <member refid="d1/d55/a03959_1aafbe6064005a72343870bb444e1e6a1f" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>SubmeshComponent</name></member>
-      <member refid="d1/d55/a03959_1a2dbcda2b8c26f4c9c52db78a5740a0f8" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>upload</name></member>
-      <member refid="d1/d55/a03959_1a30231a167367ba38b41f9bf5b3bcd005" prot="public" virt="virtual"><scope>castor3d::LinesMapping</scope><name>~SubmeshComponent</name></member>
+      <member refid="db/df9/a03951_1a339ecf90937c14aa6a0a578ce629b07c" prot="public" virt="non-virtual"><scope>castor3d::QueueDataWrapper</scope><name>data</name></member>
+      <member refid="db/df9/a03951_1a9fe4cac3233b0d1b1a4453b8e9acf7e3" prot="public" virt="non-virtual"><scope>castor3d::QueueDataWrapper</scope><name>operator*</name></member>
+      <member refid="db/df9/a03951_1ad019d52fc88e25628e9efa45ca9c1958" prot="public" virt="non-virtual"><scope>castor3d::QueueDataWrapper</scope><name>operator-&gt;</name></member>
+      <member refid="db/df9/a03951_1a6575a713a0b8ce5cb7840663b000c0fa" prot="public" virt="non-virtual"><scope>castor3d::QueueDataWrapper</scope><name>operator=</name></member>
+      <member refid="db/df9/a03951_1ac683062f1999255aafe52a3a6a4e39ce" prot="public" virt="non-virtual"><scope>castor3d::QueueDataWrapper</scope><name>operator=</name></member>
+      <member refid="db/df9/a03951_1a0bcfdd67de41f4aae9b266a3592b4b20" prot="public" virt="non-virtual"><scope>castor3d::QueueDataWrapper</scope><name>parent</name></member>
+      <member refid="db/df9/a03951_1a6ef1cb56606ca365396cf64c50879823" prot="public" virt="non-virtual"><scope>castor3d::QueueDataWrapper</scope><name>QueueDataWrapper</name></member>
+      <member refid="db/df9/a03951_1a4e895bc16d52f3d29bb275e56417bb6e" prot="public" virt="non-virtual"><scope>castor3d::QueueDataWrapper</scope><name>QueueDataWrapper</name></member>
+      <member refid="db/df9/a03951_1abefccde6a2c009c388028d895bf99048" prot="public" virt="non-virtual"><scope>castor3d::QueueDataWrapper</scope><name>QueueDataWrapper</name></member>
+      <member refid="db/df9/a03951_1ac55457c38ec19ee476b118e1c48ea59d" prot="public" virt="non-virtual"><scope>castor3d::QueueDataWrapper</scope><name>~QueueDataWrapper</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

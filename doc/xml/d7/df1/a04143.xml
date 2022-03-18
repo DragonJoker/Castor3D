@@ -1,68 +1,55 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d7/df1/a04143" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::TextOverlay::DisplayableChar</compoundname>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d7/df1/a04143_1a9e4bb5efb7a4edc4df3c4f4fe756a255" prot="public" static="no" mutable="no">
-        <type>castor::Point2d</type>
-        <definition>castor::Point2d castor3d::TextOverlay::DisplayableChar::m_position</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d7/df1/a04143" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ShadowMapResult</compoundname>
+    <basecompoundref refid="d6/dc7/a03683" prot="public" virt="non-virtual">castor3d::GBufferT&lt; SmTexture &gt;</basecompoundref>
+    <includes local="no">ShadowMapResult.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d7/df1/a04143_1afe13ade90e0602ce6b2f4c7aa24c1109" prot="private" static="no" mutable="no">
+        <type>TextureUnitArray</type>
+        <definition>TextureUnitArray castor3d::ShadowMapResult::m_owned</definition>
         <argsstring></argsstring>
-        <name>m_position</name>
+        <name>m_owned</name>
+        <qualifiedname>castor3d::ShadowMapResult::m_owned</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The character position, relative to its line. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/TextOverlay.hpp" line="295" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="295" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/df1/a04143_1af84b833128db6996ffd0ae27d2978640" prot="public" static="no" mutable="no">
-        <type>castor::Point2d</type>
-        <definition>castor::Point2d castor3d::TextOverlay::DisplayableChar::m_size</definition>
-        <argsstring></argsstring>
-        <name>m_size</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The character dimensions. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/TextOverlay.hpp" line="298" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="298" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/df1/a04143_1aa7c0972fe90e078a4cd5a0d6ce875a9d" prot="public" static="no" mutable="no">
-        <type>castor::Glyph const  &amp;</type>
-        <definition>castor::Glyph const&amp; castor3d::TextOverlay::DisplayableChar::m_glyph</definition>
-        <argsstring></argsstring>
-        <name>m_glyph</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The character to display. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/TextOverlay.hpp" line="301" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="301" bodyend="-1"/>
+        <location file="Render/ShadowMap/ShadowMapResult.hpp" line="25" column="18" bodyfile="Render/ShadowMap/ShadowMapResult.hpp" bodystart="25" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d7/df1/a04143_1ab698c99baf19934b02c2d6021edb2fd3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::TextOverlay::DisplayableChar::DisplayableChar</definition>
-        <argsstring>(castor::Point2d const &amp;position, castor::Point2d const &amp;size, castor::Glyph const &amp;glyph)</argsstring>
-        <name>DisplayableChar</name>
+      <memberdef kind="function" id="d7/df1/a04143_1a0b8cb3d74d78413cc3fe3e5331baad1c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ShadowMapResult::ShadowMapResult</definition>
+        <argsstring>(crg::ResourceHandler &amp;handler, RenderDevice const &amp;device, castor::String const &amp;prefix, VkImageCreateFlags createFlags, castor::Size const &amp;size, uint32_t layerCount)</argsstring>
+        <name>ShadowMapResult</name>
+        <qualifiedname>castor3d::ShadowMapResult::ShadowMapResult</qualifiedname>
         <param>
-          <type>castor::Point2d const &amp;</type>
-          <declname>position</declname>
+          <type>crg::ResourceHandler &amp;</type>
+          <declname>handler</declname>
         </param>
         <param>
-          <type>castor::Point2d const &amp;</type>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>prefix</declname>
+        </param>
+        <param>
+          <type>VkImageCreateFlags</type>
+          <declname>createFlags</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
           <declname>size</declname>
         </param>
         <param>
-          <type>castor::Glyph const &amp;</type>
-          <declname>glyph</declname>
+          <type>uint32_t</type>
+          <declname>layerCount</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -70,97 +57,162 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/TextOverlay.hpp" line="303" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="303" bodyend="310"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/df1/a04143_1acfd1f3bd9cf4b469d3fab2c5096eb08a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::TextOverlay::DisplayableChar::DisplayableChar</definition>
-        <argsstring>(DisplayableChar const &amp;rhs)</argsstring>
-        <name>DisplayableChar</name>
-        <param>
-          <type>DisplayableChar const &amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/TextOverlay.hpp" line="312" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="312" bodyend="317"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/df1/a04143_1aa72bc9794b7d66d99a0d1c9a57f423f8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::TextOverlay::DisplayableChar::DisplayableChar</definition>
-        <argsstring>(DisplayableChar &amp;&amp;rhs) noexcept</argsstring>
-        <name>DisplayableChar</name>
-        <param>
-          <type>DisplayableChar &amp;&amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/TextOverlay.hpp" line="319" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="319" bodyend="324"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/df1/a04143_1a2307728d8e6b6e8a25c081492a302ab5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>DisplayableChar &amp;</type>
-        <definition>DisplayableChar&amp; castor3d::TextOverlay::DisplayableChar::operator=</definition>
-        <argsstring>(DisplayableChar const &amp;rhs)</argsstring>
-        <name>operator=</name>
-        <param>
-          <type>DisplayableChar const &amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/TextOverlay.hpp" line="326" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="326" bodyend="331"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/df1/a04143_1a1e5fc84d8a0c58558e4763ddf3288eb1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>DisplayableChar &amp;</type>
-        <definition>DisplayableChar&amp; castor3d::TextOverlay::DisplayableChar::operator=</definition>
-        <argsstring>(DisplayableChar &amp;&amp;rhs) noexcept</argsstring>
-        <name>operator=</name>
-        <param>
-          <type>DisplayableChar &amp;&amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/TextOverlay.hpp" line="333" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="333" bodyend="342"/>
+        <location file="Render/ShadowMap/ShadowMapResult.hpp" line="17" column="9"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>A character, along with its size and relative position. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
-</simplesect>
-<simplesect kind="date"><para>28/01/2016 </para>
-</simplesect>
-</para>
     </detaileddescription>
-    <location file="Overlay/TextOverlay.hpp" line="292" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="291" bodyend="343"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::GBufferT&lt; SmTexture &gt;</label>
+        <link refid="d6/dc7/a03683"/>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; SmTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::GBufferBase</label>
+        <link refid="d1/d7a/a03679"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="d6/dc7/a03683"/>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ShadowMapResult</label>
+        <link refid="d7/df1/a04143"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::GBufferT&lt; SmTexture &gt;</label>
+        <link refid="d6/dc7/a03683"/>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_result</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; SmTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>T</label>
+      </node>
+      <node id="3">
+        <label>castor3d::GBufferBase</label>
+        <link refid="d1/d7a/a03679"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="d6/dc7/a03683"/>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_result</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::QueuesData</label>
+        <link refid="d5/d04/a03955"/>
+      </node>
+      <node id="5">
+        <label>castor3d::RenderDevice</label>
+        <link refid="d4/d87/a03963"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>queueFamilies</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d3/d9a/a04075"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ShadowMapResult</label>
+        <link refid="d7/df1/a04143"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
+      </node>
+      <node id="7">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="13">
+        <label>std::shared_ptr&lt; T &gt;</label>
+        <childnode refid="11" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="11" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::vector&lt; QueuesData &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; QueuesData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>std::vector&lt; TexturePtr &gt;</label>
+        <childnode refid="13" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; TexturePtr &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/ShadowMap/ShadowMapResult.hpp" line="13" column="1" bodyfile="Render/ShadowMap/ShadowMapResult.hpp" bodystart="15" bodyend="26"/>
     <listofallmembers>
-      <member refid="d7/df1/a04143_1ab698c99baf19934b02c2d6021edb2fd3" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>DisplayableChar</name></member>
-      <member refid="d7/df1/a04143_1acfd1f3bd9cf4b469d3fab2c5096eb08a" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>DisplayableChar</name></member>
-      <member refid="d7/df1/a04143_1aa72bc9794b7d66d99a0d1c9a57f423f8" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>DisplayableChar</name></member>
-      <member refid="d7/df1/a04143_1aa7c0972fe90e078a4cd5a0d6ce875a9d" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>m_glyph</name></member>
-      <member refid="d7/df1/a04143_1a9e4bb5efb7a4edc4df3c4f4fe756a255" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>m_position</name></member>
-      <member refid="d7/df1/a04143_1af84b833128db6996ffd0ae27d2978640" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>m_size</name></member>
-      <member refid="d7/df1/a04143_1a2307728d8e6b6e8a25c081492a302ab5" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>operator=</name></member>
-      <member refid="d7/df1/a04143_1a1e5fc84d8a0c58558e4763ddf3288eb1" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>operator=</name></member>
+      <member refid="d6/dc7/a03683_1a794584976030474106bba3b69f4a7f80" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>begin</name></member>
+      <member refid="d6/dc7/a03683_1ae8ca53c58a918901635ec3492d4e064d" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>begin</name></member>
+      <member refid="d6/dc7/a03683_1ad184cb851604a0fdad0f1f8136ea6457" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>cbegin</name></member>
+      <member refid="d6/dc7/a03683_1a53d2fc5d9e1c83c50823f591a9650095" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>cend</name></member>
+      <member refid="d6/dc7/a03683_1a8939bb90032a1e4ec33e7840cb71c6c4" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>create</name></member>
+      <member refid="d6/dc7/a03683_1a54feb2c94b179d3ae6e16284d05a124c" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>end</name></member>
+      <member refid="d6/dc7/a03683_1a12e053e63b5593edca663b4a01962d6d" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>end</name></member>
+      <member refid="d6/dc7/a03683_1a67a677fc6cbdb36e74fa6b74a65c5015" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>GBufferT</name></member>
+      <member refid="d6/dc7/a03683_1a1ab6068973c95bddb3229dc2d9b1cc39" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>GBufferT</name></member>
+      <member refid="d6/dc7/a03683_1a1bb04fa8833cb8e9df999784c3f4e72d" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>GBufferT</name></member>
+      <member refid="d6/dc7/a03683_1aad84cb58cfbead8aa670554e5b015e54" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>GBufferT</name></member>
+      <member refid="d7/df1/a04143_1afe13ade90e0602ce6b2f4c7aa24c1109" prot="private" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>m_owned</name></member>
+      <member refid="d6/dc7/a03683_1ab53983ea6cfcc95da08034abb5e20d6b" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>m_result</name></member>
+      <member refid="d6/dc7/a03683_1aa803d666fd91abf546fa7bb32507b038" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>operator=</name></member>
+      <member refid="d6/dc7/a03683_1a8c693c6743416a4b36022e98193e3aa3" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>operator=</name></member>
+      <member refid="d6/dc7/a03683_1afc570eab10faf45040bd5ecafcc39104" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>operator[]</name></member>
+      <member refid="d7/df1/a04143_1a0b8cb3d74d78413cc3fe3e5331baad1c" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>ShadowMapResult</name></member>
+      <member refid="d6/dc7/a03683_1a84462bb3e4892ec0bb69d310bf08a7c3" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>~GBufferT</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

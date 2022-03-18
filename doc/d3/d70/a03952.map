@@ -1,7 +1,5 @@
-<map id="castor3d::InstantiationComponent::Data" name="castor3d::InstantiationComponent::Data">
-<area shape="rect" id="node1" title=" " alt="" coords="50,303,266,344"/>
-<area shape="rect" id="node2" title=" " alt="" coords="86,199,230,240"/>
-<area shape="rect" id="node3" href="$df/dfb/a03946.html" title=" " alt="" coords="5,95,183,121"/>
-<area shape="rect" id="node4" title="STL class." alt="" coords="207,95,320,121"/>
-<area shape="rect" id="node5" title=" " alt="" coords="244,5,283,32"/>
+<map id="castor3d::QueueDataWrapper" name="castor3d::QueueDataWrapper">
+<area shape="rect" id="node1" title=" " alt="" coords="5,184,200,211"/>
+<area shape="rect" id="node2" href="$de/d88/a03958.html" title=" " alt="" coords="51,5,203,32"/>
+<area shape="rect" id="node3" href="$dc/d61/a03950.html" title=" " alt="" coords="147,95,293,121"/>
 </map>

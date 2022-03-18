@@ -1,193 +1,98 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d8/d03/a03871" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::Sphere</compoundname>
-    <basecompoundref refid="d1/dc8/a03895" prot="public" virt="non-virtual">castor3d::MeshGenerator</basecompoundref>
-    <includes local="no">Sphere.hpp</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d8/d03/a03871_1a77e8f3267c6e329d57b8cf79a017948b" prot="private" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::Sphere::m_radius</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d8/d03/a03871" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::rq::ConfigT</compoundname>
+    <includes local="no">RenderQuad.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>template&lt; typename ValueT &gt; typename</type>
+        <declname>WrapperT</declname>
+        <defname>WrapperT</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/d03/a03871_1ac4d5fa2df58c23f29429178eff899699" prot="public" static="no" mutable="no">
+        <type>WrapperT&lt; <ref refid="d0/dc7/a01402_1a4a9359de68c83f5e0f2d2cbe8bf5910b" kindref="member">BindingDescriptionArray</ref> &gt;</type>
+        <definition>WrapperT&lt; BindingDescriptionArray &gt; castor3d::rq::ConfigT&lt; WrapperT &gt;::bindings</definition>
         <argsstring></argsstring>
-        <name>m_radius</name>
+        <name>bindings</name>
+        <qualifiedname>castor3d::rq::ConfigT::bindings</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Generator/Sphere.hpp" line="39" column="1" bodyfile="Model/Mesh/Generator/Sphere.hpp" bodystart="39" bodyend="-1"/>
+        <location file="Render/Passes/RenderQuad.hpp" line="79" column="10" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="79" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d8/d03/a03871_1ad8a69e89e7a3e4dcc6fd23fcd7a9a14b" prot="private" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::Sphere::m_nbFaces</definition>
+      <memberdef kind="variable" id="d8/d03/a03871_1a34e232f8e87ff523d0df7cd3f697124f" prot="public" static="no" mutable="no">
+        <type>WrapperT&lt; VkImageSubresourceRange &gt;</type>
+        <definition>WrapperT&lt; VkImageSubresourceRange &gt; castor3d::rq::ConfigT&lt; WrapperT &gt;::range</definition>
         <argsstring></argsstring>
-        <name>m_nbFaces</name>
+        <name>range</name>
+        <qualifiedname>castor3d::rq::ConfigT::range</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Generator/Sphere.hpp" line="40" column="1" bodyfile="Model/Mesh/Generator/Sphere.hpp" bodystart="40" bodyend="-1"/>
+        <location file="Render/Passes/RenderQuad.hpp" line="80" column="10" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="80" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d8/d03/a03871_1ad6ab2353e5bd9449d7729f1680d67502" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::Sphere::Sphere</definition>
-        <argsstring>()</argsstring>
-        <name>Sphere</name>
+      <memberdef kind="variable" id="d8/d03/a03871_1a4e4283067ecc109099b08f65723dffae" prot="public" static="no" mutable="no">
+        <type>WrapperT&lt; <ref refid="d4/db7/a03863" kindref="compound">Texcoord</ref> &gt;</type>
+        <definition>WrapperT&lt; Texcoord &gt; castor3d::rq::ConfigT&lt; WrapperT &gt;::texcoordConfig</definition>
+        <argsstring></argsstring>
+        <name>texcoordConfig</name>
+        <qualifiedname>castor3d::rq::ConfigT::texcoordConfig</qualifiedname>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Generator/Sphere.hpp" line="21" column="1"/>
+        <location file="Render/Passes/RenderQuad.hpp" line="81" column="10" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="81" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="d8/d03/a03871_1a0ea52aba3f8587305570d4f73cce60ef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::Sphere::~Sphere</definition>
-        <argsstring>()</argsstring>
-        <name>~Sphere</name>
+      <memberdef kind="variable" id="d8/d03/a03871_1aad18baaa7ab25c7cf1f27c9f3719104e" prot="public" static="no" mutable="no">
+        <type>WrapperT&lt; <ref refid="da/de3/a01398_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref> &gt;</type>
+        <definition>WrapperT&lt; BlendMode &gt; castor3d::rq::ConfigT&lt; WrapperT &gt;::blendMode</definition>
+        <argsstring></argsstring>
+        <name>blendMode</name>
+        <qualifiedname>castor3d::rq::ConfigT::blendMode</qualifiedname>
         <briefdescription>
-<para>Destructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Generator/Sphere.hpp" line="28" column="1"/>
+        <location file="Render/Passes/RenderQuad.hpp" line="82" column="10" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="82" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-static-func">
-      <memberdef kind="function" id="d8/d03/a03871_1a67ab721549baf7cdcf68825698b451bb" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> MeshGeneratorSPtr</type>
-        <definition>static C3D_API MeshGeneratorSPtr castor3d::Sphere::create</definition>
-        <argsstring>()</argsstring>
-        <name>create</name>
-        <briefdescription>
-<para>Creation function, used by Factory. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para><ref refid="d5/daa/a03855" kindref="compound">Cylinder</ref> </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Generator/Sphere.hpp" line="32" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d8/d03/a03871_1a1424ee4b6ceba752232d30bd13f66ff0" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>virtual C3D_API void castor3d::Sphere::doGenerate</definition>
-        <argsstring>(Mesh &amp;mesh, Parameters const &amp;parameters)</argsstring>
-        <name>doGenerate</name>
-        <reimplements refid="d1/dc8/a03895_1a690745122d7e670b311e317ae86c9b45">doGenerate</reimplements>
-        <param>
-          <type><ref refid="d5/d45/a03887" kindref="compound">Mesh</ref> &amp;</type>
-          <declname>mesh</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
-          <declname>parameters</declname>
-        </param>
-        <briefdescription>
-<para>Generates the mesh. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">mesh</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The mesh. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">parameters</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The generator parameters. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Generator/Sphere.hpp" line="35" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="friend">
-      <memberdef kind="friend" id="d8/d03/a03871_1a8e500083978601affb94c31d8b57e940" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>friend std::ostream &amp;</type>
-        <definition>std::ostream&amp; operator&lt;&lt;</definition>
-        <argsstring>(std::ostream &amp;o, Sphere const &amp;c)</argsstring>
-        <name>operator&lt;&lt;</name>
-        <param>
-          <type>std::ostream &amp;</type>
-          <declname>o</declname>
-        </param>
-        <param>
-          <type><ref refid="d8/d03/a03871" kindref="compound">Sphere</ref> const &amp;</type>
-          <declname>c</declname>
-        </param>
+      <memberdef kind="variable" id="d8/d03/a03871_1a3a07327799c9bcbec5c44c87160279c8" prot="public" static="no" mutable="no">
+        <type>WrapperT&lt; <ref refid="de/dc3/a04319" kindref="compound">IntermediateView</ref> &gt;</type>
+        <definition>WrapperT&lt; IntermediateView &gt; castor3d::rq::ConfigT&lt; WrapperT &gt;::tex3DResult</definition>
+        <argsstring></argsstring>
+        <name>tex3DResult</name>
+        <qualifiedname>castor3d::rq::ConfigT::tex3DResult</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Generator/Sphere.hpp" line="41" column="1" bodyfile="Model/Mesh/Generator/Sphere.hpp" bodystart="44" bodyend="47"/>
+        <location file="Render/Passes/RenderQuad.hpp" line="83" column="10" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="83" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="4123">
-        <label>castor3d::MeshGenerator</label>
-        <link refid="d1/dc8/a03895"/>
-      </node>
-      <node id="4122">
-        <label>castor3d::Sphere</label>
-        <link refid="d8/d03/a03871"/>
-        <childnode refid="4123" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="4125">
-        <label>castor3d::MeshGenerator</label>
-        <link refid="d1/dc8/a03895"/>
-      </node>
-      <node id="4124">
-        <label>castor3d::Sphere</label>
-        <link refid="d8/d03/a03871"/>
-        <childnode refid="4125" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Model/Mesh/Generator/Sphere.hpp" line="13" column="1" bodyfile="Model/Mesh/Generator/Sphere.hpp" bodystart="11" bodyend="42"/>
+    <location file="Render/Passes/RenderQuad.hpp" line="77" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="78" bodyend="84"/>
     <listofallmembers>
-      <member refid="d1/dc8/a03895_1a3207825be521c851f6fc654751f54cf1" prot="public" virt="virtual"><scope>castor3d::Sphere</scope><name>computeNormals</name></member>
-      <member refid="d8/d03/a03871_1a67ab721549baf7cdcf68825698b451bb" prot="public" virt="non-virtual"><scope>castor3d::Sphere</scope><name>create</name></member>
-      <member refid="d8/d03/a03871_1a1424ee4b6ceba752232d30bd13f66ff0" prot="private" virt="virtual"><scope>castor3d::Sphere</scope><name>doGenerate</name></member>
-      <member refid="d1/dc8/a03895_1a9fdc140f2d871ca6cb81029250c346ae" prot="public" virt="virtual"><scope>castor3d::Sphere</scope><name>generate</name></member>
-      <member refid="d8/d03/a03871_1ad8a69e89e7a3e4dcc6fd23fcd7a9a14b" prot="private" virt="non-virtual"><scope>castor3d::Sphere</scope><name>m_nbFaces</name></member>
-      <member refid="d8/d03/a03871_1a77e8f3267c6e329d57b8cf79a017948b" prot="private" virt="non-virtual"><scope>castor3d::Sphere</scope><name>m_radius</name></member>
-      <member refid="d1/dc8/a03895_1a3ccec3fd88667bbca33c6e81afdeff19" prot="public" virt="non-virtual"><scope>castor3d::Sphere</scope><name>MeshGenerator</name></member>
-      <member refid="d8/d03/a03871_1a8e500083978601affb94c31d8b57e940" prot="private" virt="non-virtual"><scope>castor3d::Sphere</scope><name>operator&lt;&lt;</name></member>
-      <member refid="d8/d03/a03871_1ad6ab2353e5bd9449d7729f1680d67502" prot="public" virt="non-virtual"><scope>castor3d::Sphere</scope><name>Sphere</name></member>
-      <member refid="d1/dc8/a03895_1adee42c7c921b0dff4cbbc99c29faf31f" prot="public" virt="virtual"><scope>castor3d::Sphere</scope><name>~MeshGenerator</name></member>
-      <member refid="d8/d03/a03871_1a0ea52aba3f8587305570d4f73cce60ef" prot="public" virt="non-virtual"><scope>castor3d::Sphere</scope><name>~Sphere</name></member>
+      <member refid="d8/d03/a03871_1ac4d5fa2df58c23f29429178eff899699" prot="public" virt="non-virtual"><scope>castor3d::rq::ConfigT</scope><name>bindings</name></member>
+      <member refid="d8/d03/a03871_1aad18baaa7ab25c7cf1f27c9f3719104e" prot="public" virt="non-virtual"><scope>castor3d::rq::ConfigT</scope><name>blendMode</name></member>
+      <member refid="d8/d03/a03871_1a34e232f8e87ff523d0df7cd3f697124f" prot="public" virt="non-virtual"><scope>castor3d::rq::ConfigT</scope><name>range</name></member>
+      <member refid="d8/d03/a03871_1a3a07327799c9bcbec5c44c87160279c8" prot="public" virt="non-virtual"><scope>castor3d::rq::ConfigT</scope><name>tex3DResult</name></member>
+      <member refid="d8/d03/a03871_1a4e4283067ecc109099b08f65723dffae" prot="public" virt="non-virtual"><scope>castor3d::rq::ConfigT</scope><name>texcoordConfig</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

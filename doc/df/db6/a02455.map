@@ -1,4 +1,5 @@
-<map id="castor3d::CpuFunctorEvent" name="castor3d::CpuFunctorEvent">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,184,107"/>
-<area shape="rect" id="node2" href="$da/d23/a02452.html" title=" " alt="" coords="9,5,181,32"/>
+<map id="castor3d::BinaryParser&lt; Submesh &gt;" name="castor3d::BinaryParser&lt; Submesh &gt;">
+<area shape="rect" id="node1" title="MovableObject loader." alt="" coords="21,200,175,241"/>
+<area shape="rect" id="node2" href="$db/d83/a02328.html" title=" " alt="" coords="5,109,191,151"/>
+<area shape="rect" id="node3" href="$db/d83/a02328.html" title="Binary data chunk reader base class." alt="" coords="5,5,191,47"/>
 </map>

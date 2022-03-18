@@ -1,0 +1,30 @@
+<map id="castor3d::BillboardBase" name="castor3d::BillboardBase">
+<area shape="rect" id="node1" title=" " alt="" coords="1933,326,2093,353"/>
+<area shape="rect" id="node2" href="$d0/d7e/a04594.html" title=" " alt="" coords="1593,58,1766,85"/>
+<area shape="rect" id="node3" title=" " alt="" coords="1275,5,1473,47"/>
+<area shape="rect" id="node4" href="$d6/d71/a04598.html" title=" " alt="" coords="1621,154,1738,181"/>
+<area shape="rect" id="node5" title=" " alt="" coords="1303,71,1445,112"/>
+<area shape="rect" id="node6" title=" " alt="" coords="1281,137,1467,163"/>
+<area shape="rect" id="node7" title=" " alt="" coords="1321,187,1427,214"/>
+<area shape="rect" id="node8" href="$dd/d6a/a04642.html" title=" " alt="" coords="1606,275,1753,302"/>
+<area shape="rect" id="node9" title=" " alt="" coords="1287,289,1461,331"/>
+<area shape="rect" id="node10" href="$d6/d41/a02222.html" title=" " alt="" coords="1336,238,1412,265"/>
+<area shape="rect" id="node11" title=" " alt="" coords="971,177,1157,203"/>
+<area shape="rect" id="node12" title=" " alt="" coords="660,275,827,316"/>
+<area shape="rect" id="node16" href="$d6/d41/a02222.html" title="Animable public interface." alt="" coords="989,228,1139,269"/>
+<area shape="rect" id="node13" title=" " alt="" coords="311,282,432,309"/>
+<area shape="rect" id="node14" title=" " alt="" coords="82,318,121,345"/>
+<area shape="rect" id="node28" title=" " alt="" coords="303,335,440,376"/>
+<area shape="rect" id="node15" title=" " alt="" coords="82,247,121,274"/>
+<area shape="rect" id="node17" title=" " alt="" coords="649,209,837,251"/>
+<area shape="rect" id="node18" href="$d0/dff/a02506.html" title=" " alt="" coords="1289,436,1459,477"/>
+<area shape="rect" id="node19" href="$d3/d41/a02530.html" title=" " alt="" coords="660,638,827,665"/>
+<area shape="rect" id="node21" href="$d0/dff/a02506.html" title="An offset and range of a GpuBuffer." alt="" coords="979,471,1149,512"/>
+<area shape="rect" id="node24" href="$db/d09/a02502.html" title="A GPU buffer, that uses a buddy allocator to allocate sub&#45;buffers." alt="" coords="992,700,1136,741"/>
+<area shape="rect" id="node20" href="$d7/da8/a02522.html" title="A memory range, in bytes." alt="" coords="670,478,817,505"/>
+<area shape="rect" id="node23" href="$d9/d66/a02562.html" title=" " alt="" coords="1281,567,1467,594"/>
+<area shape="rect" id="node22" href="$d9/d76/a02526.html" title=" " alt="" coords="1591,506,1768,533"/>
+<area shape="rect" id="node25" title=" " alt="" coords="664,342,823,398"/>
+<area shape="rect" id="node26" href="$d6/d59/a02810.html" title=" " alt="" coords="316,401,427,427"/>
+<area shape="rect" id="node27" title=" " alt="" coords="5,401,197,427"/>
+</map>

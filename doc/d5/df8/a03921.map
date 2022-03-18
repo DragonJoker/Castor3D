@@ -1,5 +1,8 @@
-<map id="castor3d::BonesInstantiationComponent" name="castor3d::BonesInstantiationComponent">
-<area shape="rect" id="node1" title=" " alt="" coords="13,155,199,196"/>
-<area shape="rect" id="node2" href="$d4/d2e/a03974.html" title=" " alt="" coords="5,80,207,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,207,32"/>
+<map id="castor3d::PostEffect" name="castor3d::PostEffect">
+<area shape="rect" id="node1" title=" " alt="" coords="245,185,385,212"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,96,237,123"/>
+<area shape="rect" id="node3" title=" " alt="" coords="261,96,368,123"/>
+<area shape="rect" id="node4" href="$da/d33/a04079.html" title=" " alt="" coords="392,96,549,123"/>
+<area shape="rect" id="node5" title=" " alt="" coords="274,5,457,47"/>
+<area shape="rect" id="node6" title=" " alt="" coords="481,13,668,39"/>
 </map>

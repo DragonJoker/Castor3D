@@ -1,7 +1,10 @@
-<map id="castor3d::ObjectRenderNode&lt; DataTypeT, InstanceTypeT &gt;" name="castor3d::ObjectRenderNode&lt; DataTypeT, InstanceTypeT &gt;">
-<area shape="rect" id="node1" title="Helper structure used to render objects." alt="" coords="5,119,205,161"/>
-<area shape="rect" id="node2" href="$d7/d12/a04298.html" title=" " alt="" coords="253,5,456,61"/>
-<area shape="rect" id="node3" href="$d2/dfc/a04310.html" title=" " alt="" coords="257,86,453,127"/>
-<area shape="rect" id="node4" href="$dd/d0e/a04350.html" title=" " alt="" coords="257,151,453,193"/>
-<area shape="rect" id="node5" href="$d6/db7/a04354.html" title=" " alt="" coords="262,217,447,258"/>
+<map id="castor3d::Texture" name="castor3d::Texture">
+<area shape="rect" id="node1" title=" " alt="" coords="145,363,268,389"/>
+<area shape="rect" id="node2" href="$d4/d87/a03963.html" title=" " alt="" coords="127,273,286,300"/>
+<area shape="rect" id="node3" href="$d3/d9a/a04075.html" title=" " alt="" coords="15,184,182,211"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,95,192,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="207,184,385,211"/>
+<area shape="rect" id="node6" href="$d5/d04/a03955.html" title=" " alt="" coords="217,95,369,121"/>
+<area shape="rect" id="node7" title=" " alt="" coords="394,95,507,121"/>
+<area shape="rect" id="node8" title=" " alt="" coords="431,5,470,32"/>
 </map>

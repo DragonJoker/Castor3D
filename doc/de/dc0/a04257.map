@@ -1,5 +1,4 @@
-<map id="castor3d::LayeredLightPropagationVolumesBase" name="castor3d::LayeredLightPropagationVolumesBase">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,228,121"/>
-<area shape="rect" id="node3" href="$d6/db4/a04266.html" title="Lighting propagation volumes generation pass." alt="" coords="5,169,228,211"/>
-<area shape="rect" id="node2" title=" " alt="" coords="85,5,148,32"/>
+<map id="castor3d::RunnableLightingPass" name="castor3d::RunnableLightingPass">
+<area shape="rect" id="node1" title=" " alt="" coords="5,80,215,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="44,5,176,32"/>
 </map>

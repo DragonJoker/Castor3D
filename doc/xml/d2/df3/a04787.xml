@@ -1,166 +1,248 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d2/df3/a04787" kind="struct" language="C++" prot="protected">
-    <compoundname>castor3d::PointLightPass::Program</compoundname>
-    <basecompoundref refid="d4/deb/a04779" prot="public" virt="non-virtual">castor3d::MeshLightPass::Program</basecompoundref>
-    <includes local="no">PointLightPass.hpp</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d2/df3/a04787_1a8ec84b3fc70d851c9f07dd1bbef49adf" prot="private" static="no" mutable="no">
-        <type><ref refid="d0/d9d/a04783" kindref="compound">PointLightPass</ref> &amp;</type>
-        <definition>PointLightPass&amp; castor3d::PointLightPass::Program::m_lightPass</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d2/df3/a04787" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::SpotLight</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">GlslLight.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/df3/a04787_1adfd3757d93c9f30c5399b01723b655b4" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/d61/a04775" kindref="compound">Light</ref></type>
+        <definition>Light castor3d::shader::SpotLight::base</definition>
         <argsstring></argsstring>
-        <name>m_lightPass</name>
+        <name>base</name>
+        <qualifiedname>castor3d::shader::SpotLight::base</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/PointLightPass.hpp" line="69" column="1" bodyfile="Render/Technique/Opaque/Lighting/PointLightPass.hpp" bodystart="69" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslLight.hpp" line="146" column="7" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="146" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/df3/a04787_1a1001c80c9b9cead607b073362897def9" prot="public" static="no" mutable="no">
+        <type>sdw::Mat4</type>
+        <definition>sdw::Mat4 castor3d::shader::SpotLight::transform</definition>
+        <argsstring></argsstring>
+        <name>transform</name>
+        <qualifiedname>castor3d::shader::SpotLight::transform</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="157" column="11" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="157" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/df3/a04787_1a21194baed6dd071931dfd84451942a58" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::SpotLight::position</definition>
+        <argsstring></argsstring>
+        <name>position</name>
+        <qualifiedname>castor3d::shader::SpotLight::position</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="159" column="11" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="159" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/df3/a04787_1ae651927a25fd8cb6ed796008ff8b796f" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::SpotLight::direction</definition>
+        <argsstring></argsstring>
+        <name>direction</name>
+        <qualifiedname>castor3d::shader::SpotLight::direction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="160" column="11" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="160" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/df3/a04787_1a38422a2722081957852b0d9b291f1fd3" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::SpotLight::exponent</definition>
+        <argsstring></argsstring>
+        <name>exponent</name>
+        <qualifiedname>castor3d::shader::SpotLight::exponent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="161" column="12" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="161" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/df3/a04787_1acb446b602ff1ab397b22fcb152282aa7" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::SpotLight::cutOff</definition>
+        <argsstring></argsstring>
+        <name>cutOff</name>
+        <qualifiedname>castor3d::shader::SpotLight::cutOff</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="162" column="12" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="162" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="d2/df3/a04787_1ae0ec198d71105a937ac89250db1b9dd9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class LightingModel</definition>
+        <argsstring></argsstring>
+        <name>LightingModel</name>
+        <qualifiedname>castor3d::shader::SpotLight::LightingModel</qualifiedname>
+        <param>
+          <type><ref refid="d5/df7/a04795" kindref="compound">LightingModel</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="149" column="14" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="149" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/df3/a04787_1a33bc05a07f64e3ad73a19de511ea7398" prot="private" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::SpotLight::m_position4</definition>
+        <argsstring></argsstring>
+        <name>m_position4</name>
+        <qualifiedname>castor3d::shader::SpotLight::m_position4</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="151" column="11" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="151" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/df3/a04787_1abbacc48d111e9fdfa8f89b9ed9e5dcf8" prot="private" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::SpotLight::m_attenuation4</definition>
+        <argsstring></argsstring>
+        <name>m_attenuation4</name>
+        <qualifiedname>castor3d::shader::SpotLight::m_attenuation4</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="152" column="11" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="152" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/df3/a04787_1a6135119bbdee9305bf0707e2a6c4efb5" prot="private" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::SpotLight::m_direction4</definition>
+        <argsstring></argsstring>
+        <name>m_direction4</name>
+        <qualifiedname>castor3d::shader::SpotLight::m_direction4</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="153" column="11" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="153" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/df3/a04787_1ab2c1f6628a861c0f789f73d661578709" prot="private" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::SpotLight::m_exponentCutOff</definition>
+        <argsstring></argsstring>
+        <name>m_exponentCutOff</name>
+        <qualifiedname>castor3d::shader::SpotLight::m_exponentCutOff</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="154" column="11" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="154" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d2/df3/a04787_1ac351bacad4f6957a7c1fd0ca00f66e7d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::PointLightPass::Program::Program</definition>
-        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, PointLightPass &amp;lightPass, ShaderModule const &amp;vtx, ShaderModule const &amp;pxl, bool hasShadows=false, bool hasVoxels=false, bool generatesIndirect=false)</argsstring>
-        <name>Program</name>
+      <memberdef kind="function" id="d2/df3/a04787_1a095cb3462bc1350da119571e3ee53727" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::SpotLight::SpotLight</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>SpotLight</name>
+        <qualifiedname>castor3d::shader::SpotLight::SpotLight</qualifiedname>
         <param>
-          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
         </param>
         <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type><ref refid="d0/d9d/a04783" kindref="compound">PointLightPass</ref> &amp;</type>
-          <declname>lightPass</declname>
-        </param>
-        <param>
-          <type><ref refid="d8/dbd/a05291" kindref="compound">ShaderModule</ref> const &amp;</type>
-          <declname>vtx</declname>
-        </param>
-        <param>
-          <type><ref refid="d8/dbd/a05291" kindref="compound">ShaderModule</ref> const &amp;</type>
-          <declname>pxl</declname>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
         </param>
         <param>
           <type>bool</type>
-          <declname>hasShadows</declname>
-          <defval>false</defval>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>hasVoxels</declname>
-          <defval>false</defval>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>generatesIndirect</declname>
-          <defval>false</defval>
+          <declname>enabled</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">engine</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The engine. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">lightPass</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The light pass. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">vtx</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The vertex shader source. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">pxl</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The fragment shader source. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">hasShadows</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if this program uses shadow map. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">hasVoxels</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if this program uses voxellisation result. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">generatesIndirect</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if this program generates indirect lighting. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/PointLightPass.hpp" line="49" column="1"/>
+        <location file="Shader/Shaders/GlslLight.hpp" line="136" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d2/df3/a04787_1a35e6e30c5f24b9d8f6d9cb6781f36b07" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+      <memberdef kind="function" id="d2/df3/a04787_1aa5d20d6e83c7d29ccf6ffec738a41713" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
-        <definition>virtual castor3d::PointLightPass::Program::~Program</definition>
-        <argsstring>()</argsstring>
-        <name>~Program</name>
-        <reimplements refid="d4/deb/a04779_1a133ea9bcedef3fabee18a11d638f591a">~Program</reimplements>
+        <definition>castor3d::shader::SpotLight::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, SpotLight)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::SpotLight::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        </param>
+        <param>
+          <type><ref refid="d2/df3/a04787" kindref="compound">SpotLight</ref></type>
+        </param>
         <briefdescription>
-<para>Destructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/PointLightPass.hpp" line="63" column="1"/>
+        <location file="Shader/Shaders/GlslLight.hpp" line="139" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/df3/a04787_1a85a8a38951e2641301111876202e5302" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>C3D_API sdw::Float castor3d::shader::SpotLight::getAttenuationFactor</definition>
+        <argsstring>(sdw::Float const &amp;distance) const</argsstring>
+        <name>getAttenuationFactor</name>
+        <qualifiedname>castor3d::shader::SpotLight::getAttenuationFactor</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>distance</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="141" column="20"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d2/df3/a04787_1abde200b3c16eda10f9e0698088da15f7" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::PointLightPass::Program::doBind</definition>
-        <argsstring>(Light const &amp;light) override</argsstring>
-        <name>doBind</name>
-        <reimplements refid="dd/d07/a04743_1a8490c1cfa85a383de04fb235f22ea40e">doBind</reimplements>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d2/df3/a04787_1ac646362a4d204bda1e091bc895b12d19" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
+        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::SpotLight::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::SpotLight::makeType</qualifiedname>
         <param>
-          <type><ref refid="df/dc5/a05151" kindref="compound">Light</ref> const &amp;</type>
-          <declname>light</declname>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -168,154 +250,80 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/PointLightPass.hpp" line="66" column="1"/>
+        <location file="Shader/Shaders/GlslLight.hpp" line="143" column="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/df3/a04787_1a7ce0fb875e566ec0157161b878309416" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::SpotLight::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::SpotLight::declare</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="144" column="32"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Point light pass program. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="2782">
-        <label>castor3d::MeshLightPass::Program</label>
-        <link refid="d4/deb/a04779"/>
-        <childnode refid="2783" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2784">
-        <label>Named</label>
-      </node>
-      <node id="2783">
-        <label>castor3d::LightPass::Program</label>
-        <link refid="dd/d07/a04743"/>
-        <childnode refid="2784" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2781">
-        <label>castor3d::PointLightPass::Program</label>
+      <node id="1">
+        <label>castor3d::shader::SpotLight</label>
         <link refid="d2/df3/a04787"/>
-        <childnode refid="2782" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="2795">
-        <label>castor3d::RenderSystem</label>
-        <link refid="d6/d55/a04603"/>
-        <childnode refid="2796" relation="public-inheritance">
+      <node id="3">
+        <label>castor3d::shader::Light</label>
+        <link refid="d9/d61/a04775"/>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="2794">
-        <label>T</label>
-      </node>
-      <node id="2798">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="2794" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="2793">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="2794" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="2797">
-        <label>std::vector&lt; ashes::CommandPoolPtr &gt;</label>
-        <childnode refid="2798" relation="template-instance">
-          <edgelabel>&lt; ashes::CommandPoolPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2792">
-        <label>std::array&lt; uint32_t, 4u &gt;</label>
-        <childnode refid="2793" relation="template-instance">
-          <edgelabel>&lt; uint32_t, 4u &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2786">
-        <label>castor3d::MeshLightPass::Program</label>
-        <link refid="d4/deb/a04779"/>
-        <childnode refid="2787" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2788">
-        <label>Named</label>
-      </node>
-      <node id="2790">
-        <label>castor::Unique&lt; Engine &gt;</label>
-      </node>
-      <node id="2796">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="2787">
-        <label>castor3d::LightPass::Program</label>
-        <link refid="dd/d07/a04743"/>
-        <childnode refid="2788" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2789" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="2791" relation="usage">
-          <edgelabel>m_device</edgelabel>
-        </childnode>
-      </node>
-      <node id="2789">
-        <label>castor3d::Engine</label>
-        <link refid="d0/d7c/a02499"/>
-        <childnode refid="2790" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2791">
-        <label>castor3d::RenderDevice</label>
-        <link refid="de/ddb/a04491"/>
-        <childnode refid="2792" relation="usage">
-          <edgelabel>queueFamiliesIndex</edgelabel>
-        </childnode>
-        <childnode refid="2795" relation="usage">
-          <edgelabel>renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="2797" relation="usage">
-          <edgelabel>commandPools</edgelabel>
-        </childnode>
-      </node>
-      <node id="2785">
-        <label>castor3d::PointLightPass::Program</label>
+      <node id="1">
+        <label>castor3d::shader::SpotLight</label>
         <link refid="d2/df3/a04787"/>
-        <childnode refid="2786" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>base</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </collaborationgraph>
-    <location file="Render/Technique/Opaque/Lighting/PointLightPass.hpp" line="25" column="1" bodyfile="Render/Technique/Opaque/Lighting/PointLightPass.hpp" bodystart="23" bodyend="70"/>
+    <location file="Shader/Shaders/GlslLight.hpp" line="133" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="135" bodyend="167"/>
     <listofallmembers>
-      <member refid="dd/d07/a04743_1a56ae01d65b01883f5ce0118daf64690c" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Program</scope><name>bind</name></member>
-      <member refid="dd/d07/a04743_1ab598c54b90bcd66c546c754af0851d90" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Program</scope><name>cleanup</name></member>
-      <member refid="d2/df3/a04787_1abde200b3c16eda10f9e0698088da15f7" prot="private" virt="virtual"><scope>castor3d::PointLightPass::Program</scope><name>doBind</name></member>
-      <member refid="dd/d07/a04743_1aaa746a9a99bcd0198ee554c3ab69659e" prot="protected" virt="virtual"><scope>castor3d::PointLightPass::Program</scope><name>doRender</name></member>
-      <member refid="dd/d07/a04743_1aee4b36aedabffd104d41e37c53f5a941" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Program</scope><name>getPipelineLayout</name></member>
-      <member refid="dd/d07/a04743_1a4750cb3a226efed78fc75d73b1e1d66a" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Program</scope><name>getTextureDescriptorLayout</name></member>
-      <member refid="dd/d07/a04743_1adc6a0d70291a75c8685b58f74c1d051d" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Program</scope><name>getTextureDescriptorPool</name></member>
-      <member refid="dd/d07/a04743_1abc2748c3e65cfc9e4c431e908c561dd0" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Program</scope><name>getUboDescriptorLayout</name></member>
-      <member refid="dd/d07/a04743_1a8316aee9157855bdf8893f1554aff8bf" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Program</scope><name>getUboDescriptorPool</name></member>
-      <member refid="dd/d07/a04743_1a132d6370f071a2cb266aac2881f7ecf7" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Program</scope><name>initialise</name></member>
-      <member refid="dd/d07/a04743_1a54eaf135f9b1b974d00a93dea2db533c" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Program</scope><name>m_blendPipeline</name></member>
-      <member refid="dd/d07/a04743_1a37c0b2cded3354383db9d9cd359c99fc" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Program</scope><name>m_device</name></member>
-      <member refid="dd/d07/a04743_1a62a9586b46c1be6ffbd51cb7775953f0" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Program</scope><name>m_engine</name></member>
-      <member refid="dd/d07/a04743_1af3308b8669402be33760c617119aa3f8" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Program</scope><name>m_firstPipeline</name></member>
-      <member refid="dd/d07/a04743_1a0e77f08bb3f9f9e1bc13b7d60ea50d29" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Program</scope><name>m_generatesIndirect</name></member>
-      <member refid="d2/df3/a04787_1a8ec84b3fc70d851c9f07dd1bbef49adf" prot="private" virt="non-virtual"><scope>castor3d::PointLightPass::Program</scope><name>m_lightPass</name></member>
-      <member refid="dd/d07/a04743_1a112df3e757b429a123f4935a339fa4b6" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Program</scope><name>m_pipelineLayout</name></member>
-      <member refid="dd/d07/a04743_1a315224ba3f2ea81ccf95774e5bc39b2f" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Program</scope><name>m_program</name></member>
-      <member refid="dd/d07/a04743_1a56c94264c585da624967063f72a1ae8a" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Program</scope><name>m_shadows</name></member>
-      <member refid="dd/d07/a04743_1af9fef7d04765b65116ef087761c8584c" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Program</scope><name>m_textureDescriptorLayout</name></member>
-      <member refid="dd/d07/a04743_1a00d14bb14ae6bc413c9b29f42f5cb40f" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Program</scope><name>m_textureDescriptorPool</name></member>
-      <member refid="dd/d07/a04743_1aee516c4a94abe87058cfc9f4248a6ef8" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Program</scope><name>m_uboDescriptorLayout</name></member>
-      <member refid="dd/d07/a04743_1a1d562428e80aec816dad9255fb988568" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Program</scope><name>m_uboDescriptorPool</name></member>
-      <member refid="dd/d07/a04743_1afdde2c7c935db702388ce72f4e87422f" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Program</scope><name>m_voxels</name></member>
-      <member refid="d2/df3/a04787_1ac351bacad4f6957a7c1fd0ca00f66e7d" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Program</scope><name>Program</name></member>
-      <member refid="d4/deb/a04779_1acc4bf419371c31f1db0571bbea310987" prot="public" virt="non-virtual" ambiguityscope="castor3d::MeshLightPass::Program::"><scope>castor3d::PointLightPass::Program</scope><name>Program</name></member>
-      <member refid="dd/d07/a04743_1a8a4da088de05ee41c00ba7cb17bc5178" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Program</scope><name>render</name></member>
-      <member refid="d2/df3/a04787_1a35e6e30c5f24b9d8f6d9cb6781f36b07" prot="public" virt="virtual"><scope>castor3d::PointLightPass::Program</scope><name>~Program</name></member>
+      <member refid="d2/df3/a04787_1adfd3757d93c9f30c5399b01723b655b4" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>base</name></member>
+      <member refid="d2/df3/a04787_1acb446b602ff1ab397b22fcb152282aa7" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>cutOff</name></member>
+      <member refid="d2/df3/a04787_1a7ce0fb875e566ec0157161b878309416" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>declare</name></member>
+      <member refid="d2/df3/a04787_1ae651927a25fd8cb6ed796008ff8b796f" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>direction</name></member>
+      <member refid="d2/df3/a04787_1a38422a2722081957852b0d9b291f1fd3" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>exponent</name></member>
+      <member refid="d2/df3/a04787_1a85a8a38951e2641301111876202e5302" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>getAttenuationFactor</name></member>
+      <member refid="d2/df3/a04787_1ae0ec198d71105a937ac89250db1b9dd9" prot="private" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>LightingModel</name></member>
+      <member refid="d2/df3/a04787_1abbacc48d111e9fdfa8f89b9ed9e5dcf8" prot="private" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>m_attenuation4</name></member>
+      <member refid="d2/df3/a04787_1a6135119bbdee9305bf0707e2a6c4efb5" prot="private" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>m_direction4</name></member>
+      <member refid="d2/df3/a04787_1ab2c1f6628a861c0f789f73d661578709" prot="private" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>m_exponentCutOff</name></member>
+      <member refid="d2/df3/a04787_1a33bc05a07f64e3ad73a19de511ea7398" prot="private" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>m_position4</name></member>
+      <member refid="d2/df3/a04787_1ac646362a4d204bda1e091bc895b12d19" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>makeType</name></member>
+      <member refid="d2/df3/a04787_1a21194baed6dd071931dfd84451942a58" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>position</name></member>
+      <member refid="d2/df3/a04787_1aa5d20d6e83c7d29ccf6ffec738a41713" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="d2/df3/a04787_1a095cb3462bc1350da119571e3ee53727" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>SpotLight</name></member>
+      <member refid="d2/df3/a04787_1a1001c80c9b9cead607b073362897def9" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>transform</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

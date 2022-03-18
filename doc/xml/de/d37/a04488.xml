@@ -1,362 +1,76 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="de/d37/a04488" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::RadianceComputer</compoundname>
-    <basecompoundref refid="d3/d49/a04972" prot="private" virt="non-virtual">castor3d::RenderCube</basecompoundref>
-    <includes local="no">RadianceComputer.hpp</includes>
-    <innerclass refid="d1/dc3/a04492" prot="private">castor3d::RadianceComputer::RenderPass</innerclass>
-      <sectiondef kind="user-defined">
-      <memberdef kind="function" id="de/d37/a04488_1a31fc2df8651d5866af9071e15e8cef35" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Sampler const  &amp;</type>
-        <definition>C3D_API ashes::Sampler const&amp; castor3d::RadianceComputer::getSampler</definition>
-        <argsstring>() const</argsstring>
-        <name>getSampler</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>name Getters. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PBR/RadianceComputer.hpp" line="67" column="1"/>
-        <referencedby refid="d0/d0c/a04484_1ac929a2cee25cd0cc758d601ae9de8144" compoundref="d3/d4f/a00761" startline="95" endline="98">castor3d::IblTextures::getIrradianceSampler</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="de/d37/a04488_1af5a3a3243ba1dd29450e7cd8367688bf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::ImageView const  &amp;</type>
-        <definition>ashes::ImageView const&amp; castor3d::RadianceComputer::getResult</definition>
-        <argsstring>() const</argsstring>
-        <name>getResult</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PBR/RadianceComputer.hpp" line="69" column="1" bodyfile="Render/PBR/RadianceComputer.hpp" bodystart="69" bodyend="72"/>
-        <referencedby refid="d0/d0c/a04484_1ab9bdf726119dc6dad0d3bc06897366df" compoundref="d3/d4f/a00761" startline="80" endline="83">castor3d::IblTextures::getIrradianceTexture</referencedby>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-type">
-      <memberdef kind="typedef" id="de/d37/a04488_1ada0aa05d60f2ec3234897accac276cef" prot="private" static="no">
-        <type>std::array&lt; RenderPass, 6 &gt;</type>
-        <definition>using castor3d::RadianceComputer::RenderPasses =  std::array&lt; RenderPass, 6 &gt;</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="de/d37/a04488" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::DirectionalLightCascade</compoundname>
+    <includes local="no">DirectionalLight.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/d37/a04488_1a95fa7a197a677e582d2eef1d65d64679" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::DirectionalLightCascade::viewMatrix</definition>
         <argsstring></argsstring>
-        <name>RenderPasses</name>
+        <name>viewMatrix</name>
+        <qualifiedname>castor3d::DirectionalLightCascade::viewMatrix</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/RadianceComputer.hpp" line="81" column="1" bodyfile="Render/PBR/RadianceComputer.hpp" bodystart="81" bodyend="-1"/>
+        <location file="Scene/Light/DirectionalLight.hpp" line="15" column="20" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="15" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="de/d37/a04488_1a65ab300204315580de5a9896566a3fe0" prot="private" static="no" mutable="no">
-        <type>ashes::ImagePtr</type>
-        <definition>ashes::ImagePtr castor3d::RadianceComputer::m_result</definition>
+      <memberdef kind="variable" id="de/d37/a04488_1a4adba86dae97c6cd1782cf9effc2a8e8" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::DirectionalLightCascade::projMatrix</definition>
         <argsstring></argsstring>
-        <name>m_result</name>
+        <name>projMatrix</name>
+        <qualifiedname>castor3d::DirectionalLightCascade::projMatrix</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/RadianceComputer.hpp" line="83" column="1" bodyfile="Render/PBR/RadianceComputer.hpp" bodystart="83" bodyend="-1"/>
+        <location file="Scene/Light/DirectionalLight.hpp" line="16" column="20" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="16" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="de/d37/a04488_1a00dab33c5cd65d35d5fdfb9d13319b33" prot="private" static="no" mutable="no">
-        <type>ashes::ImageView</type>
-        <definition>ashes::ImageView castor3d::RadianceComputer::m_resultView</definition>
+      <memberdef kind="variable" id="de/d37/a04488_1af32a8d94125b4825be06641d80eda4d2" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::DirectionalLightCascade::viewProjMatrix</definition>
         <argsstring></argsstring>
-        <name>m_resultView</name>
+        <name>viewProjMatrix</name>
+        <qualifiedname>castor3d::DirectionalLightCascade::viewProjMatrix</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/RadianceComputer.hpp" line="84" column="1" bodyfile="Render/PBR/RadianceComputer.hpp" bodystart="84" bodyend="-1"/>
+        <location file="Scene/Light/DirectionalLight.hpp" line="17" column="20" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="17" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="de/d37/a04488_1a253f916b92654041acfc12e20522fd9a" prot="private" static="no" mutable="no">
-        <type>SamplerSPtr</type>
-        <definition>SamplerSPtr castor3d::RadianceComputer::m_sampler</definition>
+      <memberdef kind="variable" id="de/d37/a04488_1ad4001ac58e529c42799e6985db2dce31" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::DirectionalLightCascade::splitDepthScale</definition>
         <argsstring></argsstring>
-        <name>m_sampler</name>
+        <name>splitDepthScale</name>
+        <qualifiedname>castor3d::DirectionalLightCascade::splitDepthScale</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/RadianceComputer.hpp" line="85" column="1" bodyfile="Render/PBR/RadianceComputer.hpp" bodystart="85" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/d37/a04488_1aea3aeb562462213347a442676a2fd4bd" prot="private" static="no" mutable="no">
-        <type>ashes::ImageView</type>
-        <definition>ashes::ImageView castor3d::RadianceComputer::m_srcView</definition>
-        <argsstring></argsstring>
-        <name>m_srcView</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PBR/RadianceComputer.hpp" line="86" column="1" bodyfile="Render/PBR/RadianceComputer.hpp" bodystart="86" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/d37/a04488_1ac57192101d06527f08fffe6110b697d9" prot="private" static="no" mutable="no">
-        <type>ashes::RenderPassPtr</type>
-        <definition>ashes::RenderPassPtr castor3d::RadianceComputer::m_renderPass</definition>
-        <argsstring></argsstring>
-        <name>m_renderPass</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PBR/RadianceComputer.hpp" line="87" column="1" bodyfile="Render/PBR/RadianceComputer.hpp" bodystart="87" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/d37/a04488_1a4edb8018e2264402baaa634e2785553a" prot="private" static="no" mutable="no">
-        <type>RenderPasses</type>
-        <definition>RenderPasses castor3d::RadianceComputer::m_renderPasses</definition>
-        <argsstring></argsstring>
-        <name>m_renderPasses</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PBR/RadianceComputer.hpp" line="88" column="1" bodyfile="Render/PBR/RadianceComputer.hpp" bodystart="88" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/d37/a04488_1a44a2eee069309326688aba52d28ffe89" prot="private" static="no" mutable="no">
-        <type><ref refid="d1/da6/a04380" kindref="compound">CommandsSemaphore</ref></type>
-        <definition>CommandsSemaphore castor3d::RadianceComputer::m_commands</definition>
-        <argsstring></argsstring>
-        <name>m_commands</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PBR/RadianceComputer.hpp" line="89" column="1" bodyfile="Render/PBR/RadianceComputer.hpp" bodystart="89" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="de/d37/a04488_1a48b9093e655a2280d048760a69336eac" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::RadianceComputer::RadianceComputer</definition>
-        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, castor::Size const &amp;size, ashes::Image const &amp;srcTexture)</argsstring>
-        <name>RadianceComputer</name>
-        <param>
-          <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>castor::Size const &amp;</type>
-          <declname>size</declname>
-        </param>
-        <param>
-          <type>ashes::Image const &amp;</type>
-          <declname>srcTexture</declname>
-        </param>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">engine</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The engine. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">size</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render size. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">srcTexture</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The cube texture source. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PBR/RadianceComputer.hpp" line="38" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d37/a04488_1a8ddf49cc04b6d86e0298b5b57a0bd382" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RadianceComputer::render</definition>
-        <argsstring>()</argsstring>
-        <name>render</name>
-        <briefdescription>
-<para>Computes the radiance map. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PBR/RadianceComputer.hpp" line="48" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d37/a04488_1a86a8156b36722089b89a2af9b2c09150" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Semaphore const  &amp;</type>
-        <definition>C3D_API ashes::Semaphore const&amp; castor3d::RadianceComputer::render</definition>
-        <argsstring>(ashes::Semaphore const &amp;toWait)</argsstring>
-        <name>render</name>
-        <param>
-          <type>ashes::Semaphore const &amp;</type>
-          <declname>toWait</declname>
-        </param>
-        <briefdescription>
-<para>Computes the radiance map. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">toWait</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The semaphore from the previous render pass. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PBR/RadianceComputer.hpp" line="57" column="1"/>
+        <location file="Scene/Light/DirectionalLight.hpp" line="18" column="17" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="18" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="2830">
-        <label>castor3d::RenderCube</label>
-        <link refid="d3/d49/a04972"/>
-      </node>
-      <node id="2829">
-        <label>castor3d::RadianceComputer</label>
-        <link refid="de/d37/a04488"/>
-        <childnode refid="2830" relation="private-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="2837">
-        <label>castor3d::RenderSystem</label>
-        <link refid="d9/d38/a04624"/>
-        <childnode refid="2838" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2836">
-        <label>T</label>
-      </node>
-      <node id="2832">
-        <label>castor3d::RenderCube</label>
-        <link refid="d3/d49/a04972"/>
-        <childnode refid="2833" relation="usage">
-          <edgelabel>m_device</edgelabel>
-        </childnode>
-      </node>
-      <node id="2840">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="2836" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="2835">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="2836" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="2839">
-        <label>std::vector&lt; ashes::CommandPoolPtr &gt;</label>
-        <childnode refid="2840" relation="template-instance">
-          <edgelabel>&lt; ashes::CommandPoolPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2834">
-        <label>std::array&lt; uint32_t, 4u &gt;</label>
-        <childnode refid="2835" relation="template-instance">
-          <edgelabel>&lt; uint32_t, 4u &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2838">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="2831">
-        <label>castor3d::RadianceComputer</label>
-        <link refid="de/d37/a04488"/>
-        <childnode refid="2832" relation="private-inheritance">
-        </childnode>
-      </node>
-      <node id="2833">
-        <label>castor3d::RenderDevice</label>
-        <link refid="d1/def/a04512"/>
-        <childnode refid="2834" relation="usage">
-          <edgelabel>queueFamiliesIndex</edgelabel>
-        </childnode>
-        <childnode refid="2837" relation="usage">
-          <edgelabel>renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="2839" relation="usage">
-          <edgelabel>commandPools</edgelabel>
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Render/PBR/RadianceComputer.hpp" line="22" column="1" bodyfile="Render/PBR/RadianceComputer.hpp" bodystart="20" bodyend="90"/>
+    <location file="Scene/Light/DirectionalLight.hpp" line="13" column="1" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="14" bodyend="19"/>
     <listofallmembers>
-      <member refid="d3/d49/a04972_1a3f0330fd2cd0b556433e50c505c2cfd0" prot="private" virt="non-virtual"><scope>castor3d::RadianceComputer</scope><name>cleanup</name></member>
-      <member refid="d3/d49/a04972_1ae58f4e4abbd017b821ad1ce07bd1898c" prot="private" virt="non-virtual"><scope>castor3d::RadianceComputer</scope><name>createPipelines</name></member>
-      <member refid="d3/d49/a04972_1a03e099cd27fb31640352a9925effa710" prot="private" virt="non-virtual"><scope>castor3d::RadianceComputer</scope><name>createPipelines</name></member>
-      <member refid="d3/d49/a04972_1aee72d95a1c9e3b4e7bf221867f1a80d5" prot="private" virt="non-virtual"><scope>castor3d::RadianceComputer</scope><name>getCommandBuffer</name></member>
-      <member refid="de/d37/a04488_1af5a3a3243ba1dd29450e7cd8367688bf" prot="public" virt="non-virtual"><scope>castor3d::RadianceComputer</scope><name>getResult</name></member>
-      <member refid="de/d37/a04488_1a31fc2df8651d5866af9071e15e8cef35" prot="public" virt="non-virtual"><scope>castor3d::RadianceComputer</scope><name>getSampler</name></member>
-      <member refid="de/d37/a04488_1a44a2eee069309326688aba52d28ffe89" prot="private" virt="non-virtual"><scope>castor3d::RadianceComputer</scope><name>m_commands</name></member>
-      <member refid="d3/d49/a04972_1af9d5218505481d37eec6dc49f638039a" prot="private" virt="non-virtual"><scope>castor3d::RadianceComputer</scope><name>m_device</name></member>
-      <member refid="d3/d49/a04972_1a84414b79673d6fe5e891f6078bc8b782" prot="private" virt="non-virtual"><scope>castor3d::RadianceComputer</scope><name>m_pipelineLayout</name></member>
-      <member refid="de/d37/a04488_1ac57192101d06527f08fffe6110b697d9" prot="private" virt="non-virtual"><scope>castor3d::RadianceComputer</scope><name>m_renderPass</name></member>
-      <member refid="de/d37/a04488_1a4edb8018e2264402baaa634e2785553a" prot="private" virt="non-virtual"><scope>castor3d::RadianceComputer</scope><name>m_renderPasses</name></member>
-      <member refid="de/d37/a04488_1a65ab300204315580de5a9896566a3fe0" prot="private" virt="non-virtual"><scope>castor3d::RadianceComputer</scope><name>m_result</name></member>
-      <member refid="de/d37/a04488_1a00dab33c5cd65d35d5fdfb9d13319b33" prot="private" virt="non-virtual"><scope>castor3d::RadianceComputer</scope><name>m_resultView</name></member>
-      <member refid="de/d37/a04488_1a253f916b92654041acfc12e20522fd9a" prot="private" virt="non-virtual"><scope>castor3d::RadianceComputer</scope><name>m_sampler</name></member>
-      <member refid="de/d37/a04488_1aea3aeb562462213347a442676a2fd4bd" prot="private" virt="non-virtual"><scope>castor3d::RadianceComputer</scope><name>m_srcView</name></member>
-      <member refid="d3/d49/a04972_1a83fae0b06a6d865e7b3a9a12bf6ee6ff" prot="private" virt="non-virtual"><scope>castor3d::RadianceComputer</scope><name>prepareFrame</name></member>
-      <member refid="de/d37/a04488_1a48b9093e655a2280d048760a69336eac" prot="public" virt="non-virtual"><scope>castor3d::RadianceComputer</scope><name>RadianceComputer</name></member>
-      <member refid="d3/d49/a04972_1a4b8c2a6e867159e5545c6ae52e6ed246" prot="private" virt="non-virtual"><scope>castor3d::RadianceComputer</scope><name>registerFrame</name></member>
-      <member refid="de/d37/a04488_1a8ddf49cc04b6d86e0298b5b57a0bd382" prot="public" virt="non-virtual"><scope>castor3d::RadianceComputer</scope><name>render</name></member>
-      <member refid="de/d37/a04488_1a86a8156b36722089b89a2af9b2c09150" prot="public" virt="non-virtual"><scope>castor3d::RadianceComputer</scope><name>render</name></member>
-      <member refid="d3/d49/a04972_1ac600349f4887fe9d7765ecc3224b2992" prot="private" virt="non-virtual"><scope>castor3d::RadianceComputer</scope><name>RenderCube</name></member>
-      <member refid="de/d37/a04488_1ada0aa05d60f2ec3234897accac276cef" prot="private" virt="non-virtual"><scope>castor3d::RadianceComputer</scope><name>RenderPasses</name></member>
-      <member refid="d3/d49/a04972_1a442e2372083596ae51f50d6aa8709e60" prot="private" virt="virtual"><scope>castor3d::RadianceComputer</scope><name>~RenderCube</name></member>
+      <member refid="de/d37/a04488_1a4adba86dae97c6cd1782cf9effc2a8e8" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLightCascade</scope><name>projMatrix</name></member>
+      <member refid="de/d37/a04488_1ad4001ac58e529c42799e6985db2dce31" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLightCascade</scope><name>splitDepthScale</name></member>
+      <member refid="de/d37/a04488_1a95fa7a197a677e582d2eef1d65d64679" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLightCascade</scope><name>viewMatrix</name></member>
+      <member refid="de/d37/a04488_1af32a8d94125b4825be06641d80eda4d2" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLightCascade</scope><name>viewProjMatrix</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

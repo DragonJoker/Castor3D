@@ -1,33 +1,82 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d0/d06/a03368" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkAttachmentDescription2KHR &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d0/d06/a03368_1a635ec4a972c4d69e4a600752f7bd04ae" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkAttachmentDescription2KHR &gt;::value</definition>
+    <compoundname>castor3d::FaceInfos</compoundname>
+    <includes local="no">FaceInfos.hpp</includes>
+    <innerclass refid="d0/db9/a03372" prot="public">castor3d::FaceInfos::Vertex</innerclass>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/d06/a03368_1a4a3ac3f4c86c3e2eae6aac994965e162" prot="public" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="d0/db9/a03372" kindref="compound">Vertex</ref>, 3 &gt;</type>
+        <definition>std::array&lt; Vertex, 3 &gt; castor3d::FaceInfos::m_vertex</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_ATTACHMENT_DESCRIPTION_2_KHR</initializer>
+        <name>m_vertex</name>
+        <qualifiedname>castor3d::FaceInfos::m_vertex</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The 3 vertex informations. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="253" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="253" bodyend="-1"/>
+        <location file="Model/Mesh/Submesh/Component/FaceInfos.hpp" line="42" column="12" bodyfile="Model/Mesh/Submesh/Component/FaceInfos.hpp" bodystart="42" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="253" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="253" bodyend="253"/>
+    <collaborationgraph>
+      <node id="6">
+        <label>T</label>
+      </node>
+      <node id="2">
+        <label>std::array&lt; castor3d::FaceInfos::Vertex, 3 &gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; castor3d::FaceInfos::Vertex, 3 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::array&lt; float, 2 &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; float, 2 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::array&lt; float, 3 &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; float, 3 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::FaceInfos</label>
+        <link refid="d0/d06/a03368"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_vertex</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::FaceInfos::Vertex</label>
+        <link refid="d0/db9/a03372"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_fNormal</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_fTexCoords</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/Submesh/Component/FaceInfos.hpp" line="11" column="1" bodyfile="Model/Mesh/Submesh/Component/FaceInfos.hpp" bodystart="12" bodyend="43"/>
     <listofallmembers>
-      <member refid="d0/d06/a03368_1a635ec4a972c4d69e4a600752f7bd04ae" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkAttachmentDescription2KHR &gt;</scope><name>value</name></member>
+      <member refid="d0/d06/a03368_1a4a3ac3f4c86c3e2eae6aac994965e162" prot="public" virt="non-virtual"><scope>castor3d::FaceInfos</scope><name>m_vertex</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,51 +1,83 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dd/d94/a05102" kind="struct" language="C++" prot="protected">
-    <compoundname>castor3d::SceneBackground::Cube</compoundname>
-    <includes local="no">Background.hpp</includes>
-    <innerclass refid="d1/ddb/a05106" prot="public">castor3d::SceneBackground::Cube::Quad</innerclass>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="dd/d94/a05102_1a5a2d94bf18cbed6624899423a61c114d" prot="public" static="no" mutable="no">
-        <type><ref refid="d1/ddb/a05106" kindref="compound">Quad</ref></type>
-        <definition>Quad castor3d::SceneBackground::Cube::faces[6]</definition>
-        <argsstring>[6]</argsstring>
-        <name>faces</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dd/d94/a05102" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::HdrConfig &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::HdrConfig &gt;</basecompoundref>
+    <includes local="no">TextHdrConfig.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/d94/a05102_1a7e2c0189bb11120ffd1716c351b269b2" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::HdrConfig &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs)</argsstring>
+        <name>TextWriter</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::HdrConfig &gt;::TextWriter</qualifiedname>
+        <param>
+          <type>String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Background/Background.hpp" line="45" column="1" bodyfile="Scene/Background/Background.hpp" bodystart="45" bodyend="-1"/>
+        <location file="Text/TextHdrConfig.hpp" line="18" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d94/a05102_1ac56a22aed83aa873c3f54ae50ba80f24" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::HdrConfig &gt;::operator()</definition>
+        <argsstring>(castor3d::HdrConfig const &amp;obj, castor::StringStream &amp;file) override</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::HdrConfig &gt;::operator()</qualifiedname>
+        <param>
+          <type><ref refid="da/d7e/a04326" kindref="compound">castor3d::HdrConfig</ref> const &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <param>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextHdrConfig.hpp" line="19" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="3276">
-        <label>castor3d::SceneBackground::Cube::Quad</label>
-        <link refid="d1/ddb/a05106"/>
-        <childnode refid="3277" relation="usage">
-          <edgelabel>vertex</edgelabel>
+    <inheritancegraph>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::HdrConfig &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::HdrConfig &gt;</label>
+        <link refid="dd/d94/a05102"/>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="3277">
-        <label>castor3d::SceneBackground::Cube::Quad::Vertex</label>
-        <link refid="db/da9/a05110"/>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::HdrConfig &gt;</label>
       </node>
-      <node id="3275">
-        <label>castor3d::SceneBackground::Cube</label>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::HdrConfig &gt;</label>
         <link refid="dd/d94/a05102"/>
-        <childnode refid="3276" relation="usage">
-          <edgelabel>faces</edgelabel>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Scene/Background/Background.hpp" line="34" column="1" bodyfile="Scene/Background/Background.hpp" bodystart="33" bodyend="46"/>
+    <location file="Text/TextHdrConfig.hpp" line="14" column="1" bodyfile="Text/TextHdrConfig.hpp" bodystart="16" bodyend="21"/>
     <listofallmembers>
-      <member refid="dd/d94/a05102_1a5a2d94bf18cbed6624899423a61c114d" prot="public" virt="non-virtual"><scope>castor3d::SceneBackground::Cube</scope><name>faces</name></member>
+      <member refid="dd/d94/a05102_1ac56a22aed83aa873c3f54ae50ba80f24" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::HdrConfig &gt;</scope><name>operator()</name></member>
+      <member refid="dd/d94/a05102_1a7e2c0189bb11120ffd1716c351b269b2" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::HdrConfig &gt;</scope><name>TextWriter</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

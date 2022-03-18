@@ -1,5 +1,4 @@
-<map id="castor3d::Cache&lt; Overlay, castor::String &gt;" name="castor3d::Cache&lt; Overlay, castor::String &gt;">
-<area shape="rect" id="node1" title="Overlay collection, with additional add and remove functions to manage Z&#45;Index." alt="" coords="8,215,184,256"/>
-<area shape="rect" id="node2" href="$dc/dfd/a02370.html" title=" " alt="" coords="9,124,183,165"/>
-<area shape="rect" id="node3" href="$dc/dfd/a02370.html" title="Base class for an element cache." alt="" coords="5,5,187,47"/>
+<map id="castor3d::ChunkWriter&lt; castor::Path &gt;" name="castor3d::ChunkWriter&lt; castor::Path &gt;">
+<area shape="rect" id="node1" title="ChunkWriter specialisation for castor::Path." alt="" coords="21,80,173,121"/>
+<area shape="rect" id="node2" href="$d7/dc4/a02479.html" title=" " alt="" coords="5,5,188,32"/>
 </map>

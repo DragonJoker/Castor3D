@@ -1,33 +1,513 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="de/dbb/a02679" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkInstanceCreateInfo &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="de/dbb/a02679" kind="class" language="C++" prot="public" final="yes">
+    <compoundname>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::ResourceCacheBaseT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</basecompoundref>
+    <includes local="no">PluginCache.hpp</includes>
     <templateparamlist>
     </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="de/dbb/a02679_1aa4b79b4b4ac705413cdf276e94401f8e" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkInstanceCreateInfo &gt;::value</definition>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="de/dbb/a02679_1a001d347010400cf6c6bca5e74e6b1c3e" prot="public" static="no">
+        <type><ref refid="d0/db0/a03631" kindref="compound">castor3d::Plugin</ref></type>
+        <definition>using castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::ElementT =  castor3d::Plugin</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO</initializer>
+        <name>ElementT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::ElementT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="15" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="15" bodyend="-1"/>
+        <location file="Cache/PluginCache.hpp" line="27" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/dbb/a02679_1a55a9c0aaa9a868db7e5a74ba7a834f9d" prot="public" static="no">
+        <type>String</type>
+        <definition>using castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::ElementKeyT =  String</definition>
+        <argsstring></argsstring>
+        <name>ElementKeyT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::ElementKeyT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/PluginCache.hpp" line="28" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/dbb/a02679_1abaf9fc5790f44b4fae8ba3e9a6b8051b" prot="public" static="no">
+        <type><ref refid="da/de3/a01398_1a8a6a4a75becbe8c5672e9e5b4027a94e" kindref="member">castor3d::PluginCacheTraits</ref></type>
+        <definition>using castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::ElementCacheTraitsT =  castor3d::PluginCacheTraits</definition>
+        <argsstring></argsstring>
+        <name>ElementCacheTraitsT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::ElementCacheTraitsT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/PluginCache.hpp" line="29" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/dbb/a02679_1a22c444da27ffbf8c12786f7f17c21127" prot="public" static="no">
+        <type>ResourceCacheBaseT&lt; <ref refid="de/dbb/a02679_1a001d347010400cf6c6bca5e74e6b1c3e" kindref="member">ElementT</ref>, <ref refid="de/dbb/a02679_1a55a9c0aaa9a868db7e5a74ba7a834f9d" kindref="member">ElementKeyT</ref>, <ref refid="de/dbb/a02679_1abaf9fc5790f44b4fae8ba3e9a6b8051b" kindref="member">ElementCacheTraitsT</ref> &gt;</type>
+        <definition>using castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::ElementCacheT =  ResourceCacheBaseT&lt; ElementT, ElementKeyT, ElementCacheTraitsT &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementCacheT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::ElementCacheT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/PluginCache.hpp" line="30" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/dbb/a02679_1a2f377f4c818a9371a8be49b30728e67c" prot="public" static="no">
+        <type>typename ElementCacheT::ElementPtrT</type>
+        <definition>using castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::ElementPtrT =  typename ElementCacheT::ElementPtrT</definition>
+        <argsstring></argsstring>
+        <name>ElementPtrT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::ElementPtrT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/PluginCache.hpp" line="31" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/dbb/a02679_1a6cc372ab6664507d1df19dcadea3f427" prot="public" static="no">
+        <type>typename ElementCacheT::ElementContT</type>
+        <definition>using castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::ElementContT =  typename ElementCacheT::ElementContT</definition>
+        <argsstring></argsstring>
+        <name>ElementContT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::ElementContT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/PluginCache.hpp" line="32" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/dbb/a02679_1a8b9ecb07573035f26661007fa1eca55a" prot="public" static="no">
+        <type>typename ElementCacheT::ElementInitialiserT</type>
+        <definition>using castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::ElementInitialiserT =  typename ElementCacheT::ElementInitialiserT</definition>
+        <argsstring></argsstring>
+        <name>ElementInitialiserT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::ElementInitialiserT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/PluginCache.hpp" line="33" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/dbb/a02679_1afb8ba401059362e566123cd52e4ffafe" prot="public" static="no">
+        <type>typename ElementCacheT::ElementCleanerT</type>
+        <definition>using castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::ElementCleanerT =  typename ElementCacheT::ElementCleanerT</definition>
+        <argsstring></argsstring>
+        <name>ElementCleanerT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::ElementCleanerT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/PluginCache.hpp" line="34" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/dbb/a02679_1a0b4a90a4af082991792493278ef0e7c6" prot="public" static="no">
+        <type>typename ElementCacheT::ElementMergerT</type>
+        <definition>using castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::ElementMergerT =  typename ElementCacheT::ElementMergerT</definition>
+        <argsstring></argsstring>
+        <name>ElementMergerT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::ElementMergerT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/PluginCache.hpp" line="35" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="de/dbb/a02679_1ac399fa82d5cde320b7c19902c947bf9d" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/dd0/a02711" kindref="compound">castor3d::Engine</ref> &amp;</type>
+        <definition>castor3d::Engine&amp; castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::m_engine</definition>
+        <argsstring></argsstring>
+        <name>m_engine</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::m_engine</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/PluginCache.hpp" line="109" column="19" bodyfile="Cache/PluginCache.hpp" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dbb/a02679_1a811404d8207de16a79ae4b975c0d2e7c" prot="private" static="no" mutable="no">
+        <type>castor3d::DynamicLibraryPtrPathMapArray</type>
+        <definition>castor3d::DynamicLibraryPtrPathMapArray castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::m_libraries</definition>
+        <argsstring></argsstring>
+        <name>m_libraries</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::m_libraries</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The loaded shared libraries map. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/PluginCache.hpp" line="112" column="41" bodyfile="Cache/PluginCache.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dbb/a02679_1a4e7dc4f71934c4498963a2a7e42053fa" prot="private" static="no" mutable="no">
+        <type>std::recursive_mutex</type>
+        <definition>std::recursive_mutex castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::m_mutexLibraries</definition>
+        <argsstring></argsstring>
+        <name>m_mutexLibraries</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::m_mutexLibraries</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The mutex protecting the loaded shared libraries map. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/PluginCache.hpp" line="115" column="22" bodyfile="Cache/PluginCache.hpp" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dbb/a02679_1ac7f470add73f33e051c352893a48c815" prot="private" static="no" mutable="no">
+        <type>castor3d::PluginStrMapArray</type>
+        <definition>castor3d::PluginStrMapArray castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::m_loadedPlugins</definition>
+        <argsstring></argsstring>
+        <name>m_loadedPlugins</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::m_loadedPlugins</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The loaded plug-ins map. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/PluginCache.hpp" line="118" column="29" bodyfile="Cache/PluginCache.hpp" bodystart="118" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dbb/a02679_1a4f5557f13001b7e454570257b80f5cfc" prot="private" static="no" mutable="no">
+        <type>std::recursive_mutex</type>
+        <definition>std::recursive_mutex castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::m_mutexLoadedPlugins</definition>
+        <argsstring></argsstring>
+        <name>m_mutexLoadedPlugins</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::m_mutexLoadedPlugins</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The mutex protecting the loaded plug-ins map. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/PluginCache.hpp" line="121" column="22" bodyfile="Cache/PluginCache.hpp" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dbb/a02679_1aed0d7ce6ec542b72206698402ed95d5d" prot="private" static="no" mutable="no">
+        <type>castor3d::PluginTypePathMap</type>
+        <definition>castor3d::PluginTypePathMap castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::m_loadedPluginTypes</definition>
+        <argsstring></argsstring>
+        <name>m_loadedPluginTypes</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::m_loadedPluginTypes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The loaded plug-ins map, sorted by plug-in type. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/PluginCache.hpp" line="124" column="29" bodyfile="Cache/PluginCache.hpp" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dbb/a02679_1a95cb9cb785adca04ee53a7c82046ef80" prot="private" static="no" mutable="no">
+        <type>std::recursive_mutex</type>
+        <definition>std::recursive_mutex castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::m_mutexLoadedPluginTypes</definition>
+        <argsstring></argsstring>
+        <name>m_mutexLoadedPluginTypes</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::m_mutexLoadedPluginTypes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The mutex protecting the loaded plug-ins map sorted by type. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/PluginCache.hpp" line="127" column="22" bodyfile="Cache/PluginCache.hpp" bodystart="127" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/dbb/a02679_1a295281b62059b282c282ba471d9223dd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::ResourceCacheT</definition>
+        <argsstring>(castor3d::Engine &amp;engine)</argsstring>
+        <name>ResourceCacheT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::ResourceCacheT</qualifiedname>
+        <param>
+          <type><ref refid="d8/dd0/a02711" kindref="compound">castor3d::Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/PluginCache.hpp" line="44" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dbb/a02679_1a4e6a96954e0826b85f1bc6409ab79b02" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::~ResourceCacheT</definition>
+        <argsstring>()=default</argsstring>
+        <name>~ResourceCacheT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::~ResourceCacheT</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/PluginCache.hpp" line="51" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dbb/a02679_1a6b2c19075acb1a1974f50a78c19abdfa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::clear</definition>
+        <argsstring>()</argsstring>
+        <name>clear</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::clear</qualifiedname>
+        <briefdescription>
+<para>Flushes the collection. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/PluginCache.hpp" line="58" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dbb/a02679_1aced146acba31d8fcc25e655e1a9d5ae3" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="de/dbb/a02679_1a2f377f4c818a9371a8be49b30728e67c" kindref="member">ElementPtrT</ref></type>
+        <definition>C3D_API ElementPtrT castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::loadPlugin</definition>
+        <argsstring>(String const &amp;pluginName, Path const &amp;pathFolder) noexcept</argsstring>
+        <name>loadPlugin</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::loadPlugin</qualifiedname>
+        <param>
+          <type>String const &amp;</type>
+          <declname>pluginName</declname>
+        </param>
+        <param>
+          <type>Path const &amp;</type>
+          <declname>pathFolder</declname>
+        </param>
+        <briefdescription>
+<para>Loads a plug-in, given the plug-in name (ex: libGlRenderSystem.dll =&gt; GlRenderSystem) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pluginName</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The plug-in name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pathFolder</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Optional path where the plug-in may be looked for </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The loaded plug-in, <computeroutput>nullptr</computeroutput> if name was incorrect or path was not valid </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/PluginCache.hpp" line="71" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dbb/a02679_1a436cc6a5b55faa89da82005ab8b3631f" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="de/dbb/a02679_1a2f377f4c818a9371a8be49b30728e67c" kindref="member">ElementPtrT</ref></type>
+        <definition>C3D_API ElementPtrT castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::loadPlugin</definition>
+        <argsstring>(Path const &amp;fileFullPath) noexcept</argsstring>
+        <name>loadPlugin</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::loadPlugin</qualifiedname>
+        <param>
+          <type>Path const &amp;</type>
+          <declname>fileFullPath</declname>
+        </param>
+        <briefdescription>
+<para>Loads a plug-in, given the plug-in file&apos;s full path. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">fileFullPath</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The plug-in file path </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The loaded plug-in, <computeroutput>nullptr</computeroutput> if path was incorrect or if it wasn&apos;t a valid plug-in </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/PluginCache.hpp" line="83" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dbb/a02679_1a94f9227c28143b9d308a5c1e0693c744" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor3d::PluginStrMap</type>
+        <definition>C3D_API castor3d::PluginStrMap castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::getPlugins</definition>
+        <argsstring>(castor3d::PluginType type)</argsstring>
+        <name>getPlugins</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::getPlugins</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1aecf8304db7dd49c874ec216f139e5f67" kindref="member">castor3d::PluginType</ref></type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves the plug-ins of given type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The plug-ins type </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>nullptr</computeroutput> if not found </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/PluginCache.hpp" line="94" column="32"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dbb/a02679_1a88b0733e803b92d5778810235d40c5db" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::loadAllPlugins</definition>
+        <argsstring>(Path const &amp;folder)</argsstring>
+        <name>loadAllPlugins</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::loadAllPlugins</qualifiedname>
+        <param>
+          <type>Path const &amp;</type>
+          <declname>folder</declname>
+        </param>
+        <briefdescription>
+<para>Loads all the plug-ins located in working folder. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">folder</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The plug-ins&apos; folder </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/PluginCache.hpp" line="103" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="de/dbb/a02679_1acb751ccf87880a93625bd6f143ccb8ac" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="de/dbb/a02679_1a2f377f4c818a9371a8be49b30728e67c" kindref="member">ElementPtrT</ref></type>
+        <definition>ElementPtrT castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::doloadPlugin</definition>
+        <argsstring>(Path const &amp;pathFile)</argsstring>
+        <name>doloadPlugin</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;::doloadPlugin</qualifiedname>
+        <param>
+          <type>Path const &amp;</type>
+          <declname>pathFile</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/PluginCache.hpp" line="106" column="13"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>Plug-ins cache. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="15" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="15" bodyend="15"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::ResourceCacheBaseT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</label>
+        <link refid="de/dbb/a02679"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::ResourceCacheBaseT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</label>
+        <link refid="de/dbb/a02679"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Cache/PluginCache.hpp" line="23" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="25" bodyend="128"/>
     <listofallmembers>
-      <member refid="de/dbb/a02679_1aa4b79b4b4ac705413cdf276e94401f8e" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkInstanceCreateInfo &gt;</scope><name>value</name></member>
+      <member refid="de/dbb/a02679_1a6b2c19075acb1a1974f50a78c19abdfa" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</scope><name>clear</name></member>
+      <member refid="de/dbb/a02679_1acb751ccf87880a93625bd6f143ccb8ac" prot="private" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</scope><name>doloadPlugin</name></member>
+      <member refid="de/dbb/a02679_1a22c444da27ffbf8c12786f7f17c21127" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</scope><name>ElementCacheT</name></member>
+      <member refid="de/dbb/a02679_1abaf9fc5790f44b4fae8ba3e9a6b8051b" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</scope><name>ElementCacheTraitsT</name></member>
+      <member refid="de/dbb/a02679_1afb8ba401059362e566123cd52e4ffafe" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</scope><name>ElementCleanerT</name></member>
+      <member refid="de/dbb/a02679_1a6cc372ab6664507d1df19dcadea3f427" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</scope><name>ElementContT</name></member>
+      <member refid="de/dbb/a02679_1a8b9ecb07573035f26661007fa1eca55a" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</scope><name>ElementInitialiserT</name></member>
+      <member refid="de/dbb/a02679_1a55a9c0aaa9a868db7e5a74ba7a834f9d" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</scope><name>ElementKeyT</name></member>
+      <member refid="de/dbb/a02679_1a0b4a90a4af082991792493278ef0e7c6" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</scope><name>ElementMergerT</name></member>
+      <member refid="de/dbb/a02679_1a2f377f4c818a9371a8be49b30728e67c" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</scope><name>ElementPtrT</name></member>
+      <member refid="de/dbb/a02679_1a001d347010400cf6c6bca5e74e6b1c3e" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</scope><name>ElementT</name></member>
+      <member refid="de/dbb/a02679_1a94f9227c28143b9d308a5c1e0693c744" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</scope><name>getPlugins</name></member>
+      <member refid="de/dbb/a02679_1a88b0733e803b92d5778810235d40c5db" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</scope><name>loadAllPlugins</name></member>
+      <member refid="de/dbb/a02679_1aced146acba31d8fcc25e655e1a9d5ae3" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</scope><name>loadPlugin</name></member>
+      <member refid="de/dbb/a02679_1a436cc6a5b55faa89da82005ab8b3631f" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</scope><name>loadPlugin</name></member>
+      <member refid="de/dbb/a02679_1ac399fa82d5cde320b7c19902c947bf9d" prot="private" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</scope><name>m_engine</name></member>
+      <member refid="de/dbb/a02679_1a811404d8207de16a79ae4b975c0d2e7c" prot="private" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</scope><name>m_libraries</name></member>
+      <member refid="de/dbb/a02679_1ac7f470add73f33e051c352893a48c815" prot="private" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</scope><name>m_loadedPlugins</name></member>
+      <member refid="de/dbb/a02679_1aed0d7ce6ec542b72206698402ed95d5d" prot="private" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</scope><name>m_loadedPluginTypes</name></member>
+      <member refid="de/dbb/a02679_1a4e7dc4f71934c4498963a2a7e42053fa" prot="private" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</scope><name>m_mutexLibraries</name></member>
+      <member refid="de/dbb/a02679_1a4f5557f13001b7e454570257b80f5cfc" prot="private" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</scope><name>m_mutexLoadedPlugins</name></member>
+      <member refid="de/dbb/a02679_1a95cb9cb785adca04ee53a7c82046ef80" prot="private" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</scope><name>m_mutexLoadedPluginTypes</name></member>
+      <member refid="de/dbb/a02679_1a295281b62059b282c282ba471d9223dd" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</scope><name>ResourceCacheT</name></member>
+      <member refid="de/dbb/a02679_1a4e6a96954e0826b85f1bc6409ab79b02" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</scope><name>~ResourceCacheT</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="db/dc3/a00284" kind="file" language="C++">
+    <compoundname>CpuFunctorEvent.hpp</compoundname>
+    <includes refid="d2/d04/a00281" local="yes">CpuFrameEvent.hpp</includes>
+    <includedby refid="dc/d5d/a00278" local="yes">Event/Frame/CleanupEvent.hpp</includedby>
+    <includedby refid="df/d95/a00299" local="yes">Event/Frame/InitialiseEvent.hpp</includedby>
+    <incdepgraph>
+      <node id="5108">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="5100">
+        <label>Event/Frame/CpuFunctorEvent.hpp</label>
+        <link refid="db/dc3/a00284"/>
+        <childnode refid="5101" relation="include">
+        </childnode>
+      </node>
+      <node id="5111">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="5112">
+        <label>cstdint</label>
+      </node>
+      <node id="5101">
+        <label>CpuFrameEvent.hpp</label>
+        <link refid="d2/d04/a00281"/>
+        <childnode refid="5102" relation="include">
+        </childnode>
+      </node>
+      <node id="5110">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="5103">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="5104" relation="include">
+        </childnode>
+        <childnode refid="5105" relation="include">
+        </childnode>
+        <childnode refid="5106" relation="include">
+        </childnode>
+        <childnode refid="5107" relation="include">
+        </childnode>
+        <childnode refid="5108" relation="include">
+        </childnode>
+        <childnode refid="5109" relation="include">
+        </childnode>
+        <childnode refid="5110" relation="include">
+        </childnode>
+        <childnode refid="5111" relation="include">
+        </childnode>
+        <childnode refid="5112" relation="include">
+        </childnode>
+        <childnode refid="5113" relation="include">
+        </childnode>
+        <childnode refid="5114" relation="include">
+        </childnode>
+        <childnode refid="5115" relation="include">
+        </childnode>
+      </node>
+      <node id="5114">
+        <label>string</label>
+      </node>
+      <node id="5107">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="5104">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="5106">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="5105">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="5115">
+        <label>vector</label>
+      </node>
+      <node id="5109">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="5102">
+        <label>FrameEventModule.hpp</label>
+        <link refid="d6/d7f/a00287"/>
+        <childnode refid="5103" relation="include">
+        </childnode>
+      </node>
+      <node id="5113">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="5116">
+        <label>Event/Frame/CpuFunctorEvent.hpp</label>
+        <link refid="db/dc3/a00284"/>
+        <childnode refid="5117" relation="include">
+        </childnode>
+        <childnode refid="5118" relation="include">
+        </childnode>
+      </node>
+      <node id="5118">
+        <label>Event/Frame/InitialiseEvent.hpp</label>
+        <link refid="df/d95/a00299"/>
+      </node>
+      <node id="5117">
+        <label>Event/Frame/CleanupEvent.hpp</label>
+        <link refid="dc/d5d/a00278"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="d8/d65/a02528" prot="public">castor3d::CpuFunctorEvent</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Event/Frame/CpuFunctorEvent.hpp"/>
+  </compounddef>
+</doxygen>

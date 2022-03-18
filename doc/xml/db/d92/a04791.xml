@@ -1,71 +1,608 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="db/d92/a04791" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::PointLightPass::Config</compoundname>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="db/d92/a04791_1a977e4afea00c01617abe2177db4a441a" prot="public" static="no" mutable="no">
-        <type><ref refid="da/d9d/a04751" kindref="compound">LightPass::Config</ref></type>
-        <definition>LightPass::Config castor3d::PointLightPass::Config::base</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="db/d92/a04791" kind="struct" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::shader::LightMaterial</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <derivedcompoundref refid="d1/d24/a02847" prot="public" virt="non-virtual">castor3d::shader::PbrLightMaterial</derivedcompoundref>
+    <derivedcompoundref refid="dd/db9/a02883" prot="public" virt="non-virtual">castor3d::shader::PhongLightMaterial</derivedcompoundref>
+    <includes local="no">GlslLighting.hpp</includes>
+      <sectiondef kind="user-defined">
+      <description><para>Convertors </para>
+</description>
+      <memberdef kind="variable" id="db/d92/a04791_1a9ab1383d0a559b82da536f53a6c15cf2" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::LightMaterial::edgeFactors</definition>
         <argsstring></argsstring>
-        <name>base</name>
+        <name>edgeFactors</name>
+        <qualifiedname>castor3d::shader::LightMaterial::edgeFactors</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/PointLightPass.hpp" line="142" column="1" bodyfile="Render/Technique/Opaque/Lighting/PointLightPass.hpp" bodystart="142" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="60" column="11" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="60" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="db/d92/a04791_1a8bf655f4e7eec0c4c56cc902cb504b82" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::PointLightPass::Config::position</definition>
+      <memberdef kind="variable" id="db/d92/a04791_1aa1164a70c5a5c2f117fac78413726344" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::LightMaterial::edgeColour</definition>
         <argsstring></argsstring>
-        <name>position</name>
+        <name>edgeColour</name>
+        <qualifiedname>castor3d::shader::LightMaterial::edgeColour</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The variable containing the light position. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/PointLightPass.hpp" line="145" column="1" bodyfile="Render/Technique/Opaque/Lighting/PointLightPass.hpp" bodystart="145" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="61" column="11" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="61" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="db/d92/a04791_1a84a53729ad77740d7dee43245be0fd6c" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::PointLightPass::Config::attenuation</definition>
+      <memberdef kind="variable" id="db/d92/a04791_1a77a47550f680d30636c630de94327891" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::LightMaterial::specific</definition>
         <argsstring></argsstring>
-        <name>attenuation</name>
+        <name>specific</name>
+        <qualifiedname>castor3d::shader::LightMaterial::specific</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The variable containing the light attenuation (RGB) and index (A). </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/PointLightPass.hpp" line="148" column="1" bodyfile="Render/Technique/Opaque/Lighting/PointLightPass.hpp" bodystart="148" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="62" column="11" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d92/a04791_1ab0628508aeb40fa591094532292373cd" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::LightMaterial::albedo</definition>
+        <argsstring></argsstring>
+        <name>albedo</name>
+        <qualifiedname>castor3d::shader::LightMaterial::albedo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="63" column="11" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d92/a04791_1a0a22e22ff9e0ce7414f4b04f5f64e0fa" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::LightMaterial::specular</definition>
+        <argsstring></argsstring>
+        <name>specular</name>
+        <qualifiedname>castor3d::shader::LightMaterial::specular</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="64" column="11" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d92/a04791_1abc7d101ada57095169fdc71c9b3bb4ac" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::LightMaterial::edgeWidth</definition>
+        <argsstring></argsstring>
+        <name>edgeWidth</name>
+        <qualifiedname>castor3d::shader::LightMaterial::edgeWidth</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="65" column="12" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d92/a04791_1a58a9a49f4ad1457da7ed77d83121d04f" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::LightMaterial::depthFactor</definition>
+        <argsstring></argsstring>
+        <name>depthFactor</name>
+        <qualifiedname>castor3d::shader::LightMaterial::depthFactor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="66" column="12" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d92/a04791_1a017f87c56d41b70c44170dd0ac22e76d" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::LightMaterial::normalFactor</definition>
+        <argsstring></argsstring>
+        <name>normalFactor</name>
+        <qualifiedname>castor3d::shader::LightMaterial::normalFactor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="67" column="12" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d92/a04791_1ada9c443a2f21464282ae1e6a581c6aad" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::LightMaterial::objectFactor</definition>
+        <argsstring></argsstring>
+        <name>objectFactor</name>
+        <qualifiedname>castor3d::shader::LightMaterial::objectFactor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="68" column="12" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d92/a04791_1a09fe3e2d61feb0944df3317032dbc417" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::LightMaterial::sssProfileIndex</definition>
+        <argsstring></argsstring>
+        <name>sssProfileIndex</name>
+        <qualifiedname>castor3d::shader::LightMaterial::sssProfileIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="75" column="12" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d92/a04791_1a70872e7bf6b3cb3d0e792ef65f19321f" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::LightMaterial::sssTransmittance</definition>
+        <argsstring></argsstring>
+        <name>sssTransmittance</name>
+        <qualifiedname>castor3d::shader::LightMaterial::sssTransmittance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="76" column="12" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d92/a04791_1a982ed6b2c97b9e27a1a392cf9860eb73" prot="protected" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::LightMaterial::albDiv</definition>
+        <argsstring></argsstring>
+        <name>albDiv</name>
+        <qualifiedname>castor3d::shader::LightMaterial::albDiv</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="71" column="12" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d92/a04791_1ac63a186f37b9f956d00f322b90274493" prot="protected" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::LightMaterial::spcDiv</definition>
+        <argsstring></argsstring>
+        <name>spcDiv</name>
+        <qualifiedname>castor3d::shader::LightMaterial::spcDiv</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="72" column="12" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d92/a04791_1a37e65565fa7244c4f2dfdb85e9e0f28d" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>static C3D_API sdw::Vec3 castor3d::shader::LightMaterial::computeF0</definition>
+        <argsstring>(sdw::Vec3 const &amp;albedo, sdw::Float const &amp;metalness)</argsstring>
+        <name>computeF0</name>
+        <qualifiedname>castor3d::shader::LightMaterial::computeF0</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>albedo</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>metalness</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="53" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d92/a04791_1a4266b7f9549002e4232c31f969e7fc22" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>static C3D_API sdw::Float castor3d::shader::LightMaterial::computeMetalness</definition>
+        <argsstring>(sdw::Vec3 const &amp;albedo, sdw::Vec3 const &amp;specular)</argsstring>
+        <name>computeMetalness</name>
+        <qualifiedname>castor3d::shader::LightMaterial::computeMetalness</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>albedo</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>specular</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="55" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d92/a04791_1a72fe17e6111e0205b650052008a1685e" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>static C3D_API sdw::Float castor3d::shader::LightMaterial::computeRoughness</definition>
+        <argsstring>(sdw::Float const &amp;glossiness)</argsstring>
+        <name>computeRoughness</name>
+        <qualifiedname>castor3d::shader::LightMaterial::computeRoughness</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>glossiness</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="57" column="27"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d92/a04791_1a75114746bc2685b50cb93da7005dbb02" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::LightMaterial::LightMaterial</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>LightMaterial</name>
+        <qualifiedname>castor3d::shader::LightMaterial::LightMaterial</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="25" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d92/a04791_1a0d5fb6417f4043618222377a83818dea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::LightMaterial::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, LightMaterial)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::LightMaterial::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        </param>
+        <param>
+          <type><ref refid="db/d92/a04791" kindref="compound">LightMaterial</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="28" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d92/a04791_1a3866732a6e2362a3086777745191ba12" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::shader::LightMaterial::create</definition>
+        <argsstring>(sdw::Vec3 const &amp;albedo, sdw::Vec4 const &amp;data3, sdw::Vec4 const &amp;data2, Material const &amp;material)=0</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::shader::LightMaterial::create</qualifiedname>
+        <reimplementedby refid="d1/d24/a02847_1a12257e8cd5414f2ac918ef1a3bd627f2">create</reimplementedby>
+        <reimplementedby refid="dd/db9/a02883_1ae78aa8b0c3d3d60c3c2745b6365733a3">create</reimplementedby>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>albedo</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>data3</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>data2</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d6b/a04799" kindref="compound">Material</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="30" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d92/a04791_1a965c87258183a6d130e86ed809b80412" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::shader::LightMaterial::create</definition>
+        <argsstring>(sdw::Vec3 const &amp;albedo, sdw::Vec4 const &amp;data3, sdw::Vec4 const &amp;data2, sdw::Float const &amp;ambient=0.0_f)=0</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::shader::LightMaterial::create</qualifiedname>
+        <reimplementedby refid="d1/d24/a02847_1a521e8c1c182cc28a4e4fcfbc316028b4">create</reimplementedby>
+        <reimplementedby refid="dd/db9/a02883_1ad42bbe013946f39dd4b6dccea6561536">create</reimplementedby>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>albedo</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>data3</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>data2</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>ambient</declname>
+          <defval>0.0_f</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="34" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d92/a04791_1aeae94c2c8b411017c864a60af60462c3" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::shader::LightMaterial::create</definition>
+        <argsstring>(Material const &amp;material)=0</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::shader::LightMaterial::create</qualifiedname>
+        <reimplementedby refid="d1/d24/a02847_1a99f1a4cd9e85a573ce8c37c715b5dd24">create</reimplementedby>
+        <reimplementedby refid="dd/db9/a02883_1aaa2b89bab9ad70bc45be641b6b54d329">create</reimplementedby>
+        <param>
+          <type><ref refid="d5/d6b/a04799" kindref="compound">Material</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="38" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d92/a04791_1af30ae527eed46a2d0ea60780a1c7f1d7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::shader::LightMaterial::output</definition>
+        <argsstring>(sdw::Vec4 &amp;outData2, sdw::Vec4 &amp;outData3) const =0</argsstring>
+        <name>output</name>
+        <qualifiedname>castor3d::shader::LightMaterial::output</qualifiedname>
+        <reimplementedby refid="d1/d24/a02847_1ac5e637cf6afb6d5205dc73f8d21ef6d8">output</reimplementedby>
+        <reimplementedby refid="dd/db9/a02883_1aee2e01b1eeaade22c3c1c98141991388">output</reimplementedby>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>outData2</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>outData3</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="39" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d92/a04791_1ac841313afa1e0dc74681b628e142f307" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>virtual C3D_API sdw::Vec3 castor3d::shader::LightMaterial::getAmbient</definition>
+        <argsstring>(sdw::Vec3 const &amp;ambientLight) const =0</argsstring>
+        <name>getAmbient</name>
+        <qualifiedname>castor3d::shader::LightMaterial::getAmbient</qualifiedname>
+        <reimplementedby refid="d1/d24/a02847_1aae0e68b90d09ec39467b682acf84fdc4">getAmbient</reimplementedby>
+        <reimplementedby refid="dd/db9/a02883_1a3205aa5be90ac6d26acd3d9008dde93a">getAmbient</reimplementedby>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>ambientLight</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="40" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d92/a04791_1a57e4a5aa7cf210edb61e35f8e1df7351" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::shader::LightMaterial::adjustDirectSpecular</definition>
+        <argsstring>(sdw::Vec3 &amp;directSpecular) const =0</argsstring>
+        <name>adjustDirectSpecular</name>
+        <qualifiedname>castor3d::shader::LightMaterial::adjustDirectSpecular</qualifiedname>
+        <reimplementedby refid="d1/d24/a02847_1a733ec1d931070142c86a66fd8014e76d">adjustDirectSpecular</reimplementedby>
+        <reimplementedby refid="dd/db9/a02883_1a0010e550f10b5fd5d97e6ede6f135de4">adjustDirectSpecular</reimplementedby>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>directSpecular</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="41" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d92/a04791_1a00db46aa7ebdb3192f2d7055c0c5dcf2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>virtual C3D_API sdw::Vec3 castor3d::shader::LightMaterial::getIndirectAmbient</definition>
+        <argsstring>(sdw::Vec3 const &amp;indirectAmbient) const =0</argsstring>
+        <name>getIndirectAmbient</name>
+        <qualifiedname>castor3d::shader::LightMaterial::getIndirectAmbient</qualifiedname>
+        <reimplementedby refid="d1/d24/a02847_1aa95389110d244750cf68002499bfcb90">getIndirectAmbient</reimplementedby>
+        <reimplementedby refid="dd/db9/a02883_1a1a1bdeaab85b09b3df6c6f9fb8484f39">getIndirectAmbient</reimplementedby>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>indirectAmbient</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="42" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d92/a04791_1a79098e0d131efbd5962e1cb8a8d36173" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>virtual C3D_API sdw::Float castor3d::shader::LightMaterial::getMetalness</definition>
+        <argsstring>() const =0</argsstring>
+        <name>getMetalness</name>
+        <qualifiedname>castor3d::shader::LightMaterial::getMetalness</qualifiedname>
+        <reimplementedby refid="d1/d24/a02847_1a4c70d7723849412cded567b8e6829c49">getMetalness</reimplementedby>
+        <reimplementedby refid="dd/db9/a02883_1acc5b242b2bb288b28debbd3e635cffd7">getMetalness</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="43" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d92/a04791_1aed8e4ced1b9892e56c5f41becf49b2ec" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>virtual C3D_API sdw::Float castor3d::shader::LightMaterial::getRoughness</definition>
+        <argsstring>() const =0</argsstring>
+        <name>getRoughness</name>
+        <qualifiedname>castor3d::shader::LightMaterial::getRoughness</qualifiedname>
+        <reimplementedby refid="d1/d24/a02847_1a04d763f3e4595f24222c660eb2f7f333">getRoughness</reimplementedby>
+        <reimplementedby refid="dd/db9/a02883_1a9550f3aa0ba430dbeff4b7d3a58560a0">getRoughness</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="44" column="28"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="db/d92/a04791_1af17d7ff936ab4089326d040955e6a3e9" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
+        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::LightMaterial::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::LightMaterial::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="46" column="41"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="2779">
-        <label>castor3d::PointLightPass::Config</label>
-        <childnode refid="2780" relation="usage">
-          <edgelabel>base</edgelabel>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::LightMaterial</label>
+        <link refid="db/d92/a04791"/>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="2780">
-        <label>castor3d::LightPass::Config</label>
-        <link refid="da/d9d/a04751"/>
+      <node id="3">
+        <label>castor3d::shader::PbrLightMaterial</label>
+        <link refid="d1/d24/a02847"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::shader::PbrMRLightMaterial</label>
+        <link refid="d0/de4/a02851"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::shader::PbrSGLightMaterial</label>
+        <link refid="dc/d05/a02855"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::shader::PhongLightMaterial</label>
+        <link refid="dd/db9/a02883"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::LightMaterial</label>
+        <link refid="db/d92/a04791"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </collaborationgraph>
-    <location file="Render/Technique/Opaque/Lighting/PointLightPass.hpp" line="141" column="1" bodyfile="Render/Technique/Opaque/Lighting/PointLightPass.hpp" bodystart="140" bodyend="149"/>
+    <location file="Shader/Shaders/GlslLighting.hpp" line="22" column="1" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="24" bodyend="81"/>
     <listofallmembers>
-      <member refid="db/d92/a04791_1a84a53729ad77740d7dee43245be0fd6c" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Config</scope><name>attenuation</name></member>
-      <member refid="db/d92/a04791_1a977e4afea00c01617abe2177db4a441a" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Config</scope><name>base</name></member>
-      <member refid="db/d92/a04791_1a8bf655f4e7eec0c4c56cc902cb504b82" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Config</scope><name>position</name></member>
+      <member refid="db/d92/a04791_1a57e4a5aa7cf210edb61e35f8e1df7351" prot="public" virt="pure-virtual"><scope>castor3d::shader::LightMaterial</scope><name>adjustDirectSpecular</name></member>
+      <member refid="db/d92/a04791_1a982ed6b2c97b9e27a1a392cf9860eb73" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightMaterial</scope><name>albDiv</name></member>
+      <member refid="db/d92/a04791_1ab0628508aeb40fa591094532292373cd" prot="public" virt="non-virtual"><scope>castor3d::shader::LightMaterial</scope><name>albedo</name></member>
+      <member refid="db/d92/a04791_1a37e65565fa7244c4f2dfdb85e9e0f28d" prot="public" virt="non-virtual"><scope>castor3d::shader::LightMaterial</scope><name>computeF0</name></member>
+      <member refid="db/d92/a04791_1a4266b7f9549002e4232c31f969e7fc22" prot="public" virt="non-virtual"><scope>castor3d::shader::LightMaterial</scope><name>computeMetalness</name></member>
+      <member refid="db/d92/a04791_1a72fe17e6111e0205b650052008a1685e" prot="public" virt="non-virtual"><scope>castor3d::shader::LightMaterial</scope><name>computeRoughness</name></member>
+      <member refid="db/d92/a04791_1a3866732a6e2362a3086777745191ba12" prot="public" virt="pure-virtual"><scope>castor3d::shader::LightMaterial</scope><name>create</name></member>
+      <member refid="db/d92/a04791_1a965c87258183a6d130e86ed809b80412" prot="public" virt="pure-virtual"><scope>castor3d::shader::LightMaterial</scope><name>create</name></member>
+      <member refid="db/d92/a04791_1aeae94c2c8b411017c864a60af60462c3" prot="public" virt="pure-virtual"><scope>castor3d::shader::LightMaterial</scope><name>create</name></member>
+      <member refid="db/d92/a04791_1a58a9a49f4ad1457da7ed77d83121d04f" prot="public" virt="non-virtual"><scope>castor3d::shader::LightMaterial</scope><name>depthFactor</name></member>
+      <member refid="db/d92/a04791_1aa1164a70c5a5c2f117fac78413726344" prot="public" virt="non-virtual"><scope>castor3d::shader::LightMaterial</scope><name>edgeColour</name></member>
+      <member refid="db/d92/a04791_1a9ab1383d0a559b82da536f53a6c15cf2" prot="public" virt="non-virtual"><scope>castor3d::shader::LightMaterial</scope><name>edgeFactors</name></member>
+      <member refid="db/d92/a04791_1abc7d101ada57095169fdc71c9b3bb4ac" prot="public" virt="non-virtual"><scope>castor3d::shader::LightMaterial</scope><name>edgeWidth</name></member>
+      <member refid="db/d92/a04791_1ac841313afa1e0dc74681b628e142f307" prot="public" virt="pure-virtual"><scope>castor3d::shader::LightMaterial</scope><name>getAmbient</name></member>
+      <member refid="db/d92/a04791_1a00db46aa7ebdb3192f2d7055c0c5dcf2" prot="public" virt="pure-virtual"><scope>castor3d::shader::LightMaterial</scope><name>getIndirectAmbient</name></member>
+      <member refid="db/d92/a04791_1a79098e0d131efbd5962e1cb8a8d36173" prot="public" virt="pure-virtual"><scope>castor3d::shader::LightMaterial</scope><name>getMetalness</name></member>
+      <member refid="db/d92/a04791_1aed8e4ced1b9892e56c5f41becf49b2ec" prot="public" virt="pure-virtual"><scope>castor3d::shader::LightMaterial</scope><name>getRoughness</name></member>
+      <member refid="db/d92/a04791_1a75114746bc2685b50cb93da7005dbb02" prot="public" virt="non-virtual"><scope>castor3d::shader::LightMaterial</scope><name>LightMaterial</name></member>
+      <member refid="db/d92/a04791_1af17d7ff936ab4089326d040955e6a3e9" prot="public" virt="non-virtual"><scope>castor3d::shader::LightMaterial</scope><name>makeType</name></member>
+      <member refid="db/d92/a04791_1a017f87c56d41b70c44170dd0ac22e76d" prot="public" virt="non-virtual"><scope>castor3d::shader::LightMaterial</scope><name>normalFactor</name></member>
+      <member refid="db/d92/a04791_1ada9c443a2f21464282ae1e6a581c6aad" prot="public" virt="non-virtual"><scope>castor3d::shader::LightMaterial</scope><name>objectFactor</name></member>
+      <member refid="db/d92/a04791_1af30ae527eed46a2d0ea60780a1c7f1d7" prot="public" virt="pure-virtual"><scope>castor3d::shader::LightMaterial</scope><name>output</name></member>
+      <member refid="db/d92/a04791_1a0d5fb6417f4043618222377a83818dea" prot="public" virt="non-virtual"><scope>castor3d::shader::LightMaterial</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="db/d92/a04791_1ac63a186f37b9f956d00f322b90274493" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightMaterial</scope><name>spcDiv</name></member>
+      <member refid="db/d92/a04791_1a77a47550f680d30636c630de94327891" prot="public" virt="non-virtual"><scope>castor3d::shader::LightMaterial</scope><name>specific</name></member>
+      <member refid="db/d92/a04791_1a0a22e22ff9e0ce7414f4b04f5f64e0fa" prot="public" virt="non-virtual"><scope>castor3d::shader::LightMaterial</scope><name>specular</name></member>
+      <member refid="db/d92/a04791_1a09fe3e2d61feb0944df3317032dbc417" prot="public" virt="non-virtual"><scope>castor3d::shader::LightMaterial</scope><name>sssProfileIndex</name></member>
+      <member refid="db/d92/a04791_1a70872e7bf6b3cb3d0e792ef65f19321f" prot="public" virt="non-virtual"><scope>castor3d::shader::LightMaterial</scope><name>sssTransmittance</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

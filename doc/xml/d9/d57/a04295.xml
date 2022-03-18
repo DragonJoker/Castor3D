@@ -1,395 +1,463 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d9/d57/a04295" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::MorphingRenderNode</compoundname>
-    <basecompoundref refid="d1/df6/a04299" prot="public" virt="non-virtual">castor3d::ObjectRenderNode&lt; Submesh, Geometry &gt;</basecompoundref>
-    <includes local="no">MorphingRenderNode.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d9/d57/a04295_1a1b095752081af0d18d655d42307fccc5" prot="public" static="no" mutable="no">
-        <type><ref refid="db/d39/a05023" kindref="compound">AnimatedMesh</ref> &amp;</type>
-        <definition>AnimatedMesh&amp; castor3d::MorphingRenderNode::mesh</definition>
-        <argsstring></argsstring>
-        <name>mesh</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d9/d57/a04295" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::SsaoPass</compoundname>
+    <includes local="no">SsaoPass.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d9/d57/a04295_1a681318a06c176ca1affb6ab66ac7e1c1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/d84/a04315" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>C3D_API Texture const  &amp; castor3d::SsaoPass::getResult</definition>
+        <argsstring>() const</argsstring>
+        <name>getResult</name>
+        <qualifiedname>castor3d::SsaoPass::getResult</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The animated mesh. </para>
+<para>name Getters. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Node/MorphingRenderNode.hpp" line="31" column="1" bodyfile="Render/Node/MorphingRenderNode.hpp" bodystart="31" bodyend="-1"/>
+        <location file="Render/Technique/SsaoPass.hpp" line="80" column="24"/>
       </memberdef>
-      <memberdef kind="variable" id="d9/d57/a04295_1a026861bac307647b55de20e15b3a5b6a" prot="public" static="no" mutable="no">
-        <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d6/d3f/a05571" kindref="compound">MorphingUboConfiguration</ref> &gt;</type>
-        <definition>UniformBufferOffsetT&lt; MorphingUboConfiguration &gt; castor3d::MorphingRenderNode::morphingUbo</definition>
-        <argsstring></argsstring>
-        <name>morphingUbo</name>
+      <memberdef kind="function" id="d9/d57/a04295_1affeb6df07add80d275a581dd6af8871f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/d84/a04315" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>C3D_API Texture const  &amp; castor3d::SsaoPass::getBentNormals</definition>
+        <argsstring>() const</argsstring>
+        <name>getBentNormals</name>
+        <qualifiedname>castor3d::SsaoPass::getBentNormals</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The morphing UBO. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Node/MorphingRenderNode.hpp" line="34" column="1" bodyfile="Render/Node/MorphingRenderNode.hpp" bodystart="34" bodyend="-1"/>
+        <location file="Render/Technique/SsaoPass.hpp" line="81" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d57/a04295_1a6b4387920d4324d494ba1577043eeacc" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d6/d64/a04167" kindref="compound">SsaoConfig</ref> const &amp;</type>
+        <definition>SsaoConfig const  &amp; castor3d::SsaoPass::getConfig</definition>
+        <argsstring>() const</argsstring>
+        <name>getConfig</name>
+        <qualifiedname>castor3d::SsaoPass::getConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/SsaoPass.hpp" line="83" column="19" bodyfile="Render/Technique/SsaoPass.hpp" bodystart="83" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d57/a04295_1aa4ab1acf4df65ad959f9d1ea5f7621ab" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>crg::FramePass const &amp;</type>
+        <definition>crg::FramePass const  &amp; castor3d::SsaoPass::getLastPass</definition>
+        <argsstring>() const</argsstring>
+        <name>getLastPass</name>
+        <qualifiedname>castor3d::SsaoPass::getLastPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/SsaoPass.hpp" line="88" column="23" bodyfile="Render/Technique/SsaoPass.hpp" bodystart="88" bodyend="91"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d57/a04295_1a295f3d86b3af6c5bee7284d91e0f47ad" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>static uint32_t castor3d::SsaoPass::countInitialisationSteps</definition>
+        <argsstring>()</argsstring>
+        <name>countInitialisationSteps</name>
+        <qualifiedname>castor3d::SsaoPass::countInitialisationSteps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/SsaoPass.hpp" line="93" column="17" bodyfile="Render/Technique/SsaoPass.hpp" bodystart="93" bodyend="101"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d9/d57/a04295_1ae6f46422b6648b191ac4c0ebc108e8c6" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::SsaoPass::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::SsaoPass::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/SsaoPass.hpp" line="105" column="21" bodyfile="Render/Technique/SsaoPass.hpp" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d57/a04295_1a01cfafdc56872e208e50808aca0cbe78" prot="private" static="no" mutable="no">
+        <type><ref refid="d6/d64/a04167" kindref="compound">SsaoConfig</ref> &amp;</type>
+        <definition>SsaoConfig&amp; castor3d::SsaoPass::m_ssaoConfig</definition>
+        <argsstring></argsstring>
+        <name>m_ssaoConfig</name>
+        <qualifiedname>castor3d::SsaoPass::m_ssaoConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/SsaoPass.hpp" line="106" column="13" bodyfile="Render/Technique/SsaoPass.hpp" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d57/a04295_1acb692d886e5f241015ab8d8cf70beb01" prot="private" static="no" mutable="no">
+        <type><ref refid="de/d63/a04887" kindref="compound">GpInfoUbo</ref> const  &amp;</type>
+        <definition>GpInfoUbo const&amp; castor3d::SsaoPass::m_gpInfoUbo</definition>
+        <argsstring></argsstring>
+        <name>m_gpInfoUbo</name>
+        <qualifiedname>castor3d::SsaoPass::m_gpInfoUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/SsaoPass.hpp" line="107" column="18" bodyfile="Render/Technique/SsaoPass.hpp" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d57/a04295_1ae0389a09c00da724a5ff3ef943da4885" prot="private" static="no" mutable="no">
+        <type>crg::FramePassGroup &amp;</type>
+        <definition>crg::FramePassGroup&amp; castor3d::SsaoPass::m_group</definition>
+        <argsstring></argsstring>
+        <name>m_group</name>
+        <qualifiedname>castor3d::SsaoPass::m_group</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/SsaoPass.hpp" line="108" column="22" bodyfile="Render/Technique/SsaoPass.hpp" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d57/a04295_1a9df8673cc61605ebc78b445f221c3644" prot="private" static="no" mutable="no">
+        <type>VkExtent2D</type>
+        <definition>VkExtent2D castor3d::SsaoPass::m_size</definition>
+        <argsstring></argsstring>
+        <name>m_size</name>
+        <qualifiedname>castor3d::SsaoPass::m_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/SsaoPass.hpp" line="109" column="12" bodyfile="Render/Technique/SsaoPass.hpp" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d57/a04295_1aea73f20419bc3f9e7b1cf43bb046336f" prot="private" static="no" mutable="no">
+        <type><ref refid="de/d42/a04927" kindref="compound">MatrixUbo</ref></type>
+        <definition>MatrixUbo castor3d::SsaoPass::m_matrixUbo</definition>
+        <argsstring></argsstring>
+        <name>m_matrixUbo</name>
+        <qualifiedname>castor3d::SsaoPass::m_matrixUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/SsaoPass.hpp" line="110" column="11" bodyfile="Render/Technique/SsaoPass.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d57/a04295_1a36c92bf55196f4f26ddd6388f8af7355" prot="private" static="no" mutable="no">
+        <type>LineariseDepthPassUPtr</type>
+        <definition>LineariseDepthPassUPtr castor3d::SsaoPass::m_linearisePass</definition>
+        <argsstring></argsstring>
+        <name>m_linearisePass</name>
+        <qualifiedname>castor3d::SsaoPass::m_linearisePass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/SsaoPass.hpp" line="111" column="24" bodyfile="Render/Technique/SsaoPass.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d57/a04295_1a7d1d20eff6a241ae36762d236b3010a8" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/da2/a04991" kindref="compound">SsaoConfigUbo</ref></type>
+        <definition>SsaoConfigUbo castor3d::SsaoPass::m_ssaoConfigUbo</definition>
+        <argsstring></argsstring>
+        <name>m_ssaoConfigUbo</name>
+        <qualifiedname>castor3d::SsaoPass::m_ssaoConfigUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/SsaoPass.hpp" line="112" column="15" bodyfile="Render/Technique/SsaoPass.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d57/a04295_1ab1c297f0bca45e2c8025ec4d72126aeb" prot="private" static="no" mutable="no">
+        <type>SsaoRawAOPassUPtr</type>
+        <definition>SsaoRawAOPassUPtr castor3d::SsaoPass::m_rawAoPass</definition>
+        <argsstring></argsstring>
+        <name>m_rawAoPass</name>
+        <qualifiedname>castor3d::SsaoPass::m_rawAoPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/SsaoPass.hpp" line="113" column="19" bodyfile="Render/Technique/SsaoPass.hpp" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d57/a04295_1abd564897b7d060773681bd31fba8fcc0" prot="private" static="no" mutable="no">
+        <type>SsaoBlurPassUPtr</type>
+        <definition>SsaoBlurPassUPtr castor3d::SsaoPass::m_horizontalBlur</definition>
+        <argsstring></argsstring>
+        <name>m_horizontalBlur</name>
+        <qualifiedname>castor3d::SsaoPass::m_horizontalBlur</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/SsaoPass.hpp" line="114" column="18" bodyfile="Render/Technique/SsaoPass.hpp" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d57/a04295_1acf94af0fb4e81c2e76e25ef711d08c9d" prot="private" static="no" mutable="no">
+        <type>SsaoBlurPassUPtr</type>
+        <definition>SsaoBlurPassUPtr castor3d::SsaoPass::m_verticalBlur</definition>
+        <argsstring></argsstring>
+        <name>m_verticalBlur</name>
+        <qualifiedname>castor3d::SsaoPass::m_verticalBlur</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/SsaoPass.hpp" line="115" column="18" bodyfile="Render/Technique/SsaoPass.hpp" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d57/a04295_1aa21a2effed6f4903b7364e778520a582" prot="private" static="no" mutable="no">
+        <type>crg::FramePass const  *</type>
+        <definition>crg::FramePass const* castor3d::SsaoPass::m_lastPass</definition>
+        <argsstring></argsstring>
+        <name>m_lastPass</name>
+        <qualifiedname>castor3d::SsaoPass::m_lastPass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/SsaoPass.hpp" line="116" column="23" bodyfile="Render/Technique/SsaoPass.hpp" bodystart="116" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d9/d57/a04295_1a60a9e8cded150d9fb0e1021ae4f6e650" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d9/d57/a04295_1abf0c55f7b9094d638307abdf4c14227c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::MorphingRenderNode::MorphingRenderNode</definition>
-        <argsstring>(RenderPipeline &amp;pipeline, PassRenderNode &amp;&amp;passNode, UniformBufferOffsetT&lt; ModelMatrixUboConfiguration &gt; modelMatrixBuffer, UniformBufferOffsetT&lt; ModelUboConfiguration &gt; modelBuffer, UniformBufferOffsetT&lt; PickingUboConfiguration &gt; pickingBuffer, UniformBufferOffsetT&lt; TexturesUboConfiguration &gt; texturesBuffer, UniformBufferOffsetT&lt; ModelInstancesUboConfiguration &gt; modelInstancesBuffer, GeometryBuffers const &amp;buffers, SceneNode &amp;sceneNode, DataType &amp;data, InstanceType &amp;instance, AnimatedMesh &amp;mesh, UniformBufferOffsetT&lt; MorphingUboConfiguration &gt; morphingUbo)</argsstring>
-        <name>MorphingRenderNode</name>
+        <definition>C3D_API castor3d::SsaoPass::SsaoPass</definition>
+        <argsstring>(crg::FrameGraph &amp;graph, RenderDevice const &amp;device, ProgressBar *progress, crg::FramePass const &amp;previousPass, castor::Size const &amp;size, SsaoConfig &amp;ssaoConfig, Texture const &amp;depth, Texture const &amp;normal, GpInfoUbo const &amp;gpInfoUbo)</argsstring>
+        <name>SsaoPass</name>
+        <qualifiedname>castor3d::SsaoPass::SsaoPass</qualifiedname>
         <param>
-          <type><ref refid="dd/dec/a04595" kindref="compound">RenderPipeline</ref> &amp;</type>
-          <declname>pipeline</declname>
+          <type>crg::FrameGraph &amp;</type>
+          <declname>graph</declname>
         </param>
         <param>
-          <type><ref refid="d2/dc7/a04303" kindref="compound">PassRenderNode</ref> &amp;&amp;</type>
-          <declname>passNode</declname>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
         </param>
         <param>
-          <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d5/d7e/a05563" kindref="compound">ModelMatrixUboConfiguration</ref> &gt;</type>
-          <declname>modelMatrixBuffer</declname>
+          <type><ref refid="df/d13/a03271" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
         </param>
         <param>
-          <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d2/d72/a05567" kindref="compound">ModelUboConfiguration</ref> &gt;</type>
-          <declname>modelBuffer</declname>
+          <type>crg::FramePass const &amp;</type>
+          <declname>previousPass</declname>
         </param>
         <param>
-          <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="de/d98/a05579" kindref="compound">PickingUboConfiguration</ref> &gt;</type>
-          <declname>pickingBuffer</declname>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
         </param>
         <param>
-          <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d8/d26/a05599" kindref="compound">TexturesUboConfiguration</ref> &gt;</type>
-          <declname>texturesBuffer</declname>
+          <type><ref refid="d6/d64/a04167" kindref="compound">SsaoConfig</ref> &amp;</type>
+          <declname>ssaoConfig</declname>
         </param>
         <param>
-          <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d6/d63/a05559" kindref="compound">ModelInstancesUboConfiguration</ref> &gt;</type>
-          <declname>modelInstancesBuffer</declname>
+          <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>depth</declname>
         </param>
         <param>
-          <type><ref refid="df/d04/a02287" kindref="compound">GeometryBuffers</ref> const &amp;</type>
-          <declname>buffers</declname>
+          <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>normal</declname>
         </param>
         <param>
-          <type><ref refid="d8/dd0/a05235" kindref="compound">SceneNode</ref> &amp;</type>
-          <declname>sceneNode</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/df6/a04299_1ac978b6ccff4e9775582dcafd1399dc2e" kindref="member">DataType</ref> &amp;</type>
-          <declname>data</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/df6/a04299_1aee832b75502f22fbf4b9a886f2b11487" kindref="member">InstanceType</ref> &amp;</type>
-          <declname>instance</declname>
-        </param>
-        <param>
-          <type><ref refid="db/d39/a05023" kindref="compound">AnimatedMesh</ref> &amp;</type>
-          <declname>mesh</declname>
-        </param>
-        <param>
-          <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d6/d3f/a05571" kindref="compound">MorphingUboConfiguration</ref> &gt;</type>
-          <declname>morphingUbo</declname>
+          <type><ref refid="de/d63/a04887" kindref="compound">GpInfoUbo</ref> const &amp;</type>
+          <declname>gpInfoUbo</declname>
         </param>
         <briefdescription>
+<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">graph</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render graph. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">progress</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The progress bar. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">previousPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The previous frame pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render area dimensions. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ssaoConfig</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The SSAO configuration. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">depth</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The depth buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">normal</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The normals buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">gpInfoUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GBuffer configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Node/MorphingRenderNode.hpp" line="15" column="1"/>
+        <location file="Render/Technique/SsaoPass.hpp" line="49" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d57/a04295_1a6a75b0a97bba21131f6594e703ef96e4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SsaoPass::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::SsaoPass::update</qualifiedname>
+        <param>
+          <type><ref refid="d6/dae/a04043" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, CPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/SsaoPass.hpp" line="66" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d57/a04295_1a1678e3bb5f9f0c996a99dbd80109818a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SsaoPass::accept</definition>
+        <argsstring>(PipelineVisitorBase &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::SsaoPass::accept</qualifiedname>
+        <param>
+          <type><ref refid="d6/d38/a03259" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Visitor acceptance function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ... visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/SsaoPass.hpp" line="70" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="2093">
-        <label>castor3d::MorphingRenderNode</label>
-        <link refid="d9/d57/a04295"/>
-        <childnode refid="2094" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2094">
-        <label>SubmeshRenderNode</label>
-        <link refid="d1/df6/a04299"/>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="2102">
-        <label>castor::OwnedBy&lt; Material &gt;</label>
-      </node>
-      <node id="2116">
-        <label>castor3d::Mesh</label>
-        <link refid="d5/d45/a03887"/>
-        <childnode refid="2117" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2118" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2120">
-        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
-        <childnode refid="2121" relation="template-instance">
-          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2122">
-        <label>K</label>
-      </node>
-      <node id="2123">
-        <label>T</label>
-      </node>
-      <node id="2124">
-        <label>castor3d::Geometry</label>
-        <link refid="db/d6b/a05139"/>
-        <childnode refid="2125" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2129" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2108">
-        <label>castor3d::SceneNode</label>
-        <link refid="d8/dd0/a05235"/>
-        <childnode refid="2109" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2110" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2111" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2107">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelUboConfiguration &gt;</label>
-        <link refid="d2/dd2/a02279"/>
-        <childnode refid="2099" relation="template-instance">
-          <edgelabel>&lt; castor3d::ModelUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2105">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::PickingUboConfiguration &gt;</label>
-        <link refid="d2/dd2/a02279"/>
-        <childnode refid="2099" relation="template-instance">
-          <edgelabel>&lt; castor3d::PickingUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2110">
-        <label>castor::OwnedBy&lt; Scene &gt;</label>
-      </node>
-      <node id="2104">
-        <label>castor::OwnedBy&lt; SceneRenderPass &gt;</label>
-      </node>
-      <node id="2121">
-        <label>std::map&lt; K, T &gt;</label>
-        <childnode refid="2122" relation="usage">
-          <edgelabel>keys</edgelabel>
-        </childnode>
-        <childnode refid="2123" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="2099">
-        <label>castor3d::UniformBufferOffsetT&lt; DataT &gt;</label>
-        <link refid="d2/dd2/a02279"/>
-      </node>
-      <node id="2109">
-        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
-      </node>
-      <node id="2117">
-        <label>castor::Resource&lt; Mesh &gt;</label>
-      </node>
-      <node id="2125">
-        <label>castor3d::MovableObject</label>
-        <link refid="dc/d66/a05171"/>
-        <childnode refid="2118" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2111" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2108" relation="usage">
-          <edgelabel>m_sceneNode</edgelabel>
-        </childnode>
-        <childnode refid="2126" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-      </node>
-      <node id="2111">
-        <label>Named</label>
-      </node>
-      <node id="2095">
-        <label>castor3d::MorphingRenderNode</label>
-        <link refid="d9/d57/a04295"/>
-        <childnode refid="2096" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2113" relation="usage">
-          <edgelabel>morphingUbo</edgelabel>
-        </childnode>
-        <childnode refid="2114" relation="usage">
-          <edgelabel>mesh</edgelabel>
-        </childnode>
-      </node>
-      <node id="2129">
-        <label>castor3d::RenderedObject</label>
-        <link refid="d8/d9b/a05219"/>
-        <childnode refid="2130" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2112">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelInstancesUboConfiguration &gt;</label>
-        <link refid="d2/dd2/a02279"/>
-        <childnode refid="2099" relation="template-instance">
-          <edgelabel>&lt; castor3d::ModelInstancesUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2115">
-        <label>castor3d::AnimatedObject</label>
-        <link refid="d1/d82/a05027"/>
-        <childnode refid="2111" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2096">
-        <label>SubmeshRenderNode</label>
-        <link refid="d1/df6/a04299"/>
-        <childnode refid="2097" relation="usage">
-          <edgelabel>buffers</edgelabel>
-        </childnode>
-        <childnode refid="2098" relation="usage">
-          <edgelabel>modelMatrixUbo</edgelabel>
-        </childnode>
-        <childnode refid="2100" relation="usage">
-          <edgelabel>passNode</edgelabel>
-        </childnode>
-        <childnode refid="2103" relation="usage">
-          <edgelabel>pipeline</edgelabel>
-        </childnode>
-        <childnode refid="2105" relation="usage">
-          <edgelabel>pickingUbo</edgelabel>
-        </childnode>
-        <childnode refid="2106" relation="usage">
-          <edgelabel>texturesUbo</edgelabel>
-        </childnode>
-        <childnode refid="2107" relation="usage">
-          <edgelabel>modelUbo</edgelabel>
-        </childnode>
-        <childnode refid="2108" relation="usage">
-          <edgelabel>sceneNode</edgelabel>
-        </childnode>
-        <childnode refid="2112" relation="usage">
-          <edgelabel>modelInstancesUbo</edgelabel>
-        </childnode>
-      </node>
-      <node id="2127">
-        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
-      </node>
-      <node id="2118">
-        <label>Animable</label>
-        <link refid="de/d0a/a02015"/>
-        <childnode refid="2119" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2120" relation="usage">
-          <edgelabel>m_animations</edgelabel>
-        </childnode>
-      </node>
-      <node id="2098">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelMatrixUboConfiguration &gt;</label>
-        <link refid="d2/dd2/a02279"/>
-        <childnode refid="2099" relation="template-instance">
-          <edgelabel>&lt; castor3d::ModelMatrixUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2119">
-        <label>castor::OwnedBy&lt; AnimableHanlerT &gt;</label>
-      </node>
-      <node id="2128">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="2097">
-        <label>castor3d::GeometryBuffers</label>
-        <link refid="df/d04/a02287"/>
-      </node>
-      <node id="2113">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::MorphingUboConfiguration &gt;</label>
-        <link refid="d2/dd2/a02279"/>
-        <childnode refid="2099" relation="template-instance">
-          <edgelabel>&lt; castor3d::MorphingUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2114">
-        <label>castor3d::AnimatedMesh</label>
-        <link refid="db/d39/a05023"/>
-        <childnode refid="2115" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2116" relation="usage">
-          <edgelabel>m_mesh</edgelabel>
-        </childnode>
-        <childnode refid="2124" relation="usage">
-          <edgelabel>m_geometry</edgelabel>
-        </childnode>
-      </node>
-      <node id="2101">
-        <label>castor3d::Pass</label>
-        <link refid="db/d39/a02575"/>
-        <childnode refid="2102" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2103">
-        <label>castor3d::RenderPipeline</label>
-        <link refid="dd/dec/a04595"/>
-        <childnode refid="2104" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2130">
-        <label>std::enable_shared_from_this&lt; RenderedObject &gt;</label>
-      </node>
-      <node id="2126">
-        <label>castor3d::Scene</label>
-        <link refid="d7/d00/a05223"/>
-        <childnode refid="2127" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2128" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2111" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2100">
-        <label>castor3d::PassRenderNode</label>
-        <link refid="d2/dc7/a04303"/>
-        <childnode refid="2101" relation="usage">
-          <edgelabel>pass</edgelabel>
-        </childnode>
-      </node>
-      <node id="2106">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::TexturesUboConfiguration &gt;</label>
-        <link refid="d2/dd2/a02279"/>
-        <childnode refid="2099" relation="template-instance">
-          <edgelabel>&lt; castor3d::TexturesUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Render/Node/MorphingRenderNode.hpp" line="14" column="1" bodyfile="Render/Node/MorphingRenderNode.hpp" bodystart="12" bodyend="35"/>
+    <location file="Render/Technique/SsaoPass.hpp" line="22" column="1" bodyfile="Render/Technique/SsaoPass.hpp" bodystart="23" bodyend="117"/>
     <listofallmembers>
-      <member refid="d1/df6/a04299_1a255ba78335d0f74d664f226339c29450" prot="public" virt="non-virtual"><scope>castor3d::MorphingRenderNode</scope><name>buffers</name></member>
-      <member refid="d1/df6/a04299_1ac681909d031a28cfae6906b915b41d28" prot="public" virt="non-virtual"><scope>castor3d::MorphingRenderNode</scope><name>data</name></member>
-      <member refid="d1/df6/a04299_1ac978b6ccff4e9775582dcafd1399dc2e" prot="public" virt="non-virtual"><scope>castor3d::MorphingRenderNode</scope><name>DataType</name></member>
-      <member refid="d1/df6/a04299_1a06e411bd5fd7949c61eecb155ed01faf" prot="public" virt="non-virtual"><scope>castor3d::MorphingRenderNode</scope><name>instance</name></member>
-      <member refid="d1/df6/a04299_1aee832b75502f22fbf4b9a886f2b11487" prot="public" virt="non-virtual"><scope>castor3d::MorphingRenderNode</scope><name>InstanceType</name></member>
-      <member refid="d9/d57/a04295_1a1b095752081af0d18d655d42307fccc5" prot="public" virt="non-virtual"><scope>castor3d::MorphingRenderNode</scope><name>mesh</name></member>
-      <member refid="d1/df6/a04299_1ae95cccedfb7320b95deed2662a0121ab" prot="public" virt="non-virtual"><scope>castor3d::MorphingRenderNode</scope><name>modelInstancesUbo</name></member>
-      <member refid="d1/df6/a04299_1a6d24c32231b61a32cb31deae21dee74d" prot="public" virt="non-virtual"><scope>castor3d::MorphingRenderNode</scope><name>modelMatrixUbo</name></member>
-      <member refid="d1/df6/a04299_1a9d1dba37b0ef889fb3a8f19ef7d9488e" prot="public" virt="non-virtual"><scope>castor3d::MorphingRenderNode</scope><name>modelUbo</name></member>
-      <member refid="d9/d57/a04295_1a60a9e8cded150d9fb0e1021ae4f6e650" prot="public" virt="non-virtual"><scope>castor3d::MorphingRenderNode</scope><name>MorphingRenderNode</name></member>
-      <member refid="d9/d57/a04295_1a026861bac307647b55de20e15b3a5b6a" prot="public" virt="non-virtual"><scope>castor3d::MorphingRenderNode</scope><name>morphingUbo</name></member>
-      <member refid="d1/df6/a04299_1a5a57f8e86f0be7bd7db41380961bb670" prot="public" virt="non-virtual"><scope>castor3d::MorphingRenderNode</scope><name>ObjectRenderNode</name></member>
-      <member refid="d1/df6/a04299_1a336e57376fdc842314baf596b26b9334" prot="public" virt="non-virtual"><scope>castor3d::MorphingRenderNode</scope><name>ObjectRenderNode</name></member>
-      <member refid="d1/df6/a04299_1aee731fd52a1af46ece31c023b85a2680" prot="public" virt="non-virtual"><scope>castor3d::MorphingRenderNode</scope><name>ObjectRenderNode</name></member>
-      <member refid="d1/df6/a04299_1ac20c1daa2684bf81e39d76a40ece6c81" prot="public" virt="non-virtual"><scope>castor3d::MorphingRenderNode</scope><name>operator=</name></member>
-      <member refid="d1/df6/a04299_1acc1593a55eb5d814e132c85e14bc72a3" prot="public" virt="non-virtual"><scope>castor3d::MorphingRenderNode</scope><name>operator=</name></member>
-      <member refid="d1/df6/a04299_1ac4131c5f2757aa2c624b2fb286bfe316" prot="public" virt="non-virtual"><scope>castor3d::MorphingRenderNode</scope><name>passNode</name></member>
-      <member refid="d1/df6/a04299_1a3f68f6599e5724288b23d12793346010" prot="public" virt="non-virtual"><scope>castor3d::MorphingRenderNode</scope><name>pickingUbo</name></member>
-      <member refid="d1/df6/a04299_1a5dc38e49cff2eb5cdea2446b978f047f" prot="public" virt="non-virtual"><scope>castor3d::MorphingRenderNode</scope><name>pipeline</name></member>
-      <member refid="d1/df6/a04299_1a79244663521a4e43b1e025764bd59815" prot="public" virt="non-virtual"><scope>castor3d::MorphingRenderNode</scope><name>sceneNode</name></member>
-      <member refid="d1/df6/a04299_1a3465b01cb839a12f604d1e65530a676f" prot="public" virt="non-virtual"><scope>castor3d::MorphingRenderNode</scope><name>texDescriptorSet</name></member>
-      <member refid="d1/df6/a04299_1aa4539c98bce1d3e94e4ad471e3eb8487" prot="public" virt="non-virtual"><scope>castor3d::MorphingRenderNode</scope><name>texturesUbo</name></member>
-      <member refid="d1/df6/a04299_1a35ac48ae1cc8b7d679465d822a324cdc" prot="public" virt="non-virtual"><scope>castor3d::MorphingRenderNode</scope><name>uboDescriptorSet</name></member>
+      <member refid="d9/d57/a04295_1a1678e3bb5f9f0c996a99dbd80109818a" prot="public" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>accept</name></member>
+      <member refid="d9/d57/a04295_1a295f3d86b3af6c5bee7284d91e0f47ad" prot="public" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>countInitialisationSteps</name></member>
+      <member refid="d9/d57/a04295_1affeb6df07add80d275a581dd6af8871f" prot="public" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>getBentNormals</name></member>
+      <member refid="d9/d57/a04295_1a6b4387920d4324d494ba1577043eeacc" prot="public" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>getConfig</name></member>
+      <member refid="d9/d57/a04295_1aa4ab1acf4df65ad959f9d1ea5f7621ab" prot="public" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>getLastPass</name></member>
+      <member refid="d9/d57/a04295_1a681318a06c176ca1affb6ab66ac7e1c1" prot="public" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>getResult</name></member>
+      <member refid="d9/d57/a04295_1ae6f46422b6648b191ac4c0ebc108e8c6" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_device</name></member>
+      <member refid="d9/d57/a04295_1acb692d886e5f241015ab8d8cf70beb01" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_gpInfoUbo</name></member>
+      <member refid="d9/d57/a04295_1ae0389a09c00da724a5ff3ef943da4885" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_group</name></member>
+      <member refid="d9/d57/a04295_1abd564897b7d060773681bd31fba8fcc0" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_horizontalBlur</name></member>
+      <member refid="d9/d57/a04295_1aa21a2effed6f4903b7364e778520a582" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_lastPass</name></member>
+      <member refid="d9/d57/a04295_1a36c92bf55196f4f26ddd6388f8af7355" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_linearisePass</name></member>
+      <member refid="d9/d57/a04295_1aea73f20419bc3f9e7b1cf43bb046336f" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_matrixUbo</name></member>
+      <member refid="d9/d57/a04295_1ab1c297f0bca45e2c8025ec4d72126aeb" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_rawAoPass</name></member>
+      <member refid="d9/d57/a04295_1a9df8673cc61605ebc78b445f221c3644" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_size</name></member>
+      <member refid="d9/d57/a04295_1a01cfafdc56872e208e50808aca0cbe78" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_ssaoConfig</name></member>
+      <member refid="d9/d57/a04295_1a7d1d20eff6a241ae36762d236b3010a8" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_ssaoConfigUbo</name></member>
+      <member refid="d9/d57/a04295_1acf94af0fb4e81c2e76e25ef711d08c9d" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_verticalBlur</name></member>
+      <member refid="d9/d57/a04295_1abf0c55f7b9094d638307abdf4c14227c" prot="public" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>SsaoPass</name></member>
+      <member refid="d9/d57/a04295_1a6a75b0a97bba21131f6594e703ef96e4" prot="public" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>update</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

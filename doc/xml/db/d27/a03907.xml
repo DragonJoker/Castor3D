@@ -1,82 +1,180 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="db/d27/a03907" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::BonesInstantiationComponent</compoundname>
-    <basecompoundref refid="d1/d55/a03959" prot="public" virt="non-virtual">castor3d::SubmeshComponent</basecompoundref>
-    <includes local="no">BonesInstantiationComponent.hpp</includes>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="db/d27/a03907_1a047188d2096e53376c70ac5872407f7a" prot="public" static="yes" mutable="no">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
-        <definition>C3D_API castor::String const castor3d::BonesInstantiationComponent::Name</definition>
-        <argsstring></argsstring>
-        <name>Name</name>
+    <compoundname>castor3d::IblTextures</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Scene &gt;</basecompoundref>
+    <includes local="no">IblTextures.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="db/d27/a03907_1ada1dcd43bcbef41de2017c0bc4c6eeb3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::IblTextures::getIrradianceTexture</definition>
+        <argsstring>() const</argsstring>
+        <name>getIrradianceTexture</name>
+        <qualifiedname>castor3d::IblTextures::getIrradianceTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="72" column="23" bodyfile="Render/PBR/IblTextures.hpp" bodystart="72" bodyend="75"/>
+        <references refid="d4/da4/a03911_1a4a6e1b4199e798330b540cd53b30453b" compoundref="d3/d95/a00779" startline="77" endline="80">castor3d::RadianceComputer::getResult</references>
+      </memberdef>
+      <memberdef kind="function" id="db/d27/a03907_1ad89be757124326abbfb6907420912f58" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::IblTextures::getPrefilteredEnvironmentTexture</definition>
+        <argsstring>() const</argsstring>
+        <name>getPrefilteredEnvironmentTexture</name>
+        <qualifiedname>castor3d::IblTextures::getPrefilteredEnvironmentTexture</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="99" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="99" bodyend="-1"/>
+        <location file="Render/PBR/IblTextures.hpp" line="77" column="23" bodyfile="Render/PBR/IblTextures.hpp" bodystart="77" bodyend="80"/>
+        <references refid="d1/dc8/a03895_1a6dbf52dc4d47481cdc51ad1373666eb8" compoundref="d0/d7e/a00770" startline="111" endline="114">castor3d::EnvironmentPrefilter::getResult</references>
+      </memberdef>
+      <memberdef kind="function" id="db/d27/a03907_1ab49b1cdfec32960367c7c943f7c87d4e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::IblTextures::getPrefilteredBrdfTexture</definition>
+        <argsstring>() const</argsstring>
+        <name>getPrefilteredBrdfTexture</name>
+        <qualifiedname>castor3d::IblTextures::getPrefilteredBrdfTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="82" column="23" bodyfile="Render/PBR/IblTextures.hpp" bodystart="82" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d27/a03907_1a5d45288d46639de661d172598822b5f7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Sampler const &amp;</type>
+        <definition>ashes::Sampler const  &amp; castor3d::IblTextures::getIrradianceSampler</definition>
+        <argsstring>() const</argsstring>
+        <name>getIrradianceSampler</name>
+        <qualifiedname>castor3d::IblTextures::getIrradianceSampler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="87" column="30" bodyfile="Render/PBR/IblTextures.hpp" bodystart="87" bodyend="90"/>
+        <references refid="d4/da4/a03911_1ad1f45bde74c7608a6bbf99e4088f9c11">castor3d::RadianceComputer::getSampler</references>
+      </memberdef>
+      <memberdef kind="function" id="db/d27/a03907_1a2837d9e63ab70246556f53cb0aff6fe1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Sampler const &amp;</type>
+        <definition>ashes::Sampler const  &amp; castor3d::IblTextures::getPrefilteredEnvironmentSampler</definition>
+        <argsstring>() const</argsstring>
+        <name>getPrefilteredEnvironmentSampler</name>
+        <qualifiedname>castor3d::IblTextures::getPrefilteredEnvironmentSampler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="92" column="30" bodyfile="Render/PBR/IblTextures.hpp" bodystart="92" bodyend="95"/>
+        <references refid="d1/dc8/a03895_1ace19dfaaff10ee60ff4be98880c44d76" compoundref="d0/d7e/a00770" startline="116" endline="119">castor3d::EnvironmentPrefilter::getSampler</references>
+      </memberdef>
+      <memberdef kind="function" id="db/d27/a03907_1a54b5d41fb98711d8092c7c343ca5af12" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Sampler const &amp;</type>
+        <definition>ashes::Sampler const  &amp; castor3d::IblTextures::getPrefilteredBrdfSampler</definition>
+        <argsstring>() const</argsstring>
+        <name>getPrefilteredBrdfSampler</name>
+        <qualifiedname>castor3d::IblTextures::getPrefilteredBrdfSampler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="97" column="30" bodyfile="Render/PBR/IblTextures.hpp" bodystart="97" bodyend="100"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="db/d27/a03907_1a96a084705ada8643c43fb18b775ebd5c" prot="private" static="no" mutable="no">
-        <type><ref refid="d0/ddf/a03935" kindref="compound">InstantiationComponent</ref> const  &amp;</type>
-        <definition>InstantiationComponent const&amp; castor3d::BonesInstantiationComponent::m_instantiation</definition>
+      <memberdef kind="variable" id="db/d27/a03907_1ac7e66d8ba32e7b9c858823bebea9efa7" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref></type>
+        <definition>Texture castor3d::IblTextures::m_prefilteredBrdf</definition>
         <argsstring></argsstring>
-        <name>m_instantiation</name>
+        <name>m_prefilteredBrdf</name>
+        <qualifiedname>castor3d::IblTextures::m_prefilteredBrdf</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="102" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="102" bodyend="-1"/>
+        <location file="Render/PBR/IblTextures.hpp" line="104" column="9" bodyfile="Render/PBR/IblTextures.hpp" bodystart="104" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="db/d27/a03907_1abebbf5128deb57ad647278872ddfec1b" prot="private" static="no" mutable="no">
-        <type><ref refid="d6/db7/a03903" kindref="compound">BonesComponent</ref> const  &amp;</type>
-        <definition>BonesComponent const&amp; castor3d::BonesInstantiationComponent::m_bones</definition>
+      <memberdef kind="variable" id="db/d27/a03907_1a42729699065309e5b062ac73d01105d5" prot="private" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1a723c56c48a833a5992bd2a5a9a366e45" kindref="member">SamplerResPtr</ref></type>
+        <definition>SamplerResPtr castor3d::IblTextures::m_sampler</definition>
         <argsstring></argsstring>
-        <name>m_bones</name>
+        <name>m_sampler</name>
+        <qualifiedname>castor3d::IblTextures::m_sampler</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="103" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="103" bodyend="-1"/>
+        <location file="Render/PBR/IblTextures.hpp" line="105" column="15" bodyfile="Render/PBR/IblTextures.hpp" bodystart="105" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="db/d27/a03907_1a28fd11a2707390b80d4e7b7375a64eb8" prot="private" static="no" mutable="no">
-        <type>ShaderBufferUPtr</type>
-        <definition>ShaderBufferUPtr castor3d::BonesInstantiationComponent::m_instancedBonesBuffer</definition>
+      <memberdef kind="variable" id="db/d27/a03907_1a5fba7190da8b10e7a66579ab8c9bf721" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/da4/a03911" kindref="compound">RadianceComputer</ref></type>
+        <definition>RadianceComputer castor3d::IblTextures::m_radianceComputer</definition>
         <argsstring></argsstring>
-        <name>m_instancedBonesBuffer</name>
+        <name>m_radianceComputer</name>
+        <qualifiedname>castor3d::IblTextures::m_radianceComputer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="104" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="104" bodyend="-1"/>
+        <location file="Render/PBR/IblTextures.hpp" line="106" column="18" bodyfile="Render/PBR/IblTextures.hpp" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d27/a03907_1a0b8a2ed6e7b6504d80d2100bcdd22eb1" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/dc8/a03895" kindref="compound">EnvironmentPrefilter</ref></type>
+        <definition>EnvironmentPrefilter castor3d::IblTextures::m_environmentPrefilter</definition>
+        <argsstring></argsstring>
+        <name>m_environmentPrefilter</name>
+        <qualifiedname>castor3d::IblTextures::m_environmentPrefilter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="107" column="22" bodyfile="Render/PBR/IblTextures.hpp" bodystart="107" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="db/d27/a03907_1a30a7fca985626d2d0ffb9786987b3c65" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="db/d27/a03907_1a5e79944c8fdc443d5499eb5b0296b7e3" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::BonesInstantiationComponent::BonesInstantiationComponent</definition>
-        <argsstring>(Submesh &amp;submesh, InstantiationComponent const &amp;instantiation, BonesComponent const &amp;bones)</argsstring>
-        <name>BonesInstantiationComponent</name>
+        <definition>C3D_API castor3d::IblTextures::IblTextures</definition>
+        <argsstring>(Scene &amp;scene, RenderDevice const &amp;device, Texture const &amp;source, SamplerResPtr sampler)</argsstring>
+        <name>IblTextures</name>
+        <qualifiedname>castor3d::IblTextures::IblTextures</qualifiedname>
         <param>
-          <type><ref refid="d0/dce/a03971" kindref="compound">Submesh</ref> &amp;</type>
-          <declname>submesh</declname>
+          <type><ref refid="dd/dec/a04595" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
         </param>
         <param>
-          <type><ref refid="d0/ddf/a03935" kindref="compound">InstantiationComponent</ref> const &amp;</type>
-          <declname>instantiation</declname>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
         </param>
         <param>
-          <type><ref refid="d6/db7/a03903" kindref="compound">BonesComponent</ref> const &amp;</type>
-          <declname>bones</declname>
+          <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>source</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a723c56c48a833a5992bd2a5a9a366e45" kindref="member">SamplerResPtr</ref></type>
+          <declname>sampler</declname>
         </param>
         <briefdescription>
 <para>Constructor. </para>
@@ -84,26 +182,34 @@
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">submesh</parametername>
+<parametername direction="in">scene</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The parent submesh. </para>
+<para>The scene. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">instantiation</parametername>
+<parametername direction="in">device</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The instantiation component. </para>
+<para>The GPU device. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">bones</parametername>
+<parametername direction="in">source</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The bones component. </para>
+<para>The source environment map. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sampler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The sampler used for the environment map. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -111,194 +217,93 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="30" column="1"/>
+        <location file="Render/PBR/IblTextures.hpp" line="35" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="db/d27/a03907_1a737776e6d0f26fbc51f9b65333f346ae" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::BonesInstantiationComponent::gather</definition>
-        <argsstring>(MaterialSPtr material, ashes::BufferCRefArray &amp;buffers, std::vector&lt; uint64_t &gt; &amp;offsets, ashes::PipelineVertexInputStateCreateInfoCRefArray &amp;layouts, uint32_t instanceMult) override</argsstring>
-        <name>gather</name>
-        <reimplements refid="d1/d55/a03959_1a4b992d760e02c3c8dc32137aa43db62b">gather</reimplements>
-        <param>
-          <type>MaterialSPtr</type>
-          <declname>material</declname>
-        </param>
-        <param>
-          <type>ashes::BufferCRefArray &amp;</type>
-          <declname>buffers</declname>
-        </param>
-        <param>
-          <type>std::vector&lt; uint64_t &gt; &amp;</type>
-          <declname>offsets</declname>
-        </param>
-        <param>
-          <type>ashes::PipelineVertexInputStateCreateInfoCRefArray &amp;</type>
-          <declname>layouts</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>instanceMult</declname>
-        </param>
-        <briefdescription>
-<para>Gathers buffers that need to go in a VAO. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="36" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="db/d27/a03907_1a32e76e1e8642ee9500f1dbcd6aacf2a1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>SkeletonSPtr</type>
-        <definition>SkeletonSPtr castor3d::BonesInstantiationComponent::getSkeleton</definition>
-        <argsstring>() const</argsstring>
-        <name>getSkeleton</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The skeleton. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="47" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="47" bodyend="50"/>
-        <references refid="d6/db7/a03903_1a6c0b7671b616ddd3073f2352bcafc3a5">castor3d::BonesComponent::getSkeleton</references>
-      </memberdef>
-      <memberdef kind="function" id="db/d27/a03907_1a837c880c0ed93a393c2ecf94f8b06096" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::BonesInstantiationComponent::hasInstancedBonesBuffer</definition>
-        <argsstring>() const</argsstring>
-        <name>hasInstancedBonesBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>Tells if the bone instantiation buffer exists. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="57" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="57" bodyend="60"/>
-      </memberdef>
-      <memberdef kind="function" id="db/d27/a03907_1a324db0d74a989b387a11285e8ca37604" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d9/dba/a05287" kindref="compound">ShaderBuffer</ref> const  &amp;</type>
-        <definition>ShaderBuffer const&amp; castor3d::BonesInstantiationComponent::getInstancedBonesBuffer</definition>
-        <argsstring>() const</argsstring>
-        <name>getInstancedBonesBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The bone instantiation ShaderStorageBuffer. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="67" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="67" bodyend="70"/>
-      </memberdef>
-      <memberdef kind="function" id="db/d27/a03907_1a2622f1b71232bed018dbe0893d445fd5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d9/dba/a05287" kindref="compound">ShaderBuffer</ref> &amp;</type>
-        <definition>ShaderBuffer&amp; castor3d::BonesInstantiationComponent::getInstancedBonesBuffer</definition>
+      <memberdef kind="function" id="db/d27/a03907_1a0931c8cee3d5c72c2877071344fe73a3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::IblTextures::~IblTextures</definition>
         <argsstring>()</argsstring>
-        <name>getInstancedBonesBuffer</name>
+        <name>~IblTextures</name>
+        <qualifiedname>castor3d::IblTextures::~IblTextures</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The bone instantiation ShaderStorageBuffer. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="39" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d27/a03907_1ae0a2faec0feaa0da2cca40a9b3067c9c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::IblTextures::update</definition>
+        <argsstring>(QueueData const &amp;queueData)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::IblTextures::update</qualifiedname>
+        <param>
+          <type><ref refid="da/d1d/a03947" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <briefdescription>
+<para>Updates the environment maps. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">queueData</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue receiving the GPU commands. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="48" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d27/a03907_1a087b069a7236cdf0d8ffe7e9e8e216b8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Semaphore const &amp;</type>
+        <definition>C3D_API ashes::Semaphore const  &amp; castor3d::IblTextures::update</definition>
+        <argsstring>(QueueData const &amp;queueData, ashes::Semaphore const &amp;toWait)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::IblTextures::update</qualifiedname>
+        <param>
+          <type><ref refid="da/d1d/a03947" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <param>
+          <type>ashes::Semaphore const &amp;</type>
+          <declname>toWait</declname>
+        </param>
+        <briefdescription>
+<para>Updates the environment maps. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">queueData</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue receiving the GPU commands. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">toWait</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The semaphore from the previous render pass. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The semaphores signaled by this pass. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="77" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="77" bodyend="80"/>
-      </memberdef>
-      <memberdef kind="function" id="db/d27/a03907_1a772466b58d0ce73e90caf5fa9262efb1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
-        <type><ref refid="d7/dd1/a01458_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
-        <definition>ProgramFlags castor3d::BonesInstantiationComponent::getProgramFlags</definition>
-        <argsstring>(MaterialSPtr material) const override</argsstring>
-        <name>getProgramFlags</name>
-        <reimplements refid="d1/d55/a03959_1aa5c81caafcdb1b7fa8610605060775f1">getProgramFlags</reimplements>
-        <param>
-          <type>MaterialSPtr</type>
-          <declname>material</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The shader program flags. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="87" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="87" bodyend="90"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="db/d27/a03907_1a998d4ea20931a7aaf58b37a5cbc9c819" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>bool</type>
-        <definition>bool castor3d::BonesInstantiationComponent::doInitialise</definition>
-        <argsstring>(RenderDevice const &amp;device) override</argsstring>
-        <name>doInitialise</name>
-        <reimplements refid="d1/d55/a03959_1a02633de92cd3a940ea28bc2ee63cdefb">doInitialise</reimplements>
-        <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="93" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="db/d27/a03907_1af743a0fbe57231727307beda937a0437" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::BonesInstantiationComponent::doCleanup</definition>
-        <argsstring>() override</argsstring>
-        <name>doCleanup</name>
-        <reimplements refid="d1/d55/a03959_1a8574c2b5b3efa89e6446423448f4edfd">doCleanup</reimplements>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="94" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="db/d27/a03907_1a9774841e331a49b878254eb63cc91de0" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::BonesInstantiationComponent::doFill</definition>
-        <argsstring>(RenderDevice const &amp;device) override</argsstring>
-        <name>doFill</name>
-        <reimplements refid="d1/d55/a03959_1a78f22f8994aae0890645c943e42c45c9">doFill</reimplements>
-        <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="95" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="db/d27/a03907_1a3610cf6b6e728a6d9e281485ba9f1bd5" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::BonesInstantiationComponent::doUpload</definition>
-        <argsstring>() override</argsstring>
-        <name>doUpload</name>
-        <reimplements refid="d1/d55/a03959_1a66e01bf8274e1d77bd20a669cb637a2e">doUpload</reimplements>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="96" column="1"/>
+        <location file="Render/PBR/IblTextures.hpp" line="61" column="33"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -306,65 +311,43 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="496">
-        <label>castor3d::SubmeshComponent</label>
-        <link refid="d1/d55/a03959"/>
-        <childnode refid="497" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="495">
-        <label>castor3d::BonesInstantiationComponent</label>
+      <node id="1">
+        <label>castor3d::IblTextures</label>
         <link refid="db/d27/a03907"/>
-        <childnode refid="496" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="497">
-        <label>castor::OwnedBy&lt; Submesh &gt;</label>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="499">
-        <label>castor3d::SubmeshComponent</label>
-        <link refid="d1/d55/a03959"/>
-        <childnode refid="500" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="498">
-        <label>castor3d::BonesInstantiationComponent</label>
+      <node id="1">
+        <label>castor3d::IblTextures</label>
         <link refid="db/d27/a03907"/>
-        <childnode refid="499" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="500">
-        <label>castor::OwnedBy&lt; Submesh &gt;</label>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
       </node>
     </collaborationgraph>
-    <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="16" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="14" bodyend="105"/>
+    <location file="Render/PBR/IblTextures.hpp" line="17" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="19" bodyend="108"/>
     <listofallmembers>
-      <member refid="db/d27/a03907_1a30a7fca985626d2d0ffb9786987b3c65" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>BonesInstantiationComponent</name></member>
-      <member refid="d1/d55/a03959_1af13d08b9487f0501a06c0f7df4c89f8c" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>cleanup</name></member>
-      <member refid="db/d27/a03907_1af743a0fbe57231727307beda937a0437" prot="private" virt="virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>doCleanup</name></member>
-      <member refid="db/d27/a03907_1a9774841e331a49b878254eb63cc91de0" prot="private" virt="virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>doFill</name></member>
-      <member refid="db/d27/a03907_1a998d4ea20931a7aaf58b37a5cbc9c819" prot="private" virt="virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>doInitialise</name></member>
-      <member refid="db/d27/a03907_1a3610cf6b6e728a6d9e281485ba9f1bd5" prot="private" virt="virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>doUpload</name></member>
-      <member refid="d1/d55/a03959_1a53837125323ab11c28a86acbb187a770" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>fill</name></member>
-      <member refid="db/d27/a03907_1a737776e6d0f26fbc51f9b65333f346ae" prot="public" virt="virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>gather</name></member>
-      <member refid="db/d27/a03907_1a324db0d74a989b387a11285e8ca37604" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>getInstancedBonesBuffer</name></member>
-      <member refid="db/d27/a03907_1a2622f1b71232bed018dbe0893d445fd5" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>getInstancedBonesBuffer</name></member>
-      <member refid="db/d27/a03907_1a772466b58d0ce73e90caf5fa9262efb1" prot="public" virt="virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>getProgramFlags</name></member>
-      <member refid="db/d27/a03907_1a32e76e1e8642ee9500f1dbcd6aacf2a1" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>getSkeleton</name></member>
-      <member refid="d1/d55/a03959_1a3782f6784f793eeccd48e637e85a9d6c" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>getType</name></member>
-      <member refid="db/d27/a03907_1a837c880c0ed93a393c2ecf94f8b06096" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>hasInstancedBonesBuffer</name></member>
-      <member refid="d1/d55/a03959_1a98c6ad3457d19448c1eaa261598103ad" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>initialise</name></member>
-      <member refid="db/d27/a03907_1abebbf5128deb57ad647278872ddfec1b" prot="private" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>m_bones</name></member>
-      <member refid="db/d27/a03907_1a28fd11a2707390b80d4e7b7375a64eb8" prot="private" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>m_instancedBonesBuffer</name></member>
-      <member refid="db/d27/a03907_1a96a084705ada8643c43fb18b775ebd5c" prot="private" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>m_instantiation</name></member>
-      <member refid="db/d27/a03907_1a047188d2096e53376c70ac5872407f7a" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>Name</name></member>
-      <member refid="d1/d55/a03959_1a7e21e4eda223d50b6751c40cb44f77a7" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>needsUpdate</name></member>
-      <member refid="d1/d55/a03959_1a06b2ee9400bab62f5472f8ce8a03ee27" prot="public" virt="virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>setMaterial</name></member>
-      <member refid="d1/d55/a03959_1aafbe6064005a72343870bb444e1e6a1f" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>SubmeshComponent</name></member>
-      <member refid="d1/d55/a03959_1a2dbcda2b8c26f4c9c52db78a5740a0f8" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>upload</name></member>
-      <member refid="d1/d55/a03959_1a30231a167367ba38b41f9bf5b3bcd005" prot="public" virt="virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>~SubmeshComponent</name></member>
+      <member refid="db/d27/a03907_1a5d45288d46639de661d172598822b5f7" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getIrradianceSampler</name></member>
+      <member refid="db/d27/a03907_1ada1dcd43bcbef41de2017c0bc4c6eeb3" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getIrradianceTexture</name></member>
+      <member refid="db/d27/a03907_1a54b5d41fb98711d8092c7c343ca5af12" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getPrefilteredBrdfSampler</name></member>
+      <member refid="db/d27/a03907_1ab49b1cdfec32960367c7c943f7c87d4e" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getPrefilteredBrdfTexture</name></member>
+      <member refid="db/d27/a03907_1a2837d9e63ab70246556f53cb0aff6fe1" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getPrefilteredEnvironmentSampler</name></member>
+      <member refid="db/d27/a03907_1ad89be757124326abbfb6907420912f58" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getPrefilteredEnvironmentTexture</name></member>
+      <member refid="db/d27/a03907_1a5e79944c8fdc443d5499eb5b0296b7e3" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>IblTextures</name></member>
+      <member refid="db/d27/a03907_1a0b8a2ed6e7b6504d80d2100bcdd22eb1" prot="private" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>m_environmentPrefilter</name></member>
+      <member refid="db/d27/a03907_1ac7e66d8ba32e7b9c858823bebea9efa7" prot="private" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>m_prefilteredBrdf</name></member>
+      <member refid="db/d27/a03907_1a5fba7190da8b10e7a66579ab8c9bf721" prot="private" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>m_radianceComputer</name></member>
+      <member refid="db/d27/a03907_1a42729699065309e5b062ac73d01105d5" prot="private" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>m_sampler</name></member>
+      <member refid="db/d27/a03907_1ae0a2faec0feaa0da2cca40a9b3067c9c" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>update</name></member>
+      <member refid="db/d27/a03907_1a087b069a7236cdf0d8ffe7e9e8e216b8" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>update</name></member>
+      <member refid="db/d27/a03907_1a0931c8cee3d5c72c2877071344fe73a3" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>~IblTextures</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

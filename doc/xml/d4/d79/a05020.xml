@@ -1,44 +1,107 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d4/d79/a05020" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::Voxel</compoundname>
-    <includes local="no">VoxelizeModule.hpp</includes>
+    <compoundname>castor3d::ModelBufferConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d4/d79/a05020_1a500e862acbbc63ac0d82aecf2d8c6070" prot="public" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::Voxel::colorMask</definition>
+      <memberdef kind="variable" id="d4/d79/a05020_1afe6add37bd8e3d198f049d5237be71d3" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::ModelBufferConfiguration::prvModel</definition>
         <argsstring></argsstring>
-        <name>colorMask</name>
+        <name>prvModel</name>
+        <qualifiedname>castor3d::ModelBufferConfiguration::prvModel</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Voxelize/VoxelizeModule.hpp" line="72" column="1" bodyfile="Render/Voxelize/VoxelizeModule.hpp" bodystart="72" bodyend="-1"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="244" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="244" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d4/d79/a05020_1a11d74878f633a4332b99aeea8810ad51" prot="public" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::Voxel::normalMask</definition>
+      <memberdef kind="variable" id="d4/d79/a05020_1a9a2fbadbdb51b0c1815d90612e85422f" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::ModelBufferConfiguration::curModel</definition>
         <argsstring></argsstring>
-        <name>normalMask</name>
+        <name>curModel</name>
+        <qualifiedname>castor3d::ModelBufferConfiguration::curModel</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Voxelize/VoxelizeModule.hpp" line="73" column="1" bodyfile="Render/Voxelize/VoxelizeModule.hpp" bodystart="73" bodyend="-1"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="245" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="245" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d79/a05020_1a5292c4f9c5299e18cd6acbfeb9d5839e" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::ModelBufferConfiguration::normal</definition>
+        <argsstring></argsstring>
+        <name>normal</name>
+        <qualifiedname>castor3d::ModelBufferConfiguration::normal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="246" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="246" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d79/a05020_1a2b22886944d1ba979aebe1c2f326cbb0" prot="public" static="no" mutable="no">
+        <type>castor::Point4ui</type>
+        <definition>castor::Point4ui castor3d::ModelBufferConfiguration::textures0</definition>
+        <argsstring></argsstring>
+        <name>textures0</name>
+        <qualifiedname>castor3d::ModelBufferConfiguration::textures0</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="247" column="18" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="247" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d79/a05020_1a12f628c939da54516ad4843e099c355e" prot="public" static="no" mutable="no">
+        <type>castor::Point4ui</type>
+        <definition>castor::Point4ui castor3d::ModelBufferConfiguration::textures1</definition>
+        <argsstring></argsstring>
+        <name>textures1</name>
+        <qualifiedname>castor3d::ModelBufferConfiguration::textures1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="248" column="18" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="248" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d79/a05020_1acd243fd7d4bdf219665bd2f007617bea" prot="public" static="no" mutable="no">
+        <type>castor::Point4i</type>
+        <definition>castor::Point4i castor3d::ModelBufferConfiguration::countsIDs</definition>
+        <argsstring></argsstring>
+        <name>countsIDs</name>
+        <qualifiedname>castor3d::ModelBufferConfiguration::countsIDs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="249" column="17" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="249" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>Model index data. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Voxelize/VoxelizeModule.hpp" line="71" column="1" bodyfile="Render/Voxelize/VoxelizeModule.hpp" bodystart="70" bodyend="74"/>
+    <location file="Shader/Ubos/UbosModule.hpp" line="242" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="243" bodyend="250"/>
     <listofallmembers>
-      <member refid="d4/d79/a05020_1a500e862acbbc63ac0d82aecf2d8c6070" prot="public" virt="non-virtual"><scope>castor3d::Voxel</scope><name>colorMask</name></member>
-      <member refid="d4/d79/a05020_1a11d74878f633a4332b99aeea8810ad51" prot="public" virt="non-virtual"><scope>castor3d::Voxel</scope><name>normalMask</name></member>
+      <member refid="d4/d79/a05020_1acd243fd7d4bdf219665bd2f007617bea" prot="public" virt="non-virtual"><scope>castor3d::ModelBufferConfiguration</scope><name>countsIDs</name></member>
+      <member refid="d4/d79/a05020_1a9a2fbadbdb51b0c1815d90612e85422f" prot="public" virt="non-virtual"><scope>castor3d::ModelBufferConfiguration</scope><name>curModel</name></member>
+      <member refid="d4/d79/a05020_1a5292c4f9c5299e18cd6acbfeb9d5839e" prot="public" virt="non-virtual"><scope>castor3d::ModelBufferConfiguration</scope><name>normal</name></member>
+      <member refid="d4/d79/a05020_1afe6add37bd8e3d198f049d5237be71d3" prot="public" virt="non-virtual"><scope>castor3d::ModelBufferConfiguration</scope><name>prvModel</name></member>
+      <member refid="d4/d79/a05020_1a2b22886944d1ba979aebe1c2f326cbb0" prot="public" virt="non-virtual"><scope>castor3d::ModelBufferConfiguration</scope><name>textures0</name></member>
+      <member refid="d4/d79/a05020_1a12f628c939da54516ad4843e099c355e" prot="public" virt="non-virtual"><scope>castor3d::ModelBufferConfiguration</scope><name>textures1</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

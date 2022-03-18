@@ -1,4 +1,9 @@
-<map id="castor3d::RenderQueue" name="castor3d::RenderQueue">
-<area shape="rect" id="node1" title=" " alt="" coords="32,95,191,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,217,47"/>
+<map id="castor3d::SceneFileContext::SceneImportConfig" name="castor3d::SceneFileContext::SceneImportConfig">
+<area shape="rect" id="node1" title=" " alt="" coords="200,452,383,493"/>
+<area shape="rect" id="node2" title=" " alt="" coords="184,333,399,375"/>
+<area shape="rect" id="node3" href="$dd/d3f/a02912.html" title="Specifies the usages of a texture, per image component." alt="" coords="5,162,204,189"/>
+<area shape="rect" id="node4" href="$df/dfc/a02908.html" title=" " alt="" coords="15,5,195,32"/>
+<area shape="rect" id="node5" title=" " alt="" coords="361,162,483,189"/>
+<area shape="rect" id="node6" title=" " alt="" coords="371,5,409,32"/>
+<area shape="rect" id="node7" title=" " alt="" coords="435,5,473,32"/>
 </map>

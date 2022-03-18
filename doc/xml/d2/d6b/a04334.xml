@@ -1,30 +1,3530 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d2/d6b/a04334" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::SceneRenderNode</compoundname>
-    <includes local="no">SceneRenderNode.hpp</includes>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d2/d6b/a04334_1a8165a9adcd248857c9db91b5a81386ab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::SceneRenderNode::SceneRenderNode</definition>
-        <argsstring>()</argsstring>
-        <name>SceneRenderNode</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d2/d6b/a04334" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::ToneMappingVisitor</compoundname>
+    <basecompoundref refid="dc/d77/a03270" prot="public" virt="non-virtual">castor3d::PipelineVisitor</basecompoundref>
+    <includes local="no">ToneMappingVisitor.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d2/d6b/a04334_1aada73f9e1eddf81e5bb0445c7eda2a9c" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::ToneMappingVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, HdrConfig &amp;value)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d7e/a04326" kindref="compound">HdrConfig</ref> &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name UBO configuration. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="32" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1ab20d0ff1281e0464399f4c127bd5fdc3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(ShaderModule const &amp;value) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1ab20d0ff1281e0464399f4c127bd5fdc3">visit</reimplements>
+        <param>
+          <type><ref refid="dc/d64/a04750" kindref="compound">ShaderModule</ref> const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Shader source. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="366" bodyend="368"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1ab70e8502c679fbd38bb6fc6f2b70881c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(DebugConfig const &amp;value) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1ab70e8502c679fbd38bb6fc6f2b70881c">visit</reimplements>
+        <param>
+          <type><ref refid="d2/da6/a04086" kindref="compound">DebugConfig</ref> const &amp;</type>
+          <declname>value</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Node/SceneRenderNode.hpp" line="13" column="1"/>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="370" bodyend="372"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a716d04787bffb9ed435ffc41c69aeb0a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, bool &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a716d04787bffb9ed435ffc41c69aeb0a">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>bool &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Global post effect configuration. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="383" bodyend="387"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a4cd17224ddef91bb5c6e745807cc1c0a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, int16_t &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a4cd17224ddef91bb5c6e745807cc1c0a">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>int16_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="389" bodyend="393"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a43e829d0525724760b16ea5afa96b51c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, uint16_t &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a43e829d0525724760b16ea5afa96b51c">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint16_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="395" bodyend="399"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a17932f82d030eb3bd82b7aae3941c737" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, int32_t &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a17932f82d030eb3bd82b7aae3941c737">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>int32_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="401" bodyend="405"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1ad0017443971dafeed736b973bc2d899e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, uint32_t &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1ad0017443971dafeed736b973bc2d899e">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="407" bodyend="411"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1af132cea8ea5d482b2fceee4e22c29910" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, int64_t &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1af132cea8ea5d482b2fceee4e22c29910">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>int64_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="413" bodyend="417"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1ab67394a44b1560e36841afc0f4e8d505" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, uint64_t &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1ab67394a44b1560e36841afc0f4e8d505">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint64_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="419" bodyend="423"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a155b0ba132a9dc9f2f82c2f9f55b912e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, int32_t &amp;enumValue, castor::StringArray const &amp;enumNames, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a155b0ba132a9dc9f2f82c2f9f55b912e">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>int32_t &amp;</type>
+          <declname>enumValue</declname>
+        </param>
+        <param>
+          <type>castor::StringArray const &amp;</type>
+          <declname>enumNames</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="425" bodyend="430"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a8c0b28ab923c7bc252fe216d033eaa18" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, uint32_t &amp;enumValue, castor::StringArray const &amp;enumNames, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a8c0b28ab923c7bc252fe216d033eaa18">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>enumValue</declname>
+        </param>
+        <param>
+          <type>castor::StringArray const &amp;</type>
+          <declname>enumNames</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="432" bodyend="437"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a4152aa86f327d028ffb85fe0604c4470" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, float &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a4152aa86f327d028ffb85fe0604c4470">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>float &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="439" bodyend="443"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1abafb139a68c94e43dc0b1ead87797c8e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, double &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1abafb139a68c94e43dc0b1ead87797c8e">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="445" bodyend="449"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1ad5f51c0592fe58f6aee9a792a0e6400d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, BlendMode &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1ad5f51c0592fe58f6aee9a792a0e6400d">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref> &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="451" bodyend="455"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a3e7001bd20166eb662c3dd4692610ea7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, ParallaxOcclusionMode &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a3e7001bd20166eb662c3dd4692610ea7">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a808c81c0da4ffd2515292e95b6b4c124" kindref="member">ParallaxOcclusionMode</ref> &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="457" bodyend="461"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a9c171d88efc207bfc3d3a5a55548e6d2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, PassFlags &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a9c171d88efc207bfc3d3a5a55548e6d2">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref> &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="463" bodyend="467"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a0e9d451b1c5cff342b823c691a4e6504" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkCompareOp &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a0e9d451b1c5cff342b823c691a4e6504">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkCompareOp &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="469" bodyend="473"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1aa69df1dabecfe62376a645c56fb3acde" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RgbColour &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1aa69df1dabecfe62376a645c56fb3acde">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RgbColour &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="475" bodyend="479"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1ac31f915ed09cf199f48f5321f93dafb1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RgbaColour &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1ac31f915ed09cf199f48f5321f93dafb1">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RgbaColour &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="481" bodyend="485"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1ad7d11653a6eb9450bec56697eee028ce" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::HdrRgbColour &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1ad7d11653a6eb9450bec56697eee028ce">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::HdrRgbColour &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="487" bodyend="491"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a10621d773b78b41679643a7d94b4e35f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::HdrRgbaColour &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a10621d773b78b41679643a7d94b4e35f">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::HdrRgbaColour &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="493" bodyend="497"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a6214a493481c9cc63de55e7821b21ea9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point2f &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a6214a493481c9cc63de55e7821b21ea9">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point2f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="499" bodyend="503"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a47b0a38de0c479b48a1c708d5188df43" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point2i &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a47b0a38de0c479b48a1c708d5188df43">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point2i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="505" bodyend="509"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1aaf4d18773aef05d0d1ec078f10ad8303" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point2ui &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1aaf4d18773aef05d0d1ec078f10ad8303">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point2ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="511" bodyend="515"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1ac25ae433d3bbf3a406f617eba99ace00" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point3f &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1ac25ae433d3bbf3a406f617eba99ace00">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point3f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="517" bodyend="521"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1adb4867c81943d6c407acc77a9c611ecf" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point3i &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1adb4867c81943d6c407acc77a9c611ecf">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point3i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="523" bodyend="527"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1ae1e5baddd01e8849680a576b5730307a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point3ui &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1ae1e5baddd01e8849680a576b5730307a">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point3ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="529" bodyend="533"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a1bf0fa1738c8ea9710246a7e46c1f766" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point4f &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a1bf0fa1738c8ea9710246a7e46c1f766">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point4f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="535" bodyend="539"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a0f48f14e20cc357485abda472dcc2dd6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point4i &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a0f48f14e20cc357485abda472dcc2dd6">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point4i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="541" bodyend="545"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a0b7c0d4b3528f42e1d0644d10f0c965a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point4ui &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a0b7c0d4b3528f42e1d0644d10f0c965a">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point4ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="547" bodyend="551"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a3b4df9a9cf5cd0f985ec0a41765bfb82" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Matrix4x4f &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a3b4df9a9cf5cd0f985ec0a41765bfb82">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="553" bodyend="557"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a1fd1199a9578de6d485eda676d3d19bb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RangedValue&lt; float &gt; &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a1fd1199a9578de6d485eda676d3d19bb">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; float &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="559" bodyend="563"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a712290d9754fd0360f0fa27e1d1b7f51" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RangedValue&lt; int32_t &gt; &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a712290d9754fd0360f0fa27e1d1b7f51">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; int32_t &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="565" bodyend="569"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1ac01024c6512100f7484cb65f01741ef4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RangedValue&lt; uint32_t &gt; &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1ac01024c6512100f7484cb65f01741ef4">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; uint32_t &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="571" bodyend="575"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a96604f4af58736218b1a58bedc855f77" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, float &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a96604f4af58736218b1a58bedc855f77">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>float &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name UBO configuration. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="586" bodyend="593"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a50c02f436e1ffc998cf77f5275503210" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, int32_t &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a50c02f436e1ffc998cf77f5275503210">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>int32_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="595" bodyend="602"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a6485686b63853f8b105e1ba586c47808" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, uint32_t &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a6485686b63853f8b105e1ba586c47808">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="604" bodyend="611"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a39faa4c8133918757af99582669d046b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point2f &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a39faa4c8133918757af99582669d046b">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point2f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="613" bodyend="620"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a09ebc585a399c0c65bff0759b7b20f22" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point2i &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a09ebc585a399c0c65bff0759b7b20f22">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point2i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="622" bodyend="629"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1adb22bae130a7fd3bb65066db340182a5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point2ui &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1adb22bae130a7fd3bb65066db340182a5">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point2ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="631" bodyend="638"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1aaa426dc6caf08f5d0d2a57f1b705a2a8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point3f &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1aaa426dc6caf08f5d0d2a57f1b705a2a8">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point3f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="640" bodyend="647"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1ae85dd0c880616a184010c792cd721214" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point3i &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1ae85dd0c880616a184010c792cd721214">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point3i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="649" bodyend="656"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a526d684cddfeaf12b848f480c796dd9f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point3ui &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a526d684cddfeaf12b848f480c796dd9f">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point3ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="658" bodyend="665"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1aa7a4e8628cd78257efd0e932087ddb7f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point4f &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1aa7a4e8628cd78257efd0e932087ddb7f">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point4f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="667" bodyend="674"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1afcf5cb8b709f0a8bca65ba6e383386f5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point4i &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1afcf5cb8b709f0a8bca65ba6e383386f5">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point4i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="676" bodyend="683"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a1c6821c8061f07b19ac6fe04394adc3d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point4ui &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a1c6821c8061f07b19ac6fe04394adc3d">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point4ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="685" bodyend="692"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a404afeddaa2119cf97551fd2dbadb6b9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Matrix4x4f &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a404afeddaa2119cf97551fd2dbadb6b9">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="694" bodyend="701"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a4f70cbd556e7b315b54bf4f374881349" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::RangedValue&lt; float &gt; &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a4f70cbd556e7b315b54bf4f374881349">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; float &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="703" bodyend="710"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1aebfda78966ab949048a9c6ba59c798d1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::RangedValue&lt; int32_t &gt; &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1aebfda78966ab949048a9c6ba59c798d1">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; int32_t &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="712" bodyend="719"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1af66101264aa1ecbadce4832c40c62f9a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::RangedValue&lt; uint32_t &gt; &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1af66101264aa1ecbadce4832c40c62f9a">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; uint32_t &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="721" bodyend="728"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1aba775ef425c3a26af5e514a4900d731c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(ShaderModule const &amp;shader)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1ab20d0ff1281e0464399f4c127bd5fdc3">visit</reimplements>
+        <param>
+          <type><ref refid="dc/d64/a04750" kindref="compound">ShaderModule</ref> const &amp;</type>
+          <declname>shader</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Shader source. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a931fc40c2bd331e3d01b8e71dc0668f3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(DebugConfig const &amp;config)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1ab70e8502c679fbd38bb6fc6f2b70881c">visit</reimplements>
+        <param>
+          <type><ref refid="d2/da6/a04086" kindref="compound">DebugConfig</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a493e53a073b5db1a034ff6b823049755" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, crg::ImageViewId const &amp;viewId, VkImageLayout layout, TextureFactors const &amp;factors={})</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>viewId</declname>
+        </param>
+        <param>
+          <type>VkImageLayout</type>
+          <declname>layout</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d45/a03250" kindref="compound">TextureFactors</ref> const &amp;</type>
+          <declname>factors</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Intermediate images. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="60" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a84930df6031cc3cb8fadb04833972c89" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, Texture const &amp;texture, VkImageLayout layout, TextureFactors const &amp;factors={})</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d8c/a04318" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>texture</declname>
+        </param>
+        <param>
+          <type>VkImageLayout</type>
+          <declname>layout</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d45/a03250" kindref="compound">TextureFactors</ref> const &amp;</type>
+          <declname>factors</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="74" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a6f5f7748788d699204fe1c9c98b141e6" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, bool &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a716d04787bffb9ed435ffc41c69aeb0a">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>bool &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Global pipeline configuration. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a84f3d887eb48fc52aa3ccfcd4c9f0d20" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, int16_t &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a4cd17224ddef91bb5c6e745807cc1c0a">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>int16_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1aec39b67e1c0e66e9cc2e2a37510c1c05" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, uint16_t &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a43e829d0525724760b16ea5afa96b51c">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint16_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a90016960834902825cfde9dff737a345" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, int32_t &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a17932f82d030eb3bd82b7aae3941c737">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>int32_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a83dae23d9e12ee9025b97458ed3fdb85" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, uint32_t &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1ad0017443971dafeed736b973bc2d899e">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a9017a0346a11a9710f7384ecf9bcb107" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, int64_t &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1af132cea8ea5d482b2fceee4e22c29910">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>int64_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1acb5318dbec1dff5d014528f28b2f89e9" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, uint64_t &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1ab67394a44b1560e36841afc0f4e8d505">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint64_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a827843881d9e9dc56fd9b92b4597df01" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, int32_t &amp;enumValue, castor::StringArray const &amp;enumNames, bool *control)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a155b0ba132a9dc9f2f82c2f9f55b912e">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>int32_t &amp;</type>
+          <declname>enumValue</declname>
+        </param>
+        <param>
+          <type>castor::StringArray const &amp;</type>
+          <declname>enumNames</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a1ae4e681079f38e7480dcb7e86346643" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, uint32_t &amp;enumValue, castor::StringArray const &amp;enumNames, bool *control)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a8c0b28ab923c7bc252fe216d033eaa18">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>enumValue</declname>
+        </param>
+        <param>
+          <type>castor::StringArray const &amp;</type>
+          <declname>enumNames</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a1ca854840173a48508e3c3e1bac8e354" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, float &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a4152aa86f327d028ffb85fe0604c4470">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>float &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1af5973f1080fef7ef22a34da76cfc67dd" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, double &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1abafb139a68c94e43dc0b1ead87797c8e">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1ae43c5e4c70fa6f03cbe5eb996745352b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, BlendMode &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1ad5f51c0592fe58f6aee9a792a0e6400d">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref> &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1af90e56dc158624b694dc31afe2283e2b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, ParallaxOcclusionMode &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a3e7001bd20166eb662c3dd4692610ea7">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a808c81c0da4ffd2515292e95b6b4c124" kindref="member">ParallaxOcclusionMode</ref> &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a9a50500303aaab80479b8fb67d5f5700" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, PassFlags &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a9c171d88efc207bfc3d3a5a55548e6d2">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref> &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a775255e45591a2b2c2bfe344830540fd" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkCompareOp &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a0e9d451b1c5cff342b823c691a4e6504">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkCompareOp &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1ad417818f8450515c5237aca82c692a19" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RgbColour &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1aa69df1dabecfe62376a645c56fb3acde">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RgbColour &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a129a958c0de1e6cfe0bb962c97b4ab57" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RgbaColour &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1ac31f915ed09cf199f48f5321f93dafb1">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RgbaColour &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a3a67111e63867e0435534b2009893796" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::HdrRgbColour &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1ad7d11653a6eb9450bec56697eee028ce">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::HdrRgbColour &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a032cf1b3fae57cfb7bc89c48ddc44cfc" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::HdrRgbaColour &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a10621d773b78b41679643a7d94b4e35f">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::HdrRgbaColour &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a33c88d0da75afc3e693fd7fc1755c928" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point2f &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a6214a493481c9cc63de55e7821b21ea9">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point2f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1aaac539a9866bf5d22c8affdaef9855d3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point2i &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a47b0a38de0c479b48a1c708d5188df43">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point2i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a9fae43a18b099a9d2527d24ed2d19a9e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point2ui &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1aaf4d18773aef05d0d1ec078f10ad8303">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point2ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a4a03b72054ec0ccd246edc7fa84d638b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point3f &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1ac25ae433d3bbf3a406f617eba99ace00">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point3f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a62f209e1f18417b73fde89e258fe85b7" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point3i &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1adb4867c81943d6c407acc77a9c611ecf">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point3i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a2bdb65ce0c9e6b199009197537a766be" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point3ui &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1ae1e5baddd01e8849680a576b5730307a">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point3ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a5a5c9c48d01ecf08956160aed80a954c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point4f &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a1bf0fa1738c8ea9710246a7e46c1f766">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point4f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a71976a6decfc5c521909ea26e8294fdb" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point4i &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a0f48f14e20cc357485abda472dcc2dd6">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point4i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a830222a3c463050e2bc3bd657e518d76" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point4ui &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a0b7c0d4b3528f42e1d0644d10f0c965a">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point4ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a378562bd4ab47f3d7703304e6a7242db" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Matrix4x4f &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a3b4df9a9cf5cd0f985ec0a41765bfb82">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1aab5193c9272d8ef75a0f09076b62f4b7" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RangedValue&lt; float &gt; &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a1fd1199a9578de6d485eda676d3d19bb">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; float &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1ae4d5f54b25db1aad301787b53c5b73b8" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RangedValue&lt; int32_t &gt; &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a712290d9754fd0360f0fa27e1d1b7f51">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; int32_t &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a37aa0d0c0e49e6a2fb67ca2805cb04c7" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RangedValue&lt; uint32_t &gt; &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1ac01024c6512100f7484cb65f01741ef4">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; uint32_t &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a590ff47117e3c02cc3afc7b6d8405204" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TypeT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::ChangeTracked&lt; TypeT &gt; &amp;value)</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::ChangeTracked&lt; TypeT &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="194" bodyend="198"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a085dc17ed5c19d78bd39bb09fbf0af06" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TypeT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::GroupChangeTracked&lt; TypeT &gt; &amp;value)</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::GroupChangeTracked&lt; TypeT &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="201" bodyend="205"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1ad8bcd191efc2d3b07fdf9b5130057a2d" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, float &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a96604f4af58736218b1a58bedc855f77">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>float &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Shader buffer configuration. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a1ec5edb4aed53c15496a6e50c7025a81" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, int32_t &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a50c02f436e1ffc998cf77f5275503210">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>int32_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a4b10bcb908e79627c12bf739acaa9583" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, uint32_t &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a6485686b63853f8b105e1ba586c47808">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a893547b69949f63409841c40207ea0dd" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point2f &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a39faa4c8133918757af99582669d046b">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point2f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1ad60b00bddcd41efb8e10533d6e308689" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point2i &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a09ebc585a399c0c65bff0759b7b20f22">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point2i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a00d22eccda44cf8c28b2ed2979dcaeb8" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point2ui &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1adb22bae130a7fd3bb65066db340182a5">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point2ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1af246d6872dd565014b57a0c1ce556b10" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point3f &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1aaa426dc6caf08f5d0d2a57f1b705a2a8">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point3f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1af9a7d40be24afe7e0dc1589753a24b15" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point3i &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1ae85dd0c880616a184010c792cd721214">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point3i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a99803043a6d43fddab37c0ebb966b52a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point3ui &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a526d684cddfeaf12b848f480c796dd9f">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point3ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a99d5e4170f03d17374ce7ff49bdf8969" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point4f &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1aa7a4e8628cd78257efd0e932087ddb7f">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point4f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1abf06f9c8a34d8084f4fcf9584ee8bd58" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point4i &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1afcf5cb8b709f0a8bca65ba6e383386f5">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point4i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1aee8bdea9f522a44357b3c66a398f932d" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point4ui &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a1c6821c8061f07b19ac6fe04394adc3d">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point4ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1aea2e1807fb75c41996aada0cb79b541d" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Matrix4x4f &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a404afeddaa2119cf97551fd2dbadb6b9">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a46b34b8b57741fe9423474e990451d4d" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::RangedValue&lt; float &gt; &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1a4f70cbd556e7b315b54bf4f374881349">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; float &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1aa240f1568d3fdf2cec809d9bb06fcdaa" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::RangedValue&lt; int32_t &gt; &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1aebfda78966ab949048a9c6ba59c798d1">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; int32_t &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1aa02558a2075cf486bf2be3b149ccabc7" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::RangedValue&lt; uint32_t &gt; &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <reimplements refid="dc/d77/a03270_1af66101264aa1ecbadce4832c40c62f9a">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; uint32_t &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1a57f2d5b9317df3069ba48eea9f7b9132" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TypeT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::ChangeTracked&lt; TypeT &gt; &amp;value)</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::ChangeTracked&lt; TypeT &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="314" bodyend="321"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6b/a04334_1abb36944feed0967de65e8497b97a23eb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TypeT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::GroupChangeTracked&lt; TypeT &gt; &amp;value)</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::visit</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::GroupChangeTracked&lt; TypeT &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="35" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="324" bodyend="331"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d2/d6b/a04334_1adaf288720ba39604d0a5ccfbff390821" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ToneMappingVisitor::ToneMappingVisitor</definition>
+        <argsstring>()</argsstring>
+        <name>ToneMappingVisitor</name>
+        <qualifiedname>castor3d::ToneMappingVisitor::ToneMappingVisitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="17" column="1" bodyfile="Render/ToneMapping/ToneMappingVisitor.hpp" bodystart="17" bodyend="20"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Node/SceneRenderNode.hpp" line="12" column="1" bodyfile="Render/Node/SceneRenderNode.hpp" bodystart="11" bodyend="14"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::PipelineVisitor</label>
+        <link refid="dc/d77/a03270"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PipelineVisitorBase</label>
+        <link refid="dc/dbb/a03262"/>
+      </node>
+      <node id="1">
+        <label>castor3d::ToneMappingVisitor</label>
+        <link refid="d2/d6b/a04334"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::PipelineVisitor</label>
+        <link refid="dc/d77/a03270"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PipelineVisitorBase</label>
+        <link refid="dc/dbb/a03262"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>config</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::PipelineVisitorBase::Config</label>
+        <link refid="d6/d8d/a03266"/>
+      </node>
+      <node id="1">
+        <label>castor3d::ToneMappingVisitor</label>
+        <link refid="d2/d6b/a04334"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/ToneMapping/ToneMappingVisitor.hpp" line="13" column="1" bodyfile="Render/ToneMapping/ToneMappingVisitor.hpp" bodystart="15" bodyend="37"/>
     <listofallmembers>
-      <member refid="d2/d6b/a04334_1a8165a9adcd248857c9db91b5a81386ab" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNode</scope><name>SceneRenderNode</name></member>
+      <member refid="dc/dbb/a03262_1a7dd3b92f7aca2b9a09113dd9f3f9e78a" prot="public" virt="non-virtual"><scope>castor3d::ToneMappingVisitor</scope><name>config</name></member>
+      <member refid="dc/d77/a03270_1a1ea1ab5c663d40ac1177de0102cfb88e" prot="protected" virt="non-virtual"><scope>castor3d::ToneMappingVisitor</scope><name>PipelineVisitor</name></member>
+      <member refid="dc/dbb/a03262_1aed7367fc13c78bae663aed9b68be52c4" prot="protected" virt="non-virtual"><scope>castor3d::ToneMappingVisitor</scope><name>PipelineVisitorBase</name></member>
+      <member refid="d2/d6b/a04334_1adaf288720ba39604d0a5ccfbff390821" prot="protected" virt="non-virtual"><scope>castor3d::ToneMappingVisitor</scope><name>ToneMappingVisitor</name></member>
+      <member refid="d2/d6b/a04334_1aada73f9e1eddf81e5bb0445c7eda2a9c" prot="public" virt="pure-virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1ab20d0ff1281e0464399f4c127bd5fdc3" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1ab70e8502c679fbd38bb6fc6f2b70881c" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a716d04787bffb9ed435ffc41c69aeb0a" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a4cd17224ddef91bb5c6e745807cc1c0a" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a43e829d0525724760b16ea5afa96b51c" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a17932f82d030eb3bd82b7aae3941c737" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1ad0017443971dafeed736b973bc2d899e" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1af132cea8ea5d482b2fceee4e22c29910" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1ab67394a44b1560e36841afc0f4e8d505" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a155b0ba132a9dc9f2f82c2f9f55b912e" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a8c0b28ab923c7bc252fe216d033eaa18" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a4152aa86f327d028ffb85fe0604c4470" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1abafb139a68c94e43dc0b1ead87797c8e" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1ad5f51c0592fe58f6aee9a792a0e6400d" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a3e7001bd20166eb662c3dd4692610ea7" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a9c171d88efc207bfc3d3a5a55548e6d2" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a0e9d451b1c5cff342b823c691a4e6504" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1aa69df1dabecfe62376a645c56fb3acde" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1ac31f915ed09cf199f48f5321f93dafb1" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1ad7d11653a6eb9450bec56697eee028ce" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a10621d773b78b41679643a7d94b4e35f" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a6214a493481c9cc63de55e7821b21ea9" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a47b0a38de0c479b48a1c708d5188df43" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1aaf4d18773aef05d0d1ec078f10ad8303" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1ac25ae433d3bbf3a406f617eba99ace00" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1adb4867c81943d6c407acc77a9c611ecf" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1ae1e5baddd01e8849680a576b5730307a" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a1bf0fa1738c8ea9710246a7e46c1f766" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a0f48f14e20cc357485abda472dcc2dd6" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a0b7c0d4b3528f42e1d0644d10f0c965a" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a3b4df9a9cf5cd0f985ec0a41765bfb82" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a1fd1199a9578de6d485eda676d3d19bb" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a712290d9754fd0360f0fa27e1d1b7f51" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1ac01024c6512100f7484cb65f01741ef4" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a96604f4af58736218b1a58bedc855f77" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a50c02f436e1ffc998cf77f5275503210" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a6485686b63853f8b105e1ba586c47808" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a39faa4c8133918757af99582669d046b" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a09ebc585a399c0c65bff0759b7b20f22" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1adb22bae130a7fd3bb65066db340182a5" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1aaa426dc6caf08f5d0d2a57f1b705a2a8" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1ae85dd0c880616a184010c792cd721214" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a526d684cddfeaf12b848f480c796dd9f" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1aa7a4e8628cd78257efd0e932087ddb7f" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1afcf5cb8b709f0a8bca65ba6e383386f5" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a1c6821c8061f07b19ac6fe04394adc3d" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a404afeddaa2119cf97551fd2dbadb6b9" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a4f70cbd556e7b315b54bf4f374881349" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1aebfda78966ab949048a9c6ba59c798d1" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1af66101264aa1ecbadce4832c40c62f9a" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1aba775ef425c3a26af5e514a4900d731c" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a931fc40c2bd331e3d01b8e71dc0668f3" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a493e53a073b5db1a034ff6b823049755" prot="public" virt="non-virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a84930df6031cc3cb8fadb04833972c89" prot="public" virt="non-virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a6f5f7748788d699204fe1c9c98b141e6" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a84f3d887eb48fc52aa3ccfcd4c9f0d20" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1aec39b67e1c0e66e9cc2e2a37510c1c05" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a90016960834902825cfde9dff737a345" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a83dae23d9e12ee9025b97458ed3fdb85" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a9017a0346a11a9710f7384ecf9bcb107" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1acb5318dbec1dff5d014528f28b2f89e9" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a827843881d9e9dc56fd9b92b4597df01" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a1ae4e681079f38e7480dcb7e86346643" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a1ca854840173a48508e3c3e1bac8e354" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1af5973f1080fef7ef22a34da76cfc67dd" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1ae43c5e4c70fa6f03cbe5eb996745352b" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1af90e56dc158624b694dc31afe2283e2b" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a9a50500303aaab80479b8fb67d5f5700" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a775255e45591a2b2c2bfe344830540fd" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1ad417818f8450515c5237aca82c692a19" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a129a958c0de1e6cfe0bb962c97b4ab57" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a3a67111e63867e0435534b2009893796" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a032cf1b3fae57cfb7bc89c48ddc44cfc" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a33c88d0da75afc3e693fd7fc1755c928" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1aaac539a9866bf5d22c8affdaef9855d3" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a9fae43a18b099a9d2527d24ed2d19a9e" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a4a03b72054ec0ccd246edc7fa84d638b" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a62f209e1f18417b73fde89e258fe85b7" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a2bdb65ce0c9e6b199009197537a766be" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a5a5c9c48d01ecf08956160aed80a954c" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a71976a6decfc5c521909ea26e8294fdb" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a830222a3c463050e2bc3bd657e518d76" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a378562bd4ab47f3d7703304e6a7242db" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1aab5193c9272d8ef75a0f09076b62f4b7" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1ae4d5f54b25db1aad301787b53c5b73b8" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a37aa0d0c0e49e6a2fb67ca2805cb04c7" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a590ff47117e3c02cc3afc7b6d8405204" prot="public" virt="non-virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a085dc17ed5c19d78bd39bb09fbf0af06" prot="public" virt="non-virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1ad8bcd191efc2d3b07fdf9b5130057a2d" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a1ec5edb4aed53c15496a6e50c7025a81" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a4b10bcb908e79627c12bf739acaa9583" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a893547b69949f63409841c40207ea0dd" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1ad60b00bddcd41efb8e10533d6e308689" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a00d22eccda44cf8c28b2ed2979dcaeb8" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1af246d6872dd565014b57a0c1ce556b10" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1af9a7d40be24afe7e0dc1589753a24b15" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a99803043a6d43fddab37c0ebb966b52a" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a99d5e4170f03d17374ce7ff49bdf8969" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1abf06f9c8a34d8084f4fcf9584ee8bd58" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1aee8bdea9f522a44357b3c66a398f932d" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1aea2e1807fb75c41996aada0cb79b541d" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a46b34b8b57741fe9423474e990451d4d" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1aa240f1568d3fdf2cec809d9bb06fcdaa" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1aa02558a2075cf486bf2be3b149ccabc7" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1a57f2d5b9317df3069ba48eea9f7b9132" prot="public" virt="non-virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="d2/d6b/a04334_1abb36944feed0967de65e8497b97a23eb" prot="public" virt="non-virtual"><scope>castor3d::ToneMappingVisitor</scope><name>visit</name></member>
+      <member refid="dc/dbb/a03262_1adf52ab958471b16a3c2982aeb0ec3ef3" prot="public" virt="virtual"><scope>castor3d::ToneMappingVisitor</scope><name>~PipelineVisitorBase</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

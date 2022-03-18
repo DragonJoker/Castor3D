@@ -1,8 +1,10 @@
-<map id="castor3d::SliceView&lt; ViewT &gt;" name="castor3d::SliceView&lt; ViewT &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="50,389,187,431"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,249,147,276"/>
-<area shape="rect" id="node3" title="STL class." alt="" coords="67,95,181,121"/>
-<area shape="rect" id="node6" title=" " alt="" coords="119,184,284,225"/>
-<area shape="rect" id="node4" title=" " alt="" coords="105,5,143,32"/>
-<area shape="rect" id="node5" href="$df/d0c/a02634.html" title=" " alt="" coords="139,300,269,327"/>
+<map id="castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;" name="castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;">
+<area shape="rect" id="node1" title="Geometry cache." alt="" coords="1185,61,1367,117"/>
+<area shape="rect" id="node2" href="$db/d99/a02626.html" title=" " alt="" coords="948,61,1136,117"/>
+<area shape="rect" id="node3" title=" " alt="" coords="228,179,411,205"/>
+<area shape="rect" id="node7" href="$db/d99/a02626.html" title=" " alt="" coords="524,117,709,158"/>
+<area shape="rect" id="node4" title=" " alt="" coords="523,36,711,92"/>
+<area shape="rect" id="node5" href="$d7/d94/a02702.html" title=" " alt="" coords="259,31,379,57"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,31,176,57"/>
+<area shape="rect" id="node8" title=" " alt="" coords="225,109,413,150"/>
 </map>

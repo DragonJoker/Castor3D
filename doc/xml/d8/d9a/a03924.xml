@@ -1,201 +1,131 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d8/d9a/a03924" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::BonesComponent</compoundname>
-    <basecompoundref refid="dd/d78/a03980" prot="public" virt="non-virtual">castor3d::SubmeshComponent</basecompoundref>
-    <includes local="no">BonesComponent.hpp</includes>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d8/d9a/a03924_1a2ea1c2c1b097970e6a974f2ee5962d43" prot="public" static="yes" mutable="no">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
-        <definition>C3D_API castor::String const castor3d::BonesComponent::Name</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d8/d9a/a03924" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PostEffectSurface</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <includes local="no">PostEffectSurface.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/d9a/a03924_1ada20e82a1d3c631d55eac2d4cf411d94" prot="public" static="no" mutable="no">
+        <type>ashes::FrameBufferPtr</type>
+        <definition>ashes::FrameBufferPtr castor3d::PostEffectSurface::frameBuffer</definition>
         <argsstring></argsstring>
-        <name>Name</name>
+        <name>frameBuffer</name>
+        <qualifiedname>castor3d::PostEffectSurface::frameBuffer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The surface framebuffer. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesComponent.hpp" line="136" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesComponent.hpp" bodystart="136" bodyend="-1"/>
+        <location file="Render/PostEffect/PostEffectSurface.hpp" line="172" column="23" bodyfile="Render/PostEffect/PostEffectSurface.hpp" bodystart="172" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d8/d9a/a03924_1aee7e5a88503573058ac9bde7b73065a2" prot="public" static="yes" mutable="no">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t constexpr</type>
-        <definition>C3D_API uint32_t constexpr castor3d::BonesComponent::BindingPoint</definition>
+      <memberdef kind="variable" id="d8/d9a/a03924_1a8919e470f09c07cc27c3920f1f2b38e9" prot="public" static="no" mutable="no">
+        <type>TextureLayoutSPtr</type>
+        <definition>TextureLayoutSPtr castor3d::PostEffectSurface::colourTexture</definition>
         <argsstring></argsstring>
-        <name>BindingPoint</name>
-        <initializer>= 3u</initializer>
+        <name>colourTexture</name>
+        <qualifiedname>castor3d::PostEffectSurface::colourTexture</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The surface colour texture. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesComponent.hpp" line="137" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesComponent.hpp" bodystart="137" bodyend="-1"/>
+        <location file="Render/PostEffect/PostEffectSurface.hpp" line="175" column="19" bodyfile="Render/PostEffect/PostEffectSurface.hpp" bodystart="175" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d9a/a03924_1a36640eae4939b1f9dcdd4d9024deea34" prot="public" static="no" mutable="no">
+        <type>TextureLayoutSPtr</type>
+        <definition>TextureLayoutSPtr castor3d::PostEffectSurface::depthTexture</definition>
+        <argsstring></argsstring>
+        <name>depthTexture</name>
+        <qualifiedname>castor3d::PostEffectSurface::depthTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The surface depth texture. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffectSurface.hpp" line="178" column="19" bodyfile="Render/PostEffect/PostEffectSurface.hpp" bodystart="178" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d9a/a03924_1aca9d8cb13ca94a94b1300c7e29a5bb64" prot="public" static="no" mutable="no">
+        <type>ashes::ImageView</type>
+        <definition>ashes::ImageView castor3d::PostEffectSurface::depthView</definition>
+        <argsstring></argsstring>
+        <name>depthView</name>
+        <qualifiedname>castor3d::PostEffectSurface::depthView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The surface depth view. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffectSurface.hpp" line="181" column="18" bodyfile="Render/PostEffect/PostEffectSurface.hpp" bodystart="181" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d9a/a03924_1a7c5dd4bc6f8c64e758364f77b15e053e" prot="public" static="no" mutable="no">
+        <type>ashes::ImageView</type>
+        <definition>ashes::ImageView castor3d::PostEffectSurface::stencilView</definition>
+        <argsstring></argsstring>
+        <name>stencilView</name>
+        <qualifiedname>castor3d::PostEffectSurface::stencilView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The surface stencil view. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffectSurface.hpp" line="184" column="18" bodyfile="Render/PostEffect/PostEffectSurface.hpp" bodystart="184" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d9a/a03924_1a051c725372bae12e39a6d50bfbdf6c29" prot="public" static="no" mutable="no">
+        <type>castor::Size</type>
+        <definition>castor::Size castor3d::PostEffectSurface::size</definition>
+        <argsstring></argsstring>
+        <name>size</name>
+        <qualifiedname>castor3d::PostEffectSurface::size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The surface dimensions. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffectSurface.hpp" line="187" column="14" bodyfile="Render/PostEffect/PostEffectSurface.hpp" bodystart="187" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d8/d9a/a03924_1afb8ad649eb5609c82df096c81f025b3e" prot="private" static="no" mutable="no">
-        <type>ashes::VertexBufferPtr&lt; <ref refid="dc/d1f/a04036" kindref="compound">VertexBoneData</ref> &gt;</type>
-        <definition>ashes::VertexBufferPtr&lt; VertexBoneData &gt; castor3d::BonesComponent::m_bonesBuffer</definition>
+      <memberdef kind="variable" id="d8/d9a/a03924_1a5ef864c17aa48a40e49f47a98ac70733" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::PostEffectSurface::m_debugName</definition>
         <argsstring></argsstring>
-        <name>m_bonesBuffer</name>
+        <name>m_debugName</name>
+        <qualifiedname>castor3d::PostEffectSurface::m_debugName</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesComponent.hpp" line="140" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesComponent.hpp" bodystart="140" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/d9a/a03924_1a0408aa097ec39542daffd83d657f4406" prot="private" static="no" mutable="no">
-        <type>ashes::PipelineVertexInputStateCreateInfoPtr</type>
-        <definition>ashes::PipelineVertexInputStateCreateInfoPtr castor3d::BonesComponent::m_bonesLayout</definition>
-        <argsstring></argsstring>
-        <name>m_bonesLayout</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesComponent.hpp" line="141" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesComponent.hpp" bodystart="141" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/d9a/a03924_1ab5d51ce5aa2ea8825500ebaf0001c0ef" prot="private" static="no" mutable="no">
-        <type>VertexBoneDataArray</type>
-        <definition>VertexBoneDataArray castor3d::BonesComponent::m_bones</definition>
-        <argsstring></argsstring>
-        <name>m_bones</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesComponent.hpp" line="142" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesComponent.hpp" bodystart="142" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="friend">
-      <memberdef kind="friend" id="d8/d9a/a03924_1a3bcdafb67e8badfcad6f4de266cc3f9e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>friend class</type>
-        <definition>friend class BinaryWriter&lt; BonesComponent &gt;</definition>
-        <argsstring></argsstring>
-        <name>BinaryWriter&lt; BonesComponent &gt;</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesComponent.hpp" line="142" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesComponent.hpp" bodystart="144" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="friend" id="d8/d9a/a03924_1a656e7616fde4af54ac670e54f413dcec" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>friend class</type>
-        <definition>friend class BinaryParser&lt; BonesComponent &gt;</definition>
-        <argsstring></argsstring>
-        <name>BinaryParser&lt; BonesComponent &gt;</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesComponent.hpp" line="142" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesComponent.hpp" bodystart="145" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d8/d9a/a03924_1acb68b5db42745a262be4bfc995ae10e1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::BonesComponent::CU_DeclareList</definition>
-        <argsstring>(castor::ByteArray, BytePtr)</argsstring>
-        <name>CU_DeclareList</name>
-        <param>
-          <type>castor::ByteArray</type>
-        </param>
-        <param>
-          <type>BytePtr</type>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesComponent.hpp" line="18" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/d9a/a03924_1adf04bbc0e8a0d50e7d3be9793b7f5daa" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>bool</type>
-        <definition>bool castor3d::BonesComponent::doInitialise</definition>
-        <argsstring>(RenderDevice const &amp;device) override</argsstring>
-        <name>doInitialise</name>
-        <reimplements refid="dd/d78/a03980_1a02633de92cd3a940ea28bc2ee63cdefb">doInitialise</reimplements>
-        <param>
-          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesComponent.hpp" line="130" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/d9a/a03924_1a866e61e61415536c4cc81a8eb4af63d0" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::BonesComponent::doCleanup</definition>
-        <argsstring>() override</argsstring>
-        <name>doCleanup</name>
-        <reimplements refid="dd/d78/a03980_1a8574c2b5b3efa89e6446423448f4edfd">doCleanup</reimplements>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesComponent.hpp" line="131" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/d9a/a03924_1ac1d453256610144bf939e779d08031f7" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::BonesComponent::doFill</definition>
-        <argsstring>(RenderDevice const &amp;device) override</argsstring>
-        <name>doFill</name>
-        <reimplements refid="dd/d78/a03980_1a78f22f8994aae0890645c943e42c45c9">doFill</reimplements>
-        <param>
-          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesComponent.hpp" line="132" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/d9a/a03924_1af98d65962f7bdef72a6662f8d3b71d82" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::BonesComponent::doUpload</definition>
-        <argsstring>() override</argsstring>
-        <name>doUpload</name>
-        <reimplements refid="dd/d78/a03980_1a66e01bf8274e1d77bd20a669cb637a2e">doUpload</reimplements>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesComponent.hpp" line="133" column="1"/>
+        <location file="Render/PostEffect/PostEffectSurface.hpp" line="190" column="16" bodyfile="Render/PostEffect/PostEffectSurface.hpp" bodystart="190" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d8/d9a/a03924_1a845df8c013f202c6eb54ec33fcd3305b" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::BonesComponent::BonesComponent</definition>
-        <argsstring>(Submesh &amp;submesh)</argsstring>
-        <name>BonesComponent</name>
+      <memberdef kind="function" id="d8/d9a/a03924_1a27dfd75181c6902277746a48e41c46e8" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::PostEffectSurface::PostEffectSurface</definition>
+        <argsstring>(Engine &amp;engine, castor::String debugName)</argsstring>
+        <name>PostEffectSurface</name>
+        <qualifiedname>castor3d::PostEffectSurface::PostEffectSurface</qualifiedname>
         <param>
-          <type><ref refid="d9/d0c/a03992" kindref="compound">Submesh</ref> &amp;</type>
-          <declname>submesh</declname>
+          <type><ref refid="d7/d73/a02708" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>castor::String</type>
+          <declname>debugName</declname>
         </param>
         <briefdescription>
 <para>Constructor. </para>
@@ -203,50 +133,18 @@
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">submesh</parametername>
+<parametername direction="in">engine</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The parent submesh. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesComponent.hpp" line="29" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/d9a/a03924_1a2d4cca270b0dd3c8bdb9870d9aab66c6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::BonesComponent::addBoneDatas</definition>
-        <argsstring>(VertexBoneData const *const begin, VertexBoneData const *const end)</argsstring>
-        <name>addBoneDatas</name>
-        <param>
-          <type><ref refid="dc/d1f/a04036" kindref="compound">VertexBoneData</ref> const *const</type>
-          <declname>begin</declname>
-        </param>
-        <param>
-          <type><ref refid="dc/d1f/a04036" kindref="compound">VertexBoneData</ref> const *const</type>
-          <declname>end</declname>
-        </param>
-        <briefdescription>
-<para>adds bone datas. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">begin</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The bones data begin. </para>
+<para>The engine. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">end</parametername>
+<parametername direction="in">debugName</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The bones data end. </para>
+<para>The surface debug name. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -254,80 +152,82 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesComponent.hpp" line="40" column="1"/>
-        <referencedby refid="d8/d9a/a03924_1ab44d9263ed1980007df96fb85b440798" compoundref="d0/d29/a00470" startline="75" endline="78">addBoneDatas</referencedby>
+        <location file="Render/PostEffect/PostEffectSurface.hpp" line="29" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d8/d9a/a03924_1a6c0b7671b616ddd3073f2352bcafc3a5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> SkeletonSPtr</type>
-        <definition>C3D_API SkeletonSPtr castor3d::BonesComponent::getSkeleton</definition>
-        <argsstring>() const</argsstring>
-        <name>getSkeleton</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The skeleton. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesComponent.hpp" line="48" column="1"/>
-        <referencedby refid="dd/df7/a03928_1a32e76e1e8642ee9500f1dbcd6aacf2a1" compoundref="dc/d8e/a00473" startline="47" endline="50">castor3d::BonesInstantiationComponent::getSkeleton</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="d8/d9a/a03924_1aa743464a4176598c9b23325e2f5ae221" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::BonesComponent::gather</definition>
-        <argsstring>(MaterialSPtr material, ashes::BufferCRefArray &amp;buffers, std::vector&lt; uint64_t &gt; &amp;offsets, ashes::PipelineVertexInputStateCreateInfoCRefArray &amp;layouts, uint32_t instanceMult) override</argsstring>
-        <name>gather</name>
-        <reimplements refid="dd/d78/a03980_1a4b992d760e02c3c8dc32137aa43db62b">gather</reimplements>
+      <memberdef kind="function" id="d8/d9a/a03924_1a1e766ea4ff6539ca2fe04873fe852d8e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PostEffectSurface::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device, QueueData const &amp;queueData, ashes::RenderPass const &amp;renderPass, castor::Size const &amp;size, VkFormat format=VK_FORMAT_R32G32B32A32_SFLOAT, uint32_t mipLevels=1u)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::PostEffectSurface::initialise</qualifiedname>
         <param>
-          <type>MaterialSPtr</type>
-          <declname>material</declname>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
         </param>
         <param>
-          <type>ashes::BufferCRefArray &amp;</type>
-          <declname>buffers</declname>
+          <type><ref refid="dd/dde/a03944" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
         </param>
         <param>
-          <type>std::vector&lt; uint64_t &gt; &amp;</type>
-          <declname>offsets</declname>
+          <type>ashes::RenderPass const &amp;</type>
+          <declname>renderPass</declname>
         </param>
         <param>
-          <type>ashes::PipelineVertexInputStateCreateInfoCRefArray &amp;</type>
-          <declname>layouts</declname>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>format</declname>
+          <defval>VK_FORMAT_R32G32B32A32_SFLOAT</defval>
         </param>
         <param>
           <type>uint32_t</type>
-          <declname>instanceMult</declname>
+          <declname>mipLevels</declname>
+          <defval>1u</defval>
         </param>
         <briefdescription>
-<para>Gathers buffers that need to go in a VAO. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesComponent.hpp" line="52" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/d9a/a03924_1aa27ded4c535579d20516e3b3dfbc9f09" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::BonesComponent::addBoneDatas</definition>
-        <argsstring>(std::vector&lt; VertexBoneData &gt; const &amp;boneData)</argsstring>
-        <name>addBoneDatas</name>
-        <param>
-          <type>std::vector&lt; <ref refid="dc/d1f/a04036" kindref="compound">VertexBoneData</ref> &gt; const &amp;</type>
-          <declname>boneData</declname>
-        </param>
-        <briefdescription>
-<para>adds bone datas. </para>
+<para>Initialises the surface. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">boneData</parametername>
+<parametername direction="in">device</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The bone datas. </para>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">renderPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render pass from which the frame buffer is created. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The surface&apos;s size. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">format</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The surface&apos;s colour pixel format. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">mipLevels</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The surface&apos;s colour texture mipmap level. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -335,34 +235,80 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesComponent.hpp" line="65" column="1"/>
+        <location file="Render/PostEffect/PostEffectSurface.hpp" line="47" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d8/d9a/a03924_1ab44d9263ed1980007df96fb85b440798" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>size_t</type>
-            <declname>Count</declname>
-            <defname>Count</defname>
-          </param>
-        </templateparamlist>
-        <type>void</type>
-        <definition>void castor3d::BonesComponent::addBoneDatas</definition>
-        <argsstring>(std::array&lt; VertexBoneData, Count &gt; const &amp;boneData)</argsstring>
-        <name>addBoneDatas</name>
+      <memberdef kind="function" id="d8/d9a/a03924_1a9e322494345822e2627f99e8d14e2775" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PostEffectSurface::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device, QueueData const &amp;queueData, ashes::RenderPass const &amp;renderPass, castor::Size const &amp;size, VkFormat colourFormat, VkFormat depthFormat)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::PostEffectSurface::initialise</qualifiedname>
         <param>
-          <type>std::array&lt; <ref refid="dc/d1f/a04036" kindref="compound">VertexBoneData</ref>, Count &gt; const &amp;</type>
-          <declname>boneData</declname>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dde/a03944" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <param>
+          <type>ashes::RenderPass const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>colourFormat</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>depthFormat</declname>
         </param>
         <briefdescription>
-<para>adds bone datas. </para>
+<para>Initialises the surface. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">boneData</parametername>
+<parametername direction="in">device</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The bone datas. </para>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">renderPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render pass from which the frame buffer is created. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The surface&apos;s size. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">colourFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The surface&apos;s colour pixel format. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">depthFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The surface&apos;s depth pixel format. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -370,96 +316,348 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesComponent.hpp" line="75" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesComponent.hpp" bodystart="75" bodyend="78"/>
-        <references refid="d8/d9a/a03924_1a2d4cca270b0dd3c8bdb9870d9aab66c6">addBoneDatas</references>
+        <location file="Render/PostEffect/PostEffectSurface.hpp" line="69" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d8/d9a/a03924_1afdcb443d39980964dc0a54878807c701" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::BonesComponent::hasBoneData</definition>
-        <argsstring>() const</argsstring>
-        <name>hasBoneData</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if the submesh has bone data. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesComponent.hpp" line="85" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesComponent.hpp" bodystart="85" bodyend="88"/>
-        <referencedby refid="d8/d9a/a03924_1a8b6d9af02c66daa938ee32871c9045a0" compoundref="d0/d29/a00470" startline="122" endline="127">getProgramFlags</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="d8/d9a/a03924_1a41b981c8beefc95b80739eca3994e0e9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>VertexBoneDataArray const  &amp;</type>
-        <definition>VertexBoneDataArray const&amp; castor3d::BonesComponent::getBonesData</definition>
-        <argsstring>() const</argsstring>
-        <name>getBonesData</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The bone data. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesComponent.hpp" line="95" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesComponent.hpp" bodystart="95" bodyend="98"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/d9a/a03924_1a54a8de5f170ca8aeaa45d5590a7b4da9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::VertexBuffer&lt; <ref refid="dc/d1f/a04036" kindref="compound">VertexBoneData</ref> &gt; const  &amp;</type>
-        <definition>ashes::VertexBuffer&lt; VertexBoneData &gt; const&amp; castor3d::BonesComponent::getBonesBuffer</definition>
-        <argsstring>() const</argsstring>
-        <name>getBonesBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The bones VertexBuffer. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesComponent.hpp" line="105" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesComponent.hpp" bodystart="105" bodyend="108"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/d9a/a03924_1ab5ff7abf3298318de4295a5e5da356f3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::VertexBuffer&lt; <ref refid="dc/d1f/a04036" kindref="compound">VertexBoneData</ref> &gt; &amp;</type>
-        <definition>ashes::VertexBuffer&lt; VertexBoneData &gt;&amp; castor3d::BonesComponent::getBonesBuffer</definition>
-        <argsstring>()</argsstring>
-        <name>getBonesBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The bones VertexBuffer. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesComponent.hpp" line="115" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesComponent.hpp" bodystart="115" bodyend="118"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/d9a/a03924_1a8b6d9af02c66daa938ee32871c9045a0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
-        <type><ref refid="da/d1e/a01479_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
-        <definition>ProgramFlags castor3d::BonesComponent::getProgramFlags</definition>
-        <argsstring>(MaterialSPtr material) const override</argsstring>
-        <name>getProgramFlags</name>
-        <reimplements refid="dd/d78/a03980_1aa5c81caafcdb1b7fa8610605060775f1">getProgramFlags</reimplements>
+      <memberdef kind="function" id="d8/d9a/a03924_1a54954703d6500f9358cdb7b990b6bbd7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PostEffectSurface::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device, QueueData const &amp;queueData, ashes::RenderPass const &amp;renderPass, castor::Size const &amp;size, TextureLayoutSPtr colourTexture)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::PostEffectSurface::initialise</qualifiedname>
         <param>
-          <type>MaterialSPtr</type>
-          <declname>material</declname>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dde/a03944" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <param>
+          <type>ashes::RenderPass const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>TextureLayoutSPtr</type>
+          <declname>colourTexture</declname>
         </param>
         <briefdescription>
+<para>Initialises the surface. </para>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The shader program flags. </para>
-</simplesect>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">renderPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render pass from which the frame buffer is created. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The surface&apos;s size. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">colourTexture</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The surface&apos;s colour texture. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesComponent.hpp" line="122" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesComponent.hpp" bodystart="122" bodyend="127"/>
-        <references refid="da/d1e/a01479_1a6dbeb5480c4a424e0c24ace65835778ba8da329f9a01cff2c195563173a86b2ee">castor3d::eSkinning</references>
-        <references refid="d8/d9a/a03924_1afdcb443d39980964dc0a54878807c701" compoundref="d0/d29/a00470" startline="85" endline="88">hasBoneData</references>
+        <location file="Render/PostEffect/PostEffectSurface.hpp" line="89" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d9a/a03924_1a39b2d4d7fdbfe4d582c2446d47b75362" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PostEffectSurface::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device, QueueData const &amp;queueData, ashes::RenderPass const &amp;renderPass, castor::Size const &amp;size, TextureLayoutSPtr colourTexture, VkFormat depthFormat)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::PostEffectSurface::initialise</qualifiedname>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dde/a03944" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <param>
+          <type>ashes::RenderPass const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>TextureLayoutSPtr</type>
+          <declname>colourTexture</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>depthFormat</declname>
+        </param>
+        <briefdescription>
+<para>Initialises the surface. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">renderPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render pass from which the frame buffer is created. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The surface&apos;s size. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">colourTexture</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The surface&apos;s colour texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">depthFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The surface&apos;s depth pixel format. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffectSurface.hpp" line="110" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d9a/a03924_1acd78b28ca723ed07036ffb9d2a62f356" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PostEffectSurface::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device, QueueData const &amp;queueData, ashes::RenderPass const &amp;renderPass, castor::Size const &amp;size, VkFormat colourFormat, TextureLayoutSPtr depthTexture)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::PostEffectSurface::initialise</qualifiedname>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dde/a03944" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <param>
+          <type>ashes::RenderPass const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>colourFormat</declname>
+        </param>
+        <param>
+          <type>TextureLayoutSPtr</type>
+          <declname>depthTexture</declname>
+        </param>
+        <briefdescription>
+<para>Initialises the surface. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">renderPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render pass from which the frame buffer is created. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The surface&apos;s size. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">colourFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The surface&apos;s colour pixel format. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">depthTexture</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The surface&apos;s depth texture. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffectSurface.hpp" line="132" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d9a/a03924_1a9e6d3a9da09a438d800ef9861f4be85e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PostEffectSurface::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device, QueueData const &amp;queueData, ashes::RenderPass const &amp;renderPass, castor::Size const &amp;size, TextureLayoutSPtr colourTexture, TextureLayoutSPtr depthTexture)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::PostEffectSurface::initialise</qualifiedname>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dde/a03944" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <param>
+          <type>ashes::RenderPass const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>TextureLayoutSPtr</type>
+          <declname>colourTexture</declname>
+        </param>
+        <param>
+          <type>TextureLayoutSPtr</type>
+          <declname>depthTexture</declname>
+        </param>
+        <briefdescription>
+<para>Initialises the surface. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">renderPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render pass from which the frame buffer is created. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The surface&apos;s size. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">colourTexture</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The surface&apos;s colour texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">depthTexture</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The surface&apos;s depth texture. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffectSurface.hpp" line="154" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d9a/a03924_1a09fba11b7e672923bf40ca678b99baba" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PostEffectSurface::cleanup</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor3d::PostEffectSurface::cleanup</qualifiedname>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Cleans up the surface. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PostEffect/PostEffectSurface.hpp" line="168" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -467,73 +665,44 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="490">
-        <label>castor3d::SubmeshComponent</label>
-        <link refid="dd/d78/a03980"/>
-        <childnode refid="491" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="489">
-        <label>castor3d::BonesComponent</label>
+      <node id="1">
+        <label>castor3d::PostEffectSurface</label>
         <link refid="d8/d9a/a03924"/>
-        <childnode refid="490" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="491">
-        <label>castor::OwnedBy&lt; Submesh &gt;</label>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="493">
-        <label>castor3d::SubmeshComponent</label>
-        <link refid="dd/d78/a03980"/>
-        <childnode refid="494" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="492">
-        <label>castor3d::BonesComponent</label>
+      <node id="1">
+        <label>castor3d::PostEffectSurface</label>
         <link refid="d8/d9a/a03924"/>
-        <childnode refid="493" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="494">
-        <label>castor::OwnedBy&lt; Submesh &gt;</label>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
       </node>
     </collaborationgraph>
-    <location file="Model/Mesh/Submesh/Component/BonesComponent.hpp" line="16" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesComponent.hpp" bodystart="14" bodyend="146"/>
+    <location file="Render/PostEffect/PostEffectSurface.hpp" line="16" column="1" bodyfile="Render/PostEffect/PostEffectSurface.hpp" bodystart="18" bodyend="191"/>
     <listofallmembers>
-      <member refid="d8/d9a/a03924_1a2d4cca270b0dd3c8bdb9870d9aab66c6" prot="public" virt="non-virtual"><scope>castor3d::BonesComponent</scope><name>addBoneDatas</name></member>
-      <member refid="d8/d9a/a03924_1aa27ded4c535579d20516e3b3dfbc9f09" prot="public" virt="non-virtual"><scope>castor3d::BonesComponent</scope><name>addBoneDatas</name></member>
-      <member refid="d8/d9a/a03924_1ab44d9263ed1980007df96fb85b440798" prot="public" virt="non-virtual"><scope>castor3d::BonesComponent</scope><name>addBoneDatas</name></member>
-      <member refid="d8/d9a/a03924_1a656e7616fde4af54ac670e54f413dcec" prot="private" virt="non-virtual"><scope>castor3d::BonesComponent</scope><name>BinaryParser&lt; BonesComponent &gt;</name></member>
-      <member refid="d8/d9a/a03924_1a3bcdafb67e8badfcad6f4de266cc3f9e" prot="private" virt="non-virtual"><scope>castor3d::BonesComponent</scope><name>BinaryWriter&lt; BonesComponent &gt;</name></member>
-      <member refid="d8/d9a/a03924_1aee7e5a88503573058ac9bde7b73065a2" prot="public" virt="non-virtual"><scope>castor3d::BonesComponent</scope><name>BindingPoint</name></member>
-      <member refid="d8/d9a/a03924_1a845df8c013f202c6eb54ec33fcd3305b" prot="public" virt="non-virtual"><scope>castor3d::BonesComponent</scope><name>BonesComponent</name></member>
-      <member refid="dd/d78/a03980_1af13d08b9487f0501a06c0f7df4c89f8c" prot="public" virt="non-virtual"><scope>castor3d::BonesComponent</scope><name>cleanup</name></member>
-      <member refid="d8/d9a/a03924_1acb68b5db42745a262be4bfc995ae10e1" prot="private" virt="non-virtual"><scope>castor3d::BonesComponent</scope><name>CU_DeclareList</name></member>
-      <member refid="d8/d9a/a03924_1a866e61e61415536c4cc81a8eb4af63d0" prot="private" virt="virtual"><scope>castor3d::BonesComponent</scope><name>doCleanup</name></member>
-      <member refid="d8/d9a/a03924_1ac1d453256610144bf939e779d08031f7" prot="private" virt="virtual"><scope>castor3d::BonesComponent</scope><name>doFill</name></member>
-      <member refid="d8/d9a/a03924_1adf04bbc0e8a0d50e7d3be9793b7f5daa" prot="private" virt="virtual"><scope>castor3d::BonesComponent</scope><name>doInitialise</name></member>
-      <member refid="d8/d9a/a03924_1af98d65962f7bdef72a6662f8d3b71d82" prot="private" virt="virtual"><scope>castor3d::BonesComponent</scope><name>doUpload</name></member>
-      <member refid="dd/d78/a03980_1a53837125323ab11c28a86acbb187a770" prot="public" virt="non-virtual"><scope>castor3d::BonesComponent</scope><name>fill</name></member>
-      <member refid="d8/d9a/a03924_1aa743464a4176598c9b23325e2f5ae221" prot="public" virt="virtual"><scope>castor3d::BonesComponent</scope><name>gather</name></member>
-      <member refid="d8/d9a/a03924_1a54a8de5f170ca8aeaa45d5590a7b4da9" prot="public" virt="non-virtual"><scope>castor3d::BonesComponent</scope><name>getBonesBuffer</name></member>
-      <member refid="d8/d9a/a03924_1ab5ff7abf3298318de4295a5e5da356f3" prot="public" virt="non-virtual"><scope>castor3d::BonesComponent</scope><name>getBonesBuffer</name></member>
-      <member refid="d8/d9a/a03924_1a41b981c8beefc95b80739eca3994e0e9" prot="public" virt="non-virtual"><scope>castor3d::BonesComponent</scope><name>getBonesData</name></member>
-      <member refid="d8/d9a/a03924_1a8b6d9af02c66daa938ee32871c9045a0" prot="public" virt="virtual"><scope>castor3d::BonesComponent</scope><name>getProgramFlags</name></member>
-      <member refid="d8/d9a/a03924_1a6c0b7671b616ddd3073f2352bcafc3a5" prot="public" virt="non-virtual"><scope>castor3d::BonesComponent</scope><name>getSkeleton</name></member>
-      <member refid="dd/d78/a03980_1a3782f6784f793eeccd48e637e85a9d6c" prot="public" virt="non-virtual"><scope>castor3d::BonesComponent</scope><name>getType</name></member>
-      <member refid="d8/d9a/a03924_1afdcb443d39980964dc0a54878807c701" prot="public" virt="non-virtual"><scope>castor3d::BonesComponent</scope><name>hasBoneData</name></member>
-      <member refid="dd/d78/a03980_1a98c6ad3457d19448c1eaa261598103ad" prot="public" virt="non-virtual"><scope>castor3d::BonesComponent</scope><name>initialise</name></member>
-      <member refid="d8/d9a/a03924_1ab5d51ce5aa2ea8825500ebaf0001c0ef" prot="private" virt="non-virtual"><scope>castor3d::BonesComponent</scope><name>m_bones</name></member>
-      <member refid="d8/d9a/a03924_1afb8ad649eb5609c82df096c81f025b3e" prot="private" virt="non-virtual"><scope>castor3d::BonesComponent</scope><name>m_bonesBuffer</name></member>
-      <member refid="d8/d9a/a03924_1a0408aa097ec39542daffd83d657f4406" prot="private" virt="non-virtual"><scope>castor3d::BonesComponent</scope><name>m_bonesLayout</name></member>
-      <member refid="d8/d9a/a03924_1a2ea1c2c1b097970e6a974f2ee5962d43" prot="public" virt="non-virtual"><scope>castor3d::BonesComponent</scope><name>Name</name></member>
-      <member refid="dd/d78/a03980_1a7e21e4eda223d50b6751c40cb44f77a7" prot="public" virt="non-virtual"><scope>castor3d::BonesComponent</scope><name>needsUpdate</name></member>
-      <member refid="dd/d78/a03980_1a06b2ee9400bab62f5472f8ce8a03ee27" prot="public" virt="virtual"><scope>castor3d::BonesComponent</scope><name>setMaterial</name></member>
-      <member refid="dd/d78/a03980_1aafbe6064005a72343870bb444e1e6a1f" prot="public" virt="non-virtual"><scope>castor3d::BonesComponent</scope><name>SubmeshComponent</name></member>
-      <member refid="dd/d78/a03980_1a2dbcda2b8c26f4c9c52db78a5740a0f8" prot="public" virt="non-virtual"><scope>castor3d::BonesComponent</scope><name>upload</name></member>
-      <member refid="dd/d78/a03980_1a30231a167367ba38b41f9bf5b3bcd005" prot="public" virt="virtual"><scope>castor3d::BonesComponent</scope><name>~SubmeshComponent</name></member>
+      <member refid="d8/d9a/a03924_1a09fba11b7e672923bf40ca678b99baba" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>cleanup</name></member>
+      <member refid="d8/d9a/a03924_1a8919e470f09c07cc27c3920f1f2b38e9" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>colourTexture</name></member>
+      <member refid="d8/d9a/a03924_1a36640eae4939b1f9dcdd4d9024deea34" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>depthTexture</name></member>
+      <member refid="d8/d9a/a03924_1aca9d8cb13ca94a94b1300c7e29a5bb64" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>depthView</name></member>
+      <member refid="d8/d9a/a03924_1ada20e82a1d3c631d55eac2d4cf411d94" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>frameBuffer</name></member>
+      <member refid="d8/d9a/a03924_1a1e766ea4ff6539ca2fe04873fe852d8e" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>initialise</name></member>
+      <member refid="d8/d9a/a03924_1a9e322494345822e2627f99e8d14e2775" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>initialise</name></member>
+      <member refid="d8/d9a/a03924_1a54954703d6500f9358cdb7b990b6bbd7" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>initialise</name></member>
+      <member refid="d8/d9a/a03924_1a39b2d4d7fdbfe4d582c2446d47b75362" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>initialise</name></member>
+      <member refid="d8/d9a/a03924_1acd78b28ca723ed07036ffb9d2a62f356" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>initialise</name></member>
+      <member refid="d8/d9a/a03924_1a9e6d3a9da09a438d800ef9861f4be85e" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>initialise</name></member>
+      <member refid="d8/d9a/a03924_1a5ef864c17aa48a40e49f47a98ac70733" prot="private" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>m_debugName</name></member>
+      <member refid="d8/d9a/a03924_1a27dfd75181c6902277746a48e41c46e8" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>PostEffectSurface</name></member>
+      <member refid="d8/d9a/a03924_1a051c725372bae12e39a6d50bfbdf6c29" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>size</name></member>
+      <member refid="d8/d9a/a03924_1a7c5dd4bc6f8c64e758364f77b15e053e" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>stencilView</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,100 +1,197 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="de/d22/a04619" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::RenderWindow::RenderingResources</compoundname>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="de/d22/a04619_1a8c2ebf242a082f227a078b706b385912" prot="public" static="no" mutable="no">
-        <type>ashes::SemaphorePtr</type>
-        <definition>ashes::SemaphorePtr castor3d::RenderWindow::RenderingResources::imageAvailableSemaphore</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="de/d22/a04619" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ObjectCacheTraitsBaseT</compoundname>
+    <includes local="no">SceneModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ObjT</type>
+      </param>
+      <param>
+        <type>typename KeyT</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="de/d22/a04619_1a853816b8c208782f4686019a3274ab81" prot="public" static="no">
+        <type>ObjT</type>
+        <definition>using castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::ElementT =  ObjT</definition>
         <argsstring></argsstring>
-        <name>imageAvailableSemaphore</name>
+        <name>ElementT</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::ElementT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderWindow.hpp" line="60" column="1" bodyfile="Render/RenderWindow.hpp" bodystart="60" bodyend="-1"/>
+        <location file="Scene/SceneModule.hpp" line="469" column="1" bodyfile="Scene/SceneModule.hpp" bodystart="469" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="de/d22/a04619_1a8cdafab6c18a008ad7c70cb156f4c7c5" prot="public" static="no" mutable="no">
-        <type>ashes::SemaphorePtr</type>
-        <definition>ashes::SemaphorePtr castor3d::RenderWindow::RenderingResources::finishedRenderingSemaphore</definition>
+      <memberdef kind="typedef" id="de/d22/a04619_1a68bea8c17c8513e441397e0e64600385" prot="public" static="no">
+        <type>KeyT</type>
+        <definition>using castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::ElementKeyT =  KeyT</definition>
         <argsstring></argsstring>
-        <name>finishedRenderingSemaphore</name>
+        <name>ElementKeyT</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::ElementKeyT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderWindow.hpp" line="61" column="1" bodyfile="Render/RenderWindow.hpp" bodystart="61" bodyend="-1"/>
+        <location file="Scene/SceneModule.hpp" line="470" column="1" bodyfile="Scene/SceneModule.hpp" bodystart="470" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="de/d22/a04619_1ac2d3692cb256ec7883931ba7b9bb10a1" prot="public" static="no" mutable="no">
-        <type>ashes::FencePtr</type>
-        <definition>ashes::FencePtr castor3d::RenderWindow::RenderingResources::fence</definition>
+      <memberdef kind="typedef" id="de/d22/a04619_1a42745ed6bf95c742d6e4d053900c158b" prot="public" static="no">
+        <type>std::shared_ptr&lt; <ref refid="de/d22/a04619_1a853816b8c208782f4686019a3274ab81" kindref="member">ElementT</ref> &gt;</type>
+        <definition>using castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::ElementPtrT =  std::shared_ptr&lt; ElementT &gt;</definition>
         <argsstring></argsstring>
-        <name>fence</name>
+        <name>ElementPtrT</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::ElementPtrT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderWindow.hpp" line="62" column="1" bodyfile="Render/RenderWindow.hpp" bodystart="62" bodyend="-1"/>
+        <location file="Scene/SceneModule.hpp" line="471" column="1" bodyfile="Scene/SceneModule.hpp" bodystart="471" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="de/d22/a04619_1a863d0d7dd439ee3b83f11e4ba62e3712" prot="public" static="no" mutable="no">
-        <type>ashes::CommandBufferPtr</type>
-        <definition>ashes::CommandBufferPtr castor3d::RenderWindow::RenderingResources::commandBuffer</definition>
+      <memberdef kind="typedef" id="de/d22/a04619_1a6016166a3605d96e488a0d0a62b87746" prot="public" static="no">
+        <type>std::weak_ptr&lt; <ref refid="de/d22/a04619_1a853816b8c208782f4686019a3274ab81" kindref="member">ElementT</ref> &gt;</type>
+        <definition>using castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::ElementObsT =  std::weak_ptr&lt; ElementT &gt;</definition>
         <argsstring></argsstring>
-        <name>commandBuffer</name>
+        <name>ElementObsT</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::ElementObsT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderWindow.hpp" line="63" column="1" bodyfile="Render/RenderWindow.hpp" bodystart="63" bodyend="-1"/>
+        <location file="Scene/SceneModule.hpp" line="472" column="1" bodyfile="Scene/SceneModule.hpp" bodystart="472" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="de/d22/a04619_1a0c1b889e16668a30ea8f7ab55a6f3b68" prot="public" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::RenderWindow::RenderingResources::imageIndex</definition>
+      <memberdef kind="typedef" id="de/d22/a04619_1a27045a36c9da4fe182daa75435f845c6" prot="public" static="no">
+        <type>std::unordered_map&lt; KeyT, <ref refid="de/d22/a04619_1a42745ed6bf95c742d6e4d053900c158b" kindref="member">ElementPtrT</ref> &gt;</type>
+        <definition>using castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::ElementContT =  std::unordered_map&lt; KeyT, ElementPtrT &gt;</definition>
         <argsstring></argsstring>
-        <name>imageIndex</name>
-        <initializer>{ 0u }</initializer>
+        <name>ElementContT</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::ElementContT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderWindow.hpp" line="64" column="1" bodyfile="Render/RenderWindow.hpp" bodystart="64" bodyend="-1"/>
+        <location file="Scene/SceneModule.hpp" line="473" column="1" bodyfile="Scene/SceneModule.hpp" bodystart="473" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d22/a04619_1a4e7679d24f6b50b63b5b369bd0e6fa91" prot="public" static="no">
+        <type><ref refid="d9/d07/a02635" kindref="compound">ObjectCacheBaseT</ref>&lt; <ref refid="de/d22/a04619_1a853816b8c208782f4686019a3274ab81" kindref="member">ElementT</ref>, KeyT &gt;</type>
+        <definition>using castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::ElementCacheT =  ObjectCacheBaseT&lt; ElementT, KeyT &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementCacheT</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::ElementCacheT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneModule.hpp" line="474" column="1" bodyfile="Scene/SceneModule.hpp" bodystart="474" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d22/a04619_1a41d26cd4f564300b1d3c8e3ab904d49a" prot="public" static="no">
+        <type>std::function&lt; void(<ref refid="de/d22/a04619_1a853816b8c208782f4686019a3274ab81" kindref="member">ElementT</ref> &amp;) &gt;</type>
+        <definition>using castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::ElementInitialiserT =  std::function&lt; void( ElementT &amp; ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementInitialiserT</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::ElementInitialiserT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneModule.hpp" line="476" column="1" bodyfile="Scene/SceneModule.hpp" bodystart="476" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d22/a04619_1aefd226b4b4125473921ecb429fd5d77a" prot="public" static="no">
+        <type>std::function&lt; void(<ref refid="de/d22/a04619_1a853816b8c208782f4686019a3274ab81" kindref="member">ElementT</ref> &amp;) &gt;</type>
+        <definition>using castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::ElementCleanerT =  std::function&lt; void( ElementT &amp; ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementCleanerT</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::ElementCleanerT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneModule.hpp" line="477" column="1" bodyfile="Scene/SceneModule.hpp" bodystart="477" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d22/a04619_1aba01c74165b62806c3c097516dda71bc" prot="public" static="no">
+        <type>std::function&lt; void(<ref refid="de/d22/a04619_1a4e7679d24f6b50b63b5b369bd0e6fa91" kindref="member">ElementCacheT</ref> const &amp;, <ref refid="de/d22/a04619_1a27045a36c9da4fe182daa75435f845c6" kindref="member">ElementContT</ref> &amp;, <ref refid="de/d22/a04619_1a42745ed6bf95c742d6e4d053900c158b" kindref="member">ElementPtrT</ref>, SceneNodeSPtr, SceneNodeSPtr) &gt;</type>
+        <definition>using castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::ElementMergerT =  std::function&lt; void( ElementCacheT const &amp; , ElementContT &amp; , ElementPtrT , SceneNodeSPtr , SceneNodeSPtr ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementMergerT</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::ElementMergerT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneModule.hpp" line="478" column="1" bodyfile="Scene/SceneModule.hpp" bodystart="482" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d22/a04619_1a3a15970695d524fd0fe48fc73bfd219e" prot="public" static="no">
+        <type>std::function&lt; void(<ref refid="de/d22/a04619_1a853816b8c208782f4686019a3274ab81" kindref="member">ElementT</ref> &amp;, <ref refid="d1/d30/a04639" kindref="compound">SceneNode</ref> &amp;, SceneNodeSPtr, SceneNodeSPtr, SceneNodeSPtr) &gt;</type>
+        <definition>using castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::ElementAttacherT =  std::function&lt; void( ElementT &amp; , SceneNode &amp; , SceneNodeSPtr , SceneNodeSPtr , SceneNodeSPtr ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementAttacherT</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::ElementAttacherT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneModule.hpp" line="483" column="1" bodyfile="Scene/SceneModule.hpp" bodystart="487" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d22/a04619_1a3efd353905a3f2eb5585684731a13bbe" prot="public" static="no">
+        <type>std::function&lt; void(<ref refid="de/d22/a04619_1a853816b8c208782f4686019a3274ab81" kindref="member">ElementT</ref> &amp;) &gt;</type>
+        <definition>using castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::ElementDetacherT =  std::function&lt; void( ElementT &amp; ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementDetacherT</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::ElementDetacherT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneModule.hpp" line="488" column="1" bodyfile="Scene/SceneModule.hpp" bodystart="488" bodyend="-1"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="de/d22/a04619_1ac6768e3ba4c429fd8564e6061c2d7284" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::RenderWindow::RenderingResources::RenderingResources</definition>
-        <argsstring>(ashes::SemaphorePtr imageAvailableSemaphore, ashes::SemaphorePtr finishedRenderingSemaphore, ashes::FencePtr fence, ashes::CommandBufferPtr commandBuffer, uint32_t imageIndex)</argsstring>
-        <name>RenderingResources</name>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="de/d22/a04619_1a992c8bd17baaf6b688bd8a44da415b6b" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>ParametersT</declname>
+            <defname>ParametersT</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="de/d22/a04619_1a42745ed6bf95c742d6e4d053900c158b" kindref="member">ElementPtrT</ref></type>
+        <definition>static ElementPtrT castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::makeElement</definition>
+        <argsstring>(ElementCacheT const &amp;cache, ElementKeyT const &amp;key, ParametersT &amp;&amp;... params)</argsstring>
+        <name>makeElement</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::makeElement</qualifiedname>
         <param>
-          <type>ashes::SemaphorePtr</type>
-          <declname>imageAvailableSemaphore</declname>
+          <type><ref refid="de/d22/a04619_1a4e7679d24f6b50b63b5b369bd0e6fa91" kindref="member">ElementCacheT</ref> const &amp;</type>
+          <declname>cache</declname>
         </param>
         <param>
-          <type>ashes::SemaphorePtr</type>
-          <declname>finishedRenderingSemaphore</declname>
+          <type><ref refid="de/d22/a04619_1a68bea8c17c8513e441397e0e64600385" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>key</declname>
         </param>
         <param>
-          <type>ashes::FencePtr</type>
-          <declname>fence</declname>
-        </param>
-        <param>
-          <type>ashes::CommandBufferPtr</type>
-          <declname>commandBuffer</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>imageIndex</declname>
+          <type><ref refid="db/dd3/a03251" kindref="compound">ParametersT</ref> &amp;&amp;...</type>
+          <declname>params</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -102,35 +199,284 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderWindow.hpp" line="39" column="1" bodyfile="Render/RenderWindow.hpp" bodystart="39" bodyend="50"/>
+        <location file="Scene/SceneModule.hpp" line="491" column="20" bodyfile="Scene/SceneModule.hpp" bodystart="491" bodyend="497"/>
       </memberdef>
-      <memberdef kind="function" id="de/d22/a04619_1ac8dc7af53471de3be54c52527a4377be" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::RenderWindow::RenderingResources::~RenderingResources</definition>
-        <argsstring>()</argsstring>
-        <name>~RenderingResources</name>
+      <memberdef kind="function" id="de/d22/a04619_1ab115f8314b2327f98427cb17bc4fe2e1" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="de/d22/a04619_1a6016166a3605d96e488a0d0a62b87746" kindref="member">ElementObsT</ref></type>
+        <definition>static ElementObsT castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::makeElementObs</definition>
+        <argsstring>(ElementPtrT const &amp;element)</argsstring>
+        <name>makeElementObs</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::makeElementObs</qualifiedname>
+        <param>
+          <type><ref refid="de/d22/a04619_1a42745ed6bf95c742d6e4d053900c158b" kindref="member">ElementPtrT</ref> const &amp;</type>
+          <declname>element</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderWindow.hpp" line="52" column="1" bodyfile="Render/RenderWindow.hpp" bodystart="52" bodyend="58"/>
+        <location file="Scene/SceneModule.hpp" line="499" column="20" bodyfile="Scene/SceneModule.hpp" bodystart="499" bodyend="502"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d22/a04619_1a6114edb550747bbaee064c1c408e7384" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::areElementsEqual</definition>
+        <argsstring>(ElementObsT const &amp;lhs, ElementObsT const &amp;rhs)</argsstring>
+        <name>areElementsEqual</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::areElementsEqual</qualifiedname>
+        <param>
+          <type><ref refid="de/d22/a04619_1a6016166a3605d96e488a0d0a62b87746" kindref="member">ElementObsT</ref> const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d22/a04619_1a6016166a3605d96e488a0d0a62b87746" kindref="member">ElementObsT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneModule.hpp" line="504" column="13" bodyfile="Scene/SceneModule.hpp" bodystart="504" bodyend="508"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d22/a04619_1a37c54dd5a82abdae8e3d96d44503d8a8" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::areElementsEqual</definition>
+        <argsstring>(ElementObsT const &amp;lhs, ElementPtrT const &amp;rhs)</argsstring>
+        <name>areElementsEqual</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::areElementsEqual</qualifiedname>
+        <param>
+          <type><ref refid="de/d22/a04619_1a6016166a3605d96e488a0d0a62b87746" kindref="member">ElementObsT</ref> const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d22/a04619_1a42745ed6bf95c742d6e4d053900c158b" kindref="member">ElementPtrT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneModule.hpp" line="510" column="13" bodyfile="Scene/SceneModule.hpp" bodystart="510" bodyend="514"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d22/a04619_1a4506c3bbd01ecf0498506f27f45d527e" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::areElementsEqual</definition>
+        <argsstring>(ElementPtrT const &amp;lhs, ElementObsT const &amp;rhs)</argsstring>
+        <name>areElementsEqual</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::areElementsEqual</qualifiedname>
+        <param>
+          <type><ref refid="de/d22/a04619_1a42745ed6bf95c742d6e4d053900c158b" kindref="member">ElementPtrT</ref> const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d22/a04619_1a6016166a3605d96e488a0d0a62b87746" kindref="member">ElementObsT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneModule.hpp" line="516" column="13" bodyfile="Scene/SceneModule.hpp" bodystart="516" bodyend="520"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d22/a04619_1afa4d106be42e8df00be2e3f37193f4e5" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::areElementsEqual</definition>
+        <argsstring>(ElementPtrT const &amp;lhs, ElementPtrT const &amp;rhs)</argsstring>
+        <name>areElementsEqual</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::areElementsEqual</qualifiedname>
+        <param>
+          <type><ref refid="de/d22/a04619_1a42745ed6bf95c742d6e4d053900c158b" kindref="member">ElementPtrT</ref> const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d22/a04619_1a42745ed6bf95c742d6e4d053900c158b" kindref="member">ElementPtrT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneModule.hpp" line="522" column="13" bodyfile="Scene/SceneModule.hpp" bodystart="522" bodyend="526"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d22/a04619_1a0b36f2c9feead299e37021981646577c" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::isElementObsNull</definition>
+        <argsstring>(ElementObsT const &amp;element)</argsstring>
+        <name>isElementObsNull</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::isElementObsNull</qualifiedname>
+        <param>
+          <type><ref refid="de/d22/a04619_1a6016166a3605d96e488a0d0a62b87746" kindref="member">ElementObsT</ref> const &amp;</type>
+          <declname>element</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneModule.hpp" line="528" column="13" bodyfile="Scene/SceneModule.hpp" bodystart="528" bodyend="531"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
+<para>Helper structure to build a <ref refid="d0/d9a/a02631" kindref="compound">castor3d::ObjectCacheTraitsT</ref>. <simplesect kind="remark"><para>Predefines: <itemizedlist>
+<listitem>
+<para>ElementT: The resource type. </para>
+</listitem>
+<listitem>
+<para>ElementPtrT: The resource pointer type. </para>
+</listitem>
+<listitem>
+<para>ElementObjT: The resource observer type. </para>
+</listitem>
+<listitem>
+<para>ElementContT: The resource container type. </para>
+</listitem>
+<listitem>
+<para>ElementCacheT: The resource base cache type. </para>
+</listitem>
+<listitem>
+<para>ElementInitialiserT: The prototype of the function use to initialise a resource. </para>
+</listitem>
+<listitem>
+<para>ElementCleanerT: The prototype of the function use to cleanup a resource. </para>
+</listitem>
+<listitem>
+<para>ElementMergerT: The prototype of the function use to merge a cache element into another cache. </para>
+</listitem>
+<listitem>
+<para>ElementAttacherT: The prototype of the function use to attach a cache element to a scene node. </para>
+</listitem>
+<listitem>
+<para>ElementDetacherT: The prototype of the function use to detach a cache element from a scene node. </para>
+</listitem>
+<listitem>
+<para>static ElementPtrT makeElement( ElementKeyT const &amp;, ParametersT &amp;&amp; ... ): The element creation function. </para>
+</listitem>
+</itemizedlist>
+Hence, only remains to define: <itemizedlist>
+<listitem>
+<para>Name: The element type name. </para>
+</listitem>
+</itemizedlist>
+</para>
+</simplesect>
+</para>
     </detaileddescription>
-    <location file="Render/RenderWindow.hpp" line="38" column="1" bodyfile="Render/RenderWindow.hpp" bodystart="37" bodyend="65"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::ObjectCacheTraitsBaseT&lt; BillboardList, castor::String &gt;</label>
+        <link refid="de/d22/a04619"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; BillboardList, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::ObjectCacheTraitsBaseT&lt; Camera, castor::String &gt;</label>
+        <link refid="de/d22/a04619"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Camera, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::ObjectCacheTraitsBaseT&lt; Geometry, castor::String &gt;</label>
+        <link refid="de/d22/a04619"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Geometry, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::ObjectCacheTraitsBaseT&lt; Light, castor::String &gt;</label>
+        <link refid="de/d22/a04619"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Light, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::ObjectCacheTraitsBaseT&lt; ParticleSystem, castor::String &gt;</label>
+        <link refid="de/d22/a04619"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; ParticleSystem, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::ObjectCacheTraitsBaseT&lt; SceneNode, castor::String &gt;</label>
+        <link refid="de/d22/a04619"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SceneNode, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;</label>
+        <link refid="de/d22/a04619"/>
+      </node>
+      <node id="3">
+        <label>castor3d::ObjectCacheTraitsT&lt; BillboardList, castor::String &gt;</label>
+        <link refid="df/d53/a04623"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::ObjectCacheTraitsT&lt; Camera, castor::String &gt;</label>
+        <link refid="d8/da0/a04627"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::ObjectCacheTraitsT&lt; Geometry, castor::String &gt;</label>
+        <link refid="de/d65/a04631"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::ObjectCacheTraitsT&lt; Light, castor::String &gt;</label>
+        <link refid="dc/da4/a04515"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor3d::ObjectCacheTraitsT&lt; ParticleSystem, castor::String &gt;</label>
+        <link refid="d1/d48/a04575"/>
+        <childnode refid="10" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::ObjectCacheTraitsT&lt; SceneNode, castor::String &gt;</label>
+        <link refid="d5/d6d/a04635"/>
+        <childnode refid="12" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="Scene/SceneModule.hpp" line="467" column="1" bodyfile="Scene/SceneModule.hpp" bodystart="468" bodyend="532"/>
     <listofallmembers>
-      <member refid="de/d22/a04619_1a863d0d7dd439ee3b83f11e4ba62e3712" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::RenderingResources</scope><name>commandBuffer</name></member>
-      <member refid="de/d22/a04619_1ac2d3692cb256ec7883931ba7b9bb10a1" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::RenderingResources</scope><name>fence</name></member>
-      <member refid="de/d22/a04619_1a8cdafab6c18a008ad7c70cb156f4c7c5" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::RenderingResources</scope><name>finishedRenderingSemaphore</name></member>
-      <member refid="de/d22/a04619_1a8c2ebf242a082f227a078b706b385912" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::RenderingResources</scope><name>imageAvailableSemaphore</name></member>
-      <member refid="de/d22/a04619_1a0c1b889e16668a30ea8f7ab55a6f3b68" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::RenderingResources</scope><name>imageIndex</name></member>
-      <member refid="de/d22/a04619_1ac6768e3ba4c429fd8564e6061c2d7284" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::RenderingResources</scope><name>RenderingResources</name></member>
-      <member refid="de/d22/a04619_1ac8dc7af53471de3be54c52527a4377be" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::RenderingResources</scope><name>~RenderingResources</name></member>
+      <member refid="de/d22/a04619_1a6114edb550747bbaee064c1c408e7384" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>areElementsEqual</name></member>
+      <member refid="de/d22/a04619_1a37c54dd5a82abdae8e3d96d44503d8a8" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>areElementsEqual</name></member>
+      <member refid="de/d22/a04619_1a4506c3bbd01ecf0498506f27f45d527e" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>areElementsEqual</name></member>
+      <member refid="de/d22/a04619_1afa4d106be42e8df00be2e3f37193f4e5" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>areElementsEqual</name></member>
+      <member refid="de/d22/a04619_1a3a15970695d524fd0fe48fc73bfd219e" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>ElementAttacherT</name></member>
+      <member refid="de/d22/a04619_1a4e7679d24f6b50b63b5b369bd0e6fa91" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>ElementCacheT</name></member>
+      <member refid="de/d22/a04619_1aefd226b4b4125473921ecb429fd5d77a" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>ElementCleanerT</name></member>
+      <member refid="de/d22/a04619_1a27045a36c9da4fe182daa75435f845c6" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>ElementContT</name></member>
+      <member refid="de/d22/a04619_1a3efd353905a3f2eb5585684731a13bbe" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>ElementDetacherT</name></member>
+      <member refid="de/d22/a04619_1a41d26cd4f564300b1d3c8e3ab904d49a" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>ElementInitialiserT</name></member>
+      <member refid="de/d22/a04619_1a68bea8c17c8513e441397e0e64600385" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>ElementKeyT</name></member>
+      <member refid="de/d22/a04619_1aba01c74165b62806c3c097516dda71bc" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>ElementMergerT</name></member>
+      <member refid="de/d22/a04619_1a6016166a3605d96e488a0d0a62b87746" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>ElementObsT</name></member>
+      <member refid="de/d22/a04619_1a42745ed6bf95c742d6e4d053900c158b" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>ElementPtrT</name></member>
+      <member refid="de/d22/a04619_1a853816b8c208782f4686019a3274ab81" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>ElementT</name></member>
+      <member refid="de/d22/a04619_1a0b36f2c9feead299e37021981646577c" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>isElementObsNull</name></member>
+      <member refid="de/d22/a04619_1a992c8bd17baaf6b688bd8a44da415b6b" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>makeElement</name></member>
+      <member refid="de/d22/a04619_1ab115f8314b2327f98427cb17bc4fe2e1" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>makeElementObs</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

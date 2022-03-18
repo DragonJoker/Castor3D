@@ -1,115 +1,196 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d9/dda/a04740" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::DirectionalLightPass::Config</compoundname>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d9/dda/a04740" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TextureConfigurationBuffer::Data</compoundname>
+    <includes local="no">TextureConfigurationBuffer.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d9/dda/a04740_1a4331de25b6bc1fbecf49551b3a383f61" prot="public" static="no" mutable="no">
-        <type><ref refid="d0/d95/a04772" kindref="compound">LightPass::Config</ref></type>
-        <definition>LightPass::Config castor3d::DirectionalLightPass::Config::base</definition>
-        <argsstring></argsstring>
-        <name>base</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp" line="160" column="1" bodyfile="Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp" bodystart="160" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/dda/a04740_1a8870ac5d01d16988b845afa93482bedb" prot="public" static="no" mutable="no">
+      <memberdef kind="variable" id="d9/dda/a04740_1a1b046898c5f49eef9a1116b1e0d675a8" prot="public" static="no" mutable="no">
         <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::DirectionalLightPass::Config::direction</definition>
+        <definition>castor::Point4f castor3d::TextureConfigurationBuffer::Data::colOpa</definition>
         <argsstring></argsstring>
-        <name>direction</name>
+        <name>colOpa</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::colOpa</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp" line="161" column="1" bodyfile="Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp" bodystart="161" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="125" column="17" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="125" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d9/dda/a04740_1ac9a5c9441bb4c4f02193644231af545a" prot="public" static="no" mutable="no">
+      <memberdef kind="variable" id="d9/dda/a04740_1a2e30dac41b7150da3e02a4d7fd0af19d" prot="public" static="no" mutable="no">
         <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::DirectionalLightPass::Config::splitDepths</definition>
+        <definition>castor::Point4f castor3d::TextureConfigurationBuffer::Data::spcShn</definition>
         <argsstring></argsstring>
-        <name>splitDepths</name>
+        <name>spcShn</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::spcShn</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp" line="162" column="1" bodyfile="Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp" bodystart="162" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="126" column="17" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="126" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d9/dda/a04740_1a9a78b5f762d8e405c4f559b5499755cf" prot="public" static="no" mutable="no">
+      <memberdef kind="variable" id="d9/dda/a04740_1aaab06074bbe202b2193c464c4efb2c05" prot="public" static="no" mutable="no">
         <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::DirectionalLightPass::Config::splitScales</definition>
+        <definition>castor::Point4f castor3d::TextureConfigurationBuffer::Data::metRgh</definition>
         <argsstring></argsstring>
-        <name>splitScales</name>
+        <name>metRgh</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::metRgh</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp" line="163" column="1" bodyfile="Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp" bodystart="163" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="127" column="17" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="127" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d9/dda/a04740_1ae1c7b4062d2b5916c5aa2b18dd0d4032" prot="public" static="no" mutable="no">
-        <type>std::array&lt; castor::Matrix4x4f, <ref refid="d2/d21/a01484_1a1fcce99674136332281449dadf4505a9" kindref="member">shader::DirectionalMaxCascadesCount</ref> &gt;</type>
-        <definition>std::array&lt; castor::Matrix4x4f, shader::DirectionalMaxCascadesCount &gt; castor3d::DirectionalLightPass::Config::transform</definition>
+      <memberdef kind="variable" id="d9/dda/a04740_1ac84ff847d125a5620c6288c17776b162" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::TextureConfigurationBuffer::Data::emsOcc</definition>
         <argsstring></argsstring>
-        <name>transform</name>
+        <name>emsOcc</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::emsOcc</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp" line="164" column="1" bodyfile="Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp" bodystart="164" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="128" column="17" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dda/a04740_1af326335ff1542b4b7924689bbc20909f" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::TextureConfigurationBuffer::Data::trsDum</definition>
+        <argsstring></argsstring>
+        <name>trsDum</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::trsDum</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="129" column="17" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dda/a04740_1a9c8a80c465950eb0c299e05036441f54" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::TextureConfigurationBuffer::Data::nmlFcr</definition>
+        <argsstring></argsstring>
+        <name>nmlFcr</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::nmlFcr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="130" column="17" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="130" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dda/a04740_1ab30e6fdc13f935589ba038e70725cf2a" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::TextureConfigurationBuffer::Data::hgtFcr</definition>
+        <argsstring></argsstring>
+        <name>hgtFcr</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::hgtFcr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="131" column="17" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="131" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dda/a04740_1a9c64431678da2a22a79485f54b5b7967" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::TextureConfigurationBuffer::Data::mscVls</definition>
+        <argsstring></argsstring>
+        <name>mscVls</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::mscVls</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="132" column="17" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="132" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dda/a04740_1a6cda8adca582c4f0c1e2b2b97d6d3308" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::TextureConfigurationBuffer::Data::translate</definition>
+        <argsstring></argsstring>
+        <name>translate</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::translate</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="133" column="17" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="133" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dda/a04740_1a45deeedaeb5d45b34ac711f90895f1dc" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::TextureConfigurationBuffer::Data::rotate</definition>
+        <argsstring></argsstring>
+        <name>rotate</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::rotate</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="134" column="17" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="134" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dda/a04740_1ae4f4917bc8f1d297aeba0b232cb24376" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::TextureConfigurationBuffer::Data::scale</definition>
+        <argsstring></argsstring>
+        <name>scale</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::scale</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="135" column="17" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dda/a04740_1a0d9fdb379c7f7b3d7a75351b06bce678" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::TextureConfigurationBuffer::Data::tileSet</definition>
+        <argsstring></argsstring>
+        <name>tileSet</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::tileSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="136" column="17" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="136" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="1030">
-        <label>T</label>
-      </node>
-      <node id="1029">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="1030" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="1026">
-        <label>castor3d::DirectionalLightPass::Config</label>
-        <childnode refid="1027" relation="usage">
-          <edgelabel>base</edgelabel>
-        </childnode>
-        <childnode refid="1028" relation="usage">
-          <edgelabel>transform</edgelabel>
-        </childnode>
-      </node>
-      <node id="1028">
-        <label>std::array&lt; castor::Matrix4x4f, shader::DirectionalMaxCascadesCount &gt;</label>
-        <childnode refid="1029" relation="template-instance">
-          <edgelabel>&lt; castor::Matrix4x4f, shader::DirectionalMaxCascadesCount &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1027">
-        <label>castor3d::LightPass::Config</label>
-        <link refid="d0/d95/a04772"/>
-      </node>
-    </collaborationgraph>
-    <location file="Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp" line="159" column="1" bodyfile="Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp" bodystart="158" bodyend="165"/>
+    <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="123" column="1" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="124" bodyend="137"/>
     <listofallmembers>
-      <member refid="d9/dda/a04740_1a4331de25b6bc1fbecf49551b3a383f61" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLightPass::Config</scope><name>base</name></member>
-      <member refid="d9/dda/a04740_1a8870ac5d01d16988b845afa93482bedb" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLightPass::Config</scope><name>direction</name></member>
-      <member refid="d9/dda/a04740_1ac9a5c9441bb4c4f02193644231af545a" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLightPass::Config</scope><name>splitDepths</name></member>
-      <member refid="d9/dda/a04740_1a9a78b5f762d8e405c4f559b5499755cf" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLightPass::Config</scope><name>splitScales</name></member>
-      <member refid="d9/dda/a04740_1ae1c7b4062d2b5916c5aa2b18dd0d4032" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLightPass::Config</scope><name>transform</name></member>
+      <member refid="d9/dda/a04740_1a1b046898c5f49eef9a1116b1e0d675a8" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>colOpa</name></member>
+      <member refid="d9/dda/a04740_1ac84ff847d125a5620c6288c17776b162" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>emsOcc</name></member>
+      <member refid="d9/dda/a04740_1ab30e6fdc13f935589ba038e70725cf2a" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>hgtFcr</name></member>
+      <member refid="d9/dda/a04740_1aaab06074bbe202b2193c464c4efb2c05" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>metRgh</name></member>
+      <member refid="d9/dda/a04740_1a9c64431678da2a22a79485f54b5b7967" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>mscVls</name></member>
+      <member refid="d9/dda/a04740_1a9c8a80c465950eb0c299e05036441f54" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>nmlFcr</name></member>
+      <member refid="d9/dda/a04740_1a45deeedaeb5d45b34ac711f90895f1dc" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>rotate</name></member>
+      <member refid="d9/dda/a04740_1ae4f4917bc8f1d297aeba0b232cb24376" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>scale</name></member>
+      <member refid="d9/dda/a04740_1a2e30dac41b7150da3e02a4d7fd0af19d" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>spcShn</name></member>
+      <member refid="d9/dda/a04740_1a0d9fdb379c7f7b3d7a75351b06bce678" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>tileSet</name></member>
+      <member refid="d9/dda/a04740_1a6cda8adca582c4f0c1e2b2b97d6d3308" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>translate</name></member>
+      <member refid="d9/dda/a04740_1af326335ff1542b4b7924689bbc20909f" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>trsDum</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

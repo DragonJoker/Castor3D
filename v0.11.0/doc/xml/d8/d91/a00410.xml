@@ -1,0 +1,227 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d8/d91/a00410" kind="file" language="C++">
+    <compoundname>MeshAnimation.hpp</compoundname>
+    <includes refid="d2/d19/a07318" local="yes">MeshAnimationModule.hpp</includes>
+    <includes refid="d4/d81/a00110" local="yes">Castor3D/Binary/BinaryModule.hpp</includes>
+    <includes refid="d9/da6/a07309" local="yes">Castor3D/Scene/Animation/AnimationModule.hpp</includes>
+    <includes refid="d1/d09/a00077" local="yes">Castor3D/Animation/Animation.hpp</includes>
+    <includes refid="d3/d29/a00419" local="yes">Castor3D/Model/Mesh/Animation/MeshAnimationSubmesh.hpp</includes>
+    <incdepgraph>
+      <node id="8042">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="8054">
+        <label>Castor3D/Material/MaterialModule.hpp</label>
+        <link refid="d8/d23/a00326"/>
+        <childnode refid="8037" relation="include">
+        </childnode>
+        <childnode refid="8055" relation="include">
+        </childnode>
+      </node>
+      <node id="8045">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="8058">
+        <label>CastorUtils/Graphics/BoundingSphere.hpp</label>
+      </node>
+      <node id="8066">
+        <label>Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp</label>
+        <link refid="d9/d34/a00476"/>
+        <childnode refid="8056" relation="include">
+        </childnode>
+      </node>
+      <node id="8046">
+        <label>cstdint</label>
+      </node>
+      <node id="8063">
+        <label>CastorUtils/Design/Named.hpp</label>
+      </node>
+      <node id="8055">
+        <label>CastorUtils/Design/Signal.hpp</label>
+      </node>
+      <node id="8044">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="8037">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="8038" relation="include">
+        </childnode>
+        <childnode refid="8039" relation="include">
+        </childnode>
+        <childnode refid="8040" relation="include">
+        </childnode>
+        <childnode refid="8041" relation="include">
+        </childnode>
+        <childnode refid="8042" relation="include">
+        </childnode>
+        <childnode refid="8043" relation="include">
+        </childnode>
+        <childnode refid="8044" relation="include">
+        </childnode>
+        <childnode refid="8045" relation="include">
+        </childnode>
+        <childnode refid="8046" relation="include">
+        </childnode>
+        <childnode refid="8047" relation="include">
+        </childnode>
+        <childnode refid="8048" relation="include">
+        </childnode>
+        <childnode refid="8049" relation="include">
+        </childnode>
+      </node>
+      <node id="8048">
+        <label>string</label>
+      </node>
+      <node id="8036">
+        <label>Castor3D/Model/ModelModule.hpp</label>
+        <link refid="d7/def/a00521"/>
+        <childnode refid="8037" relation="include">
+        </childnode>
+      </node>
+      <node id="8041">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="8038">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="8056">
+        <label>Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp</label>
+        <link refid="dc/d19/a00515"/>
+        <childnode refid="8035" relation="include">
+        </childnode>
+        <childnode refid="8057" relation="include">
+        </childnode>
+        <childnode refid="8058" relation="include">
+        </childnode>
+      </node>
+      <node id="8064">
+        <label>Animation.inl</label>
+      </node>
+      <node id="8057">
+        <label>CastorUtils/Graphics/BoundingBox.hpp</label>
+      </node>
+      <node id="8040">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="8053">
+        <label>Castor3D/Scene/SceneModule.hpp</label>
+        <link refid="de/db5/a01181"/>
+        <childnode refid="8054" relation="include">
+        </childnode>
+        <childnode refid="8056" relation="include">
+        </childnode>
+        <childnode refid="8055" relation="include">
+        </childnode>
+      </node>
+      <node id="8065">
+        <label>Castor3D/Model/Mesh/Animation/MeshAnimationSubmesh.hpp</label>
+        <link refid="d3/d29/a00419"/>
+        <childnode refid="8034" relation="include">
+        </childnode>
+        <childnode refid="8056" relation="include">
+        </childnode>
+        <childnode refid="8066" relation="include">
+        </childnode>
+      </node>
+      <node id="8051">
+        <label>Castor3D/Binary/BinaryModule.hpp</label>
+        <link refid="d4/d81/a00110"/>
+        <childnode refid="8037" relation="include">
+        </childnode>
+      </node>
+      <node id="8060">
+        <label>CastorUtils/Math/Quaternion.hpp</label>
+      </node>
+      <node id="8039">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="8059">
+        <label>Castor3D/Animation/AnimationModule.hpp</label>
+        <link refid="d0/d35/a07306"/>
+        <childnode refid="8037" relation="include">
+        </childnode>
+        <childnode refid="8060" relation="include">
+        </childnode>
+      </node>
+      <node id="8035">
+        <label>Castor3D/Model/Mesh/MeshModule.hpp</label>
+        <link refid="d2/d9d/a00464"/>
+        <childnode refid="8036" relation="include">
+        </childnode>
+        <childnode refid="8050" relation="include">
+        </childnode>
+      </node>
+      <node id="8033">
+        <label>Model/Mesh/Animation/MeshAnimation.hpp</label>
+        <link refid="d8/d91/a00410"/>
+        <childnode refid="8034" relation="include">
+        </childnode>
+        <childnode refid="8051" relation="include">
+        </childnode>
+        <childnode refid="8052" relation="include">
+        </childnode>
+        <childnode refid="8061" relation="include">
+        </childnode>
+        <childnode refid="8065" relation="include">
+        </childnode>
+      </node>
+      <node id="8049">
+        <label>vector</label>
+      </node>
+      <node id="8043">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="8052">
+        <label>Castor3D/Scene/Animation/AnimationModule.hpp</label>
+        <link refid="d9/da6/a07309"/>
+        <childnode refid="8053" relation="include">
+        </childnode>
+        <childnode refid="8059" relation="include">
+        </childnode>
+      </node>
+      <node id="8061">
+        <label>Castor3D/Animation/Animation.hpp</label>
+        <link refid="d1/d09/a00077"/>
+        <childnode refid="8051" relation="include">
+        </childnode>
+        <childnode refid="8062" relation="include">
+        </childnode>
+        <childnode refid="8063" relation="include">
+        </childnode>
+        <childnode refid="8064" relation="include">
+        </childnode>
+        <childnode refid="8061" relation="include">
+        </childnode>
+      </node>
+      <node id="8062">
+        <label>Castor3D/Animation/AnimationKeyFrame.hpp</label>
+        <link refid="da/dec/a00080"/>
+        <childnode refid="8059" relation="include">
+        </childnode>
+        <childnode refid="8057" relation="include">
+        </childnode>
+      </node>
+      <node id="8034">
+        <label>MeshAnimationModule.hpp</label>
+        <link refid="d2/d19/a07318"/>
+        <childnode refid="8035" relation="include">
+        </childnode>
+      </node>
+      <node id="8050">
+        <label>CastorUtils/Design/Factory.hpp</label>
+      </node>
+      <node id="8047">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="d3/d10/a03856" prot="public">castor3d::MeshAnimation</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Model/Mesh/Animation/MeshAnimation.hpp"/>
+  </compounddef>
+</doxygen>

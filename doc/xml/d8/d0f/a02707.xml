@@ -1,33 +1,22 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d8/d0f/a02707" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkFenceCreateInfo &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
+    <compoundname>castor3d::ResourceCacheTraitsT</compoundname>
     <templateparamlist>
+      <param>
+        <type>typename ResT</type>
+      </param>
+      <param>
+        <type>typename KeyT</type>
+      </param>
     </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d8/d0f/a02707_1aa600a8d880d7bf725d6fdf3e69ed2767" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkFenceCreateInfo &gt;::value</definition>
-        <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_FENCE_CREATE_INFO</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="22" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="22" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
+<para>Helper structure to specialise a cache behaviour. </para>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="22" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="22" bodyend="22"/>
+    <location file="Castor3DModule.hpp" line="80" column="1" bodyfile="Castor3DModule.hpp" bodystart="80" bodyend="-1"/>
     <listofallmembers>
-      <member refid="d8/d0f/a02707_1aa600a8d880d7bf725d6fdf3e69ed2767" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkFenceCreateInfo &gt;</scope><name>value</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

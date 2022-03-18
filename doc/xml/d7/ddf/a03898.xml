@@ -1,69 +1,358 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d7/ddf/a03898" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::MeshImporterFactory</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">castor::Factory&lt; MeshImporter, castor::String, MeshImporterUPtr, std::function&lt; MeshImporterUPtr(Engine &amp;) &gt; &gt;</basecompoundref>
-    <includes local="no">ImporterFactory.hpp</includes>
+    <compoundname>castor3d::EnvironmentPrefilter</compoundname>
+    <includes local="no">EnvironmentPrefilter.hpp</includes>
+    <innerclass refid="d9/d7a/a03902" prot="private">castor3d::EnvironmentPrefilter::MipRenderCube</innerclass>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d7/ddf/a03898_1a6dbf52dc4d47481cdc51ad1373666eb8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d8c/a04318" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::EnvironmentPrefilter::getResult</definition>
+        <argsstring>() const</argsstring>
+        <name>getResult</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::getResult</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="111" column="16" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="111" bodyend="114"/>
+        <referencedby refid="d0/d0b/a03910_1ad89be757124326abbfb6907420912f58" compoundref="d9/dd4/a00776" startline="77" endline="80">castor3d::IblTextures::getPrefilteredEnvironmentTexture</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d7/ddf/a03898_1ace19dfaaff10ee60ff4be98880c44d76" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Sampler const &amp;</type>
+        <definition>ashes::Sampler const  &amp; castor3d::EnvironmentPrefilter::getSampler</definition>
+        <argsstring>() const</argsstring>
+        <name>getSampler</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::getSampler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="116" column="23" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="116" bodyend="119"/>
+        <referencedby refid="d0/d0b/a03910_1a2837d9e63ab70246556f53cb0aff6fe1" compoundref="d9/dd4/a00776" startline="92" endline="95">castor3d::IblTextures::getPrefilteredEnvironmentSampler</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d7/ddf/a03898_1a22a67cb642611dabb4ed713d467188c7" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t const</type>
+        <definition>C3D_API uint32_t const castor3d::EnvironmentPrefilter::MaxIblReflectionLod</definition>
+        <argsstring></argsstring>
+        <name>MaxIblReflectionLod</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::MaxIblReflectionLod</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="123" column="31" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="123" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d7/ddf/a03898_1a63eed7168bbd8455f1b7bc5790dea92d" prot="private" static="no" mutable="no">
+        <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::EnvironmentPrefilter::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="126" column="21" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="126" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/ddf/a03898_1afb8643343a7175e1017bca9f64763a2a" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d8c/a04318" kindref="compound">Texture</ref> const  &amp;</type>
+        <definition>Texture const&amp; castor3d::EnvironmentPrefilter::m_srcView</definition>
+        <argsstring></argsstring>
+        <name>m_srcView</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::m_srcView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="127" column="16" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="127" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/ddf/a03898_1aa05758641ecb49f4f0c8a37ebc541488" prot="private" static="no" mutable="no">
+        <type>ashes::ImagePtr</type>
+        <definition>ashes::ImagePtr castor3d::EnvironmentPrefilter::m_srcImage</definition>
+        <argsstring></argsstring>
+        <name>m_srcImage</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::m_srcImage</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="128" column="17" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/ddf/a03898_1af67839edd9aeec77446f7c439cca4251" prot="private" static="no" mutable="no">
+        <type>ashes::ImageView</type>
+        <definition>ashes::ImageView castor3d::EnvironmentPrefilter::m_srcImageView</definition>
+        <argsstring></argsstring>
+        <name>m_srcImageView</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::m_srcImageView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="129" column="18" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/ddf/a03898_1a8b2894fde350ad10a1e84a19567debba" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d8c/a04318" kindref="compound">Texture</ref></type>
+        <definition>Texture castor3d::EnvironmentPrefilter::m_result</definition>
+        <argsstring></argsstring>
+        <name>m_result</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::m_result</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="130" column="9" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="130" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/ddf/a03898_1a715c7c440021f91a46004f2db757ec32" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a723c56c48a833a5992bd2a5a9a366e45" kindref="member">SamplerResPtr</ref></type>
+        <definition>SamplerResPtr castor3d::EnvironmentPrefilter::m_sampler</definition>
+        <argsstring></argsstring>
+        <name>m_sampler</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::m_sampler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="131" column="15" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="131" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/ddf/a03898_1ae5a138ec5a580d1cd4b3e0ac7a4cb95d" prot="private" static="no" mutable="no">
+        <type>ashes::RenderPassPtr</type>
+        <definition>ashes::RenderPassPtr castor3d::EnvironmentPrefilter::m_renderPass</definition>
+        <argsstring></argsstring>
+        <name>m_renderPass</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::m_renderPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="132" column="22" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="132" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/ddf/a03898_1ab53d902e1fd68e223e988f06d90ff763" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::unique_ptr&lt; MipRenderCube &gt; &gt;</type>
+        <definition>std::vector&lt; std::unique_ptr&lt; MipRenderCube &gt; &gt; castor3d::EnvironmentPrefilter::m_renderPasses</definition>
+        <argsstring></argsstring>
+        <name>m_renderPasses</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::m_renderPasses</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="133" column="13" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="133" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d7/ddf/a03898_1ab8c66c78e679eb45fbb9b0c1d17e856c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::MeshImporterFactory::MeshImporterFactory</definition>
-        <argsstring>()</argsstring>
-        <name>MeshImporterFactory</name>
+      <memberdef kind="function" id="d7/ddf/a03898_1aacc395730aedb662ea78a15ea183b9b3" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::EnvironmentPrefilter::EnvironmentPrefilter</definition>
+        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, castor::Size const &amp;size, Texture const &amp;srcTexture, SamplerResPtr sampler)</argsstring>
+        <name>EnvironmentPrefilter</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::EnvironmentPrefilter</qualifiedname>
+        <param>
+          <type><ref refid="d1/d3c/a02714" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d8c/a04318" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>srcTexture</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a723c56c48a833a5992bd2a5a9a366e45" kindref="member">SamplerResPtr</ref></type>
+          <declname>sampler</declname>
+        </param>
         <briefdescription>
 <para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render size. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">srcTexture</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The cube texture source. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sampler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The sampler used for the source texture. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/ImporterFactory.hpp" line="23" column="1"/>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="73" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d7/ddf/a03898_1a487226529aa95edbf4def120475511f9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::MeshImporterFactory::~MeshImporterFactory</definition>
+      <memberdef kind="function" id="d7/ddf/a03898_1a608f80bb7ac1e003e1b5565f21e44d34" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::EnvironmentPrefilter::~EnvironmentPrefilter</definition>
         <argsstring>()</argsstring>
-        <name>~MeshImporterFactory</name>
+        <name>~EnvironmentPrefilter</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::~EnvironmentPrefilter</qualifiedname>
         <briefdescription>
-<para>Destructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/ImporterFactory.hpp" line="30" column="1"/>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="78" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/ddf/a03898_1adc239ad790e2b976c8131ea717a97268" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::EnvironmentPrefilter::render</definition>
+        <argsstring>(QueueData const &amp;queueData)</argsstring>
+        <name>render</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::render</qualifiedname>
+        <param>
+          <type><ref refid="dc/d61/a03950" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <briefdescription>
+<para>Generates the mipmap levels. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">queueData</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue receiving the GPU commands. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="87" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/ddf/a03898_1a8251497884e49da60513225de898db7f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Semaphore const &amp;</type>
+        <definition>C3D_API ashes::Semaphore const  &amp; castor3d::EnvironmentPrefilter::render</definition>
+        <argsstring>(QueueData const &amp;queueData, ashes::Semaphore const &amp;toWait)</argsstring>
+        <name>render</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::render</qualifiedname>
+        <param>
+          <type><ref refid="dc/d61/a03950" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <param>
+          <type>ashes::Semaphore const &amp;</type>
+          <declname>toWait</declname>
+        </param>
+        <briefdescription>
+<para>Generates the mipmap levels. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">queueData</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue receiving the render commands. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">toWait</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The semaphore from the previous render pass. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The semaphores signaled by this render. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="100" column="33"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="1965">
-        <label>castor::Factory&lt; MeshImporter, castor::String, MeshImporterUPtr, std::function&lt; MeshImporterUPtr(Engine &amp;) &gt; &gt;</label>
-      </node>
-      <node id="1964">
-        <label>castor3d::MeshImporterFactory</label>
-        <link refid="d7/ddf/a03898"/>
-        <childnode refid="1965" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="1967">
-        <label>castor::Factory&lt; MeshImporter, castor::String, MeshImporterUPtr, std::function&lt; MeshImporterUPtr(Engine &amp;) &gt; &gt;</label>
-      </node>
-      <node id="1966">
-        <label>castor3d::MeshImporterFactory</label>
-        <link refid="d7/ddf/a03898"/>
-        <childnode refid="1967" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Model/Mesh/ImporterFactory.hpp" line="15" column="1" bodyfile="Model/Mesh/ImporterFactory.hpp" bodystart="13" bodyend="31"/>
+    <location file="Render/PBR/EnvironmentPrefilter.hpp" line="22" column="1" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="23" bodyend="134"/>
     <listofallmembers>
-      <member refid="d7/ddf/a03898_1ab8c66c78e679eb45fbb9b0c1d17e856c" prot="public" virt="non-virtual"><scope>castor3d::MeshImporterFactory</scope><name>MeshImporterFactory</name></member>
-      <member refid="d7/ddf/a03898_1a487226529aa95edbf4def120475511f9" prot="public" virt="non-virtual"><scope>castor3d::MeshImporterFactory</scope><name>~MeshImporterFactory</name></member>
+      <member refid="d7/ddf/a03898_1aacc395730aedb662ea78a15ea183b9b3" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter</scope><name>EnvironmentPrefilter</name></member>
+      <member refid="d7/ddf/a03898_1a6dbf52dc4d47481cdc51ad1373666eb8" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter</scope><name>getResult</name></member>
+      <member refid="d7/ddf/a03898_1ace19dfaaff10ee60ff4be98880c44d76" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter</scope><name>getSampler</name></member>
+      <member refid="d7/ddf/a03898_1a63eed7168bbd8455f1b7bc5790dea92d" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter</scope><name>m_device</name></member>
+      <member refid="d7/ddf/a03898_1ae5a138ec5a580d1cd4b3e0ac7a4cb95d" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter</scope><name>m_renderPass</name></member>
+      <member refid="d7/ddf/a03898_1ab53d902e1fd68e223e988f06d90ff763" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter</scope><name>m_renderPasses</name></member>
+      <member refid="d7/ddf/a03898_1a8b2894fde350ad10a1e84a19567debba" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter</scope><name>m_result</name></member>
+      <member refid="d7/ddf/a03898_1a715c7c440021f91a46004f2db757ec32" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter</scope><name>m_sampler</name></member>
+      <member refid="d7/ddf/a03898_1aa05758641ecb49f4f0c8a37ebc541488" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter</scope><name>m_srcImage</name></member>
+      <member refid="d7/ddf/a03898_1af67839edd9aeec77446f7c439cca4251" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter</scope><name>m_srcImageView</name></member>
+      <member refid="d7/ddf/a03898_1afb8643343a7175e1017bca9f64763a2a" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter</scope><name>m_srcView</name></member>
+      <member refid="d7/ddf/a03898_1a22a67cb642611dabb4ed713d467188c7" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter</scope><name>MaxIblReflectionLod</name></member>
+      <member refid="d7/ddf/a03898_1adc239ad790e2b976c8131ea717a97268" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter</scope><name>render</name></member>
+      <member refid="d7/ddf/a03898_1a8251497884e49da60513225de898db7f" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter</scope><name>render</name></member>
+      <member refid="d7/ddf/a03898_1a608f80bb7ac1e003e1b5565f21e44d34" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter</scope><name>~EnvironmentPrefilter</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

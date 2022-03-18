@@ -1,706 +1,632 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d1/d09/a00077" kind="file" language="C++">
-    <compoundname>Animation.hpp</compoundname>
-    <includes refid="d4/d81/a00110" local="yes">Castor3D/Binary/BinaryModule.hpp</includes>
-    <includes refid="da/dec/a00080" local="yes">Castor3D/Animation/AnimationKeyFrame.hpp</includes>
-    <includes local="no">CastorUtils/Design/Named.hpp</includes>
-    <includes local="yes">Animation.inl</includes>
-    <includes local="yes">Z:/Projets/C++/Castor3D/include/Core/Castor3D/Animation/Animation.hpp</includes>
-    <includedby refid="db/db6/a00074" local="yes">Animation/Animable.hpp</includedby>
-    <includedby refid="d1/dc6/a00347" local="yes">Material/Texture/Animation/TextureAnimation.hpp</includedby>
-    <includedby refid="d8/d91/a00410" local="yes">Model/Mesh/Animation/MeshAnimation.hpp</includedby>
-    <includedby refid="d9/d24/a00524" local="yes">Model/Skeleton/Animation/SkeletonAnimation.hpp</includedby>
+    <compoundname>AnimationKeyFrame.hpp</compoundname>
+    <includes refid="de/d41/a10778" local="yes">AnimationModule.hpp</includes>
+    <includes local="no">CastorUtils/Graphics/BoundingBox.hpp</includes>
+    <includedby refid="db/db6/a00074" local="yes">Animation/Animation.hpp</includedby>
+    <includedby refid="db/d10/a00350" local="yes">Material/Texture/Animation/TextureAnimationKeyFrame.hpp</includedby>
+    <includedby refid="d4/dd3/a00428" local="yes">Model/Mesh/Animation/MeshAnimationKeyFrame.hpp</includedby>
+    <includedby refid="d8/deb/a00545" local="yes">Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp</includedby>
+    <includedby refid="db/daf/a01019" local="yes">Scene/Animation/SceneNodeAnimationKeyFrame.hpp</includedby>
     <incdepgraph>
-      <node id="114">
-        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
-      </node>
-      <node id="117">
-        <label>ashespp/AshesPPPrerequisites.hpp</label>
-      </node>
-      <node id="118">
-        <label>cstdint</label>
-      </node>
-      <node id="126">
-        <label>CastorUtils/Design/Named.hpp</label>
-      </node>
-      <node id="116">
-        <label>CastorUtils/Math/Point.hpp</label>
-      </node>
-      <node id="109">
-        <label>Castor3D/Castor3DModule.hpp</label>
-        <link refid="d5/d35/a00266"/>
-        <childnode refid="110" relation="include">
-        </childnode>
-        <childnode refid="111" relation="include">
-        </childnode>
-        <childnode refid="112" relation="include">
-        </childnode>
-        <childnode refid="113" relation="include">
-        </childnode>
-        <childnode refid="114" relation="include">
-        </childnode>
-        <childnode refid="115" relation="include">
-        </childnode>
-        <childnode refid="116" relation="include">
-        </childnode>
-        <childnode refid="117" relation="include">
-        </childnode>
-        <childnode refid="118" relation="include">
-        </childnode>
-        <childnode refid="119" relation="include">
-        </childnode>
-        <childnode refid="120" relation="include">
-        </childnode>
-        <childnode refid="121" relation="include">
-        </childnode>
-      </node>
-      <node id="120">
-        <label>string</label>
-      </node>
-      <node id="113">
-        <label>CastorUtils/Exception/Assertion.hpp</label>
-      </node>
-      <node id="110">
-        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
-      </node>
-      <node id="127">
-        <label>Animation.inl</label>
-      </node>
-      <node id="125">
-        <label>CastorUtils/Graphics/BoundingBox.hpp</label>
-      </node>
-      <node id="112">
-        <label>CastorUtils/Design/OwnedBy.hpp</label>
-      </node>
-      <node id="108">
-        <label>Castor3D/Binary/BinaryModule.hpp</label>
-        <link refid="d4/d81/a00110"/>
-        <childnode refid="109" relation="include">
-        </childnode>
-      </node>
-      <node id="124">
-        <label>CastorUtils/Math/Quaternion.hpp</label>
-      </node>
-      <node id="111">
+      <node id="5">
         <label>CastorUtils/Design/FlagCombination.hpp</label>
       </node>
-      <node id="123">
-        <label>AnimationModule.hpp</label>
-        <link refid="d0/d35/a07306"/>
-        <childnode refid="109" relation="include">
-        </childnode>
-        <childnode refid="124" relation="include">
-        </childnode>
+      <node id="6">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
       </node>
-      <node id="121">
-        <label>vector</label>
+      <node id="7">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
       </node>
-      <node id="115">
+      <node id="19">
+        <label>CastorUtils/Graphics/BoundingBox.hpp</label>
+      </node>
+      <node id="8">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="9">
+        <label>CastorUtils/Graphics/Size.hpp</label>
+      </node>
+      <node id="10">
         <label>CastorUtils/Math/Coords.hpp</label>
       </node>
-      <node id="107">
-        <label>Animation/Animation.hpp</label>
+      <node id="11">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="18">
+        <label>CastorUtils/Math/Quaternion.hpp</label>
+      </node>
+      <node id="4">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="13">
+        <label>RenderGraph/FrameGraphPrerequisites.hpp</label>
+      </node>
+      <node id="1">
+        <label>Animation/AnimationKeyFrame.hpp</label>
         <link refid="d1/d09/a00077"/>
-        <childnode refid="108" relation="include">
+        <childnode refid="2" relation="include">
         </childnode>
-        <childnode refid="122" relation="include">
-        </childnode>
-        <childnode refid="126" relation="include">
-        </childnode>
-        <childnode refid="127" relation="include">
-        </childnode>
-        <childnode refid="107" relation="include">
+        <childnode refid="19" relation="include">
         </childnode>
       </node>
-      <node id="122">
-        <label>Castor3D/Animation/AnimationKeyFrame.hpp</label>
-        <link refid="da/dec/a00080"/>
-        <childnode refid="123" relation="include">
+      <node id="2">
+        <label>AnimationModule.hpp</label>
+        <link refid="de/d41/a10778"/>
+        <childnode refid="3" relation="include">
         </childnode>
-        <childnode refid="125" relation="include">
+        <childnode refid="18" relation="include">
         </childnode>
       </node>
-      <node id="119">
+      <node id="3">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d6/d22/a00245"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="14">
+        <label>cstdint</label>
+      </node>
+      <node id="15">
         <label>memory</label>
+      </node>
+      <node id="16">
+        <label>string</label>
+      </node>
+      <node id="17">
+        <label>vector</label>
       </node>
     </incdepgraph>
     <invincdepgraph>
-      <node id="175">
-        <label>Render/PostEffect/PostEffect.hpp</label>
-        <link refid="d8/dba/a00773"/>
-      </node>
-      <node id="160">
-        <label>Render/Technique/Opaque/DeferredRendering.hpp</label>
-        <link refid="d1/d93/a00875"/>
-      </node>
-      <node id="172">
-        <label>Scene/Background/Skybox.hpp</label>
-        <link refid="d1/dfa/a01097"/>
-        <childnode refid="173" relation="include">
-        </childnode>
-      </node>
-      <node id="162">
-        <label>Render/Technique/Transparent/TransparentPassResult.hpp</label>
-        <link refid="df/dce/a00974"/>
-        <childnode refid="147" relation="include">
-        </childnode>
-      </node>
-      <node id="196">
-        <label>Scene/Geometry.hpp</label>
-        <link refid="d0/d39/a01112"/>
-        <childnode refid="192" relation="include">
-        </childnode>
-        <childnode refid="148" relation="include">
-        </childnode>
-        <childnode refid="197" relation="include">
-        </childnode>
-      </node>
-      <node id="181">
-        <label>Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp</label>
-        <link refid="d3/d29/a00947"/>
-        <childnode refid="144" relation="include">
-        </childnode>
-      </node>
-      <node id="174">
-        <label>Text/TextBackground.hpp</label>
-        <link refid="d8/d4e/a01355"/>
-      </node>
-      <node id="168">
-        <label>Scene/Background/Colour.hpp</label>
-        <link refid="d6/d0d/a01091"/>
-        <childnode refid="169" relation="include">
-        </childnode>
-      </node>
-      <node id="164">
-        <label>Render/Passes/GaussianBlur.hpp</label>
-        <link refid="dd/db2/a00737"/>
-        <childnode refid="140" relation="include">
-        </childnode>
-        <childnode refid="152" relation="include">
-        </childnode>
-        <childnode refid="153" relation="include">
-        </childnode>
-      </node>
-      <node id="151">
-        <label>Render/ShadowMap/ShadowMapPassSpot.hpp</label>
-        <link refid="d9/d30/a00848"/>
-      </node>
-      <node id="154">
-        <label>Render/Technique/Opaque/LightVolumeGI/LightVolumeGIModule.hpp</label>
-        <link refid="d4/ddc/a00917"/>
-        <childnode refid="155" relation="include">
-        </childnode>
-        <childnode refid="142" relation="include">
-        </childnode>
-        <childnode refid="143" relation="include">
-        </childnode>
-        <childnode refid="156" relation="include">
-        </childnode>
-      </node>
-      <node id="198">
-        <label>Scene/Light/Light.hpp</label>
-        <link refid="dd/d09/a01118"/>
-        <childnode refid="141" relation="include">
-        </childnode>
-        <childnode refid="142" relation="include">
-        </childnode>
-        <childnode refid="199" relation="include">
-        </childnode>
-        <childnode refid="200" relation="include">
-        </childnode>
-      </node>
-      <node id="155">
-        <label>Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp</label>
-        <link refid="d0/d85/a00908"/>
-        <childnode refid="142" relation="include">
-        </childnode>
-      </node>
-      <node id="176">
-        <label>Render/RenderTarget.hpp</label>
-        <link refid="d8/d1c/a00824"/>
-        <childnode refid="175" relation="include">
-        </childnode>
-        <childnode refid="177" relation="include">
-        </childnode>
-      </node>
-      <node id="177">
-        <label>Text/TextRenderTarget.hpp</label>
-        <link refid="d5/da5/a01424"/>
-      </node>
-      <node id="153">
-        <label>Render/ShadowMap/ShadowMapSpot.hpp</label>
-        <link refid="d0/d82/a00857"/>
-        <childnode refid="141" relation="include">
-        </childnode>
-        <childnode refid="145" relation="include">
-        </childnode>
-      </node>
-      <node id="187">
-        <label>Model/Mesh/Mesh.hpp</label>
-        <link refid="dd/d63/a00455"/>
-        <childnode refid="188" relation="include">
-        </childnode>
-      </node>
-      <node id="171">
-        <label>Text/TextImageBackground.hpp</label>
-        <link refid="de/d9d/a01382"/>
-      </node>
-      <node id="152">
-        <label>Render/ShadowMap/ShadowMapPoint.hpp</label>
-        <link refid="df/d4c/a00851"/>
-        <childnode refid="141" relation="include">
-        </childnode>
-        <childnode refid="145" relation="include">
-        </childnode>
-      </node>
-      <node id="194">
-        <label>Scene/Camera.hpp</label>
-        <link refid="da/d4e/a01106"/>
-        <childnode refid="148" relation="include">
-        </childnode>
-        <childnode refid="142" relation="include">
-        </childnode>
-        <childnode refid="143" relation="include">
-        </childnode>
-        <childnode refid="195" relation="include">
-        </childnode>
-      </node>
-      <node id="145">
-        <label>Render/Technique/Transparent/TransparentPass.hpp</label>
-        <link refid="d0/d3c/a00971"/>
-        <childnode refid="146" relation="include">
-        </childnode>
-        <childnode refid="147" relation="include">
-        </childnode>
-      </node>
-      <node id="141">
-        <label>Render/Technique/Opaque/Lighting/LightPassShadow.hpp</label>
-        <link refid="d7/d46/a00890"/>
-        <childnode refid="142" relation="include">
-        </childnode>
-        <childnode refid="143" relation="include">
-        </childnode>
-        <childnode refid="144" relation="include">
-        </childnode>
-      </node>
-      <node id="149">
-        <label>Render/ShadowMap/ShadowMapPassDirectional.hpp</label>
-        <link refid="d0/d11/a00842"/>
-      </node>
-      <node id="134">
-        <label>Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp</label>
-        <link refid="da/d46/a00665"/>
-      </node>
-      <node id="193">
-        <label>Text/TextBillboardList.hpp</label>
-        <link refid="de/d5c/a01358"/>
-      </node>
-      <node id="163">
-        <label>Render/Passes/DownscalePass.hpp</label>
-        <link refid="d6/dc0/a00734"/>
-        <childnode refid="142" relation="include">
-        </childnode>
-        <childnode refid="143" relation="include">
-        </childnode>
-        <childnode refid="144" relation="include">
-        </childnode>
-      </node>
-      <node id="129">
+      <node id="3">
         <label>Animation/Animable.hpp</label>
+        <link refid="d0/d89/a00071"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="65" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Animation/Animation.hpp</label>
         <link refid="db/db6/a00074"/>
-        <childnode refid="130" relation="include">
+        <childnode refid="3" relation="include">
         </childnode>
-        <childnode refid="187" relation="include">
+        <childnode refid="67" relation="include">
         </childnode>
-        <childnode refid="189" relation="include">
+        <childnode refid="70" relation="include">
         </childnode>
-        <childnode refid="190" relation="include">
+        <childnode refid="71" relation="include">
         </childnode>
-      </node>
-      <node id="188">
-        <label>Text/TextMesh.hpp</label>
-        <link refid="d6/d2f/a01394"/>
-      </node>
-      <node id="140">
-        <label>Render/ShadowMap/ShadowMapDirectional.hpp</label>
-        <link refid="dc/d6e/a00833"/>
-        <childnode refid="141" relation="include">
-        </childnode>
-        <childnode refid="145" relation="include">
+        <childnode refid="72" relation="include">
         </childnode>
       </node>
-      <node id="195">
-        <label>Text/TextCamera.hpp</label>
-        <link refid="de/d1f/a01364"/>
-      </node>
-      <node id="161">
-        <label>Render/Technique/Opaque/OpaquePassResult.hpp</label>
-        <link refid="dc/d92/a00929"/>
-        <childnode refid="160" relation="include">
+      <node id="1">
+        <label>Animation/AnimationKeyFrame.hpp</label>
+        <link refid="d1/d09/a00077"/>
+        <childnode refid="2" relation="include">
         </childnode>
-        <childnode refid="142" relation="include">
+        <childnode refid="73" relation="include">
         </childnode>
-        <childnode refid="143" relation="include">
+        <childnode refid="74" relation="include">
         </childnode>
-        <childnode refid="144" relation="include">
+        <childnode refid="75" relation="include">
+        </childnode>
+        <childnode refid="78" relation="include">
         </childnode>
       </node>
-      <node id="131">
-        <label>Render/GBuffer.hpp</label>
-        <link refid="dc/df2/a00656"/>
-        <childnode refid="132" relation="include">
-        </childnode>
-        <childnode refid="138" relation="include">
-        </childnode>
-        <childnode refid="158" relation="include">
-        </childnode>
-        <childnode refid="161" relation="include">
-        </childnode>
-        <childnode refid="162" relation="include">
-        </childnode>
-      </node>
-      <node id="182">
-        <label>Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp</label>
-        <link refid="df/d39/a00950"/>
-        <childnode refid="144" relation="include">
-        </childnode>
-      </node>
-      <node id="173">
-        <label>Text/TextSkyboxBackground.hpp</label>
-        <link refid="d9/d6f/a01445"/>
-      </node>
-      <node id="202">
-        <label>Text/TextParticleSystem.hpp</label>
-        <link refid="dc/d25/a01406"/>
-      </node>
-      <node id="199">
-        <label>Scene/Light/LightFactory.hpp</label>
-        <link refid="d0/dc8/a01124"/>
-      </node>
-      <node id="184">
-        <label>Render/Voxelize/Voxelizer.hpp</label>
-        <link refid="d6/dcf/a01031"/>
-      </node>
-      <node id="204">
-        <label>Model/Mesh/Animation/MeshAnimation.hpp</label>
-        <link refid="d8/d91/a00410"/>
-      </node>
-      <node id="130">
-        <label>Material/Texture/TextureUnit.hpp</label>
-        <link refid="d8/d21/a00368"/>
-        <childnode refid="131" relation="include">
-        </childnode>
-        <childnode refid="134" relation="include">
-        </childnode>
-        <childnode refid="136" relation="include">
-        </childnode>
-        <childnode refid="137" relation="include">
-        </childnode>
-        <childnode refid="163" relation="include">
-        </childnode>
-        <childnode refid="164" relation="include">
-        </childnode>
-        <childnode refid="165" relation="include">
-        </childnode>
-        <childnode refid="166" relation="include">
-        </childnode>
-        <childnode refid="175" relation="include">
-        </childnode>
-        <childnode refid="176" relation="include">
-        </childnode>
-        <childnode refid="139" relation="include">
-        </childnode>
-        <childnode refid="148" relation="include">
-        </childnode>
-        <childnode refid="178" relation="include">
-        </childnode>
-        <childnode refid="179" relation="include">
-        </childnode>
-        <childnode refid="180" relation="include">
-        </childnode>
-        <childnode refid="159" relation="include">
-        </childnode>
-        <childnode refid="155" relation="include">
-        </childnode>
-        <childnode refid="142" relation="include">
-        </childnode>
-        <childnode refid="143" relation="include">
-        </childnode>
-        <childnode refid="156" relation="include">
-        </childnode>
-        <childnode refid="144" relation="include">
-        </childnode>
-        <childnode refid="181" relation="include">
-        </childnode>
-        <childnode refid="182" relation="include">
-        </childnode>
-        <childnode refid="157" relation="include">
-        </childnode>
-        <childnode refid="183" relation="include">
-        </childnode>
-        <childnode refid="184" relation="include">
-        </childnode>
-        <childnode refid="167" relation="include">
-        </childnode>
-        <childnode refid="172" relation="include">
-        </childnode>
-        <childnode refid="185" relation="include">
-        </childnode>
-        <childnode refid="186" relation="include">
-        </childnode>
-      </node>
-      <node id="157">
-        <label>Render/Technique/RenderTechnique.hpp</label>
-        <link refid="d3/de5/a00956"/>
-      </node>
-      <node id="136">
-        <label>Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp</label>
-        <link refid="d8/d13/a00671"/>
-      </node>
-      <node id="139">
-        <label>Render/ShadowMap/ShadowMap.hpp</label>
-        <link refid="d9/daf/a00830"/>
-        <childnode refid="140" relation="include">
-        </childnode>
-        <childnode refid="148" relation="include">
-        </childnode>
-        <childnode refid="152" relation="include">
-        </childnode>
-        <childnode refid="153" relation="include">
-        </childnode>
-        <childnode refid="154" relation="include">
-        </childnode>
-        <childnode refid="157" relation="include">
-        </childnode>
-      </node>
-      <node id="178">
-        <label>Render/Ssao/SsaoBlurPass.hpp</label>
-        <link refid="d2/d5e/a00860"/>
-      </node>
-      <node id="143">
-        <label>Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp</label>
-        <link refid="d3/dd1/a00914"/>
-      </node>
-      <node id="137">
-        <label>Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp</label>
-        <link refid="d8/d73/a00674"/>
-      </node>
-      <node id="191">
-        <label>Scene/BillboardList.hpp</label>
-        <link refid="d9/d10/a01103"/>
-        <childnode refid="192" relation="include">
-        </childnode>
-        <childnode refid="193" relation="include">
-        </childnode>
-      </node>
-      <node id="147">
-        <label>Render/Technique/Transparent/WeightedBlendRendering.hpp</label>
-        <link refid="db/d20/a00980"/>
-      </node>
-      <node id="186">
-        <label>Text/TextTextureUnit.hpp</label>
-        <link refid="d5/d67/a01466"/>
-      </node>
-      <node id="133">
-        <label>Render/GlobalIllumination/LightPropagationVolumes/GeometryInjectionPass.hpp</label>
-        <link refid="dc/df1/a00662"/>
-        <childnode refid="134" relation="include">
-        </childnode>
-      </node>
-      <node id="200">
-        <label>Text/TextLight.hpp</label>
-        <link refid="df/d68/a01385"/>
-      </node>
-      <node id="156">
-        <label>Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp</label>
-        <link refid="d6/d82/a00920"/>
-        <childnode refid="143" relation="include">
-        </childnode>
-      </node>
-      <node id="148">
-        <label>Render/ShadowMap/ShadowMapPass.hpp</label>
-        <link refid="df/de8/a00839"/>
-        <childnode refid="149" relation="include">
-        </childnode>
-        <childnode refid="150" relation="include">
-        </childnode>
-        <childnode refid="151" relation="include">
-        </childnode>
-      </node>
-      <node id="142">
-        <label>Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp</label>
-        <link refid="d7/d12/a00911"/>
-      </node>
-      <node id="146">
-        <label>Render/Technique/Transparent/TransparentResolvePass.hpp</label>
-        <link refid="d5/d6c/a00977"/>
-        <childnode refid="147" relation="include">
-        </childnode>
-      </node>
-      <node id="203">
+      <node id="67">
         <label>Material/Texture/Animation/TextureAnimation.hpp</label>
         <link refid="d1/dc6/a00347"/>
-      </node>
-      <node id="144">
-        <label>Render/Technique/Opaque/ReflectiveShadowMapGI/LightPassReflectiveShadow.hpp</label>
-        <link refid="d8/d19/a00935"/>
-      </node>
-      <node id="138">
-        <label>Render/ShadowMap/ShadowMapResult.hpp</label>
-        <link refid="d6/d2f/a00854"/>
-        <childnode refid="139" relation="include">
+        <childnode refid="68" relation="include">
         </childnode>
       </node>
-      <node id="189">
+      <node id="73">
+        <label>Material/Texture/Animation/TextureAnimationKeyFrame.hpp</label>
+        <link refid="db/d10/a00350"/>
+      </node>
+      <node id="4">
+        <label>Material/Texture/TextureUnit.hpp</label>
+        <link refid="d5/db5/a00374"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+      </node>
+      <node id="70">
+        <label>Model/Mesh/Animation/MeshAnimation.hpp</label>
+        <link refid="dc/d2f/a00425"/>
+      </node>
+      <node id="74">
+        <label>Model/Mesh/Animation/MeshAnimationKeyFrame.hpp</label>
+        <link refid="d4/dd3/a00428"/>
+      </node>
+      <node id="50">
+        <label>Model/Mesh/Mesh.hpp</label>
+        <link refid="d0/d29/a00470"/>
+        <childnode refid="51" relation="include">
+        </childnode>
+      </node>
+      <node id="71">
+        <label>Model/Skeleton/Animation/SkeletonAnimation.hpp</label>
+        <link refid="d3/d87/a00539"/>
+        <childnode refid="71" relation="include">
+        </childnode>
+      </node>
+      <node id="75">
+        <label>Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp</label>
+        <link refid="d8/deb/a00545"/>
+        <childnode refid="76" relation="include">
+        </childnode>
+      </node>
+      <node id="52">
         <label>Model/Skeleton/Skeleton.hpp</label>
-        <link refid="dd/de6/a00548"/>
+        <link refid="dc/dae/a00563"/>
       </node>
-      <node id="190">
-        <label>Scene/MovableObject.hpp</label>
-        <link refid="d1/dae/a01136"/>
-        <childnode refid="191" relation="include">
+      <node id="5">
+        <label>Render/GBuffer.hpp</label>
+        <link refid="da/d46/a00665"/>
+        <childnode refid="6" relation="include">
         </childnode>
-        <childnode refid="194" relation="include">
+        <childnode refid="12" relation="include">
         </childnode>
-        <childnode refid="196" relation="include">
+        <childnode refid="24" relation="include">
         </childnode>
-        <childnode refid="198" relation="include">
+        <childnode refid="27" relation="include">
         </childnode>
-        <childnode refid="201" relation="include">
-        </childnode>
-      </node>
-      <node id="183">
-        <label>Render/ToTexture/Texture3DTo2D.hpp</label>
-        <link refid="d0/d2b/a01010"/>
-      </node>
-      <node id="167">
-        <label>Scene/Background/Background.hpp</label>
-        <link refid="dd/df1/a01082"/>
-        <childnode refid="168" relation="include">
-        </childnode>
-        <childnode refid="170" relation="include">
-        </childnode>
-        <childnode refid="172" relation="include">
-        </childnode>
-        <childnode refid="174" relation="include">
+        <childnode refid="28" relation="include">
         </childnode>
       </node>
-      <node id="128">
-        <label>Animation/Animation.hpp</label>
-        <link refid="d1/d09/a00077"/>
-        <childnode refid="129" relation="include">
-        </childnode>
-        <childnode refid="203" relation="include">
-        </childnode>
-        <childnode refid="204" relation="include">
-        </childnode>
-        <childnode refid="205" relation="include">
+      <node id="7">
+        <label>Render/GlobalIllumination/LightPropagationVolumes/GeometryInjectionPass.hpp</label>
+        <link refid="d8/d13/a00671"/>
+        <childnode refid="8" relation="include">
         </childnode>
       </node>
-      <node id="180">
-        <label>Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp</label>
-        <link refid="d5/dd3/a00902"/>
-        <childnode refid="160" relation="include">
-        </childnode>
+      <node id="8">
+        <label>Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp</label>
+        <link refid="d8/d73/a00674"/>
       </node>
-      <node id="135">
+      <node id="9">
         <label>Render/GlobalIllumination/LightPropagationVolumes/LightInjectionPass.hpp</label>
-        <link refid="d0/d5c/a00668"/>
-        <childnode refid="134" relation="include">
+        <link refid="dc/de4/a00677"/>
+        <childnode refid="8" relation="include">
         </childnode>
       </node>
-      <node id="159">
-        <label>Render/Technique/Opaque/LightingPass.hpp</label>
-        <link refid="da/d5b/a00905"/>
-        <childnode refid="160" relation="include">
+      <node id="10">
+        <label>Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp</label>
+        <link refid="d4/d9b/a00680"/>
+      </node>
+      <node id="11">
+        <label>Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp</label>
+        <link refid="db/d77/a00683"/>
+      </node>
+      <node id="6">
+        <label>Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp</label>
+        <link refid="d1/d87/a00689"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
         </childnode>
       </node>
-      <node id="197">
-        <label>Text/TextGeometry.hpp</label>
-        <link refid="d2/d29/a01376"/>
-      </node>
-      <node id="192">
-        <label>Render/Node/RenderNode_Render.hpp</label>
+      <node id="29">
+        <label>Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp</label>
         <link refid="d4/d6a/a00704"/>
       </node>
-      <node id="165">
+      <node id="30">
+        <label>Render/PBR/IblTextures.hpp</label>
+        <link refid="d8/dba/a00773"/>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+      </node>
+      <node id="39">
+        <label>Render/Passes/DownscalePass.hpp</label>
+        <link refid="d0/d0a/a00743"/>
+      </node>
+      <node id="40">
+        <label>Render/Passes/GaussianBlur.hpp</label>
+        <link refid="d4/dfa/a00746"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+      </node>
+      <node id="41">
         <label>Render/Passes/LineariseDepthPass.hpp</label>
-        <link refid="dc/dce/a00740"/>
+        <link refid="d5/de8/a00749"/>
       </node>
-      <node id="185">
+      <node id="42">
+        <label>Render/PostEffect/PostEffect.hpp</label>
+        <link refid="d3/d00/a00785"/>
+      </node>
+      <node id="43">
+        <label>Render/RenderTarget.hpp</label>
+        <link refid="dc/d6e/a00833"/>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>Render/ShadowMap/ShadowMap.hpp</label>
+        <link refid="df/de8/a00839"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>Render/ShadowMap/ShadowMapDirectional.hpp</label>
+        <link refid="d0/d11/a00842"/>
+        <childnode refid="15" relation="include">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>Render/ShadowMap/ShadowMapPass.hpp</label>
+        <link refid="d9/d30/a00848"/>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>Render/ShadowMap/ShadowMapPassDirectional.hpp</label>
+        <link refid="df/d4c/a00851"/>
+      </node>
+      <node id="19">
+        <label>Render/ShadowMap/ShadowMapPassPoint.hpp</label>
+        <link refid="d6/d2f/a00854"/>
+      </node>
+      <node id="20">
+        <label>Render/ShadowMap/ShadowMapPassSpot.hpp</label>
+        <link refid="d0/d82/a00857"/>
+      </node>
+      <node id="21">
+        <label>Render/ShadowMap/ShadowMapPoint.hpp</label>
+        <link refid="d2/d5e/a00860"/>
+        <childnode refid="15" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>Render/ShadowMap/ShadowMapResult.hpp</label>
+        <link refid="d7/d49/a00863"/>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+      <node id="22">
+        <label>Render/ShadowMap/ShadowMapSpot.hpp</label>
+        <link refid="dd/db2/a00866"/>
+        <childnode refid="15" relation="include">
+        </childnode>
+      </node>
+      <node id="45">
+        <label>Render/Ssao/SsaoRawAOPass.hpp</label>
+        <link refid="d5/d69/a00878"/>
+      </node>
+      <node id="25">
+        <label>Render/Technique/Opaque/DeferredRendering.hpp</label>
+        <link refid="dd/d08/a00884"/>
+      </node>
+      <node id="24">
+        <label>Render/Technique/Opaque/Lighting/LightPassResult.hpp</label>
+        <link refid="d3/d8a/a00899"/>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+      </node>
+      <node id="46">
+        <label>Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp</label>
+        <link refid="da/d5b/a00905"/>
+      </node>
+      <node id="26">
+        <label>Render/Technique/Opaque/LightingPass.hpp</label>
+        <link refid="d0/d85/a00908"/>
+      </node>
+      <node id="27">
+        <label>Render/Technique/Opaque/OpaquePassResult.hpp</label>
+        <link refid="d4/ddc/a00917"/>
+        <childnode refid="25" relation="include">
+        </childnode>
+      </node>
+      <node id="23">
+        <label>Render/Technique/RenderTechnique.hpp</label>
+        <link refid="df/de9/a00923"/>
+      </node>
+      <node id="15">
+        <label>Render/Technique/Transparent/TransparentPass.hpp</label>
+        <link refid="d6/dad/a00941"/>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="28">
+        <label>Render/Technique/Transparent/TransparentPassResult.hpp</label>
+        <link refid="d9/dce/a00944"/>
+      </node>
+      <node id="16">
+        <label>Render/Technique/Transparent/WeightedBlendRendering.hpp</label>
+        <link refid="d3/d29/a00947"/>
+      </node>
+      <node id="47">
+        <label>Render/ToTexture/Texture3DTo2D.hpp</label>
+        <link refid="d5/d6c/a00977"/>
+      </node>
+      <node id="72">
+        <label>Scene/Animation/SceneNodeAnimation.hpp</label>
+        <link refid="de/def/a01016"/>
+      </node>
+      <node id="78">
+        <label>Scene/Animation/SceneNodeAnimationKeyFrame.hpp</label>
+        <link refid="db/daf/a01019"/>
+      </node>
+      <node id="77">
+        <label>Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp</label>
+        <link refid="d1/dd8/a01022"/>
+      </node>
+      <node id="76">
+        <label>Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp</label>
+        <link refid="db/d08/a01028"/>
+        <childnode refid="77" relation="include">
+        </childnode>
+      </node>
+      <node id="31">
+        <label>Scene/Background/Background.hpp</label>
+        <link refid="db/d14/a01040"/>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+      </node>
+      <node id="32">
+        <label>Scene/Background/Colour.hpp</label>
+        <link refid="d0/d22/a01049"/>
+        <childnode refid="33" relation="include">
+        </childnode>
+      </node>
+      <node id="34">
+        <label>Scene/Background/Image.hpp</label>
+        <link refid="d9/dce/a01052"/>
+        <childnode refid="35" relation="include">
+        </childnode>
+      </node>
+      <node id="36">
+        <label>Scene/Background/Skybox.hpp</label>
+        <link refid="d2/d71/a01055"/>
+        <childnode refid="37" relation="include">
+        </childnode>
+      </node>
+      <node id="54">
+        <label>Scene/BillboardList.hpp</label>
+        <link refid="de/d9e/a01061"/>
+        <childnode refid="55" relation="include">
+        </childnode>
+      </node>
+      <node id="56">
+        <label>Scene/Camera.hpp</label>
+        <link refid="d9/db3/a01064"/>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+      </node>
+      <node id="58">
+        <label>Scene/Geometry.hpp</label>
+        <link refid="d5/d67/a01070"/>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="59" relation="include">
+        </childnode>
+      </node>
+      <node id="60">
+        <label>Scene/Light/Light.hpp</label>
+        <link refid="d6/d80/a01076"/>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+      </node>
+      <node id="61">
+        <label>Scene/Light/LightFactory.hpp</label>
+        <link refid="dd/df1/a01082"/>
+      </node>
+      <node id="53">
+        <label>Scene/MovableObject.hpp</label>
+        <link refid="d6/dea/a01094"/>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+      </node>
+      <node id="48">
         <label>Scene/ParticleSystem/ComputeParticleSystem.hpp</label>
-        <link refid="d5/d3e/a01139"/>
+        <link refid="d1/dfa/a01097"/>
       </node>
-      <node id="169">
+      <node id="63">
+        <label>Scene/ParticleSystem/ParticleSystem.hpp</label>
+        <link refid="dd/d09/a01118"/>
+        <childnode refid="64" relation="include">
+        </childnode>
+      </node>
+      <node id="68">
+        <label>Scene/SceneFileParser.hpp</label>
+        <link refid="db/d28/a01133"/>
+        <childnode refid="69" relation="include">
+        </childnode>
+      </node>
+      <node id="69">
+        <label>Scene/SceneFileParser_Parsers.hpp</label>
+        <link refid="d1/dae/a01136"/>
+      </node>
+      <node id="65">
+        <label>Scene/SceneNode.hpp</label>
+        <link refid="d3/ddc/a01142"/>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="66" relation="include">
+        </childnode>
+      </node>
+      <node id="38">
+        <label>Text/TextBackground.hpp</label>
+        <link refid="d5/da7/a01283"/>
+      </node>
+      <node id="55">
+        <label>Text/TextBillboardList.hpp</label>
+        <link refid="d0/d00/a01286"/>
+      </node>
+      <node id="57">
+        <label>Text/TextCamera.hpp</label>
+        <link refid="d8/d7a/a01292"/>
+      </node>
+      <node id="33">
         <label>Text/TextColourBackground.hpp</label>
+        <link refid="d2/d68/a01295"/>
+      </node>
+      <node id="59">
+        <label>Text/TextGeometry.hpp</label>
+        <link refid="d6/dae/a01304"/>
+      </node>
+      <node id="35">
+        <label>Text/TextImageBackground.hpp</label>
+        <link refid="da/d79/a01310"/>
+      </node>
+      <node id="62">
+        <label>Text/TextLight.hpp</label>
+        <link refid="de/d90/a01313"/>
+      </node>
+      <node id="51">
+        <label>Text/TextMesh.hpp</label>
+        <link refid="d5/df4/a01322"/>
+      </node>
+      <node id="64">
+        <label>Text/TextParticleSystem.hpp</label>
+        <link refid="dc/d8e/a01331"/>
+      </node>
+      <node id="44">
+        <label>Text/TextRenderTarget.hpp</label>
+        <link refid="d9/de4/a01346"/>
+      </node>
+      <node id="66">
+        <label>Text/TextSceneNode.hpp</label>
+        <link refid="d2/d1f/a01361"/>
+      </node>
+      <node id="37">
+        <label>Text/TextSkyboxBackground.hpp</label>
         <link refid="dd/d86/a01367"/>
       </node>
-      <node id="179">
-        <label>Render/Ssao/SsaoRawAOPass.hpp</label>
-        <link refid="d3/db2/a00869"/>
-      </node>
-      <node id="166">
-        <label>Render/PBR/IblTextures.hpp</label>
-        <link refid="d3/d4f/a00761"/>
-        <childnode refid="167" relation="include">
-        </childnode>
-        <childnode refid="172" relation="include">
-        </childnode>
-      </node>
-      <node id="205">
-        <label>Model/Skeleton/Animation/SkeletonAnimation.hpp</label>
-        <link refid="d9/d24/a00524"/>
-        <childnode refid="205" relation="include">
-        </childnode>
-      </node>
-      <node id="132">
-        <label>Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp</label>
-        <link refid="d4/d9b/a00680"/>
-        <childnode refid="133" relation="include">
-        </childnode>
-        <childnode refid="134" relation="include">
-        </childnode>
-        <childnode refid="135" relation="include">
-        </childnode>
-        <childnode refid="136" relation="include">
-        </childnode>
-        <childnode refid="137" relation="include">
-        </childnode>
-      </node>
-      <node id="150">
-        <label>Render/ShadowMap/ShadowMapPassPoint.hpp</label>
-        <link refid="d7/dcf/a00845"/>
-      </node>
-      <node id="158">
-        <label>Render/Technique/Opaque/Lighting/LightPassResult.hpp</label>
-        <link refid="d7/d92/a00887"/>
-        <childnode refid="159" relation="include">
-        </childnode>
-        <childnode refid="142" relation="include">
-        </childnode>
-        <childnode refid="144" relation="include">
-        </childnode>
-      </node>
-      <node id="170">
-        <label>Scene/Background/Image.hpp</label>
-        <link refid="d6/dea/a01094"/>
-        <childnode refid="171" relation="include">
-        </childnode>
-      </node>
-      <node id="201">
-        <label>Scene/ParticleSystem/ParticleSystem.hpp</label>
-        <link refid="da/d20/a01160"/>
-        <childnode refid="202" relation="include">
-        </childnode>
+      <node id="49">
+        <label>Text/TextTextureUnit.hpp</label>
+        <link refid="df/d68/a01385"/>
       </node>
     </invincdepgraph>
-    <innerclass refid="d4/ddd/a02040" prot="public">castor3d::AnimationT</innerclass>
-    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <innerclass refid="d2/d9a/a02227" prot="public">castor3d::AnimationKeyFrame</innerclass>
+    <innernamespace refid="da/de3/a01398">castor3d</innernamespace>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Animation/Animation.hpp"/>
+    <location file="Animation/AnimationKeyFrame.hpp"/>
   </compounddef>
 </doxygen>

@@ -1,0 +1,6 @@
+<map id="castor3d::CpuEventCleanerT::operator()" name="castor3d::CpuEventCleanerT::operator()">
+<area shape="rect" id="node1" title=" " alt="" coords="5,39,184,80"/>
+<area shape="rect" id="node2" href="$d0/d95/a01389.html#a0a328c389f0ad9363871aca64b56a1b3" title="Helper function to create a cleanup event." alt="" coords="232,5,415,47"/>
+<area shape="rect" id="node4" href="$d6/d87/a02734.html#a2c62573911a7ed3c2149fd37a7de9df0" title="Puts an event in the corresponding array." alt="" coords="242,71,405,112"/>
+<area shape="rect" id="node3" href="$d0/d95/a01389.html#a40644dcb72161d3c8a9066ca245f0e7d" title="Helper function to create a functor event." alt="" coords="463,5,641,47"/>
+</map>

@@ -1,82 +1,116 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d7/dc4/a02479" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayInitialiser</compoundname>
-    <includes local="no">OverlayCache.hpp</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d7/dc4/a02479_1af9e6fed7fa62f586c21bd7abd37d91fa" prot="private" static="no" mutable="no">
-        <type><ref refid="d7/dd1/a01458_1a6573844f0848fb7a4664ac788b817e88" kindref="member">OverlayCategorySet</ref> &amp;</type>
-        <definition>OverlayCategorySet&amp; castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayInitialiser::m_overlays</definition>
-        <argsstring></argsstring>
-        <name>m_overlays</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="70" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="70" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/dc4/a02479_1a09689d3473873ca4f89ad2fcfb1b2425" prot="private" static="no" mutable="no">
-        <type>std::vector&lt; int &gt; &amp;</type>
-        <definition>std::vector&lt; int &gt;&amp; castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayInitialiser::m_overlayCountPerLevel</definition>
-        <argsstring></argsstring>
-        <name>m_overlayCountPerLevel</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="71" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="71" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d7/dc4/a02479_1ad06cc612c33615b1c59b9a275fa8b0b0" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayInitialiser::OverlayInitialiser</definition>
-        <argsstring>(Cache&lt; Overlay, castor::String &gt; &amp;cache)</argsstring>
-        <name>OverlayInitialiser</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d7/dc4/a02479" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ChunkWriterBase</compoundname>
+    <derivedcompoundref refid="d3/de3/a02483" prot="public" virt="non-virtual">castor3d::ChunkWriter&lt; T &gt;</derivedcompoundref>
+    <derivedcompoundref refid="d6/d9a/a02491" prot="public" virt="non-virtual">castor3d::ChunkWriter&lt; castor::Path &gt;</derivedcompoundref>
+    <derivedcompoundref refid="d1/d50/a02487" prot="public" virt="non-virtual">castor3d::ChunkWriter&lt; castor::String &gt;</derivedcompoundref>
+    <includes local="no">ChunkWriter.hpp</includes>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d7/dc4/a02479_1a6d5639d69c83f6b59094817e85f17398" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool castor3d::ChunkWriterBase::write</definition>
+        <argsstring>(uint8_t const *begin, uint8_t const *end, ChunkType type, BinaryChunk &amp;chunk)</argsstring>
+        <name>write</name>
+        <qualifiedname>castor3d::ChunkWriterBase::write</qualifiedname>
         <param>
-          <type><ref refid="dd/d1b/a02351" kindref="compound">Cache</ref>&lt; <ref refid="da/d33/a04079" kindref="compound">Overlay</ref>, castor::String &gt; &amp;</type>
-          <declname>cache</declname>
+          <type>uint8_t const *</type>
+          <declname>begin</declname>
+        </param>
+        <param>
+          <type>uint8_t const *</type>
+          <declname>end</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d3b/a02291" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
         </param>
         <briefdescription>
+<para>Writes a subchunk value into a chunk. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">begin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The values begin </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">end</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The values end </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The subchunk type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="66" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/dc4/a02479_1a557a74cbad6622f39684a7e2344e9fce" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayInitialiser::operator()</definition>
-        <argsstring>(OverlaySPtr element)</argsstring>
-        <name>operator()</name>
-        <param>
-          <type>OverlaySPtr</type>
-          <declname>element</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="67" column="1"/>
+        <location file="Binary/ChunkWriter.hpp" line="32" column="20" bodyfile="Binary/ChunkWriter.hpp" bodystart="32" bodyend="51"/>
+        <references refid="dd/d3b/a02291_1a05ffb50a92f97be91612f8f91ceeed8e">castor3d::BinaryChunk::addSubChunk</references>
+        <references refid="dd/d3b/a02291_1aa21722c40ca9e697b02b6612e81e41c9" compoundref="d9/d77/a00095" startline="307" endline="311">castor3d::BinaryChunk::setData</references>
+        <referencedby refid="d6/d9a/a02491_1afdeae129e73ddd2c7980afdd4441dba0" compoundref="da/d1e/a00149" startline="201" endline="219">castor3d::ChunkWriter&lt; castor::Path &gt;::write</referencedby>
+        <referencedby refid="d1/d50/a02487_1a3f0c739cc3dd42610e348f722ee20506" compoundref="da/d1e/a00149" startline="153" endline="171">castor3d::ChunkWriter&lt; castor::String &gt;::write</referencedby>
+        <referencedby refid="d3/de3/a02483_1ac4cf51584e348def2f360b81e6ec7a9a" compoundref="da/d1e/a00149" startline="83" endline="99">castor3d::ChunkWriter&lt; T &gt;::write</referencedby>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Cache/OverlayCache.hpp" line="65" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="64" bodyend="72"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::ChunkWriter&lt; T &gt;</label>
+        <link refid="d3/de3/a02483"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::ChunkWriter&lt; castor::Path &gt;</label>
+        <link refid="d6/d9a/a02491"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::ChunkWriter&lt; castor::String &gt;</label>
+        <link refid="d1/d50/a02487"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ChunkWriterBase</label>
+        <link refid="d7/dc4/a02479"/>
+      </node>
+    </inheritancegraph>
+    <location file="Binary/ChunkWriter.hpp" line="13" column="1" bodyfile="Binary/ChunkWriter.hpp" bodystart="14" bodyend="52"/>
     <listofallmembers>
-      <member refid="d7/dc4/a02479_1a09689d3473873ca4f89ad2fcfb1b2425" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayInitialiser</scope><name>m_overlayCountPerLevel</name></member>
-      <member refid="d7/dc4/a02479_1af9e6fed7fa62f586c21bd7abd37d91fa" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayInitialiser</scope><name>m_overlays</name></member>
-      <member refid="d7/dc4/a02479_1a557a74cbad6622f39684a7e2344e9fce" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayInitialiser</scope><name>operator()</name></member>
-      <member refid="d7/dc4/a02479_1ad06cc612c33615b1c59b9a275fa8b0b0" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayInitialiser</scope><name>OverlayInitialiser</name></member>
+      <member refid="d7/dc4/a02479_1a6d5639d69c83f6b59094817e85f17398" prot="public" virt="non-virtual"><scope>castor3d::ChunkWriterBase</scope><name>write</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,6 +1,8 @@
-<map id="castor3d::PipelineVisitor" name="castor3d::PipelineVisitor">
-<area shape="rect" id="node1" title=" " alt="" coords="119,80,282,107"/>
-<area shape="rect" id="node3" href="$d6/d45/a04907.html" title=" " alt="" coords="5,155,185,196"/>
-<area shape="rect" id="node4" href="$d2/d77/a04939.html" title=" " alt="" coords="210,162,405,189"/>
-<area shape="rect" id="node2" href="$d7/dab/a03815.html" title=" " alt="" coords="104,5,297,32"/>
+<map id="castor3d::DepthPass" name="castor3d::DepthPass">
+<area shape="rect" id="node1" title=" " alt="" coords="197,229,341,256"/>
+<area shape="rect" id="node2" href="$df/d48/a04287.html" title=" " alt="" coords="164,155,375,181"/>
+<area shape="rect" id="node3" href="$d4/d54/a04055.html" title=" " alt="" coords="175,80,363,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,5,192,32"/>
+<area shape="rect" id="node5" title=" " alt="" coords="216,5,323,32"/>
+<area shape="rect" id="node6" title=" " alt="" coords="347,5,466,32"/>
 </map>

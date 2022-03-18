@@ -1,60 +1,96 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d5/d2c/a04678" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::ShadowMapPoint::FrameBuffer</compoundname>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d5/d2c/a04678" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::LightBuffer::Float4x4</compoundname>
+    <includes local="no">LightBuffer.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d5/d2c/a04678_1ad6e84448af2325515773b403c1925ea7" prot="public" static="no" mutable="no">
-        <type>std::array&lt; ashes::ImageView, size_t(<ref refid="de/d13/a01473_1afd8c72a6b5ba8d1f784bec682765751cae558bb69fadec037d9eae46601a4df8e" kindref="member">SmTexture::eCount</ref>) &gt;</type>
-        <definition>std::array&lt; ashes::ImageView, size_t( SmTexture::eCount ) &gt; castor3d::ShadowMapPoint::FrameBuffer::views</definition>
+      <memberdef kind="variable" id="d5/d2c/a04678_1a2efb4a5929c0af4c2f28f0a0e12ae21d" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/de4/a04674" kindref="compound">Float4</ref></type>
+        <definition>Float4 castor3d::LightBuffer::Float4x4::c0</definition>
         <argsstring></argsstring>
-        <name>views</name>
+        <name>c0</name>
+        <qualifiedname>castor3d::LightBuffer::Float4x4::c0</qualifiedname>
+        <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPoint.hpp" line="75" column="1" bodyfile="Render/ShadowMap/ShadowMapPoint.hpp" bodystart="75" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="75" column="8" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="75" bodyend="-1"/>
+        <referencedby refid="d5/d2c/a04678_1af4d5f2ccd4d55848c8ac48be67e51d27" compoundref="da/d20/a01160" startline="66" endline="73">operator=</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="d5/d2c/a04678_1ab3977d258f033d6a4bbebdce337ea1ae" prot="public" static="no" mutable="no">
-        <type>ashes::ImageView</type>
-        <definition>ashes::ImageView castor3d::ShadowMapPoint::FrameBuffer::varianceView</definition>
+      <memberdef kind="variable" id="d5/d2c/a04678_1a372c2c3f7efcc62a4e95047223847091" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/de4/a04674" kindref="compound">Float4</ref></type>
+        <definition>Float4 castor3d::LightBuffer::Float4x4::c1</definition>
         <argsstring></argsstring>
-        <name>varianceView</name>
+        <name>c1</name>
+        <qualifiedname>castor3d::LightBuffer::Float4x4::c1</qualifiedname>
+        <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPoint.hpp" line="76" column="1" bodyfile="Render/ShadowMap/ShadowMapPoint.hpp" bodystart="76" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="76" column="8" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="76" bodyend="-1"/>
+        <referencedby refid="d5/d2c/a04678_1af4d5f2ccd4d55848c8ac48be67e51d27" compoundref="da/d20/a01160" startline="66" endline="73">operator=</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="d5/d2c/a04678_1a51403f93a48329a990585832a352c8ca" prot="public" static="no" mutable="no">
-        <type>ashes::FrameBufferPtr</type>
-        <definition>ashes::FrameBufferPtr castor3d::ShadowMapPoint::FrameBuffer::frameBuffer</definition>
+      <memberdef kind="variable" id="d5/d2c/a04678_1a4933e6cc88270cd06281a2e0fecc2e3e" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/de4/a04674" kindref="compound">Float4</ref></type>
+        <definition>Float4 castor3d::LightBuffer::Float4x4::c2</definition>
         <argsstring></argsstring>
-        <name>frameBuffer</name>
+        <name>c2</name>
+        <qualifiedname>castor3d::LightBuffer::Float4x4::c2</qualifiedname>
+        <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPoint.hpp" line="77" column="1" bodyfile="Render/ShadowMap/ShadowMapPoint.hpp" bodystart="77" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="77" column="8" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="77" bodyend="-1"/>
+        <referencedby refid="d5/d2c/a04678_1af4d5f2ccd4d55848c8ac48be67e51d27" compoundref="da/d20/a01160" startline="66" endline="73">operator=</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="d5/d2c/a04678_1a2ecc8f7a4cae558225358bbb718d3aec" prot="public" static="no" mutable="no">
-        <type><ref refid="db/da9/a04374" kindref="compound">CommandsSemaphore</ref></type>
-        <definition>CommandsSemaphore castor3d::ShadowMapPoint::FrameBuffer::blurCommands</definition>
+      <memberdef kind="variable" id="d5/d2c/a04678_1a163f574b774f0802a7299958c82184ed" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/de4/a04674" kindref="compound">Float4</ref></type>
+        <definition>Float4 castor3d::LightBuffer::Float4x4::c3</definition>
         <argsstring></argsstring>
-        <name>blurCommands</name>
-        <initializer>{ nullptr, nullptr }</initializer>
+        <name>c3</name>
+        <qualifiedname>castor3d::LightBuffer::Float4x4::c3</qualifiedname>
+        <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPoint.hpp" line="78" column="1" bodyfile="Render/ShadowMap/ShadowMapPoint.hpp" bodystart="78" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="78" column="8" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="78" bodyend="-1"/>
+        <referencedby refid="d5/d2c/a04678_1af4d5f2ccd4d55848c8ac48be67e51d27" compoundref="da/d20/a01160" startline="66" endline="73">operator=</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/d2c/a04678_1af4d5f2ccd4d55848c8ac48be67e51d27" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d2c/a04678" kindref="compound">Float4x4</ref> &amp;</type>
+        <definition>Float4x4 &amp; castor3d::LightBuffer::Float4x4::operator=</definition>
+        <argsstring>(castor::Matrix4x4f const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::LightBuffer::Float4x4::operator=</qualifiedname>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="66" column="11" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="66" bodyend="73"/>
+        <references refid="d5/d2c/a04678_1a2efb4a5929c0af4c2f28f0a0e12ae21d" compoundref="da/d20/a01160" startline="75">c0</references>
+        <references refid="d5/d2c/a04678_1a372c2c3f7efcc62a4e95047223847091" compoundref="da/d20/a01160" startline="76">c1</references>
+        <references refid="d5/d2c/a04678_1a4933e6cc88270cd06281a2e0fecc2e3e" compoundref="da/d20/a01160" startline="77">c2</references>
+        <references refid="d5/d2c/a04678_1a163f574b774f0802a7299958c82184ed" compoundref="da/d20/a01160" startline="78">c3</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -62,41 +98,28 @@
     <detaileddescription>
     </detaileddescription>
     <collaborationgraph>
-      <node id="3870">
-        <label>T</label>
+      <node id="2">
+        <label>castor3d::LightBuffer::Float4</label>
+        <link refid="d7/de4/a04674"/>
       </node>
-      <node id="3868">
-        <label>std::array&lt; ashes::ImageView, size_t(SmTexture::eCount) &gt;</label>
-        <childnode refid="3869" relation="template-instance">
-          <edgelabel>&lt; ashes::ImageView, size_t(SmTexture::eCount) &gt;</edgelabel>
+      <node id="1">
+        <label>castor3d::LightBuffer::Float4x4</label>
+        <link refid="d5/d2c/a04678"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>c0</edgelabel>
+          <edgelabel>c1</edgelabel>
+          <edgelabel>c2</edgelabel>
+          <edgelabel>c3</edgelabel>
         </childnode>
-      </node>
-      <node id="3869">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="3870" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="3866">
-        <label>castor3d::ShadowMapPoint::FrameBuffer</label>
-        <childnode refid="3867" relation="usage">
-          <edgelabel>blurCommands</edgelabel>
-        </childnode>
-        <childnode refid="3868" relation="usage">
-          <edgelabel>views</edgelabel>
-        </childnode>
-      </node>
-      <node id="3867">
-        <label>castor3d::CommandsSemaphore</label>
-        <link refid="db/da9/a04374"/>
       </node>
     </collaborationgraph>
-    <location file="Render/ShadowMap/ShadowMapPoint.hpp" line="74" column="1" bodyfile="Render/ShadowMap/ShadowMapPoint.hpp" bodystart="73" bodyend="79"/>
+    <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="64" column="1" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="65" bodyend="79"/>
     <listofallmembers>
-      <member refid="d5/d2c/a04678_1a2ecc8f7a4cae558225358bbb718d3aec" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPoint::FrameBuffer</scope><name>blurCommands</name></member>
-      <member refid="d5/d2c/a04678_1a51403f93a48329a990585832a352c8ca" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPoint::FrameBuffer</scope><name>frameBuffer</name></member>
-      <member refid="d5/d2c/a04678_1ab3977d258f033d6a4bbebdce337ea1ae" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPoint::FrameBuffer</scope><name>varianceView</name></member>
-      <member refid="d5/d2c/a04678_1ad6e84448af2325515773b403c1925ea7" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPoint::FrameBuffer</scope><name>views</name></member>
+      <member refid="d5/d2c/a04678_1a2efb4a5929c0af4c2f28f0a0e12ae21d" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::Float4x4</scope><name>c0</name></member>
+      <member refid="d5/d2c/a04678_1a372c2c3f7efcc62a4e95047223847091" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::Float4x4</scope><name>c1</name></member>
+      <member refid="d5/d2c/a04678_1a4933e6cc88270cd06281a2e0fecc2e3e" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::Float4x4</scope><name>c2</name></member>
+      <member refid="d5/d2c/a04678_1a163f574b774f0802a7299958c82184ed" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::Float4x4</scope><name>c3</name></member>
+      <member refid="d5/d2c/a04678_1af4d5f2ccd4d55848c8ac48be67e51d27" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::Float4x4</scope><name>operator=</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

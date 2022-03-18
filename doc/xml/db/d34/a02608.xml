@@ -1,42 +1,189 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="db/d34/a02608" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::PassTyper&lt; MaterialType::eMetallicRoughness &gt;</compoundname>
-    <includes local="no">PassModule.hpp</includes>
+    <compoundname>castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;::MeshPoolsEntry</compoundname>
+    <includes local="no">AnimatedObjectGroupCache.hpp</includes>
     <templateparamlist>
     </templateparamlist>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="db/d34/a02608_1adc1b6bbbade2f9f35965368d1825b368" prot="public" static="no">
-        <type><ref refid="d1/df5/a02592" kindref="compound">MetallicRoughnessPbrPass</ref></type>
-        <definition>using castor3d::PassTyper&lt; MaterialType::eMetallicRoughness &gt;::Type =  MetallicRoughnessPbrPass</definition>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/d34/a02608_1a8cfc17145d33ca7fd619bf3996dd6ece" prot="public" static="no" mutable="no">
+        <type><ref refid="de/d79/a04372" kindref="compound">castor3d::AnimatedObjectGroup</ref> const  &amp;</type>
+        <definition>castor3d::AnimatedObjectGroup const&amp; castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;::MeshPoolsEntry::group</definition>
         <argsstring></argsstring>
-        <name>Type</name>
+        <name>group</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;::MeshPoolsEntry::group</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Pass/PassModule.hpp" line="213" column="1" bodyfile="Material/Pass/PassModule.hpp" bodystart="213" bodyend="-1"/>
+        <location file="Cache/AnimatedObjectGroupCache.hpp" line="42" column="38" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d34/a02608_1ac3de6819aef1c5ea76500a15fa5af4c7" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/dd1/a04364" kindref="compound">castor3d::AnimatedMesh</ref> const  &amp;</type>
+        <definition>castor3d::AnimatedMesh const&amp; castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;::MeshPoolsEntry::mesh</definition>
+        <argsstring></argsstring>
+        <name>mesh</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;::MeshPoolsEntry::mesh</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/AnimatedObjectGroupCache.hpp" line="43" column="31" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="43" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Helper class to retrieve a pass type from a MaterialType. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
-</simplesect>
-<simplesect kind="version"><para>0.9.0 </para>
-</simplesect>
-<simplesect kind="date"><para>02/12/2016</para>
-</simplesect>
-<simplesect kind="remark"><para>Specialisation for <ref refid="da/d1e/a01479_1a90306964da63b9bbc97f4e205ecc5b7aa070a8071cbe82751a559d66b7cc85024" kindref="member">MaterialType::eMetallicRoughness</ref>. </para>
-</simplesect>
-</para>
     </detaileddescription>
-    <location file="Material/Pass/PassModule.hpp" line="212" column="1" bodyfile="Material/Pass/PassModule.hpp" bodystart="211" bodyend="214"/>
+    <collaborationgraph>
+      <node id="8">
+        <label>Animable</label>
+        <link refid="d8/d5f/a02216"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>K</label>
+      </node>
+      <node id="13">
+        <label>T</label>
+      </node>
+      <node id="14">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d8/d5f/a02216"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::AnimatedMesh</label>
+        <link refid="d3/dd1/a04364"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_mesh</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="usage">
+          <edgelabel>m_geometry</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::AnimatedObject</label>
+        <link refid="d1/d13/a04368"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::AnimatedObjectGroup</label>
+        <link refid="de/d79/a04372"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor3d::Geometry</label>
+        <link refid="d0/d0c/a04484"/>
+        <childnode refid="17" relation="public-inheritance">
+        </childnode>
+        <childnode refid="20" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::Mesh</label>
+        <link refid="d1/d24/a03336"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::MovableObject</label>
+        <link refid="d9/dbb/a04524"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor3d::RenderedObject</label>
+        <link refid="dc/d0d/a04588"/>
+        <childnode refid="21" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor3d::SceneNode</label>
+        <link refid="d4/d6d/a04636"/>
+        <childnode refid="19" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+      <node id="15">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="9">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;::MeshPoolsEntry</label>
+        <link refid="db/d34/a02608"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>group</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>mesh</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>std::enable_shared_from_this&lt; RenderedObject &gt;</label>
+      </node>
+      <node id="19">
+        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
+      </node>
+      <node id="11">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="12" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Cache/AnimatedObjectGroupCache.hpp" line="40" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="41" bodyend="44"/>
     <listofallmembers>
-      <member refid="db/d34/a02608_1adc1b6bbbade2f9f35965368d1825b368" prot="public" virt="non-virtual"><scope>castor3d::PassTyper&lt; MaterialType::eMetallicRoughness &gt;</scope><name>Type</name></member>
+      <member refid="db/d34/a02608_1a8cfc17145d33ca7fd619bf3996dd6ece" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;::MeshPoolsEntry</scope><name>group</name></member>
+      <member refid="db/d34/a02608_1ac3de6819aef1c5ea76500a15fa5af4c7" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;::MeshPoolsEntry</scope><name>mesh</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

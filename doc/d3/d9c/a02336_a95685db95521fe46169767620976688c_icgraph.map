@@ -1,0 +1,5 @@
+<map id="castor3d::BinaryWriterBase::doWriteChunk" name="castor3d::BinaryWriterBase::doWriteChunk">
+<area shape="rect" id="node1" title="Writes a subchunk value into a chunk." alt="" coords="467,29,649,71"/>
+<area shape="rect" id="node2" href="$d3/d9c/a02336.html#a8828d359b7a61ea2b657d5aada2dd87b" title="Writes the header chunk." alt="" coords="236,29,419,71"/>
+<area shape="rect" id="node3" href="$d3/d9c/a02336.html#a21e7985d2f99ff20a6056d198aac07c5" title="Writes an object to a file." alt="" coords="5,29,188,71"/>
+</map>

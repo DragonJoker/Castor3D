@@ -1,33 +1,149 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="de/d3e/a02727" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkBufferViewCreateInfo &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
+    <compoundname>castor3d::CpuEventCleanerT</compoundname>
+    <includes local="no">CpuFunctorEvent.hpp</includes>
     <templateparamlist>
+      <param>
+        <type>typename CacheT</type>
+      </param>
     </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="de/d3e/a02727_1abd6e5624305f44e925483c4b4b048e71" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkBufferViewCreateInfo &gt;::value</definition>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="de/d3e/a02727_1a5088387ad86315ae525e04b40136e0fb" prot="public" static="no">
+        <type>typename CacheT::ElementT</type>
+        <definition>using castor3d::CpuEventCleanerT&lt; CacheT &gt;::ElementT =  typename CacheT::ElementT</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_BUFFER_VIEW_CREATE_INFO</initializer>
+        <name>ElementT</name>
+        <qualifiedname>castor3d::CpuEventCleanerT::ElementT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="27" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="27" bodyend="-1"/>
+        <location file="Event/Frame/CpuFunctorEvent.hpp" line="127" column="1" bodyfile="Event/Frame/CpuFunctorEvent.hpp" bodystart="127" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/d3e/a02727_1aba65326c19f8a70bf7ddb1680a80f522" prot="public" static="no" mutable="no">
+        <type><ref refid="df/dee/a02743" kindref="compound">FrameListener</ref> *</type>
+        <definition>FrameListener* castor3d::CpuEventCleanerT&lt; CacheT &gt;::listener</definition>
+        <argsstring></argsstring>
+        <name>listener</name>
+        <qualifiedname>castor3d::CpuEventCleanerT::listener</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/CpuFunctorEvent.hpp" line="139" column="16" bodyfile="Event/Frame/CpuFunctorEvent.hpp" bodystart="139" bodyend="-1"/>
+        <referencedby refid="de/d3e/a02727_1afe1d4e1fb082e6ef3ff59a15b84b509b" compoundref="dd/dd7/a00260" startline="134" endline="137">castor3d::CpuEventCleanerT&lt; CacheT &gt;::operator()</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/d3e/a02727_1af9f7c734fdf2a6034a66a18bac02d777" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::CpuEventCleanerT&lt; CacheT &gt;::CpuEventCleanerT</definition>
+        <argsstring>(FrameListener &amp;listener)</argsstring>
+        <name>CpuEventCleanerT</name>
+        <qualifiedname>castor3d::CpuEventCleanerT::CpuEventCleanerT</qualifiedname>
+        <param>
+          <type><ref refid="df/dee/a02743" kindref="compound">FrameListener</ref> &amp;</type>
+          <declname>listener</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/CpuFunctorEvent.hpp" line="129" column="10" bodyfile="Event/Frame/CpuFunctorEvent.hpp" bodystart="129" bodyend="132"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d3e/a02727_1afe1d4e1fb082e6ef3ff59a15b84b509b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::CpuEventCleanerT&lt; CacheT &gt;::operator()</definition>
+        <argsstring>(ElementT &amp;res) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor3d::CpuEventCleanerT::operator()</qualifiedname>
+        <param>
+          <type><ref refid="de/d3e/a02727_1a5088387ad86315ae525e04b40136e0fb" kindref="member">ElementT</ref> &amp;</type>
+          <declname>res</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/CpuFunctorEvent.hpp" line="134" column="6" bodyfile="Event/Frame/CpuFunctorEvent.hpp" bodystart="134" bodyend="137"/>
+        <references refid="de/d3e/a02727_1aba65326c19f8a70bf7ddb1680a80f522" compoundref="dd/dd7/a00260" startline="139">castor3d::CpuEventCleanerT&lt; CacheT &gt;::listener</references>
+        <references refid="da/de3/a01398_1a0a328c389f0ad9363871aca64b56a1b3" compoundref="dd/dd7/a00260" startline="72" endline="79">castor3d::makeCpuCleanupEvent</references>
+        <references refid="df/dee/a02743_1a2c62573911a7ed3c2149fd37a7de9df0">castor3d::FrameListener::postEvent</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
+<para>Cached resource cleaner, through a CPU frame event. </para>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="27" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="27" bodyend="27"/>
+    <collaborationgraph>
+      <node id="6">
+        <label>T</label>
+      </node>
+      <node id="4">
+        <label>std::array&lt; CpuFrameEventPtrArray, size_t(EventType::eCount) &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; CpuFrameEventPtrArray, size_t(EventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::array&lt; GpuFrameEventPtrArray, size_t(EventType::eCount) &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; GpuFrameEventPtrArray, size_t(EventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::CpuEventCleanerT&lt; CacheT &gt;</label>
+        <link refid="de/d3e/a02727"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>listener</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::FrameListener</label>
+        <link refid="df/dee/a02743"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_cpuEvents</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_gpuEvents</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>m_mutex</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+      <node id="5">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::recursive_mutex</label>
+      </node>
+    </collaborationgraph>
+    <location file="Event/Frame/CpuFunctorEvent.hpp" line="125" column="1" bodyfile="Event/Frame/CpuFunctorEvent.hpp" bodystart="126" bodyend="140"/>
     <listofallmembers>
-      <member refid="de/d3e/a02727_1abd6e5624305f44e925483c4b4b048e71" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkBufferViewCreateInfo &gt;</scope><name>value</name></member>
+      <member refid="de/d3e/a02727_1af9f7c734fdf2a6034a66a18bac02d777" prot="public" virt="non-virtual"><scope>castor3d::CpuEventCleanerT</scope><name>CpuEventCleanerT</name></member>
+      <member refid="de/d3e/a02727_1a5088387ad86315ae525e04b40136e0fb" prot="public" virt="non-virtual"><scope>castor3d::CpuEventCleanerT</scope><name>ElementT</name></member>
+      <member refid="de/d3e/a02727_1aba65326c19f8a70bf7ddb1680a80f522" prot="public" virt="non-virtual"><scope>castor3d::CpuEventCleanerT</scope><name>listener</name></member>
+      <member refid="de/d3e/a02727_1afe1d4e1fb082e6ef3ff59a15b84b509b" prot="public" virt="non-virtual"><scope>castor3d::CpuEventCleanerT</scope><name>operator()</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

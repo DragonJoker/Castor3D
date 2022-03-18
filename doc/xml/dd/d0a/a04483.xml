@@ -1,220 +1,78 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dd/d0a/a04483" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::PostEffectSurface</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
-    <includes local="no">PostEffectSurface.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="dd/d0a/a04483_1ada20e82a1d3c631d55eac2d4cf411d94" prot="public" static="no" mutable="no">
-        <type>ashes::FrameBufferPtr</type>
-        <definition>ashes::FrameBufferPtr castor3d::PostEffectSurface::frameBuffer</definition>
-        <argsstring></argsstring>
-        <name>frameBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The surface framebuffer. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PostEffect/PostEffectSurface.hpp" line="166" column="1" bodyfile="Render/PostEffect/PostEffectSurface.hpp" bodystart="166" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dd/d0a/a04483_1a8919e470f09c07cc27c3920f1f2b38e9" prot="public" static="no" mutable="no">
-        <type>TextureLayoutSPtr</type>
-        <definition>TextureLayoutSPtr castor3d::PostEffectSurface::colourTexture</definition>
-        <argsstring></argsstring>
-        <name>colourTexture</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The surface colour texture. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PostEffect/PostEffectSurface.hpp" line="169" column="1" bodyfile="Render/PostEffect/PostEffectSurface.hpp" bodystart="169" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dd/d0a/a04483_1a36640eae4939b1f9dcdd4d9024deea34" prot="public" static="no" mutable="no">
-        <type>TextureLayoutSPtr</type>
-        <definition>TextureLayoutSPtr castor3d::PostEffectSurface::depthTexture</definition>
-        <argsstring></argsstring>
-        <name>depthTexture</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The surface depth texture. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PostEffect/PostEffectSurface.hpp" line="172" column="1" bodyfile="Render/PostEffect/PostEffectSurface.hpp" bodystart="172" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dd/d0a/a04483_1aca9d8cb13ca94a94b1300c7e29a5bb64" prot="public" static="no" mutable="no">
-        <type>ashes::ImageView</type>
-        <definition>ashes::ImageView castor3d::PostEffectSurface::depthView</definition>
-        <argsstring></argsstring>
-        <name>depthView</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The surface depth view. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PostEffect/PostEffectSurface.hpp" line="175" column="1" bodyfile="Render/PostEffect/PostEffectSurface.hpp" bodystart="175" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dd/d0a/a04483_1a7c5dd4bc6f8c64e758364f77b15e053e" prot="public" static="no" mutable="no">
-        <type>ashes::ImageView</type>
-        <definition>ashes::ImageView castor3d::PostEffectSurface::stencilView</definition>
-        <argsstring></argsstring>
-        <name>stencilView</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The surface stencil view. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PostEffect/PostEffectSurface.hpp" line="178" column="1" bodyfile="Render/PostEffect/PostEffectSurface.hpp" bodystart="178" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dd/d0a/a04483_1a051c725372bae12e39a6d50bfbdf6c29" prot="public" static="no" mutable="no">
-        <type>castor::Size</type>
-        <definition>castor::Size castor3d::PostEffectSurface::size</definition>
-        <argsstring></argsstring>
-        <name>size</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The surface dimensions. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PostEffect/PostEffectSurface.hpp" line="181" column="1" bodyfile="Render/PostEffect/PostEffectSurface.hpp" bodystart="181" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dd/d0a/a04483" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Fog</compoundname>
+    <includes local="no">Fog.hpp</includes>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="dd/d0a/a04483_1a5ef864c17aa48a40e49f47a98ac70733" prot="private" static="no" mutable="no">
-        <type>castor::String</type>
-        <definition>castor::String castor3d::PostEffectSurface::m_debugName</definition>
+      <memberdef kind="variable" id="dd/d0a/a04483_1aa335665572c9bc485e59e03415b27c4b" prot="private" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1a99a6b51dbe68abcf95c70f03008dd3a3" kindref="member">FogType</ref></type>
+        <definition>FogType castor3d::Fog::m_type</definition>
         <argsstring></argsstring>
-        <name>m_debugName</name>
+        <name>m_type</name>
+        <qualifiedname>castor3d::Fog::m_type</qualifiedname>
+        <initializer>{ <ref refid="da/de3/a01398_1a99a6b51dbe68abcf95c70f03008dd3a3ab32b520e58e1334ea07d4df5a4c5c402" kindref="member">FogType::eDisabled</ref> }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PostEffect/PostEffectSurface.hpp" line="184" column="1" bodyfile="Render/PostEffect/PostEffectSurface.hpp" bodystart="184" bodyend="-1"/>
+        <location file="Scene/Fog.hpp" line="60" column="9" bodyfile="Scene/Fog.hpp" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d0a/a04483_1a9c71be33bfb8286212d196e10ee4a9ea" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::Fog::m_density</definition>
+        <argsstring></argsstring>
+        <name>m_density</name>
+        <qualifiedname>castor3d::Fog::m_density</qualifiedname>
+        <initializer>{ 0.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Fog.hpp" line="61" column="7" bodyfile="Scene/Fog.hpp" bodystart="61" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="dd/d0a/a04483_1a27dfd75181c6902277746a48e41c46e8" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::PostEffectSurface::PostEffectSurface</definition>
-        <argsstring>(Engine &amp;engine, castor::String debugName)</argsstring>
-        <name>PostEffectSurface</name>
-        <param>
-          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
-        </param>
-        <param>
-          <type>castor::String</type>
-          <declname>debugName</declname>
-        </param>
+      <memberdef kind="function" id="dd/d0a/a04483_1a8d3651269c2eaa72f82f733e6e6ad5a6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::Fog::getDensity</definition>
+        <argsstring>() const</argsstring>
+        <name>getDensity</name>
+        <qualifiedname>castor3d::Fog::getDensity</qualifiedname>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">engine</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The engine. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">debugName</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The surface debug name. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
+<para><simplesect kind="return"><para>The fog&apos;s density. </para>
+</simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PostEffect/PostEffectSurface.hpp" line="29" column="1"/>
+        <location file="Scene/Fog.hpp" line="20" column="7" bodyfile="Scene/Fog.hpp" bodystart="20" bodyend="23"/>
       </memberdef>
-      <memberdef kind="function" id="dd/d0a/a04483_1a19a4ea036057285cbfbf8cb1c961841f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::PostEffectSurface::initialise</definition>
-        <argsstring>(RenderDevice const &amp;device, ashes::RenderPass const &amp;renderPass, castor::Size const &amp;size, VkFormat format=VK_FORMAT_R32G32B32A32_SFLOAT, uint32_t mipLevels=1u)</argsstring>
-        <name>initialise</name>
+      <memberdef kind="function" id="dd/d0a/a04483_1a40727e4aeb3f250f47241951510f6051" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Fog::setDensity</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setDensity</name>
+        <qualifiedname>castor3d::Fog::setDensity</qualifiedname>
         <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>ashes::RenderPass const &amp;</type>
-          <declname>renderPass</declname>
-        </param>
-        <param>
-          <type>castor::Size const &amp;</type>
-          <declname>size</declname>
-        </param>
-        <param>
-          <type>VkFormat</type>
-          <declname>format</declname>
-          <defval>VK_FORMAT_R32G32B32A32_SFLOAT</defval>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>mipLevels</declname>
-          <defval>1u</defval>
+          <type>float</type>
+          <declname>value</declname>
         </param>
         <briefdescription>
-<para>Initialises the surface. </para>
+<para>Sets the fog&apos;s density. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">device</parametername>
+<parametername direction="in">value</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">renderPass</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render pass from which the frame buffer is created. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">size</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The surface&apos;s size. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">format</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The surface&apos;s colour pixel format. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">mipLevels</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The surface&apos;s colour texture mipmap level. </para>
+<para>The new value. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -222,139 +80,45 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PostEffect/PostEffectSurface.hpp" line="47" column="1"/>
+        <location file="Scene/Fog.hpp" line="32" column="6" bodyfile="Scene/Fog.hpp" bodystart="32" bodyend="35"/>
       </memberdef>
-      <memberdef kind="function" id="dd/d0a/a04483_1a2ddc32cc5f9570d4320f63ae7362af12" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::PostEffectSurface::initialise</definition>
-        <argsstring>(RenderDevice const &amp;device, ashes::RenderPass const &amp;renderPass, castor::Size const &amp;size, VkFormat colourFormat, VkFormat depthFormat)</argsstring>
-        <name>initialise</name>
-        <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>ashes::RenderPass const &amp;</type>
-          <declname>renderPass</declname>
-        </param>
-        <param>
-          <type>castor::Size const &amp;</type>
-          <declname>size</declname>
-        </param>
-        <param>
-          <type>VkFormat</type>
-          <declname>colourFormat</declname>
-        </param>
-        <param>
-          <type>VkFormat</type>
-          <declname>depthFormat</declname>
-        </param>
+      <memberdef kind="function" id="dd/d0a/a04483_1a17321980e758b1ae9093f548f0feddd8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/de3/a01398_1a99a6b51dbe68abcf95c70f03008dd3a3" kindref="member">FogType</ref></type>
+        <definition>FogType castor3d::Fog::getType</definition>
+        <argsstring>() const</argsstring>
+        <name>getType</name>
+        <qualifiedname>castor3d::Fog::getType</qualifiedname>
         <briefdescription>
-<para>Initialises the surface. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">renderPass</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render pass from which the frame buffer is created. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">size</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The surface&apos;s size. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">colourFormat</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The surface&apos;s colour pixel format. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">depthFormat</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The surface&apos;s depth pixel format. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
+<para><simplesect kind="return"><para>The fog type. </para>
+</simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PostEffect/PostEffectSurface.hpp" line="68" column="1"/>
+        <location file="Scene/Fog.hpp" line="42" column="9" bodyfile="Scene/Fog.hpp" bodystart="42" bodyend="45"/>
       </memberdef>
-      <memberdef kind="function" id="dd/d0a/a04483_1abc1edcb717e21c4e247475a5f64ae74d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::PostEffectSurface::initialise</definition>
-        <argsstring>(RenderDevice const &amp;device, ashes::RenderPass const &amp;renderPass, castor::Size const &amp;size, TextureLayoutSPtr colourTexture)</argsstring>
-        <name>initialise</name>
+      <memberdef kind="function" id="dd/d0a/a04483_1a22f56909dc877e7713ece4e753e125be" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Fog::setType</definition>
+        <argsstring>(FogType value)</argsstring>
+        <name>setType</name>
+        <qualifiedname>castor3d::Fog::setType</qualifiedname>
         <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>ashes::RenderPass const &amp;</type>
-          <declname>renderPass</declname>
-        </param>
-        <param>
-          <type>castor::Size const &amp;</type>
-          <declname>size</declname>
-        </param>
-        <param>
-          <type>TextureLayoutSPtr</type>
-          <declname>colourTexture</declname>
+          <type><ref refid="da/de3/a01398_1a99a6b51dbe68abcf95c70f03008dd3a3" kindref="member">FogType</ref></type>
+          <declname>value</declname>
         </param>
         <briefdescription>
-<para>Initialises the surface. </para>
+<para>Sets the fog type. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">device</parametername>
+<parametername direction="in">value</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">renderPass</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render pass from which the frame buffer is created. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">size</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The surface&apos;s size. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">colourTexture</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The surface&apos;s colour texture. </para>
+<para>The new value. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -362,308 +126,21 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PostEffect/PostEffectSurface.hpp" line="87" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d0a/a04483_1a754a22b7c05f1de24aa27c253f3877d3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::PostEffectSurface::initialise</definition>
-        <argsstring>(RenderDevice const &amp;device, ashes::RenderPass const &amp;renderPass, castor::Size const &amp;size, TextureLayoutSPtr colourTexture, VkFormat depthFormat)</argsstring>
-        <name>initialise</name>
-        <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>ashes::RenderPass const &amp;</type>
-          <declname>renderPass</declname>
-        </param>
-        <param>
-          <type>castor::Size const &amp;</type>
-          <declname>size</declname>
-        </param>
-        <param>
-          <type>TextureLayoutSPtr</type>
-          <declname>colourTexture</declname>
-        </param>
-        <param>
-          <type>VkFormat</type>
-          <declname>depthFormat</declname>
-        </param>
-        <briefdescription>
-<para>Initialises the surface. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">renderPass</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render pass from which the frame buffer is created. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">size</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The surface&apos;s size. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">colourTexture</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The surface&apos;s colour texture. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">depthFormat</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The surface&apos;s depth pixel format. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PostEffect/PostEffectSurface.hpp" line="107" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d0a/a04483_1a3f929478f5257eea524bc2c3b620c173" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::PostEffectSurface::initialise</definition>
-        <argsstring>(RenderDevice const &amp;device, ashes::RenderPass const &amp;renderPass, castor::Size const &amp;size, VkFormat colourFormat, TextureLayoutSPtr depthTexture)</argsstring>
-        <name>initialise</name>
-        <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>ashes::RenderPass const &amp;</type>
-          <declname>renderPass</declname>
-        </param>
-        <param>
-          <type>castor::Size const &amp;</type>
-          <declname>size</declname>
-        </param>
-        <param>
-          <type>VkFormat</type>
-          <declname>colourFormat</declname>
-        </param>
-        <param>
-          <type>TextureLayoutSPtr</type>
-          <declname>depthTexture</declname>
-        </param>
-        <briefdescription>
-<para>Initialises the surface. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">renderPass</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render pass from which the frame buffer is created. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">size</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The surface&apos;s size. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">colourFormat</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The surface&apos;s colour pixel format. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">depthTexture</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The surface&apos;s depth texture. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PostEffect/PostEffectSurface.hpp" line="128" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d0a/a04483_1a43dd221c18e33054da4181d981ebfe88" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::PostEffectSurface::initialise</definition>
-        <argsstring>(RenderDevice const &amp;device, ashes::RenderPass const &amp;renderPass, castor::Size const &amp;size, TextureLayoutSPtr colourTexture, TextureLayoutSPtr depthTexture)</argsstring>
-        <name>initialise</name>
-        <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>ashes::RenderPass const &amp;</type>
-          <declname>renderPass</declname>
-        </param>
-        <param>
-          <type>castor::Size const &amp;</type>
-          <declname>size</declname>
-        </param>
-        <param>
-          <type>TextureLayoutSPtr</type>
-          <declname>colourTexture</declname>
-        </param>
-        <param>
-          <type>TextureLayoutSPtr</type>
-          <declname>depthTexture</declname>
-        </param>
-        <briefdescription>
-<para>Initialises the surface. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">renderPass</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render pass from which the frame buffer is created. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">size</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The surface&apos;s size. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">colourTexture</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The surface&apos;s colour texture. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">depthTexture</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The surface&apos;s depth texture. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PostEffect/PostEffectSurface.hpp" line="149" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d0a/a04483_1a09fba11b7e672923bf40ca678b99baba" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::PostEffectSurface::cleanup</definition>
-        <argsstring>(RenderDevice const &amp;device)</argsstring>
-        <name>cleanup</name>
-        <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-<para>Cleans up the surface. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PostEffect/PostEffectSurface.hpp" line="162" column="1"/>
+        <location file="Scene/Fog.hpp" line="54" column="6" bodyfile="Scene/Fog.hpp" bodystart="54" bodyend="57"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="2815">
-        <label>castor3d::PostEffectSurface</label>
-        <link refid="dd/d0a/a04483"/>
-        <childnode refid="2816" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2816">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="2817">
-        <label>castor3d::PostEffectSurface</label>
-        <link refid="dd/d0a/a04483"/>
-        <childnode refid="2818" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2818">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-    </collaborationgraph>
-    <location file="Render/PostEffect/PostEffectSurface.hpp" line="18" column="1" bodyfile="Render/PostEffect/PostEffectSurface.hpp" bodystart="16" bodyend="185"/>
+    <location file="Scene/Fog.hpp" line="11" column="1" bodyfile="Scene/Fog.hpp" bodystart="12" bodyend="62"/>
     <listofallmembers>
-      <member refid="dd/d0a/a04483_1a09fba11b7e672923bf40ca678b99baba" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>cleanup</name></member>
-      <member refid="dd/d0a/a04483_1a8919e470f09c07cc27c3920f1f2b38e9" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>colourTexture</name></member>
-      <member refid="dd/d0a/a04483_1a36640eae4939b1f9dcdd4d9024deea34" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>depthTexture</name></member>
-      <member refid="dd/d0a/a04483_1aca9d8cb13ca94a94b1300c7e29a5bb64" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>depthView</name></member>
-      <member refid="dd/d0a/a04483_1ada20e82a1d3c631d55eac2d4cf411d94" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>frameBuffer</name></member>
-      <member refid="dd/d0a/a04483_1a19a4ea036057285cbfbf8cb1c961841f" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>initialise</name></member>
-      <member refid="dd/d0a/a04483_1a2ddc32cc5f9570d4320f63ae7362af12" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>initialise</name></member>
-      <member refid="dd/d0a/a04483_1abc1edcb717e21c4e247475a5f64ae74d" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>initialise</name></member>
-      <member refid="dd/d0a/a04483_1a754a22b7c05f1de24aa27c253f3877d3" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>initialise</name></member>
-      <member refid="dd/d0a/a04483_1a3f929478f5257eea524bc2c3b620c173" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>initialise</name></member>
-      <member refid="dd/d0a/a04483_1a43dd221c18e33054da4181d981ebfe88" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>initialise</name></member>
-      <member refid="dd/d0a/a04483_1a5ef864c17aa48a40e49f47a98ac70733" prot="private" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>m_debugName</name></member>
-      <member refid="dd/d0a/a04483_1a27dfd75181c6902277746a48e41c46e8" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>PostEffectSurface</name></member>
-      <member refid="dd/d0a/a04483_1a051c725372bae12e39a6d50bfbdf6c29" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>size</name></member>
-      <member refid="dd/d0a/a04483_1a7c5dd4bc6f8c64e758364f77b15e053e" prot="public" virt="non-virtual"><scope>castor3d::PostEffectSurface</scope><name>stencilView</name></member>
+      <member refid="dd/d0a/a04483_1a8d3651269c2eaa72f82f733e6e6ad5a6" prot="public" virt="non-virtual"><scope>castor3d::Fog</scope><name>getDensity</name></member>
+      <member refid="dd/d0a/a04483_1a17321980e758b1ae9093f548f0feddd8" prot="public" virt="non-virtual"><scope>castor3d::Fog</scope><name>getType</name></member>
+      <member refid="dd/d0a/a04483_1a9c71be33bfb8286212d196e10ee4a9ea" prot="private" virt="non-virtual"><scope>castor3d::Fog</scope><name>m_density</name></member>
+      <member refid="dd/d0a/a04483_1aa335665572c9bc485e59e03415b27c4b" prot="private" virt="non-virtual"><scope>castor3d::Fog</scope><name>m_type</name></member>
+      <member refid="dd/d0a/a04483_1a40727e4aeb3f250f47241951510f6051" prot="public" virt="non-virtual"><scope>castor3d::Fog</scope><name>setDensity</name></member>
+      <member refid="dd/d0a/a04483_1a22f56909dc877e7713ece4e753e125be" prot="public" virt="non-virtual"><scope>castor3d::Fog</scope><name>setType</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

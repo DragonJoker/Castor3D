@@ -1,54 +1,46 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d5/d3b/a03990" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::SubmeshAnimationBufferT</compoundname>
-    <includes local="no">SubmeshModule.hpp</includes>
-    <templateparamlist>
-      <param>
-        <type>typename</type>
-        <declname>T</declname>
-        <defname>T</defname>
-      </param>
-    </templateparamlist>
+    <compoundname>castor3d::NonTexturedQuad</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+    <innerclass refid="d2/dc1/a03994" prot="public">castor3d::NonTexturedQuad::Vertex</innerclass>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d5/d3b/a03990_1abe5ed8a52b6a3cc7356f0df4b30186ec" prot="public" static="no" mutable="no">
-        <type><ref refid="de/d13/a01473_1a0fd1d0e91104369d815dacc20c10f0b4" kindref="member">InterleavedVertexTArray</ref>&lt; T &gt;</type>
-        <definition>InterleavedVertexTArray&lt; T &gt; castor3d::SubmeshAnimationBufferT&lt; T &gt;::m_buffer</definition>
-        <argsstring></argsstring>
-        <name>m_buffer</name>
+      <memberdef kind="variable" id="d5/d3b/a03990_1a06ed1816a2c121a3c199124c081a1c72" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dc1/a03994" kindref="compound">Vertex</ref></type>
+        <definition>Vertex castor3d::NonTexturedQuad::vertex[6]</definition>
+        <argsstring>[6]</argsstring>
+        <name>vertex</name>
+        <qualifiedname>castor3d::NonTexturedQuad::vertex</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The vertex buffer. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/SubmeshModule.hpp" line="40" column="1" bodyfile="Model/Mesh/Submesh/SubmeshModule.hpp" bodystart="40" bodyend="-1"/>
-        <referencedby refid="de/d13/a01473_1a04cfa41d0ea2df4819a1f078fe399cdf" compoundref="de/d76/a00134" startline="1270" endline="1277">castor3d::prepareChunkData</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="d5/d3b/a03990_1abca210c34ec7b7a2abaa623f7ec0bd8e" prot="public" static="no" mutable="no">
-        <type>castor::BoundingBox</type>
-        <definition>castor::BoundingBox castor3d::SubmeshAnimationBufferT&lt; T &gt;::m_boundingBox</definition>
-        <argsstring></argsstring>
-        <name>m_boundingBox</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The bounding box. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/SubmeshModule.hpp" line="43" column="1" bodyfile="Model/Mesh/Submesh/SubmeshModule.hpp" bodystart="43" bodyend="-1"/>
+        <location file="Render/RenderModule.hpp" line="42" column="8" bodyfile="Render/RenderModule.hpp" bodystart="42" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>A quad without UV. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Model/Mesh/Submesh/SubmeshModule.hpp" line="37" column="1" bodyfile="Model/Mesh/Submesh/SubmeshModule.hpp" bodystart="36" bodyend="44"/>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::NonTexturedQuad</label>
+        <link refid="d5/d3b/a03990"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>vertex</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::NonTexturedQuad::Vertex</label>
+        <link refid="d2/dc1/a03994"/>
+      </node>
+    </collaborationgraph>
+    <location file="Render/RenderModule.hpp" line="35" column="1" bodyfile="Render/RenderModule.hpp" bodystart="36" bodyend="43"/>
     <listofallmembers>
-      <member refid="d5/d3b/a03990_1abca210c34ec7b7a2abaa623f7ec0bd8e" prot="public" virt="non-virtual"><scope>castor3d::SubmeshAnimationBufferT</scope><name>m_boundingBox</name></member>
-      <member refid="d5/d3b/a03990_1abe5ed8a52b6a3cc7356f0df4b30186ec" prot="public" virt="non-virtual"><scope>castor3d::SubmeshAnimationBufferT</scope><name>m_buffer</name></member>
+      <member refid="d5/d3b/a03990_1a06ed1816a2c121a3c199124c081a1c72" prot="public" virt="non-virtual"><scope>castor3d::NonTexturedQuad</scope><name>vertex</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

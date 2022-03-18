@@ -1,259 +1,261 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d0/dca/a04171" kind="class" language="C++" prot="public" abstract="yes">
-    <compoundname>castor3d::Plugin</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
-    <derivedcompoundref refid="dd/d8c/a04151" prot="public" virt="non-virtual">castor3d::DividerPlugin</derivedcompoundref>
-    <derivedcompoundref refid="d4/d0c/a04155" prot="public" virt="non-virtual">castor3d::GeneratorPlugin</derivedcompoundref>
-    <derivedcompoundref refid="d0/dd0/a04159" prot="public" virt="non-virtual">castor3d::GenericPlugin</derivedcompoundref>
-    <derivedcompoundref refid="d1/d56/a04163" prot="public" virt="non-virtual">castor3d::ImporterPlugin</derivedcompoundref>
-    <derivedcompoundref refid="d6/d64/a04167" prot="public" virt="non-virtual">castor3d::ParticlePlugin</derivedcompoundref>
-    <derivedcompoundref refid="d9/df1/a04179" prot="public" virt="non-virtual">castor3d::PostFxPlugin</derivedcompoundref>
-    <derivedcompoundref refid="db/d64/a04183" prot="public" virt="non-virtual">castor3d::ToneMappingPlugin</derivedcompoundref>
-    <includes local="no">Plugin.hpp</includes>
-      <sectiondef kind="private-type">
-      <memberdef kind="typedef" id="d0/dca/a04171_1a260c910f89d5cbe49782efbcc6d42a04" prot="private" static="no">
-        <type>void</type>
-        <definition>typedef void castor3d::Plugin::OnLoadFunction(Engine *, Plugin *)</definition>
-        <argsstring>(Engine *, Plugin *)</argsstring>
-        <name>OnLoadFunction</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d0/dca/a04171" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::SsaoRawAOPass</compoundname>
+    <includes local="no">SsaoRawAOPass.hpp</includes>
+    <innerclass refid="d9/df1/a04179" prot="private">castor3d::SsaoRawAOPass::Program</innerclass>
+    <innerclass refid="d9/d88/a04175" prot="private">castor3d::SsaoRawAOPass::RenderQuad</innerclass>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d0/dca/a04171_1a9c2a1e0dbb63ad643d1803b3493e34b4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::SsaoRawAOPass::getResult</definition>
+        <argsstring>() const</argsstring>
+        <name>getResult</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::getResult</qualifiedname>
         <briefdescription>
-<para>&lt; Signature for the plug-in&apos;s loading function </para>
         </briefdescription>
         <detaileddescription>
-<para>Signature for the plug-in&apos;s unloading function </para>
+<para>name Getters. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/Plugin.hpp" line="17" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="17" bodyend="-1"/>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="83" column="16" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="83" bodyend="86"/>
       </memberdef>
-      <memberdef kind="typedef" id="d0/dca/a04171_1a484bd75f26901cf9c43d9a9a7effb87c" prot="private" static="no">
-        <type>void</type>
-        <definition>typedef void castor3d::Plugin::OnUnloadFunction(Engine *)</definition>
-        <argsstring>(Engine *)</argsstring>
-        <name>OnUnloadFunction</name>
+      <memberdef kind="function" id="d0/dca/a04171_1a3a08aa98339dde2b7ab4f47605fe45bf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::SsaoRawAOPass::getBentResult</definition>
+        <argsstring>() const</argsstring>
+        <name>getBentResult</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::getBentResult</qualifiedname>
         <briefdescription>
-<para>Signature for the plug-in&apos;s type retrieval function. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/Plugin.hpp" line="19" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="19" bodyend="-1"/>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="88" column="16" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="88" bodyend="91"/>
       </memberdef>
-      <memberdef kind="typedef" id="d0/dca/a04171_1adfb1c6693e96e17ce3050b36981b6967" prot="private" static="no">
-        <type>void</type>
-        <definition>typedef void castor3d::Plugin::GetTypeFunction(PluginType *)</definition>
-        <argsstring>(PluginType *)</argsstring>
-        <name>GetTypeFunction</name>
-        <briefdescription>
-<para>Signature for the plug-in&apos;s version checking function. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Plugin/Plugin.hpp" line="21" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="21" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d0/dca/a04171_1a62c48b3460f8bcca388f9c497c8c3add" prot="private" static="no">
-        <type>void</type>
-        <definition>typedef void castor3d::Plugin::GetRequiredVersionFunction(Version *version)</definition>
-        <argsstring>(Version *version)</argsstring>
-        <name>GetRequiredVersionFunction</name>
-        <briefdescription>
-<para>Signature for the plug-in&apos;s name retrieval function. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Plugin/Plugin.hpp" line="23" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="23" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d0/dca/a04171_1a5481372866001812535aa3e0662d5603" prot="private" static="no">
-        <type>void</type>
-        <definition>typedef void castor3d::Plugin::GetNameFunction(char const **)</definition>
-        <argsstring>(char const **)</argsstring>
-        <name>GetNameFunction</name>
+      <memberdef kind="function" id="d0/dca/a04171_1a8e629838dc57e1736ae9dc9c2d82ddf7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>crg::FramePass const &amp;</type>
+        <definition>crg::FramePass const  &amp; castor3d::SsaoRawAOPass::getLastPass</definition>
+        <argsstring>() const</argsstring>
+        <name>getLastPass</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::getLastPass</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/Plugin.hpp" line="25" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="25" bodyend="-1"/>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="93" column="23" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="93" bodyend="96"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="d0/dca/a04171_1a54268afa0fd4a75c485f0ba59f108e65" prot="public" static="no">
-        <type>OnLoadFunction *</type>
-        <definition>typedef OnLoadFunction* castor3d::Plugin::POnLoadFunction</definition>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d0/dca/a04171_1ae137b1d9ea13d46bf0c90fed7e04969b" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>VkFormat constexpr</type>
+        <definition>VkFormat constexpr castor3d::SsaoRawAOPass::ResultFormat</definition>
         <argsstring></argsstring>
-        <name>POnLoadFunction</name>
+        <name>ResultFormat</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::ResultFormat</qualifiedname>
+        <initializer>= VK_FORMAT_R32G32B32A32_SFLOAT</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/Plugin.hpp" line="28" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="28" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d0/dca/a04171_1a186ebd8d8fe1eb8b52b7909347ce0fb4" prot="public" static="no">
-        <type>OnUnloadFunction *</type>
-        <definition>typedef OnUnloadFunction* castor3d::Plugin::POnUnloadFunction</definition>
-        <argsstring></argsstring>
-        <name>POnUnloadFunction</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Plugin/Plugin.hpp" line="29" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="29" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d0/dca/a04171_1aa7caed7d5f2bd1d34409227a1e3b09bf" prot="public" static="no">
-        <type>GetTypeFunction *</type>
-        <definition>typedef GetTypeFunction* castor3d::Plugin::PGetTypeFunction</definition>
-        <argsstring></argsstring>
-        <name>PGetTypeFunction</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Plugin/Plugin.hpp" line="30" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="30" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d0/dca/a04171_1a571d2dbc7a601aca467b1b5d8a62d997" prot="public" static="no">
-        <type>GetRequiredVersionFunction *</type>
-        <definition>typedef GetRequiredVersionFunction* castor3d::Plugin::PGetRequiredVersionFunction</definition>
-        <argsstring></argsstring>
-        <name>PGetRequiredVersionFunction</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Plugin/Plugin.hpp" line="31" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="31" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d0/dca/a04171_1af3f82c3bbc1d49880fda39cdc7ea2015" prot="public" static="no">
-        <type>GetNameFunction *</type>
-        <definition>typedef GetNameFunction* castor3d::Plugin::PGetNameFunction</definition>
-        <argsstring></argsstring>
-        <name>PGetNameFunction</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Plugin/Plugin.hpp" line="32" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="32" bodyend="-1"/>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="100" column="27" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="100" bodyend="-1"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="protected-attrib">
-      <memberdef kind="variable" id="d0/dca/a04171_1a3bbb683c98da8be6cb7eadd5ba677f18" prot="protected" static="no" mutable="no">
-        <type><ref refid="d0/dca/a04171_1a571d2dbc7a601aca467b1b5d8a62d997" kindref="member">PGetRequiredVersionFunction</ref></type>
-        <definition>PGetRequiredVersionFunction castor3d::Plugin::m_pfnGetRequiredVersion</definition>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/dca/a04171_1a4cb260c9b492455e8fd22ae35c6ec6f0" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::SsaoRawAOPass::m_device</definition>
         <argsstring></argsstring>
-        <name>m_pfnGetRequiredVersion</name>
+        <name>m_device</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::m_device</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The plug-in&apos;s version checking function. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/Plugin.hpp" line="108" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="108" bodyend="-1"/>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="131" column="21" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="131" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d0/dca/a04171_1a5b06730be035851689f1f52a9d37a839" prot="protected" static="no" mutable="no">
-        <type><ref refid="d0/dca/a04171_1af3f82c3bbc1d49880fda39cdc7ea2015" kindref="member">PGetNameFunction</ref></type>
-        <definition>PGetNameFunction castor3d::Plugin::m_pfnGetName</definition>
+      <memberdef kind="variable" id="d0/dca/a04171_1ac09224221f0535d74aeebf5916419dda" prot="private" static="no" mutable="no">
+        <type>crg::FramePassGroup &amp;</type>
+        <definition>crg::FramePassGroup&amp; castor3d::SsaoRawAOPass::m_graph</definition>
         <argsstring></argsstring>
-        <name>m_pfnGetName</name>
+        <name>m_graph</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::m_graph</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The plug-in&apos;s name retrieval function. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/Plugin.hpp" line="111" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="111" bodyend="-1"/>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="132" column="22" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="132" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d0/dca/a04171_1ae4b1c74ae527aef8847250d27eb3acf0" prot="protected" static="no" mutable="no">
-        <type><ref refid="d0/dca/a04171_1a54268afa0fd4a75c485f0ba59f108e65" kindref="member">POnLoadFunction</ref></type>
-        <definition>POnLoadFunction castor3d::Plugin::m_pfnOnLoad</definition>
+      <memberdef kind="variable" id="d0/dca/a04171_1a276f177dc0e84cc3e2fb42c72c813eb9" prot="private" static="no" mutable="no">
+        <type><ref refid="d6/d64/a04167" kindref="compound">SsaoConfig</ref> const  &amp;</type>
+        <definition>SsaoConfig const&amp; castor3d::SsaoRawAOPass::m_ssaoConfig</definition>
         <argsstring></argsstring>
-        <name>m_pfnOnLoad</name>
+        <name>m_ssaoConfig</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::m_ssaoConfig</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The plug-in&apos;s loading function. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/Plugin.hpp" line="114" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="114" bodyend="-1"/>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="133" column="19" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="133" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d0/dca/a04171_1a5d94afb97a6d885ed7d2885dafeda0dc" prot="protected" static="no" mutable="no">
-        <type><ref refid="d0/dca/a04171_1a186ebd8d8fe1eb8b52b7909347ce0fb4" kindref="member">POnUnloadFunction</ref></type>
-        <definition>POnUnloadFunction castor3d::Plugin::m_pfnOnUnload</definition>
+      <memberdef kind="variable" id="d0/dca/a04171_1a50b19e6c276599cced6e2d6579d16bd8" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/da2/a04991" kindref="compound">SsaoConfigUbo</ref> &amp;</type>
+        <definition>SsaoConfigUbo&amp; castor3d::SsaoRawAOPass::m_ssaoConfigUbo</definition>
         <argsstring></argsstring>
-        <name>m_pfnOnUnload</name>
+        <name>m_ssaoConfigUbo</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::m_ssaoConfigUbo</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The plug-in&apos;s unloading function </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/Plugin.hpp" line="117" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="117" bodyend="-1"/>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="134" column="16" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="134" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d0/dca/a04171_1ad988a5d361f28b80ba19dd2caac722e1" prot="protected" static="no" mutable="no">
-        <type><ref refid="d7/dd1/a01458_1aecf8304db7dd49c874ec216f139e5f67" kindref="member">PluginType</ref></type>
-        <definition>PluginType castor3d::Plugin::m_type</definition>
+      <memberdef kind="variable" id="d0/dca/a04171_1a1e4fe2de170561413ecf88495ef4141a" prot="private" static="no" mutable="no">
+        <type><ref refid="de/d63/a04887" kindref="compound">GpInfoUbo</ref> const  &amp;</type>
+        <definition>GpInfoUbo const&amp; castor3d::SsaoRawAOPass::m_gpInfoUbo</definition>
         <argsstring></argsstring>
-        <name>m_type</name>
+        <name>m_gpInfoUbo</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::m_gpInfoUbo</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The plug-in type. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/Plugin.hpp" line="120" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="120" bodyend="-1"/>
-        <referencedby refid="d0/dca/a04171_1adfce87274549c3458e705ec6f49f2466" compoundref="d7/db1/a00590" startline="84" endline="87">getType</referencedby>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="135" column="18" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="135" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d0/dca/a04171_1ac89ef3325c33aebd3c45ff41a3912d25" prot="protected" static="no" mutable="no">
-        <type>castor::DynamicLibraryWPtr</type>
-        <definition>castor::DynamicLibraryWPtr castor3d::Plugin::m_library</definition>
+      <memberdef kind="variable" id="d0/dca/a04171_1ad97360edb8e2cad50dccbbd1542be339" prot="private" static="no" mutable="no">
+        <type>VkExtent2D</type>
+        <definition>VkExtent2D castor3d::SsaoRawAOPass::m_size</definition>
         <argsstring></argsstring>
-        <name>m_library</name>
+        <name>m_size</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::m_size</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The plug-in library. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/Plugin.hpp" line="123" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="123" bodyend="-1"/>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="136" column="12" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dca/a04171_1a241d943bc9b029adbe04469fd01316e1" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref></type>
+        <definition>Texture castor3d::SsaoRawAOPass::m_result</definition>
+        <argsstring></argsstring>
+        <name>m_result</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::m_result</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="137" column="9" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dca/a04171_1a8d71e9a7d786ff1a9b21b8c6a81d92ae" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref></type>
+        <definition>Texture castor3d::SsaoRawAOPass::m_bentNormals</definition>
+        <argsstring></argsstring>
+        <name>m_bentNormals</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::m_bentNormals</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="138" column="9" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dca/a04171_1aa8e6dad374ba4eb5da82d571366ca93f" prot="private" static="no" mutable="no">
+        <type>std::array&lt; Program, 2u &gt;</type>
+        <definition>std::array&lt; Program, 2u &gt; castor3d::SsaoRawAOPass::m_programs</definition>
+        <argsstring></argsstring>
+        <name>m_programs</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::m_programs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="139" column="12" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="139" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dca/a04171_1a4881d7bf119b29366ea697b44a2a81b0" prot="private" static="no" mutable="no">
+        <type>crg::FramePass const  *</type>
+        <definition>crg::FramePass const* castor3d::SsaoRawAOPass::m_lastPass</definition>
+        <argsstring></argsstring>
+        <name>m_lastPass</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::m_lastPass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="140" column="23" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="140" bodyend="-1"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="protected-func">
-      <memberdef kind="function" id="d0/dca/a04171_1ab1d7f300c810facf8bc08fceffff8c2b" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/dca/a04171_1a3d1e45efcf884fb3647e285a5d42abd0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::Plugin::Plugin</definition>
-        <argsstring>(PluginType type, castor::DynamicLibrarySPtr library, Engine &amp;engine)</argsstring>
-        <name>Plugin</name>
+        <definition>C3D_API castor3d::SsaoRawAOPass::SsaoRawAOPass</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, RenderDevice const &amp;device, ProgressBar *progress, crg::FramePass const &amp;previousPass, VkExtent2D const &amp;size, SsaoConfig const &amp;config, SsaoConfigUbo &amp;ssaoConfigUbo, GpInfoUbo const &amp;gpInfoUbo, Texture const &amp;linearisedDepthBuffer, Texture const &amp;normals)</argsstring>
+        <name>SsaoRawAOPass</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::SsaoRawAOPass</qualifiedname>
         <param>
-          <type><ref refid="d7/dd1/a01458_1aecf8304db7dd49c874ec216f139e5f67" kindref="member">PluginType</ref></type>
-          <declname>type</declname>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
         </param>
         <param>
-          <type>castor::DynamicLibrarySPtr</type>
-          <declname>library</declname>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
         </param>
         <param>
-          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
+          <type><ref refid="df/d13/a03271" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type>VkExtent2D const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d64/a04167" kindref="compound">SsaoConfig</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/da2/a04991" kindref="compound">SsaoConfigUbo</ref> &amp;</type>
+          <declname>ssaoConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d63/a04887" kindref="compound">GpInfoUbo</ref> const &amp;</type>
+          <declname>gpInfoUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>linearisedDepthBuffer</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>normals</declname>
         </param>
         <briefdescription>
 <para>Constructor. </para>
@@ -261,26 +263,82 @@
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">type</parametername>
+<parametername direction="in">graph</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The plug-in type </para>
+<para>The render graph. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">library</parametername>
+<parametername direction="in">device</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The shared library holding the plug-in </para>
+<para>The GPU device. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">engine</parametername>
+<parametername direction="in">progress</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The engine </para>
+<para>The progress bar. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">previousPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The previous frame pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render area dimensions. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The SSAO configuration. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ssaoConfigUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The SSAO configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">gpInfoUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GBuffer configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">linearisedDepthBuffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The linearised depth buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">normals</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The normals buffer. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -288,202 +346,87 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/Plugin.hpp" line="47" column="1"/>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="51" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d0/dca/a04171_1a6eee27fad0b4dc406af8dac993816e1e" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::Plugin::load</definition>
-        <argsstring>()</argsstring>
-        <name>load</name>
-        <briefdescription>
-<para>Calls load function for the plug-in. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Plugin/Plugin.hpp" line="96" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dca/a04171_1a1062d08432032ec7d502e7941b4e0df4" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::Plugin::unload</definition>
-        <argsstring>()</argsstring>
-        <name>unload</name>
-        <briefdescription>
-<para>Calls unload function for the plug-in. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Plugin/Plugin.hpp" line="103" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d0/dca/a04171_1af7f881d3d5d32c7044c1b93164754c64" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+      <memberdef kind="function" id="d0/dca/a04171_1af6153dccdcc84ff4c438d267f93b0c10" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>virtual C3D_API castor3d::Plugin::~Plugin</definition>
-        <argsstring>()=0</argsstring>
-        <name>~Plugin</name>
+        <definition>C3D_API castor3d::SsaoRawAOPass::~SsaoRawAOPass</definition>
+        <argsstring>()</argsstring>
+        <name>~SsaoRawAOPass</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::~SsaoRawAOPass</qualifiedname>
         <briefdescription>
-<para>Destructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/Plugin.hpp" line="57" column="1"/>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="61" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d0/dca/a04171_1a21c697a5bb64dc09df8604a595ed4ef1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d0/dca/a04171_1a9678f811408a3410bc35b975c8fd759f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::Plugin::getRequiredVersion</definition>
-        <argsstring>(Version &amp;version) const</argsstring>
-        <name>getRequiredVersion</name>
+        <definition>C3D_API void castor3d::SsaoRawAOPass::accept</definition>
+        <argsstring>(SsaoConfig &amp;config, PipelineVisitorBase &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::accept</qualifiedname>
         <param>
-          <type><ref refid="d2/db0/a03827" kindref="compound">Version</ref> &amp;</type>
-          <declname>version</declname>
+          <type><ref refid="d6/d64/a04167" kindref="compound">SsaoConfig</ref> &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d38/a03259" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
         </param>
         <briefdescription>
-<para>Retrieves the required version for the plug-in to work correctly. </para>
+<para>Accepts a visitor. </para>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The version </para>
-</simplesect>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The SSAO config. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/Plugin.hpp" line="66" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dca/a04171_1a76345cfa813957198ab5a735b3bf2c84" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String</type>
-        <definition>C3D_API castor::String castor3d::Plugin::getName</definition>
-        <argsstring>() const</argsstring>
-        <name>getName</name>
-        <briefdescription>
-<para>Retrieves the plug-in name. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The name </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Plugin/Plugin.hpp" line="75" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dca/a04171_1adfce87274549c3458e705ec6f49f2466" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d7/dd1/a01458_1aecf8304db7dd49c874ec216f139e5f67" kindref="member">PluginType</ref></type>
-        <definition>PluginType castor3d::Plugin::getType</definition>
-        <argsstring>() const</argsstring>
-        <name>getType</name>
-        <briefdescription>
-<para>Retrieves the plug-in type. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The type </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Plugin/Plugin.hpp" line="84" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="84" bodyend="87"/>
-        <references refid="d0/dca/a04171_1ad988a5d361f28b80ba19dd2caac722e1" compoundref="d7/db1/a00590" startline="120">m_type</references>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="72" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="2717">
-        <label>castor3d::ParticlePlugin</label>
-        <link refid="d6/d64/a04167"/>
-        <childnode refid="2711" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2715">
-        <label>castor3d::GenericPlugin</label>
-        <link refid="d0/dd0/a04159"/>
-        <childnode refid="2711" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2713">
-        <label>castor3d::DividerPlugin</label>
-        <link refid="dd/d8c/a04151"/>
-        <childnode refid="2711" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2718">
-        <label>castor3d::PostFxPlugin</label>
-        <link refid="d9/df1/a04179"/>
-        <childnode refid="2711" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2712">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="2719">
-        <label>castor3d::ToneMappingPlugin</label>
-        <link refid="db/d64/a04183"/>
-        <childnode refid="2711" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2714">
-        <label>castor3d::GeneratorPlugin</label>
-        <link refid="d4/d0c/a04155"/>
-        <childnode refid="2711" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2711">
-        <label>castor3d::Plugin</label>
-        <link refid="d0/dca/a04171"/>
-        <childnode refid="2712" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2716">
-        <label>castor3d::ImporterPlugin</label>
-        <link refid="d1/d56/a04163"/>
-        <childnode refid="2711" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="2721">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="2720">
-        <label>castor3d::Plugin</label>
-        <link refid="d0/dca/a04171"/>
-        <childnode refid="2721" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Plugin/Plugin.hpp" line="14" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="12" bodyend="124"/>
+    <location file="Render/Ssao/SsaoRawAOPass.hpp" line="22" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="23" bodyend="141"/>
     <listofallmembers>
-      <member refid="d0/dca/a04171_1a76345cfa813957198ab5a735b3bf2c84" prot="public" virt="non-virtual"><scope>castor3d::Plugin</scope><name>getName</name></member>
-      <member refid="d0/dca/a04171_1a5481372866001812535aa3e0662d5603" prot="private" virt="non-virtual"><scope>castor3d::Plugin</scope><name>GetNameFunction</name></member>
-      <member refid="d0/dca/a04171_1a21c697a5bb64dc09df8604a595ed4ef1" prot="public" virt="non-virtual"><scope>castor3d::Plugin</scope><name>getRequiredVersion</name></member>
-      <member refid="d0/dca/a04171_1a62c48b3460f8bcca388f9c497c8c3add" prot="private" virt="non-virtual"><scope>castor3d::Plugin</scope><name>GetRequiredVersionFunction</name></member>
-      <member refid="d0/dca/a04171_1adfce87274549c3458e705ec6f49f2466" prot="public" virt="non-virtual"><scope>castor3d::Plugin</scope><name>getType</name></member>
-      <member refid="d0/dca/a04171_1adfb1c6693e96e17ce3050b36981b6967" prot="private" virt="non-virtual"><scope>castor3d::Plugin</scope><name>GetTypeFunction</name></member>
-      <member refid="d0/dca/a04171_1a6eee27fad0b4dc406af8dac993816e1e" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>load</name></member>
-      <member refid="d0/dca/a04171_1ac89ef3325c33aebd3c45ff41a3912d25" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>m_library</name></member>
-      <member refid="d0/dca/a04171_1a5b06730be035851689f1f52a9d37a839" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>m_pfnGetName</name></member>
-      <member refid="d0/dca/a04171_1a3bbb683c98da8be6cb7eadd5ba677f18" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>m_pfnGetRequiredVersion</name></member>
-      <member refid="d0/dca/a04171_1ae4b1c74ae527aef8847250d27eb3acf0" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>m_pfnOnLoad</name></member>
-      <member refid="d0/dca/a04171_1a5d94afb97a6d885ed7d2885dafeda0dc" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>m_pfnOnUnload</name></member>
-      <member refid="d0/dca/a04171_1ad988a5d361f28b80ba19dd2caac722e1" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>m_type</name></member>
-      <member refid="d0/dca/a04171_1a260c910f89d5cbe49782efbcc6d42a04" prot="private" virt="non-virtual"><scope>castor3d::Plugin</scope><name>OnLoadFunction</name></member>
-      <member refid="d0/dca/a04171_1a484bd75f26901cf9c43d9a9a7effb87c" prot="private" virt="non-virtual"><scope>castor3d::Plugin</scope><name>OnUnloadFunction</name></member>
-      <member refid="d0/dca/a04171_1af3f82c3bbc1d49880fda39cdc7ea2015" prot="public" virt="non-virtual"><scope>castor3d::Plugin</scope><name>PGetNameFunction</name></member>
-      <member refid="d0/dca/a04171_1a571d2dbc7a601aca467b1b5d8a62d997" prot="public" virt="non-virtual"><scope>castor3d::Plugin</scope><name>PGetRequiredVersionFunction</name></member>
-      <member refid="d0/dca/a04171_1aa7caed7d5f2bd1d34409227a1e3b09bf" prot="public" virt="non-virtual"><scope>castor3d::Plugin</scope><name>PGetTypeFunction</name></member>
-      <member refid="d0/dca/a04171_1ab1d7f300c810facf8bc08fceffff8c2b" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>Plugin</name></member>
-      <member refid="d0/dca/a04171_1a54268afa0fd4a75c485f0ba59f108e65" prot="public" virt="non-virtual"><scope>castor3d::Plugin</scope><name>POnLoadFunction</name></member>
-      <member refid="d0/dca/a04171_1a186ebd8d8fe1eb8b52b7909347ce0fb4" prot="public" virt="non-virtual"><scope>castor3d::Plugin</scope><name>POnUnloadFunction</name></member>
-      <member refid="d0/dca/a04171_1a1062d08432032ec7d502e7941b4e0df4" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>unload</name></member>
-      <member refid="d0/dca/a04171_1af7f881d3d5d32c7044c1b93164754c64" prot="public" virt="pure-virtual"><scope>castor3d::Plugin</scope><name>~Plugin</name></member>
+      <member refid="d0/dca/a04171_1a9678f811408a3410bc35b975c8fd759f" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>accept</name></member>
+      <member refid="d0/dca/a04171_1a3a08aa98339dde2b7ab4f47605fe45bf" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>getBentResult</name></member>
+      <member refid="d0/dca/a04171_1a8e629838dc57e1736ae9dc9c2d82ddf7" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>getLastPass</name></member>
+      <member refid="d0/dca/a04171_1a9c2a1e0dbb63ad643d1803b3493e34b4" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>getResult</name></member>
+      <member refid="d0/dca/a04171_1a8d71e9a7d786ff1a9b21b8c6a81d92ae" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_bentNormals</name></member>
+      <member refid="d0/dca/a04171_1a4cb260c9b492455e8fd22ae35c6ec6f0" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_device</name></member>
+      <member refid="d0/dca/a04171_1a1e4fe2de170561413ecf88495ef4141a" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_gpInfoUbo</name></member>
+      <member refid="d0/dca/a04171_1ac09224221f0535d74aeebf5916419dda" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_graph</name></member>
+      <member refid="d0/dca/a04171_1a4881d7bf119b29366ea697b44a2a81b0" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_lastPass</name></member>
+      <member refid="d0/dca/a04171_1aa8e6dad374ba4eb5da82d571366ca93f" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_programs</name></member>
+      <member refid="d0/dca/a04171_1a241d943bc9b029adbe04469fd01316e1" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_result</name></member>
+      <member refid="d0/dca/a04171_1ad97360edb8e2cad50dccbbd1542be339" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_size</name></member>
+      <member refid="d0/dca/a04171_1a276f177dc0e84cc3e2fb42c72c813eb9" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_ssaoConfig</name></member>
+      <member refid="d0/dca/a04171_1a50b19e6c276599cced6e2d6579d16bd8" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_ssaoConfigUbo</name></member>
+      <member refid="d0/dca/a04171_1ae137b1d9ea13d46bf0c90fed7e04969b" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>ResultFormat</name></member>
+      <member refid="d0/dca/a04171_1a3d1e45efcf884fb3647e285a5d42abd0" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>SsaoRawAOPass</name></member>
+      <member refid="d0/dca/a04171_1af6153dccdcc84ff4c438d267f93b0c10" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>~SsaoRawAOPass</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,9 +1,7 @@
-<map id="castor3d::ShadowMapPass" name="castor3d::ShadowMapPass">
-<area shape="rect" id="node1" title=" " alt="" coords="476,56,657,83"/>
-<area shape="rect" id="node5" href="$dd/d22/a04662.html" title=" " alt="" coords="705,5,948,32"/>
-<area shape="rect" id="node6" href="$d7/d54/a04666.html" title=" " alt="" coords="721,56,932,83"/>
-<area shape="rect" id="node7" href="$d8/dca/a04670.html" title=" " alt="" coords="723,107,931,133"/>
-<area shape="rect" id="node2" href="$d6/d1b/a04590.html" title=" " alt="" coords="240,56,428,83"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,31,192,57"/>
-<area shape="rect" id="node4" title=" " alt="" coords="67,81,130,108"/>
+<map id="castor3d::ShaderProgram::CompiledShader" name="castor3d::ShaderProgram::CompiledShader">
+<area shape="rect" id="node1" title=" " alt="" coords="8,275,179,316"/>
+<area shape="rect" id="node2" href="$da/d9d/a04751.html" title="A SPIR&#45;V shader module, with SPIR&#45;V binary and debug text source." alt="" coords="17,185,170,212"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,96,96,123"/>
+<area shape="rect" id="node4" title=" " alt="" coords="120,96,200,123"/>
+<area shape="rect" id="node5" title=" " alt="" coords="97,5,223,47"/>
 </map>

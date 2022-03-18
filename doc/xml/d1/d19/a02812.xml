@@ -1,33 +1,306 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d1/d19/a02812" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkComputePipelineCreateInfo &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d1/d19/a02812_1aabfaeae5e72094e0a1216a18dc9713af" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkComputePipelineCreateInfo &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d1/d19/a02812" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::PassFactory</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <basecompoundref prot="private" virt="non-virtual">PassFactoryBase</basecompoundref>
+    <includes local="no">PassFactory.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d1/d19/a02812_1a54db7aafa377a4ce5d668a62418fc7f1" prot="public" static="no">
+        <type>std::pair&lt; castor::String, <ref refid="d2/df5/a01395_1a773fcfeb825d3fe54eb4a3dce23bca11" kindref="member">PassTypeID</ref> &gt;</type>
+        <definition>using castor3d::PassFactory::StringIdPair =  std::pair&lt; castor::String, PassTypeID &gt;</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO</initializer>
+        <name>StringIdPair</name>
+        <qualifiedname>castor3d::PassFactory::StringIdPair</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="43" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="43" bodyend="-1"/>
+        <location file="Material/Pass/PassFactory.hpp" line="34" column="1" bodyfile="Material/Pass/PassFactory.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/d19/a02812_1ae9f667fe3035aff4c5217f4360db194d" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d1/d19/a02812_1a54db7aafa377a4ce5d668a62418fc7f1" kindref="member">StringIdPair</ref> &gt;</type>
+        <definition>std::vector&lt; StringIdPair &gt; castor3d::PassFactory::m_passTypeNames</definition>
+        <argsstring></argsstring>
+        <name>m_passTypeNames</name>
+        <qualifiedname>castor3d::PassFactory::m_passTypeNames</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassFactory.hpp" line="71" column="13" bodyfile="Material/Pass/PassFactory.hpp" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d19/a02812_1ab23b6150c7df148fc93e73647b9a024b" prot="private" static="no" mutable="no">
+        <type>std::unordered_map&lt; <ref refid="d2/df5/a01395_1a773fcfeb825d3fe54eb4a3dce23bca11" kindref="member">PassTypeID</ref>, castor::String &gt;</type>
+        <definition>std::unordered_map&lt; PassTypeID, castor::String &gt; castor3d::PassFactory::m_lightingModels</definition>
+        <argsstring></argsstring>
+        <name>m_lightingModels</name>
+        <qualifiedname>castor3d::PassFactory::m_lightingModels</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassFactory.hpp" line="72" column="20" bodyfile="Material/Pass/PassFactory.hpp" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d19/a02812_1a0386561a7c271c1abeeb32981437b60e" prot="private" static="no" mutable="no">
+        <type>std::unordered_map&lt; <ref refid="d2/df5/a01395_1a773fcfeb825d3fe54eb4a3dce23bca11" kindref="member">PassTypeID</ref>, bool &gt;</type>
+        <definition>std::unordered_map&lt; PassTypeID, bool &gt; castor3d::PassFactory::m_ibls</definition>
+        <argsstring></argsstring>
+        <name>m_ibls</name>
+        <qualifiedname>castor3d::PassFactory::m_ibls</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassFactory.hpp" line="73" column="20" bodyfile="Material/Pass/PassFactory.hpp" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d19/a02812_1a3d92b0815bc1b5fd7482999afefcd8b2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::PassFactory::PassFactory</definition>
+        <argsstring>(Engine &amp;engine)</argsstring>
+        <name>PassFactory</name>
+        <qualifiedname>castor3d::PassFactory::PassFactory</qualifiedname>
+        <param>
+          <type><ref refid="d7/d73/a02708" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassFactory.hpp" line="43" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d19/a02812_1ad4c3728044c8536c315a3c7de51ed5e6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::PassFactory::~PassFactory</definition>
+        <argsstring>()</argsstring>
+        <name>~PassFactory</name>
+        <qualifiedname>castor3d::PassFactory::~PassFactory</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassFactory.hpp" line="50" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d19/a02812_1a747ec9043752eb699a1281dd76e81893" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PassFactory::registerType</definition>
+        <argsstring>(castor::String const &amp;passType, PassRegisterInfo info)</argsstring>
+        <name>registerType</name>
+        <qualifiedname>castor3d::PassFactory::registerType</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>passType</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/dd0/a02808" kindref="compound">PassRegisterInfo</ref></type>
+          <declname>info</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassFactory.hpp" line="52" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d19/a02812_1ab21b35561fb08cc94c2fa2a17caac623" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PassFactory::unregisterType</definition>
+        <argsstring>(castor::String const &amp;passType)</argsstring>
+        <name>unregisterType</name>
+        <qualifiedname>castor3d::PassFactory::unregisterType</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>passType</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassFactory.hpp" line="54" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d19/a02812_1a4acc48f3b9fe309dce85427c01fa8d28" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> PassSPtr</type>
+        <definition>C3D_API PassSPtr castor3d::PassFactory::create</definition>
+        <argsstring>(castor::String const &amp;passType, Material &amp;parent) const</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::PassFactory::create</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>passType</declname>
+        </param>
+        <param>
+          <type><ref refid="de/db6/a02792" kindref="compound">Material</ref> &amp;</type>
+          <declname>parent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassFactory.hpp" line="55" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d19/a02812_1a7e660083942a5cc94f853107e979d4fd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/df5/a01395_1a773fcfeb825d3fe54eb4a3dce23bca11" kindref="member">PassTypeID</ref></type>
+        <definition>C3D_API PassTypeID castor3d::PassFactory::getNameId</definition>
+        <argsstring>(castor::String const &amp;passType) const</argsstring>
+        <name>getNameId</name>
+        <qualifiedname>castor3d::PassFactory::getNameId</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>passType</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassFactory.hpp" line="58" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d19/a02812_1a34a606e11950ed00093cc7e9a6f4ff2d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String</type>
+        <definition>C3D_API castor::String castor3d::PassFactory::getIdName</definition>
+        <argsstring>(PassTypeID passTypeId) const</argsstring>
+        <name>getIdName</name>
+        <qualifiedname>castor3d::PassFactory::getIdName</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a773fcfeb825d3fe54eb4a3dce23bca11" kindref="member">PassTypeID</ref></type>
+          <declname>passTypeId</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassFactory.hpp" line="59" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d19/a02812_1a0757114ad0cad06b1cfa53f3c4d6cf63" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String</type>
+        <definition>C3D_API castor::String castor3d::PassFactory::getLightingModelName</definition>
+        <argsstring>(PassTypeID passTypeId) const</argsstring>
+        <name>getLightingModelName</name>
+        <qualifiedname>castor3d::PassFactory::getLightingModelName</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a773fcfeb825d3fe54eb4a3dce23bca11" kindref="member">PassTypeID</ref></type>
+          <declname>passTypeId</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassFactory.hpp" line="60" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d19/a02812_1aa6a79ed074e74f0c2fb1c97ef9b0989b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PassFactory::hasIBL</definition>
+        <argsstring>(PassTypeID passTypeId) const</argsstring>
+        <name>hasIBL</name>
+        <qualifiedname>castor3d::PassFactory::hasIBL</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a773fcfeb825d3fe54eb4a3dce23bca11" kindref="member">PassTypeID</ref></type>
+          <declname>passTypeId</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassFactory.hpp" line="61" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d19/a02812_1ad353d1d0174167ec116a68e5bab063f9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="d1/d19/a02812_1a54db7aafa377a4ce5d668a62418fc7f1" kindref="member">StringIdPair</ref> &gt; const &amp;</type>
+        <definition>std::vector&lt; StringIdPair &gt; const  &amp; castor3d::PassFactory::listRegisteredTypes</definition>
+        <argsstring>() const</argsstring>
+        <name>listRegisteredTypes</name>
+        <qualifiedname>castor3d::PassFactory::listRegisteredTypes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassFactory.hpp" line="63" column="20" bodyfile="Material/Pass/PassFactory.hpp" bodystart="63" bodyend="66"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="43" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="43" bodyend="43"/>
+    <inheritancegraph>
+      <node id="3">
+        <label>PassFactoryBase</label>
+      </node>
+      <node id="1">
+        <label>castor3d::PassFactory</label>
+        <link refid="d1/d19/a02812"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>PassFactoryBase</label>
+      </node>
+      <node id="1">
+        <label>castor3d::PassFactory</label>
+        <link refid="d1/d19/a02812"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/PassFactory.hpp" line="29" column="1" bodyfile="Material/Pass/PassFactory.hpp" bodystart="32" bodyend="74"/>
     <listofallmembers>
-      <member refid="d1/d19/a02812_1aabfaeae5e72094e0a1216a18dc9713af" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkComputePipelineCreateInfo &gt;</scope><name>value</name></member>
+      <member refid="d1/d19/a02812_1a4acc48f3b9fe309dce85427c01fa8d28" prot="public" virt="non-virtual"><scope>castor3d::PassFactory</scope><name>create</name></member>
+      <member refid="d1/d19/a02812_1a34a606e11950ed00093cc7e9a6f4ff2d" prot="public" virt="non-virtual"><scope>castor3d::PassFactory</scope><name>getIdName</name></member>
+      <member refid="d1/d19/a02812_1a0757114ad0cad06b1cfa53f3c4d6cf63" prot="public" virt="non-virtual"><scope>castor3d::PassFactory</scope><name>getLightingModelName</name></member>
+      <member refid="d1/d19/a02812_1a7e660083942a5cc94f853107e979d4fd" prot="public" virt="non-virtual"><scope>castor3d::PassFactory</scope><name>getNameId</name></member>
+      <member refid="d1/d19/a02812_1aa6a79ed074e74f0c2fb1c97ef9b0989b" prot="public" virt="non-virtual"><scope>castor3d::PassFactory</scope><name>hasIBL</name></member>
+      <member refid="d1/d19/a02812_1ad353d1d0174167ec116a68e5bab063f9" prot="public" virt="non-virtual"><scope>castor3d::PassFactory</scope><name>listRegisteredTypes</name></member>
+      <member refid="d1/d19/a02812_1a0386561a7c271c1abeeb32981437b60e" prot="private" virt="non-virtual"><scope>castor3d::PassFactory</scope><name>m_ibls</name></member>
+      <member refid="d1/d19/a02812_1ab23b6150c7df148fc93e73647b9a024b" prot="private" virt="non-virtual"><scope>castor3d::PassFactory</scope><name>m_lightingModels</name></member>
+      <member refid="d1/d19/a02812_1ae9f667fe3035aff4c5217f4360db194d" prot="private" virt="non-virtual"><scope>castor3d::PassFactory</scope><name>m_passTypeNames</name></member>
+      <member refid="d1/d19/a02812_1a3d92b0815bc1b5fd7482999afefcd8b2" prot="public" virt="non-virtual"><scope>castor3d::PassFactory</scope><name>PassFactory</name></member>
+      <member refid="d1/d19/a02812_1a747ec9043752eb699a1281dd76e81893" prot="public" virt="non-virtual"><scope>castor3d::PassFactory</scope><name>registerType</name></member>
+      <member refid="d1/d19/a02812_1a54db7aafa377a4ce5d668a62418fc7f1" prot="public" virt="non-virtual"><scope>castor3d::PassFactory</scope><name>StringIdPair</name></member>
+      <member refid="d1/d19/a02812_1ab21b35561fb08cc94c2fa2a17caac623" prot="public" virt="non-virtual"><scope>castor3d::PassFactory</scope><name>unregisterType</name></member>
+      <member refid="d1/d19/a02812_1ad4c3728044c8536c315a3c7de51ed5e6" prot="public" virt="non-virtual"><scope>castor3d::PassFactory</scope><name>~PassFactory</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

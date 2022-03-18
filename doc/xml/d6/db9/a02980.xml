@@ -1,33 +1,843 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d6/db9/a02980" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPhysicalDeviceImageFormatInfo2 &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d6/db9/a02980" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::LoadingScreen</compoundname>
+    <includes local="no">LoadingScreen.hpp</includes>
+    <innerclass refid="dd/d7e/a02984" prot="private">castor3d::LoadingScreen::WindowPass</innerclass>
       <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d6/db9/a02980_1a86fd95656a7b5e6518a189bda7d57bb8" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPhysicalDeviceImageFormatInfo2 &gt;::value</definition>
+      <memberdef kind="variable" id="d6/db9/a02980_1a95a1a00a914b3faa2d571232a185f148" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::LoadingScreen::SceneName</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2</initializer>
+        <name>SceneName</name>
+        <qualifiedname>castor3d::LoadingScreen::SceneName</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="85" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="85" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="112" column="37" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d6/db9/a02980_1a1a01ef371bcf00b8fb536bf4b4436c1e" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::LoadingScreen::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::LoadingScreen::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="154" column="21" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="154" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/db9/a02980_1abaf1e2eaf70bd3dd76ce4eb0bd878568" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/dcb/a03268" kindref="compound">ProgressBar</ref> &amp;</type>
+        <definition>ProgressBar&amp; castor3d::LoadingScreen::m_progressBar</definition>
+        <argsstring></argsstring>
+        <name>m_progressBar</name>
+        <qualifiedname>castor3d::LoadingScreen::m_progressBar</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="155" column="14" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="155" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/db9/a02980_1acf11c45c56f7b20ac1ce6584a7eff119" prot="private" static="no" mutable="no">
+        <type>crg::FrameGraph</type>
+        <definition>crg::FrameGraph castor3d::LoadingScreen::m_graph</definition>
+        <argsstring></argsstring>
+        <name>m_graph</name>
+        <qualifiedname>castor3d::LoadingScreen::m_graph</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="156" column="17" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="156" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/db9/a02980_1a0c3602777e6d8f89fa43fbdc6700f5d0" prot="private" static="no" mutable="no">
+        <type>std::atomic_bool</type>
+        <definition>std::atomic_bool castor3d::LoadingScreen::m_enabled</definition>
+        <argsstring></argsstring>
+        <name>m_enabled</name>
+        <qualifiedname>castor3d::LoadingScreen::m_enabled</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="157" column="18" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="157" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/db9/a02980_1ad996b6ed6e18cd63f289ded9f0d4b839" prot="private" static="no" mutable="no">
+        <type>SceneRPtr</type>
+        <definition>SceneRPtr castor3d::LoadingScreen::m_scene</definition>
+        <argsstring></argsstring>
+        <name>m_scene</name>
+        <qualifiedname>castor3d::LoadingScreen::m_scene</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="158" column="11" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="158" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/db9/a02980_1ae316d81fb6ed0830bb4d182a92538d2d" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/d13/a04444" kindref="compound">SceneBackground</ref> &amp;</type>
+        <definition>SceneBackground&amp; castor3d::LoadingScreen::m_background</definition>
+        <argsstring></argsstring>
+        <name>m_background</name>
+        <qualifiedname>castor3d::LoadingScreen::m_background</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="159" column="18" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="159" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/db9/a02980_1af7d47703aa15d53cdee613c3021c68d4" prot="private" static="no" mutable="no">
+        <type>VkRenderPass</type>
+        <definition>VkRenderPass castor3d::LoadingScreen::m_renderPass</definition>
+        <argsstring></argsstring>
+        <name>m_renderPass</name>
+        <qualifiedname>castor3d::LoadingScreen::m_renderPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="160" column="14" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="160" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/db9/a02980_1a888426eba6ed98189dda4a52004e02f6" prot="private" static="no" mutable="no">
+        <type>castor::Size</type>
+        <definition>castor::Size castor3d::LoadingScreen::m_renderSize</definition>
+        <argsstring></argsstring>
+        <name>m_renderSize</name>
+        <qualifiedname>castor3d::LoadingScreen::m_renderSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="161" column="14" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="161" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/db9/a02980_1a553fcfa6e37ee813bc9ba2ddf66a260f" prot="private" static="no" mutable="no">
+        <type>CameraSPtr</type>
+        <definition>CameraSPtr castor3d::LoadingScreen::m_camera</definition>
+        <argsstring></argsstring>
+        <name>m_camera</name>
+        <qualifiedname>castor3d::LoadingScreen::m_camera</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="162" column="12" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="162" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/db9/a02980_1a77ed17acb5cc7ed232bf0a558b30537d" prot="private" static="no" mutable="no">
+        <type>SceneCullerUPtr</type>
+        <definition>SceneCullerUPtr castor3d::LoadingScreen::m_culler</definition>
+        <argsstring></argsstring>
+        <name>m_culler</name>
+        <qualifiedname>castor3d::LoadingScreen::m_culler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="163" column="17" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="163" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/db9/a02980_1a329da09052c3a1fdbc5f017931bd00f2" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d46/a04312" kindref="compound">Texture</ref></type>
+        <definition>Texture castor3d::LoadingScreen::m_colour</definition>
+        <argsstring></argsstring>
+        <name>m_colour</name>
+        <qualifiedname>castor3d::LoadingScreen::m_colour</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="164" column="9" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="164" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/db9/a02980_1a6de273cd7e5929ea975d946bb81bfe3b" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d46/a04312" kindref="compound">Texture</ref></type>
+        <definition>Texture castor3d::LoadingScreen::m_depth</definition>
+        <argsstring></argsstring>
+        <name>m_depth</name>
+        <qualifiedname>castor3d::LoadingScreen::m_depth</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="165" column="9" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="165" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/db9/a02980_1a8976534b2d87b782cfa6f05ae4d66d25" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/db7/a04924" kindref="compound">MatrixUbo</ref></type>
+        <definition>MatrixUbo castor3d::LoadingScreen::m_matrixUbo</definition>
+        <argsstring></argsstring>
+        <name>m_matrixUbo</name>
+        <qualifiedname>castor3d::LoadingScreen::m_matrixUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="166" column="11" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="166" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/db9/a02980_1aed30b196551c0ad9b1fd560171c8ba16" prot="private" static="no" mutable="no">
+        <type><ref refid="db/d9e/a04892" kindref="compound">HdrConfigUbo</ref></type>
+        <definition>HdrConfigUbo castor3d::LoadingScreen::m_hdrConfigUbo</definition>
+        <argsstring></argsstring>
+        <name>m_hdrConfigUbo</name>
+        <qualifiedname>castor3d::LoadingScreen::m_hdrConfigUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="167" column="14" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="167" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/db9/a02980_1a6fa1ffb200f80673f53b0263ff0b09c5" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/dc6/a04964" kindref="compound">SceneUbo</ref></type>
+        <definition>SceneUbo castor3d::LoadingScreen::m_sceneUbo</definition>
+        <argsstring></argsstring>
+        <name>m_sceneUbo</name>
+        <qualifiedname>castor3d::LoadingScreen::m_sceneUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="168" column="10" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="168" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/db9/a02980_1a3aed02bc15cbd1283aa95436c88acb3b" prot="private" static="no" mutable="no">
+        <type>BackgroundRendererUPtr</type>
+        <definition>BackgroundRendererUPtr castor3d::LoadingScreen::m_backgroundRenderer</definition>
+        <argsstring></argsstring>
+        <name>m_backgroundRenderer</name>
+        <qualifiedname>castor3d::LoadingScreen::m_backgroundRenderer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="169" column="24" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="169" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/db9/a02980_1a96090cc1d15706cb3160327111d64882" prot="private" static="no" mutable="no">
+        <type>crg::FramePass *</type>
+        <definition>crg::FramePass* castor3d::LoadingScreen::m_opaquePassDesc</definition>
+        <argsstring></argsstring>
+        <name>m_opaquePassDesc</name>
+        <qualifiedname>castor3d::LoadingScreen::m_opaquePassDesc</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="170" column="17" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="170" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/db9/a02980_1aa9dc73fc15d903f4a437f5b1b120d68f" prot="private" static="no" mutable="no">
+        <type><ref refid="dd/ddf/a04284" kindref="compound">RenderTechniquePass</ref> *</type>
+        <definition>RenderTechniquePass* castor3d::LoadingScreen::m_opaquePass</definition>
+        <argsstring></argsstring>
+        <name>m_opaquePass</name>
+        <qualifiedname>castor3d::LoadingScreen::m_opaquePass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="171" column="22" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="171" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/db9/a02980_1adb08a618e898c924e653dccb6a48c115" prot="private" static="no" mutable="no">
+        <type>crg::FramePass *</type>
+        <definition>crg::FramePass* castor3d::LoadingScreen::m_transparentPassDesc</definition>
+        <argsstring></argsstring>
+        <name>m_transparentPassDesc</name>
+        <qualifiedname>castor3d::LoadingScreen::m_transparentPassDesc</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="172" column="17" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="172" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/db9/a02980_1a5edb580367a9c4b38a7cf3f84577149a" prot="private" static="no" mutable="no">
+        <type><ref refid="dd/ddf/a04284" kindref="compound">RenderTechniquePass</ref> *</type>
+        <definition>RenderTechniquePass* castor3d::LoadingScreen::m_transparentPass</definition>
+        <argsstring></argsstring>
+        <name>m_transparentPass</name>
+        <qualifiedname>castor3d::LoadingScreen::m_transparentPass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="173" column="22" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="173" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/db9/a02980_1ac48d25bcae0e57b4712849c03bf1f108" prot="private" static="no" mutable="no">
+        <type>crg::FramePass *</type>
+        <definition>crg::FramePass* castor3d::LoadingScreen::m_overlayPassDesc</definition>
+        <argsstring></argsstring>
+        <name>m_overlayPassDesc</name>
+        <qualifiedname>castor3d::LoadingScreen::m_overlayPassDesc</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="174" column="17" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="174" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/db9/a02980_1acb4fb2b397b1daadeb631522023bac78" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d8b/a03840" kindref="compound">OverlayPass</ref> *</type>
+        <definition>OverlayPass* castor3d::LoadingScreen::m_overlayPass</definition>
+        <argsstring></argsstring>
+        <name>m_overlayPass</name>
+        <qualifiedname>castor3d::LoadingScreen::m_overlayPass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="175" column="14" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="175" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/db9/a02980_1ad89c39f8a87ee37503542677b756ec59" prot="private" static="no" mutable="no">
+        <type>crg::FramePass *</type>
+        <definition>crg::FramePass* castor3d::LoadingScreen::m_windowPassDesc</definition>
+        <argsstring></argsstring>
+        <name>m_windowPassDesc</name>
+        <qualifiedname>castor3d::LoadingScreen::m_windowPassDesc</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="176" column="17" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="176" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/db9/a02980_1a675814667fe4f17fcf372c9167b7c7bb" prot="private" static="no" mutable="no">
+        <type>WindowPass *</type>
+        <definition>WindowPass* castor3d::LoadingScreen::m_windowPass</definition>
+        <argsstring></argsstring>
+        <name>m_windowPass</name>
+        <qualifiedname>castor3d::LoadingScreen::m_windowPass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="177" column="13" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="177" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/db9/a02980_1a316c219949d764cc25c67aee00602dda" prot="private" static="no" mutable="no">
+        <type>crg::RunnableGraphPtr</type>
+        <definition>crg::RunnableGraphPtr castor3d::LoadingScreen::m_runnable</definition>
+        <argsstring></argsstring>
+        <name>m_runnable</name>
+        <qualifiedname>castor3d::LoadingScreen::m_runnable</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="178" column="23" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="178" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/db9/a02980_1ae87672ae8b9a44a189d7fb6ff243ef93" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LoadingScreen::LoadingScreen</definition>
+        <argsstring>(ProgressBar &amp;progressBar, RenderDevice const &amp;device, crg::ResourceHandler &amp;handler, SceneRPtr scene, VkRenderPass renderPass, castor::Size const &amp;size)</argsstring>
+        <name>LoadingScreen</name>
+        <qualifiedname>castor3d::LoadingScreen::LoadingScreen</qualifiedname>
+        <param>
+          <type><ref refid="d4/dcb/a03268" kindref="compound">ProgressBar</ref> &amp;</type>
+          <declname>progressBar</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>crg::ResourceHandler &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <param>
+          <type>SceneRPtr</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type>VkRenderPass</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="36" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/db9/a02980_1af61d86452a6f060ff55967047ca64405" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LoadingScreen::~LoadingScreen</definition>
+        <argsstring>()</argsstring>
+        <name>~LoadingScreen</name>
+        <qualifiedname>castor3d::LoadingScreen::~LoadingScreen</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="42" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/db9/a02980_1aac914217da82edaa38a5c2fa9ef3c07e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LoadingScreen::enable</definition>
+        <argsstring>()</argsstring>
+        <name>enable</name>
+        <qualifiedname>castor3d::LoadingScreen::enable</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="44" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/db9/a02980_1ad3fea55f69bf30d23d74ad46cf586536" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LoadingScreen::disable</definition>
+        <argsstring>()</argsstring>
+        <name>disable</name>
+        <qualifiedname>castor3d::LoadingScreen::disable</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="45" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/db9/a02980_1a4471ffde8b3c96f5652a198f4535096e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LoadingScreen::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::LoadingScreen::update</qualifiedname>
+        <param>
+          <type><ref refid="db/d69/a04040" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="46" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/db9/a02980_1af23e6f7c202d3e7ff349c8ad3a18d339" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LoadingScreen::update</definition>
+        <argsstring>(GpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::LoadingScreen::update</qualifiedname>
+        <param>
+          <type><ref refid="d1/dc7/a04044" kindref="compound">GpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="47" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/db9/a02980_1af4a323da9dc3f5319c87b16f812244c5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LoadingScreen::setRenderPass</definition>
+        <argsstring>(VkRenderPass renderPass, castor::Size const &amp;renderSize)</argsstring>
+        <name>setRenderPass</name>
+        <qualifiedname>castor3d::LoadingScreen::setRenderPass</qualifiedname>
+        <param>
+          <type>VkRenderPass</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>renderSize</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="48" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/db9/a02980_1a1bed66312bfedd6b542c4ca358f10c3d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LoadingScreen::upload</definition>
+        <argsstring>(ashes::CommandBuffer const &amp;cb)</argsstring>
+        <name>upload</name>
+        <qualifiedname>castor3d::LoadingScreen::upload</qualifiedname>
+        <param>
+          <type>ashes::CommandBuffer const &amp;</type>
+          <declname>cb</declname>
+        </param>
+        <briefdescription>
+<para>Uploads overlays GPU buffers to VRAM. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">cb</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The command buffer on which transfer commands are recorded. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="58" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/db9/a02980_1ad3e463d75cc62be85675578088e7464f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> crg::SemaphoreWaitArray</type>
+        <definition>C3D_API crg::SemaphoreWaitArray castor3d::LoadingScreen::render</definition>
+        <argsstring>(ashes::Queue const &amp;queue, ashes::FrameBuffer const &amp;framebuffer, crg::SemaphoreWaitArray const &amp;toWait, crg::Fence *&amp;fence)</argsstring>
+        <name>render</name>
+        <qualifiedname>castor3d::LoadingScreen::render</qualifiedname>
+        <param>
+          <type>ashes::Queue const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>ashes::FrameBuffer const &amp;</type>
+          <declname>framebuffer</declname>
+        </param>
+        <param>
+          <type>crg::SemaphoreWaitArray const &amp;</type>
+          <declname>toWait</declname>
+        </param>
+        <param>
+          <type>crg::Fence *&amp;</type>
+          <declname>fence</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="59" column="33"/>
+        <referencedby refid="d6/db9/a02980_1a72803ebc5f3bc97c25db3e32c525c884" compoundref="dc/dc9/a00389" startline="64" endline="73">render</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d6/db9/a02980_1a72803ebc5f3bc97c25db3e32c525c884" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>crg::SemaphoreWaitArray</type>
+        <definition>crg::SemaphoreWaitArray castor3d::LoadingScreen::render</definition>
+        <argsstring>(ashes::Queue const &amp;queue, ashes::FrameBuffer const &amp;framebuffer, crg::SemaphoreWait const &amp;toWait, crg::Fence *&amp;fence)</argsstring>
+        <name>render</name>
+        <qualifiedname>castor3d::LoadingScreen::render</qualifiedname>
+        <param>
+          <type>ashes::Queue const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>ashes::FrameBuffer const &amp;</type>
+          <declname>framebuffer</declname>
+        </param>
+        <param>
+          <type>crg::SemaphoreWait const &amp;</type>
+          <declname>toWait</declname>
+        </param>
+        <param>
+          <type>crg::Fence *&amp;</type>
+          <declname>fence</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="64" column="25" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="64" bodyend="73"/>
+        <references refid="d6/db9/a02980_1ad3e463d75cc62be85675578088e7464f">render</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/db9/a02980_1a1d3087f8da3eaa4200859b30f47f11c2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LoadingScreen::step</definition>
+        <argsstring>(castor::String const &amp;label)</argsstring>
+        <name>step</name>
+        <qualifiedname>castor3d::LoadingScreen::step</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>label</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="75" column="6" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="75" bodyend="78"/>
+        <references refid="d4/dcb/a03268_1adaa9491fcdbb041db68a6d07f3a3344d">castor3d::ProgressBar::step</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/db9/a02980_1a6c0565e5148b5622aa276441c9c56f9a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LoadingScreen::setRange</definition>
+        <argsstring>(uint32_t max)</argsstring>
+        <name>setRange</name>
+        <qualifiedname>castor3d::LoadingScreen::setRange</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>max</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="80" column="6" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="80" bodyend="83"/>
+        <references refid="d4/dcb/a03268_1ace55e4bed10c8538dfea0cc5f7ddd826" compoundref="d8/d91/a00410" startline="30" endline="33">castor3d::ProgressBar::setRange</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/db9/a02980_1a26edc01f0d1e686e6c47439ef46148b2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LoadingScreen::incRange</definition>
+        <argsstring>(uint32_t mod)</argsstring>
+        <name>incRange</name>
+        <qualifiedname>castor3d::LoadingScreen::incRange</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>mod</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="85" column="6" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="85" bodyend="88"/>
+        <references refid="d4/dcb/a03268_1a85189fe3a0429ed175e29ad98f595da8" compoundref="d8/d91/a00410" startline="35" endline="38">castor3d::ProgressBar::incRange</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/db9/a02980_1a47c456420c001241b3a37ad1380a7904" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::LoadingScreen::getIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>getIndex</name>
+        <qualifiedname>castor3d::LoadingScreen::getIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="90" column="10" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="90" bodyend="93"/>
+        <references refid="d4/dcb/a03268_1a9cca7d88d91d201751163c0b3820b50c" compoundref="d8/d91/a00410" startline="40" endline="43">castor3d::ProgressBar::getIndex</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/db9/a02980_1a23dc728bfd3ea48d84269f79c040b5bb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::LoadingScreen::isEnabled</definition>
+        <argsstring>() const</argsstring>
+        <name>isEnabled</name>
+        <qualifiedname>castor3d::LoadingScreen::isEnabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="95" column="6" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="95" bodyend="98"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/db9/a02980_1ad6a151f055e607a3ed95d55c25dcf639" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/dcb/a03268" kindref="compound">ProgressBar</ref> &amp;</type>
+        <definition>ProgressBar &amp; castor3d::LoadingScreen::getProgressBar</definition>
+        <argsstring>()</argsstring>
+        <name>getProgressBar</name>
+        <qualifiedname>castor3d::LoadingScreen::getProgressBar</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="100" column="14" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="100" bodyend="103"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d6/db9/a02980_1aea81718995e11a25d1e6fdfdb9b8fbb1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::LoadingScreen::doCreateOpaquePass</definition>
+        <argsstring>(crg::FramePass const *previousPass)</argsstring>
+        <name>doCreateOpaquePass</name>
+        <qualifiedname>castor3d::LoadingScreen::doCreateOpaquePass</qualifiedname>
+        <param>
+          <type>crg::FramePass const *</type>
+          <declname>previousPass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="106" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/db9/a02980_1a655ca3b0748430dad89aa3b6646a758a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::LoadingScreen::doCreateTransparentPass</definition>
+        <argsstring>(crg::FramePass const *previousPass)</argsstring>
+        <name>doCreateTransparentPass</name>
+        <qualifiedname>castor3d::LoadingScreen::doCreateTransparentPass</qualifiedname>
+        <param>
+          <type>crg::FramePass const *</type>
+          <declname>previousPass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="107" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/db9/a02980_1a89340b07db516bf59f552adc3f630ba8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::LoadingScreen::doCreateOverlayPass</definition>
+        <argsstring>(crg::FramePass const *previousPass)</argsstring>
+        <name>doCreateOverlayPass</name>
+        <qualifiedname>castor3d::LoadingScreen::doCreateOverlayPass</qualifiedname>
+        <param>
+          <type>crg::FramePass const *</type>
+          <declname>previousPass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="108" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/db9/a02980_1a8ad0b1f2442ee02b32cbf29bf2ba418f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::LoadingScreen::doCreateWindowPass</definition>
+        <argsstring>(crg::FramePass const *previousPass)</argsstring>
+        <name>doCreateWindowPass</name>
+        <qualifiedname>castor3d::LoadingScreen::doCreateWindowPass</qualifiedname>
+        <param>
+          <type>crg::FramePass const *</type>
+          <declname>previousPass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="109" column="17"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="85" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="85" bodyend="85"/>
+    <location file="Miscellaneous/LoadingScreen.hpp" line="33" column="1" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="34" bodyend="179"/>
     <listofallmembers>
-      <member refid="d6/db9/a02980_1a86fd95656a7b5e6518a189bda7d57bb8" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPhysicalDeviceImageFormatInfo2 &gt;</scope><name>value</name></member>
+      <member refid="d6/db9/a02980_1ad3fea55f69bf30d23d74ad46cf586536" prot="public" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>disable</name></member>
+      <member refid="d6/db9/a02980_1aea81718995e11a25d1e6fdfdb9b8fbb1" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>doCreateOpaquePass</name></member>
+      <member refid="d6/db9/a02980_1a89340b07db516bf59f552adc3f630ba8" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>doCreateOverlayPass</name></member>
+      <member refid="d6/db9/a02980_1a655ca3b0748430dad89aa3b6646a758a" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>doCreateTransparentPass</name></member>
+      <member refid="d6/db9/a02980_1a8ad0b1f2442ee02b32cbf29bf2ba418f" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>doCreateWindowPass</name></member>
+      <member refid="d6/db9/a02980_1aac914217da82edaa38a5c2fa9ef3c07e" prot="public" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>enable</name></member>
+      <member refid="d6/db9/a02980_1a47c456420c001241b3a37ad1380a7904" prot="public" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>getIndex</name></member>
+      <member refid="d6/db9/a02980_1ad6a151f055e607a3ed95d55c25dcf639" prot="public" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>getProgressBar</name></member>
+      <member refid="d6/db9/a02980_1a26edc01f0d1e686e6c47439ef46148b2" prot="public" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>incRange</name></member>
+      <member refid="d6/db9/a02980_1a23dc728bfd3ea48d84269f79c040b5bb" prot="public" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>isEnabled</name></member>
+      <member refid="d6/db9/a02980_1ae87672ae8b9a44a189d7fb6ff243ef93" prot="public" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>LoadingScreen</name></member>
+      <member refid="d6/db9/a02980_1ae316d81fb6ed0830bb4d182a92538d2d" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>m_background</name></member>
+      <member refid="d6/db9/a02980_1a3aed02bc15cbd1283aa95436c88acb3b" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>m_backgroundRenderer</name></member>
+      <member refid="d6/db9/a02980_1a553fcfa6e37ee813bc9ba2ddf66a260f" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>m_camera</name></member>
+      <member refid="d6/db9/a02980_1a329da09052c3a1fdbc5f017931bd00f2" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>m_colour</name></member>
+      <member refid="d6/db9/a02980_1a77ed17acb5cc7ed232bf0a558b30537d" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>m_culler</name></member>
+      <member refid="d6/db9/a02980_1a6de273cd7e5929ea975d946bb81bfe3b" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>m_depth</name></member>
+      <member refid="d6/db9/a02980_1a1a01ef371bcf00b8fb536bf4b4436c1e" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>m_device</name></member>
+      <member refid="d6/db9/a02980_1a0c3602777e6d8f89fa43fbdc6700f5d0" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>m_enabled</name></member>
+      <member refid="d6/db9/a02980_1acf11c45c56f7b20ac1ce6584a7eff119" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>m_graph</name></member>
+      <member refid="d6/db9/a02980_1aed30b196551c0ad9b1fd560171c8ba16" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>m_hdrConfigUbo</name></member>
+      <member refid="d6/db9/a02980_1a8976534b2d87b782cfa6f05ae4d66d25" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>m_matrixUbo</name></member>
+      <member refid="d6/db9/a02980_1aa9dc73fc15d903f4a437f5b1b120d68f" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>m_opaquePass</name></member>
+      <member refid="d6/db9/a02980_1a96090cc1d15706cb3160327111d64882" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>m_opaquePassDesc</name></member>
+      <member refid="d6/db9/a02980_1acb4fb2b397b1daadeb631522023bac78" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>m_overlayPass</name></member>
+      <member refid="d6/db9/a02980_1ac48d25bcae0e57b4712849c03bf1f108" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>m_overlayPassDesc</name></member>
+      <member refid="d6/db9/a02980_1abaf1e2eaf70bd3dd76ce4eb0bd878568" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>m_progressBar</name></member>
+      <member refid="d6/db9/a02980_1af7d47703aa15d53cdee613c3021c68d4" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>m_renderPass</name></member>
+      <member refid="d6/db9/a02980_1a888426eba6ed98189dda4a52004e02f6" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>m_renderSize</name></member>
+      <member refid="d6/db9/a02980_1a316c219949d764cc25c67aee00602dda" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>m_runnable</name></member>
+      <member refid="d6/db9/a02980_1ad996b6ed6e18cd63f289ded9f0d4b839" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>m_scene</name></member>
+      <member refid="d6/db9/a02980_1a6fa1ffb200f80673f53b0263ff0b09c5" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>m_sceneUbo</name></member>
+      <member refid="d6/db9/a02980_1a5edb580367a9c4b38a7cf3f84577149a" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>m_transparentPass</name></member>
+      <member refid="d6/db9/a02980_1adb08a618e898c924e653dccb6a48c115" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>m_transparentPassDesc</name></member>
+      <member refid="d6/db9/a02980_1a675814667fe4f17fcf372c9167b7c7bb" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>m_windowPass</name></member>
+      <member refid="d6/db9/a02980_1ad89c39f8a87ee37503542677b756ec59" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>m_windowPassDesc</name></member>
+      <member refid="d6/db9/a02980_1ad3e463d75cc62be85675578088e7464f" prot="public" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>render</name></member>
+      <member refid="d6/db9/a02980_1a72803ebc5f3bc97c25db3e32c525c884" prot="public" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>render</name></member>
+      <member refid="d6/db9/a02980_1a95a1a00a914b3faa2d571232a185f148" prot="public" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>SceneName</name></member>
+      <member refid="d6/db9/a02980_1a6c0565e5148b5622aa276441c9c56f9a" prot="public" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>setRange</name></member>
+      <member refid="d6/db9/a02980_1af4a323da9dc3f5319c87b16f812244c5" prot="public" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>setRenderPass</name></member>
+      <member refid="d6/db9/a02980_1a1d3087f8da3eaa4200859b30f47f11c2" prot="public" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>step</name></member>
+      <member refid="d6/db9/a02980_1a4471ffde8b3c96f5652a198f4535096e" prot="public" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>update</name></member>
+      <member refid="d6/db9/a02980_1af23e6f7c202d3e7ff349c8ad3a18d339" prot="public" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>update</name></member>
+      <member refid="d6/db9/a02980_1a1bed66312bfedd6b542c4ca358f10c3d" prot="public" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>upload</name></member>
+      <member refid="d6/db9/a02980_1af61d86452a6f060ff55967047ca64405" prot="public" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>~LoadingScreen</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

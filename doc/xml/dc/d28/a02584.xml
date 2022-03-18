@@ -1,102 +1,153 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dc/d28/a02584" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::Material</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">castor::Resource&lt; Material &gt;</basecompoundref>
-    <basecompoundref prot="public" virt="non-virtual">std::enable_shared_from_this&lt; Material &gt;</basecompoundref>
-    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
-    <includes local="no">Material.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="dc/d28/a02584_1a8aaba373cf1a62ef931fa12dc240120d" prot="public" static="no" mutable="no">
-        <type><ref refid="da/d1e/a01479_1a1b974f5f177fb1d55d0747c49a60ebd1" kindref="member">OnMaterialChanged</ref></type>
-        <definition>OnMaterialChanged castor3d::Material::onChanged</definition>
-        <argsstring></argsstring>
-        <name>onChanged</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The signal raised when the material has changed. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Material.hpp" line="212" column="1" bodyfile="Material/Material.hpp" bodystart="212" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="dc/d28/a02584_1aa36c9553aa9623526b0c475336523e9e" prot="public" static="yes" mutable="no">
-        <type>const castor::String</type>
-        <definition>const castor::String castor3d::Material::DefaultMaterialName</definition>
-        <argsstring></argsstring>
-        <name>DefaultMaterialName</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The default material name. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Material.hpp" line="215" column="1" bodyfile="Material/Material.hpp" bodystart="215" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
+    <compoundname>castor3d::PoolUniformBuffer</compoundname>
+    <includes local="no">PoolUniformBuffer.hpp</includes>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="dc/d28/a02584_1a0306bd7823ed37cc6a2e1f719889d010" prot="private" static="no" mutable="no">
-        <type>PassPtrArray</type>
-        <definition>PassPtrArray castor3d::Material::m_passes</definition>
+      <memberdef kind="variable" id="dc/d28/a02584_1a41ce37131b470a87b0ae6ab96ce5b3a7" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dbb/a04072" kindref="compound">RenderSystem</ref> const  &amp;</type>
+        <definition>RenderSystem const&amp; castor3d::PoolUniformBuffer::m_renderSystem</definition>
         <argsstring></argsstring>
-        <name>m_passes</name>
+        <name>m_renderSystem</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::m_renderSystem</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Material.hpp" line="218" column="1" bodyfile="Material/Material.hpp" bodystart="218" bodyend="-1"/>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="249" column="21" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="249" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dc/d28/a02584_1a2ce1b3c15f9d7c955a1032899fdd5987" prot="private" static="no" mutable="no">
-        <type><ref refid="da/d1e/a01479_1a90306964da63b9bbc97f4e205ecc5b7a" kindref="member">MaterialType</ref></type>
-        <definition>MaterialType castor3d::Material::m_type</definition>
+      <memberdef kind="variable" id="dc/d28/a02584_1a85afdeb1cde8aedbc74d5d7be3d4d077" prot="private" static="no" mutable="no">
+        <type>VkBufferUsageFlags</type>
+        <definition>VkBufferUsageFlags castor3d::PoolUniformBuffer::m_usage</definition>
         <argsstring></argsstring>
-        <name>m_type</name>
-        <initializer>{ <ref refid="da/d1e/a01479_1a90306964da63b9bbc97f4e205ecc5b7aae24e2ceb8935bc97009d91183e8e1d4a" kindref="member">MaterialType::ePhong</ref> }</initializer>
+        <name>m_usage</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::m_usage</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Material.hpp" line="219" column="1" bodyfile="Material/Material.hpp" bodystart="219" bodyend="-1"/>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="250" column="20" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="250" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dc/d28/a02584_1a17ccd9758cfd9520dadcfd32db07a17c" prot="private" static="no" mutable="no">
-        <type>std::map&lt; PassSPtr, <ref refid="da/d1e/a01479_1a53125ebeccd59c39556a280b619e42cc" kindref="member">OnPassChangedConnection</ref> &gt;</type>
-        <definition>std::map&lt; PassSPtr, OnPassChangedConnection &gt; castor3d::Material::m_passListeners</definition>
+      <memberdef kind="variable" id="dc/d28/a02584_1a0f50cc79281f6c234c727f926ddfbcf8" prot="private" static="no" mutable="no">
+        <type>VkMemoryPropertyFlags</type>
+        <definition>VkMemoryPropertyFlags castor3d::PoolUniformBuffer::m_flags</definition>
         <argsstring></argsstring>
-        <name>m_passListeners</name>
+        <name>m_flags</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::m_flags</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Material.hpp" line="220" column="1" bodyfile="Material/Material.hpp" bodystart="220" bodyend="-1"/>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="251" column="23" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="251" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d28/a02584_1a20d1cd447ae5f875a7c9d13419e33035" prot="private" static="no" mutable="no">
+        <type>ashes::QueueShare</type>
+        <definition>ashes::QueueShare castor3d::PoolUniformBuffer::m_sharingMode</definition>
+        <argsstring></argsstring>
+        <name>m_sharingMode</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::m_sharingMode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="252" column="19" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="252" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d28/a02584_1aab23d4b9089c3943656b943c38c25289" prot="private" static="no" mutable="no">
+        <type>std::set&lt; <ref refid="d2/dab/a02516" kindref="compound">MemChunk</ref> &gt;</type>
+        <definition>std::set&lt; MemChunk &gt; castor3d::PoolUniformBuffer::m_allocated</definition>
+        <argsstring></argsstring>
+        <name>m_allocated</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::m_allocated</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="253" column="10" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="253" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d28/a02584_1a1cd07230309159b3e8b81b32a8553266" prot="private" static="no" mutable="no">
+        <type>ashes::UniformBufferPtr</type>
+        <definition>ashes::UniformBufferPtr castor3d::PoolUniformBuffer::m_buffer</definition>
+        <argsstring></argsstring>
+        <name>m_buffer</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::m_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="254" column="25" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="254" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d28/a02584_1a2f46362bb79c8f5bc308bd36978ab280" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::PoolUniformBuffer::m_debugName</definition>
+        <argsstring></argsstring>
+        <name>m_debugName</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::m_debugName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="255" column="16" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="255" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d28/a02584_1a741b5ad3d0c991d22d148fb2a7933372" prot="private" static="no" mutable="no">
+        <type>castor::ArrayView&lt; uint8_t &gt;</type>
+        <definition>castor::ArrayView&lt; uint8_t &gt; castor3d::PoolUniformBuffer::m_data</definition>
+        <argsstring></argsstring>
+        <name>m_data</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::m_data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="256" column="19" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="256" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="dc/d28/a02584_1a2ec8a59f24abf77a0c1a4f036b8e88f2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::Material::Material</definition>
-        <argsstring>(castor::String const &amp;name, Engine &amp;engine, MaterialType type)</argsstring>
-        <name>Material</name>
+      <memberdef kind="function" id="dc/d28/a02584_1a2bb9306a9d408dd999bb213a20cfc58e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::PoolUniformBuffer::PoolUniformBuffer</definition>
+        <argsstring>(RenderSystem const &amp;renderSystem, castor::ArrayView&lt; uint8_t &gt; data, VkBufferUsageFlags usage, VkMemoryPropertyFlags flags, castor::String debugName, ashes::QueueShare sharingMode={})</argsstring>
+        <name>PoolUniformBuffer</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::PoolUniformBuffer</qualifiedname>
         <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
+          <type><ref refid="d2/dbb/a04072" kindref="compound">RenderSystem</ref> const &amp;</type>
+          <declname>renderSystem</declname>
         </param>
         <param>
-          <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
+          <type>castor::ArrayView&lt; uint8_t &gt;</type>
+          <declname>data</declname>
         </param>
         <param>
-          <type><ref refid="da/d1e/a01479_1a90306964da63b9bbc97f4e205ecc5b7a" kindref="member">MaterialType</ref></type>
-          <declname>type</declname>
+          <type>VkBufferUsageFlags</type>
+          <declname>usage</declname>
+        </param>
+        <param>
+          <type>VkMemoryPropertyFlags</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>castor::String</type>
+          <declname>debugName</declname>
+        </param>
+        <param>
+          <type>ashes::QueueShare</type>
+          <declname>sharingMode</declname>
+          <defval>{}</defval>
         </param>
         <briefdescription>
 <para>Constructor. </para>
@@ -104,26 +155,50 @@
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">name</parametername>
+<parametername direction="in">renderSystem</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The material name. </para>
+<para>The <ref refid="d2/dbb/a04072" kindref="compound">RenderSystem</ref>. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">engine</parametername>
+<parametername direction="in">data</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The core engine. </para>
+<para>The mapped data. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">type</parametername>
+<parametername direction="in">usage</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The material type. </para>
+<para>The buffer usage flags. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer memory flags. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">debugName</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer debug name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sharingMode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The sharing mode. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -131,33 +206,20 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Material.hpp" line="34" column="1"/>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="41" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="dc/d28/a02584_1ac9f663866024511c2ab94737358e0371" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>virtual C3D_API castor3d::Material::~Material</definition>
-        <argsstring>()</argsstring>
-        <name>~Material</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Material.hpp" line="43" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="dc/d28/a02584_1a75744b002ab13e525a12aad51e4ea642" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::Material::initialise</definition>
+      <memberdef kind="function" id="dc/d28/a02584_1acb9da7d65165c0ffee76279f21ac9c54" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::PoolUniformBuffer::initialise</definition>
         <argsstring>(RenderDevice const &amp;device)</argsstring>
         <name>initialise</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::initialise</qualifiedname>
         <param>
-          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
           <declname>device</declname>
         </param>
         <briefdescription>
-<para>Initialises the material and all it&apos;s passes. </para>
+<para>Initialises the GPU buffer. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
@@ -173,58 +235,28 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Material.hpp" line="52" column="1"/>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="55" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="dc/d28/a02584_1a3f87e00d4d4b1a6d138b4ab1f712923c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::Material::cleanup</definition>
-        <argsstring>()</argsstring>
+      <memberdef kind="function" id="dc/d28/a02584_1ab2dde565384597c456092f4a8c884c13" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PoolUniformBuffer::cleanup</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
         <name>cleanup</name>
-        <briefdescription>
-<para>Flushes passes. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Material.hpp" line="59" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="dc/d28/a02584_1aed6380c591d1877c2a5b784a51d49c23" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> PassSPtr</type>
-        <definition>C3D_API PassSPtr castor3d::Material::createPass</definition>
-        <argsstring>()</argsstring>
-        <name>createPass</name>
-        <briefdescription>
-<para>Creates a pass. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The created pass. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Material.hpp" line="68" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="dc/d28/a02584_1aa089db54feed1a4434334bf9309e9edb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::Material::removePass</definition>
-        <argsstring>(PassSPtr pass)</argsstring>
-        <name>removePass</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::cleanup</qualifiedname>
         <param>
-          <type>PassSPtr</type>
-          <declname>pass</declname>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
         </param>
         <briefdescription>
-<para>Removes an external pass to rhe material. </para>
+<para>Cleans up the GPU buffer. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">pass</parametername>
+<parametername direction="in">device</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The pass. </para>
+<para>The GPU device. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -232,58 +264,106 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Material.hpp" line="77" column="1"/>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="64" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="dc/d28/a02584_1a7a03955864c7bd8b43aa19af14573d90" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> PassSPtr</type>
-        <definition>C3D_API PassSPtr castor3d::Material::getPass</definition>
-        <argsstring>(uint32_t index) const</argsstring>
-        <name>getPass</name>
+      <memberdef kind="function" id="dc/d28/a02584_1af825adaf870341eb0810ef0fc70a2811" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PoolUniformBuffer::hasAvailable</definition>
+        <argsstring>(VkDeviceSize size) const</argsstring>
+        <name>hasAvailable</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::hasAvailable</qualifiedname>
         <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
+          <type>VkDeviceSize</type>
+          <declname>size</declname>
         </param>
         <briefdescription>
-<para>Retrieves a pass and returns it. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">index</parametername>
+<parametername>size</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The index of the wanted pass. </para>
+<para>The size wanted. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>The retrieved pass or nullptr if not found. </para>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> if there is enough remaining memory for a new element. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Material.hpp" line="88" column="1"/>
-        <referencedby refid="dc/d28/a02584_1a673a552539e98ca1f38e95a00d08b773" compoundref="de/d55/a00323" startline="199" endline="204">getTypedPass</referencedby>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="73" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="dc/d28/a02584_1a1eb8959bd3743ecef6526a92b4836ec7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::Material::destroyPass</definition>
-        <argsstring>(uint32_t index)</argsstring>
-        <name>destroyPass</name>
+      <memberdef kind="function" id="dc/d28/a02584_1a9b17010f71d69a2733e0e1563ddedd04" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PoolUniformBuffer::hasAllocated</definition>
+        <argsstring>() const</argsstring>
+        <name>hasAllocated</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::hasAllocated</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if at least one element has been allocated. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="80" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d28/a02584_1a7cc2d0d50f79a7425983da27baae4147" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/dab/a02516" kindref="compound">MemChunk</ref></type>
+        <definition>C3D_API MemChunk castor3d::PoolUniformBuffer::allocate</definition>
+        <argsstring>(VkDeviceSize size)</argsstring>
+        <name>allocate</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::allocate</qualifiedname>
         <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
+          <type>VkDeviceSize</type>
+          <declname>size</declname>
         </param>
         <briefdescription>
-<para>Destroys the pass at the given index. </para>
+<para>Allocates a memory chunk for a CPU buffer. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">index</parametername>
+<parametername>size</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The pass index. </para>
+<para>The size wanted. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The memory chunk offset. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="91" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d28/a02584_1a7b2e62bf5f3fd11e264e8588838adba2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PoolUniformBuffer::deallocate</definition>
+        <argsstring>(VkDeviceSize offset)</argsstring>
+        <name>deallocate</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::deallocate</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+<para>Deallocates memory. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The memory chunk offset. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -291,77 +371,34 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Material.hpp" line="97" column="1"/>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="100" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="dc/d28/a02584_1ad7e34981d8e011d2c77659e15b1de4ce" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::Material::hasAlphaBlending</definition>
-        <argsstring>() const</argsstring>
-        <name>hasAlphaBlending</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if all passes needs alpha blending. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Material.hpp" line="104" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="dc/d28/a02584_1a66f46543912ad98b0c39b8970e0f91de" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::Material::hasEnvironmentMapping</definition>
-        <argsstring>() const</argsstring>
-        <name>hasEnvironmentMapping</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if at least one pass needs a reflection map. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Material.hpp" line="111" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="dc/d28/a02584_1a0a2623fe84f04fc8706a4982ae8d82f6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::Material::hasSubsurfaceScattering</definition>
-        <argsstring>() const</argsstring>
-        <name>hasSubsurfaceScattering</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>Tells if the material has subsurface scattering. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Material.hpp" line="118" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="dc/d28/a02584_1ac1e3cdc5102ee026032baa6ccd69f551" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::Material::isTextured</definition>
-        <argsstring>(TextureFlags mask=TextureFlag::eAll) const</argsstring>
-        <name>isTextured</name>
+      <memberdef kind="function" id="dc/d28/a02584_1a120bb112f7be0f8f0d893a1a1bd8910e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename DataT</type>
+          </param>
+        </templateparamlist>
+        <type>DataT const &amp;</type>
+        <definition>DataT const  &amp; castor3d::PoolUniformBuffer::getData</definition>
+        <argsstring>(VkDeviceSize offset) const</argsstring>
+        <name>getData</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::getData</qualifiedname>
         <param>
-          <type><ref refid="da/d1e/a01479_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref></type>
-          <declname>mask</declname>
-          <defval><ref refid="da/d1e/a01479_1ae3a32e32f3eaa63d0b9886aa3e942742a205a605c9a22391af5e09fa60fe30678" kindref="member">TextureFlag::eAll</ref></defval>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
         </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>Tells if the material is textured. </para>
+<para><simplesect kind="return"><para>The N-th instance of the data. </para>
 </simplesect>
 <parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">mask</parametername>
+<parametername direction="in">offset</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>A texture mask to filter out textures. </para>
+<para>The memory chunk offset. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -369,235 +406,275 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Material.hpp" line="127" column="1"/>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="114" column="14" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="114" bodyend="117"/>
+        <referencedby refid="d9/de2/a02508_1a59505199eb458103512ef51fec723f12" compoundref="d9/dd0/a00191" startline="51" endline="54">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getData</referencedby>
       </memberdef>
-      <memberdef kind="function" id="dc/d28/a02584_1a4ca11d2102e8df7d693da8d9e4b30c8f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::Material::getPassCount</definition>
-        <argsstring>() const</argsstring>
-        <name>getPassCount</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The passes count. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Material.hpp" line="134" column="1" bodyfile="Material/Material.hpp" bodystart="134" bodyend="137"/>
-      </memberdef>
-      <memberdef kind="function" id="dc/d28/a02584_1a9cd0250e758f345c4f3e5355e0bcf2e5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>PassPtrArrayConstIt</type>
-        <definition>PassPtrArrayConstIt castor3d::Material::begin</definition>
-        <argsstring>() const</argsstring>
-        <name>begin</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The constant iterator on the beginning of the passes array. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Material.hpp" line="144" column="1" bodyfile="Material/Material.hpp" bodystart="144" bodyend="147"/>
-      </memberdef>
-      <memberdef kind="function" id="dc/d28/a02584_1ae70e8598bfcd4189f5dd68c02df9e733" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>PassPtrArrayIt</type>
-        <definition>PassPtrArrayIt castor3d::Material::begin</definition>
-        <argsstring>()</argsstring>
-        <name>begin</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The iterator on the beginning of the passes array. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Material.hpp" line="154" column="1" bodyfile="Material/Material.hpp" bodystart="154" bodyend="157"/>
-      </memberdef>
-      <memberdef kind="function" id="dc/d28/a02584_1a23ce55302b43e77123cd7492acf36857" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>PassPtrArrayConstIt</type>
-        <definition>PassPtrArrayConstIt castor3d::Material::end</definition>
-        <argsstring>() const</argsstring>
-        <name>end</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The constant iterator on the end of the passes array. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Material.hpp" line="164" column="1" bodyfile="Material/Material.hpp" bodystart="164" bodyend="167"/>
-      </memberdef>
-      <memberdef kind="function" id="dc/d28/a02584_1aaaf660dda33451c486be40b2fbea3a83" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>PassPtrArrayIt</type>
-        <definition>PassPtrArrayIt castor3d::Material::end</definition>
-        <argsstring>()</argsstring>
-        <name>end</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The iterator on the end of the passes array. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Material.hpp" line="174" column="1" bodyfile="Material/Material.hpp" bodystart="174" bodyend="177"/>
-      </memberdef>
-      <memberdef kind="function" id="dc/d28/a02584_1adc8c13a477df8d3c1b6d47967686f57a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="da/d1e/a01479_1a90306964da63b9bbc97f4e205ecc5b7a" kindref="member">MaterialType</ref></type>
-        <definition>MaterialType castor3d::Material::getType</definition>
-        <argsstring>() const</argsstring>
-        <name>getType</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The material type. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Material.hpp" line="184" column="1" bodyfile="Material/Material.hpp" bodystart="184" bodyend="187"/>
-      </memberdef>
-      <memberdef kind="function" id="dc/d28/a02584_1a673a552539e98ca1f38e95a00d08b773" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="dc/d28/a02584_1a1ad0dbe57d8d7cdc4f4bf79b763b60ec" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
-            <type><ref refid="da/d1e/a01479_1a90306964da63b9bbc97f4e205ecc5b7a" kindref="member">MaterialType</ref></type>
-            <declname>Type</declname>
-            <defname>Type</defname>
+            <type>typename DataT</type>
           </param>
         </templateparamlist>
-        <type>std::shared_ptr&lt; typename <ref refid="d1/d88/a02600" kindref="compound">PassTyper</ref>&lt; Type &gt;::Type &gt;</type>
-        <definition>std::shared_ptr&lt; typename PassTyper&lt; Type &gt;::Type &gt; castor3d::Material::getTypedPass</definition>
-        <argsstring>(uint32_t index) const</argsstring>
-        <name>getTypedPass</name>
+        <type>DataT &amp;</type>
+        <definition>DataT &amp; castor3d::PoolUniformBuffer::getData</definition>
+        <argsstring>(VkDeviceSize offset)</argsstring>
+        <name>getData</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::getData</qualifiedname>
         <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
         </param>
         <briefdescription>
-<para>Retrieves a pass and returns it. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The N-th instance of the data. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The memory chunk offset. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="131" column="8" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="131" bodyend="134"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d28/a02584_1a1b1d69c156642513662b5db351e6bd22" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::ArrayView&lt; uint8_t &gt; const &amp;</type>
+        <definition>castor::ArrayView&lt; uint8_t &gt; const  &amp; castor3d::PoolUniformBuffer::getDatas</definition>
+        <argsstring>() const</argsstring>
+        <name>getDatas</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::getDatas</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The data. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="143" column="26" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="143" bodyend="146"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d28/a02584_1ab040736570e5277841e2d4cf06670aaf" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::ArrayView&lt; uint8_t &gt; &amp;</type>
+        <definition>castor::ArrayView&lt; uint8_t &gt; &amp; castor3d::PoolUniformBuffer::getDatas</definition>
+        <argsstring>()</argsstring>
+        <name>getDatas</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::getDatas</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The data. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="155" column="20" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="155" bodyend="158"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d28/a02584_1a77619c448a45c14bbfcd61b22b592274" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PoolUniformBuffer::hasBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>hasBuffer</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::hasBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>false</computeroutput> if the internal buffer doesn&apos;t exist. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="167" column="6" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="167" bodyend="170"/>
+        <referencedby refid="d9/de2/a02508_1ad7a4b5aef7f032e598077b111714ad28" compoundref="d9/dd0/a00191" startline="31" endline="35">castor3d::UniformBufferOffsetT&lt; DataT &gt;::operator bool</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dc/d28/a02584_1a7804d82ef261e90f61fd38589881c900" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::UniformBuffer const &amp;</type>
+        <definition>ashes::UniformBuffer const  &amp; castor3d::PoolUniformBuffer::getBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>getBuffer</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::getBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The internal buffer. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="179" column="29" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="179" bodyend="182"/>
+        <referencedby refid="d9/de2/a02508_1a2c6ad146d4910651544564c25ca7dccd" compoundref="d9/dd0/a00191" startline="96" endline="105">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</referencedby>
+        <referencedby refid="dc/d28/a02584_1a32a13128eaf15955c1ff544751dcac6a" compoundref="d7/d25/a00182" startline="231" endline="234">getAlignedSize</referencedby>
+        <referencedby refid="d9/de2/a02508_1af6031892474c15c1ff806ca0e9842242" compoundref="d9/dd0/a00191" startline="71" endline="74">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getBuffer</referencedby>
+        <referencedby refid="d9/de2/a02508_1af1486cfa4c196f82e0cbc2440edea70e" compoundref="d9/dd0/a00191" startline="37" endline="42">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getByteOffset</referencedby>
+        <referencedby refid="d9/de2/a02508_1a11dc3f75dd4cd054c5ee5fd4e0c1f67f" compoundref="d9/dd0/a00191" startline="44" endline="49">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getByteRange</referencedby>
+        <referencedby refid="d9/de2/a02508_1ad7dcad7c96a620540d10eb85f3d4586b" compoundref="d9/dd0/a00191" startline="107" endline="120">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getDescriptorWrite</referencedby>
+        <referencedby refid="dc/d28/a02584_1ad3de3f47551cdd4bd91f2372e504bd4d" compoundref="d7/d25/a00182" startline="211" endline="214">getElementSize</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dc/d28/a02584_1a3f8292fb08362bce16522a0e987f6344" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::PoolUniformBuffer::operator ashes::UniformBuffer const &amp;</definition>
+        <argsstring>() const</argsstring>
+        <name>operator ashes::UniformBuffer const &amp;</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::UniformBuffer const &amp;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="183" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="183" bodyend="186"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d28/a02584_1ab3b072dc5db16c61c7982533fee8c223" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::UniformBuffer &amp;</type>
+        <definition>ashes::UniformBuffer &amp; castor3d::PoolUniformBuffer::getBuffer</definition>
+        <argsstring>()</argsstring>
+        <name>getBuffer</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::getBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The internal buffer. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="195" column="23" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="195" bodyend="198"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d28/a02584_1aef9b5a32ba56c24595a4b819ad25c7c9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::PoolUniformBuffer::operator ashes::UniformBuffer &amp;</definition>
+        <argsstring>()</argsstring>
+        <name>operator ashes::UniformBuffer &amp;</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::UniformBuffer &amp;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="199" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="199" bodyend="202"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d28/a02584_1ad3de3f47551cdd4bd91f2372e504bd4d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::PoolUniformBuffer::getElementSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getElementSize</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::getElementSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The size of one element in the buffer. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="211" column="10" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="211" bodyend="214"/>
+        <references refid="dc/d28/a02584_1a7804d82ef261e90f61fd38589881c900" compoundref="d7/d25/a00182" startline="179" endline="182">getBuffer</references>
+        <references refid="dc/d28/a02584_1ad3de3f47551cdd4bd91f2372e504bd4d" compoundref="d7/d25/a00182" startline="211" endline="214">getElementSize</references>
+        <referencedby refid="dc/d28/a02584_1ab9520ff65055aeb19c8b5bfca02ae4a3" compoundref="d7/d25/a00182" startline="243" endline="246">getAlignedSize</referencedby>
+        <referencedby refid="dc/d28/a02584_1ad3de3f47551cdd4bd91f2372e504bd4d" compoundref="d7/d25/a00182" startline="211" endline="214">getElementSize</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dc/d28/a02584_1a32a13128eaf15955c1ff544751dcac6a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::PoolUniformBuffer::getAlignedSize</definition>
+        <argsstring>(uint32_t size) const</argsstring>
+        <name>getAlignedSize</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::getAlignedSize</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves the aligned size for an element. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">index</parametername>
+<parametername direction="in">size</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The index of the wanted pass. </para>
+<para>The size of an element. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>The retrieved pass or nullptr if not found. </para>
+<simplesect kind="return"><para>The aligned size. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Material.hpp" line="199" column="1" bodyfile="Material/Material.hpp" bodystart="199" bodyend="204"/>
-        <references refid="dc/d28/a02584_1a7a03955864c7bd8b43aa19af14573d90">getPass</references>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="231" column="10" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="231" bodyend="234"/>
+        <references refid="dc/d28/a02584_1ab9520ff65055aeb19c8b5bfca02ae4a3" compoundref="d7/d25/a00182" startline="243" endline="246">getAlignedSize</references>
+        <references refid="dc/d28/a02584_1a7804d82ef261e90f61fd38589881c900" compoundref="d7/d25/a00182" startline="179" endline="182">getBuffer</references>
+        <referencedby refid="d9/de2/a02508_1a27740308743c3e5d9e0a84631b3df4b9" compoundref="d9/dd0/a00191" startline="81" endline="84">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getAlignedSize</referencedby>
+        <referencedby refid="d9/de2/a02508_1a59505199eb458103512ef51fec723f12" compoundref="d9/dd0/a00191" startline="51" endline="54">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getData</referencedby>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="dc/d28/a02584_1aed2cd18d4356cb11f8fb95d3382ad23d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::Material::onPassChanged</definition>
-        <argsstring>(Pass const &amp;pass)</argsstring>
-        <name>onPassChanged</name>
-        <param>
-          <type><ref refid="df/d5d/a02596" kindref="compound">Pass</ref> const &amp;</type>
-          <declname>pass</declname>
-        </param>
+      <memberdef kind="function" id="dc/d28/a02584_1ab9520ff65055aeb19c8b5bfca02ae4a3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::PoolUniformBuffer::getAlignedSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getAlignedSize</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::getAlignedSize</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para><simplesect kind="return"><para>The aligned size for an element. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Material.hpp" line="207" column="1"/>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="243" column="10" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="243" bodyend="246"/>
+        <references refid="dc/d28/a02584_1ab9520ff65055aeb19c8b5bfca02ae4a3" compoundref="d7/d25/a00182" startline="243" endline="246">getAlignedSize</references>
+        <references refid="dc/d28/a02584_1ad3de3f47551cdd4bd91f2372e504bd4d" compoundref="d7/d25/a00182" startline="211" endline="214">getElementSize</references>
+        <referencedby refid="dc/d28/a02584_1a32a13128eaf15955c1ff544751dcac6a" compoundref="d7/d25/a00182" startline="231" endline="234">getAlignedSize</referencedby>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="1838">
-        <label>std::enable_shared_from_this&lt; Material &gt;</label>
-      </node>
-      <node id="1836">
-        <label>castor3d::Material</label>
-        <link refid="dc/d28/a02584"/>
-        <childnode refid="1837" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1838" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1839" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1837">
-        <label>castor::Resource&lt; Material &gt;</label>
-      </node>
-      <node id="1839">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="1842">
-        <label>std::enable_shared_from_this&lt; Material &gt;</label>
-      </node>
-      <node id="1840">
-        <label>castor3d::Material</label>
-        <link refid="dc/d28/a02584"/>
-        <childnode refid="1841" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1842" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1843" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1841">
-        <label>castor::Resource&lt; Material &gt;</label>
-      </node>
-      <node id="1843">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-    </collaborationgraph>
-    <location file="Material/Material.hpp" line="20" column="1" bodyfile="Material/Material.hpp" bodystart="16" bodyend="221"/>
+    <location file="Buffer/PoolUniformBuffer.hpp" line="20" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="21" bodyend="257"/>
     <listofallmembers>
-      <member refid="dc/d28/a02584_1a9cd0250e758f345c4f3e5355e0bcf2e5" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>begin</name></member>
-      <member refid="dc/d28/a02584_1ae70e8598bfcd4189f5dd68c02df9e733" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>begin</name></member>
-      <member refid="dc/d28/a02584_1a3f87e00d4d4b1a6d138b4ab1f712923c" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>cleanup</name></member>
-      <member refid="dc/d28/a02584_1aed6380c591d1877c2a5b784a51d49c23" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>createPass</name></member>
-      <member refid="dc/d28/a02584_1aa36c9553aa9623526b0c475336523e9e" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>DefaultMaterialName</name></member>
-      <member refid="dc/d28/a02584_1a1eb8959bd3743ecef6526a92b4836ec7" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>destroyPass</name></member>
-      <member refid="dc/d28/a02584_1a23ce55302b43e77123cd7492acf36857" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>end</name></member>
-      <member refid="dc/d28/a02584_1aaaf660dda33451c486be40b2fbea3a83" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>end</name></member>
-      <member refid="dc/d28/a02584_1a7a03955864c7bd8b43aa19af14573d90" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>getPass</name></member>
-      <member refid="dc/d28/a02584_1a4ca11d2102e8df7d693da8d9e4b30c8f" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>getPassCount</name></member>
-      <member refid="dc/d28/a02584_1adc8c13a477df8d3c1b6d47967686f57a" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>getType</name></member>
-      <member refid="dc/d28/a02584_1a673a552539e98ca1f38e95a00d08b773" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>getTypedPass</name></member>
-      <member refid="dc/d28/a02584_1ad7e34981d8e011d2c77659e15b1de4ce" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>hasAlphaBlending</name></member>
-      <member refid="dc/d28/a02584_1a66f46543912ad98b0c39b8970e0f91de" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>hasEnvironmentMapping</name></member>
-      <member refid="dc/d28/a02584_1a0a2623fe84f04fc8706a4982ae8d82f6" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>hasSubsurfaceScattering</name></member>
-      <member refid="dc/d28/a02584_1a75744b002ab13e525a12aad51e4ea642" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>initialise</name></member>
-      <member refid="dc/d28/a02584_1ac1e3cdc5102ee026032baa6ccd69f551" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>isTextured</name></member>
-      <member refid="dc/d28/a02584_1a0306bd7823ed37cc6a2e1f719889d010" prot="private" virt="non-virtual"><scope>castor3d::Material</scope><name>m_passes</name></member>
-      <member refid="dc/d28/a02584_1a17ccd9758cfd9520dadcfd32db07a17c" prot="private" virt="non-virtual"><scope>castor3d::Material</scope><name>m_passListeners</name></member>
-      <member refid="dc/d28/a02584_1a2ce1b3c15f9d7c955a1032899fdd5987" prot="private" virt="non-virtual"><scope>castor3d::Material</scope><name>m_type</name></member>
-      <member refid="dc/d28/a02584_1a2ec8a59f24abf77a0c1a4f036b8e88f2" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>Material</name></member>
-      <member refid="dc/d28/a02584_1a8aaba373cf1a62ef931fa12dc240120d" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>onChanged</name></member>
-      <member refid="dc/d28/a02584_1aed2cd18d4356cb11f8fb95d3382ad23d" prot="private" virt="non-virtual"><scope>castor3d::Material</scope><name>onPassChanged</name></member>
-      <member refid="dc/d28/a02584_1aa089db54feed1a4434334bf9309e9edb" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>removePass</name></member>
-      <member refid="dc/d28/a02584_1ac9f663866024511c2ab94737358e0371" prot="public" virt="virtual"><scope>castor3d::Material</scope><name>~Material</name></member>
+      <member refid="dc/d28/a02584_1a7cc2d0d50f79a7425983da27baae4147" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>allocate</name></member>
+      <member refid="dc/d28/a02584_1ab2dde565384597c456092f4a8c884c13" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>cleanup</name></member>
+      <member refid="dc/d28/a02584_1a7b2e62bf5f3fd11e264e8588838adba2" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>deallocate</name></member>
+      <member refid="dc/d28/a02584_1a32a13128eaf15955c1ff544751dcac6a" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getAlignedSize</name></member>
+      <member refid="dc/d28/a02584_1ab9520ff65055aeb19c8b5bfca02ae4a3" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getAlignedSize</name></member>
+      <member refid="dc/d28/a02584_1a7804d82ef261e90f61fd38589881c900" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getBuffer</name></member>
+      <member refid="dc/d28/a02584_1ab3b072dc5db16c61c7982533fee8c223" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getBuffer</name></member>
+      <member refid="dc/d28/a02584_1a120bb112f7be0f8f0d893a1a1bd8910e" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getData</name></member>
+      <member refid="dc/d28/a02584_1a1ad0dbe57d8d7cdc4f4bf79b763b60ec" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getData</name></member>
+      <member refid="dc/d28/a02584_1a1b1d69c156642513662b5db351e6bd22" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getDatas</name></member>
+      <member refid="dc/d28/a02584_1ab040736570e5277841e2d4cf06670aaf" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getDatas</name></member>
+      <member refid="dc/d28/a02584_1ad3de3f47551cdd4bd91f2372e504bd4d" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getElementSize</name></member>
+      <member refid="dc/d28/a02584_1a9b17010f71d69a2733e0e1563ddedd04" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>hasAllocated</name></member>
+      <member refid="dc/d28/a02584_1af825adaf870341eb0810ef0fc70a2811" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>hasAvailable</name></member>
+      <member refid="dc/d28/a02584_1a77619c448a45c14bbfcd61b22b592274" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>hasBuffer</name></member>
+      <member refid="dc/d28/a02584_1acb9da7d65165c0ffee76279f21ac9c54" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>initialise</name></member>
+      <member refid="dc/d28/a02584_1aab23d4b9089c3943656b943c38c25289" prot="private" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>m_allocated</name></member>
+      <member refid="dc/d28/a02584_1a1cd07230309159b3e8b81b32a8553266" prot="private" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>m_buffer</name></member>
+      <member refid="dc/d28/a02584_1a741b5ad3d0c991d22d148fb2a7933372" prot="private" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>m_data</name></member>
+      <member refid="dc/d28/a02584_1a2f46362bb79c8f5bc308bd36978ab280" prot="private" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>m_debugName</name></member>
+      <member refid="dc/d28/a02584_1a0f50cc79281f6c234c727f926ddfbcf8" prot="private" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>m_flags</name></member>
+      <member refid="dc/d28/a02584_1a41ce37131b470a87b0ae6ab96ce5b3a7" prot="private" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>m_renderSystem</name></member>
+      <member refid="dc/d28/a02584_1a20d1cd447ae5f875a7c9d13419e33035" prot="private" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>m_sharingMode</name></member>
+      <member refid="dc/d28/a02584_1a85afdeb1cde8aedbc74d5d7be3d4d077" prot="private" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>m_usage</name></member>
+      <member refid="dc/d28/a02584_1aef9b5a32ba56c24595a4b819ad25c7c9" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>operator ashes::UniformBuffer &amp;</name></member>
+      <member refid="dc/d28/a02584_1a3f8292fb08362bce16522a0e987f6344" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>operator ashes::UniformBuffer const &amp;</name></member>
+      <member refid="dc/d28/a02584_1a2bb9306a9d408dd999bb213a20cfc58e" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>PoolUniformBuffer</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,11 +1,9 @@
-<map id="castor3d::LightPassConfig" name="castor3d::LightPassConfig">
-<area shape="rect" id="node1" title=" " alt="" coords="56,455,231,481"/>
-<area shape="rect" id="node2" href="$de/d5f/a05458.html" title=" " alt="" coords="5,365,145,392"/>
-<area shape="rect" id="node3" href="$d6/df5/a04770.html" title=" " alt="" coords="169,365,344,392"/>
-<area shape="rect" id="node4" href="$d1/dcc/a04250.html" title=" " alt="" coords="191,275,322,316"/>
-<area shape="rect" id="node5" href="$d1/d5a/a04246.html" title=" " alt="" coords="259,81,412,108"/>
-<area shape="rect" id="node9" href="$d1/dcc/a04250.html" title=" " alt="" coords="194,171,325,212"/>
-<area shape="rect" id="node6" title=" " alt="" coords="304,5,367,32"/>
-<area shape="rect" id="node7" href="$df/d9b/a02514.html" title=" " alt="" coords="103,81,223,108"/>
-<area shape="rect" id="node8" title=" " alt="" coords="78,5,249,32"/>
+<map id="castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;" name="castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;">
+<area shape="rect" id="node1" title="Wrapper class to select between SSBO or TBO." alt="" coords="877,91,1064,133"/>
+<area shape="rect" id="node2" href="$d2/d33/a04654.html" title=" " alt="" coords="531,5,686,32"/>
+<area shape="rect" id="node3" title=" " alt="" coords="538,57,679,98"/>
+<area shape="rect" id="node4" title=" " alt="" coords="149,129,263,156"/>
+<area shape="rect" id="node6" title=" " alt="" coords="520,122,697,163"/>
+<area shape="rect" id="node7" title=" " alt="" coords="481,187,736,229"/>
+<area shape="rect" id="node5" title=" " alt="" coords="5,129,44,156"/>
 </map>

@@ -1,4 +1,13 @@
-<map id="castor3d::RenderTargetCache" name="castor3d::RenderTargetCache">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,200,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="9,5,196,32"/>
+<map id="castor3d::CmshImporter" name="castor3d::CmshImporter">
+<area shape="rect" id="node1" title=" " alt="" coords="1263,99,1424,126"/>
+<area shape="rect" id="node2" href="$df/de2/a03331.html" title=" " alt="" coords="1055,99,1213,126"/>
+<area shape="rect" id="node3" title=" " alt="" coords="695,41,882,67"/>
+<area shape="rect" id="node4" href="$db/dd3/a03251.html" title=" " alt="" coords="711,92,866,133"/>
+<area shape="rect" id="node5" href="$db/dd3/a03251.html" title="Configuration parameters." alt="" coords="314,5,469,47"/>
+<area shape="rect" id="node6" title=" " alt="" coords="681,244,896,285"/>
+<area shape="rect" id="node7" href="$d6/deb/a02915.html" title="Specifies the usages of a texture, per image component." alt="" coords="292,257,491,283"/>
+<area shape="rect" id="node8" href="$d9/d08/a02911.html" title=" " alt="" coords="5,257,185,283"/>
+<area shape="rect" id="node9" title=" " alt="" coords="331,311,452,338"/>
+<area shape="rect" id="node10" title=" " alt="" coords="76,307,115,334"/>
+<area shape="rect" id="node11" title=" " alt="" coords="76,358,115,385"/>
 </map>

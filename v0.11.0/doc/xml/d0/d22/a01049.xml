@@ -1,0 +1,194 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d0/d22/a01049" kind="file" language="C++">
+    <compoundname>AnimatedSkeleton.hpp</compoundname>
+    <includes refid="d8/d27/a01043" local="yes">Castor3D/Scene/Animation/AnimatedObject.hpp</includes>
+    <includes refid="dc/d66/a07327" local="yes">Castor3D/Scene/Animation/Skeleton/SkeletonAnimationModule.hpp</includes>
+    <includes refid="d9/d87/a00551" local="yes">Castor3D/Model/Skeleton/SkeletonModule.hpp</includes>
+    <incdepgraph>
+      <node id="23483">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="23477">
+        <label>Castor3D/Material/MaterialModule.hpp</label>
+        <link refid="d8/d23/a00326"/>
+        <childnode refid="23478" relation="include">
+        </childnode>
+        <childnode refid="23491" relation="include">
+        </childnode>
+      </node>
+      <node id="23486">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="23474">
+        <label>AnimationInstance.hpp</label>
+        <link refid="d2/d71/a01055"/>
+        <childnode refid="23475" relation="include">
+        </childnode>
+      </node>
+      <node id="23501">
+        <label>Castor3D/Scene/Animation/Skeleton/SkeletonAnimationModule.hpp</label>
+        <link refid="dc/d66/a07327"/>
+        <childnode refid="23475" relation="include">
+        </childnode>
+      </node>
+      <node id="23497">
+        <label>CastorUtils/Graphics/BoundingSphere.hpp</label>
+      </node>
+      <node id="23487">
+        <label>cstdint</label>
+      </node>
+      <node id="23500">
+        <label>CastorUtils/Design/Named.hpp</label>
+      </node>
+      <node id="23491">
+        <label>CastorUtils/Design/Signal.hpp</label>
+      </node>
+      <node id="23485">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="23478">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="23479" relation="include">
+        </childnode>
+        <childnode refid="23480" relation="include">
+        </childnode>
+        <childnode refid="23481" relation="include">
+        </childnode>
+        <childnode refid="23482" relation="include">
+        </childnode>
+        <childnode refid="23483" relation="include">
+        </childnode>
+        <childnode refid="23484" relation="include">
+        </childnode>
+        <childnode refid="23485" relation="include">
+        </childnode>
+        <childnode refid="23486" relation="include">
+        </childnode>
+        <childnode refid="23487" relation="include">
+        </childnode>
+        <childnode refid="23488" relation="include">
+        </childnode>
+        <childnode refid="23489" relation="include">
+        </childnode>
+        <childnode refid="23490" relation="include">
+        </childnode>
+      </node>
+      <node id="23489">
+        <label>string</label>
+      </node>
+      <node id="23494">
+        <label>Castor3D/Model/ModelModule.hpp</label>
+        <link refid="d7/def/a00521"/>
+        <childnode refid="23478" relation="include">
+        </childnode>
+      </node>
+      <node id="23482">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="23479">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="23492">
+        <label>Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp</label>
+        <link refid="dc/d19/a00515"/>
+        <childnode refid="23493" relation="include">
+        </childnode>
+        <childnode refid="23496" relation="include">
+        </childnode>
+        <childnode refid="23497" relation="include">
+        </childnode>
+      </node>
+      <node id="23496">
+        <label>CastorUtils/Graphics/BoundingBox.hpp</label>
+      </node>
+      <node id="23481">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="23476">
+        <label>Castor3D/Scene/SceneModule.hpp</label>
+        <link refid="de/db5/a01181"/>
+        <childnode refid="23477" relation="include">
+        </childnode>
+        <childnode refid="23492" relation="include">
+        </childnode>
+        <childnode refid="23491" relation="include">
+        </childnode>
+      </node>
+      <node id="23499">
+        <label>CastorUtils/Math/Quaternion.hpp</label>
+      </node>
+      <node id="23472">
+        <label>Scene/Animation/AnimatedSkeleton.hpp</label>
+        <link refid="d0/d22/a01049"/>
+        <childnode refid="23473" relation="include">
+        </childnode>
+        <childnode refid="23501" relation="include">
+        </childnode>
+        <childnode refid="23502" relation="include">
+        </childnode>
+      </node>
+      <node id="23480">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="23498">
+        <label>Castor3D/Animation/AnimationModule.hpp</label>
+        <link refid="d0/d35/a07306"/>
+        <childnode refid="23478" relation="include">
+        </childnode>
+        <childnode refid="23499" relation="include">
+        </childnode>
+      </node>
+      <node id="23493">
+        <label>Castor3D/Model/Mesh/MeshModule.hpp</label>
+        <link refid="d2/d9d/a00464"/>
+        <childnode refid="23494" relation="include">
+        </childnode>
+        <childnode refid="23495" relation="include">
+        </childnode>
+      </node>
+      <node id="23490">
+        <label>vector</label>
+      </node>
+      <node id="23484">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="23475">
+        <label>AnimationModule.hpp</label>
+        <link refid="d9/da6/a07309"/>
+        <childnode refid="23476" relation="include">
+        </childnode>
+        <childnode refid="23498" relation="include">
+        </childnode>
+      </node>
+      <node id="23502">
+        <label>Castor3D/Model/Skeleton/SkeletonModule.hpp</label>
+        <link refid="d9/d87/a00551"/>
+        <childnode refid="23494" relation="include">
+        </childnode>
+      </node>
+      <node id="23495">
+        <label>CastorUtils/Design/Factory.hpp</label>
+      </node>
+      <node id="23488">
+        <label>memory</label>
+      </node>
+      <node id="23473">
+        <label>Castor3D/Scene/Animation/AnimatedObject.hpp</label>
+        <link refid="d8/d27/a01043"/>
+        <childnode refid="23474" relation="include">
+        </childnode>
+        <childnode refid="23500" relation="include">
+        </childnode>
+      </node>
+    </incdepgraph>
+    <innerclass refid="d2/d9d/a05056" prot="public">castor3d::AnimatedSkeleton</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Scene/Animation/AnimatedSkeleton.hpp"/>
+  </compounddef>
+</doxygen>

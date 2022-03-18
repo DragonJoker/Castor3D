@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d1/d98/a00407" kind="file" language="C++">
+    <compoundname>VersionException.hpp</compoundname>
+    <includes refid="d9/de6/a00404" local="yes">Castor3D/Miscellaneous/Version.hpp</includes>
+    <includes local="no">CastorUtils/Exception/Exception.hpp</includes>
+    <incdepgraph>
+      <node id="8022">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="8030">
+        <label>Castor3D/RequiredVersion.hpp</label>
+      </node>
+      <node id="8025">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="8026">
+        <label>cstdint</label>
+      </node>
+      <node id="8024">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="8017">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="8018" relation="include">
+        </childnode>
+        <childnode refid="8019" relation="include">
+        </childnode>
+        <childnode refid="8020" relation="include">
+        </childnode>
+        <childnode refid="8021" relation="include">
+        </childnode>
+        <childnode refid="8022" relation="include">
+        </childnode>
+        <childnode refid="8023" relation="include">
+        </childnode>
+        <childnode refid="8024" relation="include">
+        </childnode>
+        <childnode refid="8025" relation="include">
+        </childnode>
+        <childnode refid="8026" relation="include">
+        </childnode>
+        <childnode refid="8027" relation="include">
+        </childnode>
+        <childnode refid="8028" relation="include">
+        </childnode>
+        <childnode refid="8029" relation="include">
+        </childnode>
+      </node>
+      <node id="8028">
+        <label>string</label>
+      </node>
+      <node id="8021">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="8018">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="8020">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="8016">
+        <label>MiscellaneousModule.hpp</label>
+        <link refid="d4/d27/a00392"/>
+        <childnode refid="8017" relation="include">
+        </childnode>
+      </node>
+      <node id="8019">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="8029">
+        <label>vector</label>
+      </node>
+      <node id="8023">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="8031">
+        <label>CastorUtils/Exception/Exception.hpp</label>
+      </node>
+      <node id="8015">
+        <label>Castor3D/Miscellaneous/Version.hpp</label>
+        <link refid="d9/de6/a00404"/>
+        <childnode refid="8016" relation="include">
+        </childnode>
+        <childnode refid="8030" relation="include">
+        </childnode>
+      </node>
+      <node id="8014">
+        <label>Miscellaneous/VersionException.hpp</label>
+        <link refid="d1/d98/a00407"/>
+        <childnode refid="8015" relation="include">
+        </childnode>
+        <childnode refid="8031" relation="include">
+        </childnode>
+      </node>
+      <node id="8027">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="d8/d80/a03852" prot="public">castor3d::VersionException</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+      <sectiondef kind="define">
+      <memberdef kind="define" id="d1/d98/a00407_1a9d9cdc8049e0a356062d1f34e8475837" prot="public" static="no">
+        <name>CASTOR_VERSION_EXCEPTION</name>
+        <param><defname>given</defname></param>
+        <param><defname>expected</defname></param>
+        <initializer>throw <ref refid="d8/d80/a03852" kindref="compound">castor3d::VersionException</ref>{ given, expected, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/VersionException.hpp" line="48" column="9" bodyfile="Miscellaneous/VersionException.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Miscellaneous/VersionException.hpp"/>
+  </compounddef>
+</doxygen>

@@ -1,118 +1,247 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="da/d96/a02547" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::UserInputEvent</compoundname>
-    <derivedcompoundref refid="d6/d51/a02535" prot="public" virt="non-virtual">castor3d::HandlerEvent</derivedcompoundref>
-    <derivedcompoundref refid="d3/d09/a02539" prot="public" virt="non-virtual">castor3d::KeyboardEvent</derivedcompoundref>
-    <derivedcompoundref refid="d1/d57/a02543" prot="public" virt="non-virtual">castor3d::MouseEvent</derivedcompoundref>
-    <includes local="no">UserInputEvent.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="da/d96/a02547" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::GpuBufferPackedAllocator</compoundname>
+    <includes local="no">GpuBufferPackedAllocator.hpp</includes>
+    <innerclass refid="db/df2/a02551" prot="private">castor3d::GpuBufferPackedAllocator::MemChunkCompare</innerclass>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="da/d96/a02547_1a5973899c9785c2dffaae34250aec448b" prot="private" static="no" mutable="no">
-        <type><ref refid="d7/dd1/a01458_1abdf15c31ed466fee351daf42b2b45ad5" kindref="member">UserInputEventType</ref></type>
-        <definition>UserInputEventType castor3d::UserInputEvent::m_eventType</definition>
+      <memberdef kind="variable" id="da/d96/a02547_1a698b14c9c43c39c82a3a1ae00a1476f5" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t castor3d::GpuBufferPackedAllocator::m_allocatedSize</definition>
         <argsstring></argsstring>
-        <name>m_eventType</name>
+        <name>m_allocatedSize</name>
+        <qualifiedname>castor3d::GpuBufferPackedAllocator::m_allocatedSize</qualifiedname>
+        <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/UserInputEvent.hpp" line="58" column="1" bodyfile="Event/UserInput/UserInputEvent.hpp" bodystart="58" bodyend="-1"/>
+        <location file="Buffer/GpuBufferPackedAllocator.hpp" line="77" column="8" bodyfile="Buffer/GpuBufferPackedAllocator.hpp" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d96/a02547_1a588810cceb3ef6acfc149a9a5c237700" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t castor3d::GpuBufferPackedAllocator::m_alignSize</definition>
+        <argsstring></argsstring>
+        <name>m_alignSize</name>
+        <qualifiedname>castor3d::GpuBufferPackedAllocator::m_alignSize</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferPackedAllocator.hpp" line="78" column="8" bodyfile="Buffer/GpuBufferPackedAllocator.hpp" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d96/a02547_1aa5fd53202d4534522b9861f20a738c60" prot="private" static="no" mutable="no">
+        <type>std::set&lt; <ref refid="d9/dce/a02519" kindref="compound">MemChunk</ref>, MemChunkCompare &gt;</type>
+        <definition>std::set&lt; MemChunk, MemChunkCompare &gt; castor3d::GpuBufferPackedAllocator::m_allocated</definition>
+        <argsstring></argsstring>
+        <name>m_allocated</name>
+        <qualifiedname>castor3d::GpuBufferPackedAllocator::m_allocated</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferPackedAllocator.hpp" line="86" column="10" bodyfile="Buffer/GpuBufferPackedAllocator.hpp" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d96/a02547_1a3c4ebf7f340157c1320817674f5ff103" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d9/dce/a02519" kindref="compound">MemChunk</ref> &gt;</type>
+        <definition>std::vector&lt; MemChunk &gt; castor3d::GpuBufferPackedAllocator::m_deallocated</definition>
+        <argsstring></argsstring>
+        <name>m_deallocated</name>
+        <qualifiedname>castor3d::GpuBufferPackedAllocator::m_deallocated</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferPackedAllocator.hpp" line="87" column="13" bodyfile="Buffer/GpuBufferPackedAllocator.hpp" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d96/a02547_1ab55026bebd2002a6380e4231c60d2abf" prot="private" static="no" mutable="no">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::GpuBufferPackedAllocator::m_currentAllocated</definition>
+        <argsstring></argsstring>
+        <name>m_currentAllocated</name>
+        <qualifiedname>castor3d::GpuBufferPackedAllocator::m_currentAllocated</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferPackedAllocator.hpp" line="88" column="14" bodyfile="Buffer/GpuBufferPackedAllocator.hpp" bodystart="88" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="da/d96/a02547_1a1d946a77fa49158379ee4e5dfb84a556" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::UserInputEvent::UserInputEvent</definition>
-        <argsstring>(UserInputEventType type)</argsstring>
-        <name>UserInputEvent</name>
+      <memberdef kind="function" id="da/d96/a02547_1a2302607af7c095820708242a46e17959" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::GpuBufferPackedAllocator::GpuBufferPackedAllocator</definition>
+        <argsstring>(size_t size)</argsstring>
+        <name>GpuBufferPackedAllocator</name>
+        <qualifiedname>castor3d::GpuBufferPackedAllocator::GpuBufferPackedAllocator</qualifiedname>
         <param>
-          <type><ref refid="d7/dd1/a01458_1abdf15c31ed466fee351daf42b2b45ad5" kindref="member">UserInputEventType</ref></type>
-          <declname>type</declname>
+          <type>size_t</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The allocated size. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferPackedAllocator.hpp" line="23" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d96/a02547_1a8b77bc98a50fcc69fac4b9af0036a388" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkDeviceSize</type>
+        <definition>C3D_API VkDeviceSize castor3d::GpuBufferPackedAllocator::allocate</definition>
+        <argsstring>(size_t size)</argsstring>
+        <name>allocate</name>
+        <qualifiedname>castor3d::GpuBufferPackedAllocator::allocate</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Allocates memory. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The requested memory size. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The memory chunk. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferPackedAllocator.hpp" line="34" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d96/a02547_1a616402f874bdc44eaa7fae848c852e1d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::GpuBufferPackedAllocator::deallocate</definition>
+        <argsstring>(VkDeviceSize pointer)</argsstring>
+        <name>deallocate</name>
+        <qualifiedname>castor3d::GpuBufferPackedAllocator::deallocate</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>pointer</declname>
+        </param>
+        <briefdescription>
+<para>Deallocates memory. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pointer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The memory chunk. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferPackedAllocator.hpp" line="43" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d96/a02547_1a8003c09271626dd23edc648d8a1da75a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor3d::GpuBufferPackedAllocator::getTotalSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getTotalSize</name>
+        <qualifiedname>castor3d::GpuBufferPackedAllocator::getTotalSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The allocator size. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferPackedAllocator.hpp" line="50" column="8" bodyfile="Buffer/GpuBufferPackedAllocator.hpp" bodystart="50" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d96/a02547_1aaf4125d6b857856a0a5e5d7bab565e2c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor3d::GpuBufferPackedAllocator::getAlignSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getAlignSize</name>
+        <qualifiedname>castor3d::GpuBufferPackedAllocator::getAlignSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The element aligned size. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferPackedAllocator.hpp" line="60" column="8" bodyfile="Buffer/GpuBufferPackedAllocator.hpp" bodystart="60" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d96/a02547_1a633e293007c5919cd9d3c71597a48f56" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::GpuBufferPackedAllocator::hasAvailable</definition>
+        <argsstring>(size_t size) const</argsstring>
+        <name>hasAvailable</name>
+        <qualifiedname>castor3d::GpuBufferPackedAllocator::hasAvailable</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>size</declname>
         </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputEvent.hpp" line="33" column="1" bodyfile="Event/UserInput/UserInputEvent.hpp" bodystart="33" bodyend="36"/>
-      </memberdef>
-      <memberdef kind="function" id="da/d96/a02547_1a520eaa4deaa4a2c25ee217105e289b78" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
-        <type></type>
-        <definition>virtual castor3d::UserInputEvent::~UserInputEvent</definition>
-        <argsstring>()</argsstring>
-        <name>~UserInputEvent</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputEvent.hpp" line="43" column="1" bodyfile="Event/UserInput/UserInputEvent.hpp" bodystart="43" bodyend="45"/>
-      </memberdef>
-      <memberdef kind="function" id="da/d96/a02547_1ab45ab37b6687ae9a35165ea5b18f0a71" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d7/dd1/a01458_1abdf15c31ed466fee351daf42b2b45ad5" kindref="member">UserInputEventType</ref></type>
-        <definition>UserInputEventType castor3d::UserInputEvent::getEventType</definition>
-        <argsstring>() const</argsstring>
-        <name>getEventType</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The user input event type. </para>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if there is enough remaining memory for given size. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/UserInputEvent.hpp" line="52" column="1" bodyfile="Event/UserInput/UserInputEvent.hpp" bodystart="52" bodyend="55"/>
+        <location file="Buffer/GpuBufferPackedAllocator.hpp" line="70" column="6" bodyfile="Buffer/GpuBufferPackedAllocator.hpp" bodystart="70" bodyend="74"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Description of a user input event. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
-</simplesect>
-<simplesect kind="date"><para>17/04/2016 </para>
-</simplesect>
-<simplesect kind="version"><para>0.9.0</para>
-</simplesect>
-<simplesect kind="remark"><para>You may use this one, but prefer using <ref refid="d1/d57/a02543" kindref="compound">MouseEvent</ref> or <ref refid="d3/d09/a02539" kindref="compound">KeyboardEvent</ref>. </para>
-</simplesect>
-</para>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="4634">
-        <label>castor3d::UserInputEvent</label>
-        <link refid="da/d96/a02547"/>
-      </node>
-      <node id="4637">
-        <label>castor3d::MouseEvent</label>
-        <link refid="d1/d57/a02543"/>
-        <childnode refid="4634" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4635">
-        <label>castor3d::HandlerEvent</label>
-        <link refid="d6/d51/a02535"/>
-        <childnode refid="4634" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4636">
-        <label>castor3d::KeyboardEvent</label>
-        <link refid="d3/d09/a02539"/>
-        <childnode refid="4634" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <location file="Event/UserInput/UserInputEvent.hpp" line="23" column="1" bodyfile="Event/UserInput/UserInputEvent.hpp" bodystart="22" bodyend="59"/>
+    <location file="Buffer/GpuBufferPackedAllocator.hpp" line="13" column="1" bodyfile="Buffer/GpuBufferPackedAllocator.hpp" bodystart="14" bodyend="89"/>
     <listofallmembers>
-      <member refid="da/d96/a02547_1ab45ab37b6687ae9a35165ea5b18f0a71" prot="public" virt="non-virtual"><scope>castor3d::UserInputEvent</scope><name>getEventType</name></member>
-      <member refid="da/d96/a02547_1a5973899c9785c2dffaae34250aec448b" prot="private" virt="non-virtual"><scope>castor3d::UserInputEvent</scope><name>m_eventType</name></member>
-      <member refid="da/d96/a02547_1a1d946a77fa49158379ee4e5dfb84a556" prot="public" virt="non-virtual"><scope>castor3d::UserInputEvent</scope><name>UserInputEvent</name></member>
-      <member refid="da/d96/a02547_1a520eaa4deaa4a2c25ee217105e289b78" prot="public" virt="virtual"><scope>castor3d::UserInputEvent</scope><name>~UserInputEvent</name></member>
+      <member refid="da/d96/a02547_1a8b77bc98a50fcc69fac4b9af0036a388" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferPackedAllocator</scope><name>allocate</name></member>
+      <member refid="da/d96/a02547_1a616402f874bdc44eaa7fae848c852e1d" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferPackedAllocator</scope><name>deallocate</name></member>
+      <member refid="da/d96/a02547_1aaf4125d6b857856a0a5e5d7bab565e2c" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferPackedAllocator</scope><name>getAlignSize</name></member>
+      <member refid="da/d96/a02547_1a8003c09271626dd23edc648d8a1da75a" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferPackedAllocator</scope><name>getTotalSize</name></member>
+      <member refid="da/d96/a02547_1a2302607af7c095820708242a46e17959" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferPackedAllocator</scope><name>GpuBufferPackedAllocator</name></member>
+      <member refid="da/d96/a02547_1a633e293007c5919cd9d3c71597a48f56" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferPackedAllocator</scope><name>hasAvailable</name></member>
+      <member refid="da/d96/a02547_1a588810cceb3ef6acfc149a9a5c237700" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferPackedAllocator</scope><name>m_alignSize</name></member>
+      <member refid="da/d96/a02547_1aa5fd53202d4534522b9861f20a738c60" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferPackedAllocator</scope><name>m_allocated</name></member>
+      <member refid="da/d96/a02547_1a698b14c9c43c39c82a3a1ae00a1476f5" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferPackedAllocator</scope><name>m_allocatedSize</name></member>
+      <member refid="da/d96/a02547_1ab55026bebd2002a6380e4231c60d2abf" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferPackedAllocator</scope><name>m_currentAllocated</name></member>
+      <member refid="da/d96/a02547_1a3c4ebf7f340157c1320817674f5ff103" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferPackedAllocator</scope><name>m_deallocated</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

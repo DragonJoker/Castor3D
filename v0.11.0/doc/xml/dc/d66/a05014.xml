@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dc/d66/a05014" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::Voxel</compoundname>
+    <includes local="no">VoxelizeModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/d66/a05014_1a500e862acbbc63ac0d82aecf2d8c6070" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Voxel::colorMask</definition>
+        <argsstring></argsstring>
+        <name>colorMask</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelizeModule.hpp" line="72" column="1" bodyfile="Render/Voxelize/VoxelizeModule.hpp" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d66/a05014_1a11d74878f633a4332b99aeea8810ad51" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Voxel::normalMask</definition>
+        <argsstring></argsstring>
+        <name>normalMask</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelizeModule.hpp" line="73" column="1" bodyfile="Render/Voxelize/VoxelizeModule.hpp" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Voxelize/VoxelizeModule.hpp" line="71" column="1" bodyfile="Render/Voxelize/VoxelizeModule.hpp" bodystart="70" bodyend="74"/>
+    <listofallmembers>
+      <member refid="dc/d66/a05014_1a500e862acbbc63ac0d82aecf2d8c6070" prot="public" virt="non-virtual"><scope>castor3d::Voxel</scope><name>colorMask</name></member>
+      <member refid="dc/d66/a05014_1a11d74878f633a4332b99aeea8810ad51" prot="public" virt="non-virtual"><scope>castor3d::Voxel</scope><name>normalMask</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

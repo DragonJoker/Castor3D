@@ -1,33 +1,877 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d6/d92/a02890" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPhysicalDevice16BitStorageFeatures &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d6/d92/a02890_1a90e36331db32bb52c6522782a067456b" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPhysicalDevice16BitStorageFeatures &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d6/d92/a02890" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::PhongReflectionModel</compoundname>
+    <basecompoundref refid="d3/d23/a04822" prot="public" virt="non-virtual">castor3d::shader::ReflectionModel</basecompoundref>
+    <includes local="no">GlslPhongReflection.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d6/d92/a02890_1ab489d53fa405787738bf5af09f4fc227" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3, sdw::InVec3, sdw::InCombinedImageCubeRgba32, InPhongLightMaterial &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InVec3 , sdw::InVec3 , sdw::InCombinedImageCubeRgba32 , InPhongLightMaterial &gt; castor3d::shader::PhongReflectionModel::m_computeRefl</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_16BIT_STORAGE_FEATURES</initializer>
+        <name>m_computeRefl</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::m_computeRefl</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="64" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="64" bodyend="-1"/>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="122" column="2" bodyfile="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d92/a02890_1ada1eeedc25538da9e3524dce8b543da4" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3, sdw::InVec3, sdw::InCombinedImageCubeRgba32, sdw::InFloat, sdw::InVec3, InOutPhongLightMaterial &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InVec3 , sdw::InVec3 , sdw::InCombinedImageCubeRgba32 , sdw::InFloat , sdw::InVec3 , InOutPhongLightMaterial &gt; castor3d::shader::PhongReflectionModel::m_computeRefr</definition>
+        <argsstring></argsstring>
+        <name>m_computeRefr</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::m_computeRefr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="129" column="2" bodyfile="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d92/a02890_1a3565c2ce740e06ae0cbaaa65daf5ce69" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Void, sdw::InVec3, sdw::InVec3, sdw::InCombinedImageCubeRgba32, sdw::InFloat, sdw::InVec3, InOutPhongLightMaterial, sdw::InOutVec3, sdw::OutVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , sdw::InVec3 , sdw::InVec3 , sdw::InCombinedImageCubeRgba32 , sdw::InFloat , sdw::InVec3 , InOutPhongLightMaterial , sdw::InOutVec3 , sdw::OutVec3 &gt; castor3d::shader::PhongReflectionModel::m_computeMergeRefr</definition>
+        <argsstring></argsstring>
+        <name>m_computeMergeRefr</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::m_computeMergeRefr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="138" column="2" bodyfile="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d92/a02890_1acb1635b17a99fdeeb67b1833cc706751" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Void, sdw::InVec3, sdw::InVec3, sdw::InCombinedImageCubeRgba32, sdw::InFloat, sdw::InVec3, InOutPhongLightMaterial, sdw::OutVec3, sdw::OutVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , sdw::InVec3 , sdw::InVec3 , sdw::InCombinedImageCubeRgba32 , sdw::InFloat , sdw::InVec3 , InOutPhongLightMaterial , sdw::OutVec3 , sdw::OutVec3 &gt; castor3d::shader::PhongReflectionModel::m_computeReflRefr</definition>
+        <argsstring></argsstring>
+        <name>m_computeReflRefr</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::m_computeReflRefr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="147" column="2" bodyfile="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" bodystart="147" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d92/a02890_1ab9168bd501ea3a278d852601777eba79" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3, sdw::InVec3, sdw::InCombinedImageCubeArrayRgba32, sdw::InInt, InPhongLightMaterial &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InVec3 , sdw::InVec3 , sdw::InCombinedImageCubeArrayRgba32 , sdw::InInt , InPhongLightMaterial &gt; castor3d::shader::PhongReflectionModel::m_computeRefls</definition>
+        <argsstring></argsstring>
+        <name>m_computeRefls</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::m_computeRefls</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="153" column="2" bodyfile="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" bodystart="153" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d92/a02890_1aa074cefceda4aa26be609154b8c6a165" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3, sdw::InVec3, sdw::InCombinedImageCubeArrayRgba32, sdw::InInt, sdw::InFloat, sdw::InVec3, InOutPhongLightMaterial &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InVec3 , sdw::InVec3 , sdw::InCombinedImageCubeArrayRgba32 , sdw::InInt , sdw::InFloat , sdw::InVec3 , InOutPhongLightMaterial &gt; castor3d::shader::PhongReflectionModel::m_computeRefrs</definition>
+        <argsstring></argsstring>
+        <name>m_computeRefrs</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::m_computeRefrs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="161" column="2" bodyfile="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" bodystart="161" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d92/a02890_1a5ae8c1df9fa04f188ea427a84612c7bf" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Void, sdw::InVec3, sdw::InVec3, sdw::InCombinedImageCubeArrayRgba32, sdw::InInt, sdw::InFloat, sdw::InVec3, InOutPhongLightMaterial, sdw::InOutVec3, sdw::OutVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , sdw::InVec3 , sdw::InVec3 , sdw::InCombinedImageCubeArrayRgba32 , sdw::InInt , sdw::InFloat , sdw::InVec3 , InOutPhongLightMaterial , sdw::InOutVec3 , sdw::OutVec3 &gt; castor3d::shader::PhongReflectionModel::m_computeMergeRefrs</definition>
+        <argsstring></argsstring>
+        <name>m_computeMergeRefrs</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::m_computeMergeRefrs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="171" column="2" bodyfile="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" bodystart="171" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d92/a02890_1a1eb540e6097d9cb97f985435e4f5c7c7" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Void, sdw::InVec3, sdw::InVec3, sdw::InCombinedImageCubeArrayRgba32, sdw::InInt, sdw::InFloat, sdw::InVec3, InOutPhongLightMaterial, sdw::OutVec3, sdw::OutVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , sdw::InVec3 , sdw::InVec3 , sdw::InCombinedImageCubeArrayRgba32 , sdw::InInt , sdw::InFloat , sdw::InVec3 , InOutPhongLightMaterial , sdw::OutVec3 , sdw::OutVec3 &gt; castor3d::shader::PhongReflectionModel::m_computeReflRefrs</definition>
+        <argsstring></argsstring>
+        <name>m_computeReflRefrs</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::m_computeReflRefrs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="181" column="2" bodyfile="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" bodystart="181" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d92/a02890_1a91c07fcf824ae1175c1c84c1515fc3ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::PhongReflectionModel::PhongReflectionModel</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Utils &amp;utils, uint32_t &amp;envMapBinding, uint32_t envMapSet)</argsstring>
+        <name>PhongReflectionModel</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::PhongReflectionModel</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/daa/a04862" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>envMapBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>envMapSet</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="17" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d92/a02890_1a101452a978f61428358a04039b721eb0" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::PhongReflectionModel::computeDeferred</definition>
+        <argsstring>(LightMaterial &amp;material, Surface const &amp;surface, SceneData const &amp;sceneData, sdw::Int envMapIndex, sdw::Int const &amp;reflection, sdw::Int const &amp;refraction, sdw::Float const &amp;refractionRatio, sdw::Vec3 const &amp;transmission, sdw::Vec3 &amp;ambient, sdw::Vec3 &amp;reflected, sdw::Vec3 &amp;refracted) override</argsstring>
+        <name>computeDeferred</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::computeDeferred</qualifiedname>
+        <reimplements refid="d3/d23/a04822_1afb423e26805f3626a36dd3b062c21e6c">computeDeferred</reimplements>
+        <param>
+          <type><ref refid="de/d4c/a04794" kindref="compound">LightMaterial</ref> &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d06/a01403_1afa7e0e1d1dbce1333aa48253fd404bf4" kindref="member">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d5a/a04966" kindref="compound">SceneData</ref> const &amp;</type>
+          <declname>sceneData</declname>
+        </param>
+        <param>
+          <type>sdw::Int</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>reflection</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>refraction</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>transmission</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>ambient</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflected</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>refracted</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="21" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d92/a02890_1a84ff066cb9b910c6681cb4e590530bb7" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::PhongReflectionModel::computeForward</definition>
+        <argsstring>(LightMaterial &amp;material, Surface const &amp;surface, SceneData const &amp;sceneData) override</argsstring>
+        <name>computeForward</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::computeForward</qualifiedname>
+        <reimplements refid="d3/d23/a04822_1aaef84e59f33340c7dfca92ffe9c23daf">computeForward</reimplements>
+        <param>
+          <type><ref refid="de/d4c/a04794" kindref="compound">LightMaterial</ref> &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d06/a01403_1afa7e0e1d1dbce1333aa48253fd404bf4" kindref="member">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d5a/a04966" kindref="compound">SceneData</ref> const &amp;</type>
+          <declname>sceneData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="32" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d92/a02890_1a267f098f0812efaf4491f712b102854a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::PhongReflectionModel::computeForward</definition>
+        <argsstring>(LightMaterial &amp;material, Surface const &amp;surface, SceneData const &amp;sceneData, sdw::Float const &amp;refractionRatio, sdw::Vec3 const &amp;transmission) override</argsstring>
+        <name>computeForward</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::computeForward</qualifiedname>
+        <reimplements refid="d3/d23/a04822_1a9d149fd79dbb80ab68e17d7fe9ddb7e0">computeForward</reimplements>
+        <param>
+          <type><ref refid="de/d4c/a04794" kindref="compound">LightMaterial</ref> &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d06/a01403_1afa7e0e1d1dbce1333aa48253fd404bf4" kindref="member">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d5a/a04966" kindref="compound">SceneData</ref> const &amp;</type>
+          <declname>sceneData</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>transmission</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="35" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d92/a02890_1a5d93e67b5b95455e9fec105029e85a0e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::PhongReflectionModel::computeForward</definition>
+        <argsstring>(LightMaterial &amp;material, Surface const &amp;surface, SceneData const &amp;sceneData, sdw::Float const &amp;refractionRatio, sdw::Vec3 const &amp;transmission, sdw::Vec3 &amp;ambient, sdw::Vec3 &amp;reflected, sdw::Vec3 &amp;refracted) override</argsstring>
+        <name>computeForward</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::computeForward</qualifiedname>
+        <reimplements refid="d3/d23/a04822_1a222f0fbe46b7f3f9b9223b703d5abf99">computeForward</reimplements>
+        <param>
+          <type><ref refid="de/d4c/a04794" kindref="compound">LightMaterial</ref> &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d06/a01403_1afa7e0e1d1dbce1333aa48253fd404bf4" kindref="member">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d5a/a04966" kindref="compound">SceneData</ref> const &amp;</type>
+          <declname>sceneData</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>transmission</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>ambient</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflected</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>refracted</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="40" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d6/d92/a02890_1a66d6f24c4b366eb01394e88a59b29a96" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::PhongReflectionModel::computeIncident</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsPosition, sdw::Vec3 const &amp;wsCamera) const</argsstring>
+        <name>computeIncident</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::computeIncident</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsCamera</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="50" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d92/a02890_1ad70996b19caf96c1322bc711ca574161" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::PhongReflectionModel::computeRefl</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsIncident, sdw::Vec3 const &amp;wsNormal, sdw::CombinedImageCubeRgba32 const &amp;envMap, PhongLightMaterial const &amp;material)</argsstring>
+        <name>computeRefl</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::computeRefl</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsIncident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImageCubeRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d78/a02886" kindref="compound">PhongLightMaterial</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="52" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d92/a02890_1a9dfd8effc2ac5b9e429173e070eb54ac" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::PhongReflectionModel::computeRefr</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsIncident, sdw::Vec3 const &amp;wsNormal, sdw::CombinedImageCubeRgba32 const &amp;envMap, sdw::Float const &amp;refractionRatio, sdw::Vec3 const &amp;transmission, PhongLightMaterial &amp;material)</argsstring>
+        <name>computeRefr</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::computeRefr</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsIncident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImageCubeRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>transmission</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d78/a02886" kindref="compound">PhongLightMaterial</ref> &amp;</type>
+          <declname>material</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="56" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d92/a02890_1ad8cbc248310a85e395938cc991d89d2a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongReflectionModel::computeRefr</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsIncident, sdw::Vec3 const &amp;wsNormal, sdw::CombinedImageCubeRgba32 const &amp;envMap, sdw::Float const &amp;refractionRatio, sdw::Vec3 const &amp;transmission, PhongLightMaterial &amp;material, sdw::Vec3 &amp;reflection, sdw::Vec3 &amp;refraction)</argsstring>
+        <name>computeRefr</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::computeRefr</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsIncident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImageCubeRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>transmission</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d78/a02886" kindref="compound">PhongLightMaterial</ref> &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflection</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>refraction</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="62" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d92/a02890_1aea910afe84c9d55e37e20c6f0c68569d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongReflectionModel::computeReflRefr</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsIncident, sdw::Vec3 const &amp;wsNormal, sdw::CombinedImageCubeRgba32 const &amp;envMap, sdw::Float const &amp;refractionRatio, sdw::Vec3 const &amp;transmission, PhongLightMaterial &amp;material, sdw::Vec3 &amp;reflection, sdw::Vec3 &amp;refraction)</argsstring>
+        <name>computeReflRefr</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::computeReflRefr</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsIncident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImageCubeRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>transmission</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d78/a02886" kindref="compound">PhongLightMaterial</ref> &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflection</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>refraction</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="70" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d92/a02890_1a7e9313982491802d06a7da937566f4dd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::PhongReflectionModel::computeRefls</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsIncident, sdw::Vec3 const &amp;wsNormal, sdw::CombinedImageCubeArrayRgba32 const &amp;envMap, sdw::Int const &amp;envMapIndex, PhongLightMaterial const &amp;material)</argsstring>
+        <name>computeRefls</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::computeRefls</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsIncident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImageCubeArrayRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d78/a02886" kindref="compound">PhongLightMaterial</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="78" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d92/a02890_1a26f20f2520af2c5ba07b5e7f78697f1b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::PhongReflectionModel::computeRefrs</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsIncident, sdw::Vec3 const &amp;wsNormal, sdw::CombinedImageCubeArrayRgba32 const &amp;envMap, sdw::Int const &amp;envMapIndex, sdw::Float const &amp;refractionRatio, sdw::Vec3 const &amp;transmission, PhongLightMaterial &amp;material)</argsstring>
+        <name>computeRefrs</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::computeRefrs</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsIncident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImageCubeArrayRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>transmission</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d78/a02886" kindref="compound">PhongLightMaterial</ref> &amp;</type>
+          <declname>material</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="83" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d92/a02890_1a8f24f04cf40c3ffa635d361bc3c3f861" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongReflectionModel::computeRefrs</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsIncident, sdw::Vec3 const &amp;wsNormal, sdw::CombinedImageCubeArrayRgba32 const &amp;envMap, sdw::Int const &amp;envMapIndex, sdw::Float const &amp;refractionRatio, sdw::Vec3 const &amp;transmission, PhongLightMaterial &amp;material, sdw::Vec3 &amp;reflection, sdw::Vec3 &amp;refraction)</argsstring>
+        <name>computeRefrs</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::computeRefrs</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsIncident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImageCubeArrayRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>transmission</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d78/a02886" kindref="compound">PhongLightMaterial</ref> &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflection</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>refraction</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="90" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d92/a02890_1a01a321f9be69c498b95e8d09fe4cd476" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongReflectionModel::computeReflRefrs</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsIncident, sdw::Vec3 const &amp;wsNormal, sdw::CombinedImageCubeArrayRgba32 const &amp;envMap, sdw::Int const &amp;envMapIndex, sdw::Float const &amp;refractionRatio, sdw::Vec3 const &amp;transmission, PhongLightMaterial &amp;material, sdw::Vec3 &amp;reflection, sdw::Vec3 &amp;refraction)</argsstring>
+        <name>computeReflRefrs</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::computeReflRefrs</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsIncident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImageCubeArrayRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>transmission</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d78/a02886" kindref="compound">PhongLightMaterial</ref> &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflection</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>refraction</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="99" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d92/a02890_1a4b90d092779c9d41ad793b2450bb527a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongReflectionModel::doDeclareComputeRefl</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareComputeRefl</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::doDeclareComputeRefl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="108" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d92/a02890_1a8398d3ea8aeff46a224b4cf0241c44eb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongReflectionModel::doDeclareComputeRefr</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareComputeRefr</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::doDeclareComputeRefr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="109" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d92/a02890_1a055079f572c79d801b18fde5bf53d09c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongReflectionModel::doDeclareComputeMergeRefr</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareComputeMergeRefr</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::doDeclareComputeMergeRefr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="110" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d92/a02890_1a0963ce91dba880387d28dad80642f697" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongReflectionModel::doDeclareComputeReflRefr</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareComputeReflRefr</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::doDeclareComputeReflRefr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="111" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d92/a02890_1a756ab110dcb74a975ad4e29e99e36492" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongReflectionModel::doDeclareComputeRefls</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareComputeRefls</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::doDeclareComputeRefls</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="112" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d92/a02890_1a475ad3acaf6616769cea9cce595d56b3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongReflectionModel::doDeclareComputeRefrs</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareComputeRefrs</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::doDeclareComputeRefrs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="113" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d92/a02890_1ab0b8a71c71ae6b53980371cbdeca0cba" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongReflectionModel::doDeclareComputeMergeRefrs</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareComputeMergeRefrs</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::doDeclareComputeMergeRefrs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="114" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d92/a02890_1a14062ec9936dd707e97a96faf2c094bd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongReflectionModel::doDeclareComputeReflRefrs</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareComputeReflRefrs</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::doDeclareComputeReflRefrs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="115" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="64" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="64" bodyend="64"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::PhongReflectionModel</label>
+        <link refid="d6/d92/a02890"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::ReflectionModel</label>
+        <link refid="d3/d23/a04822"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::PhongReflectionModel</label>
+        <link refid="d6/d92/a02890"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::ReflectionModel</label>
+        <link refid="d3/d23/a04822"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_utils</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::Utils</label>
+        <link refid="d5/daa/a04862"/>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="13" column="1" bodyfile="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" bodystart="15" bodyend="182"/>
     <listofallmembers>
-      <member refid="d6/d92/a02890_1a90e36331db32bb52c6522782a067456b" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPhysicalDevice16BitStorageFeatures &gt;</scope><name>value</name></member>
+      <member refid="d6/d92/a02890_1a101452a978f61428358a04039b721eb0" prot="public" virt="virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>computeDeferred</name></member>
+      <member refid="d6/d92/a02890_1a84ff066cb9b910c6681cb4e590530bb7" prot="public" virt="virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>computeForward</name></member>
+      <member refid="d6/d92/a02890_1a267f098f0812efaf4491f712b102854a" prot="public" virt="virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>computeForward</name></member>
+      <member refid="d6/d92/a02890_1a5d93e67b5b95455e9fec105029e85a0e" prot="public" virt="virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>computeForward</name></member>
+      <member refid="d3/d23/a04822_1ada2c9ecbe4d8818abf37027f027b9ffb" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>computeFresnel</name></member>
+      <member refid="d6/d92/a02890_1a66d6f24c4b366eb01394e88a59b29a96" prot="private" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>computeIncident</name></member>
+      <member refid="d6/d92/a02890_1ad70996b19caf96c1322bc711ca574161" prot="private" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>computeRefl</name></member>
+      <member refid="d6/d92/a02890_1aea910afe84c9d55e37e20c6f0c68569d" prot="private" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>computeReflRefr</name></member>
+      <member refid="d6/d92/a02890_1a01a321f9be69c498b95e8d09fe4cd476" prot="private" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>computeReflRefrs</name></member>
+      <member refid="d6/d92/a02890_1a7e9313982491802d06a7da937566f4dd" prot="private" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>computeRefls</name></member>
+      <member refid="d6/d92/a02890_1a9dfd8effc2ac5b9e429173e070eb54ac" prot="private" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>computeRefr</name></member>
+      <member refid="d6/d92/a02890_1ad8cbc248310a85e395938cc991d89d2a" prot="private" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>computeRefr</name></member>
+      <member refid="d6/d92/a02890_1a26f20f2520af2c5ba07b5e7f78697f1b" prot="private" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>computeRefrs</name></member>
+      <member refid="d6/d92/a02890_1a8f24f04cf40c3ffa635d361bc3c3f861" prot="private" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>computeRefrs</name></member>
+      <member refid="d3/d23/a04822_1a4de8b9230c6f6c815bd7c305a44468f4" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>computeScreenSpace</name></member>
+      <member refid="d3/d23/a04822_1af0c88e8b7858f8efdb51502aacfeceb2" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>declareComputeFresnel</name></member>
+      <member refid="d3/d23/a04822_1a896bf0ac2253775c748acf0bc05e34e9" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>declareComputeScreenSpace</name></member>
+      <member refid="d3/d23/a04822_1aaf46556c3db082a3e71649a68d3edad9" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>declareTraceScreenSpace</name></member>
+      <member refid="d6/d92/a02890_1a055079f572c79d801b18fde5bf53d09c" prot="private" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>doDeclareComputeMergeRefr</name></member>
+      <member refid="d6/d92/a02890_1ab0b8a71c71ae6b53980371cbdeca0cba" prot="private" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>doDeclareComputeMergeRefrs</name></member>
+      <member refid="d6/d92/a02890_1a4b90d092779c9d41ad793b2450bb527a" prot="private" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>doDeclareComputeRefl</name></member>
+      <member refid="d6/d92/a02890_1a0963ce91dba880387d28dad80642f697" prot="private" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>doDeclareComputeReflRefr</name></member>
+      <member refid="d6/d92/a02890_1a14062ec9936dd707e97a96faf2c094bd" prot="private" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>doDeclareComputeReflRefrs</name></member>
+      <member refid="d6/d92/a02890_1a756ab110dcb74a975ad4e29e99e36492" prot="private" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>doDeclareComputeRefls</name></member>
+      <member refid="d6/d92/a02890_1a8398d3ea8aeff46a224b4cf0241c44eb" prot="private" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>doDeclareComputeRefr</name></member>
+      <member refid="d6/d92/a02890_1a475ad3acaf6616769cea9cce595d56b3" prot="private" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>doDeclareComputeRefrs</name></member>
+      <member refid="d3/d23/a04822_1a37a538d646d2cfb7025db4c8ad990c99" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>m_computeFresnel</name></member>
+      <member refid="d6/d92/a02890_1a3565c2ce740e06ae0cbaaa65daf5ce69" prot="private" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>m_computeMergeRefr</name></member>
+      <member refid="d6/d92/a02890_1a5ae8c1df9fa04f188ea427a84612c7bf" prot="private" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>m_computeMergeRefrs</name></member>
+      <member refid="d6/d92/a02890_1ab489d53fa405787738bf5af09f4fc227" prot="private" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>m_computeRefl</name></member>
+      <member refid="d6/d92/a02890_1acb1635b17a99fdeeb67b1833cc706751" prot="private" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>m_computeReflRefr</name></member>
+      <member refid="d6/d92/a02890_1a1eb540e6097d9cb97f985435e4f5c7c7" prot="private" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>m_computeReflRefrs</name></member>
+      <member refid="d6/d92/a02890_1ab9168bd501ea3a278d852601777eba79" prot="private" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>m_computeRefls</name></member>
+      <member refid="d6/d92/a02890_1ada1eeedc25538da9e3524dce8b543da4" prot="private" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>m_computeRefr</name></member>
+      <member refid="d6/d92/a02890_1aa074cefceda4aa26be609154b8c6a165" prot="private" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>m_computeRefrs</name></member>
+      <member refid="d3/d23/a04822_1a4dacf94e9e976b47e13deed31611e60e" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>m_computeScreenSpace</name></member>
+      <member refid="d3/d23/a04822_1a551f1fdfd98b317996261cc500242841" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>m_passFlags</name></member>
+      <member refid="d3/d23/a04822_1a6295894be3ea19ea49a9ce8c8ca01474" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>m_traceScreenSpace</name></member>
+      <member refid="d3/d23/a04822_1aca7e4f987a800a07a60e70823d3c227b" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>m_utils</name></member>
+      <member refid="d3/d23/a04822_1ae525d4f79a6aeb9c3283ad34fa60400d" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>m_writer</name></member>
+      <member refid="d6/d92/a02890_1a91c07fcf824ae1175c1c84c1515fc3ad" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>PhongReflectionModel</name></member>
+      <member refid="d3/d23/a04822_1a04440c3303085df09f734548b4dfb29d" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>ReflectionModel</name></member>
+      <member refid="d3/d23/a04822_1a665333520095ab79bcd6ceba1666bcde" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>ReflectionModel</name></member>
+      <member refid="d3/d23/a04822_1ad7af5ab2a285495abbdfbd19053ef700" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>traceScreenSpace</name></member>
+      <member refid="d3/d23/a04822_1ab741a9bc5a596e2f5684120b015bd578" prot="public" virt="virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>~ReflectionModel</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

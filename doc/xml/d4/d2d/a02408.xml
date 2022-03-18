@@ -1,69 +1,137 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d4/d2d/a02408" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::CacheTraits&lt; RenderTechnique, KeyType &gt;</compoundname>
-    <includes local="no">CacheModule.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d4/d2d/a02408" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;</compoundname>
+    <basecompoundref refid="db/d83/a02328" prot="public" virt="non-virtual">castor3d::BinaryParserBase&lt; SkeletonAnimationBone &gt;</basecompoundref>
+    <includes local="no">BinarySkeletonAnimationBone.hpp</includes>
     <templateparamlist>
-      <param>
-        <type>typename KeyType</type>
-      </param>
     </templateparamlist>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="d4/d2d/a02408_1ad39e0c02de673f38cbfd3ebd95a82e92" prot="public" static="no">
-        <type>std::function&lt; std::shared_ptr&lt; <ref refid="da/d05/a04920" kindref="compound">RenderTechnique</ref> &gt;(KeyType const &amp;, castor::String const &amp;, <ref refid="d3/d6e/a04628" kindref="compound">RenderTarget</ref> &amp;, <ref refid="da/d1e/a01479_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;, <ref refid="db/dcc/a04712" kindref="compound">SsaoConfig</ref> const &amp;) &gt;</type>
-        <definition>using castor3d::CacheTraits&lt; RenderTechnique, KeyType &gt;::Producer =  std::function &lt; std::shared_ptr&lt; RenderTechnique &gt;( KeyType const &amp; , castor::String const &amp; , RenderTarget &amp; , Parameters const &amp; , SsaoConfig const &amp; ) &gt;</definition>
-        <argsstring></argsstring>
-        <name>Producer</name>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d4/d2d/a02408_1ae674ccd0f87c445bf7d82f4fbba2f150" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;::doParse</definition>
+        <argsstring>(SkeletonAnimationBone &amp;obj) override</argsstring>
+        <name>doParse</name>
+        <qualifiedname>castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;::doParse</qualifiedname>
+        <reimplements refid="db/d83/a02328_1a020a66d5fc1b452dc76c82702d72bbb1">doParse</reimplements>
+        <param>
+          <type><ref refid="df/d89/a03440" kindref="compound">SkeletonAnimationBone</ref> &amp;</type>
+          <declname>obj</declname>
+        </param>
         <briefdescription>
+<para>Function used to retrieve specific data from the chunk. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/CacheModule.hpp" line="223" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="227" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d4/d2d/a02408_1a59cddc41487f9b88d874e854b0ac323b" prot="public" static="no">
-        <type>std::function&lt; void(<ref refid="df/d46/a02376" kindref="compound">CacheBase</ref>&lt; <ref refid="da/d05/a04920" kindref="compound">RenderTechnique</ref>, KeyType &gt; const &amp;, castor::Collection&lt; <ref refid="da/d05/a04920" kindref="compound">RenderTechnique</ref>, KeyType &gt; &amp;, std::shared_ptr&lt; <ref refid="da/d05/a04920" kindref="compound">RenderTechnique</ref> &gt;) &gt;</type>
-        <definition>using castor3d::CacheTraits&lt; RenderTechnique, KeyType &gt;::Merger =  std::function&lt; void( CacheBase&lt; RenderTechnique, KeyType &gt; const &amp; , castor::Collection&lt; RenderTechnique, KeyType &gt; &amp; , std::shared_ptr&lt; RenderTechnique &gt; ) &gt;</definition>
-        <argsstring></argsstring>
-        <name>Merger</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/CacheModule.hpp" line="228" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="230" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d4/d2d/a02408_1adbfc3574d7a14bdfd842cd13542c30b6" prot="public" static="yes" mutable="no">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
-        <definition>C3D_API const castor::String castor3d::CacheTraits&lt; RenderTechnique, KeyType &gt;::Name</definition>
-        <argsstring></argsstring>
-        <name>Name</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/CacheModule.hpp" line="222" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="222" bodyend="-1"/>
+        <location file="Binary/BinarySkeletonAnimationBone.hpp" line="80" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Helper structure to specialise a cache behaviour. </para>
+<para>MovingBone binary loader. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="remark"><para>Specialisation for <ref refid="da/d05/a04920" kindref="compound">RenderTechnique</ref>. </para>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
 </simplesect>
-</para>
+<simplesect kind="version"><para>0.8.0 </para>
+</simplesect>
+<simplesect kind="date"><para>26/01/2016</para>
+</simplesect>
+Loader binaire de MovingBone. </para>
     </detaileddescription>
-    <location file="Cache/CacheModule.hpp" line="221" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="220" bodyend="231"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::BinaryParserBase&lt; SkeletonAnimationBone &gt;</label>
+        <link refid="db/d83/a02328"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationBone &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;</label>
+        <link refid="d4/d2d/a02408"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
+        <link refid="db/d83/a02328"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::BinaryParserBase&lt; SkeletonAnimationBone &gt;</label>
+        <link refid="db/d83/a02328"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_fileVersion</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationBone &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::BinaryChunk</label>
+        <link refid="dc/d1a/a02288"/>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;</label>
+        <link refid="d4/d2d/a02408"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
+        <link refid="db/d83/a02328"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_fileVersion</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::Version</label>
+        <link refid="d0/ded/a03276"/>
+      </node>
+    </collaborationgraph>
+    <location file="Binary/BinarySkeletonAnimationBone.hpp" line="66" column="1" bodyfile="Binary/BinarySkeletonAnimationBone.hpp" bodystart="68" bodyend="81"/>
     <listofallmembers>
-      <member refid="d4/d2d/a02408_1a59cddc41487f9b88d874e854b0ac323b" prot="public" virt="non-virtual"><scope>castor3d::CacheTraits&lt; RenderTechnique, KeyType &gt;</scope><name>Merger</name></member>
-      <member refid="d4/d2d/a02408_1adbfc3574d7a14bdfd842cd13542c30b6" prot="public" virt="non-virtual"><scope>castor3d::CacheTraits&lt; RenderTechnique, KeyType &gt;</scope><name>Name</name></member>
-      <member refid="d4/d2d/a02408_1ad39e0c02de673f38cbfd3ebd95a82e92" prot="public" virt="non-virtual"><scope>castor3d::CacheTraits&lt; RenderTechnique, KeyType &gt;</scope><name>Producer</name></member>
+      <member refid="db/d83/a02328_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;</scope><name>checkError</name></member>
+      <member refid="db/d83/a02328_1ae6f4694ede819151fe4e30e33235ff07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;</scope><name>createBinaryParser</name></member>
+      <member refid="db/d83/a02328_1ab5f9ba53ad5865f967b41e5a27ed73a9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;</scope><name>doGetSubChunk</name></member>
+      <member refid="d4/d2d/a02408_1ae674ccd0f87c445bf7d82f4fbba2f150" prot="private" virt="virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;</scope><name>doParse</name></member>
+      <member refid="db/d83/a02328_1a0e1aa917e3bf897fab03a32d20890062" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;</scope><name>doParseChunk</name></member>
+      <member refid="db/d83/a02328_1a22ca62addb3ab167995e18f49267efcf" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;</scope><name>doParseChunk</name></member>
+      <member refid="db/d83/a02328_1a5a648553ce168f5bc34adeedc8d169a7" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;</scope><name>doParseChunk</name></member>
+      <member refid="db/d83/a02328_1a90df4e46072e5ef14aebebd00cbcc1f5" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;</scope><name>doParseChunk</name></member>
+      <member refid="db/d83/a02328_1a5fac84360102001f5e730be1927c024e" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;</scope><name>doParseChunk</name></member>
+      <member refid="db/d83/a02328_1a035881aba2b64571b30a5efd3faaf3d9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;</scope><name>doParseHeader</name></member>
+      <member refid="db/d83/a02328_1ab3df04f9aa2eb1f7a533ed18631f09c4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;</scope><name>m_chunk</name></member>
+      <member refid="db/d83/a02328_1a455764ca72b659dab2652baf56ce5885" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;</scope><name>m_fileVersion</name></member>
+      <member refid="db/d83/a02328_1ae4820a3ab3e4b282240e5f1b969153c1" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;</scope><name>Name</name></member>
+      <member refid="db/d83/a02328_1a5db83668684ca219f67de3a381898e64" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;</scope><name>parse</name></member>
+      <member refid="db/d83/a02328_1a6bbbb529f463085c7d259600ae1b3e99" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;</scope><name>parse</name></member>
+      <member refid="db/d83/a02328_1a61b02dbf69d89569eff5be22facd5f07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;</scope><name>parse_v1_1</name></member>
+      <member refid="db/d83/a02328_1a95788692ddd6fae91074c299b674aaab" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;</scope><name>parse_v1_2</name></member>
+      <member refid="db/d83/a02328_1a6f39b66d980e4a65660016f71115a89c" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;</scope><name>parse_v1_3</name></member>
+      <member refid="db/d83/a02328_1aabc068daf8d99718497aa35f7a17c346" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;</scope><name>parse_v1_4</name></member>
+      <member refid="db/d83/a02328_1afb9e6fdcdc58e65458de7892d2bf8025" prot="public" virt="virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;</scope><name>~BinaryParserBase</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

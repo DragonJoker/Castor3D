@@ -1,11 +1,11 @@
-<map id="castor3d::MeshGenerator" name="castor3d::MeshGenerator">
-<area shape="rect" id="node1" title=" " alt="" coords="5,183,175,209"/>
-<area shape="rect" id="node2" href="$dd/d31/a03862.html" title=" " alt="" coords="243,5,353,32"/>
-<area shape="rect" id="node3" href="$db/d06/a03866.html" title=" " alt="" coords="243,56,353,83"/>
-<area shape="rect" id="node4" href="$dc/db8/a03870.html" title=" " alt="" coords="235,107,361,133"/>
-<area shape="rect" id="node5" href="$d0/d34/a03874.html" title=" " alt="" coords="223,157,373,184"/>
-<area shape="rect" id="node6" href="$d0/d60/a03878.html" title=" " alt="" coords="241,208,355,235"/>
-<area shape="rect" id="node7" href="$dd/d94/a03882.html" title=" " alt="" coords="229,259,367,285"/>
-<area shape="rect" id="node8" href="$d4/d72/a03886.html" title=" " alt="" coords="237,309,359,336"/>
-<area shape="rect" id="node9" href="$d2/df3/a03890.html" title=" " alt="" coords="242,360,354,387"/>
+<map id="castor3d::RadianceComputer" name="castor3d::RadianceComputer">
+<area shape="rect" id="node1" title=" " alt="" coords="111,439,302,465"/>
+<area shape="rect" id="node2" href="$df/d59/a04343.html" title=" " alt="" coords="131,363,282,389"/>
+<area shape="rect" id="node3" href="$d4/d87/a03963.html" title=" " alt="" coords="127,273,286,300"/>
+<area shape="rect" id="node4" href="$d3/d9a/a04075.html" title=" " alt="" coords="15,184,182,211"/>
+<area shape="rect" id="node5" title=" " alt="" coords="5,95,192,121"/>
+<area shape="rect" id="node6" title=" " alt="" coords="207,184,385,211"/>
+<area shape="rect" id="node7" href="$d5/d04/a03955.html" title=" " alt="" coords="217,95,369,121"/>
+<area shape="rect" id="node8" title=" " alt="" coords="394,95,507,121"/>
+<area shape="rect" id="node9" title=" " alt="" coords="431,5,470,32"/>
 </map>

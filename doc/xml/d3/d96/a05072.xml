@@ -1,334 +1,51 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d3/d96/a05072" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::MeshAnimationInstance</compoundname>
-    <basecompoundref refid="d2/d8c/a05064" prot="public" virt="non-virtual">castor3d::AnimationInstance</basecompoundref>
-    <includes local="no">MeshAnimationInstance.hpp</includes>
-      <sectiondef kind="user-defined">
-      <memberdef kind="function" id="d3/d96/a05072_1a20eb16758bfff388fdb9001644bc5475" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::MeshAnimationInstance::MeshAnimationInstance</definition>
-        <argsstring>(MeshAnimationInstance &amp;&amp;rhs)=default</argsstring>
-        <name>MeshAnimationInstance</name>
-        <param>
-          <type><ref refid="d3/d96/a05072" kindref="compound">MeshAnimationInstance</ref> &amp;&amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>name Copy / Move. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="25" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d96/a05072_1a4df16c67f56ea72d28a40f48181faabb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/d96/a05072" kindref="compound">MeshAnimationInstance</ref> &amp;</type>
-        <definition>C3D_API MeshAnimationInstance&amp; castor3d::MeshAnimationInstance::operator=</definition>
-        <argsstring>(MeshAnimationInstance &amp;&amp;rhs)=delete</argsstring>
-        <name>operator=</name>
-        <param>
-          <type><ref refid="d3/d96/a05072" kindref="compound">MeshAnimationInstance</ref> &amp;&amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="26" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d96/a05072_1ae5911fe86e5b102df6abfc3ce082ff93" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::MeshAnimationInstance::MeshAnimationInstance</definition>
-        <argsstring>(MeshAnimationInstance const &amp;rhs)=delete</argsstring>
-        <name>MeshAnimationInstance</name>
-        <param>
-          <type><ref refid="d3/d96/a05072" kindref="compound">MeshAnimationInstance</ref> const &amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="27" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d96/a05072_1a6e41741a94547e6463f9dd1ef2946be9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/d96/a05072" kindref="compound">MeshAnimationInstance</ref> &amp;</type>
-        <definition>C3D_API MeshAnimationInstance&amp; castor3d::MeshAnimationInstance::operator=</definition>
-        <argsstring>(MeshAnimationInstance const &amp;rhs)=delete</argsstring>
-        <name>operator=</name>
-        <param>
-          <type><ref refid="d3/d96/a05072" kindref="compound">MeshAnimationInstance</ref> const &amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="28" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="protected-attrib">
-      <memberdef kind="variable" id="d3/d96/a05072_1a9825c86fc3fe267e5bb60036a66cc6d0" prot="protected" static="no" mutable="no">
-        <type><ref refid="db/df9/a05044" kindref="compound">AnimatedMesh</ref> &amp;</type>
-        <definition>AnimatedMesh&amp; castor3d::MeshAnimationInstance::m_animatedMesh</definition>
-        <argsstring></argsstring>
-        <name>m_animatedMesh</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="90" column="1" bodyfile="Scene/Animation/Mesh/MeshAnimationInstance.hpp" bodystart="90" bodyend="-1"/>
-        <referencedby refid="d3/d96/a05072_1af5b82b9b5915f9bfa50756b9bb2e9e59" compoundref="d5/d4c/a01058" startline="71" endline="74">getAnimatedMesh</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d96/a05072_1a9f7ace121e37ba978036c6754c1faab1" prot="protected" static="no" mutable="no">
-        <type><ref refid="d3/d10/a03856" kindref="compound">MeshAnimation</ref> const  &amp;</type>
-        <definition>MeshAnimation const&amp; castor3d::MeshAnimationInstance::m_meshAnimation</definition>
-        <argsstring></argsstring>
-        <name>m_meshAnimation</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="91" column="1" bodyfile="Scene/Animation/Mesh/MeshAnimationInstance.hpp" bodystart="91" bodyend="-1"/>
-        <referencedby refid="d3/d96/a05072_1a34c077b5f5bc50920d655e72a2427db7" compoundref="d5/d4c/a01058" startline="61" endline="64">getMeshAnimation</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d96/a05072_1a75cf3563d778d2feccbe458f62f6eca0" prot="protected" static="no" mutable="no">
-        <type>MeshAnimationInstanceSubmeshMap</type>
-        <definition>MeshAnimationInstanceSubmeshMap castor3d::MeshAnimationInstance::m_submeshes</definition>
-        <argsstring></argsstring>
-        <name>m_submeshes</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="92" column="1" bodyfile="Scene/Animation/Mesh/MeshAnimationInstance.hpp" bodystart="92" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d96/a05072_1adb73747e9076d1c1cc116a4ed1ef27de" prot="protected" static="no" mutable="no">
-        <type>AnimationKeyFrameArray::iterator</type>
-        <definition>AnimationKeyFrameArray::iterator castor3d::MeshAnimationInstance::m_prev</definition>
-        <argsstring></argsstring>
-        <name>m_prev</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="93" column="1" bodyfile="Scene/Animation/Mesh/MeshAnimationInstance.hpp" bodystart="93" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d96/a05072_1a098806667b1b6205333243bf710401b8" prot="protected" static="no" mutable="no">
-        <type>AnimationKeyFrameArray::iterator</type>
-        <definition>AnimationKeyFrameArray::iterator castor3d::MeshAnimationInstance::m_curr</definition>
-        <argsstring></argsstring>
-        <name>m_curr</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="94" column="1" bodyfile="Scene/Animation/Mesh/MeshAnimationInstance.hpp" bodystart="94" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d96/a05072_1af0744ac075f80ed341613a0c18a03a4a" prot="protected" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::MeshAnimationInstance::m_ratio</definition>
-        <argsstring></argsstring>
-        <name>m_ratio</name>
-        <initializer>{ 0.0f }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="95" column="1" bodyfile="Scene/Animation/Mesh/MeshAnimationInstance.hpp" bodystart="95" bodyend="-1"/>
-        <referencedby refid="d3/d96/a05072_1a7d0a2474cd378cf37cca6868e2286548" compoundref="d5/d4c/a01058" startline="81" endline="84">getRatio</referencedby>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="friend">
-      <memberdef kind="friend" id="d3/d96/a05072_1ac6a0a82fd0082097621fd77e2cf5afec" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>friend class</type>
-        <definition>friend class BinaryWriter&lt; MeshAnimation &gt;</definition>
-        <argsstring></argsstring>
-        <name>BinaryWriter&lt; MeshAnimation &gt;</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="95" column="1" bodyfile="Scene/Animation/Mesh/MeshAnimationInstance.hpp" bodystart="97" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="friend" id="d3/d96/a05072_1a843c2e6a2af43657991379b2b506e920" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>friend class</type>
-        <definition>friend class BinaryParser&lt; MeshAnimation &gt;</definition>
-        <argsstring></argsstring>
-        <name>BinaryParser&lt; MeshAnimation &gt;</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="95" column="1" bodyfile="Scene/Animation/Mesh/MeshAnimationInstance.hpp" bodystart="98" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
+    <compoundname>castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::BorderPanelOverlay &gt;</basecompoundref>
+    <includes local="no">TextBorderPanelOverlay.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d3/d96/a05072_1a50ada71097dfbba1597db4190abe7890" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::MeshAnimationInstance::MeshAnimationInstance</definition>
-        <argsstring>(AnimatedMesh &amp;object, MeshAnimation &amp;animation)</argsstring>
-        <name>MeshAnimationInstance</name>
+      <memberdef kind="function" id="d3/d96/a05072_1a5f5b8cbfaef024781385d065b08cde14" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs)</argsstring>
+        <name>TextWriter</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;::TextWriter</qualifiedname>
         <param>
-          <type><ref refid="db/df9/a05044" kindref="compound">AnimatedMesh</ref> &amp;</type>
-          <declname>object</declname>
-        </param>
-        <param>
-          <type><ref refid="d3/d10/a03856" kindref="compound">MeshAnimation</ref> &amp;</type>
-          <declname>animation</declname>
-        </param>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">object</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parent <ref refid="db/df9/a05044" kindref="compound">AnimatedMesh</ref>. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">animation</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The animation. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="40" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d96/a05072_1a9443ed0336aafb7db2e21859dd18f12b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::MeshAnimationInstance::~MeshAnimationInstance</definition>
-        <argsstring>()</argsstring>
-        <name>~MeshAnimationInstance</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="47" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d3/d96/a05072_1ac6e3eb159a7383ed941851b043345c36" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/ddd/a05076" kindref="compound">MeshAnimationInstanceSubmesh</ref> const  *</type>
-        <definition>C3D_API MeshAnimationInstanceSubmesh const* castor3d::MeshAnimationInstance::getAnimationSubmesh</definition>
-        <argsstring>(uint32_t index) const</argsstring>
-        <name>getAnimationSubmesh</name>
-        <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
+          <type>String const &amp;</type>
+          <declname>tabs</declname>
         </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The animation submesh at given ID, nullptr if not found. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="54" column="1"/>
+        <location file="Text/TextBorderPanelOverlay.hpp" line="18" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d3/d96/a05072_1a34c077b5f5bc50920d655e72a2427db7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d3/d10/a03856" kindref="compound">MeshAnimation</ref> const  &amp;</type>
-        <definition>MeshAnimation const&amp; castor3d::MeshAnimationInstance::getMeshAnimation</definition>
-        <argsstring>() const</argsstring>
-        <name>getMeshAnimation</name>
+      <memberdef kind="function" id="d3/d96/a05072_1ae26e8317b7bf6fb6c1bc323c1e131a75" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;::operator()</definition>
+        <argsstring>(castor3d::BorderPanelOverlay const &amp;overlay, castor::StringStream &amp;file) override</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;::operator()</qualifiedname>
+        <param>
+          <type><ref refid="d8/d3d/a03492" kindref="compound">castor3d::BorderPanelOverlay</ref> const &amp;</type>
+          <declname>overlay</declname>
+        </param>
+        <param>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The animation. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="61" column="1" bodyfile="Scene/Animation/Mesh/MeshAnimationInstance.hpp" bodystart="61" bodyend="64"/>
-        <references refid="d3/d96/a05072_1a9f7ace121e37ba978036c6754c1faab1" compoundref="d5/d4c/a01058" startline="91">m_meshAnimation</references>
-      </memberdef>
-      <memberdef kind="function" id="d3/d96/a05072_1af5b82b9b5915f9bfa50756b9bb2e9e59" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="db/df9/a05044" kindref="compound">AnimatedMesh</ref> &amp;</type>
-        <definition>AnimatedMesh&amp; castor3d::MeshAnimationInstance::getAnimatedMesh</definition>
-        <argsstring>()</argsstring>
-        <name>getAnimatedMesh</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The animated mesh. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="71" column="1" bodyfile="Scene/Animation/Mesh/MeshAnimationInstance.hpp" bodystart="71" bodyend="74"/>
-        <references refid="d3/d96/a05072_1a9825c86fc3fe267e5bb60036a66cc6d0" compoundref="d5/d4c/a01058" startline="90">m_animatedMesh</references>
-      </memberdef>
-      <memberdef kind="function" id="d3/d96/a05072_1a7d0a2474cd378cf37cca6868e2286548" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>float</type>
-        <definition>float castor3d::MeshAnimationInstance::getRatio</definition>
-        <argsstring>() const</argsstring>
-        <name>getRatio</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The current keyframe current ratio. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="81" column="1" bodyfile="Scene/Animation/Mesh/MeshAnimationInstance.hpp" bodystart="81" bodyend="84"/>
-        <references refid="d3/d96/a05072_1af0744ac075f80ed341613a0c18a03a4a" compoundref="d5/d4c/a01058" startline="95">m_ratio</references>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d3/d96/a05072_1a0b80de77ce6f39af0ed72ecfaed6dedc" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::MeshAnimationInstance::doUpdate</definition>
-        <argsstring>() override</argsstring>
-        <name>doUpdate</name>
-        <reimplements refid="d2/d8c/a05064_1a3ae30f9d3201f11bb86ac99d8c5b58e7">doUpdate</reimplements>
-        <briefdescription>
-<para>Updates the animation, updates the key frame at the good time index. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="87" column="1"/>
+        <location file="Text/TextBorderPanelOverlay.hpp" line="19" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -336,254 +53,31 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="1884">
-        <label>castor3d::MeshAnimationInstance</label>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::BorderPanelOverlay &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;</label>
         <link refid="d3/d96/a05072"/>
-        <childnode refid="1885" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1886">
-        <label>castor::OwnedBy&lt; AnimatedObject &gt;</label>
-      </node>
-      <node id="1885">
-        <label>castor3d::AnimationInstance</label>
-        <link refid="d2/d8c/a05064"/>
-        <childnode refid="1886" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="1895">
-        <label>castor3d::Mesh</label>
-        <link refid="dc/dce/a03908"/>
-        <childnode refid="1896" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1897" relation="public-inheritance">
-        </childnode>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::BorderPanelOverlay &gt;</label>
       </node>
-      <node id="1899">
-        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
-        <childnode refid="1900" relation="template-instance">
-          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1901">
-        <label>K</label>
-      </node>
-      <node id="1902">
-        <label>T</label>
-      </node>
-      <node id="1903">
-        <label>castor3d::Geometry</label>
-        <link refid="df/df0/a05160"/>
-        <childnode refid="1904" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1911" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1905">
-        <label>castor3d::SceneNode</label>
-        <link refid="da/d44/a05256"/>
-        <childnode refid="1906" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1907" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1891" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1914">
-        <label>Animation</label>
-        <link refid="d4/ddd/a02040"/>
-        <childnode refid="1915" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1916" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1890" relation="template-instance">
-          <edgelabel>&lt; Engine &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1887">
-        <label>castor3d::MeshAnimationInstance</label>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;</label>
         <link refid="d3/d96/a05072"/>
-        <childnode refid="1888" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1893" relation="usage">
-          <edgelabel>m_animatedMesh</edgelabel>
-        </childnode>
-        <childnode refid="1913" relation="usage">
-          <edgelabel>m_meshAnimation</edgelabel>
-        </childnode>
-      </node>
-      <node id="1907">
-        <label>castor::OwnedBy&lt; Scene &gt;</label>
-      </node>
-      <node id="1900">
-        <label>std::map&lt; K, T &gt;</label>
-        <childnode refid="1901" relation="usage">
-          <edgelabel>keys</edgelabel>
-        </childnode>
-        <childnode refid="1902" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="1906">
-        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
-      </node>
-      <node id="1896">
-        <label>castor::Resource&lt; Mesh &gt;</label>
-      </node>
-      <node id="1915">
-        <label>castor::Named</label>
-      </node>
-      <node id="1904">
-        <label>castor3d::MovableObject</label>
-        <link refid="d9/d4a/a05192"/>
-        <childnode refid="1897" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1891" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1905" relation="usage">
-          <edgelabel>m_sceneNode</edgelabel>
-        </childnode>
-        <childnode refid="1908" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-      </node>
-      <node id="1891">
-        <label>Named</label>
-      </node>
-      <node id="1913">
-        <label>castor3d::MeshAnimation</label>
-        <link refid="d3/d10/a03856"/>
-        <childnode refid="1914" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1916">
-        <label>castor::OwnedBy&lt; AnimableT&lt; Engine &gt; &gt;</label>
-      </node>
-      <node id="1911">
-        <label>castor3d::RenderedObject</label>
-        <link refid="d5/d47/a05240"/>
-        <childnode refid="1912" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1894">
-        <label>castor3d::AnimatedObject</label>
-        <link refid="d0/d8b/a05048"/>
-        <childnode refid="1891" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1909">
-        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
-      </node>
-      <node id="1897">
-        <label>Animable</label>
-        <link refid="d7/db2/a02036"/>
-        <childnode refid="1898" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1899" relation="usage">
-          <edgelabel>m_animations</edgelabel>
-        </childnode>
-      </node>
-      <node id="1898">
-        <label>castor::OwnedBy&lt; AnimableHanlerT &gt;</label>
-      </node>
-      <node id="1910">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="1890">
-        <label>castor3d::AnimationT&lt; AnimableHanlerT &gt;</label>
-        <link refid="d4/ddd/a02040"/>
-        <childnode refid="1891" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1892" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1889">
-        <label>castor::OwnedBy&lt; AnimatedObject &gt;</label>
-      </node>
-      <node id="1893">
-        <label>castor3d::AnimatedMesh</label>
-        <link refid="db/df9/a05044"/>
-        <childnode refid="1894" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1895" relation="usage">
-          <edgelabel>m_mesh</edgelabel>
-        </childnode>
-        <childnode refid="1903" relation="usage">
-          <edgelabel>m_geometry</edgelabel>
-        </childnode>
-      </node>
-      <node id="1892">
-        <label>castor::OwnedBy&lt; AnimableT&lt; AnimableHanlerT &gt; &gt;</label>
-      </node>
-      <node id="1912">
-        <label>std::enable_shared_from_this&lt; RenderedObject &gt;</label>
-      </node>
-      <node id="1888">
-        <label>castor3d::AnimationInstance</label>
-        <link refid="d2/d8c/a05064"/>
-        <childnode refid="1889" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1890" relation="usage">
-          <edgelabel>m_animation</edgelabel>
-        </childnode>
-      </node>
-      <node id="1908">
-        <label>castor3d::Scene</label>
-        <link refid="d5/d76/a05244"/>
-        <childnode refid="1909" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1910" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1891" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Scene/Animation/Mesh/MeshAnimationInstance.hpp" line="16" column="1" bodyfile="Scene/Animation/Mesh/MeshAnimationInstance.hpp" bodystart="14" bodyend="99"/>
+    <location file="Text/TextBorderPanelOverlay.hpp" line="14" column="1" bodyfile="Text/TextBorderPanelOverlay.hpp" bodystart="16" bodyend="21"/>
     <listofallmembers>
-      <member refid="d2/d8c/a05064_1a23a7bfcdfcd7c97de734734aff4cd3c5" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>AnimationInstance</name></member>
-      <member refid="d3/d96/a05072_1a843c2e6a2af43657991379b2b506e920" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>BinaryParser&lt; MeshAnimation &gt;</name></member>
-      <member refid="d3/d96/a05072_1ac6a0a82fd0082097621fd77e2cf5afec" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>BinaryWriter&lt; MeshAnimation &gt;</name></member>
-      <member refid="d3/d96/a05072_1a0b80de77ce6f39af0ed72ecfaed6dedc" prot="private" virt="virtual"><scope>castor3d::MeshAnimationInstance</scope><name>doUpdate</name></member>
-      <member refid="d3/d96/a05072_1af5b82b9b5915f9bfa50756b9bb2e9e59" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>getAnimatedMesh</name></member>
-      <member refid="d2/d8c/a05064_1aab33ccf8f14ea1991f4f3569fabd59f4" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>getAnimation</name></member>
-      <member refid="d3/d96/a05072_1ac6e3eb159a7383ed941851b043345c36" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>getAnimationSubmesh</name></member>
-      <member refid="d3/d96/a05072_1a34c077b5f5bc50920d655e72a2427db7" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>getMeshAnimation</name></member>
-      <member refid="d3/d96/a05072_1a7d0a2474cd378cf37cca6868e2286548" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>getRatio</name></member>
-      <member refid="d2/d8c/a05064_1a3170af477f4a163dfc67f240baafa55d" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>getScale</name></member>
-      <member refid="d2/d8c/a05064_1aac09e282b3696b2e46f820a86449918f" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>getStartingPoint</name></member>
-      <member refid="d2/d8c/a05064_1ab2197aab90f85806400a9e4087761cc3" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>getState</name></member>
-      <member refid="d2/d8c/a05064_1a6b8de0d470c6d060cc7f835c599ec4ae" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>getStoppingPoint</name></member>
-      <member refid="d2/d8c/a05064_1a914538daf4453ee5ee35a32986d5dbec" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>isLooped</name></member>
-      <member refid="d3/d96/a05072_1a9825c86fc3fe267e5bb60036a66cc6d0" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>m_animatedMesh</name></member>
-      <member refid="d2/d8c/a05064_1a4ea27648adc0879b6d44149b089c0295" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>m_animation</name></member>
-      <member refid="d3/d96/a05072_1a098806667b1b6205333243bf710401b8" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>m_curr</name></member>
-      <member refid="d2/d8c/a05064_1a5a7017dbf729b5ddf98c80548804cf8f" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>m_currentTime</name></member>
-      <member refid="d2/d8c/a05064_1a5064a319a11f8d3928c81a4a629b5982" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>m_looped</name></member>
-      <member refid="d3/d96/a05072_1a9f7ace121e37ba978036c6754c1faab1" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>m_meshAnimation</name></member>
-      <member refid="d3/d96/a05072_1adb73747e9076d1c1cc116a4ed1ef27de" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>m_prev</name></member>
-      <member refid="d3/d96/a05072_1af0744ac075f80ed341613a0c18a03a4a" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>m_ratio</name></member>
-      <member refid="d2/d8c/a05064_1aa313a440c453a3433cc6261e06b43a8a" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>m_scale</name></member>
-      <member refid="d2/d8c/a05064_1a1948260ac64b862bc876124d06f34673" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>m_startingPoint</name></member>
-      <member refid="d2/d8c/a05064_1a2e5b588a84db6b90580577a93d9f5d20" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>m_state</name></member>
-      <member refid="d2/d8c/a05064_1abd1d4de3d4e507ac453f0531026dd9db" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>m_stoppingPoint</name></member>
-      <member refid="d3/d96/a05072_1a75cf3563d778d2feccbe458f62f6eca0" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>m_submeshes</name></member>
-      <member refid="d3/d96/a05072_1a20eb16758bfff388fdb9001644bc5475" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>MeshAnimationInstance</name></member>
-      <member refid="d3/d96/a05072_1ae5911fe86e5b102df6abfc3ce082ff93" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>MeshAnimationInstance</name></member>
-      <member refid="d3/d96/a05072_1a50ada71097dfbba1597db4190abe7890" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>MeshAnimationInstance</name></member>
-      <member refid="d3/d96/a05072_1a4df16c67f56ea72d28a40f48181faabb" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>operator=</name></member>
-      <member refid="d3/d96/a05072_1a6e41741a94547e6463f9dd1ef2946be9" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>operator=</name></member>
-      <member refid="d2/d8c/a05064_1ad18010efe608f7087115754ef77a3f7e" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>pause</name></member>
-      <member refid="d2/d8c/a05064_1a59bea7025b5c52e5b09df209e95e4c6b" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>play</name></member>
-      <member refid="d2/d8c/a05064_1a060d6999c9e24ab73e28400cb7e8850b" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>setLooped</name></member>
-      <member refid="d2/d8c/a05064_1a338ffe9fbc76c64938f1fe8b072bbd41" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>setScale</name></member>
-      <member refid="d2/d8c/a05064_1ab6dd01f7c83349132cd6e4d205e33e3a" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>setStartingPoint</name></member>
-      <member refid="d2/d8c/a05064_1aab7fdd5bb07392f6faba0743e1c6073b" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>setStoppingPoint</name></member>
-      <member refid="d2/d8c/a05064_1aeb6466ce1395148bbbed32cacfe49291" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>stop</name></member>
-      <member refid="d2/d8c/a05064_1a3f89c5c509bba8c43af73cb0f068745b" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>update</name></member>
-      <member refid="d2/d8c/a05064_1ac419fc44173c317197c06e8be55df362" prot="public" virt="virtual"><scope>castor3d::MeshAnimationInstance</scope><name>~AnimationInstance</name></member>
-      <member refid="d3/d96/a05072_1a9443ed0336aafb7db2e21859dd18f12b" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstance</scope><name>~MeshAnimationInstance</name></member>
+      <member refid="d3/d96/a05072_1ae26e8317b7bf6fb6c1bc323c1e131a75" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;</scope><name>operator()</name></member>
+      <member refid="d3/d96/a05072_1a5f5b8cbfaef024781385d065b08cde14" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;</scope><name>TextWriter</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

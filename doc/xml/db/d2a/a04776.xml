@@ -1,22 +1,104 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="db/d2a/a04776" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::LightPassResult</compoundname>
-    <basecompoundref refid="d8/dc6/a04256" prot="public" virt="non-virtual">castor3d::GBufferT&lt; LpTexture &gt;</basecompoundref>
-    <includes local="no">LightPassResult.hpp</includes>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="db/d2a/a04776_1a013a79c440261c8a366bd3c2c2c59f89" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::LightPassResult::LightPassResult</definition>
-        <argsstring>(Engine &amp;engine, castor::Size const &amp;size)</argsstring>
-        <name>LightPassResult</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="db/d2a/a04776" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::DirectionalLight</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">GlslLight.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/d2a/a04776_1a9369dcf7966bac1fb1df634818b354e6" prot="public" static="no" mutable="no">
+        <type><ref refid="d0/d95/a04772" kindref="compound">Light</ref></type>
+        <definition>Light castor3d::shader::DirectionalLight::base</definition>
+        <argsstring></argsstring>
+        <name>base</name>
+        <qualifiedname>castor3d::shader::DirectionalLight::base</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="83" column="7" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d2a/a04776_1a8645586a5b9bb31475804e01378bbf40" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::DirectionalLight::splitDepths</definition>
+        <argsstring></argsstring>
+        <name>splitDepths</name>
+        <qualifiedname>castor3d::shader::DirectionalLight::splitDepths</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="91" column="11" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d2a/a04776_1a22f5882f8714c9c2905e564210815677" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::DirectionalLight::splitScales</definition>
+        <argsstring></argsstring>
+        <name>splitScales</name>
+        <qualifiedname>castor3d::shader::DirectionalLight::splitScales</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="92" column="11" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d2a/a04776_1a79a3f9340b03537220fdbec62b67a1e8" prot="public" static="no" mutable="no">
+        <type>sdw::Array&lt; sdw::Mat4 &gt;</type>
+        <definition>sdw::Array&lt; sdw::Mat4 &gt; castor3d::shader::DirectionalLight::transforms</definition>
+        <argsstring></argsstring>
+        <name>transforms</name>
+        <qualifiedname>castor3d::shader::DirectionalLight::transforms</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="93" column="12" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d2a/a04776_1a0a225bbcc2e763913fcb190754e34a3b" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::DirectionalLight::direction</definition>
+        <argsstring></argsstring>
+        <name>direction</name>
+        <qualifiedname>castor3d::shader::DirectionalLight::direction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="95" column="11" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d2a/a04776_1ae2286f37d6d52f318cb78f3a5068af68" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::DirectionalLight::cascadeCount</definition>
+        <argsstring></argsstring>
+        <name>cascadeCount</name>
+        <qualifiedname>castor3d::shader::DirectionalLight::cascadeCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="96" column="11" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="db/d2a/a04776_1ae0ec198d71105a937ac89250db1b9dd9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class LightingModel</definition>
+        <argsstring></argsstring>
+        <name>LightingModel</name>
+        <qualifiedname>castor3d::shader::DirectionalLight::LightingModel</qualifiedname>
         <param>
-          <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
-        </param>
-        <param>
-          <type>castor::Size const &amp;</type>
-          <declname>size</declname>
+          <type><ref refid="da/d11/a04792" kindref="compound">LightingModel</ref></type>
         </param>
         <briefdescription>
         </briefdescription>
@@ -24,7 +106,109 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPassResult.hpp" line="17" column="1"/>
+        <location file="Shader/Shaders/GlslLight.hpp" line="86" column="14" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="db/d2a/a04776_1af992250fbd41c454fb261b8a715d403c" prot="private" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::DirectionalLight::m_directionCount</definition>
+        <argsstring></argsstring>
+        <name>m_directionCount</name>
+        <qualifiedname>castor3d::shader::DirectionalLight::m_directionCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="88" column="11" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d2a/a04776_1ae57d56ead2c708ee19f815f3de44e5be" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::DirectionalLight::DirectionalLight</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>DirectionalLight</name>
+        <qualifiedname>castor3d::shader::DirectionalLight::DirectionalLight</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="75" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d2a/a04776_1a184428777ffce4ba21abe59f7f825aae" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::DirectionalLight::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, DirectionalLight)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::DirectionalLight::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        </param>
+        <param>
+          <type><ref refid="db/d2a/a04776" kindref="compound">DirectionalLight</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="78" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="db/d2a/a04776_1a1c066c4f730cfcf5a8e8785060f1f718" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
+        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::DirectionalLight::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::DirectionalLight::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="80" column="41"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d2a/a04776_1a876cbcabdff362bd9241237e33b4fd9d" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::DirectionalLight::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::DirectionalLight::declare</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="81" column="32"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -32,101 +216,50 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="1683">
-        <label>castor3d::GBufferT&lt; LpTexture &gt;</label>
-        <link refid="d8/dc6/a04256"/>
-        <childnode refid="1684" relation="private-inheritance">
-        </childnode>
-        <childnode refid="1686" relation="template-instance">
-          <edgelabel>&lt; LpTexture &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1682">
-        <label>castor3d::LightPassResult</label>
+      <node id="1">
+        <label>castor3d::shader::DirectionalLight</label>
         <link refid="db/d2a/a04776"/>
-        <childnode refid="1683" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="1685">
-        <label>Named</label>
-      </node>
-      <node id="1686">
-        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
-        <link refid="d8/dc6/a04256"/>
-        <childnode refid="1684" relation="private-inheritance">
-        </childnode>
-      </node>
-      <node id="1684">
-        <label>castor3d::GBufferBase</label>
-        <link refid="dc/de4/a04252"/>
-        <childnode refid="1685" relation="public-inheritance">
-        </childnode>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="1688">
-        <label>castor3d::GBufferT&lt; LpTexture &gt;</label>
-        <link refid="d8/dc6/a04256"/>
-        <childnode refid="1689" relation="private-inheritance">
-        </childnode>
-        <childnode refid="1691" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="1693" relation="template-instance">
-          <edgelabel>&lt; LpTexture &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1687">
-        <label>castor3d::LightPassResult</label>
+      <node id="1">
+        <label>castor3d::shader::DirectionalLight</label>
         <link refid="db/d2a/a04776"/>
-        <childnode refid="1688" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>base</edgelabel>
         </childnode>
       </node>
-      <node id="1690">
-        <label>Named</label>
-      </node>
-      <node id="1692">
-        <label>castor::Unique&lt; Engine &gt;</label>
-      </node>
-      <node id="1691">
-        <label>castor3d::Engine</label>
-        <link refid="dc/dbb/a02520"/>
-        <childnode refid="1692" relation="public-inheritance">
+      <node id="3">
+        <label>castor3d::shader::Light</label>
+        <link refid="d0/d95/a04772"/>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="1693">
-        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
-        <link refid="d8/dc6/a04256"/>
-        <childnode refid="1689" relation="private-inheritance">
-        </childnode>
-        <childnode refid="1691" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-      </node>
-      <node id="1689">
-        <label>castor3d::GBufferBase</label>
-        <link refid="dc/de4/a04252"/>
-        <childnode refid="1690" relation="public-inheritance">
-        </childnode>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </collaborationgraph>
-    <location file="Render/Technique/Opaque/Lighting/LightPassResult.hpp" line="15" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassResult.hpp" bodystart="13" bodyend="19"/>
+    <location file="Shader/Shaders/GlslLight.hpp" line="72" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="74" bodyend="101"/>
     <listofallmembers>
-      <member refid="d8/dc6/a04256_1a07ee2a84c48f234617c05d6d5c4b6c33" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>begin</name></member>
-      <member refid="d8/dc6/a04256_1aa0de394aee0ba9d95e5c04da314a9cb4" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>begin</name></member>
-      <member refid="d8/dc6/a04256_1a77d65937285e0954c33bc1834b099dbf" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>cbegin</name></member>
-      <member refid="d8/dc6/a04256_1a0ca55ac3a4cfb4c27acbd6867f420a41" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>cend</name></member>
-      <member refid="d8/dc6/a04256_1a2dbf9ef234080f55751db9f2ced2db94" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>cleanup</name></member>
-      <member refid="d8/dc6/a04256_1a2ed3e0a1d7b905e8393d6f1e3b67f339" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>end</name></member>
-      <member refid="d8/dc6/a04256_1ad9a2382a1c40e83a016a77209bee05fd" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>end</name></member>
-      <member refid="d8/dc6/a04256_1afc858ac06674fbee5bcc31d1eb051f21" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>GBufferT</name></member>
-      <member refid="d8/dc6/a04256_1a48c1db122e270552414435855b31f23d" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>GBufferT</name></member>
-      <member refid="d8/dc6/a04256_1adbb549264af799a0ca09aafab55df3b8" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>initialise</name></member>
-      <member refid="db/d2a/a04776_1a013a79c440261c8a366bd3c2c2c59f89" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>LightPassResult</name></member>
-      <member refid="d8/dc6/a04256_1abfc84e342baf1448ab71cb739138f89b" prot="protected" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>m_engine</name></member>
-      <member refid="d8/dc6/a04256_1a1cd0629caecd95cfa73fc857e92be07a" prot="protected" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>m_owned</name></member>
-      <member refid="d8/dc6/a04256_1ac693f4659ea2014569d916d03013f68e" prot="protected" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>m_result</name></member>
-      <member refid="d8/dc6/a04256_1a55a704f02c3e73ede1b8ed6fb78e79d5" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>operator[]</name></member>
+      <member refid="db/d2a/a04776_1a9369dcf7966bac1fb1df634818b354e6" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectionalLight</scope><name>base</name></member>
+      <member refid="db/d2a/a04776_1ae2286f37d6d52f318cb78f3a5068af68" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectionalLight</scope><name>cascadeCount</name></member>
+      <member refid="db/d2a/a04776_1a876cbcabdff362bd9241237e33b4fd9d" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectionalLight</scope><name>declare</name></member>
+      <member refid="db/d2a/a04776_1a0a225bbcc2e763913fcb190754e34a3b" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectionalLight</scope><name>direction</name></member>
+      <member refid="db/d2a/a04776_1ae57d56ead2c708ee19f815f3de44e5be" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectionalLight</scope><name>DirectionalLight</name></member>
+      <member refid="db/d2a/a04776_1ae0ec198d71105a937ac89250db1b9dd9" prot="private" virt="non-virtual"><scope>castor3d::shader::DirectionalLight</scope><name>LightingModel</name></member>
+      <member refid="db/d2a/a04776_1af992250fbd41c454fb261b8a715d403c" prot="private" virt="non-virtual"><scope>castor3d::shader::DirectionalLight</scope><name>m_directionCount</name></member>
+      <member refid="db/d2a/a04776_1a1c066c4f730cfcf5a8e8785060f1f718" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectionalLight</scope><name>makeType</name></member>
+      <member refid="db/d2a/a04776_1a184428777ffce4ba21abe59f7f825aae" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectionalLight</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="db/d2a/a04776_1a8645586a5b9bb31475804e01378bbf40" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectionalLight</scope><name>splitDepths</name></member>
+      <member refid="db/d2a/a04776_1a22f5882f8714c9c2905e564210815677" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectionalLight</scope><name>splitScales</name></member>
+      <member refid="db/d2a/a04776_1a79a3f9340b03537220fdbec62b67a1e8" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectionalLight</scope><name>transforms</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

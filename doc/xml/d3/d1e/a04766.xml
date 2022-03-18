@@ -1,91 +1,83 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d3/d1e/a04766" kind="struct" language="C++" prot="protected">
-    <compoundname>castor3d::LightPass::Config</compoundname>
-    <includes local="no">LightPass.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d3/d1e/a04766_1a2041d60b5ed7805c684ed5b447bbc74c" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::LightPass::Config::colourIndex</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d3/d1e/a04766" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::Fog</compoundname>
+    <includes local="no">GlslFog.hpp</includes>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d3/d1e/a04766_1a818ce0c5e2394483e664a8ea9a245220" prot="protected" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec4, sdw::InVec4, sdw::InVec4, sdw::InVec3, InSceneData &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec4 , sdw::InVec4 , sdw::InVec4 , sdw::InVec3 , InSceneData &gt; castor3d::shader::Fog::m_fog</definition>
         <argsstring></argsstring>
-        <name>colourIndex</name>
+        <name>m_fog</name>
+        <qualifiedname>castor3d::shader::Fog::m_fog</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The variable containing the light colour and index. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="559" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="559" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslFog.hpp" line="31" column="2" bodyfile="Shader/Shaders/GlslFog.hpp" bodystart="31" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d3/d1e/a04766_1a6d3b3b41cab4f515f17fcd25d50285eb" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::LightPass::Config::intensityFarPlane</definition>
-        <argsstring></argsstring>
-        <name>intensityFarPlane</name>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d1e/a04766_1a7413ef23e75baa5f273030d019702918" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::Fog::Fog</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>Fog</name>
+        <qualifiedname>castor3d::shader::Fog::Fog</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The variable containing the light intensities (RG) and far plane (B). </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="562" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="562" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslFog.hpp" line="20" column="18"/>
       </memberdef>
-      <memberdef kind="variable" id="d3/d1e/a04766_1a3f366ab841f3fad66c02df7b0e9dd7a7" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::LightPass::Config::volumetric</definition>
-        <argsstring></argsstring>
-        <name>volumetric</name>
+      <memberdef kind="function" id="d3/d1e/a04766_1a948e9e44f98b28496ea045301de03d04" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::Fog::apply</definition>
+        <argsstring>(sdw::Vec4 const &amp;bgColour, sdw::Vec4 const &amp;colour, sdw::Vec3 const &amp;wsPosition, SceneData const &amp;sceneData)</argsstring>
+        <name>apply</name>
+        <qualifiedname>castor3d::shader::Fog::apply</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>bgColour</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsPosition</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d5a/a04966" kindref="compound">SceneData</ref> const &amp;</type>
+          <declname>sceneData</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The variable containing the light volumetric scattering data. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="565" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="565" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d1e/a04766_1adbed9f2dba2b9f9cace6bbd77c59fd64" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::LightPass::Config::shadowsOffsets</definition>
-        <argsstring></argsstring>
-        <name>shadowsOffsets</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The variable containing the light raw and PCF shadow data. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="568" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="568" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d1e/a04766_1a75faef2a902baf50aa71823dbee06400" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::LightPass::Config::shadowsVariances</definition>
-        <argsstring></argsstring>
-        <name>shadowsVariances</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The variable containing the light VSM shadow data. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="571" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="571" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslFog.hpp" line="21" column="19"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="556" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="555" bodyend="572"/>
+    <location file="Shader/Shaders/GlslFog.hpp" line="17" column="1" bodyfile="Shader/Shaders/GlslFog.hpp" bodystart="18" bodyend="32"/>
     <listofallmembers>
-      <member refid="d3/d1e/a04766_1a2041d60b5ed7805c684ed5b447bbc74c" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Config</scope><name>colourIndex</name></member>
-      <member refid="d3/d1e/a04766_1a6d3b3b41cab4f515f17fcd25d50285eb" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Config</scope><name>intensityFarPlane</name></member>
-      <member refid="d3/d1e/a04766_1adbed9f2dba2b9f9cace6bbd77c59fd64" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Config</scope><name>shadowsOffsets</name></member>
-      <member refid="d3/d1e/a04766_1a75faef2a902baf50aa71823dbee06400" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Config</scope><name>shadowsVariances</name></member>
-      <member refid="d3/d1e/a04766_1a3f366ab841f3fad66c02df7b0e9dd7a7" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Config</scope><name>volumetric</name></member>
+      <member refid="d3/d1e/a04766_1a948e9e44f98b28496ea045301de03d04" prot="public" virt="non-virtual"><scope>castor3d::shader::Fog</scope><name>apply</name></member>
+      <member refid="d3/d1e/a04766_1a7413ef23e75baa5f273030d019702918" prot="public" virt="non-virtual"><scope>castor3d::shader::Fog</scope><name>Fog</name></member>
+      <member refid="d3/d1e/a04766_1a818ce0c5e2394483e664a8ea9a245220" prot="protected" virt="non-virtual"><scope>castor3d::shader::Fog</scope><name>m_fog</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

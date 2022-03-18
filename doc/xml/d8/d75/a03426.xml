@@ -1,33 +1,44 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d8/d75/a03426" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkDisplayPlaneInfo2KHR &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
+    <compoundname>castor3d::SubmeshComponentAdder</compoundname>
+    <includes local="no">Submesh.hpp</includes>
     <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
     </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d8/d75/a03426_1a396b24eb51d65e723ccc729daa2f6ee5" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkDisplayPlaneInfo2KHR &gt;::value</definition>
-        <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_DISPLAY_PLANE_INFO_2_KHR</initializer>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d8/d75/a03426_1aae25f0c1d88de80ce1ffa434951e14e6" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>static void castor3d::SubmeshComponentAdder&lt; T &gt;::add</definition>
+        <argsstring>(std::shared_ptr&lt; T &gt; component, Submesh &amp;submesh)</argsstring>
+        <name>add</name>
+        <qualifiedname>castor3d::SubmeshComponentAdder::add</qualifiedname>
+        <param>
+          <type>std::shared_ptr&lt; T &gt;</type>
+          <declname>component</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d46/a03430" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>submesh</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="269" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="269" bodyend="-1"/>
+        <location file="Model/Mesh/Submesh/Submesh.hpp" line="35" column="20"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="269" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="269" bodyend="269"/>
+    <location file="Model/Mesh/Submesh/Submesh.hpp" line="33" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="34" bodyend="37"/>
     <listofallmembers>
-      <member refid="d8/d75/a03426_1a396b24eb51d65e723ccc729daa2f6ee5" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkDisplayPlaneInfo2KHR &gt;</scope><name>value</name></member>
+      <member refid="d8/d75/a03426_1aae25f0c1d88de80ce1ffa434951e14e6" prot="public" virt="non-virtual"><scope>castor3d::SubmeshComponentAdder</scope><name>add</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

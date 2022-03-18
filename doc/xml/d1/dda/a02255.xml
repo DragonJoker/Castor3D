@@ -1,184 +1,44 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d1/dda/a02255" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::ChunkWriter</compoundname>
-    <basecompoundref refid="d1/d0c/a02251" prot="public" virt="non-virtual">castor3d::ChunkWriterBase</basecompoundref>
-    <includes local="no">ChunkWriter.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d1/dda/a02255" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ChunkTyper&lt; Animation &gt;</compoundname>
+    <includes local="no">BinaryAnimation.hpp</includes>
     <templateparamlist>
-      <param>
-        <type>typename T</type>
-      </param>
     </templateparamlist>
-      <sectiondef kind="public-static-func">
-      <memberdef kind="function" id="d1/dda/a02255_1ac4cf51584e348def2f360b81e6ec7a9a" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>static bool castor3d::ChunkWriter&lt; T &gt;::write</definition>
-        <argsstring>(T const *begin, T const *end, ChunkType type, BinaryChunk &amp;chunk)</argsstring>
-        <name>write</name>
-        <param>
-          <type>T const *</type>
-          <declname>begin</declname>
-        </param>
-        <param>
-          <type>T const *</type>
-          <declname>end</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref></type>
-          <declname>type</declname>
-        </param>
-        <param>
-          <type><ref refid="d2/d31/a02087" kindref="compound">BinaryChunk</ref> &amp;</type>
-          <declname>chunk</declname>
-        </param>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d1/dda/a02255_1a649cf382bfc47818805de4bd2f33e840" prot="public" static="yes" mutable="no">
+        <type><ref refid="da/de3/a01398_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref> const</type>
+        <definition>ChunkType const castor3d::ChunkTyper&lt; Animation &gt;::Value</definition>
+        <argsstring></argsstring>
+        <name>Value</name>
+        <qualifiedname>castor3d::ChunkTyper&lt; Animation &gt;::Value</qualifiedname>
+        <initializer>= <ref refid="da/de3/a01398_1a742783d4e4b7354fac3e375ae107414daf8b3bcfa9a9160ba9956d2197892e796" kindref="member">ChunkType::eAnimation</ref></initializer>
         <briefdescription>
-<para>Writes a subchunk value into a chunk. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">begin</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The values begin </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">end</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The values end </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">type</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The subchunk type </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">chunk</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The chunk </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Binary/ChunkWriter.hpp" line="83" column="1" bodyfile="Binary/ChunkWriter.hpp" bodystart="83" bodyend="99"/>
-        <references refid="d7/dd1/a01458_1a430f3de9071e7d03358bb1b39d07c2b8" compoundref="d1/d09/a00077" startline="127" endline="133">castor3d::prepareChunkData</references>
-        <references refid="d1/d0c/a02251_1a6d5639d69c83f6b59094817e85f17398" compoundref="dc/dfe/a00125" startline="32" endline="51">castor3d::ChunkWriterBase::write</references>
-        <referencedby refid="df/daa/a02135_1a95685db95521fe46169767620976688c" compoundref="d4/d3e/a00116" startline="120" endline="126">castor3d::BinaryWriterBase&lt; Skeleton &gt;::doWriteChunk</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="d1/dda/a02255_1a9d1fa6f341bb8c14ae9a7c2c1bfb184b" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>static bool castor3d::ChunkWriter&lt; T &gt;::write</definition>
-        <argsstring>(T const &amp;value, ChunkType type, BinaryChunk &amp;chunk)</argsstring>
-        <name>write</name>
-        <param>
-          <type>T const &amp;</type>
-          <declname>value</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref></type>
-          <declname>type</declname>
-        </param>
-        <param>
-          <type><ref refid="d2/d31/a02087" kindref="compound">BinaryChunk</ref> &amp;</type>
-          <declname>chunk</declname>
-        </param>
-        <briefdescription>
-<para>Writes a subchunk value into a chunk. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The value </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">type</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The subchunk type </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">chunk</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The chunk </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Binary/ChunkWriter.hpp" line="114" column="1" bodyfile="Binary/ChunkWriter.hpp" bodystart="114" bodyend="123"/>
-        <references refid="d7/dd1/a01458_1acd91e9630a784a5006a0c4299b0abe2d" compoundref="df/d6a/a00119" startline="47" endline="50">castor3d::getBuffer</references>
-        <references refid="d7/dd1/a01458_1a0237c5eefd38c3d0de4466c3fbe0d713" compoundref="df/d6a/a00119" startline="384" endline="387">castor3d::getDataSize</references>
-        <references refid="d7/dd1/a01458_1a430f3de9071e7d03358bb1b39d07c2b8" compoundref="d1/d09/a00077" startline="127" endline="133">castor3d::prepareChunkData</references>
-        <references refid="d1/d0c/a02251_1a6d5639d69c83f6b59094817e85f17398" compoundref="dc/dfe/a00125" startline="32" endline="51">castor3d::ChunkWriterBase::write</references>
+        <location file="Binary/BinaryAnimation.hpp" line="28" column="24" bodyfile="Binary/BinaryAnimation.hpp" bodystart="28" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Chunk data writer. </para>
+<para>Helper structure to find ChunkType from a type. </para>
     </briefdescription>
     <detaileddescription>
 <para><simplesect kind="author"><para>Sylvain DOREMUS </para>
 </simplesect>
 <simplesect kind="version"><para>0.9.0 </para>
 </simplesect>
-<simplesect kind="date"><para>30/05/2016 </para>
+<simplesect kind="date"><para>28/05/2016</para>
+</simplesect>
+<simplesect kind="remark"><para>Specialisation for Animation. </para>
 </simplesect>
 </para>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="704">
-        <label>castor3d::ChunkWriter&lt; T &gt;</label>
-        <link refid="d1/dda/a02255"/>
-        <childnode refid="705" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="705">
-        <label>castor3d::ChunkWriterBase</label>
-        <link refid="d1/d0c/a02251"/>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="706">
-        <label>castor3d::ChunkWriter&lt; T &gt;</label>
-        <link refid="d1/dda/a02255"/>
-        <childnode refid="707" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="707">
-        <label>castor3d::ChunkWriterBase</label>
-        <link refid="d1/d0c/a02251"/>
-      </node>
-    </collaborationgraph>
-    <location file="Binary/ChunkWriter.hpp" line="65" column="1" bodyfile="Binary/ChunkWriter.hpp" bodystart="63" bodyend="124"/>
+    <location file="Binary/BinaryAnimation.hpp" line="26" column="1" bodyfile="Binary/BinaryAnimation.hpp" bodystart="27" bodyend="29"/>
     <listofallmembers>
-      <member refid="d1/dda/a02255_1ac4cf51584e348def2f360b81e6ec7a9a" prot="public" virt="non-virtual"><scope>castor3d::ChunkWriter</scope><name>write</name></member>
-      <member refid="d1/dda/a02255_1a9d1fa6f341bb8c14ae9a7c2c1bfb184b" prot="public" virt="non-virtual"><scope>castor3d::ChunkWriter</scope><name>write</name></member>
-      <member refid="d1/d0c/a02251_1a6d5639d69c83f6b59094817e85f17398" prot="public" virt="non-virtual" ambiguityscope="castor3d::ChunkWriterBase::"><scope>castor3d::ChunkWriter</scope><name>write</name></member>
+      <member refid="d1/dda/a02255_1a649cf382bfc47818805de4bd2f33e840" prot="public" virt="non-virtual"><scope>castor3d::ChunkTyper&lt; Animation &gt;</scope><name>Value</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

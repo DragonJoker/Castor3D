@@ -1,516 +1,634 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="da/d9e/a04926" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::TransparentPass</compoundname>
-    <basecompoundref refid="d6/d54/a04918" prot="public" virt="non-virtual">castor3d::RenderTechniquePass</basecompoundref>
-    <includes local="no">TransparentPass.hpp</includes>
-      <sectiondef kind="user-defined">
-      <memberdef kind="function" id="da/d9e/a04926_1aaaeccd5f146030f09bb6295b865ee2f6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::TransparentPass::setDepthFormat</definition>
-        <argsstring>(VkFormat value)</argsstring>
-        <name>setDepthFormat</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="da/d9e/a04926" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::MatrixData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">MatrixUbo.hpp</includes>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="da/d9e/a04926_1a9bb6aa488de293114ff892ef18876df3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>struct</type>
+        <definition>friend struct BillboardData</definition>
+        <argsstring></argsstring>
+        <name>BillboardData</name>
+        <qualifiedname>castor3d::shader::MatrixData::BillboardData</qualifiedname>
         <param>
-          <type>VkFormat</type>
-          <declname>value</declname>
+          <type><ref refid="dd/d60/a04878" kindref="compound">BillboardData</ref></type>
         </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>name Getters. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentPass.hpp" line="90" column="1" bodyfile="Render/Technique/Transparent/TransparentPass.hpp" bodystart="90" bodyend="93"/>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="24" column="15" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="24" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="da/d9e/a04926_1af647ffac7861c46502c8904733748771" prot="private" static="no" mutable="no">
-        <type>VkFormat</type>
-        <definition>VkFormat castor3d::TransparentPass::m_depthFormat</definition>
+      <memberdef kind="variable" id="da/d9e/a04926_1a4506f504504fde611d113c661a0d3071" prot="private" static="no" mutable="no">
+        <type>sdw::Mat4</type>
+        <definition>sdw::Mat4 castor3d::shader::MatrixData::m_projection</definition>
         <argsstring></argsstring>
-        <name>m_depthFormat</name>
-        <initializer>{}</initializer>
+        <name>m_projection</name>
+        <qualifiedname>castor3d::shader::MatrixData::m_projection</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentPass.hpp" line="107" column="1" bodyfile="Render/Technique/Transparent/TransparentPass.hpp" bodystart="107" bodyend="-1"/>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="76" column="11" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="76" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="da/d9e/a04926_1afcb19a16b71672aaca7d04107693acbc" prot="private" static="no" mutable="no">
-        <type>ashes::CommandBufferPtr</type>
-        <definition>ashes::CommandBufferPtr castor3d::TransparentPass::m_nodesCommands</definition>
+      <memberdef kind="variable" id="da/d9e/a04926_1a0555b13db6aff71fdfab24e80024bb2b" prot="private" static="no" mutable="no">
+        <type>sdw::Mat4</type>
+        <definition>sdw::Mat4 castor3d::shader::MatrixData::m_invProjection</definition>
         <argsstring></argsstring>
-        <name>m_nodesCommands</name>
+        <name>m_invProjection</name>
+        <qualifiedname>castor3d::shader::MatrixData::m_invProjection</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentPass.hpp" line="108" column="1" bodyfile="Render/Technique/Transparent/TransparentPass.hpp" bodystart="108" bodyend="-1"/>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="77" column="11" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="77" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="da/d9e/a04926_1a2c62761a52666ad8879ee14ce30499b9" prot="private" static="no" mutable="no">
-        <type>ashes::FrameBufferPtr</type>
-        <definition>ashes::FrameBufferPtr castor3d::TransparentPass::m_frameBuffer</definition>
+      <memberdef kind="variable" id="da/d9e/a04926_1a868baf68219a2f240ff6228aa4222f94" prot="private" static="no" mutable="no">
+        <type>sdw::Mat4</type>
+        <definition>sdw::Mat4 castor3d::shader::MatrixData::m_curView</definition>
         <argsstring></argsstring>
-        <name>m_frameBuffer</name>
+        <name>m_curView</name>
+        <qualifiedname>castor3d::shader::MatrixData::m_curView</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentPass.hpp" line="109" column="1" bodyfile="Render/Technique/Transparent/TransparentPass.hpp" bodystart="109" bodyend="-1"/>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="78" column="11" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d9e/a04926_1a677dfb6ae843d028746e8f55ceb41625" prot="private" static="no" mutable="no">
+        <type>sdw::Mat4</type>
+        <definition>sdw::Mat4 castor3d::shader::MatrixData::m_prvView</definition>
+        <argsstring></argsstring>
+        <name>m_prvView</name>
+        <qualifiedname>castor3d::shader::MatrixData::m_prvView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="79" column="11" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d9e/a04926_1aec4f55f1895211a6a92680922838aa08" prot="private" static="no" mutable="no">
+        <type>sdw::Mat4</type>
+        <definition>sdw::Mat4 castor3d::shader::MatrixData::m_curViewProj</definition>
+        <argsstring></argsstring>
+        <name>m_curViewProj</name>
+        <qualifiedname>castor3d::shader::MatrixData::m_curViewProj</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="80" column="11" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d9e/a04926_1acf8656af99effd62fe6f398b5f9ab9e8" prot="private" static="no" mutable="no">
+        <type>sdw::Mat4</type>
+        <definition>sdw::Mat4 castor3d::shader::MatrixData::m_prvViewProj</definition>
+        <argsstring></argsstring>
+        <name>m_prvViewProj</name>
+        <qualifiedname>castor3d::shader::MatrixData::m_prvViewProj</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="81" column="11" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d9e/a04926_1add24ff2bd3cb443b85e46b9aa4915126" prot="private" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::MatrixData::m_jitter</definition>
+        <argsstring></argsstring>
+        <name>m_jitter</name>
+        <qualifiedname>castor3d::shader::MatrixData::m_jitter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="82" column="11" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="82" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="da/d9e/a04926_1a96ffbce155b9666670fa576fdd636da8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::TransparentPass::TransparentPass</definition>
-        <argsstring>(MatrixUbo &amp;matrixUbo, SceneCuller &amp;culler, SsaoConfig const &amp;ssaoConfig, LpvGridConfigUbo const &amp;lpvConfigUbo, LayeredLpvGridConfigUbo const &amp;llpvConfigUbo, VoxelizerUbo const &amp;vctConfigUbo)</argsstring>
-        <name>TransparentPass</name>
+      <memberdef kind="function" id="da/d9e/a04926_1ab9277d122e88d70b7ef18a23ff34986f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::MatrixData::MatrixData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>MatrixData</name>
+        <qualifiedname>castor3d::shader::MatrixData::MatrixData</qualifiedname>
         <param>
-          <type><ref refid="d2/d30/a05490" kindref="compound">MatrixUbo</ref> &amp;</type>
-          <declname>matrixUbo</declname>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
         </param>
         <param>
-          <type><ref refid="d2/d73/a04226" kindref="compound">SceneCuller</ref> &amp;</type>
-          <declname>culler</declname>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
         </param>
         <param>
-          <type><ref refid="d4/dc3/a04706" kindref="compound">SsaoConfig</ref> const &amp;</type>
-          <declname>ssaoConfig</declname>
-        </param>
-        <param>
-          <type><ref refid="dd/de0/a05478" kindref="compound">LpvGridConfigUbo</ref> const &amp;</type>
-          <declname>lpvConfigUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d10/a05470" kindref="compound">LayeredLpvGridConfigUbo</ref> const &amp;</type>
-          <declname>llpvConfigUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="df/d05/a05626" kindref="compound">VoxelizerUbo</ref> const &amp;</type>
-          <declname>vctConfigUbo</declname>
+          <type>bool</type>
+          <declname>enabled</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">matrixUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The scene matrices UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">culler</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The culler for this pass. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">ssaoConfig</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The SSAO configuration. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">lpvConfigUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The LPV configuration UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">llpvConfigUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The Layered LPV configuration UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">vctConfigUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The VCT configuration UBO. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentPass.hpp" line="38" column="1"/>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="26" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="da/d9e/a04926_1acafb1a6174c6babb7b442120ab42a7e6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::TransparentPass::~TransparentPass</definition>
-        <argsstring>()</argsstring>
-        <name>~TransparentPass</name>
+      <memberdef kind="function" id="da/d9e/a04926_1a06d0fe78dd710ed551831f1de8f1a3ac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::MatrixData::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, MatrixData)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::MatrixData::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        </param>
+        <param>
+          <type><ref refid="da/d9e/a04926" kindref="compound">MatrixData</ref></type>
+        </param>
         <briefdescription>
-<para>Destructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentPass.hpp" line="50" column="1"/>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="29" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="da/d9e/a04926_1ac9323b72a53a501658c89f76473b3ad4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::TransparentPass::initialiseRenderPass</definition>
-        <argsstring>(RenderDevice const &amp;device, TransparentPassResult const &amp;wbpResult)</argsstring>
-        <name>initialiseRenderPass</name>
+      <memberdef kind="function" id="da/d9e/a04926_1a10fefffe6759cfd41bb6c139328a7b80" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::MatrixData::projToView</definition>
+        <argsstring>(sdw::Vec4 const &amp;psPosition) const</argsstring>
+        <name>projToView</name>
+        <qualifiedname>castor3d::shader::MatrixData::projToView</qualifiedname>
         <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d8f/a04930" kindref="compound">TransparentPassResult</ref> const &amp;</type>
-          <declname>wbpResult</declname>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>psPosition</declname>
         </param>
         <briefdescription>
-<para>Initialises the render pass. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">wbpResult</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The accumulation pass buffers. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentPass.hpp" line="61" column="1"/>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="34" column="19"/>
       </memberdef>
-      <memberdef kind="function" id="da/d9e/a04926_1a005f7ca342ce8a283f4cee773fd42a30" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::TransparentPass::accept</definition>
-        <argsstring>(RenderTechniqueVisitor &amp;visitor) override</argsstring>
-        <name>accept</name>
-        <reimplements refid="d6/d54/a04918_1a4c9d269118ce29a21fdb17eabd6e9070">accept</reimplements>
+      <memberdef kind="function" id="da/d9e/a04926_1a0f0c47a9125b875394a9a2377c82db1a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::MatrixData::viewToProj</definition>
+        <argsstring>(sdw::Vec4 const &amp;vsPosition) const</argsstring>
+        <name>viewToProj</name>
+        <qualifiedname>castor3d::shader::MatrixData::viewToProj</qualifiedname>
         <param>
-          <type><ref refid="de/de4/a04922" kindref="compound">RenderTechniqueVisitor</ref> &amp;</type>
-          <declname>visitor</declname>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>vsPosition</declname>
         </param>
         <briefdescription>
-<para>Visitor acceptance function. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername>visitor</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The ... visitor. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentPass.hpp" line="66" column="1"/>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="35" column="19"/>
       </memberdef>
-      <memberdef kind="function" id="da/d9e/a04926_1a30f7d40a2c608827a8f008b58729c2f9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Semaphore const  &amp;</type>
-        <definition>C3D_API ashes::Semaphore const&amp; castor3d::TransparentPass::render</definition>
-        <argsstring>(RenderDevice const &amp;device, ashes::Semaphore const &amp;toWait)</argsstring>
-        <name>render</name>
+      <memberdef kind="function" id="da/d9e/a04926_1a4d964481c440736e3ca3ecb3d8aa690b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::MatrixData::worldToCurView</definition>
+        <argsstring>(sdw::Vec4 const &amp;wsPosition) const</argsstring>
+        <name>worldToCurView</name>
+        <qualifiedname>castor3d::shader::MatrixData::worldToCurView</qualifiedname>
         <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>ashes::Semaphore const &amp;</type>
-          <declname>toWait</declname>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>wsPosition</declname>
         </param>
         <briefdescription>
-<para>Renders transparent nodes. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">toWait</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The semaphore to wait for. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentPass.hpp" line="77" column="1"/>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="36" column="19"/>
       </memberdef>
-      <memberdef kind="function" id="da/d9e/a04926_1a3b0d6847ccfe39b88217f9c4a0efa975" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="de/d13/a01473_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref></type>
-        <definition>C3D_API TextureFlags castor3d::TransparentPass::getTexturesMask</definition>
-        <argsstring>() const override</argsstring>
-        <name>getTexturesMask</name>
-        <reimplements refid="d6/d1b/a04590_1abe50f4442fa70138e392be9d1bfba637">getTexturesMask</reimplements>
+      <memberdef kind="function" id="da/d9e/a04926_1a60497d899641db5efc7b938c26aa2650" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::MatrixData::worldToPrvView</definition>
+        <argsstring>(sdw::Vec4 const &amp;wsPosition) const</argsstring>
+        <name>worldToPrvView</name>
+        <qualifiedname>castor3d::shader::MatrixData::worldToPrvView</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>wsPosition</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>name Getters. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentPass.hpp" line="80" column="1"/>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="37" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d9e/a04926_1a98519f1a964a8830f803ff1b41f574ca" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::MatrixData::curViewToWorld</definition>
+        <argsstring>(sdw::Vec4 const &amp;vsPosition) const</argsstring>
+        <name>curViewToWorld</name>
+        <qualifiedname>castor3d::shader::MatrixData::curViewToWorld</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>vsPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="38" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d9e/a04926_1a838ce93fe7d0658351143a1e67ae9f15" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::MatrixData::prvViewToWorld</definition>
+        <argsstring>(sdw::Vec4 const &amp;vsPosition) const</argsstring>
+        <name>prvViewToWorld</name>
+        <qualifiedname>castor3d::shader::MatrixData::prvViewToWorld</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>vsPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="39" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d9e/a04926_1abc34549c0e769fe05ecd7d943814d59d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::MatrixData::worldToCurProj</definition>
+        <argsstring>(sdw::Vec4 const &amp;wsPosition) const</argsstring>
+        <name>worldToCurProj</name>
+        <qualifiedname>castor3d::shader::MatrixData::worldToCurProj</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>wsPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="40" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d9e/a04926_1a69755248a26d014a19f24f71ade37c4c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::MatrixData::worldToPrvProj</definition>
+        <argsstring>(sdw::Vec4 const &amp;wsPosition) const</argsstring>
+        <name>worldToPrvProj</name>
+        <qualifiedname>castor3d::shader::MatrixData::worldToPrvProj</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>wsPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="41" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d9e/a04926_1a193629ec062a17665f53a1f1a3d4db90" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::MatrixData::viewToScreenUV</definition>
+        <argsstring>(Utils &amp;utils, sdw::Vec4 vsPosition) const</argsstring>
+        <name>viewToScreenUV</name>
+        <qualifiedname>castor3d::shader::MatrixData::viewToScreenUV</qualifiedname>
+        <param>
+          <type><ref refid="d5/daa/a04862" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4</type>
+          <declname>vsPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="42" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d9e/a04926_1a9b535e5d45a8b060399c0b60df3c3e7e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::MatrixData::worldToCurScreenUV</definition>
+        <argsstring>(Utils &amp;utils, sdw::Vec4 wsPosition) const</argsstring>
+        <name>worldToCurScreenUV</name>
+        <qualifiedname>castor3d::shader::MatrixData::worldToCurScreenUV</qualifiedname>
+        <param>
+          <type><ref refid="d5/daa/a04862" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4</type>
+          <declname>wsPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="44" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d9e/a04926_1a0fbdd2f07f25ca97a7a3f270a9e1e292" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::MatrixData::worldToPrvScreenUV</definition>
+        <argsstring>(Utils &amp;utils, sdw::Vec4 wsPosition) const</argsstring>
+        <name>worldToPrvScreenUV</name>
+        <qualifiedname>castor3d::shader::MatrixData::worldToPrvScreenUV</qualifiedname>
+        <param>
+          <type><ref refid="d5/daa/a04862" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4</type>
+          <declname>wsPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="46" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d9e/a04926_1a4407294d3823cd916ed7cc42cdbbdedb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::MatrixData::projToView</definition>
+        <argsstring>(Utils &amp;utils, sdw::Vec2 const &amp;texCoord, sdw::Float const &amp;depth) const</argsstring>
+        <name>projToView</name>
+        <qualifiedname>castor3d::shader::MatrixData::projToView</qualifiedname>
+        <param>
+          <type><ref refid="d5/daa/a04862" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>texCoord</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>depth</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="48" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d9e/a04926_1a3463e6f17131149fe4c2af04aeeced5c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::MatrixData::curProjToWorld</definition>
+        <argsstring>(sdw::Vec4 const &amp;position) const</argsstring>
+        <name>curProjToWorld</name>
+        <qualifiedname>castor3d::shader::MatrixData::curProjToWorld</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="51" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d9e/a04926_1a6dffdb0cf9b340d1e570e7f1a0c2de8b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::MatrixData::curProjToWorld</definition>
+        <argsstring>(Utils &amp;utils, sdw::Vec2 const &amp;texCoord, sdw::Float const &amp;depth) const</argsstring>
+        <name>curProjToWorld</name>
+        <qualifiedname>castor3d::shader::MatrixData::curProjToWorld</qualifiedname>
+        <param>
+          <type><ref refid="d5/daa/a04862" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>texCoord</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>depth</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="52" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d9e/a04926_1a1e910aeb47761b0cb151087422e5fbfe" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::MatrixData::prvProjToWorld</definition>
+        <argsstring>(Utils &amp;utils, sdw::Vec2 const &amp;texCoord, sdw::Float const &amp;depth) const</argsstring>
+        <name>prvProjToWorld</name>
+        <qualifiedname>castor3d::shader::MatrixData::prvProjToWorld</qualifiedname>
+        <param>
+          <type><ref refid="d5/daa/a04862" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>texCoord</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>depth</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="55" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d9e/a04926_1a3fa1f0afc1044fda3001d916c675008d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::MatrixData::getCurViewRight</definition>
+        <argsstring>() const</argsstring>
+        <name>getCurViewRight</name>
+        <qualifiedname>castor3d::shader::MatrixData::getCurViewRight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="58" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d9e/a04926_1a4bbc74dbbb10dc14c91f737b6bbd3091" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::MatrixData::getPrvViewRight</definition>
+        <argsstring>() const</argsstring>
+        <name>getPrvViewRight</name>
+        <qualifiedname>castor3d::shader::MatrixData::getPrvViewRight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="59" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d9e/a04926_1a287b5f10a42152a0a3073af35af9a58f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::MatrixData::getCurViewUp</definition>
+        <argsstring>() const</argsstring>
+        <name>getCurViewUp</name>
+        <qualifiedname>castor3d::shader::MatrixData::getCurViewUp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="60" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d9e/a04926_1a4f47804faa0f3dd454c8d319040e56c1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::MatrixData::getPrvViewUp</definition>
+        <argsstring>() const</argsstring>
+        <name>getPrvViewUp</name>
+        <qualifiedname>castor3d::shader::MatrixData::getPrvViewUp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="61" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d9e/a04926_1ae0fb8e0692af0334076ac70f9c9011c5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::MatrixData::getCurViewCenter</definition>
+        <argsstring>() const</argsstring>
+        <name>getCurViewCenter</name>
+        <qualifiedname>castor3d::shader::MatrixData::getCurViewCenter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="62" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d9e/a04926_1ad4b53874ee0f66cd2441b2b5d0794401" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::MatrixData::getPrvViewCenter</definition>
+        <argsstring>() const</argsstring>
+        <name>getPrvViewCenter</name>
+        <qualifiedname>castor3d::shader::MatrixData::getPrvViewCenter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="63" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d9e/a04926_1a2f74278befb91fece5f18f87c246e979" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::MatrixData::jitter</definition>
+        <argsstring>(sdw::Vec4 &amp;csPosition) const</argsstring>
+        <name>jitter</name>
+        <qualifiedname>castor3d::shader::MatrixData::jitter</qualifiedname>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>csPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="64" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d9e/a04926_1aaf40bf0c36b0fd2b2675e36c94fdb61f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Mat4 const &amp;</type>
+        <definition>sdw::Mat4 const  &amp; castor3d::shader::MatrixData::getInvProjMtx</definition>
+        <argsstring>() const</argsstring>
+        <name>getInvProjMtx</name>
+        <qualifiedname>castor3d::shader::MatrixData::getInvProjMtx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="66" column="18" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="66" bodyend="69"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="da/d9e/a04926_1a543fbaa765004699379e18ac4a9f04ff" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>bool</type>
-        <definition>bool castor3d::TransparentPass::doInitialise</definition>
-        <argsstring>(RenderDevice const &amp;device, castor::Size const &amp;size) override</argsstring>
-        <name>doInitialise</name>
-        <reimplements refid="d6/d54/a04918_1a1be42c59a817fa1c892cfae340dd23a9">doInitialise</reimplements>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="da/d9e/a04926_1a99aaa9d710271114edb1ed1b88943544" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
+        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::MatrixData::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::MatrixData::makeType</qualifiedname>
         <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>castor::Size const &amp;</type>
-          <declname>size</declname>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
         </param>
         <briefdescription>
-<para>Initialises the pass. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername>size</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pass needed dimensions. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>true</computeroutput> on ok. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentPass.hpp" line="97" column="1"/>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="31" column="41"/>
       </memberdef>
-      <memberdef kind="function" id="da/d9e/a04926_1a66a1193830371815c6449cac35756345" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type>ashes::PipelineDepthStencilStateCreateInfo</type>
-        <definition>ashes::PipelineDepthStencilStateCreateInfo castor3d::TransparentPass::doCreateDepthStencilState</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
-        <name>doCreateDepthStencilState</name>
-        <reimplements refid="d6/d54/a04918_1ab0aeb7579ebac2906ec9954ff970ed9f">doCreateDepthStencilState</reimplements>
+      <memberdef kind="function" id="da/d9e/a04926_1a0e245d58ced9db4a8fe0751711851bca" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::MatrixData::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::MatrixData::declare</qualifiedname>
         <param>
-          <type><ref refid="d0/d15/a04574" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
         </param>
         <briefdescription>
-<para>Creates the depth stencil state. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentPass.hpp" line="99" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="da/d9e/a04926_1a1bdbac2bc43c236e3ee53f13dfc85194" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type>ashes::PipelineColorBlendStateCreateInfo</type>
-        <definition>ashes::PipelineColorBlendStateCreateInfo castor3d::TransparentPass::doCreateBlendState</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
-        <name>doCreateBlendState</name>
-        <reimplements refid="d6/d54/a04918_1afd7311426c1cc5a4dcb29a841193f180">doCreateBlendState</reimplements>
-        <param>
-          <type><ref refid="d0/d15/a04574" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Creates the colour blend state. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentPass.hpp" line="100" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="da/d9e/a04926_1a870e0f037e1b52f333acc4cca8a29b54" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="de/d13/a01473_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
-        <definition>ShaderPtr castor3d::TransparentPass::doGetPhongPixelShaderSource</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
-        <name>doGetPhongPixelShaderSource</name>
-        <reimplements refid="d6/d1b/a04590_1a64c67405e2954877ce96d89c3bd6b0ad">doGetPhongPixelShaderSource</reimplements>
-        <param>
-          <type><ref refid="d0/d15/a04574" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves the pixel shader source matching the given flags. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentPass.hpp" line="101" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="da/d9e/a04926_1a578f8678135ad9b944575ebce3b98ad8" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="de/d13/a01473_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
-        <definition>ShaderPtr castor3d::TransparentPass::doGetPbrMRPixelShaderSource</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
-        <name>doGetPbrMRPixelShaderSource</name>
-        <reimplements refid="d6/d1b/a04590_1a840611696fdbf0542000710c0191781f">doGetPbrMRPixelShaderSource</reimplements>
-        <param>
-          <type><ref refid="d0/d15/a04574" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves the pixel shader source matching the given flags. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentPass.hpp" line="102" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="da/d9e/a04926_1a8fb7678d3ceff6c5d0dc38f4265af4f0" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="de/d13/a01473_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
-        <definition>ShaderPtr castor3d::TransparentPass::doGetPbrSGPixelShaderSource</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
-        <name>doGetPbrSGPixelShaderSource</name>
-        <reimplements refid="d6/d1b/a04590_1a26b38ac7476d3a153faa4b18573f3744">doGetPbrSGPixelShaderSource</reimplements>
-        <param>
-          <type><ref refid="d0/d15/a04574" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves the pixel shader source matching the given flags. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentPass.hpp" line="103" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="da/d9e/a04926_1ae3e2f6ab6e57f1ccca304fd4f715d853" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::TransparentPass::doUpdatePipeline</definition>
-        <argsstring>(RenderPipeline &amp;pipeline) override</argsstring>
-        <name>doUpdatePipeline</name>
-        <reimplements refid="d6/d54/a04918_1a93314d2fea227ddc8125a3c0d360db0c">doUpdatePipeline</reimplements>
-        <param>
-          <type><ref refid="d9/d98/a04610" kindref="compound">RenderPipeline</ref> &amp;</type>
-          <declname>pipeline</declname>
-        </param>
-        <briefdescription>
-<para>Updates the pipeline. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">pipeline</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render pipeline. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentPass.hpp" line="104" column="1"/>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="32" column="32"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -518,494 +636,64 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="4513">
-        <label>castor3d::TransparentPass</label>
+      <node id="1">
+        <label>castor3d::shader::MatrixData</label>
         <link refid="da/d9e/a04926"/>
-        <childnode refid="4514" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="4514">
-        <label>castor3d::RenderTechniquePass</label>
-        <link refid="d6/d54/a04918"/>
-        <childnode refid="4515" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4517">
-        <label>Named</label>
-      </node>
-      <node id="4515">
-        <label>castor3d::SceneRenderPass</label>
-        <link refid="d6/d1b/a04590"/>
-        <childnode refid="4516" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4517" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4516">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="4534">
-        <label>castor3d::RenderQueue</label>
-        <link refid="d2/dc4/a04614"/>
-        <childnode refid="4535" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4531">
-        <label>castor3d::SceneCuller</label>
-        <link refid="d2/d73/a04226"/>
-      </node>
-      <node id="4530">
-        <label>castor3d::RenderSystem</label>
-        <link refid="d1/d9a/a04618"/>
-        <childnode refid="4521" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4547">
-        <label>castor3d::TextureUnit</label>
-        <link refid="df/d14/a02658"/>
-        <childnode refid="4548" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4550">
-        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
-        <childnode refid="4526" relation="template-instance">
-          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4527">
-        <label>K</label>
-      </node>
-      <node id="4528">
-        <label>T</label>
-      </node>
-      <node id="4518">
-        <label>castor3d::TransparentPass</label>
+      <node id="1">
+        <label>castor3d::shader::MatrixData</label>
         <link refid="da/d9e/a04926"/>
-        <childnode refid="4519" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="4556">
-        <label>castor3d::Camera</label>
-        <link refid="d2/d3d/a05146"/>
-        <childnode refid="4557" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4559">
-        <label>castor3d::SceneNode</label>
-        <link refid="d8/de7/a05250"/>
-        <childnode refid="4560" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4561" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4522" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4553">
-        <label>castor3d::SsaoConfig</label>
-        <link refid="d4/dc3/a04706"/>
-      </node>
-      <node id="4546">
-        <label>castor3d::VoxelizerUbo</label>
-        <link refid="df/d05/a05626"/>
-      </node>
-      <node id="4541">
-        <label>castor3d::GBufferT&lt; LpvTexture &gt;</label>
-        <link refid="d1/dcc/a04250"/>
-        <childnode refid="4542" relation="private-inheritance">
-        </childnode>
-        <childnode refid="4543" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="4545" relation="template-instance">
-          <edgelabel>&lt; LpvTexture &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4561">
-        <label>castor::OwnedBy&lt; Scene &gt;</label>
-      </node>
-      <node id="4535">
-        <label>castor::OwnedBy&lt; SceneRenderPass &gt;</label>
-      </node>
-      <node id="4526">
-        <label>std::map&lt; K, T &gt;</label>
-        <childnode refid="4527" relation="usage">
-          <edgelabel>keys</edgelabel>
-        </childnode>
-        <childnode refid="4528" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="4525">
-        <label>castor3d::UniformBufferOffsetT&lt; DataT &gt;</label>
-        <link refid="dd/dae/a02294"/>
-      </node>
-      <node id="4560">
-        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
-      </node>
-      <node id="4562">
-        <label>castor3d::LayeredLpvGridConfigUbo</label>
-        <link refid="da/d10/a05470"/>
-        <childnode refid="4537" relation="usage">
-          <edgelabel>LayeredLpvGridData</edgelabel>
-          <edgelabel>LayeredLpvConfig</edgelabel>
-        </childnode>
-      </node>
-      <node id="4519">
-        <label>castor3d::RenderTechniquePass</label>
-        <link refid="d6/d54/a04918"/>
-        <childnode refid="4520" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4536" relation="usage">
-          <edgelabel>m_lpvConfigUbo</edgelabel>
-        </childnode>
-        <childnode refid="4539" relation="usage">
-          <edgelabel>m_sceneNode</edgelabel>
-        </childnode>
-        <childnode refid="4540" relation="usage">
-          <edgelabel>m_lpvResult</edgelabel>
-        </childnode>
-        <childnode refid="4546" relation="usage">
-          <edgelabel>m_vctConfigUbo</edgelabel>
-        </childnode>
-        <childnode refid="4547" relation="usage">
-          <edgelabel>m_vctFirstBounce</edgelabel>
-          <edgelabel>m_vctSecondaryBounce</edgelabel>
-        </childnode>
-        <childnode refid="4553" relation="usage">
-          <edgelabel>m_ssaoConfig</edgelabel>
-        </childnode>
-        <childnode refid="4554" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-        <childnode refid="4556" relation="usage">
-          <edgelabel>m_camera</edgelabel>
-        </childnode>
-        <childnode refid="4562" relation="usage">
-          <edgelabel>m_llpvConfigUbo</edgelabel>
-        </childnode>
-      </node>
-      <node id="4557">
-        <label>castor3d::MovableObject</label>
-        <link refid="db/d21/a05186"/>
-        <childnode refid="4558" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4522" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4559" relation="usage">
-          <edgelabel>m_sceneNode</edgelabel>
-        </childnode>
-        <childnode refid="4554" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-      </node>
-      <node id="4522">
-        <label>Named</label>
-      </node>
-      <node id="4524">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelInstancesUboConfiguration &gt;</label>
-        <link refid="dd/dae/a02294"/>
-        <childnode refid="4525" relation="template-instance">
-          <edgelabel>&lt; castor3d::ModelInstancesUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4548">
-        <label>castor3d::AnimableT&lt; Engine &gt;</label>
-        <link refid="d8/de7/a02030"/>
-        <childnode refid="4549" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4550" relation="usage">
-          <edgelabel>m_animations</edgelabel>
-        </childnode>
-        <childnode refid="4551" relation="template-instance">
-          <edgelabel>&lt; Engine &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4549">
-        <label>castor::OwnedBy&lt; Engine  &gt;</label>
-      </node>
-      <node id="4544">
-        <label>castor::Unique&lt; Engine &gt;</label>
-      </node>
-      <node id="4536">
-        <label>castor3d::LpvGridConfigUbo</label>
-        <link refid="dd/de0/a05478"/>
-        <childnode refid="4537" relation="usage">
-          <edgelabel>LpvGridConfig</edgelabel>
-          <edgelabel>LpvGridData</edgelabel>
-        </childnode>
-      </node>
-      <node id="4520">
-        <label>castor3d::SceneRenderPass</label>
-        <link refid="d6/d1b/a04590"/>
-        <childnode refid="4521" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4522" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4523" relation="usage">
-          <edgelabel>m_modelsInstances</edgelabel>
-        </childnode>
-        <childnode refid="4529" relation="usage">
-          <edgelabel>m_sceneUbo</edgelabel>
-        </childnode>
-        <childnode refid="4530" relation="usage">
-          <edgelabel>m_renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="4531" relation="usage">
-          <edgelabel>m_culler</edgelabel>
-        </childnode>
-        <childnode refid="4532" relation="usage">
-          <edgelabel>m_timer</edgelabel>
-        </childnode>
-        <childnode refid="4533" relation="usage">
-          <edgelabel>m_matrixUbo</edgelabel>
-        </childnode>
-        <childnode refid="4534" relation="usage">
-          <edgelabel>m_renderQueue</edgelabel>
-        </childnode>
-      </node>
-      <node id="4538">
-        <label>std::basic_string&lt; char &gt;</label>
-      </node>
-      <node id="4529">
-        <label>castor3d::SceneUbo</label>
-        <link refid="dc/d79/a05522"/>
-      </node>
-      <node id="4551">
-        <label>castor3d::AnimableT&lt; AnimableHanlerT &gt;</label>
-        <link refid="d8/de7/a02030"/>
-        <childnode refid="4552" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4550" relation="usage">
-          <edgelabel>m_animations</edgelabel>
-        </childnode>
-      </node>
-      <node id="4555">
-        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
-      </node>
-      <node id="4558">
-        <label>Animable</label>
-        <link refid="d8/de7/a02030"/>
-        <childnode refid="4552" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4550" relation="usage">
-          <edgelabel>m_animations</edgelabel>
-        </childnode>
-      </node>
-      <node id="4532">
-        <label>castor3d::RenderPassTimer</label>
-        <link refid="d6/d76/a04606"/>
-        <childnode refid="4522" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4552">
-        <label>castor::OwnedBy&lt; AnimableHanlerT &gt;</label>
-      </node>
-      <node id="4521">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="4540">
-        <label>castor3d::LightVolumePassResult</label>
-        <link refid="de/d3f/a04290"/>
-        <childnode refid="4541" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4543">
-        <label>castor3d::Engine</label>
-        <link refid="df/d9b/a02514"/>
-        <childnode refid="4544" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4545">
-        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
-        <link refid="d1/dcc/a04250"/>
-        <childnode refid="4542" relation="private-inheritance">
-        </childnode>
-        <childnode refid="4543" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-      </node>
-      <node id="4542">
-        <label>castor3d::GBufferBase</label>
-        <link refid="d1/d5a/a04246"/>
-        <childnode refid="4522" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4554">
-        <label>castor3d::Scene</label>
-        <link refid="d6/d66/a05238"/>
-        <childnode refid="4555" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4521" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4522" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4533">
-        <label>castor3d::MatrixUbo</label>
-        <link refid="d2/d30/a05490"/>
-      </node>
-      <node id="4523">
-        <label>std::map&lt; size_t, castor3d::UniformBufferOffsetT&lt; castor3d::ModelInstancesUboConfiguration &gt; &gt;</label>
-        <childnode refid="4524" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-        <childnode refid="4526" relation="template-instance">
-          <edgelabel>&lt; size_t, castor3d::UniformBufferOffsetT&lt; castor3d::ModelInstancesUboConfiguration &gt; &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4537">
-        <label>std::string</label>
-        <childnode refid="4538" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4539">
-        <label>castor3d::SceneRenderNode</label>
-        <link refid="d2/d6b/a04334"/>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </collaborationgraph>
-    <location file="Render/Technique/Transparent/TransparentPass.hpp" line="18" column="1" bodyfile="Render/Technique/Transparent/TransparentPass.hpp" bodystart="16" bodyend="110"/>
+    <location file="Shader/Ubos/MatrixUbo.hpp" line="21" column="1" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="23" bodyend="83"/>
     <listofallmembers>
-      <member refid="da/d9e/a04926_1a005f7ca342ce8a283f4cee773fd42a30" prot="public" virt="virtual"><scope>castor3d::TransparentPass</scope><name>accept</name></member>
-      <member refid="d6/d1b/a04590_1ac5627bf8072801b914f5a7a8fde7c4ef" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>cleanup</name></member>
-      <member refid="d6/d1b/a04590_1a7534bc2c8e7a5e8812685d23cf92da18" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>createBillboardNode</name></member>
-      <member refid="d6/d1b/a04590_1a85a295a43ea151d07bbb59a983fc0a9b" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>createBlendState</name></member>
-      <member refid="d6/d1b/a04590_1aef15f688cd35f6b8b50970e7b5f57d1b" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>createMorphingNode</name></member>
-      <member refid="d6/d1b/a04590_1a1f6309ff1990fcf752d1b1fc4162707e" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>createSkinningNode</name></member>
-      <member refid="d6/d1b/a04590_1ad06a7b233133bd72a5f40a6309bbb636" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>createStaticNode</name></member>
-      <member refid="d6/d1b/a04590_1acfc7eaded98ff40bb227979eb6f56274" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>DistanceSortedNodeMap</name></member>
-      <member refid="d6/d54/a04918_1a281c6db6df63bc04b4656377b453a571" prot="protected" virt="virtual"><scope>castor3d::TransparentPass</scope><name>doCleanup</name></member>
-      <member refid="d6/d1b/a04590_1a5ad44dd6ff6eff2ff3ef28ffce50790d" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doCopyNodesBones</name></member>
-      <member refid="d6/d1b/a04590_1af6a1dcd4de30a16371ff2801ae10c23a" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doCopyNodesBones</name></member>
-      <member refid="d6/d1b/a04590_1ac7e8cea34069461a25c5dce78ad4133d" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doCopyNodesMatrices</name></member>
-      <member refid="d6/d1b/a04590_1abedc9556fe34264878d1175e4c5dd76d" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doCopyNodesMatrices</name></member>
-      <member refid="d6/d1b/a04590_1a8ea69998caa9d7ccc3c86d5fd5b4f0f0" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doCopyNodesMatrices</name></member>
-      <member refid="d6/d1b/a04590_1a6bce0687b325c3413c94465655611170" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doCopyNodesMatrices</name></member>
-      <member refid="da/d9e/a04926_1a1bdbac2bc43c236e3ee53f13dfc85194" prot="private" virt="virtual"><scope>castor3d::TransparentPass</scope><name>doCreateBlendState</name></member>
-      <member refid="da/d9e/a04926_1a66a1193830371815c6449cac35756345" prot="private" virt="virtual"><scope>castor3d::TransparentPass</scope><name>doCreateDepthStencilState</name></member>
-      <member refid="d6/d1b/a04590_1ab989a2da21f70c26e1fed17823e39af6" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doCreatePassRenderNode</name></member>
-      <member refid="d6/d1b/a04590_1a9bf6b45209c8b79cccfa152d51b3b144" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doCreateSceneRenderNode</name></member>
-      <member refid="d6/d54/a04918_1ad9e37d9faa638b44916072a6f9faaca8" prot="protected" virt="virtual"><scope>castor3d::TransparentPass</scope><name>doCreateTextureBindings</name></member>
-      <member refid="d6/d54/a04918_1aaf8bc2adc1ec263f60686e8cbd6705c8" prot="protected" virt="virtual"><scope>castor3d::TransparentPass</scope><name>doCreateUboBindings</name></member>
-      <member refid="d6/d1b/a04590_1adc154d1a476245fee3c7a997e51018ae" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doGetBackPipelines</name></member>
-      <member refid="d6/d1b/a04590_1a31fa7bcde80cfbdcb6acce0810df198e" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doGetBackPipelines</name></member>
-      <member refid="d6/d1b/a04590_1a1f4d8c2e2d67d3686c1059e189ab2d95" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doGetFrontPipelines</name></member>
-      <member refid="d6/d1b/a04590_1ab11482c4f9eb0c4a7d91af6681bc558d" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doGetFrontPipelines</name></member>
-      <member refid="da/d9e/a04926_1a578f8678135ad9b944575ebce3b98ad8" prot="private" virt="virtual"><scope>castor3d::TransparentPass</scope><name>doGetPbrMRPixelShaderSource</name></member>
-      <member refid="da/d9e/a04926_1a8fb7678d3ceff6c5d0dc38f4265af4f0" prot="private" virt="virtual"><scope>castor3d::TransparentPass</scope><name>doGetPbrSGPixelShaderSource</name></member>
-      <member refid="da/d9e/a04926_1a870e0f037e1b52f333acc4cca8a29b54" prot="private" virt="virtual"><scope>castor3d::TransparentPass</scope><name>doGetPhongPixelShaderSource</name></member>
-      <member refid="d6/d1b/a04590_1a4b807ea9d74d5f1ccaba4b29e78c8085" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doGetProgram</name></member>
-      <member refid="d6/d54/a04918_1a58e4f7398f67bbfff2c97dc6e0d1549b" prot="protected" virt="virtual"><scope>castor3d::TransparentPass</scope><name>doGetVertexShaderSource</name></member>
-      <member refid="da/d9e/a04926_1a543fbaa765004699379e18ac4a9f04ff" prot="private" virt="virtual"><scope>castor3d::TransparentPass</scope><name>doInitialise</name></member>
-      <member refid="d6/d1b/a04590_1a01dba0c138042186e5976fd73e716fc5" prot="protected" virt="virtual"><scope>castor3d::TransparentPass</scope><name>doPrepareBackPipeline</name></member>
-      <member refid="d6/d1b/a04590_1ab5eabfab3b395ee4a59d0302b0e245d1" prot="protected" virt="virtual"><scope>castor3d::TransparentPass</scope><name>doPrepareFrontPipeline</name></member>
-      <member refid="d6/d1b/a04590_1a1f6449a6facd708b63468e0cf2395133" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doUpdate</name></member>
-      <member refid="d6/d1b/a04590_1a8daee9fd51dd6295fcfde8f29d9b0215" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doUpdate</name></member>
-      <member refid="d6/d1b/a04590_1accb2dd43ffa84bee0d475a1f39135d2a" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doUpdate</name></member>
-      <member refid="d6/d1b/a04590_1a42af41141686d6979c7f14d427b2b978" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doUpdate</name></member>
-      <member refid="d6/d1b/a04590_1a8130e8bcfe91063cf2589979d4381e73" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doUpdate</name></member>
-      <member refid="d6/d1b/a04590_1ab524ba33c1aaec1b9f95ab64b8efaab5" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doUpdate</name></member>
-      <member refid="d6/d1b/a04590_1a8e02e08b5f5e4065d583926ae5a2b313" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doUpdate</name></member>
-      <member refid="d6/d1b/a04590_1ae907440fd9c2237ba4bb5a4dec97a898" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doUpdate</name></member>
-      <member refid="d6/d1b/a04590_1ab0c1a3251b5af55708ad6b6a13307fa6" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doUpdate</name></member>
-      <member refid="d6/d1b/a04590_1acc81b152f8a75a0006f933aa9ad1c35b" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doUpdate</name></member>
-      <member refid="d6/d1b/a04590_1ad95120cc3a5f5ae2566518fbfd1e96b1" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doUpdate</name></member>
-      <member refid="d6/d1b/a04590_1abcc866dd44044031e30ed73d47357ed0" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doUpdate</name></member>
-      <member refid="d6/d1b/a04590_1a7b644b338ea6bbbffec7ed1cf4936a38" prot="protected" virt="virtual"><scope>castor3d::TransparentPass</scope><name>doUpdate</name></member>
-      <member refid="da/d9e/a04926_1ae3e2f6ab6e57f1ccca304fd4f715d853" prot="private" virt="virtual"><scope>castor3d::TransparentPass</scope><name>doUpdatePipeline</name></member>
-      <member refid="d6/d1b/a04590_1a8dd34d9bcfcbf1cc93c73d633e26b375" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>forceTwoSided</name></member>
-      <member refid="d6/d1b/a04590_1abcf02ee3b5e0f4dbfb0c9b5cf22a3245" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getCommandBuffer</name></member>
-      <member refid="d6/d1b/a04590_1a9ec598bacebe135008057204f4b7e498" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getCuller</name></member>
-      <member refid="d6/d1b/a04590_1ab06deeaf325f047f97f0fdd046b1db9a" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getCuller</name></member>
-      <member refid="d6/d1b/a04590_1ad17ff2b38eb4b3323973a04816eca7a9" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getGeometryShaderSource</name></member>
-      <member refid="d6/d1b/a04590_1ae964287f47d4145776448a31cb9a6ccd" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getInstanceMult</name></member>
-      <member refid="d6/d1b/a04590_1a283dc741d44f730b657f153ee8c0b21d" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getMatrixUbo</name></member>
-      <member refid="d6/d1b/a04590_1a3f2e595dabdcea8b9668d591a5e26879" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getPipelineBack</name></member>
-      <member refid="d6/d1b/a04590_1a9ee5e22f4b636f7d1eb3dc7993cc23a4" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getPipelineFront</name></member>
-      <member refid="d6/d1b/a04590_1a6f6289ae6913449d6cb3cb7a1ae64976" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getPipelinesCount</name></member>
-      <member refid="d6/d1b/a04590_1a32ad22d6a16a83d89a3a888599bf19ed" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getPixelShaderSource</name></member>
-      <member refid="d6/d1b/a04590_1af9a616bf4b5e1bf848d4a7783cff5dcf" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getRenderPass</name></member>
-      <member refid="d6/d1b/a04590_1a9ce55bbe9de899304219df9a29869ac2" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getSceneUbo</name></member>
-      <member refid="d6/d1b/a04590_1ad5bf1e846317bf671e0cac4118922226" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getSceneUbo</name></member>
-      <member refid="d6/d54/a04918_1a7fa2f3526158ff47ac18cf2fa563edb8" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getSemaphore</name></member>
-      <member refid="da/d9e/a04926_1a3b0d6847ccfe39b88217f9c4a0efa975" prot="public" virt="virtual"><scope>castor3d::TransparentPass</scope><name>getTexturesMask</name></member>
-      <member refid="d6/d1b/a04590_1ab21b006fe9daf0ae6172c17f076c5f85" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getTimer</name></member>
-      <member refid="d6/d1b/a04590_1a70c70fcde770cfa3efeaba683a11cbe4" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getTimer</name></member>
-      <member refid="d6/d1b/a04590_1a2d99705d33fb3391c2556e0c484d6ab8" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getVertexShaderSource</name></member>
-      <member refid="d6/d1b/a04590_1afaa168a458700f72a3365a1f4c550c55" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>hasNodes</name></member>
-      <member refid="d6/d54/a04918_1a7087dd96e88ccce71594bda01521d49d" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>initialise</name></member>
-      <member refid="d6/d54/a04918_1a5d25691aefc33b304bc4a10b7fe5d474" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>initialise</name></member>
-      <member refid="d6/d1b/a04590_1a659c1c103b9db5a461c77a6c0417be1b" prot="public" virt="non-virtual" ambiguityscope="castor3d::SceneRenderPass::"><scope>castor3d::TransparentPass</scope><name>initialise</name></member>
-      <member refid="d6/d1b/a04590_1aa19a90dd2842009db8b987e205272135" prot="public" virt="non-virtual" ambiguityscope="castor3d::SceneRenderPass::"><scope>castor3d::TransparentPass</scope><name>initialise</name></member>
-      <member refid="da/d9e/a04926_1ac9323b72a53a501658c89f76473b3ad4" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>initialiseRenderPass</name></member>
-      <member refid="d6/d1b/a04590_1a3206b3416f9f404253530cd6a8bcf39d" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>initialiseTextureDescriptor</name></member>
-      <member refid="d6/d1b/a04590_1a19fdc14553d98acdae5243a15a009b0e" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>initialiseTextureDescriptor</name></member>
-      <member refid="d6/d1b/a04590_1a9f7a16a74d188c71932474d2dfabd496" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>initialiseTextureDescriptor</name></member>
-      <member refid="d6/d1b/a04590_1a6293db061efb0ed860e247a10373b25b" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>initialiseTextureDescriptor</name></member>
-      <member refid="d6/d1b/a04590_1a244414e5446292f40316010853b25a85" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>initialiseTextureDescriptor</name></member>
-      <member refid="d6/d1b/a04590_1a80f92f9b5d2ac1396870e4a19d88baaa" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>initialiseTextureDescriptor</name></member>
-      <member refid="d6/d1b/a04590_1a41e1f148667ede6bf4a4b15b63edbd09" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>initialiseUboDescriptor</name></member>
-      <member refid="d6/d1b/a04590_1a1566db0372f6d6a3db34efc6c469cd26" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>initialiseUboDescriptor</name></member>
-      <member refid="d6/d1b/a04590_1a6eb27cf641fd25efae02250beae221ac" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>initialiseUboDescriptor</name></member>
-      <member refid="d6/d1b/a04590_1a8e22a05fc6dbb5c7a99030c0a688cc15" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>initialiseUboDescriptor</name></member>
-      <member refid="d6/d1b/a04590_1a174e24b5897213c0dda6e3fcfb4d90d5" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>initialiseUboDescriptor</name></member>
-      <member refid="d6/d1b/a04590_1ab6ccf8272797a7df98ad6dc8c7c43706" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>initialiseUboDescriptor</name></member>
-      <member refid="d6/d1b/a04590_1a912328721eae90138599880d76a309ae" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>isDirty</name></member>
-      <member refid="d6/d1b/a04590_1a4bac800c4178729d7e6c2324eb126fd6" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>isOrderIndependent</name></member>
-      <member refid="d6/d54/a04918_1a561fc478bc6c7a8929c0ccd8357d0ac7" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_camera</name></member>
-      <member refid="d6/d1b/a04590_1aa7fc94ef9d99bc777795fb27941d7c65" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_category</name></member>
-      <member refid="d6/d1b/a04590_1a16c632e89f0628620bcf01a70d520b2d" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_culler</name></member>
-      <member refid="da/d9e/a04926_1af647ffac7861c46502c8904733748771" prot="private" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_depthFormat</name></member>
-      <member refid="d6/d54/a04918_1a269923719047d7da20f4a6e264461bae" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_environment</name></member>
-      <member refid="d6/d54/a04918_1ad3107dc97f3d953d13c47f44b59edbd0" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_finished</name></member>
-      <member refid="d6/d1b/a04590_1aa9df6fd78c7eb9ca9b59c10574776085" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_forceTwoSided</name></member>
-      <member refid="da/d9e/a04926_1a2c62761a52666ad8879ee14ce30499b9" prot="private" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_frameBuffer</name></member>
-      <member refid="d6/d1b/a04590_1a6e274505905d565cac4f9d6743b0417d" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_index</name></member>
-      <member refid="d6/d1b/a04590_1afe43990c332123ca5bcaaa12e2204ff5" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_instanceMult</name></member>
-      <member refid="d6/d1b/a04590_1ac70af3d0c68adfc6fa7ec2f68d5b6f12" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_isDirty</name></member>
-      <member refid="d6/d54/a04918_1a9b457c9f92302ebfec621d6198af2ae1" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_llpvConfigUbo</name></member>
-      <member refid="d6/d54/a04918_1a4df75ae519c2c6695914fe8f9c618944" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_lpvConfigUbo</name></member>
-      <member refid="d6/d54/a04918_1a0da52e609494b66e161f6cf5d0d202ce" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_lpvResult</name></member>
-      <member refid="d6/d1b/a04590_1a6b0f370e15e18a3a554c56b09fba85b4" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_matrixUbo</name></member>
-      <member refid="d6/d1b/a04590_1a927f5ac447cecf2b3419ce9501632fd7" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_mode</name></member>
-      <member refid="d6/d1b/a04590_1a923ae0f7686d6ef4c9a27f0799ca62c8" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_modelsInstances</name></member>
-      <member refid="da/d9e/a04926_1afcb19a16b71672aaca7d04107693acbc" prot="private" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_nodesCommands</name></member>
-      <member refid="d6/d1b/a04590_1a898939bc8fc037bb32daebe391e6263b" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_oit</name></member>
-      <member refid="d6/d1b/a04590_1a5faf1387a50606631d9eccf95060f84a" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_ownTimer</name></member>
-      <member refid="d6/d1b/a04590_1a6f215acabcb9564bc85f30f8abeaba56" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_renderPass</name></member>
-      <member refid="d6/d1b/a04590_1a3fd80e792cc2f052add8f252b531c0e2" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_renderQueue</name></member>
-      <member refid="d6/d1b/a04590_1a1513ba71b682375fed01e9819105c894" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_renderSystem</name></member>
-      <member refid="d6/d54/a04918_1a97ef9757bc87714bf0d7f61594a10dc1" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_scene</name></member>
-      <member refid="d6/d54/a04918_1aa7a5ba8ef4a7a31a7585322ce2f4f17f" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_sceneNode</name></member>
-      <member refid="d6/d1b/a04590_1aa623f3557914bcc6e2e8cf058da1c5e5" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_sceneUbo</name></member>
-      <member refid="d6/d1b/a04590_1ab4b6ee7f462854794ed9e3fccdc5b10f" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_size</name></member>
-      <member refid="d6/d54/a04918_1a13bfc94b8af871d1e1bca1268d921397" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_ssaoConfig</name></member>
-      <member refid="d6/d1b/a04590_1a729739080d9153cd9ce71129b909a869" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_timer</name></member>
-      <member refid="d6/d54/a04918_1a2635c15545bce3cfe1f8a71698fc8286" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_vctConfigUbo</name></member>
-      <member refid="d6/d54/a04918_1ad1f6e25e29d6fab2aefab5c09dacbddb" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_vctFirstBounce</name></member>
-      <member refid="d6/d54/a04918_1a15a7d78a593d50789066f2ad20aa3f13" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_vctSecondaryBounce</name></member>
-      <member refid="d6/d1b/a04590_1a1944832d81c804c1db58c6ce658aa50c" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>prepareBackPipeline</name></member>
-      <member refid="d6/d1b/a04590_1aca7f84fa9420e1056a2254e7387c4c56" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>prepareBackPipeline</name></member>
-      <member refid="d6/d1b/a04590_1a8ef8352df2d2af6d596e4b8f7f013679" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>prepareFrontPipeline</name></member>
-      <member refid="d6/d1b/a04590_1ab2e52ba19699b996f9a24a209af5c50d" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>prepareFrontPipeline</name></member>
-      <member refid="da/d9e/a04926_1a30f7d40a2c608827a8f008b58729c2f9" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>render</name></member>
-      <member refid="d6/d54/a04918_1a2babe394143a32a9b58e1e8afaf11b5c" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>RenderTechniquePass</name></member>
-      <member refid="d6/d54/a04918_1a18da3e98fa3727c796c4ded91c736a9c" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>RenderTechniquePass</name></member>
-      <member refid="d6/d1b/a04590_1affb5828080147f1657a582841cbaca01" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>SceneRenderPass</name></member>
-      <member refid="d6/d1b/a04590_1ac65dc41b8e3392db21bd3cadd94754d6" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>SceneRenderPass</name></member>
-      <member refid="d6/d1b/a04590_1a7a964bd723f31105db6937b6c2016344" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>SceneRenderPass</name></member>
-      <member refid="d6/d1b/a04590_1a78ae5b7ef98084673c04980da95e359f" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>SceneRenderPass</name></member>
-      <member refid="d6/d1b/a04590_1adf551a42f8dec9de911b7f2ffc56b666" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>SceneRenderPass</name></member>
-      <member refid="da/d9e/a04926_1aaaeccd5f146030f09bb6295b865ee2f6" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>setDepthFormat</name></member>
-      <member refid="da/d9e/a04926_1a96ffbce155b9666670fa576fdd636da8" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>TransparentPass</name></member>
-      <member refid="d6/d54/a04918_1a34b80c98549ada2496387ba4db944fd1" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>update</name></member>
-      <member refid="d6/d54/a04918_1add6df2057351a89dbe243c62d6a5728a" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>update</name></member>
-      <member refid="d6/d1b/a04590_1add6df2057351a89dbe243c62d6a5728a" prot="public" virt="non-virtual" ambiguityscope="castor3d::SceneRenderPass::"><scope>castor3d::TransparentPass</scope><name>update</name></member>
-      <member refid="d6/d1b/a04590_1a49f451446a2b5cc5622aaaeda521bfbf" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>updateFlags</name></member>
-      <member refid="d6/d1b/a04590_1aeb30d85455e3fb74cff7074377268d80" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>updatePipeline</name></member>
-      <member refid="d6/d1b/a04590_1a8ece518761c68ec639b59e82cde459af" prot="public" virt="virtual"><scope>castor3d::TransparentPass</scope><name>~SceneRenderPass</name></member>
-      <member refid="da/d9e/a04926_1acafb1a6174c6babb7b442120ab42a7e6" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>~TransparentPass</name></member>
+      <member refid="da/d9e/a04926_1a9bb6aa488de293114ff892ef18876df3" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>BillboardData</name></member>
+      <member refid="da/d9e/a04926_1a3463e6f17131149fe4c2af04aeeced5c" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>curProjToWorld</name></member>
+      <member refid="da/d9e/a04926_1a6dffdb0cf9b340d1e570e7f1a0c2de8b" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>curProjToWorld</name></member>
+      <member refid="da/d9e/a04926_1a98519f1a964a8830f803ff1b41f574ca" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>curViewToWorld</name></member>
+      <member refid="da/d9e/a04926_1a0e245d58ced9db4a8fe0751711851bca" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>declare</name></member>
+      <member refid="da/d9e/a04926_1ae0fb8e0692af0334076ac70f9c9011c5" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>getCurViewCenter</name></member>
+      <member refid="da/d9e/a04926_1a3fa1f0afc1044fda3001d916c675008d" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>getCurViewRight</name></member>
+      <member refid="da/d9e/a04926_1a287b5f10a42152a0a3073af35af9a58f" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>getCurViewUp</name></member>
+      <member refid="da/d9e/a04926_1aaf40bf0c36b0fd2b2675e36c94fdb61f" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>getInvProjMtx</name></member>
+      <member refid="da/d9e/a04926_1ad4b53874ee0f66cd2441b2b5d0794401" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>getPrvViewCenter</name></member>
+      <member refid="da/d9e/a04926_1a4bbc74dbbb10dc14c91f737b6bbd3091" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>getPrvViewRight</name></member>
+      <member refid="da/d9e/a04926_1a4f47804faa0f3dd454c8d319040e56c1" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>getPrvViewUp</name></member>
+      <member refid="da/d9e/a04926_1a2f74278befb91fece5f18f87c246e979" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>jitter</name></member>
+      <member refid="da/d9e/a04926_1a868baf68219a2f240ff6228aa4222f94" prot="private" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>m_curView</name></member>
+      <member refid="da/d9e/a04926_1aec4f55f1895211a6a92680922838aa08" prot="private" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>m_curViewProj</name></member>
+      <member refid="da/d9e/a04926_1a0555b13db6aff71fdfab24e80024bb2b" prot="private" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>m_invProjection</name></member>
+      <member refid="da/d9e/a04926_1add24ff2bd3cb443b85e46b9aa4915126" prot="private" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>m_jitter</name></member>
+      <member refid="da/d9e/a04926_1a4506f504504fde611d113c661a0d3071" prot="private" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>m_projection</name></member>
+      <member refid="da/d9e/a04926_1a677dfb6ae843d028746e8f55ceb41625" prot="private" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>m_prvView</name></member>
+      <member refid="da/d9e/a04926_1acf8656af99effd62fe6f398b5f9ab9e8" prot="private" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>m_prvViewProj</name></member>
+      <member refid="da/d9e/a04926_1a99aaa9d710271114edb1ed1b88943544" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>makeType</name></member>
+      <member refid="da/d9e/a04926_1ab9277d122e88d70b7ef18a23ff34986f" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>MatrixData</name></member>
+      <member refid="da/d9e/a04926_1a10fefffe6759cfd41bb6c139328a7b80" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>projToView</name></member>
+      <member refid="da/d9e/a04926_1a4407294d3823cd916ed7cc42cdbbdedb" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>projToView</name></member>
+      <member refid="da/d9e/a04926_1a1e910aeb47761b0cb151087422e5fbfe" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>prvProjToWorld</name></member>
+      <member refid="da/d9e/a04926_1a838ce93fe7d0658351143a1e67ae9f15" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>prvViewToWorld</name></member>
+      <member refid="da/d9e/a04926_1a06d0fe78dd710ed551831f1de8f1a3ac" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="da/d9e/a04926_1a0f0c47a9125b875394a9a2377c82db1a" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>viewToProj</name></member>
+      <member refid="da/d9e/a04926_1a193629ec062a17665f53a1f1a3d4db90" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>viewToScreenUV</name></member>
+      <member refid="da/d9e/a04926_1abc34549c0e769fe05ecd7d943814d59d" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>worldToCurProj</name></member>
+      <member refid="da/d9e/a04926_1a9b535e5d45a8b060399c0b60df3c3e7e" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>worldToCurScreenUV</name></member>
+      <member refid="da/d9e/a04926_1a4d964481c440736e3ca3ecb3d8aa690b" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>worldToCurView</name></member>
+      <member refid="da/d9e/a04926_1a69755248a26d014a19f24f71ade37c4c" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>worldToPrvProj</name></member>
+      <member refid="da/d9e/a04926_1a0fbdd2f07f25ca97a7a3f270a9e1e292" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>worldToPrvScreenUV</name></member>
+      <member refid="da/d9e/a04926_1a60497d899641db5efc7b938c26aa2650" prot="public" virt="non-virtual"><scope>castor3d::shader::MatrixData</scope><name>worldToPrvView</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

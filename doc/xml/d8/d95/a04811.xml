@@ -1,44 +1,165 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d8/d95/a04811" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::SubsurfaceScatteringPass::BlurConfiguration</compoundname>
-    <includes local="no">SubsurfaceScatteringPass.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d8/d95/a04811_1afa2b6185c9d8bdd7e07c6e1f399b8ff4" prot="public" static="no" mutable="no">
-        <type>castor::Point2f</type>
-        <definition>castor::Point2f castor3d::SubsurfaceScatteringPass::BlurConfiguration::blurPixelSize</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d8/d95/a04811" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::SssProfiles</compoundname>
+    <includes local="no">GlslMaterial.hpp</includes>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d8/d95/a04811_1a58bb45c4bf87c0635321f3994c3530a7" prot="protected" static="no" mutable="no">
+        <type>sdw::ShaderWriter &amp;</type>
+        <definition>sdw::ShaderWriter&amp; castor3d::shader::SssProfiles::m_writer</definition>
         <argsstring></argsstring>
-        <name>blurPixelSize</name>
+        <name>m_writer</name>
+        <qualifiedname>castor3d::shader::SssProfiles::m_writer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="111" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="111" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="120" column="20" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="120" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d8/d95/a04811_1a24df45312c604ae07e7ff4f691e908f3" prot="public" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::SubsurfaceScatteringPass::BlurConfiguration::blurCorrection</definition>
+      <memberdef kind="variable" id="d8/d95/a04811_1a20d4d4a50d800dfa1b08b0122137c107" prot="protected" static="no" mutable="no">
+        <type>std::unique_ptr&lt; sdw::ArraySsboT&lt; <ref refid="d1/da9/a04807" kindref="compound">SssProfile</ref> &gt; &gt;</type>
+        <definition>std::unique_ptr&lt; sdw::ArraySsboT&lt; SssProfile &gt; &gt; castor3d::shader::SssProfiles::m_ssbo</definition>
         <argsstring></argsstring>
-        <name>blurCorrection</name>
+        <name>m_ssbo</name>
+        <qualifiedname>castor3d::shader::SssProfiles::m_ssbo</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="112" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="112" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="121" column="17" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/d95/a04811_1a2c5099c58d11a13b11f92ad0c68a34b5" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::SssProfiles::SssProfiles</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>SssProfiles</name>
+        <qualifiedname>castor3d::shader::SssProfiles::SssProfiles</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="110" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d95/a04811_1a34ae09771843f9086979464d7dd4a233" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::SssProfiles::SssProfiles</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, uint32_t binding, uint32_t set, bool enable=true)</argsstring>
+        <name>SssProfiles</name>
+        <qualifiedname>castor3d::shader::SssProfiles::SssProfiles</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enable</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="111" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d95/a04811_1a965a9b2ae19bc4eae529f918d1c67daf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::SssProfiles::declare</definition>
+        <argsstring>(uint32_t binding, uint32_t set)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::SssProfiles::declare</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="115" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d95/a04811_1a73c5730e1d304b6b235c852084f5fd7f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/da9/a04807" kindref="compound">SssProfile</ref></type>
+        <definition>C3D_API SssProfile castor3d::shader::SssProfiles::getProfile</definition>
+        <argsstring>(sdw::UInt const &amp;index) const</argsstring>
+        <name>getProfile</name>
+        <qualifiedname>castor3d::shader::SssProfiles::getProfile</qualifiedname>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="117" column="20"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="110" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="109" bodyend="113"/>
+    <collaborationgraph>
+      <node id="4">
+        <label>T</label>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::SssProfiles</label>
+        <link refid="d8/d95/a04811"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_ssbo</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::unique_ptr&lt; sdw::ArraySsboT&lt; castor3d::shader::SssProfile &gt; &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; sdw::ArraySsboT&lt; castor3d::shader::SssProfile &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslMaterial.hpp" line="107" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="108" bodyend="122"/>
     <listofallmembers>
-      <member refid="d8/d95/a04811_1a24df45312c604ae07e7ff4f691e908f3" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::BlurConfiguration</scope><name>blurCorrection</name></member>
-      <member refid="d8/d95/a04811_1afa2b6185c9d8bdd7e07c6e1f399b8ff4" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::BlurConfiguration</scope><name>blurPixelSize</name></member>
+      <member refid="d8/d95/a04811_1a965a9b2ae19bc4eae529f918d1c67daf" prot="public" virt="non-virtual"><scope>castor3d::shader::SssProfiles</scope><name>declare</name></member>
+      <member refid="d8/d95/a04811_1a73c5730e1d304b6b235c852084f5fd7f" prot="public" virt="non-virtual"><scope>castor3d::shader::SssProfiles</scope><name>getProfile</name></member>
+      <member refid="d8/d95/a04811_1a20d4d4a50d800dfa1b08b0122137c107" prot="protected" virt="non-virtual"><scope>castor3d::shader::SssProfiles</scope><name>m_ssbo</name></member>
+      <member refid="d8/d95/a04811_1a58bb45c4bf87c0635321f3994c3530a7" prot="protected" virt="non-virtual"><scope>castor3d::shader::SssProfiles</scope><name>m_writer</name></member>
+      <member refid="d8/d95/a04811_1a2c5099c58d11a13b11f92ad0c68a34b5" prot="public" virt="non-virtual"><scope>castor3d::shader::SssProfiles</scope><name>SssProfiles</name></member>
+      <member refid="d8/d95/a04811_1a34ae09771843f9086979464d7dd4a233" prot="public" virt="non-virtual"><scope>castor3d::shader::SssProfiles</scope><name>SssProfiles</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

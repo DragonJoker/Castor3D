@@ -1,33 +1,150 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d7/d1c/a02732" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkSemaphoreCreateInfo &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
+    <compoundname>castor3d::GpuEventInitialiserT</compoundname>
+    <includes local="no">GpuFunctorEvent.hpp</includes>
     <templateparamlist>
+      <param>
+        <type>typename CacheT</type>
+      </param>
     </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d7/d1c/a02732_1ac79541047aded1aec25d4036c749bfff" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkSemaphoreCreateInfo &gt;::value</definition>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d7/d1c/a02732_1a6c56e85a9ecad4a49058ff56fdf16202" prot="public" static="no">
+        <type>typename CacheT::ElementT</type>
+        <definition>using castor3d::GpuEventInitialiserT&lt; CacheT &gt;::ElementT =  typename CacheT::ElementT</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO</initializer>
+        <name>ElementT</name>
+        <qualifiedname>castor3d::GpuEventInitialiserT::ElementT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="23" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="23" bodyend="-1"/>
+        <location file="Event/Frame/GpuFunctorEvent.hpp" line="112" column="1" bodyfile="Event/Frame/GpuFunctorEvent.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/d1c/a02732_1ad54a1a37b9d0c10697401553ce710285" prot="public" static="no" mutable="no">
+        <type><ref refid="da/d20/a02740" kindref="compound">FrameListener</ref> *</type>
+        <definition>FrameListener* castor3d::GpuEventInitialiserT&lt; CacheT &gt;::listener</definition>
+        <argsstring></argsstring>
+        <name>listener</name>
+        <qualifiedname>castor3d::GpuEventInitialiserT::listener</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/GpuFunctorEvent.hpp" line="124" column="16" bodyfile="Event/Frame/GpuFunctorEvent.hpp" bodystart="124" bodyend="-1"/>
+        <referencedby refid="d7/d1c/a02732_1ac39ad25122a42c42858573c48b06f8a0" compoundref="d5/d42/a00269" startline="119" endline="122">castor3d::GpuEventInitialiserT&lt; CacheT &gt;::operator()</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/d1c/a02732_1a018b9e9b82edb318bb3fb3ee4c7ec48d" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::GpuEventInitialiserT&lt; CacheT &gt;::GpuEventInitialiserT</definition>
+        <argsstring>(FrameListener &amp;listener)</argsstring>
+        <name>GpuEventInitialiserT</name>
+        <qualifiedname>castor3d::GpuEventInitialiserT::GpuEventInitialiserT</qualifiedname>
+        <param>
+          <type><ref refid="da/d20/a02740" kindref="compound">FrameListener</ref> &amp;</type>
+          <declname>listener</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/GpuFunctorEvent.hpp" line="114" column="10" bodyfile="Event/Frame/GpuFunctorEvent.hpp" bodystart="114" bodyend="117"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d1c/a02732_1ac39ad25122a42c42858573c48b06f8a0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::GpuEventInitialiserT&lt; CacheT &gt;::operator()</definition>
+        <argsstring>(ElementT &amp;res) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor3d::GpuEventInitialiserT::operator()</qualifiedname>
+        <param>
+          <type><ref refid="d7/d1c/a02732_1a6c56e85a9ecad4a49058ff56fdf16202" kindref="member">ElementT</ref> &amp;</type>
+          <declname>res</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/GpuFunctorEvent.hpp" line="119" column="6" bodyfile="Event/Frame/GpuFunctorEvent.hpp" bodystart="119" bodyend="122"/>
+        <references refid="d7/d1c/a02732_1ad54a1a37b9d0c10697401553ce710285" compoundref="d5/d42/a00269" startline="124">castor3d::GpuEventInitialiserT&lt; CacheT &gt;::listener</references>
+        <references refid="d2/df5/a01395_1aaf67c7f08e12d5b908a8e9d0d95df55e" compoundref="d5/d42/a00269" startline="91" endline="99">castor3d::makeGpuInitialiseEvent</references>
+        <references refid="da/d20/a02740_1a2c62573911a7ed3c2149fd37a7de9df0">castor3d::FrameListener::postEvent</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
+<para>Cached resource initialiser, through a GPU frame event.</para>
+<para>name Cache functors. </para>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="23" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="23" bodyend="23"/>
+    <collaborationgraph>
+      <node id="6">
+        <label>T</label>
+      </node>
+      <node id="4">
+        <label>std::array&lt; CpuFrameEventPtrArray, size_t(EventType::eCount) &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; CpuFrameEventPtrArray, size_t(EventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::array&lt; GpuFrameEventPtrArray, size_t(EventType::eCount) &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; GpuFrameEventPtrArray, size_t(EventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::FrameListener</label>
+        <link refid="da/d20/a02740"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_cpuEvents</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_gpuEvents</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>m_mutex</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::GpuEventInitialiserT&lt; CacheT &gt;</label>
+        <link refid="d7/d1c/a02732"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>listener</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+      <node id="5">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::recursive_mutex</label>
+      </node>
+    </collaborationgraph>
+    <location file="Event/Frame/GpuFunctorEvent.hpp" line="110" column="1" bodyfile="Event/Frame/GpuFunctorEvent.hpp" bodystart="111" bodyend="125"/>
     <listofallmembers>
-      <member refid="d7/d1c/a02732_1ac79541047aded1aec25d4036c749bfff" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkSemaphoreCreateInfo &gt;</scope><name>value</name></member>
+      <member refid="d7/d1c/a02732_1a6c56e85a9ecad4a49058ff56fdf16202" prot="public" virt="non-virtual"><scope>castor3d::GpuEventInitialiserT</scope><name>ElementT</name></member>
+      <member refid="d7/d1c/a02732_1a018b9e9b82edb318bb3fb3ee4c7ec48d" prot="public" virt="non-virtual"><scope>castor3d::GpuEventInitialiserT</scope><name>GpuEventInitialiserT</name></member>
+      <member refid="d7/d1c/a02732_1ad54a1a37b9d0c10697401553ce710285" prot="public" virt="non-virtual"><scope>castor3d::GpuEventInitialiserT</scope><name>listener</name></member>
+      <member refid="d7/d1c/a02732_1ac39ad25122a42c42858573c48b06f8a0" prot="public" virt="non-virtual"><scope>castor3d::GpuEventInitialiserT</scope><name>operator()</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

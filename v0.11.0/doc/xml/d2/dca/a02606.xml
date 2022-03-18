@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d2/dca/a02606" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PassTyper&lt; MaterialType::eSpecularGlossiness &gt;</compoundname>
+    <includes local="no">PassModule.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d2/dca/a02606_1ab9f7fc1893605ea7704a0ac7ccab471a" prot="public" static="no">
+        <type><ref refid="dc/dd5/a02614" kindref="compound">SpecularGlossinessPbrPass</ref></type>
+        <definition>using castor3d::PassTyper&lt; MaterialType::eSpecularGlossiness &gt;::Type =  SpecularGlossinessPbrPass</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassModule.hpp" line="229" column="1" bodyfile="Material/Pass/PassModule.hpp" bodystart="229" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Helper class to retrieve a pass type from a MaterialType. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="version"><para>0.9.0 </para>
+</simplesect>
+<simplesect kind="date"><para>02/12/2016</para>
+</simplesect>
+<simplesect kind="remark"><para>Specialisation for <ref refid="de/d13/a01473_1a90306964da63b9bbc97f4e205ecc5b7aa070a8071cbe82751a559d66b7cc85024" kindref="member">MaterialType::eMetallicRoughness</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="Material/Pass/PassModule.hpp" line="228" column="1" bodyfile="Material/Pass/PassModule.hpp" bodystart="227" bodyend="230"/>
+    <listofallmembers>
+      <member refid="d2/dca/a02606_1ab9f7fc1893605ea7704a0ac7ccab471a" prot="public" virt="non-virtual"><scope>castor3d::PassTyper&lt; MaterialType::eSpecularGlossiness &gt;</scope><name>Type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,22 +1,76 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dc/d12/a04723" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::LightPassShadowTraits</compoundname>
-    <includes local="no">LightingModule.hpp</includes>
-    <templateparamlist>
-      <param>
-        <type><ref refid="d7/dd1/a01458_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
-        <declname>LtType</declname>
-        <defname>LtType</defname>
-      </param>
-    </templateparamlist>
+    <compoundname>castor3d::SssProfileBuffer::Data</compoundname>
+    <includes local="no">SssProfileBuffer.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/d12/a04723_1a80a1b77623e0252bed6b54c53f247512" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SssProfileBuffer::Data::x</definition>
+        <argsstring></argsstring>
+        <name>x</name>
+        <qualifiedname>castor3d::SssProfileBuffer::Data::x</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="29" column="7" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d12/a04723_1a84eee77307ab6fd4e41074c36d817fe8" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SssProfileBuffer::Data::y</definition>
+        <argsstring></argsstring>
+        <name>y</name>
+        <qualifiedname>castor3d::SssProfileBuffer::Data::y</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="30" column="7" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d12/a04723_1aa49697620d9aa4205ca2aec8bd84c0c3" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SssProfileBuffer::Data::z</definition>
+        <argsstring></argsstring>
+        <name>z</name>
+        <qualifiedname>castor3d::SssProfileBuffer::Data::z</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="31" column="7" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d12/a04723_1af04dfbdb9c52bf7040f9545196da58a3" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SssProfileBuffer::Data::w</definition>
+        <argsstring></argsstring>
+        <name>w</name>
+        <qualifiedname>castor3d::SssProfileBuffer::Data::w</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="32" column="7" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
     <briefdescription>
-<para>Traits structure to specialise light passes with shadows. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Technique/Opaque/Lighting/LightingModule.hpp" line="91" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightingModule.hpp" bodystart="91" bodyend="-1"/>
+    <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="27" column="1" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="28" bodyend="33"/>
     <listofallmembers>
+      <member refid="dc/d12/a04723_1af04dfbdb9c52bf7040f9545196da58a3" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer::Data</scope><name>w</name></member>
+      <member refid="dc/d12/a04723_1a80a1b77623e0252bed6b54c53f247512" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer::Data</scope><name>x</name></member>
+      <member refid="dc/d12/a04723_1a84eee77307ab6fd4e41074c36d817fe8" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer::Data</scope><name>y</name></member>
+      <member refid="dc/d12/a04723_1aa49697620d9aa4205ca2aec8bd84c0c3" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer::Data</scope><name>z</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

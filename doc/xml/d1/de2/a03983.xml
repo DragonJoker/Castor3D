@@ -1,183 +1,342 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d1/de2/a03983" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::InterleavedVertexT</compoundname>
-    <includes local="no">VertexGroup.hpp</includes>
-    <templateparamlist>
-      <param>
-        <type>typename</type>
-        <declname>T</declname>
-        <defname>T</defname>
-      </param>
-    </templateparamlist>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d1/de2/a03983_1a231c8bedc4c5ff711f3eb1e4ccd05752" prot="public" static="no" mutable="no">
-        <type>castor::Point3&lt; T &gt;</type>
-        <definition>castor::Point3&lt; T &gt; castor3d::InterleavedVertexT&lt; T &gt;::pos</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d1/de2/a03983" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::RenderLoopSync</compoundname>
+    <basecompoundref refid="d0/dce/a03971" prot="public" virt="non-virtual">castor3d::RenderLoop</basecompoundref>
+    <includes local="no">RenderLoopSync.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/de2/a03983_1af16062cd1f23b0dacd38209aa79ceecb" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderLoopSync::m_active</definition>
         <argsstring></argsstring>
-        <name>pos</name>
+        <name>m_active</name>
+        <qualifiedname>castor3d::RenderLoopSync::m_active</qualifiedname>
         <briefdescription>
+<para>Tells if the render loop is active. </para>
         </briefdescription>
         <detaileddescription>
-<para>The vertex coordinates. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/VertexGroup.hpp" line="40" column="1" bodyfile="Model/VertexGroup.hpp" bodystart="40" bodyend="-1"/>
-        <referencedby refid="d1/de2/a03983_1a8b2cdc46717234a17ad2926bd082b9d8" compoundref="d3/d87/a00539" startline="14" endline="18">castor3d::InterleavedVertexT&lt; float &gt;::position</referencedby>
-        <referencedby refid="d7/dd1/a01458_1a02a77ba0bbe8d8c7e9b2cdac1f45a2fe" compoundref="df/d6a/a00119" startline="1243" endline="1260">castor3d::prepareChunkData</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="d1/de2/a03983_1a08ef8cb947afd3d5e8ea4b6419104111" prot="public" static="no" mutable="no">
-        <type>castor::Point3&lt; T &gt;</type>
-        <definition>castor::Point3&lt; T &gt; castor3d::InterleavedVertexT&lt; T &gt;::nml</definition>
-        <argsstring></argsstring>
-        <name>nml</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The vertex normal. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/VertexGroup.hpp" line="43" column="1" bodyfile="Model/VertexGroup.hpp" bodystart="43" bodyend="-1"/>
-        <referencedby refid="d1/de2/a03983_1aedccf70fc3cb75d5a4cc692cd72f4556" compoundref="d3/d87/a00539" startline="20" endline="24">castor3d::InterleavedVertexT&lt; float &gt;::normal</referencedby>
-        <referencedby refid="d7/dd1/a01458_1a02a77ba0bbe8d8c7e9b2cdac1f45a2fe" compoundref="df/d6a/a00119" startline="1243" endline="1260">castor3d::prepareChunkData</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="d1/de2/a03983_1a9f11fd7bbdd4959041c9aaa25e8f1bc3" prot="public" static="no" mutable="no">
-        <type>castor::Point3&lt; T &gt;</type>
-        <definition>castor::Point3&lt; T &gt; castor3d::InterleavedVertexT&lt; T &gt;::tan</definition>
-        <argsstring></argsstring>
-        <name>tan</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The vertex tangent. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/VertexGroup.hpp" line="46" column="1" bodyfile="Model/VertexGroup.hpp" bodystart="46" bodyend="-1"/>
-        <referencedby refid="d7/dd1/a01458_1a02a77ba0bbe8d8c7e9b2cdac1f45a2fe" compoundref="df/d6a/a00119" startline="1243" endline="1260">castor3d::prepareChunkData</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="d1/de2/a03983_1a4ccb3f9d45a9d26918f29c3110affa6d" prot="public" static="no" mutable="no">
-        <type>castor::Point3&lt; T &gt;</type>
-        <definition>castor::Point3&lt; T &gt; castor3d::InterleavedVertexT&lt; T &gt;::tex</definition>
-        <argsstring></argsstring>
-        <name>tex</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The vertex texture coordinates. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/VertexGroup.hpp" line="49" column="1" bodyfile="Model/VertexGroup.hpp" bodystart="49" bodyend="-1"/>
-        <referencedby refid="d7/dd1/a01458_1a02a77ba0bbe8d8c7e9b2cdac1f45a2fe" compoundref="df/d6a/a00119" startline="1243" endline="1260">castor3d::prepareChunkData</referencedby>
-        <referencedby refid="d1/de2/a03983_1a6d95ae1f4f10e8112d7b8d5421df5ea4" compoundref="d3/d87/a00539" startline="26" endline="30">castor3d::InterleavedVertexT&lt; float &gt;::texcoord</referencedby>
+        <location file="Render/RenderLoopSync.hpp" line="57" column="6" bodyfile="Render/RenderLoopSync.hpp" bodystart="57" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d1/de2/a03983_1a8b2cdc46717234a17ad2926bd082b9d8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d1/de2/a03983" kindref="compound">InterleavedVertexT</ref> &amp;</type>
-        <definition>InterleavedVertexT&amp; castor3d::InterleavedVertexT&lt; T &gt;::position</definition>
-        <argsstring>(castor::Point3&lt; T &gt; const &amp;pos)</argsstring>
-        <name>position</name>
+      <memberdef kind="function" id="d1/de2/a03983_1ac020f68f41bd51da5f2b8e4b3a7aabb2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::RenderLoopSync::RenderLoopSync</definition>
+        <argsstring>(Engine &amp;engine, uint32_t wantedFPS)</argsstring>
+        <name>RenderLoopSync</name>
+        <qualifiedname>castor3d::RenderLoopSync::RenderLoopSync</qualifiedname>
         <param>
-          <type>castor::Point3&lt; T &gt; const &amp;</type>
-          <declname>pos</declname>
+          <type><ref refid="d8/dd0/a02711" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>wantedFPS</declname>
         </param>
         <briefdescription>
+<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">wantedFPS</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The wanted FPS count. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/VertexGroup.hpp" line="14" column="1" bodyfile="Model/VertexGroup.hpp" bodystart="14" bodyend="18"/>
+        <location file="Render/RenderLoopSync.hpp" line="25" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d1/de2/a03983_1aedccf70fc3cb75d5a4cc692cd72f4556" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d1/de2/a03983" kindref="compound">InterleavedVertexT</ref> &amp;</type>
-        <definition>InterleavedVertexT&amp; castor3d::InterleavedVertexT&lt; T &gt;::normal</definition>
-        <argsstring>(castor::Point3&lt; T &gt; const &amp;nml)</argsstring>
-        <name>normal</name>
-        <param>
-          <type>castor::Point3&lt; T &gt; const &amp;</type>
-          <declname>nml</declname>
-        </param>
+      <memberdef kind="function" id="d1/de2/a03983_1ad3524cefff4b7ca6e92f4c1475212d24" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::RenderLoopSync::~RenderLoopSync</definition>
+        <argsstring>() override</argsstring>
+        <name>~RenderLoopSync</name>
+        <qualifiedname>castor3d::RenderLoopSync::~RenderLoopSync</qualifiedname>
         <briefdescription>
+<para>Destructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/VertexGroup.hpp" line="20" column="1" bodyfile="Model/VertexGroup.hpp" bodystart="20" bodyend="24"/>
+        <location file="Render/RenderLoopSync.hpp" line="33" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d1/de2/a03983_1a6d95ae1f4f10e8112d7b8d5421df5ea4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d1/de2/a03983" kindref="compound">InterleavedVertexT</ref> &amp;</type>
-        <definition>InterleavedVertexT&amp; castor3d::InterleavedVertexT&lt; T &gt;::texcoord</definition>
-        <argsstring>(castor::Point2&lt; T &gt; const &amp;tex)</argsstring>
-        <name>texcoord</name>
-        <param>
-          <type>castor::Point2&lt; T &gt; const &amp;</type>
-          <declname>tex</declname>
-        </param>
+      <memberdef kind="function" id="d1/de2/a03983_1ac849b8aea69ba1e907d697d8d6fec1a9" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderLoopSync::beginRendering</definition>
+        <argsstring>() override</argsstring>
+        <name>beginRendering</name>
+        <qualifiedname>castor3d::RenderLoopSync::beginRendering</qualifiedname>
+        <reimplements refid="d0/dce/a03971_1a7842a7d67f402edcc24be8fd09973818">beginRendering</reimplements>
         <briefdescription>
+<para>Starts threaded render loop. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/VertexGroup.hpp" line="26" column="1" bodyfile="Model/VertexGroup.hpp" bodystart="26" bodyend="30"/>
+        <location file="Render/RenderLoopSync.hpp" line="37" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d1/de2/a03983_1a34ee41848086e736108e7b247c847895" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d1/de2/a03983" kindref="compound">InterleavedVertexT</ref> &amp;</type>
-        <definition>InterleavedVertexT&amp; castor3d::InterleavedVertexT&lt; T &gt;::texcoord</definition>
-        <argsstring>(castor::Point3&lt; T &gt; const &amp;tex)</argsstring>
-        <name>texcoord</name>
+      <memberdef kind="function" id="d1/de2/a03983_1ae5926ec23f7697887648816bc68ed00c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderLoopSync::renderSyncFrame</definition>
+        <argsstring>(castor::Milliseconds tslf) override</argsstring>
+        <name>renderSyncFrame</name>
+        <qualifiedname>castor3d::RenderLoopSync::renderSyncFrame</qualifiedname>
+        <reimplements refid="d0/dce/a03971_1aabd4de0429c0e2659058545c6ec1bad2">renderSyncFrame</reimplements>
         <param>
-          <type>castor::Point3&lt; T &gt; const &amp;</type>
-          <declname>tex</declname>
+          <type>castor::Milliseconds</type>
+          <declname>tslf</declname>
         </param>
         <briefdescription>
+<para>Renders one frame, only if not in render loop. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">tslf</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The time elapsed since last frame. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoopSync.hpp" line="41" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/de2/a03983_1aa8e92d2a1df7dbd0a8d5881af5d4bc24" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderLoopSync::pause</definition>
+        <argsstring>() override</argsstring>
+        <name>pause</name>
+        <qualifiedname>castor3d::RenderLoopSync::pause</qualifiedname>
+        <reimplements refid="d0/dce/a03971_1afbc75c36ac22821c05f284e6fee155af">pause</reimplements>
+        <briefdescription>
+<para>Pauses the render loop. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/VertexGroup.hpp" line="32" column="1" bodyfile="Model/VertexGroup.hpp" bodystart="32" bodyend="36"/>
+        <location file="Render/RenderLoopSync.hpp" line="45" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/de2/a03983_1a59027889dfb53d02becb6189b482fda9" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderLoopSync::resume</definition>
+        <argsstring>() override</argsstring>
+        <name>resume</name>
+        <qualifiedname>castor3d::RenderLoopSync::resume</qualifiedname>
+        <reimplements refid="d0/dce/a03971_1ae909f2e21ba004087428391048d8db86">resume</reimplements>
+        <briefdescription>
+<para>Resumes the render loop. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoopSync.hpp" line="49" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/de2/a03983_1a3976c0787f2b3fd8c413b15f601aae48" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderLoopSync::endRendering</definition>
+        <argsstring>() override</argsstring>
+        <name>endRendering</name>
+        <qualifiedname>castor3d::RenderLoopSync::endRendering</qualifiedname>
+        <reimplements refid="d0/dce/a03971_1ad9ec6cf47938ab0fb37512d0cf177a51">endRendering</reimplements>
+        <briefdescription>
+<para>Ends the render, cleans up engine. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Ends the threaded render loop, if any. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoopSync.hpp" line="53" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Holds the all components of a vertex. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
-</simplesect>
-<simplesect kind="date"><para>23/07/2012 </para>
-</simplesect>
-</para>
     </detaileddescription>
     <inheritancegraph>
-      <node id="1457">
-        <label>castor3d::InterleavedVertexT&lt; T &gt;</label>
-        <link refid="d1/de2/a03983"/>
-      </node>
-      <node id="1458">
-        <label>castor3d::InterleavedVertexT&lt; float &gt;</label>
-        <link refid="d1/de2/a03983"/>
-        <childnode refid="1457" relation="template-instance">
-          <edgelabel>&lt; float &gt;</edgelabel>
+      <node id="2">
+        <label>castor3d::RenderLoop</label>
+        <link refid="d0/dce/a03971"/>
+        <childnode refid="3" relation="public-inheritance">
         </childnode>
       </node>
+      <node id="1">
+        <label>castor3d::RenderLoopSync</label>
+        <link refid="d1/de2/a03983"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
     </inheritancegraph>
-    <location file="Model/ModelModule.hpp" line="23" column="1" bodyfile="Model/ModelModule.hpp" bodystart="23" bodyend="-1"/>
+    <collaborationgraph>
+      <node id="7">
+        <label>T</label>
+      </node>
+      <node id="12">
+        <label>std::array&lt; castor3d::RenderLoop::UploadResources, 2u &gt;</label>
+        <childnode refid="13" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="template-instance">
+          <edgelabel>&lt; castor3d::RenderLoop::UploadResources, 2u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::atomic&lt; castor::Microseconds &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; castor::Microseconds &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::CommandsSemaphore</label>
+        <link refid="d7/dab/a03815"/>
+      </node>
+      <node id="9">
+        <label>castor3d::DebugOverlays</label>
+        <link refid="d5/d70/a03499"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::RenderLoop</label>
+        <link refid="d0/dce/a03971"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_lastFrameTime</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>m_debugOverlays</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>m_debugOverlaysMtx</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_uploadResources</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::RenderLoop::UploadResources</label>
+        <link refid="df/d2e/a03975"/>
+        <childnode refid="14" relation="usage">
+          <edgelabel>commands</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::RenderLoopSync</label>
+        <link refid="d1/de2/a03983"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d3/d9a/a04075"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="15">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::atomic&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>std::mutex</label>
+      </node>
+      <node id="10">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::unique_ptr&lt; castor3d::DebugOverlays &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; castor3d::DebugOverlays &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/RenderLoopSync.hpp" line="11" column="1" bodyfile="Render/RenderLoopSync.hpp" bodystart="13" bodyend="58"/>
     <listofallmembers>
-      <member refid="d1/de2/a03983_1a08ef8cb947afd3d5e8ea4b6419104111" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertexT</scope><name>nml</name></member>
-      <member refid="d1/de2/a03983_1aedccf70fc3cb75d5a4cc692cd72f4556" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertexT</scope><name>normal</name></member>
-      <member refid="d1/de2/a03983_1a231c8bedc4c5ff711f3eb1e4ccd05752" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertexT</scope><name>pos</name></member>
-      <member refid="d1/de2/a03983_1a8b2cdc46717234a17ad2926bd082b9d8" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertexT</scope><name>position</name></member>
-      <member refid="d1/de2/a03983_1a9f11fd7bbdd4959041c9aaa25e8f1bc3" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertexT</scope><name>tan</name></member>
-      <member refid="d1/de2/a03983_1a4ccb3f9d45a9d26918f29c3110affa6d" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertexT</scope><name>tex</name></member>
-      <member refid="d1/de2/a03983_1a6d95ae1f4f10e8112d7b8d5421df5ea4" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertexT</scope><name>texcoord</name></member>
-      <member refid="d1/de2/a03983_1a34ee41848086e736108e7b247c847895" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertexT</scope><name>texcoord</name></member>
+      <member refid="d1/de2/a03983_1ac849b8aea69ba1e907d697d8d6fec1a9" prot="public" virt="virtual"><scope>castor3d::RenderLoopSync</scope><name>beginRendering</name></member>
+      <member refid="d0/dce/a03971_1ad8988f97407d38c23b3f7ab1c5aa6c91" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>cleanup</name></member>
+      <member refid="d0/dce/a03971_1adb8cd1592c293d4f956365f0e958e92d" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>doRenderFrame</name></member>
+      <member refid="d0/dce/a03971_1a04a7351eb46eba5aa6c227512f3903c3" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>dumpFrameTimes</name></member>
+      <member refid="d0/dce/a03971_1a9920fa7ccc5a06415b08e238e1f4754f" prot="public" virt="virtual"><scope>castor3d::RenderLoopSync</scope><name>enableVSync</name></member>
+      <member refid="d1/de2/a03983_1a3976c0787f2b3fd8c413b15f601aae48" prot="public" virt="virtual"><scope>castor3d::RenderLoopSync</scope><name>endRendering</name></member>
+      <member refid="d0/dce/a03971_1ab0cce3459fd96396758d47675c0d0f45" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>flushEvents</name></member>
+      <member refid="d0/dce/a03971_1a60e53e14809ebd66fa6fbfbc92e14d58" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>getAvgFrameTime</name></member>
+      <member refid="d0/dce/a03971_1abce67ba6a22426d1555dcfb813432242" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>getFrameTime</name></member>
+      <member refid="d0/dce/a03971_1a74acb481115f9d2c3084bfb81a3dbe3f" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>getLastFrameTime</name></member>
+      <member refid="d0/dce/a03971_1a4f497f75e762e1308a6d972114f845ac" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>getWantedFps</name></member>
+      <member refid="d0/dce/a03971_1a60b8176ab5eb5ca6b25663f955780e3e" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>hasDebugOverlays</name></member>
+      <member refid="d1/de2/a03983_1af16062cd1f23b0dacd38209aa79ceecb" prot="private" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_active</name></member>
+      <member refid="d0/dce/a03971_1a03f6c7a9ec87f3e1e24dfc1bf8868b89" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_currentUpdate</name></member>
+      <member refid="d0/dce/a03971_1a3df1d0d853b8d30a64f9491ba2b64206" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_debugOverlays</name></member>
+      <member refid="d0/dce/a03971_1acda37a7285dc00458860bd65822d34a6" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_debugOverlaysMtx</name></member>
+      <member refid="d0/dce/a03971_1a3fdea4c3d454da13b6874d71d031772a" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_frameTime</name></member>
+      <member refid="d0/dce/a03971_1aadd20893be5df0f0a8bdfe52b5f4d148" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_lastFrameTime</name></member>
+      <member refid="d0/dce/a03971_1a12c0e4650d67b30b6d3d8af64a6fdea6" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_renderSystem</name></member>
+      <member refid="d0/dce/a03971_1a6ff0941180c29396e2176994260c9fd5" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_toWait</name></member>
+      <member refid="d0/dce/a03971_1a110d978875d737faa37572c0d01417f3" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_uploadResources</name></member>
+      <member refid="d0/dce/a03971_1aca51dfa60d759d003d2e706b33124933" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_wantedFPS</name></member>
+      <member refid="d1/de2/a03983_1aa8e92d2a1df7dbd0a8d5881af5d4bc24" prot="public" virt="virtual"><scope>castor3d::RenderLoopSync</scope><name>pause</name></member>
+      <member refid="d0/dce/a03971_1a0d67947c5b1193af46bbaf0e0cc7585a" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>registerBuffer</name></member>
+      <member refid="d0/dce/a03971_1a26a0b1e129f0ee670917a424b133e012" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>registerTimer</name></member>
+      <member refid="d0/dce/a03971_1a92f9f97a35dd1d47e537f6e6024952b7" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>RenderLoop</name></member>
+      <member refid="d1/de2/a03983_1ac020f68f41bd51da5f2b8e4b3a7aabb2" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>RenderLoopSync</name></member>
+      <member refid="d1/de2/a03983_1ae5926ec23f7697887648816bc68ed00c" prot="public" virt="virtual"><scope>castor3d::RenderLoopSync</scope><name>renderSyncFrame</name></member>
+      <member refid="d1/de2/a03983_1a59027889dfb53d02becb6189b482fda9" prot="public" virt="virtual"><scope>castor3d::RenderLoopSync</scope><name>resume</name></member>
+      <member refid="d0/dce/a03971_1aebff987d3a1a626374752685dff11c05" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>showDebugOverlays</name></member>
+      <member refid="d0/dce/a03971_1a886e62492a8383af4e913c392e9c13af" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>UnlimitedFPS</name></member>
+      <member refid="d0/dce/a03971_1a602c3f0c8a347db8331c9a5926ce0235" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>unregisterBuffer</name></member>
+      <member refid="d0/dce/a03971_1a32c564fbdef938f9fd21f10834c028ac" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>unregisterTimer</name></member>
+      <member refid="d0/dce/a03971_1a98370f8e34e7f81f1c9277129c71b718" prot="public" virt="virtual"><scope>castor3d::RenderLoopSync</scope><name>~RenderLoop</name></member>
+      <member refid="d1/de2/a03983_1ad3524cefff4b7ca6e92f4c1475212d24" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>~RenderLoopSync</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

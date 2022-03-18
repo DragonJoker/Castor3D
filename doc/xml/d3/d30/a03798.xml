@@ -1,33 +1,593 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d3/d30/a03798" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkImageStencilUsageCreateInfoEXT &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d3/d30/a03798_1ac9dc6a83557a1468a2f68fb104d55854" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkImageStencilUsageCreateInfoEXT &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d3/d30/a03798" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BackgroundPass</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">crg::RenderPass</basecompoundref>
+    <includes local="no">BackgroundPass.hpp</includes>
+    <innerclass refid="dc/dfc/a03802" prot="private">castor3d::BackgroundPass::Cube</innerclass>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d3/d30/a03798_1a9539d436363d801ea982dae91112f779" prot="private" static="no" mutable="no">
+        <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::BackgroundPass::m_device</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_IMAGE_STENCIL_USAGE_CREATE_INFO_EXT</initializer>
+        <name>m_device</name>
+        <qualifiedname>castor3d::BackgroundPass::m_device</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="362" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="362" bodyend="-1"/>
+        <location file="Render/Passes/BackgroundPass.hpp" line="101" column="21" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d30/a03798_1a9bca21940f9c9145d84e61f6f3731c21" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/d1f/a04450" kindref="compound">SceneBackground</ref> const  *</type>
+        <definition>SceneBackground const* castor3d::BackgroundPass::m_background</definition>
+        <argsstring></argsstring>
+        <name>m_background</name>
+        <qualifiedname>castor3d::BackgroundPass::m_background</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="102" column="24" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d30/a03798_1abc2c63e304a1d50d1fd43eeee9aaaf84" prot="private" static="no" mutable="no">
+        <type>VkExtent2D</type>
+        <definition>VkExtent2D castor3d::BackgroundPass::m_size</definition>
+        <argsstring></argsstring>
+        <name>m_size</name>
+        <qualifiedname>castor3d::BackgroundPass::m_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="103" column="12" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d30/a03798_1a2cd63ae475fcbd5a4f683cae8cbf19b3" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::BackgroundPass::m_usesDepth</definition>
+        <argsstring></argsstring>
+        <name>m_usesDepth</name>
+        <qualifiedname>castor3d::BackgroundPass::m_usesDepth</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="104" column="6" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d30/a03798_1a5591007551361ac6abc1730261165c3d" prot="private" static="no" mutable="no">
+        <type><ref refid="da/dee/a04366" kindref="compound">Viewport</ref></type>
+        <definition>Viewport castor3d::BackgroundPass::m_viewport</definition>
+        <argsstring></argsstring>
+        <name>m_viewport</name>
+        <qualifiedname>castor3d::BackgroundPass::m_viewport</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="105" column="10" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d30/a03798_1a2a328ffa76f8f72e61a86dc2ec6db90a" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a041b5481c8af5c2735f8cbf6740bf07e" kindref="member">OnBackgroundChangedConnection</ref></type>
+        <definition>OnBackgroundChangedConnection castor3d::BackgroundPass::m_onBackgroundChanged</definition>
+        <argsstring></argsstring>
+        <name>m_onBackgroundChanged</name>
+        <qualifiedname>castor3d::BackgroundPass::m_onBackgroundChanged</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="106" column="31" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d30/a03798_1a26de699d51004335a00600e20bb1259c" prot="private" static="no" mutable="no">
+        <type>ashes::VertexBufferPtr&lt; Cube &gt;</type>
+        <definition>ashes::VertexBufferPtr&lt; Cube &gt; castor3d::BackgroundPass::m_vertexBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_vertexBuffer</name>
+        <qualifiedname>castor3d::BackgroundPass::m_vertexBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="107" column="24" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d30/a03798_1a34b4fa7772a81149cb13f83076f0a8bc" prot="private" static="no" mutable="no">
+        <type>ashes::BufferPtr&lt; uint16_t &gt;</type>
+        <definition>ashes::BufferPtr&lt; uint16_t &gt; castor3d::BackgroundPass::m_indexBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_indexBuffer</name>
+        <qualifiedname>castor3d::BackgroundPass::m_indexBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="108" column="18" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d30/a03798_1a1e6a890a5ce5db9da148a0789f69c54f" prot="private" static="no" mutable="no">
+        <type>crg::WriteDescriptorSetArray</type>
+        <definition>crg::WriteDescriptorSetArray castor3d::BackgroundPass::m_descriptorWrites</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorWrites</name>
+        <qualifiedname>castor3d::BackgroundPass::m_descriptorWrites</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="109" column="30" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d30/a03798_1a6348610843f0c29dda12918b2b285bc2" prot="private" static="no" mutable="no">
+        <type>crg::VkDescriptorSetLayoutBindingArray</type>
+        <definition>crg::VkDescriptorSetLayoutBindingArray castor3d::BackgroundPass::m_descriptorBindings</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorBindings</name>
+        <qualifiedname>castor3d::BackgroundPass::m_descriptorBindings</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="110" column="40" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d30/a03798_1a6e8772e506546891e35c5f37059b98fb" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetLayoutPtr</type>
+        <definition>ashes::DescriptorSetLayoutPtr castor3d::BackgroundPass::m_descriptorSetLayout</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorSetLayout</name>
+        <qualifiedname>castor3d::BackgroundPass::m_descriptorSetLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="111" column="31" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d30/a03798_1a3c48728b937cce86c7ed0791248abf57" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineLayoutPtr</type>
+        <definition>ashes::PipelineLayoutPtr castor3d::BackgroundPass::m_pipelineLayout</definition>
+        <argsstring></argsstring>
+        <name>m_pipelineLayout</name>
+        <qualifiedname>castor3d::BackgroundPass::m_pipelineLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="112" column="26" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d30/a03798_1a5cf4028b1aa1d6bcf53e878a319e18a9" prot="private" static="no" mutable="no">
+        <type>ashes::GraphicsPipelinePtr</type>
+        <definition>ashes::GraphicsPipelinePtr castor3d::BackgroundPass::m_pipeline</definition>
+        <argsstring></argsstring>
+        <name>m_pipeline</name>
+        <qualifiedname>castor3d::BackgroundPass::m_pipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="113" column="28" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d30/a03798_1ad3054eb6ed21590b574084f052583267" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetPoolPtr</type>
+        <definition>ashes::DescriptorSetPoolPtr castor3d::BackgroundPass::m_descriptorSetPool</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorSetPool</name>
+        <qualifiedname>castor3d::BackgroundPass::m_descriptorSetPool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="114" column="29" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d30/a03798_1a139e9198733ad4ddd8821501965fd0c0" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::BackgroundPass::m_descriptorSet</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorSet</name>
+        <qualifiedname>castor3d::BackgroundPass::m_descriptorSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="115" column="25" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d30/a03798_1a2a7d3147de9103a90f49c7cb46548c3f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::BackgroundPass::BackgroundPass</definition>
+        <argsstring>(crg::FramePass const &amp;pass, crg::GraphContext &amp;context, crg::RunnableGraph &amp;graph, RenderDevice const &amp;device, SceneBackground &amp;background, VkExtent2D const &amp;size, bool usesDepth)</argsstring>
+        <name>BackgroundPass</name>
+        <qualifiedname>castor3d::BackgroundPass::BackgroundPass</qualifiedname>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>crg::GraphContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>crg::RunnableGraph &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d1f/a04450" kindref="compound">SceneBackground</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type>VkExtent2D const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>usesDepth</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent frame pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">context</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The rendering context. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">graph</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The runnable graph. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">background</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene background. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render area dimensions. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">usesDepth</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> to account for depth buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="43" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d30/a03798_1acd17fe877559efb1d47b8cfce772834b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BackgroundPass::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::BackgroundPass::update</qualifiedname>
+        <param>
+          <type><ref refid="d3/d14/a04046" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, CPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="58" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d30/a03798_1a1d7d6d8051e48336744b7553a2fe43c0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BackgroundPass::update</definition>
+        <argsstring>(GpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::BackgroundPass::update</qualifiedname>
+        <param>
+          <type><ref refid="dd/daf/a04050" kindref="compound">GpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, GPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="67" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d3/d30/a03798_1af245b9388176a06dd6e045495f7c5b9c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BackgroundPass::doSubInitialise</definition>
+        <argsstring>()</argsstring>
+        <name>doSubInitialise</name>
+        <qualifiedname>castor3d::BackgroundPass::doSubInitialise</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="70" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d30/a03798_1aaf59908d29e26eea6881330b1eeff7cd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BackgroundPass::doSubRecordInto</definition>
+        <argsstring>(crg::RecordContext &amp;context, VkCommandBuffer commandBuffer, uint32_t index)</argsstring>
+        <name>doSubRecordInto</name>
+        <qualifiedname>castor3d::BackgroundPass::doSubRecordInto</qualifiedname>
+        <param>
+          <type>crg::RecordContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>VkCommandBuffer</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="71" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d30/a03798_1a7e7f88609c3dd3bdbf98673a36c7240d" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BackgroundPass::doIsEnabled</definition>
+        <argsstring>() const</argsstring>
+        <name>doIsEnabled</name>
+        <qualifiedname>castor3d::BackgroundPass::doIsEnabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="74" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d30/a03798_1a0562573cfed507e69fba7d1e0e79a10e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BackgroundPass::doInitialiseVertexBuffer</definition>
+        <argsstring>()</argsstring>
+        <name>doInitialiseVertexBuffer</name>
+        <qualifiedname>castor3d::BackgroundPass::doInitialiseVertexBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="76" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d30/a03798_1a41fdd606516784eacc29ee9f40341a67" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ashes::PipelineShaderStageCreateInfoArray</type>
+        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::BackgroundPass::doInitialiseShader</definition>
+        <argsstring>()</argsstring>
+        <name>doInitialiseShader</name>
+        <qualifiedname>castor3d::BackgroundPass::doInitialiseShader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="77" column="43"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d30/a03798_1a7fe3c1464a62a7cf46eca57d0ab6ef0b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BackgroundPass::doFillDescriptorBindings</definition>
+        <argsstring>()</argsstring>
+        <name>doFillDescriptorBindings</name>
+        <qualifiedname>castor3d::BackgroundPass::doFillDescriptorBindings</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="78" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d30/a03798_1a8126592990c7a44df486da82ddd2a30d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BackgroundPass::doCreateDescriptorSet</definition>
+        <argsstring>()</argsstring>
+        <name>doCreateDescriptorSet</name>
+        <qualifiedname>castor3d::BackgroundPass::doCreateDescriptorSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="79" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d30/a03798_1ad414e6b8040fd7e025bfd9886a8291b3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BackgroundPass::doCreatePipeline</definition>
+        <argsstring>()</argsstring>
+        <name>doCreatePipeline</name>
+        <qualifiedname>castor3d::BackgroundPass::doCreatePipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="80" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d30/a03798_1a364b1bbf2ead0e5f33f5c2d7f11f364b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ashes::PipelineViewportStateCreateInfo</type>
+        <definition>ashes::PipelineViewportStateCreateInfo castor3d::BackgroundPass::doCreateViewportState</definition>
+        <argsstring>()</argsstring>
+        <name>doCreateViewportState</name>
+        <qualifiedname>castor3d::BackgroundPass::doCreateViewportState</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="81" column="40"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d30/a03798_1a901a1fc63328126e8ae9bcbc7d574b4c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BackgroundPass::doResetPipeline</definition>
+        <argsstring>()</argsstring>
+        <name>doResetPipeline</name>
+        <qualifiedname>castor3d::BackgroundPass::doResetPipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="82" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="362" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="362" bodyend="362"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::BackgroundPass</label>
+        <link refid="d3/d30/a03798"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>crg::RenderPass</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::BackgroundPass</label>
+        <link refid="d3/d30/a03798"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>crg::RenderPass</label>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Passes/BackgroundPass.hpp" line="19" column="1" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="21" bodyend="116"/>
     <listofallmembers>
-      <member refid="d3/d30/a03798_1ac9dc6a83557a1468a2f68fb104d55854" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkImageStencilUsageCreateInfoEXT &gt;</scope><name>value</name></member>
+      <member refid="d3/d30/a03798_1a2a7d3147de9103a90f49c7cb46548c3f" prot="public" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>BackgroundPass</name></member>
+      <member refid="d3/d30/a03798_1a8126592990c7a44df486da82ddd2a30d" prot="private" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>doCreateDescriptorSet</name></member>
+      <member refid="d3/d30/a03798_1ad414e6b8040fd7e025bfd9886a8291b3" prot="private" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>doCreatePipeline</name></member>
+      <member refid="d3/d30/a03798_1a364b1bbf2ead0e5f33f5c2d7f11f364b" prot="private" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>doCreateViewportState</name></member>
+      <member refid="d3/d30/a03798_1a7fe3c1464a62a7cf46eca57d0ab6ef0b" prot="private" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>doFillDescriptorBindings</name></member>
+      <member refid="d3/d30/a03798_1a41fdd606516784eacc29ee9f40341a67" prot="private" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>doInitialiseShader</name></member>
+      <member refid="d3/d30/a03798_1a0562573cfed507e69fba7d1e0e79a10e" prot="private" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>doInitialiseVertexBuffer</name></member>
+      <member refid="d3/d30/a03798_1a7e7f88609c3dd3bdbf98673a36c7240d" prot="private" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>doIsEnabled</name></member>
+      <member refid="d3/d30/a03798_1a901a1fc63328126e8ae9bcbc7d574b4c" prot="private" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>doResetPipeline</name></member>
+      <member refid="d3/d30/a03798_1af245b9388176a06dd6e045495f7c5b9c" prot="private" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>doSubInitialise</name></member>
+      <member refid="d3/d30/a03798_1aaf59908d29e26eea6881330b1eeff7cd" prot="private" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>doSubRecordInto</name></member>
+      <member refid="d3/d30/a03798_1a9bca21940f9c9145d84e61f6f3731c21" prot="private" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>m_background</name></member>
+      <member refid="d3/d30/a03798_1a6348610843f0c29dda12918b2b285bc2" prot="private" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>m_descriptorBindings</name></member>
+      <member refid="d3/d30/a03798_1a139e9198733ad4ddd8821501965fd0c0" prot="private" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>m_descriptorSet</name></member>
+      <member refid="d3/d30/a03798_1a6e8772e506546891e35c5f37059b98fb" prot="private" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>m_descriptorSetLayout</name></member>
+      <member refid="d3/d30/a03798_1ad3054eb6ed21590b574084f052583267" prot="private" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>m_descriptorSetPool</name></member>
+      <member refid="d3/d30/a03798_1a1e6a890a5ce5db9da148a0789f69c54f" prot="private" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>m_descriptorWrites</name></member>
+      <member refid="d3/d30/a03798_1a9539d436363d801ea982dae91112f779" prot="private" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>m_device</name></member>
+      <member refid="d3/d30/a03798_1a34b4fa7772a81149cb13f83076f0a8bc" prot="private" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>m_indexBuffer</name></member>
+      <member refid="d3/d30/a03798_1a2a328ffa76f8f72e61a86dc2ec6db90a" prot="private" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>m_onBackgroundChanged</name></member>
+      <member refid="d3/d30/a03798_1a5cf4028b1aa1d6bcf53e878a319e18a9" prot="private" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>m_pipeline</name></member>
+      <member refid="d3/d30/a03798_1a3c48728b937cce86c7ed0791248abf57" prot="private" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>m_pipelineLayout</name></member>
+      <member refid="d3/d30/a03798_1abc2c63e304a1d50d1fd43eeee9aaaf84" prot="private" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>m_size</name></member>
+      <member refid="d3/d30/a03798_1a2cd63ae475fcbd5a4f683cae8cbf19b3" prot="private" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>m_usesDepth</name></member>
+      <member refid="d3/d30/a03798_1a26de699d51004335a00600e20bb1259c" prot="private" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>m_vertexBuffer</name></member>
+      <member refid="d3/d30/a03798_1a5591007551361ac6abc1730261165c3d" prot="private" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>m_viewport</name></member>
+      <member refid="d3/d30/a03798_1acd17fe877559efb1d47b8cfce772834b" prot="public" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>update</name></member>
+      <member refid="d3/d30/a03798_1a1d7d6d8051e48336744b7553a2fe43c0" prot="public" virt="non-virtual"><scope>castor3d::BackgroundPass</scope><name>update</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,30 +1,94 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="da/d8f/a04930" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::TransparentPassResult</compoundname>
-    <basecompoundref refid="d1/dcc/a04250" prot="public" virt="non-virtual">castor3d::GBufferT&lt; WbTexture &gt;</basecompoundref>
-    <includes local="no">TransparentPassResult.hpp</includes>
+    <compoundname>castor3d::MatrixUbo</compoundname>
+    <includes local="no">MatrixUbo.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="da/d8f/a04930_1ab366057cde7f2778837daab6f7a4ab03" prot="public" static="no">
+        <type><ref refid="df/dab/a05022" kindref="compound">MatrixUboConfiguration</ref></type>
+        <definition>using castor3d::MatrixUbo::Configuration =  MatrixUboConfiguration</definition>
+        <argsstring></argsstring>
+        <name>Configuration</name>
+        <qualifiedname>castor3d::MatrixUbo::Configuration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="89" column="1" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="da/d8f/a04930_1a54c17749bf08eadf66747e7de5ff1726" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::MatrixUbo::BufferMatrix</definition>
+        <argsstring></argsstring>
+        <name>BufferMatrix</name>
+        <qualifiedname>castor3d::MatrixUbo::BufferMatrix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="147" column="37" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="147" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d8f/a04930_1a7bfe7dbcbbd1fd786a31b59cd1dd23c9" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::MatrixUbo::MatrixData</definition>
+        <argsstring></argsstring>
+        <name>MatrixData</name>
+        <qualifiedname>castor3d::MatrixUbo::MatrixData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="148" column="37" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="148" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="da/d8f/a04930_1a8feea146f7985be47c55ceeae04d0b4d" prot="private" static="no" mutable="no">
+        <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::MatrixUbo::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::MatrixUbo::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="151" column="21" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="151" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d8f/a04930_1ac6539544071116d0f2712177bc47e4a0" prot="private" static="no" mutable="no">
+        <type><ref refid="df/d9b/a02514" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="da/d8f/a04930_1ab366057cde7f2778837daab6f7a4ab03" kindref="member">Configuration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::MatrixUbo::m_ubo</definition>
+        <argsstring></argsstring>
+        <name>m_ubo</name>
+        <qualifiedname>castor3d::MatrixUbo::m_ubo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="152" column="22" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="152" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="da/d8f/a04930_1a8f680150aa58090226832bca85c606cc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::TransparentPassResult::TransparentPassResult</definition>
-        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, TextureUnit const &amp;depthTexture, TextureUnit const &amp;velocityTexture)</argsstring>
-        <name>TransparentPassResult</name>
+      <memberdef kind="function" id="da/d8f/a04930_1af18b73c719151cf79ac99b0e95ea31f1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MatrixUbo::MatrixUbo</definition>
+        <argsstring>(MatrixUbo const &amp;rhs)=delete</argsstring>
+        <name>MatrixUbo</name>
+        <qualifiedname>castor3d::MatrixUbo::MatrixUbo</qualifiedname>
         <param>
-          <type><ref refid="df/d9b/a02514" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
-        </param>
-        <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type><ref refid="df/d14/a02658" kindref="compound">TextureUnit</ref> const &amp;</type>
-          <declname>depthTexture</declname>
-        </param>
-        <param>
-          <type><ref refid="df/d14/a02658" kindref="compound">TextureUnit</ref> const &amp;</type>
-          <declname>velocityTexture</declname>
+          <type><ref refid="da/d8f/a04930" kindref="compound">MatrixUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -32,109 +96,287 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentPassResult.hpp" line="17" column="1"/>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="90" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d8f/a04930_1af5131f15f6a5566acafd12e27f6854cd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="da/d8f/a04930" kindref="compound">MatrixUbo</ref> &amp;</type>
+        <definition>C3D_API MatrixUbo &amp; castor3d::MatrixUbo::operator=</definition>
+        <argsstring>(MatrixUbo const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::MatrixUbo::operator=</qualifiedname>
+        <param>
+          <type><ref refid="da/d8f/a04930" kindref="compound">MatrixUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="91" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d8f/a04930_1afc6eab32a9bf5172b55e954b68e56258" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MatrixUbo::MatrixUbo</definition>
+        <argsstring>(MatrixUbo &amp;&amp;rhs)=default</argsstring>
+        <name>MatrixUbo</name>
+        <qualifiedname>castor3d::MatrixUbo::MatrixUbo</qualifiedname>
+        <param>
+          <type><ref refid="da/d8f/a04930" kindref="compound">MatrixUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="92" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d8f/a04930_1ac329f024fddcd5bd0e742d3e959a8333" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="da/d8f/a04930" kindref="compound">MatrixUbo</ref> &amp;</type>
+        <definition>C3D_API MatrixUbo &amp; castor3d::MatrixUbo::operator=</definition>
+        <argsstring>(MatrixUbo &amp;&amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::MatrixUbo::operator=</qualifiedname>
+        <param>
+          <type><ref refid="da/d8f/a04930" kindref="compound">MatrixUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="93" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d8f/a04930_1af5e23ce07ed3cbe07143718c77061d3e" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MatrixUbo::MatrixUbo</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>MatrixUbo</name>
+        <qualifiedname>castor3d::MatrixUbo::MatrixUbo</qualifiedname>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="94" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d8f/a04930_1adbc27d788bd181b321e04df02ee0a531" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MatrixUbo::~MatrixUbo</definition>
+        <argsstring>()</argsstring>
+        <name>~MatrixUbo</name>
+        <qualifiedname>castor3d::MatrixUbo::~MatrixUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="95" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d8f/a04930_1a6a00775f136350227e835e042607dfd6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::MatrixUbo::cpuUpdate</definition>
+        <argsstring>(castor::Matrix4x4f const &amp;view, castor::Matrix4x4f const &amp;projection, castor::Point2f const &amp;jitter=castor::Point2f{})</argsstring>
+        <name>cpuUpdate</name>
+        <qualifiedname>castor3d::MatrixUbo::cpuUpdate</qualifiedname>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>projection</declname>
+        </param>
+        <param>
+          <type>castor::Point2f const &amp;</type>
+          <declname>jitter</declname>
+          <defval>castor::Point2f{}</defval>
+        </param>
+        <briefdescription>
+<para>Updates the UBO from given values. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">view</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new view matrix. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">projection</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new projection matrix. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">jitter</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The jittering value. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="108" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d8f/a04930_1ac9222d9b95b0e141d7e13cc43cc5d06f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::MatrixUbo::cpuUpdate</definition>
+        <argsstring>(castor::Matrix4x4f const &amp;projection)</argsstring>
+        <name>cpuUpdate</name>
+        <qualifiedname>castor3d::MatrixUbo::cpuUpdate</qualifiedname>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>projection</declname>
+        </param>
+        <briefdescription>
+<para>Updates the UBO from given values. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>View matrix won&apos;t be updated. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">projection</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new projection matrix. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="121" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d8f/a04930_1a0b734b908500ac9be255f78b8c07b2d3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::MatrixUbo::createPassBinding</definition>
+        <argsstring>(crg::FramePass &amp;pass, uint32_t binding) const</argsstring>
+        <name>createPassBinding</name>
+        <qualifiedname>castor3d::MatrixUbo::createPassBinding</qualifiedname>
+        <param>
+          <type>crg::FramePass &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="123" column="6" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="123" bodyend="127"/>
+        <references refid="df/d9b/a02514_1ae2c055477d81767157b9832b18baa027" compoundref="de/db1/a00197" startline="86" endline="94">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createPassBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d8f/a04930_1ac31062a614833908640fbbeed9cb92fe" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::MatrixUbo::createSizedBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</argsstring>
+        <name>createSizedBinding</name>
+        <qualifiedname>castor3d::MatrixUbo::createSizedBinding</qualifiedname>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>layoutBinding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="129" column="6" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="129" bodyend="133"/>
+        <references refid="df/d9b/a02514_1a2c6ad146d4910651544564c25ca7dccd" compoundref="de/db1/a00197" startline="96" endline="105">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d8f/a04930_1a4872797ae1ca5fc2943359a8f257ef43" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::WriteDescriptorSet</type>
+        <definition>ashes::WriteDescriptorSet castor3d::MatrixUbo::getDescriptorWrite</definition>
+        <argsstring>(uint32_t dstBinding, uint32_t dstArrayElement=0u) const</argsstring>
+        <name>getDescriptorWrite</name>
+        <qualifiedname>castor3d::MatrixUbo::getDescriptorWrite</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstArrayElement</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="135" column="27" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="135" bodyend="139"/>
+        <references refid="df/d9b/a02514_1ad7dcad7c96a620540d10eb85f3d4586b" compoundref="de/db1/a00197" startline="107" endline="120">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getDescriptorWrite</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d8f/a04930_1a8c8a37f84e646933b8c21cf2514bff6a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="df/d9b/a02514" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="da/d8f/a04930_1ab366057cde7f2778837daab6f7a4ab03" kindref="member">Configuration</ref> &gt; const &amp;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; const  &amp; castor3d::MatrixUbo::getUbo</definition>
+        <argsstring>() const</argsstring>
+        <name>getUbo</name>
+        <qualifiedname>castor3d::MatrixUbo::getUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MatrixUbo.hpp" line="141" column="29" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="141" bodyend="144"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="4564">
-        <label>castor3d::GBufferT&lt; WbTexture &gt;</label>
-        <link refid="d1/dcc/a04250"/>
-        <childnode refid="4565" relation="private-inheritance">
-        </childnode>
-        <childnode refid="4567" relation="template-instance">
-          <edgelabel>&lt; WbTexture &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4566">
-        <label>Named</label>
-      </node>
-      <node id="4567">
-        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
-        <link refid="d1/dcc/a04250"/>
-        <childnode refid="4565" relation="private-inheritance">
-        </childnode>
-      </node>
-      <node id="4563">
-        <label>castor3d::TransparentPassResult</label>
-        <link refid="da/d8f/a04930"/>
-        <childnode refid="4564" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4565">
-        <label>castor3d::GBufferBase</label>
-        <link refid="d1/d5a/a04246"/>
-        <childnode refid="4566" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="4569">
-        <label>castor3d::GBufferT&lt; WbTexture &gt;</label>
-        <link refid="d1/dcc/a04250"/>
-        <childnode refid="4570" relation="private-inheritance">
-        </childnode>
-        <childnode refid="4572" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="4574" relation="template-instance">
-          <edgelabel>&lt; WbTexture &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4571">
-        <label>Named</label>
-      </node>
-      <node id="4573">
-        <label>castor::Unique&lt; Engine &gt;</label>
-      </node>
-      <node id="4572">
-        <label>castor3d::Engine</label>
-        <link refid="df/d9b/a02514"/>
-        <childnode refid="4573" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4574">
-        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
-        <link refid="d1/dcc/a04250"/>
-        <childnode refid="4570" relation="private-inheritance">
-        </childnode>
-        <childnode refid="4572" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-      </node>
-      <node id="4568">
-        <label>castor3d::TransparentPassResult</label>
-        <link refid="da/d8f/a04930"/>
-        <childnode refid="4569" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4570">
-        <label>castor3d::GBufferBase</label>
-        <link refid="d1/d5a/a04246"/>
-        <childnode refid="4571" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Render/Technique/Transparent/TransparentPassResult.hpp" line="15" column="1" bodyfile="Render/Technique/Transparent/TransparentPassResult.hpp" bodystart="13" bodyend="21"/>
+    <location file="Shader/Ubos/MatrixUbo.hpp" line="86" column="1" bodyfile="Shader/Ubos/MatrixUbo.hpp" bodystart="87" bodyend="153"/>
     <listofallmembers>
-      <member refid="d1/dcc/a04250_1a07ee2a84c48f234617c05d6d5c4b6c33" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>begin</name></member>
-      <member refid="d1/dcc/a04250_1aa0de394aee0ba9d95e5c04da314a9cb4" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>begin</name></member>
-      <member refid="d1/dcc/a04250_1a77d65937285e0954c33bc1834b099dbf" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>cbegin</name></member>
-      <member refid="d1/dcc/a04250_1a0ca55ac3a4cfb4c27acbd6867f420a41" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>cend</name></member>
-      <member refid="d1/dcc/a04250_1a2dbf9ef234080f55751db9f2ced2db94" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>cleanup</name></member>
-      <member refid="d1/dcc/a04250_1a2ed3e0a1d7b905e8393d6f1e3b67f339" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>end</name></member>
-      <member refid="d1/dcc/a04250_1ad9a2382a1c40e83a016a77209bee05fd" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>end</name></member>
-      <member refid="d1/dcc/a04250_1afc858ac06674fbee5bcc31d1eb051f21" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>GBufferT</name></member>
-      <member refid="d1/dcc/a04250_1a48c1db122e270552414435855b31f23d" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>GBufferT</name></member>
-      <member refid="d1/dcc/a04250_1adbb549264af799a0ca09aafab55df3b8" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>initialise</name></member>
-      <member refid="d1/dcc/a04250_1abfc84e342baf1448ab71cb739138f89b" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>m_engine</name></member>
-      <member refid="d1/dcc/a04250_1a1cd0629caecd95cfa73fc857e92be07a" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>m_owned</name></member>
-      <member refid="d1/dcc/a04250_1ac693f4659ea2014569d916d03013f68e" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>m_result</name></member>
-      <member refid="d1/dcc/a04250_1a55a704f02c3e73ede1b8ed6fb78e79d5" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>operator[]</name></member>
-      <member refid="da/d8f/a04930_1a8f680150aa58090226832bca85c606cc" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>TransparentPassResult</name></member>
+      <member refid="da/d8f/a04930_1a54c17749bf08eadf66747e7de5ff1726" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>BufferMatrix</name></member>
+      <member refid="da/d8f/a04930_1ab366057cde7f2778837daab6f7a4ab03" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>Configuration</name></member>
+      <member refid="da/d8f/a04930_1a6a00775f136350227e835e042607dfd6" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>cpuUpdate</name></member>
+      <member refid="da/d8f/a04930_1ac9222d9b95b0e141d7e13cc43cc5d06f" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>cpuUpdate</name></member>
+      <member refid="da/d8f/a04930_1a0b734b908500ac9be255f78b8c07b2d3" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>createPassBinding</name></member>
+      <member refid="da/d8f/a04930_1ac31062a614833908640fbbeed9cb92fe" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>createSizedBinding</name></member>
+      <member refid="da/d8f/a04930_1a4872797ae1ca5fc2943359a8f257ef43" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>getDescriptorWrite</name></member>
+      <member refid="da/d8f/a04930_1a8c8a37f84e646933b8c21cf2514bff6a" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>getUbo</name></member>
+      <member refid="da/d8f/a04930_1a8feea146f7985be47c55ceeae04d0b4d" prot="private" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>m_device</name></member>
+      <member refid="da/d8f/a04930_1ac6539544071116d0f2712177bc47e4a0" prot="private" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>m_ubo</name></member>
+      <member refid="da/d8f/a04930_1a7bfe7dbcbbd1fd786a31b59cd1dd23c9" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>MatrixData</name></member>
+      <member refid="da/d8f/a04930_1af18b73c719151cf79ac99b0e95ea31f1" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>MatrixUbo</name></member>
+      <member refid="da/d8f/a04930_1afc6eab32a9bf5172b55e954b68e56258" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>MatrixUbo</name></member>
+      <member refid="da/d8f/a04930_1af5e23ce07ed3cbe07143718c77061d3e" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>MatrixUbo</name></member>
+      <member refid="da/d8f/a04930_1af5131f15f6a5566acafd12e27f6854cd" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>operator=</name></member>
+      <member refid="da/d8f/a04930_1ac329f024fddcd5bd0e742d3e959a8333" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>operator=</name></member>
+      <member refid="da/d8f/a04930_1adbc27d788bd181b321e04df02ee0a531" prot="public" virt="non-virtual"><scope>castor3d::MatrixUbo</scope><name>~MatrixUbo</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

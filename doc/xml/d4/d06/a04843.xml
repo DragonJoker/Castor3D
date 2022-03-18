@@ -1,22 +1,209 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d4/d06/a04843" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::LightPassLayeredVolumePropagationShadowT</compoundname>
-    <includes local="no">LightVolumeGIModule.hpp</includes>
-    <templateparamlist>
-      <param>
-        <type><ref refid="d7/dd1/a01458_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
-        <declname>LtType</declname>
-        <defname>LtType</defname>
-      </param>
-    </templateparamlist>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d4/d06/a04843" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::TextureAnimData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">GlslTextureAnimation.hpp</includes>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="d4/d06/a04843_1acdef04b2da9e72180d6572c921abb811" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class TextureAnimations</definition>
+        <argsstring></argsstring>
+        <name>TextureAnimations</name>
+        <qualifiedname>castor3d::shader::TextureAnimData::TextureAnimations</qualifiedname>
+        <param>
+          <type><ref refid="dd/dca/a04847" kindref="compound">TextureAnimations</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureAnimation.hpp" line="21" column="14" bodyfile="Shader/Shaders/GlslTextureAnimation.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/d06/a04843_1affe3d660299dd013a9d113e5a4f24c19" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::TextureAnimData::texTrn</definition>
+        <argsstring></argsstring>
+        <name>texTrn</name>
+        <qualifiedname>castor3d::shader::TextureAnimData::texTrn</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureAnimation.hpp" line="37" column="11" bodyfile="Shader/Shaders/GlslTextureAnimation.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d06/a04843_1aa7cab455886186271c137de7a4ef2d6b" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::TextureAnimData::texRot</definition>
+        <argsstring></argsstring>
+        <name>texRot</name>
+        <qualifiedname>castor3d::shader::TextureAnimData::texRot</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureAnimation.hpp" line="38" column="11" bodyfile="Shader/Shaders/GlslTextureAnimation.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d06/a04843_1a31ad5f97f557474fd8537f5295cd75fc" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::TextureAnimData::texScl</definition>
+        <argsstring></argsstring>
+        <name>texScl</name>
+        <qualifiedname>castor3d::shader::TextureAnimData::texScl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureAnimation.hpp" line="39" column="11" bodyfile="Shader/Shaders/GlslTextureAnimation.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d06/a04843_1a4031296fa4b2de9e568d63c22ab17198" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::TextureAnimData::tleSet</definition>
+        <argsstring></argsstring>
+        <name>tleSet</name>
+        <qualifiedname>castor3d::shader::TextureAnimData::tleSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureAnimation.hpp" line="40" column="11" bodyfile="Shader/Shaders/GlslTextureAnimation.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/d06/a04843_1a60f77eec687e92906624be5721c2a233" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::TextureAnimData::TextureAnimData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>TextureAnimData</name>
+        <qualifiedname>castor3d::shader::TextureAnimData::TextureAnimData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureAnimation.hpp" line="24" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d06/a04843_1a806da9cd39f2a14932bd098f3be7a8a4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::TextureAnimData::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, TextureAnimData)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::TextureAnimData::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        </param>
+        <param>
+          <type><ref refid="d4/d06/a04843" kindref="compound">TextureAnimData</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureAnimation.hpp" line="27" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d4/d06/a04843_1ad229617431d807bb823acb354619c28e" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::TextureAnimData::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::TextureAnimData::declare</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureAnimation.hpp" line="29" column="32"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d06/a04843_1a105a670d0df7f242b884160735b43f31" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
+        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::TextureAnimData::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::TextureAnimData::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureAnimation.hpp" line="30" column="41"/>
+      </memberdef>
+      </sectiondef>
     <briefdescription>
-<para>Base class for all light passes with light propagation volumes. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIModule.hpp" line="65" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIModule.hpp" bodystart="65" bodyend="-1"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::TextureAnimData</label>
+        <link refid="d4/d06/a04843"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::TextureAnimData</label>
+        <link refid="d4/d06/a04843"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslTextureAnimation.hpp" line="18" column="1" bodyfile="Shader/Shaders/GlslTextureAnimation.hpp" bodystart="20" bodyend="41"/>
     <listofallmembers>
+      <member refid="d4/d06/a04843_1ad229617431d807bb823acb354619c28e" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureAnimData</scope><name>declare</name></member>
+      <member refid="d4/d06/a04843_1a105a670d0df7f242b884160735b43f31" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureAnimData</scope><name>makeType</name></member>
+      <member refid="d4/d06/a04843_1a806da9cd39f2a14932bd098f3be7a8a4" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureAnimData</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="d4/d06/a04843_1aa7cab455886186271c137de7a4ef2d6b" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureAnimData</scope><name>texRot</name></member>
+      <member refid="d4/d06/a04843_1a31ad5f97f557474fd8537f5295cd75fc" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureAnimData</scope><name>texScl</name></member>
+      <member refid="d4/d06/a04843_1affe3d660299dd013a9d113e5a4f24c19" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureAnimData</scope><name>texTrn</name></member>
+      <member refid="d4/d06/a04843_1acdef04b2da9e72180d6572c921abb811" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureAnimData</scope><name>TextureAnimations</name></member>
+      <member refid="d4/d06/a04843_1a60f77eec687e92906624be5721c2a233" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureAnimData</scope><name>TextureAnimData</name></member>
+      <member refid="d4/d06/a04843_1a4031296fa4b2de9e568d63c22ab17198" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureAnimData</scope><name>tleSet</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

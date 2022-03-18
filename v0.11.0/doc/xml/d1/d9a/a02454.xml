@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d1/d9a/a02454" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ObjectCacheTraits&lt; SceneNode, KeyType &gt;</compoundname>
+    <includes local="no">CacheModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename KeyType</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d1/d9a/a02454_1a5fc06ab255c3776673cd51bb8bbce479" prot="public" static="no">
+        <type>std::function&lt; std::shared_ptr&lt; <ref refid="d8/de7/a05250" kindref="compound">SceneNode</ref> &gt;(KeyType const &amp;, <ref refid="d8/de7/a05250" kindref="compound">SceneNode</ref> &amp;) &gt;</type>
+        <definition>using castor3d::ObjectCacheTraits&lt; SceneNode, KeyType &gt;::Producer =  std::function&lt; std::shared_ptr&lt; SceneNode &gt;( KeyType const &amp;, SceneNode &amp; ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>Producer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheModule.hpp" line="484" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="484" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d1/d9a/a02454_1a16da34fc32eaefea5a3b840894e298f0" prot="public" static="no">
+        <type>std::function&lt; void(<ref refid="d4/dde/a02422" kindref="compound">ObjectCacheBase</ref>&lt; <ref refid="d8/de7/a05250" kindref="compound">SceneNode</ref>, KeyType &gt; const &amp;, castor::Collection&lt; <ref refid="d8/de7/a05250" kindref="compound">SceneNode</ref>, KeyType &gt; &amp;, std::shared_ptr&lt; <ref refid="d8/de7/a05250" kindref="compound">SceneNode</ref> &gt;, SceneNodeSPtr, SceneNodeSPtr) &gt;</type>
+        <definition>using castor3d::ObjectCacheTraits&lt; SceneNode, KeyType &gt;::Merger =  std::function&lt; void( ObjectCacheBase&lt; SceneNode, KeyType &gt; const &amp; , castor::Collection&lt; SceneNode, KeyType &gt; &amp; , std::shared_ptr&lt; SceneNode &gt; , SceneNodeSPtr , SceneNodeSPtr ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>Merger</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheModule.hpp" line="485" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="489" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d1/d9a/a02454_1a537ff7845ecff3df821f84cf299fae28" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <definition>C3D_API const castor::String castor3d::ObjectCacheTraits&lt; SceneNode, KeyType &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheModule.hpp" line="483" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="483" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Helper structure to specialise a scene objects cache behaviour. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Specialisation for <ref refid="d8/de7/a05250" kindref="compound">SceneNode</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="Cache/CacheModule.hpp" line="482" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="481" bodyend="490"/>
+    <listofallmembers>
+      <member refid="d1/d9a/a02454_1a16da34fc32eaefea5a3b840894e298f0" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraits&lt; SceneNode, KeyType &gt;</scope><name>Merger</name></member>
+      <member refid="d1/d9a/a02454_1a537ff7845ecff3df821f84cf299fae28" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraits&lt; SceneNode, KeyType &gt;</scope><name>Name</name></member>
+      <member refid="d1/d9a/a02454_1a5fc06ab255c3776673cd51bb8bbce479" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraits&lt; SceneNode, KeyType &gt;</scope><name>Producer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

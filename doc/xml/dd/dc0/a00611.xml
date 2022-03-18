@@ -1,161 +1,144 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dd/dc0/a00611" kind="file" language="C++">
-    <compoundname>Plugin.hpp</compoundname>
-    <includes refid="d4/dc4/a00617" local="yes">PluginModule.hpp</includes>
-    <includes refid="d4/d27/a00392" local="yes">Castor3D/Miscellaneous/MiscellaneousModule.hpp</includes>
-    <includedby refid="dc/d25/a00596" local="yes">Plugin/DividerPlugin.hpp</includedby>
-    <includedby refid="d5/d8a/a00599" local="yes">Plugin/GeneratorPlugin.hpp</includedby>
-    <includedby refid="d5/d0a/a00602" local="yes">Plugin/GenericPlugin.hpp</includedby>
-    <includedby refid="d0/d1c/a00605" local="yes">Plugin/ImporterPlugin.hpp</includedby>
-    <includedby refid="d4/d14/a00608" local="yes">Plugin/ParticlePlugin.hpp</includedby>
-    <includedby refid="dc/d4d/a00620" local="yes">Plugin/PostFxPlugin.hpp</includedby>
-    <includedby refid="df/d6f/a00623" local="yes">Plugin/ToneMappingPlugin.hpp</includedby>
+    <compoundname>DividerPlugin.hpp</compoundname>
+    <includes refid="d6/dfa/a00626" local="yes">Castor3D/Plugin/Plugin.hpp</includes>
     <incdepgraph>
-      <node id="11508">
-        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
-      </node>
-      <node id="11501">
-        <label>Plugin/Plugin.hpp</label>
-        <link refid="dd/dc0/a00611"/>
-        <childnode refid="11502" relation="include">
-        </childnode>
-        <childnode refid="11517" relation="include">
-        </childnode>
-      </node>
-      <node id="11511">
-        <label>ashespp/AshesPPPrerequisites.hpp</label>
-      </node>
-      <node id="11512">
-        <label>cstdint</label>
-      </node>
-      <node id="11510">
-        <label>CastorUtils/Math/Point.hpp</label>
-      </node>
-      <node id="11503">
-        <label>Castor3D/Castor3DModule.hpp</label>
-        <link refid="d5/d35/a00266"/>
-        <childnode refid="11504" relation="include">
-        </childnode>
-        <childnode refid="11505" relation="include">
-        </childnode>
-        <childnode refid="11506" relation="include">
-        </childnode>
-        <childnode refid="11507" relation="include">
-        </childnode>
-        <childnode refid="11508" relation="include">
-        </childnode>
-        <childnode refid="11509" relation="include">
-        </childnode>
-        <childnode refid="11510" relation="include">
-        </childnode>
-        <childnode refid="11511" relation="include">
-        </childnode>
-        <childnode refid="11512" relation="include">
-        </childnode>
-        <childnode refid="11513" relation="include">
-        </childnode>
-        <childnode refid="11514" relation="include">
-        </childnode>
-        <childnode refid="11515" relation="include">
-        </childnode>
-      </node>
-      <node id="11514">
-        <label>string</label>
-      </node>
-      <node id="11507">
-        <label>CastorUtils/Exception/Assertion.hpp</label>
-      </node>
-      <node id="11504">
-        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
-      </node>
-      <node id="11506">
-        <label>CastorUtils/Design/OwnedBy.hpp</label>
-      </node>
-      <node id="11517">
-        <label>Castor3D/Miscellaneous/MiscellaneousModule.hpp</label>
-        <link refid="d4/d27/a00392"/>
-        <childnode refid="11503" relation="include">
-        </childnode>
-      </node>
-      <node id="11502">
-        <label>PluginModule.hpp</label>
-        <link refid="d4/dc4/a00617"/>
-        <childnode refid="11503" relation="include">
-        </childnode>
-        <childnode refid="11516" relation="include">
-        </childnode>
-      </node>
-      <node id="11505">
-        <label>CastorUtils/Design/FlagCombination.hpp</label>
-      </node>
-      <node id="11515">
-        <label>vector</label>
-      </node>
-      <node id="11509">
-        <label>CastorUtils/Math/Coords.hpp</label>
-      </node>
-      <node id="11516">
+      <node id="23">
         <label>CastorUtils/Data/Path.hpp</label>
       </node>
-      <node id="11513">
+      <node id="7">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="8">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="20">
+        <label>CastorUtils/Design/ResourceCache.hpp</label>
+      </node>
+      <node id="9">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="10">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="11">
+        <label>CastorUtils/Graphics/Size.hpp</label>
+      </node>
+      <node id="12">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="13">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="6">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="15">
+        <label>RenderGraph/FrameGraphPrerequisites.hpp</label>
+      </node>
+      <node id="4">
+        <label>Castor3D/Cache/CacheModule.hpp</label>
+        <link refid="d5/df1/a00206"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d6/d22/a00245"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+      </node>
+      <node id="24">
+        <label>Castor3D/Miscellaneous/MiscellaneousModule.hpp</label>
+        <link refid="d7/d00/a00401"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>Plugin/DividerPlugin.hpp</label>
+        <link refid="dd/dc0/a00611"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Castor3D/Plugin/Plugin.hpp</label>
+        <link refid="d6/dfa/a00626"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>PluginModule.hpp</label>
+        <link refid="d4/d2a/a00632"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="16">
+        <label>cstdint</label>
+      </node>
+      <node id="21">
+        <label>functional</label>
+      </node>
+      <node id="17">
         <label>memory</label>
       </node>
+      <node id="18">
+        <label>string</label>
+      </node>
+      <node id="22">
+        <label>unordered_map</label>
+      </node>
+      <node id="19">
+        <label>vector</label>
+      </node>
     </incdepgraph>
-    <invincdepgraph>
-      <node id="11518">
-        <label>Plugin/Plugin.hpp</label>
-        <link refid="dd/dc0/a00611"/>
-        <childnode refid="11519" relation="include">
-        </childnode>
-        <childnode refid="11520" relation="include">
-        </childnode>
-        <childnode refid="11521" relation="include">
-        </childnode>
-        <childnode refid="11522" relation="include">
-        </childnode>
-        <childnode refid="11523" relation="include">
-        </childnode>
-        <childnode refid="11524" relation="include">
-        </childnode>
-        <childnode refid="11525" relation="include">
-        </childnode>
-      </node>
-      <node id="11523">
-        <label>Plugin/ParticlePlugin.hpp</label>
-        <link refid="d4/d14/a00608"/>
-      </node>
-      <node id="11522">
-        <label>Plugin/ImporterPlugin.hpp</label>
-        <link refid="d0/d1c/a00605"/>
-      </node>
-      <node id="11525">
-        <label>Plugin/ToneMappingPlugin.hpp</label>
-        <link refid="df/d6f/a00623"/>
-      </node>
-      <node id="11521">
-        <label>Plugin/GenericPlugin.hpp</label>
-        <link refid="d5/d0a/a00602"/>
-      </node>
-      <node id="11520">
-        <label>Plugin/GeneratorPlugin.hpp</label>
-        <link refid="d5/d8a/a00599"/>
-      </node>
-      <node id="11524">
-        <label>Plugin/PostFxPlugin.hpp</label>
-        <link refid="dc/d4d/a00620"/>
-      </node>
-      <node id="11519">
-        <label>Plugin/DividerPlugin.hpp</label>
-        <link refid="dc/d25/a00596"/>
-      </node>
-    </invincdepgraph>
-    <innerclass refid="db/d33/a04192" prot="public">castor3d::Plugin</innerclass>
-    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <innerclass refid="d0/d50/a03611" prot="public">castor3d::DividerPlugin</innerclass>
+    <innernamespace refid="da/de3/a01398">castor3d</innernamespace>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Plugin/Plugin.hpp"/>
+    <location file="Plugin/DividerPlugin.hpp"/>
   </compounddef>
 </doxygen>

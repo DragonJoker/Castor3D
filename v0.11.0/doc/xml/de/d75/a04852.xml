@@ -1,0 +1,491 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="de/d75/a04852" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::LayeredLightVolumeGIPass</compoundname>
+    <basecompoundref refid="d4/d45/a04456" prot="public" virt="non-virtual">castor3d::RenderQuad</basecompoundref>
+    <includes local="no">LayeredLightVolumeGIPass.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="de/d75/a04852_1afdc925b3fd2f163770910ee1a32460b4" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/d22/a05464" kindref="compound">GpInfoUbo</ref> const  &amp;</type>
+        <definition>GpInfoUbo const&amp; castor3d::LayeredLightVolumeGIPass::m_gpInfo</definition>
+        <argsstring></argsstring>
+        <name>m_gpInfo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" line="76" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d75/a04852_1ae4ba8d976457cc8b2356ae694f61828f" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/db7/a05476" kindref="compound">LayeredLpvGridConfigUbo</ref> const  &amp;</type>
+        <definition>LayeredLpvGridConfigUbo const&amp; castor3d::LayeredLightVolumeGIPass::m_lpvConfigUbo</definition>
+        <argsstring></argsstring>
+        <name>m_lpvConfigUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" line="77" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d75/a04852_1aae8091885f1f86676c06c5d09e116346" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/dcd/a04880" kindref="compound">OpaquePassResult</ref> const  &amp;</type>
+        <definition>OpaquePassResult const&amp; castor3d::LayeredLightVolumeGIPass::m_gpResult</definition>
+        <argsstring></argsstring>
+        <name>m_gpResult</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" line="78" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d75/a04852_1a381d887bb84d01b23a85550152e7aae1" prot="private" static="no" mutable="no">
+        <type>LightVolumePassResultArray const  &amp;</type>
+        <definition>LightVolumePassResultArray const&amp; castor3d::LayeredLightVolumeGIPass::m_lpvResult</definition>
+        <argsstring></argsstring>
+        <name>m_lpvResult</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" line="79" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d75/a04852_1a4f65eda21cdd3b593d6b1e88e3877b09" prot="private" static="no" mutable="no">
+        <type><ref refid="d6/d18/a02664" kindref="compound">TextureUnit</ref> const  &amp;</type>
+        <definition>TextureUnit const&amp; castor3d::LayeredLightVolumeGIPass::m_result</definition>
+        <argsstring></argsstring>
+        <name>m_result</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" line="80" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d75/a04852_1a03b57e61fabc38c8316596acbb14f9c0" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/d32/a05312" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::LayeredLightVolumeGIPass::m_vertexShader</definition>
+        <argsstring></argsstring>
+        <name>m_vertexShader</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" line="81" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d75/a04852_1a1e07c4a84a5223b1ffcb7152d528a078" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/d32/a05312" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::LayeredLightVolumeGIPass::m_pixelShader</definition>
+        <argsstring></argsstring>
+        <name>m_pixelShader</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" line="82" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d75/a04852_1afaa2546f766d2b38e5e704db3740cfc7" prot="private" static="no" mutable="no">
+        <type>ashes::RenderPassPtr</type>
+        <definition>ashes::RenderPassPtr castor3d::LayeredLightVolumeGIPass::m_renderPass</definition>
+        <argsstring></argsstring>
+        <name>m_renderPass</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" line="83" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d75/a04852_1ae069a9db8d4bc4ebd195550ca8e97a2d" prot="private" static="no" mutable="no">
+        <type>ashes::FrameBufferPtr</type>
+        <definition>ashes::FrameBufferPtr castor3d::LayeredLightVolumeGIPass::m_frameBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_frameBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" line="84" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d75/a04852_1a956f4fc2be9a39579fd7400f9720b6bd" prot="private" static="no" mutable="no">
+        <type>RenderPassTimerSPtr</type>
+        <definition>RenderPassTimerSPtr castor3d::LayeredLightVolumeGIPass::m_timer</definition>
+        <argsstring></argsstring>
+        <name>m_timer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" line="85" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d75/a04852_1a497180f1866935b56af011910f488248" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/da6/a04380" kindref="compound">CommandsSemaphore</ref></type>
+        <definition>CommandsSemaphore castor3d::LayeredLightVolumeGIPass::m_commands</definition>
+        <argsstring></argsstring>
+        <name>m_commands</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" line="86" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/d75/a04852_1a741370fe7db5201ba3d81ab11dd64adf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LayeredLightVolumeGIPass::LayeredLightVolumeGIPass</definition>
+        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, castor::String const &amp;prefix, GpInfoUbo const &amp;gpInfo, LayeredLpvGridConfigUbo const &amp;lpvConfigUbo, OpaquePassResult const &amp;gpResult, LightVolumePassResultArray const &amp;lpvResult, TextureUnit const &amp;dst, BlendMode blendMode)</argsstring>
+        <name>LayeredLightVolumeGIPass</name>
+        <param>
+          <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>prefix</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d22/a05464" kindref="compound">GpInfoUbo</ref> const &amp;</type>
+          <declname>gpInfo</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/db7/a05476" kindref="compound">LayeredLpvGridConfigUbo</ref> const &amp;</type>
+          <declname>lpvConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/dcd/a04880" kindref="compound">OpaquePassResult</ref> const &amp;</type>
+          <declname>gpResult</declname>
+        </param>
+        <param>
+          <type>LightVolumePassResultArray const &amp;</type>
+          <declname>lpvResult</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d18/a02664" kindref="compound">TextureUnit</ref> const &amp;</type>
+          <declname>dst</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
+          <declname>blendMode</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">prefix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass name&apos;s prefix. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">gpInfo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GBuffer configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lpvConfigUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The LPV configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">gpResult</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GBuffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lpvResult</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The LPV result. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dst</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GI result. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">blendMode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The blend mode. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" line="50" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d75/a04852_1a066a2612221ba490fe5e4aa8897f687b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Semaphore const  &amp;</type>
+        <definition>C3D_API ashes::Semaphore const&amp; castor3d::LayeredLightVolumeGIPass::compute</definition>
+        <argsstring>(ashes::Semaphore const &amp;toWait) const</argsstring>
+        <name>compute</name>
+        <param>
+          <type>ashes::Semaphore const &amp;</type>
+          <declname>toWait</declname>
+        </param>
+        <briefdescription>
+<para>Renders the pass. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">toWait</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The semaphore from the previous render pass. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" line="67" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d75/a04852_1a823b83402995bef91ac9a69d2997a480" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/da6/a04380" kindref="compound">CommandsSemaphore</ref></type>
+        <definition>C3D_API CommandsSemaphore castor3d::LayeredLightVolumeGIPass::getCommands</definition>
+        <argsstring>(RenderPassTimer const &amp;timer, uint32_t index) const</argsstring>
+        <name>getCommands</name>
+        <param>
+          <type><ref refid="d7/dc4/a04612" kindref="compound">RenderPassTimer</ref> const &amp;</type>
+          <declname>timer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" line="68" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d75/a04852_1a6a995b343689315d48d16a3feb5d2254" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LayeredLightVolumeGIPass::accept</definition>
+        <argsstring>(PipelineVisitorBase &amp;visitor)</argsstring>
+        <name>accept</name>
+        <param>
+          <type><ref refid="d5/d73/a03836" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Visitor acceptance function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ... visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" line="73" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1508">
+        <label>castor3d::RenderQuad</label>
+        <link refid="d4/d45/a04456"/>
+        <childnode refid="1509" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1507">
+        <label>castor3d::LayeredLightVolumeGIPass</label>
+        <link refid="de/d75/a04852"/>
+        <childnode refid="1508" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1509">
+        <label>Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1513">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d9/d38/a04624"/>
+        <childnode refid="1514" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1511">
+        <label>castor3d::RenderQuad</label>
+        <link refid="d4/d45/a04456"/>
+        <childnode refid="1512" relation="public-inheritance">
+        </childnode>
+        <childnode refid="1513" relation="usage">
+          <edgelabel>m_renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="1515" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+      </node>
+      <node id="1518">
+        <label>T</label>
+      </node>
+      <node id="1520">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="1518" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="1517">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="1518" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="1519">
+        <label>std::vector&lt; ashes::CommandPoolPtr &gt;</label>
+        <childnode refid="1520" relation="template-instance">
+          <edgelabel>&lt; ashes::CommandPoolPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1510">
+        <label>castor3d::LayeredLightVolumeGIPass</label>
+        <link refid="de/d75/a04852"/>
+        <childnode refid="1511" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1516">
+        <label>std::array&lt; uint32_t, 4u &gt;</label>
+        <childnode refid="1517" relation="template-instance">
+          <edgelabel>&lt; uint32_t, 4u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1512">
+        <label>Named</label>
+      </node>
+      <node id="1514">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="1515">
+        <label>castor3d::RenderDevice</label>
+        <link refid="d1/def/a04512"/>
+        <childnode refid="1516" relation="usage">
+          <edgelabel>queueFamiliesIndex</edgelabel>
+        </childnode>
+        <childnode refid="1513" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="1519" relation="usage">
+          <edgelabel>commandPools</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" line="24" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp" bodystart="22" bodyend="87"/>
+    <listofallmembers>
+      <member refid="de/d75/a04852_1a6a995b343689315d48d16a3feb5d2254" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>accept</name></member>
+      <member refid="d4/d45/a04456_1ab31f1f028639e2280dc81a5207c19361" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>cleanup</name></member>
+      <member refid="de/d75/a04852_1a066a2612221ba490fe5e4aa8897f687b" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>compute</name></member>
+      <member refid="d4/d45/a04456_1a2d8f7fe31e95ec7563ab7e49d47f847f" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>createPipeline</name></member>
+      <member refid="d4/d45/a04456_1a9eed2ab1f518d2d215e10f79dd66b980" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>createPipelineAndPass</name></member>
+      <member refid="de/d75/a04852_1a823b83402995bef91ac9a69d2997a480" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>getCommands</name></member>
+      <member refid="d4/d45/a04456_1a208ae566cd29dc14e874ec5381a40676" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>getDevice</name></member>
+      <member refid="d4/d45/a04456_1adf3b0cdd23bb9558df6d7f1b87b74ac6" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>getRenderSystem</name></member>
+      <member refid="d4/d45/a04456_1a2b4ea1f81bda3deace1e6f5b159f90db" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>getSampler</name></member>
+      <member refid="d4/d45/a04456_1a434520ea0e0f0a1ae885e7c9e19306a8" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>initialisePasses</name></member>
+      <member refid="de/d75/a04852_1a741370fe7db5201ba3d81ab11dd64adf" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>LayeredLightVolumeGIPass</name></member>
+      <member refid="de/d75/a04852_1a497180f1866935b56af011910f488248" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>m_commands</name></member>
+      <member refid="d4/d45/a04456_1ac07074df6fa0bb86ec6e9c76bf23f867" prot="protected" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>m_config</name></member>
+      <member refid="d4/d45/a04456_1a0e0d911b83650f310a1d773e6774788c" prot="protected" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>m_device</name></member>
+      <member refid="de/d75/a04852_1ae069a9db8d4bc4ebd195550ca8e97a2d" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>m_frameBuffer</name></member>
+      <member refid="de/d75/a04852_1afdc925b3fd2f163770910ee1a32460b4" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>m_gpInfo</name></member>
+      <member refid="de/d75/a04852_1aae8091885f1f86676c06c5d09e116346" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>m_gpResult</name></member>
+      <member refid="de/d75/a04852_1ae4ba8d976457cc8b2356ae694f61828f" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>m_lpvConfigUbo</name></member>
+      <member refid="de/d75/a04852_1a381d887bb84d01b23a85550152e7aae1" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>m_lpvResult</name></member>
+      <member refid="de/d75/a04852_1a1e07c4a84a5223b1ffcb7152d528a078" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>m_pixelShader</name></member>
+      <member refid="de/d75/a04852_1afaa2546f766d2b38e5e704db3740cfc7" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>m_renderPass</name></member>
+      <member refid="d4/d45/a04456_1a67e531e63c3eef4d22c89cd5dcf26d39" prot="protected" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>m_renderSystem</name></member>
+      <member refid="de/d75/a04852_1a4f65eda21cdd3b593d6b1e88e3877b09" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>m_result</name></member>
+      <member refid="d4/d45/a04456_1ac424bcc12b49f4788b6a78e181e7d8c9" prot="protected" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>m_sampler</name></member>
+      <member refid="de/d75/a04852_1a956f4fc2be9a39579fd7400f9720b6bd" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>m_timer</name></member>
+      <member refid="de/d75/a04852_1a03b57e61fabc38c8316596acbb14f9c0" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>m_vertexShader</name></member>
+      <member refid="d4/d45/a04456_1aba30b821ed0f043349148de3f91e1e28" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>makeDescriptorWrite</name></member>
+      <member refid="d4/d45/a04456_1abb76aa593ad380a88d949bd26fea0202" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>makeDescriptorWrite</name></member>
+      <member refid="d4/d45/a04456_1a612d681d62631e6bb92d9601c660b48e" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>makeDescriptorWrite</name></member>
+      <member refid="d4/d45/a04456_1af64b5bc8b9a9a3013e46accb200156f5" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>makeDescriptorWrite</name></member>
+      <member refid="d4/d45/a04456_1a43bab20a96e9bea365bc98d8667c977e" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>makeDescriptorWrite</name></member>
+      <member refid="d4/d45/a04456_1afacd916c61c3a5b315a0d3e94a8ba84d" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>makeDescriptorWrite</name></member>
+      <member refid="d4/d45/a04456_1a046a2ac1ba39bbd6114dfe87d4aaaf11" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>makeDescriptorWrite</name></member>
+      <member refid="d4/d45/a04456_1ac0cf400425c8050429e895099c971715" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>registerPass</name></member>
+      <member refid="d4/d45/a04456_1a62f21f0ecc9017c47eb029d0bc19e396" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>registerPass</name></member>
+      <member refid="d4/d45/a04456_1a367adcd9b6cc6ac6b1c68a28b2580eb2" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>registerPassInputs</name></member>
+      <member refid="d4/d45/a04456_1a48a49fffd036c545328e87e1449e141d" prot="protected" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>RenderQuad</name></member>
+      <member refid="d4/d45/a04456_1aeaeeae8d7065de723f0a710360bab119" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>RenderQuad</name></member>
+      <member refid="d4/d45/a04456_1a8a01faf0243638f02d6f052ff9e85b4b" prot="public" virt="virtual"><scope>castor3d::LayeredLightVolumeGIPass</scope><name>~RenderQuad</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

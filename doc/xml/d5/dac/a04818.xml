@@ -1,116 +1,171 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d5/dac/a04818" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::SpotLightPass::Config</compoundname>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d5/dac/a04818" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::OutputComponents</compoundname>
+    <includes local="no">GlslOutputComponents.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d5/dac/a04818_1ad8e254ecddf91496bd01ce9018a1f316" prot="public" static="no" mutable="no">
-        <type><ref refid="d3/d1e/a04766" kindref="compound">LightPass::Config</ref></type>
-        <definition>LightPass::Config castor3d::SpotLightPass::Config::base</definition>
+      <memberdef kind="variable" id="d5/dac/a04818_1a052a635035966a4aa49e711b7146ebb0" prot="public" static="no" mutable="no">
+        <type>sdw::InOutVec3</type>
+        <definition>sdw::InOutVec3 castor3d::shader::OutputComponents::m_diffuse</definition>
         <argsstring></argsstring>
-        <name>base</name>
+        <name>m_diffuse</name>
+        <qualifiedname>castor3d::shader::OutputComponents::m_diffuse</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="142" column="1" bodyfile="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" bodystart="142" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="30" column="16" bodyfile="Shader/Shaders/GlslOutputComponents.hpp" bodystart="30" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d5/dac/a04818_1ad8d85443186a6013d409dc98173b3ab0" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::SpotLightPass::Config::position</definition>
+      <memberdef kind="variable" id="d5/dac/a04818_1aa4284b72c519ff3cfe28838f95555d32" prot="public" static="no" mutable="no">
+        <type>sdw::InOutVec3</type>
+        <definition>sdw::InOutVec3 castor3d::shader::OutputComponents::m_specular</definition>
         <argsstring></argsstring>
-        <name>position</name>
+        <name>m_specular</name>
+        <qualifiedname>castor3d::shader::OutputComponents::m_specular</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The variable containing the light position (RGB). </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="145" column="1" bodyfile="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" bodystart="145" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="31" column="16" bodyfile="Shader/Shaders/GlslOutputComponents.hpp" bodystart="31" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d5/dac/a04818_1a56fbd30e4dbfe7089696505779862e98" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::SpotLightPass::Config::attenuation</definition>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d5/dac/a04818_1a90742d3c47b9acf0bc2ce854ea53c677" prot="private" static="no" mutable="no">
+        <type>ast::expr::ExprPtr</type>
+        <definition>ast::expr::ExprPtr castor3d::shader::OutputComponents::m_expr</definition>
         <argsstring></argsstring>
-        <name>attenuation</name>
+        <name>m_expr</name>
+        <qualifiedname>castor3d::shader::OutputComponents::m_expr</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The variable containing the light attenuation (RGB) and index (A). </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="148" column="1" bodyfile="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" bodystart="148" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="34" column="20" bodyfile="Shader/Shaders/GlslOutputComponents.hpp" bodystart="34" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d5/dac/a04818_1af76a2d96499514cb22bef18b1cda3e98" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::SpotLightPass::Config::direction</definition>
-        <argsstring></argsstring>
-        <name>direction</name>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/dac/a04818_1abdc4c22cd0cdf7d5640f1421f700c839" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::OutputComponents::OutputComponents</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>OutputComponents</name>
+        <qualifiedname>castor3d::shader::OutputComponents::OutputComponents</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The variable containing the light direction (RGB). </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="151" column="1" bodyfile="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" bodystart="151" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="17" column="18"/>
       </memberdef>
-      <memberdef kind="variable" id="d5/dac/a04818_1a1d677655b597dee9f505c8a9ac573edf" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::SpotLightPass::Config::exponentCutOff</definition>
-        <argsstring></argsstring>
-        <name>exponentCutOff</name>
+      <memberdef kind="function" id="d5/dac/a04818_1a0c677bdf03fdb8c726117ec79cc7c305" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::OutputComponents::OutputComponents</definition>
+        <argsstring>(sdw::InOutVec3 const &amp;diffuse, sdw::InOutVec3 const &amp;specular)</argsstring>
+        <name>OutputComponents</name>
+        <qualifiedname>castor3d::shader::OutputComponents::OutputComponents</qualifiedname>
+        <param>
+          <type>sdw::InOutVec3 const &amp;</type>
+          <declname>diffuse</declname>
+        </param>
+        <param>
+          <type>sdw::InOutVec3 const &amp;</type>
+          <declname>specular</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The variable containing the light exponent (R) and cutoff (G). </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="154" column="1" bodyfile="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" bodystart="154" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="18" column="9"/>
       </memberdef>
-      <memberdef kind="variable" id="d5/dac/a04818_1abb4a8be3cb2e6194a6da4668a5a16ceb" prot="public" static="no" mutable="no">
-        <type>castor::Matrix4x4f</type>
-        <definition>castor::Matrix4x4f castor3d::SpotLightPass::Config::transform</definition>
-        <argsstring></argsstring>
-        <name>transform</name>
+      <memberdef kind="function" id="d5/dac/a04818_1ae38720bf915c66d9c2b9b39c8a35bb8f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::expr::Expr *</type>
+        <definition>C3D_API ast::expr::Expr * castor3d::shader::OutputComponents::getExpr</definition>
+        <argsstring>() const</argsstring>
+        <name>getExpr</name>
+        <qualifiedname>castor3d::shader::OutputComponents::getExpr</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The variable containing the light space transformation matrix. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="157" column="1" bodyfile="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" bodystart="157" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="21" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dac/a04818_1aeaa6e55891dcc064142a630b80a2b603" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::ShaderWriter *</type>
+        <definition>C3D_API sdw::ShaderWriter * castor3d::shader::OutputComponents::getWriter</definition>
+        <argsstring>() const</argsstring>
+        <name>getWriter</name>
+        <qualifiedname>castor3d::shader::OutputComponents::getWriter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="22" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dac/a04818_1a34792b7f5a9ece038745e91a09a750a0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::OutputComponents::setVar</definition>
+        <argsstring>(ast::var::VariableList::const_iterator &amp;var)</argsstring>
+        <name>setVar</name>
+        <qualifiedname>castor3d::shader::OutputComponents::setVar</qualifiedname>
+        <param>
+          <type>ast::var::VariableList::const_iterator &amp;</type>
+          <declname>var</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="23" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dac/a04818_1aacc80ec09e21fe588d551e5810b5fed5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::shader::OutputComponents::isEnabled</definition>
+        <argsstring>() const</argsstring>
+        <name>isEnabled</name>
+        <qualifiedname>castor3d::shader::OutputComponents::isEnabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="25" column="6" bodyfile="Shader/Shaders/GlslOutputComponents.hpp" bodystart="25" bodyend="28"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="4184">
-        <label>castor3d::SpotLightPass::Config</label>
-        <childnode refid="4185" relation="usage">
-          <edgelabel>base</edgelabel>
-        </childnode>
-      </node>
-      <node id="4185">
-        <label>castor3d::LightPass::Config</label>
-        <link refid="d3/d1e/a04766"/>
-      </node>
-    </collaborationgraph>
-    <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="141" column="1" bodyfile="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" bodystart="140" bodyend="158"/>
+    <location file="Shader/Shaders/GlslOutputComponents.hpp" line="15" column="1" bodyfile="Shader/Shaders/GlslOutputComponents.hpp" bodystart="16" bodyend="35"/>
     <listofallmembers>
-      <member refid="d5/dac/a04818_1a56fbd30e4dbfe7089696505779862e98" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Config</scope><name>attenuation</name></member>
-      <member refid="d5/dac/a04818_1ad8e254ecddf91496bd01ce9018a1f316" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Config</scope><name>base</name></member>
-      <member refid="d5/dac/a04818_1af76a2d96499514cb22bef18b1cda3e98" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Config</scope><name>direction</name></member>
-      <member refid="d5/dac/a04818_1a1d677655b597dee9f505c8a9ac573edf" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Config</scope><name>exponentCutOff</name></member>
-      <member refid="d5/dac/a04818_1ad8d85443186a6013d409dc98173b3ab0" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Config</scope><name>position</name></member>
-      <member refid="d5/dac/a04818_1abb4a8be3cb2e6194a6da4668a5a16ceb" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Config</scope><name>transform</name></member>
+      <member refid="d5/dac/a04818_1ae38720bf915c66d9c2b9b39c8a35bb8f" prot="public" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>getExpr</name></member>
+      <member refid="d5/dac/a04818_1aeaa6e55891dcc064142a630b80a2b603" prot="public" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>getWriter</name></member>
+      <member refid="d5/dac/a04818_1aacc80ec09e21fe588d551e5810b5fed5" prot="public" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>isEnabled</name></member>
+      <member refid="d5/dac/a04818_1a052a635035966a4aa49e711b7146ebb0" prot="public" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>m_diffuse</name></member>
+      <member refid="d5/dac/a04818_1a90742d3c47b9acf0bc2ce854ea53c677" prot="private" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>m_expr</name></member>
+      <member refid="d5/dac/a04818_1aa4284b72c519ff3cfe28838f95555d32" prot="public" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>m_specular</name></member>
+      <member refid="d5/dac/a04818_1abdc4c22cd0cdf7d5640f1421f700c839" prot="public" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>OutputComponents</name></member>
+      <member refid="d5/dac/a04818_1a0c677bdf03fdb8c726117ec79cc7c305" prot="public" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>OutputComponents</name></member>
+      <member refid="d5/dac/a04818_1a34792b7f5a9ece038745e91a09a750a0" prot="public" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>setVar</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

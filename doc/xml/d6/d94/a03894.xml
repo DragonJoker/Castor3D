@@ -1,104 +1,158 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d6/d94/a03894" kind="class" language="C++" prot="public" abstract="yes">
-    <compoundname>castor3d::MeshImporter</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
-    <derivedcompoundref refid="d5/d49/a02282" prot="public" virt="non-virtual">castor3d::CmshImporter</derivedcompoundref>
-    <includes local="no">Importer.hpp</includes>
-      <sectiondef kind="protected-attrib">
-      <memberdef kind="variable" id="d6/d94/a03894_1a7136a295e404160089dbe8f17c07deb5" prot="protected" static="no" mutable="no">
-        <type>castor::Path</type>
-        <definition>castor::Path castor3d::MeshImporter::m_fileName</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d6/d94/a03894" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BrdfPrefilter</compoundname>
+    <includes local="no">BrdfPrefilter.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d6/d94/a03894_1aac34b86e29ee71d93647922d9c33e068" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/d34/a04078" kindref="compound">RenderSystem</ref> &amp;</type>
+        <definition>RenderSystem&amp; castor3d::BrdfPrefilter::m_renderSystem</definition>
         <argsstring></argsstring>
-        <name>m_fileName</name>
+        <name>m_renderSystem</name>
+        <qualifiedname>castor3d::BrdfPrefilter::m_renderSystem</qualifiedname>
         <briefdescription>
-<para>The file name. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Importer.hpp" line="99" column="1" bodyfile="Model/Mesh/Importer.hpp" bodystart="99" bodyend="-1"/>
+        <location file="Render/PBR/BrdfPrefilter.hpp" line="52" column="15" bodyfile="Render/PBR/BrdfPrefilter.hpp" bodystart="52" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d94/a03894_1afc8f20d32bfd80444da60342617748ad" prot="protected" static="no" mutable="no">
-        <type>castor::Path</type>
-        <definition>castor::Path castor3d::MeshImporter::m_filePath</definition>
+      <memberdef kind="variable" id="d6/d94/a03894_1a95aa99486f0069ac5bb710dbf354e10e" prot="private" static="no" mutable="no">
+        <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::BrdfPrefilter::m_device</definition>
         <argsstring></argsstring>
-        <name>m_filePath</name>
+        <name>m_device</name>
+        <qualifiedname>castor3d::BrdfPrefilter::m_device</qualifiedname>
         <briefdescription>
-<para>The file full path. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Importer.hpp" line="101" column="1" bodyfile="Model/Mesh/Importer.hpp" bodystart="101" bodyend="-1"/>
+        <location file="Render/PBR/BrdfPrefilter.hpp" line="53" column="21" bodyfile="Render/PBR/BrdfPrefilter.hpp" bodystart="53" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d94/a03894_1ac9f3f2e9a1060842f42d2da135641de5" prot="protected" static="no" mutable="no">
-        <type>SceneNodePtrArray</type>
-        <definition>SceneNodePtrArray castor3d::MeshImporter::m_nodes</definition>
+      <memberdef kind="variable" id="d6/d94/a03894_1a997615a8dd6950cd4bb385713d0d17ad" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/d66/a02562" kindref="compound">ObjectBufferOffset</ref></type>
+        <definition>ObjectBufferOffset castor3d::BrdfPrefilter::m_vertexBuffer</definition>
         <argsstring></argsstring>
-        <name>m_nodes</name>
+        <name>m_vertexBuffer</name>
+        <qualifiedname>castor3d::BrdfPrefilter::m_vertexBuffer</qualifiedname>
         <briefdescription>
-<para>The loaded scene nodes. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Importer.hpp" line="103" column="1" bodyfile="Model/Mesh/Importer.hpp" bodystart="103" bodyend="-1"/>
+        <location file="Render/PBR/BrdfPrefilter.hpp" line="54" column="20" bodyfile="Render/PBR/BrdfPrefilter.hpp" bodystart="54" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d94/a03894_1a5dab227b4d20b86f974427433bbcf0e3" prot="protected" static="no" mutable="no">
-        <type>GeometryPtrStrMap</type>
-        <definition>GeometryPtrStrMap castor3d::MeshImporter::m_geometries</definition>
+      <memberdef kind="variable" id="d6/d94/a03894_1a25a31e94a2203ee6d38a97d6a068ec8f" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineVertexInputStateCreateInfoPtr</type>
+        <definition>ashes::PipelineVertexInputStateCreateInfoPtr castor3d::BrdfPrefilter::m_vertexLayout</definition>
         <argsstring></argsstring>
-        <name>m_geometries</name>
+        <name>m_vertexLayout</name>
+        <qualifiedname>castor3d::BrdfPrefilter::m_vertexLayout</qualifiedname>
         <briefdescription>
-<para>The loaded geometries. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Importer.hpp" line="105" column="1" bodyfile="Model/Mesh/Importer.hpp" bodystart="105" bodyend="-1"/>
+        <location file="Render/PBR/BrdfPrefilter.hpp" line="55" column="46" bodyfile="Render/PBR/BrdfPrefilter.hpp" bodystart="55" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d94/a03894_1afb5a24369d04781b9fa30b5d824307a2" prot="protected" static="no" mutable="no">
-        <type><ref refid="de/d13/a01473_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref></type>
-        <definition>Parameters castor3d::MeshImporter::m_parameters</definition>
+      <memberdef kind="variable" id="d6/d94/a03894_1aa8d7e52a08587d715a3901f12c7c3925" prot="private" static="no" mutable="no">
+        <type>ashes::RenderPassPtr</type>
+        <definition>ashes::RenderPassPtr castor3d::BrdfPrefilter::m_renderPass</definition>
         <argsstring></argsstring>
-        <name>m_parameters</name>
+        <name>m_renderPass</name>
+        <qualifiedname>castor3d::BrdfPrefilter::m_renderPass</qualifiedname>
         <briefdescription>
-<para>Import configuration parameters. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Importer.hpp" line="107" column="1" bodyfile="Model/Mesh/Importer.hpp" bodystart="107" bodyend="-1"/>
+        <location file="Render/PBR/BrdfPrefilter.hpp" line="56" column="22" bodyfile="Render/PBR/BrdfPrefilter.hpp" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d94/a03894_1af39b1f4f8bda6adf43770da3fa9401fa" prot="private" static="no" mutable="no">
+        <type>ashes::FrameBufferPtr</type>
+        <definition>ashes::FrameBufferPtr castor3d::BrdfPrefilter::m_frameBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_frameBuffer</name>
+        <qualifiedname>castor3d::BrdfPrefilter::m_frameBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/BrdfPrefilter.hpp" line="57" column="23" bodyfile="Render/PBR/BrdfPrefilter.hpp" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d94/a03894_1a46c3af75ce78362f0e46dcffef7f4ee0" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineLayoutPtr</type>
+        <definition>ashes::PipelineLayoutPtr castor3d::BrdfPrefilter::m_pipelineLayout</definition>
+        <argsstring></argsstring>
+        <name>m_pipelineLayout</name>
+        <qualifiedname>castor3d::BrdfPrefilter::m_pipelineLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/BrdfPrefilter.hpp" line="58" column="26" bodyfile="Render/PBR/BrdfPrefilter.hpp" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d94/a03894_1a4b034a94a3b00e694f596d2e4f906fcd" prot="private" static="no" mutable="no">
+        <type>ashes::GraphicsPipelinePtr</type>
+        <definition>ashes::GraphicsPipelinePtr castor3d::BrdfPrefilter::m_pipeline</definition>
+        <argsstring></argsstring>
+        <name>m_pipeline</name>
+        <qualifiedname>castor3d::BrdfPrefilter::m_pipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/BrdfPrefilter.hpp" line="59" column="28" bodyfile="Render/PBR/BrdfPrefilter.hpp" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d94/a03894_1a0c6388f6bf1e013da1c1c4d4d0cde36c" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d5e/a03818" kindref="compound">CommandsSemaphore</ref></type>
+        <definition>CommandsSemaphore castor3d::BrdfPrefilter::m_commands</definition>
+        <argsstring></argsstring>
+        <name>m_commands</name>
+        <qualifiedname>castor3d::BrdfPrefilter::m_commands</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/BrdfPrefilter.hpp" line="60" column="19" bodyfile="Render/PBR/BrdfPrefilter.hpp" bodystart="60" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d6/d94/a03894_1ab487a61ca9280ca08416a78209be114c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type></type>
-        <definition>virtual castor3d::MeshImporter::~MeshImporter</definition>
-        <argsstring>()=default</argsstring>
-        <name>~MeshImporter</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Importer.hpp" line="22" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d6/d94/a03894_1a045aa14041b53b76e24b6302849dcae4" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::MeshImporter::MeshImporter</definition>
-        <argsstring>(Engine &amp;engine)</argsstring>
-        <name>MeshImporter</name>
+      <memberdef kind="function" id="d6/d94/a03894_1aef14839f4241b5e7a0055ef37a76af2f" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::BrdfPrefilter::BrdfPrefilter</definition>
+        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, castor::Size const &amp;size, ashes::ImageView const &amp;dstTexture)</argsstring>
+        <name>BrdfPrefilter</name>
+        <qualifiedname>castor3d::BrdfPrefilter::BrdfPrefilter</qualifiedname>
         <param>
-          <type><ref refid="df/d9b/a02514" kindref="compound">Engine</ref> &amp;</type>
+          <type><ref refid="d1/d3c/a02714" kindref="compound">Engine</ref> &amp;</type>
           <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>ashes::ImageView const &amp;</type>
+          <declname>dstTexture</declname>
         </param>
         <briefdescription>
 <para>Constructor. </para>
@@ -109,7 +163,31 @@
 <parametername direction="in">engine</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The core engine </para>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The current device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render dimensions. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dstTexture</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The cube texture destination. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -117,263 +195,72 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Importer.hpp" line="31" column="1"/>
+        <location file="Render/PBR/BrdfPrefilter.hpp" line="34" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d6/d94/a03894_1ac7a60af9fbfa9bc67f77133fd7fb1834" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::MeshImporter::import</definition>
-        <argsstring>(Mesh &amp;mesh, castor::Path const &amp;pathFile, Parameters const &amp;parameters, bool initialise)</argsstring>
-        <name>import</name>
+      <memberdef kind="function" id="d6/d94/a03894_1a3b4b4822a0f66df9fbc8329b644cbb62" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BrdfPrefilter::render</definition>
+        <argsstring>(QueueData const &amp;queueData)</argsstring>
+        <name>render</name>
+        <qualifiedname>castor3d::BrdfPrefilter::render</qualifiedname>
         <param>
-          <type><ref refid="d9/d7a/a03902" kindref="compound">Mesh</ref> &amp;</type>
-          <declname>mesh</declname>
-        </param>
-        <param>
-          <type>castor::Path const &amp;</type>
-          <declname>pathFile</declname>
-        </param>
-        <param>
-          <type><ref refid="de/d13/a01473_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
-          <declname>parameters</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>initialise</declname>
+          <type><ref refid="dc/d61/a03950" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
         </param>
         <briefdescription>
-<para><ref refid="d9/d7a/a03902" kindref="compound">Mesh</ref> import Function. </para>
+<para>Computes the convoluted BRDF. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="out">mesh</parametername>
+<parametername direction="in">queueData</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>Receives the imported data. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">pathFile</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The location of the file to import. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">parameters</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Import configuration parameters. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">initialise</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if the imported mesh must be initialised. </para>
+<para>The queue receiving the GPU commands. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if any problem occured. </para>
-</simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Importer.hpp" line="48" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d6/d94/a03894_1a04e2b14f4ceba76a6de55378d195ffb9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> TextureUnitSPtr</type>
-        <definition>C3D_API TextureUnitSPtr castor3d::MeshImporter::loadTexture</definition>
-        <argsstring>(castor::Path const &amp;path, TextureConfiguration const &amp;config) const</argsstring>
-        <name>loadTexture</name>
-        <param>
-          <type>castor::Path const &amp;</type>
-          <declname>path</declname>
-        </param>
-        <param>
-          <type><ref refid="d0/d3f/a02630" kindref="compound">TextureConfiguration</ref> const &amp;</type>
-          <declname>config</declname>
-        </param>
-        <briefdescription>
-<para>Loads a texture and adds it to the given pass. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">path</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The image file path (can be relative or absolute). </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">config</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The texture unit configuration. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The texture unit. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Importer.hpp" line="64" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d6/d94/a03894_1a56211b75461d1b62d6a09d127f490167" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> TextureUnitSPtr</type>
-        <definition>C3D_API TextureUnitSPtr castor3d::MeshImporter::loadTexture</definition>
-        <argsstring>(castor::Path const &amp;path, TextureConfiguration const &amp;config, Pass &amp;pass) const</argsstring>
-        <name>loadTexture</name>
-        <param>
-          <type>castor::Path const &amp;</type>
-          <declname>path</declname>
-        </param>
-        <param>
-          <type><ref refid="d0/d3f/a02630" kindref="compound">TextureConfiguration</ref> const &amp;</type>
-          <declname>config</declname>
-        </param>
-        <param>
-          <type><ref refid="df/d57/a02590" kindref="compound">Pass</ref> &amp;</type>
-          <declname>pass</declname>
-        </param>
-        <briefdescription>
-<para>Loads a texture and adds it to the given pass. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">path</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The image file path (can be relative or absolute). </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">config</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The texture unit configuration. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">pass</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pass. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Importer.hpp" line="80" column="1"/>
+        <location file="Render/PBR/BrdfPrefilter.hpp" line="46" column="14"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="protected-func">
-      <memberdef kind="function" id="d6/d94/a03894_1a0eb9bc99966ced84853d1ff07fad8ce0" prot="protected" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>virtual C3D_API bool castor3d::MeshImporter::doImportMesh</definition>
-        <argsstring>(Mesh &amp;mesh)=0</argsstring>
-        <name>doImportMesh</name>
-        <reimplementedby refid="d5/d49/a02282_1af85892cc57daf30d7a334c196de4eb37">doImportMesh</reimplementedby>
-        <param>
-          <type><ref refid="d9/d7a/a03902" kindref="compound">Mesh</ref> &amp;</type>
-          <declname>mesh</declname>
-        </param>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d6/d94/a03894_1a4061df070adf64c5a97a6f97e40b6ae8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ashes::PipelineShaderStageCreateInfoArray</type>
+        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::BrdfPrefilter::doCreateProgram</definition>
+        <argsstring>()</argsstring>
+        <name>doCreateProgram</name>
+        <qualifiedname>castor3d::BrdfPrefilter::doCreateProgram</qualifiedname>
         <briefdescription>
-<para><ref refid="d9/d7a/a03902" kindref="compound">Mesh</ref> import Function. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="out">mesh</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Receives the imported data. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if any problem occured. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Importer.hpp" line="95" column="1"/>
+        <location file="Render/PBR/BrdfPrefilter.hpp" line="49" column="43"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="1959">
-        <label>castor3d::CmshImporter</label>
-        <link refid="d5/d49/a02282"/>
-        <childnode refid="1957" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1958">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="1957">
-        <label>castor3d::MeshImporter</label>
-        <link refid="d6/d94/a03894"/>
-        <childnode refid="1958" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="1962">
-        <label>castor3d::ParametersT&lt; castor::String &gt;</label>
-        <link refid="d0/db2/a03822"/>
-        <childnode refid="1963" relation="template-instance">
-          <edgelabel>&lt; castor::String &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1963">
-        <label>castor3d::ParametersT&lt; KeyT &gt;</label>
-        <link refid="d0/db2/a03822"/>
-      </node>
-      <node id="1961">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="1960">
-        <label>castor3d::MeshImporter</label>
-        <link refid="d6/d94/a03894"/>
-        <childnode refid="1961" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1962" relation="usage">
-          <edgelabel>m_parameters</edgelabel>
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Model/Mesh/Importer.hpp" line="20" column="1" bodyfile="Model/Mesh/Importer.hpp" bodystart="18" bodyend="108"/>
+    <location file="Render/PBR/BrdfPrefilter.hpp" line="17" column="1" bodyfile="Render/PBR/BrdfPrefilter.hpp" bodystart="18" bodyend="61"/>
     <listofallmembers>
-      <member refid="d6/d94/a03894_1a0eb9bc99966ced84853d1ff07fad8ce0" prot="protected" virt="pure-virtual"><scope>castor3d::MeshImporter</scope><name>doImportMesh</name></member>
-      <member refid="d6/d94/a03894_1ac7a60af9fbfa9bc67f77133fd7fb1834" prot="public" virt="non-virtual"><scope>castor3d::MeshImporter</scope><name>import</name></member>
-      <member refid="d6/d94/a03894_1a04e2b14f4ceba76a6de55378d195ffb9" prot="public" virt="non-virtual"><scope>castor3d::MeshImporter</scope><name>loadTexture</name></member>
-      <member refid="d6/d94/a03894_1a56211b75461d1b62d6a09d127f490167" prot="public" virt="non-virtual"><scope>castor3d::MeshImporter</scope><name>loadTexture</name></member>
-      <member refid="d6/d94/a03894_1a7136a295e404160089dbe8f17c07deb5" prot="protected" virt="non-virtual"><scope>castor3d::MeshImporter</scope><name>m_fileName</name></member>
-      <member refid="d6/d94/a03894_1afc8f20d32bfd80444da60342617748ad" prot="protected" virt="non-virtual"><scope>castor3d::MeshImporter</scope><name>m_filePath</name></member>
-      <member refid="d6/d94/a03894_1a5dab227b4d20b86f974427433bbcf0e3" prot="protected" virt="non-virtual"><scope>castor3d::MeshImporter</scope><name>m_geometries</name></member>
-      <member refid="d6/d94/a03894_1ac9f3f2e9a1060842f42d2da135641de5" prot="protected" virt="non-virtual"><scope>castor3d::MeshImporter</scope><name>m_nodes</name></member>
-      <member refid="d6/d94/a03894_1afb5a24369d04781b9fa30b5d824307a2" prot="protected" virt="non-virtual"><scope>castor3d::MeshImporter</scope><name>m_parameters</name></member>
-      <member refid="d6/d94/a03894_1a045aa14041b53b76e24b6302849dcae4" prot="public" virt="non-virtual"><scope>castor3d::MeshImporter</scope><name>MeshImporter</name></member>
-      <member refid="d6/d94/a03894_1ab487a61ca9280ca08416a78209be114c" prot="public" virt="virtual"><scope>castor3d::MeshImporter</scope><name>~MeshImporter</name></member>
+      <member refid="d6/d94/a03894_1aef14839f4241b5e7a0055ef37a76af2f" prot="public" virt="non-virtual"><scope>castor3d::BrdfPrefilter</scope><name>BrdfPrefilter</name></member>
+      <member refid="d6/d94/a03894_1a4061df070adf64c5a97a6f97e40b6ae8" prot="private" virt="non-virtual"><scope>castor3d::BrdfPrefilter</scope><name>doCreateProgram</name></member>
+      <member refid="d6/d94/a03894_1a0c6388f6bf1e013da1c1c4d4d0cde36c" prot="private" virt="non-virtual"><scope>castor3d::BrdfPrefilter</scope><name>m_commands</name></member>
+      <member refid="d6/d94/a03894_1a95aa99486f0069ac5bb710dbf354e10e" prot="private" virt="non-virtual"><scope>castor3d::BrdfPrefilter</scope><name>m_device</name></member>
+      <member refid="d6/d94/a03894_1af39b1f4f8bda6adf43770da3fa9401fa" prot="private" virt="non-virtual"><scope>castor3d::BrdfPrefilter</scope><name>m_frameBuffer</name></member>
+      <member refid="d6/d94/a03894_1a4b034a94a3b00e694f596d2e4f906fcd" prot="private" virt="non-virtual"><scope>castor3d::BrdfPrefilter</scope><name>m_pipeline</name></member>
+      <member refid="d6/d94/a03894_1a46c3af75ce78362f0e46dcffef7f4ee0" prot="private" virt="non-virtual"><scope>castor3d::BrdfPrefilter</scope><name>m_pipelineLayout</name></member>
+      <member refid="d6/d94/a03894_1aa8d7e52a08587d715a3901f12c7c3925" prot="private" virt="non-virtual"><scope>castor3d::BrdfPrefilter</scope><name>m_renderPass</name></member>
+      <member refid="d6/d94/a03894_1aac34b86e29ee71d93647922d9c33e068" prot="private" virt="non-virtual"><scope>castor3d::BrdfPrefilter</scope><name>m_renderSystem</name></member>
+      <member refid="d6/d94/a03894_1a997615a8dd6950cd4bb385713d0d17ad" prot="private" virt="non-virtual"><scope>castor3d::BrdfPrefilter</scope><name>m_vertexBuffer</name></member>
+      <member refid="d6/d94/a03894_1a25a31e94a2203ee6d38a97d6a068ec8f" prot="private" virt="non-virtual"><scope>castor3d::BrdfPrefilter</scope><name>m_vertexLayout</name></member>
+      <member refid="d6/d94/a03894_1a3b4b4822a0f66df9fbc8329b644cbb62" prot="public" virt="non-virtual"><scope>castor3d::BrdfPrefilter</scope><name>render</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

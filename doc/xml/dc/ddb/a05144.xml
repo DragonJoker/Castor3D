@@ -1,44 +1,83 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dc/ddb/a05144" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::BillboardBase::Vertex</compoundname>
-    <includes local="no">BillboardList.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="dc/ddb/a05144_1a593c736459e354413967f1b8a5aab9b0" prot="public" static="no" mutable="no">
-        <type>castor::Point3f</type>
-        <definition>castor::Point3f castor3d::BillboardBase::Vertex::position</definition>
-        <argsstring></argsstring>
-        <name>position</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dc/ddb/a05144" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::ShaderProgram &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::ShaderProgram &gt;</basecompoundref>
+    <includes local="no">TextProgram.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/ddb/a05144_1a7082a7ccd824ca24aacfbc7da0778b1b" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::ShaderProgram &gt;::TextWriter</definition>
+        <argsstring>(castor::String const &amp;tabs)</argsstring>
+        <name>TextWriter</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::ShaderProgram &gt;::TextWriter</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/BillboardList.hpp" line="213" column="1" bodyfile="Scene/BillboardList.hpp" bodystart="213" bodyend="-1"/>
+        <location file="Text/TextProgram.hpp" line="18" column="18"/>
       </memberdef>
-      <memberdef kind="variable" id="dc/ddb/a05144_1a2f94ae756c163856a8d24cbbd76bb56f" prot="public" static="no" mutable="no">
-        <type>castor::Point2f</type>
-        <definition>castor::Point2f castor3d::BillboardBase::Vertex::uv</definition>
-        <argsstring></argsstring>
-        <name>uv</name>
+      <memberdef kind="function" id="dc/ddb/a05144_1aa99dccfcbbd169a5ada96b8785d7a89b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::ShaderProgram &gt;::operator()</definition>
+        <argsstring>(castor3d::ShaderProgram const &amp;program, castor::StringStream &amp;file) override</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::ShaderProgram &gt;::operator()</qualifiedname>
+        <param>
+          <type><ref refid="d1/d2b/a04652" kindref="compound">castor3d::ShaderProgram</ref> const &amp;</type>
+          <declname>program</declname>
+        </param>
+        <param>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/BillboardList.hpp" line="214" column="1" bodyfile="Scene/BillboardList.hpp" bodystart="214" bodyend="-1"/>
+        <location file="Text/TextProgram.hpp" line="19" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Scene/BillboardList.hpp" line="212" column="1" bodyfile="Scene/BillboardList.hpp" bodystart="211" bodyend="215"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::ShaderProgram &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::ShaderProgram &gt;</label>
+        <link refid="dc/ddb/a05144"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::ShaderProgram &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::ShaderProgram &gt;</label>
+        <link refid="dc/ddb/a05144"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextProgram.hpp" line="14" column="1" bodyfile="Text/TextProgram.hpp" bodystart="16" bodyend="21"/>
     <listofallmembers>
-      <member refid="dc/ddb/a05144_1a593c736459e354413967f1b8a5aab9b0" prot="public" virt="non-virtual"><scope>castor3d::BillboardBase::Vertex</scope><name>position</name></member>
-      <member refid="dc/ddb/a05144_1a2f94ae756c163856a8d24cbbd76bb56f" prot="public" virt="non-virtual"><scope>castor3d::BillboardBase::Vertex</scope><name>uv</name></member>
+      <member refid="dc/ddb/a05144_1aa99dccfcbbd169a5ada96b8785d7a89b" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::ShaderProgram &gt;</scope><name>operator()</name></member>
+      <member refid="dc/ddb/a05144_1a7082a7ccd824ca24aacfbc7da0778b1b" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::ShaderProgram &gt;</scope><name>TextWriter</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

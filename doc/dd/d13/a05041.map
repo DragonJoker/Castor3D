@@ -1,7 +1,4 @@
-<map id="castor3d::AnimatedObject" name="castor3d::AnimatedObject">
-<area shape="rect" id="node1" title=" " alt="" coords="203,80,377,107"/>
-<area shape="rect" id="node3" href="$d5/dbd/a05038.html" title=" " alt="" coords="5,155,172,181"/>
-<area shape="rect" id="node4" href="$da/df4/a05050.html" title=" " alt="" coords="197,155,383,181"/>
-<area shape="rect" id="node5" href="$d1/d09/a05054.html" title=" " alt="" coords="407,155,586,181"/>
-<area shape="rect" id="node2" title=" " alt="" coords="259,5,321,32"/>
+<map id="castor3d::shader::VoxelData" name="castor3d::shader::VoxelData">
+<area shape="rect" id="node1" title=" " alt="" coords="5,80,192,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="30,5,167,32"/>
 </map>

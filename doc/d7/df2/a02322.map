@@ -1,4 +1,5 @@
-<map id="castor3d::GpuBufferPool" name="castor3d::GpuBufferPool">
-<area shape="rect" id="node1" title=" " alt="" coords="40,80,203,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,237,32"/>
+<map id="castor3d::BinaryWriter&lt; MeshAnimationKeyFrame &gt;" name="castor3d::BinaryWriter&lt; MeshAnimationKeyFrame &gt;">
+<area shape="rect" id="node1" title="MeshAnimationKeyFrame binary loader." alt="" coords="5,200,201,241"/>
+<area shape="rect" id="node2" href="$d2/da6/a02339.html" title=" " alt="" coords="5,109,201,151"/>
+<area shape="rect" id="node3" href="$d2/da6/a02339.html" title="Binary data chunk writer base class." alt="" coords="12,5,195,47"/>
 </map>

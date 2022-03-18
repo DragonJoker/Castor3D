@@ -1,0 +1,230 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d1/dc6/a00347" kind="file" language="C++">
+    <compoundname>TextureAnimation.hpp</compoundname>
+    <includes refid="d9/ddf/a07312" local="yes">TextureAnimationModule.hpp</includes>
+    <includes refid="d4/d81/a00110" local="yes">Castor3D/Binary/BinaryModule.hpp</includes>
+    <includes refid="d9/da6/a07309" local="yes">Castor3D/Scene/Animation/AnimationModule.hpp</includes>
+    <includes refid="de/dd7/a00362" local="yes">Castor3D/Material/Texture/TextureModule.hpp</includes>
+    <includes refid="d1/d09/a00077" local="yes">Castor3D/Animation/Animation.hpp</includes>
+    <includes local="no">CastorUtils/Math/Speed.hpp</includes>
+    <incdepgraph>
+      <node id="6520">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="6514">
+        <label>Castor3D/Material/MaterialModule.hpp</label>
+        <link refid="d8/d23/a00326"/>
+        <childnode refid="6515" relation="include">
+        </childnode>
+        <childnode refid="6528" relation="include">
+        </childnode>
+      </node>
+      <node id="6523">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="6538">
+        <label>CastorUtils/Graphics/BoundingSphere.hpp</label>
+      </node>
+      <node id="6524">
+        <label>cstdint</label>
+      </node>
+      <node id="6543">
+        <label>CastorUtils/Design/Named.hpp</label>
+      </node>
+      <node id="6528">
+        <label>CastorUtils/Design/Signal.hpp</label>
+      </node>
+      <node id="6522">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="6545">
+        <label>CastorUtils/Math/Speed.hpp</label>
+      </node>
+      <node id="6515">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="6516" relation="include">
+        </childnode>
+        <childnode refid="6517" relation="include">
+        </childnode>
+        <childnode refid="6518" relation="include">
+        </childnode>
+        <childnode refid="6519" relation="include">
+        </childnode>
+        <childnode refid="6520" relation="include">
+        </childnode>
+        <childnode refid="6521" relation="include">
+        </childnode>
+        <childnode refid="6522" relation="include">
+        </childnode>
+        <childnode refid="6523" relation="include">
+        </childnode>
+        <childnode refid="6524" relation="include">
+        </childnode>
+        <childnode refid="6525" relation="include">
+        </childnode>
+        <childnode refid="6526" relation="include">
+        </childnode>
+        <childnode refid="6527" relation="include">
+        </childnode>
+      </node>
+      <node id="6526">
+        <label>string</label>
+      </node>
+      <node id="6535">
+        <label>Castor3D/Model/ModelModule.hpp</label>
+        <link refid="d7/def/a00521"/>
+        <childnode refid="6515" relation="include">
+        </childnode>
+      </node>
+      <node id="6519">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="6516">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="6533">
+        <label>Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp</label>
+        <link refid="dc/d19/a00515"/>
+        <childnode refid="6534" relation="include">
+        </childnode>
+        <childnode refid="6537" relation="include">
+        </childnode>
+        <childnode refid="6538" relation="include">
+        </childnode>
+      </node>
+      <node id="6544">
+        <label>Animation.inl</label>
+      </node>
+      <node id="6513">
+        <label>Castor3D/Material/Texture/TextureModule.hpp</label>
+        <link refid="de/dd7/a00362"/>
+        <childnode refid="6514" relation="include">
+        </childnode>
+        <childnode refid="6528" relation="include">
+        </childnode>
+      </node>
+      <node id="6537">
+        <label>CastorUtils/Graphics/BoundingBox.hpp</label>
+      </node>
+      <node id="6518">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="6532">
+        <label>Castor3D/Scene/SceneModule.hpp</label>
+        <link refid="de/db5/a01181"/>
+        <childnode refid="6514" relation="include">
+        </childnode>
+        <childnode refid="6533" relation="include">
+        </childnode>
+        <childnode refid="6528" relation="include">
+        </childnode>
+      </node>
+      <node id="6530">
+        <label>Castor3D/Binary/BinaryModule.hpp</label>
+        <link refid="d4/d81/a00110"/>
+        <childnode refid="6515" relation="include">
+        </childnode>
+      </node>
+      <node id="6540">
+        <label>CastorUtils/Math/Quaternion.hpp</label>
+      </node>
+      <node id="6529">
+        <label>CastorUtils/Math/MathModule.hpp</label>
+      </node>
+      <node id="6517">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="6539">
+        <label>Castor3D/Animation/AnimationModule.hpp</label>
+        <link refid="d0/d35/a07306"/>
+        <childnode refid="6515" relation="include">
+        </childnode>
+        <childnode refid="6540" relation="include">
+        </childnode>
+      </node>
+      <node id="6534">
+        <label>Castor3D/Model/Mesh/MeshModule.hpp</label>
+        <link refid="d2/d9d/a00464"/>
+        <childnode refid="6535" relation="include">
+        </childnode>
+        <childnode refid="6536" relation="include">
+        </childnode>
+      </node>
+      <node id="6527">
+        <label>vector</label>
+      </node>
+      <node id="6521">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="6512">
+        <label>TextureAnimationModule.hpp</label>
+        <link refid="d9/ddf/a07312"/>
+        <childnode refid="6513" relation="include">
+        </childnode>
+        <childnode refid="6529" relation="include">
+        </childnode>
+      </node>
+      <node id="6511">
+        <label>Material/Texture/Animation/TextureAnimation.hpp</label>
+        <link refid="d1/dc6/a00347"/>
+        <childnode refid="6512" relation="include">
+        </childnode>
+        <childnode refid="6530" relation="include">
+        </childnode>
+        <childnode refid="6531" relation="include">
+        </childnode>
+        <childnode refid="6513" relation="include">
+        </childnode>
+        <childnode refid="6541" relation="include">
+        </childnode>
+        <childnode refid="6545" relation="include">
+        </childnode>
+      </node>
+      <node id="6531">
+        <label>Castor3D/Scene/Animation/AnimationModule.hpp</label>
+        <link refid="d9/da6/a07309"/>
+        <childnode refid="6532" relation="include">
+        </childnode>
+        <childnode refid="6539" relation="include">
+        </childnode>
+      </node>
+      <node id="6541">
+        <label>Castor3D/Animation/Animation.hpp</label>
+        <link refid="d1/d09/a00077"/>
+        <childnode refid="6530" relation="include">
+        </childnode>
+        <childnode refid="6542" relation="include">
+        </childnode>
+        <childnode refid="6543" relation="include">
+        </childnode>
+        <childnode refid="6544" relation="include">
+        </childnode>
+        <childnode refid="6541" relation="include">
+        </childnode>
+      </node>
+      <node id="6542">
+        <label>Castor3D/Animation/AnimationKeyFrame.hpp</label>
+        <link refid="da/dec/a00080"/>
+        <childnode refid="6539" relation="include">
+        </childnode>
+        <childnode refid="6537" relation="include">
+        </childnode>
+      </node>
+      <node id="6536">
+        <label>CastorUtils/Design/Factory.hpp</label>
+      </node>
+      <node id="6525">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="d4/d7d/a02628" prot="public">castor3d::TextureAnimation</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/Texture/Animation/TextureAnimation.hpp"/>
+  </compounddef>
+</doxygen>

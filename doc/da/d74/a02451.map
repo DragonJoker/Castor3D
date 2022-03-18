@@ -1,4 +1,5 @@
-<map id="castor3d::CpuFrameEvent" name="castor3d::CpuFrameEvent">
-<area shape="rect" id="node1" title=" " alt="" coords="9,5,181,32"/>
-<area shape="rect" id="node2" href="$d5/dcb/a02456.html" title=" " alt="" coords="5,80,184,107"/>
+<map id="castor3d::BinaryWriter&lt; Submesh &gt;" name="castor3d::BinaryWriter&lt; Submesh &gt;">
+<area shape="rect" id="node1" title="MovableObject loader." alt="" coords="21,200,173,241"/>
+<area shape="rect" id="node2" href="$d3/d9c/a02336.html" title=" " alt="" coords="5,109,188,151"/>
+<area shape="rect" id="node3" href="$d3/d9c/a02336.html" title="Binary data chunk writer base class." alt="" coords="5,5,188,47"/>
 </map>

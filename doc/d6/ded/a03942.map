@@ -1,7 +1,4 @@
-<map id="castor3d::FaceInfos::Vertex" name="castor3d::FaceInfos::Vertex">
-<area shape="rect" id="node1" title="Holds vertex informations." alt="" coords="94,273,230,315"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,184,145,211"/>
-<area shape="rect" id="node3" title="STL class." alt="" coords="87,95,195,121"/>
-<area shape="rect" id="node5" title=" " alt="" coords="169,184,309,211"/>
-<area shape="rect" id="node4" title=" " alt="" coords="121,5,160,32"/>
+<map id="castor3d::QueueData" name="castor3d::QueueData">
+<area shape="rect" id="node1" title=" " alt="" coords="9,95,154,121"/>
+<area shape="rect" id="node2" href="$d3/d70/a03952.html" title=" " alt="" coords="5,5,157,32"/>
 </map>

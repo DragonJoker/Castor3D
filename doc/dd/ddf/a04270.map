@@ -1,5 +1,4 @@
-<map id="castor3d::LayeredLightPropagationVolumesT&lt; GeometryVolumesT &gt;" name="castor3d::LayeredLightPropagationVolumesT&lt; GeometryVolumesT &gt;">
-<area shape="rect" id="node1" title="Lighting propagation volumes generation pass." alt="" coords="5,169,228,211"/>
-<area shape="rect" id="node2" href="$d7/deb/a04264.html" title=" " alt="" coords="5,80,228,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="85,5,148,32"/>
+<map id="castor3d::OpaqueResolvePass" name="castor3d::OpaqueResolvePass">
+<area shape="rect" id="node1" title=" " alt="" coords="5,80,205,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="12,5,199,32"/>
 </map>

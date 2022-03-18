@@ -1,33 +1,166 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d1/d7b/a03639" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkImportMemoryHostPointerInfoEXT &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
+    <compoundname>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</compoundname>
+    <basecompoundref refid="da/dfd/a02619" prot="public" virt="non-virtual">castor3d::PtrCacheTraitsBaseT&lt; Plugin, castor::String &gt;</basecompoundref>
+    <includes local="no">PluginModule.hpp</includes>
     <templateparamlist>
     </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d1/d7b/a03639_1a1fa65fbcf5286efd8c6098d8b91ad7ac" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkImportMemoryHostPointerInfoEXT &gt;::value</definition>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d1/d7b/a03639_1a3a7ebedca12dc66d4cde1208fa098384" prot="public" static="no">
+        <type><ref refid="d0/db0/a03631" kindref="compound">Plugin</ref></type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::ResT =  Plugin</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_IMPORT_MEMORY_HOST_POINTER_INFO_EXT</initializer>
+        <name>ResT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::ResT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="326" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="326" bodyend="-1"/>
+        <location file="Plugin/PluginModule.hpp" line="176" column="1" bodyfile="Plugin/PluginModule.hpp" bodystart="176" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d1/d7b/a03639_1abd5210a976106167ac5461f5946a2759" prot="public" static="no">
+        <type>castor::String</type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::KeyT =  castor::String</definition>
+        <argsstring></argsstring>
+        <name>KeyT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::KeyT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/PluginModule.hpp" line="177" column="1" bodyfile="Plugin/PluginModule.hpp" bodystart="177" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d1/d7b/a03639_1aef68b46ba183462d32e94a49a4f30dfe" prot="public" static="no">
+        <type><ref refid="da/dfd/a02619" kindref="compound">PtrCacheTraitsBaseT</ref>&lt; <ref refid="d1/d7b/a03639_1a3a7ebedca12dc66d4cde1208fa098384" kindref="member">ResT</ref>, <ref refid="d1/d7b/a03639_1abd5210a976106167ac5461f5946a2759" kindref="member">KeyT</ref> &gt;</type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::Base =  PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;</definition>
+        <argsstring></argsstring>
+        <name>Base</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::Base</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/PluginModule.hpp" line="178" column="1" bodyfile="Plugin/PluginModule.hpp" bodystart="178" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d1/d7b/a03639_1a5005be55b3e3371eceb9c3e751401de8" prot="public" static="no">
+        <type>typename <ref refid="da/dfd/a02619_1a97fc821a6c93a6497ce29ef7ee81d091" kindref="member">Base::ElementT</ref></type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::ElementT =  typename Base::ElementT</definition>
+        <argsstring></argsstring>
+        <name>ElementT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::ElementT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/PluginModule.hpp" line="179" column="1" bodyfile="Plugin/PluginModule.hpp" bodystart="179" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d1/d7b/a03639_1aaacc30ce0b352a7897839640c9bb1fac" prot="public" static="no">
+        <type>typename <ref refid="da/dfd/a02619_1a1bb78b2e2efba448f1bab3f5714b9943" kindref="member">Base::ElementPtrT</ref></type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::ElementPtrT =  typename Base::ElementPtrT</definition>
+        <argsstring></argsstring>
+        <name>ElementPtrT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::ElementPtrT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/PluginModule.hpp" line="180" column="1" bodyfile="Plugin/PluginModule.hpp" bodystart="180" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d1/d7b/a03639_1a5a4bfb21dc9cc00987e21d8231046cf2" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <definition>C3D_API const castor::String castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::Name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/PluginModule.hpp" line="182" column="37" bodyfile="Plugin/PluginModule.hpp" bodystart="182" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
+<para>Helper structure to specialise a cache behaviour. <simplesect kind="remark"><para>Specialisation for <ref refid="d0/db0/a03631" kindref="compound">Plugin</ref>. </para>
+</simplesect>
+</para>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="326" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="326" bodyend="326"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::PtrCacheTraitsBaseT&lt; Plugin, castor::String &gt;</label>
+        <link refid="da/dfd/a02619"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Plugin, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;</label>
+        <link refid="da/dfd/a02619"/>
+      </node>
+      <node id="1">
+        <label>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</label>
+        <link refid="d1/d7b/a03639"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::PtrCacheTraitsBaseT&lt; Plugin, castor::String &gt;</label>
+        <link refid="da/dfd/a02619"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Plugin, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;</label>
+        <link refid="da/dfd/a02619"/>
+      </node>
+      <node id="1">
+        <label>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</label>
+        <link refid="d1/d7b/a03639"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Plugin/PluginModule.hpp" line="173" column="1" bodyfile="Plugin/PluginModule.hpp" bodystart="175" bodyend="183"/>
     <listofallmembers>
-      <member refid="d1/d7b/a03639_1a1fa65fbcf5286efd8c6098d8b91ad7ac" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkImportMemoryHostPointerInfoEXT &gt;</scope><name>value</name></member>
+      <member refid="da/dfd/a02619_1aad74680d04a777cf6e1a48f5335e5bba" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="da/dfd/a02619_1acc9650475bb6cfdd4b46f86662ee4d67" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="da/dfd/a02619_1aace6e188551a79fe4c617062a3987c34" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="da/dfd/a02619_1a604b98a8324764213e894ac5ff3192e4" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="d1/d7b/a03639_1aef68b46ba183462d32e94a49a4f30dfe" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>Base</name></member>
+      <member refid="da/dfd/a02619_1a0606136714bd1cb7209313f2ece3f687" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementCacheT</name></member>
+      <member refid="da/dfd/a02619_1a021a9d07d6fb3fe77b7ef22b5d9fc7e8" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementCleanerT</name></member>
+      <member refid="da/dfd/a02619_1acbb5da0cf908b54ec0b238b4bf290498" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementContT</name></member>
+      <member refid="da/dfd/a02619_1af3b3d08e4639ccc06cbe81f6cb200a64" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementInitialiserT</name></member>
+      <member refid="da/dfd/a02619_1a37487aa6a3179e261c465a659e7e232d" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementKeyT</name></member>
+      <member refid="da/dfd/a02619_1a54c0975e844a33c1ef48f9284b13e984" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementMergerT</name></member>
+      <member refid="da/dfd/a02619_1aeeb13142ba14f28398dcf1b902e1d7df" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementObsT</name></member>
+      <member refid="d1/d7b/a03639_1aaacc30ce0b352a7897839640c9bb1fac" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementPtrT</name></member>
+      <member refid="d1/d7b/a03639_1a5005be55b3e3371eceb9c3e751401de8" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementT</name></member>
+      <member refid="da/dfd/a02619_1a97feed9b72e3c5d21e10571563ec56f5" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>isElementObsNull</name></member>
+      <member refid="d1/d7b/a03639_1abd5210a976106167ac5461f5946a2759" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>KeyT</name></member>
+      <member refid="da/dfd/a02619_1a5f00547170a4e85ac4c706f0ac32f9aa" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>makeElement</name></member>
+      <member refid="da/dfd/a02619_1aba7dca15362049b6e793f1b99d419bb0" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>makeElementObs</name></member>
+      <member refid="d1/d7b/a03639_1a5a4bfb21dc9cc00987e21d8231046cf2" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>Name</name></member>
+      <member refid="d1/d7b/a03639_1a3a7ebedca12dc66d4cde1208fa098384" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ResT</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

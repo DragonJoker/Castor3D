@@ -1,132 +1,413 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="df/d9b/a04755" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::LightPassResult</compoundname>
-    <basecompoundref refid="de/d93/a04235" prot="public" virt="non-virtual">castor3d::GBufferT&lt; LpTexture &gt;</basecompoundref>
-    <includes local="no">LightPassResult.hpp</includes>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="df/d9b/a04755_1a013a79c440261c8a366bd3c2c2c59f89" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::LightPassResult::LightPassResult</definition>
-        <argsstring>(Engine &amp;engine, castor::Size const &amp;size)</argsstring>
-        <name>LightPassResult</name>
-        <param>
-          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
-        </param>
-        <param>
-          <type>castor::Size const &amp;</type>
-          <declname>size</declname>
-        </param>
+    <compoundname>castor3d::StructuredShaderBuffer</compoundname>
+    <includes local="no">StructuredShaderBuffer.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ElementTypeTraits</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="df/d9b/a04755_1ac871c6867fd96e3f487cc1eff2fb8f2b" prot="public" static="no">
+        <type>typename ElementTypeTraits::ElementType</type>
+        <definition>using castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::ElementType =  typename ElementTypeTraits::ElementType</definition>
+        <argsstring></argsstring>
+        <name>ElementType</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::ElementType</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPassResult.hpp" line="17" column="1"/>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="15" column="1" bodyfile="Shader/StructuredShaderBuffer.hpp" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="df/d9b/a04755_1aa510b563154634f8dd1984847dcf71ff" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::ElementSize</definition>
+        <argsstring></argsstring>
+        <name>ElementSize</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::ElementSize</qualifiedname>
+        <initializer>= ElementTypeTraits::ElementSize</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="16" column="27" bodyfile="Shader/StructuredShaderBuffer.hpp" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="df/d9b/a04755_1a8ebe3a55079bc65e52f62b141ed26256" prot="protected" static="no" mutable="no">
+        <type><ref refid="db/da5/a04663" kindref="compound">ShaderBuffer</ref> &amp;</type>
+        <definition>ShaderBuffer&amp; castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::m_buffer</definition>
+        <argsstring></argsstring>
+        <name>m_buffer</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::m_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The <ref refid="db/da5/a04663" kindref="compound">ShaderBuffer</ref>. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="84" column="15" bodyfile="Shader/StructuredShaderBuffer.hpp" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d9b/a04755_1a8f31a1099d315c0b3e0990b534b78e8b" prot="protected" static="no" mutable="no">
+        <type>uint32_t &amp;</type>
+        <definition>uint32_t&amp; castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::m_elementID</definition>
+        <argsstring></argsstring>
+        <name>m_elementID</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::m_elementID</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The next element ID. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="87" column="11" bodyfile="Shader/StructuredShaderBuffer.hpp" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d9b/a04755_1a3b987f796fa562ac0727b2664e7bb778" prot="protected" static="no" mutable="no">
+        <type>ElementTypeTraits</type>
+        <definition>ElementTypeTraits castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::m_traits</definition>
+        <argsstring></argsstring>
+        <name>m_traits</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::m_traits</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The traits. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="90" column="19" bodyfile="Shader/StructuredShaderBuffer.hpp" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d9b/a04755_1afee9a32e875f5af80427d9da131f82c2" prot="protected" static="no" mutable="no">
+        <type>std::vector&lt; ashes::AttributeFormat * &gt;</type>
+        <definition>std::vector&lt; ashes::AttributeFormat * &gt; castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::m_elements</definition>
+        <argsstring></argsstring>
+        <name>m_elements</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::m_elements</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The current elements. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="93" column="13" bodyfile="Shader/StructuredShaderBuffer.hpp" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d9b/a04755_1ad0752449f8db8a0b7b95676375f51b84" prot="protected" static="no" mutable="no">
+        <type>std::vector&lt; ashes::AttributeFormat const * &gt;</type>
+        <definition>std::vector&lt; ashes::AttributeFormat const * &gt; castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::m_dirty</definition>
+        <argsstring></argsstring>
+        <name>m_dirty</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::m_dirty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The modified elements. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="96" column="13" bodyfile="Shader/StructuredShaderBuffer.hpp" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d9b/a04755_1acdf85146cab98dbf6e4cc2515877f56b" prot="protected" static="no" mutable="no">
+        <type>uint32_t const</type>
+        <definition>uint32_t const castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::m_maxElemCount</definition>
+        <argsstring></argsstring>
+        <name>m_maxElemCount</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::m_maxElemCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The maximum element count. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="99" column="16" bodyfile="Shader/StructuredShaderBuffer.hpp" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d9b/a04755_1a1d50f88adb5ccde3879b034852f6f83d" prot="protected" static="no" mutable="no">
+        <type>std::vector&lt; typename ElementType::OnChangedConnection &gt;</type>
+        <definition>std::vector&lt; typename ElementType::OnChangedConnection &gt; castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::m_connections</definition>
+        <argsstring></argsstring>
+        <name>m_connections</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::m_connections</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The connections to change signal for current elements. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="102" column="13" bodyfile="Shader/StructuredShaderBuffer.hpp" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d9b/a04755_1a5c294ad3bfb643ce7cfd15596ef6998f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::StructuredShaderBuffer</definition>
+        <argsstring>(Engine &amp;engine, ShaderBuffer &amp;buffer, uint32_t &amp;elementID, uint32_t count)</argsstring>
+        <name>StructuredShaderBuffer</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::StructuredShaderBuffer</qualifiedname>
+        <param>
+          <type><ref refid="d8/dd0/a02711" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="db/da5/a04663" kindref="compound">ShaderBuffer</ref> &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>elementID</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The shader buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">elementID</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ID for the next element to add. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The maximum number of elements. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="33" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d9b/a04755_1a3981425391c0d81cf4fd023b09c46764" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::~StructuredShaderBuffer</definition>
+        <argsstring>()</argsstring>
+        <name>~StructuredShaderBuffer</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::~StructuredShaderBuffer</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="43" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d9b/a04755_1a2028872542be80a393caaf05c7747534" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::add</definition>
+        <argsstring>(ElementType &amp;element)</argsstring>
+        <name>add</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::add</qualifiedname>
+        <param>
+          <type><ref refid="df/d9b/a04755_1ac871c6867fd96e3f487cc1eff2fb8f2b" kindref="member">ElementType</ref> &amp;</type>
+          <declname>element</declname>
+        </param>
+        <briefdescription>
+<para>Adds an element to the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Sets the element&apos;s ID. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">element</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="54" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d9b/a04755_1a340cff2cf011c5e204f9cbc9b87dea31" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::remove</definition>
+        <argsstring>(ElementType &amp;element)</argsstring>
+        <name>remove</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::remove</qualifiedname>
+        <param>
+          <type><ref refid="df/d9b/a04755_1ac871c6867fd96e3f487cc1eff2fb8f2b" kindref="member">ElementType</ref> &amp;</type>
+          <declname>element</declname>
+        </param>
+        <briefdescription>
+<para>Removes an element from the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">element</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="63" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d9b/a04755_1ae2f3e575377a788a0496787e9b91324c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::update</definition>
+        <argsstring>()</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::update</qualifiedname>
+        <briefdescription>
+<para>Updates the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="70" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d9b/a04755_1af9182a5585487cf0c837561822919bcf" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::bind</definition>
+        <argsstring>(uint32_t index) const</argsstring>
+        <name>bind</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::bind</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Binds the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The binding point. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="79" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>Wrapper class to select between SSBO or TBO. </para>
     </briefdescription>
     <detaileddescription>
+<para><simplesect kind="remark"><para>Allows to user either one or the other in the same way. </para>
+</simplesect>
+</para>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="1683">
-        <label>castor3d::GBufferT&lt; LpTexture &gt;</label>
-        <link refid="de/d93/a04235"/>
-        <childnode refid="1684" relation="private-inheritance">
-        </childnode>
-        <childnode refid="1686" relation="template-instance">
-          <edgelabel>&lt; LpTexture &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1682">
-        <label>castor3d::LightPassResult</label>
-        <link refid="df/d9b/a04755"/>
-        <childnode refid="1683" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1685">
-        <label>Named</label>
-      </node>
-      <node id="1686">
-        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
-        <link refid="de/d93/a04235"/>
-        <childnode refid="1684" relation="private-inheritance">
-        </childnode>
-      </node>
-      <node id="1684">
-        <label>castor3d::GBufferBase</label>
-        <link refid="d7/da1/a04231"/>
-        <childnode refid="1685" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
     <collaborationgraph>
-      <node id="1688">
-        <label>castor3d::GBufferT&lt; LpTexture &gt;</label>
-        <link refid="de/d93/a04235"/>
-        <childnode refid="1689" relation="private-inheritance">
-        </childnode>
-        <childnode refid="1691" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="1693" relation="template-instance">
-          <edgelabel>&lt; LpTexture &gt;</edgelabel>
-        </childnode>
+      <node id="5">
+        <label>T</label>
       </node>
-      <node id="1687">
-        <label>castor3d::LightPassResult</label>
+      <node id="2">
+        <label>castor3d::ShaderBuffer</label>
+        <link refid="db/da5/a04663"/>
+      </node>
+      <node id="1">
+        <label>castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;</label>
         <link refid="df/d9b/a04755"/>
-        <childnode refid="1688" relation="public-inheritance">
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_buffer</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_elements</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_dirty</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_connections</edgelabel>
         </childnode>
       </node>
-      <node id="1690">
-        <label>Named</label>
-      </node>
-      <node id="1692">
-        <label>castor::Unique&lt; Engine &gt;</label>
-      </node>
-      <node id="1691">
-        <label>castor3d::Engine</label>
-        <link refid="d0/d7c/a02499"/>
-        <childnode refid="1692" relation="public-inheritance">
+      <node id="4">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>elements</edgelabel>
         </childnode>
       </node>
-      <node id="1693">
-        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
-        <link refid="de/d93/a04235"/>
-        <childnode refid="1689" relation="private-inheritance">
-        </childnode>
-        <childnode refid="1691" relation="usage">
-          <edgelabel>m_engine</edgelabel>
+      <node id="3">
+        <label>std::vector&lt; ashes::AttributeFormat * &gt;</label>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; ashes::AttributeFormat * &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="1689">
-        <label>castor3d::GBufferBase</label>
-        <link refid="d7/da1/a04231"/>
-        <childnode refid="1690" relation="public-inheritance">
+      <node id="6">
+        <label>std::vector&lt; ashes::AttributeFormat const * &gt;</label>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; ashes::AttributeFormat const * &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::vector&lt; typename ElementType::OnChangedConnection &gt;</label>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; typename ElementType::OnChangedConnection &gt;</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Render/Technique/Opaque/Lighting/LightPassResult.hpp" line="15" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassResult.hpp" bodystart="13" bodyend="19"/>
+    <location file="Shader/StructuredShaderBuffer.hpp" line="12" column="1" bodyfile="Shader/StructuredShaderBuffer.hpp" bodystart="13" bodyend="103"/>
     <listofallmembers>
-      <member refid="de/d93/a04235_1a07ee2a84c48f234617c05d6d5c4b6c33" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>begin</name></member>
-      <member refid="de/d93/a04235_1aa0de394aee0ba9d95e5c04da314a9cb4" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>begin</name></member>
-      <member refid="de/d93/a04235_1a77d65937285e0954c33bc1834b099dbf" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>cbegin</name></member>
-      <member refid="de/d93/a04235_1a0ca55ac3a4cfb4c27acbd6867f420a41" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>cend</name></member>
-      <member refid="de/d93/a04235_1a2dbf9ef234080f55751db9f2ced2db94" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>cleanup</name></member>
-      <member refid="de/d93/a04235_1a2ed3e0a1d7b905e8393d6f1e3b67f339" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>end</name></member>
-      <member refid="de/d93/a04235_1ad9a2382a1c40e83a016a77209bee05fd" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>end</name></member>
-      <member refid="de/d93/a04235_1afc858ac06674fbee5bcc31d1eb051f21" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>GBufferT</name></member>
-      <member refid="de/d93/a04235_1a48c1db122e270552414435855b31f23d" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>GBufferT</name></member>
-      <member refid="de/d93/a04235_1adbb549264af799a0ca09aafab55df3b8" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>initialise</name></member>
-      <member refid="df/d9b/a04755_1a013a79c440261c8a366bd3c2c2c59f89" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>LightPassResult</name></member>
-      <member refid="de/d93/a04235_1abfc84e342baf1448ab71cb739138f89b" prot="protected" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>m_engine</name></member>
-      <member refid="de/d93/a04235_1a1cd0629caecd95cfa73fc857e92be07a" prot="protected" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>m_owned</name></member>
-      <member refid="de/d93/a04235_1ac693f4659ea2014569d916d03013f68e" prot="protected" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>m_result</name></member>
-      <member refid="de/d93/a04235_1a55a704f02c3e73ede1b8ed6fb78e79d5" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>operator[]</name></member>
+      <member refid="df/d9b/a04755_1a2028872542be80a393caaf05c7747534" prot="public" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>add</name></member>
+      <member refid="df/d9b/a04755_1af9182a5585487cf0c837561822919bcf" prot="public" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>bind</name></member>
+      <member refid="df/d9b/a04755_1aa510b563154634f8dd1984847dcf71ff" prot="public" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>ElementSize</name></member>
+      <member refid="df/d9b/a04755_1ac871c6867fd96e3f487cc1eff2fb8f2b" prot="public" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>ElementType</name></member>
+      <member refid="df/d9b/a04755_1a8ebe3a55079bc65e52f62b141ed26256" prot="protected" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>m_buffer</name></member>
+      <member refid="df/d9b/a04755_1a1d50f88adb5ccde3879b034852f6f83d" prot="protected" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>m_connections</name></member>
+      <member refid="df/d9b/a04755_1ad0752449f8db8a0b7b95676375f51b84" prot="protected" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>m_dirty</name></member>
+      <member refid="df/d9b/a04755_1a8f31a1099d315c0b3e0990b534b78e8b" prot="protected" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>m_elementID</name></member>
+      <member refid="df/d9b/a04755_1afee9a32e875f5af80427d9da131f82c2" prot="protected" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>m_elements</name></member>
+      <member refid="df/d9b/a04755_1acdf85146cab98dbf6e4cc2515877f56b" prot="protected" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>m_maxElemCount</name></member>
+      <member refid="df/d9b/a04755_1a3b987f796fa562ac0727b2664e7bb778" prot="protected" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>m_traits</name></member>
+      <member refid="df/d9b/a04755_1a340cff2cf011c5e204f9cbc9b87dea31" prot="public" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>remove</name></member>
+      <member refid="df/d9b/a04755_1a5c294ad3bfb643ce7cfd15596ef6998f" prot="public" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>StructuredShaderBuffer</name></member>
+      <member refid="df/d9b/a04755_1ae2f3e575377a788a0496787e9b91324c" prot="public" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>update</name></member>
+      <member refid="df/d9b/a04755_1a3981425391c0d81cf4fd023b09c46764" prot="public" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>~StructuredShaderBuffer</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

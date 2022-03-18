@@ -1,7 +1,4 @@
-<map id="castor3d::AnimationInstance" name="castor3d::AnimationInstance">
-<area shape="rect" id="node1" title=" " alt="" coords="243,64,429,91"/>
-<area shape="rect" id="node3" href="$d3/d96/a05072.html" title=" " alt="" coords="477,5,696,32"/>
-<area shape="rect" id="node4" href="$de/d0b/a05080.html" title=" " alt="" coords="492,57,681,98"/>
-<area shape="rect" id="node5" href="$d6/da5/a05100.html" title=" " alt="" coords="496,122,677,163"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,57,195,98"/>
+<map id="castor::TextWriter&lt; castor3d::SceneBackground &gt;" name="castor::TextWriter&lt; castor3d::SceneBackground &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="5,95,216,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="35,5,186,47"/>
 </map>

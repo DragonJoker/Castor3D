@@ -1,4 +1,5 @@
-<map id="castor3d::RenderTargetCache" name="castor3d::RenderTargetCache">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,200,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="9,5,196,32"/>
+<map id="castor3d::UniformBufferT&lt; DataT &gt;" name="castor3d::UniformBufferT&lt; DataT &gt;">
+<area shape="rect" id="node1" title="A uniform typed buffer, than can contain multiple sub&#45;buffers." alt="" coords="47,81,211,123"/>
+<area shape="rect" id="node3" href="$dd/df4/a02510.html" title=" " alt="" coords="5,185,252,227"/>
+<area shape="rect" id="node2" href="$db/d8b/a02594.html" title=" " alt="" coords="35,5,222,32"/>
 </map>

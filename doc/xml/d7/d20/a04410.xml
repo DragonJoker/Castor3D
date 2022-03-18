@@ -1,44 +1,382 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d7/d20/a04410" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::LineariseDepthPass::MinifyConfiguration</compoundname>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d7/d20/a04410_1a149c0c3bfa6061f313ac30551a7c2e26" prot="public" static="no" mutable="no">
-        <type>castor::Point2i</type>
-        <definition>castor::Point2i castor3d::LineariseDepthPass::MinifyConfiguration::textureSize</definition>
-        <argsstring></argsstring>
-        <name>textureSize</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d7/d20/a04410" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::MeshAnimationInstanceSubmesh</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; MeshAnimationInstance &gt;</basecompoundref>
+    <includes local="no">MeshAnimationInstanceSubmesh.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d7/d20/a04410_1a23258a25a95ca2cb425159182d6c0311" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MeshAnimationInstanceSubmesh::MeshAnimationInstanceSubmesh</definition>
+        <argsstring>(MeshAnimationInstanceSubmesh &amp;&amp;rhs)=default</argsstring>
+        <name>MeshAnimationInstanceSubmesh</name>
+        <qualifiedname>castor3d::MeshAnimationInstanceSubmesh::MeshAnimationInstanceSubmesh</qualifiedname>
+        <param>
+          <type><ref refid="d7/d20/a04410" kindref="compound">MeshAnimationInstanceSubmesh</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>name Copy / Move. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="194" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="194" bodyend="-1"/>
+        <location file="Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp" line="24" column="9"/>
       </memberdef>
-      <memberdef kind="variable" id="d7/d20/a04410_1a9ef38062f5d2fa1d31003528ee3cfaa9" prot="public" static="no" mutable="no">
-        <type>int</type>
-        <definition>int castor3d::LineariseDepthPass::MinifyConfiguration::previousLevel</definition>
-        <argsstring></argsstring>
-        <name>previousLevel</name>
+      <memberdef kind="function" id="d7/d20/a04410_1a3bdb519987b7ddb6a2e1ab38a5d93c72" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/d20/a04410" kindref="compound">MeshAnimationInstanceSubmesh</ref> &amp;</type>
+        <definition>C3D_API MeshAnimationInstanceSubmesh &amp; castor3d::MeshAnimationInstanceSubmesh::operator=</definition>
+        <argsstring>(MeshAnimationInstanceSubmesh &amp;&amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::MeshAnimationInstanceSubmesh::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d7/d20/a04410" kindref="compound">MeshAnimationInstanceSubmesh</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/LineariseDepthPass.hpp" line="195" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="195" bodyend="-1"/>
+        <location file="Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp" line="25" column="39"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d20/a04410_1a49fa9381c2fb91d1d1851efeeff6819c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MeshAnimationInstanceSubmesh::MeshAnimationInstanceSubmesh</definition>
+        <argsstring>(MeshAnimationInstanceSubmesh const &amp;rhs)=delete</argsstring>
+        <name>MeshAnimationInstanceSubmesh</name>
+        <qualifiedname>castor3d::MeshAnimationInstanceSubmesh::MeshAnimationInstanceSubmesh</qualifiedname>
+        <param>
+          <type><ref refid="d7/d20/a04410" kindref="compound">MeshAnimationInstanceSubmesh</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp" line="26" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d20/a04410_1ad1e263c258d62e7d37e642e145567432" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/d20/a04410" kindref="compound">MeshAnimationInstanceSubmesh</ref> &amp;</type>
+        <definition>C3D_API MeshAnimationInstanceSubmesh &amp; castor3d::MeshAnimationInstanceSubmesh::operator=</definition>
+        <argsstring>(MeshAnimationInstanceSubmesh const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::MeshAnimationInstanceSubmesh::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d7/d20/a04410" kindref="compound">MeshAnimationInstanceSubmesh</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp" line="27" column="39"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d7/d20/a04410_1a59215d0221b0e6c016dd4ab53a811642" prot="protected" static="no" mutable="no">
+        <type><ref refid="d6/d90/a03298" kindref="compound">MeshAnimationSubmesh</ref> &amp;</type>
+        <definition>MeshAnimationSubmesh&amp; castor3d::MeshAnimationInstanceSubmesh::m_animationObject</definition>
+        <argsstring></argsstring>
+        <name>m_animationObject</name>
+        <qualifiedname>castor3d::MeshAnimationInstanceSubmesh::m_animationObject</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The animation object. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp" line="84" column="23" bodyfile="Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d20/a04410_1a13125ff8df2ad1ab18b4c7e75a4ebe71" prot="protected" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::MeshAnimationInstanceSubmesh::m_currentFactor</definition>
+        <argsstring></argsstring>
+        <name>m_currentFactor</name>
+        <qualifiedname>castor3d::MeshAnimationInstanceSubmesh::m_currentFactor</qualifiedname>
+        <initializer>{ 0.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The time elapsed since the last keyframe. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp" line="87" column="7" bodyfile="Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp" bodystart="87" bodyend="-1"/>
+        <referencedby refid="d7/d20/a04410_1a5a2d7bdb4f981713838aec0d54448b99" compoundref="d0/d2b/a01010" startline="76" endline="79">getCurrentFactor</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d20/a04410_1a5099fbe827b35c59114e510c38b3e90a" prot="protected" static="no" mutable="no">
+        <type><ref refid="d5/d85/a03434" kindref="compound">SubmeshAnimationBuffer</ref> const  *</type>
+        <definition>SubmeshAnimationBuffer const* castor3d::MeshAnimationInstanceSubmesh::m_cur</definition>
+        <argsstring></argsstring>
+        <name>m_cur</name>
+        <qualifiedname>castor3d::MeshAnimationInstanceSubmesh::m_cur</qualifiedname>
+        <initializer>{ nullptr }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The current animation buffer. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp" line="90" column="31" bodyfile="Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/d20/a04410_1abf78ac0d180f0f6b54f45952e18f1655" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MeshAnimationInstanceSubmesh::MeshAnimationInstanceSubmesh</definition>
+        <argsstring>(MeshAnimationInstance &amp;animationInstance, MeshAnimationSubmesh &amp;animationObject)</argsstring>
+        <name>MeshAnimationInstanceSubmesh</name>
+        <qualifiedname>castor3d::MeshAnimationInstanceSubmesh::MeshAnimationInstanceSubmesh</qualifiedname>
+        <param>
+          <type><ref refid="d4/d61/a04406" kindref="compound">MeshAnimationInstance</ref> &amp;</type>
+          <declname>animationInstance</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d90/a03298" kindref="compound">MeshAnimationSubmesh</ref> &amp;</type>
+          <declname>animationObject</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">animationInstance</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent skeleton animation instance. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">animationObject</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation object. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp" line="39" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d20/a04410_1a576a8ed3527c276eb88592e8b725397a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::MeshAnimationInstanceSubmesh::~MeshAnimationInstanceSubmesh</definition>
+        <argsstring>()=default</argsstring>
+        <name>~MeshAnimationInstanceSubmesh</name>
+        <qualifiedname>castor3d::MeshAnimationInstanceSubmesh::~MeshAnimationInstanceSubmesh</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp" line="47" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d20/a04410_1af06b30c583202cb1831ba500b51ab738" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::MeshAnimationInstanceSubmesh::update</definition>
+        <argsstring>(float factor, SubmeshAnimationBuffer const &amp;prv, SubmeshAnimationBuffer const &amp;cur)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::MeshAnimationInstanceSubmesh::update</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>factor</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d85/a03434" kindref="compound">SubmeshAnimationBuffer</ref> const &amp;</type>
+          <declname>prv</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d85/a03434" kindref="compound">SubmeshAnimationBuffer</ref> const &amp;</type>
+          <declname>cur</declname>
+        </param>
+        <briefdescription>
+<para>Updates the object, given to animation buffers. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">factor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The percentage between <computeroutput>prv</computeroutput> and <computeroutput>cur</computeroutput>. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">prv</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The previous animation buffer (factor 0). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">cur</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The current animation buffer (factor 1). </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp" line="60" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d20/a04410_1a91e810a4634c68bd6eff684697408da9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/d46/a03430" kindref="compound">Submesh</ref> const &amp;</type>
+        <definition>C3D_API Submesh const  &amp; castor3d::MeshAnimationInstanceSubmesh::getSubmesh</definition>
+        <argsstring>() const</argsstring>
+        <name>getSubmesh</name>
+        <qualifiedname>castor3d::MeshAnimationInstanceSubmesh::getSubmesh</qualifiedname>
+        <briefdescription>
+<para>The submesh. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp" line="69" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d20/a04410_1a5a2d7bdb4f981713838aec0d54448b99" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::MeshAnimationInstanceSubmesh::getCurrentFactor</definition>
+        <argsstring>() const</argsstring>
+        <name>getCurrentFactor</name>
+        <qualifiedname>castor3d::MeshAnimationInstanceSubmesh::getCurrentFactor</qualifiedname>
+        <briefdescription>
+<para>The current factor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp" line="76" column="7" bodyfile="Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp" bodystart="76" bodyend="79"/>
+        <references refid="d7/d20/a04410_1a13125ff8df2ad1ab18b4c7e75a4ebe71" compoundref="d0/d2b/a01010" startline="87">m_currentFactor</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
-<para>name Minification. </para>
     </detaileddescription>
-    <location file="Render/Passes/LineariseDepthPass.hpp" line="193" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="192" bodyend="196"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::MeshAnimationInstanceSubmesh</label>
+        <link refid="d7/d20/a04410"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; MeshAnimationInstance &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="13">
+        <label>T</label>
+      </node>
+      <node id="11">
+        <label>castor3d::InterleavedVertex</label>
+        <link refid="df/d5f/a03494"/>
+      </node>
+      <node id="1">
+        <label>castor3d::MeshAnimationInstanceSubmesh</label>
+        <link refid="d7/d20/a04410"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_animationObject</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_cur</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::MeshAnimationSubmesh</label>
+        <link refid="d6/d90/a03298"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_submesh</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::Submesh</label>
+        <link refid="d7/d46/a03430"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::SubmeshAnimationBuffer</label>
+        <link refid="d5/d85/a03434"/>
+        <childnode refid="10" relation="usage">
+          <edgelabel>buffer</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::OwnedBy&lt; Mesh &gt;</label>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; MeshAnimation &gt;</label>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; MeshAnimationInstance &gt;</label>
+      </node>
+      <node id="5">
+        <label>std::enable_shared_from_this&lt; MeshAnimationSubmesh &gt;</label>
+      </node>
+      <node id="8">
+        <label>std::enable_shared_from_this&lt; Submesh &gt;</label>
+      </node>
+      <node id="12">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="13" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::vector&lt; InterleavedVertex &gt;</label>
+        <childnode refid="11" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; InterleavedVertex &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp" line="13" column="1" bodyfile="Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp" bodystart="15" bodyend="91"/>
     <listofallmembers>
-      <member refid="d7/d20/a04410_1a9ef38062f5d2fa1d31003528ee3cfaa9" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass::MinifyConfiguration</scope><name>previousLevel</name></member>
-      <member refid="d7/d20/a04410_1a149c0c3bfa6061f313ac30551a7c2e26" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass::MinifyConfiguration</scope><name>textureSize</name></member>
+      <member refid="d7/d20/a04410_1a5a2d7bdb4f981713838aec0d54448b99" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstanceSubmesh</scope><name>getCurrentFactor</name></member>
+      <member refid="d7/d20/a04410_1a91e810a4634c68bd6eff684697408da9" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstanceSubmesh</scope><name>getSubmesh</name></member>
+      <member refid="d7/d20/a04410_1a59215d0221b0e6c016dd4ab53a811642" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstanceSubmesh</scope><name>m_animationObject</name></member>
+      <member refid="d7/d20/a04410_1a5099fbe827b35c59114e510c38b3e90a" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstanceSubmesh</scope><name>m_cur</name></member>
+      <member refid="d7/d20/a04410_1a13125ff8df2ad1ab18b4c7e75a4ebe71" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationInstanceSubmesh</scope><name>m_currentFactor</name></member>
+      <member refid="d7/d20/a04410_1a23258a25a95ca2cb425159182d6c0311" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstanceSubmesh</scope><name>MeshAnimationInstanceSubmesh</name></member>
+      <member refid="d7/d20/a04410_1a49fa9381c2fb91d1d1851efeeff6819c" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstanceSubmesh</scope><name>MeshAnimationInstanceSubmesh</name></member>
+      <member refid="d7/d20/a04410_1abf78ac0d180f0f6b54f45952e18f1655" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstanceSubmesh</scope><name>MeshAnimationInstanceSubmesh</name></member>
+      <member refid="d7/d20/a04410_1a3bdb519987b7ddb6a2e1ab38a5d93c72" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstanceSubmesh</scope><name>operator=</name></member>
+      <member refid="d7/d20/a04410_1ad1e263c258d62e7d37e642e145567432" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstanceSubmesh</scope><name>operator=</name></member>
+      <member refid="d7/d20/a04410_1af06b30c583202cb1831ba500b51ab738" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationInstanceSubmesh</scope><name>update</name></member>
+      <member refid="d7/d20/a04410_1a576a8ed3527c276eb88592e8b725397a" prot="public" virt="virtual"><scope>castor3d::MeshAnimationInstanceSubmesh</scope><name>~MeshAnimationInstanceSubmesh</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

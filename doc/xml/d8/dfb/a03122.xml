@@ -1,33 +1,34 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d8/dfb/a03122" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkExternalSemaphoreProperties &gt;</compoundname>
+    <compoundname>castor3d::VkStructTraits&lt; VkPipelineLayoutCreateInfo &gt;</compoundname>
     <includes local="no">makeVkType.hpp</includes>
     <templateparamlist>
     </templateparamlist>
       <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d8/dfb/a03122_1ac8e0cf5df5c3b75319aeea77a9067ba9" prot="public" static="yes" mutable="no">
+      <memberdef kind="variable" id="d8/dfb/a03122_1a9039ebdb0afe4ba843c5088481324768" prot="public" static="yes" constexpr="yes" mutable="no">
         <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkExternalSemaphoreProperties &gt;::value</definition>
+        <definition>VkStructureType constexpr castor3d::VkStructTraits&lt; VkPipelineLayoutCreateInfo &gt;::value</definition>
         <argsstring></argsstring>
         <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_PROPERTIES</initializer>
+        <qualifiedname>castor3d::VkStructTraits&lt; VkPipelineLayoutCreateInfo &gt;::value</qualifiedname>
+        <initializer>= VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="122" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="122" bodyend="-1"/>
+        <location file="Miscellaneous/makeVkType.hpp" line="44" column="65" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="44" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="122" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="122" bodyend="122"/>
+    <location file="Miscellaneous/makeVkType.hpp" line="44" column="10" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="44" bodyend="44"/>
     <listofallmembers>
-      <member refid="d8/dfb/a03122_1ac8e0cf5df5c3b75319aeea77a9067ba9" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkExternalSemaphoreProperties &gt;</scope><name>value</name></member>
+      <member refid="d8/dfb/a03122_1a9039ebdb0afe4ba843c5088481324768" prot="public" virt="non-virtual"><scope>castor3d::VkStructTraits&lt; VkPipelineLayoutCreateInfo &gt;</scope><name>value</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

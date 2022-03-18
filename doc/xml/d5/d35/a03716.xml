@@ -1,33 +1,183 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d5/d35/a03716" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPhysicalDeviceComputeShaderDerivativesFeaturesNV &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d5/d35/a03716_1ad8e7cde8f1d454be9087d3c372d43aee" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPhysicalDeviceComputeShaderDerivativesFeaturesNV &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d5/d35/a03716" kind="class" language="C++" prot="private">
+    <compoundname>castor3d::LightPropagationPass::PipelineHolder</compoundname>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d5/d35/a03716_1a95a4fc7ef1504adfaad46a04388149e0" prot="private" static="no" mutable="no">
+        <type>crg::PipelineHolder</type>
+        <definition>crg::PipelineHolder castor3d::LightPropagationPass::PipelineHolder::m_holder</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_COMPUTE_SHADER_DERIVATIVES_FEATURES_NV</initializer>
+        <name>m_holder</name>
+        <qualifiedname>castor3d::LightPropagationPass::PipelineHolder::m_holder</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="340" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="340" bodyend="-1"/>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" line="113" column="21" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d35/a03716_1a8bd2455a5d222c16f238eec08c65b98a" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::LightPropagationPass::PipelineHolder::m_gridSize</definition>
+        <argsstring></argsstring>
+        <name>m_gridSize</name>
+        <qualifiedname>castor3d::LightPropagationPass::PipelineHolder::m_gridSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" line="114" column="10" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d35/a03716_1a998d7b533b3f240366e879e78bae44c5" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/df5/a01395_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
+        <definition>BlendMode castor3d::LightPropagationPass::PipelineHolder::m_blendMode</definition>
+        <argsstring></argsstring>
+        <name>m_blendMode</name>
+        <qualifiedname>castor3d::LightPropagationPass::PipelineHolder::m_blendMode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" line="115" column="11" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d35/a03716_1ae926866d88f54fb89ceac221e2c09ace" prot="private" static="no" mutable="no">
+        <type>VkRenderPass</type>
+        <definition>VkRenderPass castor3d::LightPropagationPass::PipelineHolder::m_renderPass</definition>
+        <argsstring></argsstring>
+        <name>m_renderPass</name>
+        <qualifiedname>castor3d::LightPropagationPass::PipelineHolder::m_renderPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" line="116" column="14" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/d35/a03716_1a5d5c5830eb03d25c7aa50afc29fc90f1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::LightPropagationPass::PipelineHolder::PipelineHolder</definition>
+        <argsstring>(crg::FramePass const &amp;pass, crg::GraphContext &amp;context, crg::RunnableGraph &amp;graph, crg::pp::Config config, uint32_t gridSize, BlendMode blendMode)</argsstring>
+        <name>PipelineHolder</name>
+        <qualifiedname>castor3d::LightPropagationPass::PipelineHolder::PipelineHolder</qualifiedname>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>crg::GraphContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>crg::RunnableGraph &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::pp::Config</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>gridSize</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
+          <declname>blendMode</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" line="97" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d35/a03716_1a8f78c009b392c12dbd5d114e8b88e19c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LightPropagationPass::PipelineHolder::initialise</definition>
+        <argsstring>(VkRenderPass renderPass)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::LightPropagationPass::PipelineHolder::initialise</qualifiedname>
+        <param>
+          <type>VkRenderPass</type>
+          <declname>renderPass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" line="104" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d35/a03716_1aae0a52b47f79ce2040895711cc0281da" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LightPropagationPass::PipelineHolder::recordInto</definition>
+        <argsstring>(crg::RecordContext &amp;context, VkCommandBuffer commandBuffer, uint32_t index)</argsstring>
+        <name>recordInto</name>
+        <qualifiedname>castor3d::LightPropagationPass::PipelineHolder::recordInto</qualifiedname>
+        <param>
+          <type>crg::RecordContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>VkCommandBuffer</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" line="105" column="6"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d5/d35/a03716_1ac67d165095a1b4703eebb145833b2707" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LightPropagationPass::PipelineHolder::doCreatePipeline</definition>
+        <argsstring>(uint32_t index)</argsstring>
+        <name>doCreatePipeline</name>
+        <qualifiedname>castor3d::LightPropagationPass::PipelineHolder::doCreatePipeline</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" line="110" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="340" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="340" bodyend="340"/>
+    <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" line="94" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" bodystart="95" bodyend="117"/>
     <listofallmembers>
-      <member refid="d5/d35/a03716_1ad8e7cde8f1d454be9087d3c372d43aee" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPhysicalDeviceComputeShaderDerivativesFeaturesNV &gt;</scope><name>value</name></member>
+      <member refid="d5/d35/a03716_1ac67d165095a1b4703eebb145833b2707" prot="protected" virt="non-virtual"><scope>castor3d::LightPropagationPass::PipelineHolder</scope><name>doCreatePipeline</name></member>
+      <member refid="d5/d35/a03716_1a8f78c009b392c12dbd5d114e8b88e19c" prot="public" virt="non-virtual"><scope>castor3d::LightPropagationPass::PipelineHolder</scope><name>initialise</name></member>
+      <member refid="d5/d35/a03716_1a998d7b533b3f240366e879e78bae44c5" prot="private" virt="non-virtual"><scope>castor3d::LightPropagationPass::PipelineHolder</scope><name>m_blendMode</name></member>
+      <member refid="d5/d35/a03716_1a8bd2455a5d222c16f238eec08c65b98a" prot="private" virt="non-virtual"><scope>castor3d::LightPropagationPass::PipelineHolder</scope><name>m_gridSize</name></member>
+      <member refid="d5/d35/a03716_1a95a4fc7ef1504adfaad46a04388149e0" prot="private" virt="non-virtual"><scope>castor3d::LightPropagationPass::PipelineHolder</scope><name>m_holder</name></member>
+      <member refid="d5/d35/a03716_1ae926866d88f54fb89ceac221e2c09ace" prot="private" virt="non-virtual"><scope>castor3d::LightPropagationPass::PipelineHolder</scope><name>m_renderPass</name></member>
+      <member refid="d5/d35/a03716_1a5d5c5830eb03d25c7aa50afc29fc90f1" prot="public" virt="non-virtual"><scope>castor3d::LightPropagationPass::PipelineHolder</scope><name>PipelineHolder</name></member>
+      <member refid="d5/d35/a03716_1aae0a52b47f79ce2040895711cc0281da" prot="public" virt="non-virtual"><scope>castor3d::LightPropagationPass::PipelineHolder</scope><name>recordInto</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

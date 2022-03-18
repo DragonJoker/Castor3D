@@ -1,193 +1,71 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d4/d72/a03886" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::Sphere</compoundname>
-    <basecompoundref refid="d0/d0b/a03910" prot="public" virt="non-virtual">castor3d::MeshGenerator</basecompoundref>
-    <includes local="no">Sphere.hpp</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d4/d72/a03886_1a77e8f3267c6e329d57b8cf79a017948b" prot="private" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::Sphere::m_radius</definition>
-        <argsstring></argsstring>
-        <name>m_radius</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Generator/Sphere.hpp" line="39" column="1" bodyfile="Model/Mesh/Generator/Sphere.hpp" bodystart="39" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/d72/a03886_1ad8a69e89e7a3e4dcc6fd23fcd7a9a14b" prot="private" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::Sphere::m_nbFaces</definition>
-        <argsstring></argsstring>
-        <name>m_nbFaces</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Generator/Sphere.hpp" line="40" column="1" bodyfile="Model/Mesh/Generator/Sphere.hpp" bodystart="40" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d4/d72/a03886_1ad6ab2353e5bd9449d7729f1680d67502" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::Sphere::Sphere</definition>
-        <argsstring>()</argsstring>
-        <name>Sphere</name>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Generator/Sphere.hpp" line="21" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/d72/a03886_1a0ea52aba3f8587305570d4f73cce60ef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::Sphere::~Sphere</definition>
-        <argsstring>()</argsstring>
-        <name>~Sphere</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Generator/Sphere.hpp" line="28" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-static-func">
-      <memberdef kind="function" id="d4/d72/a03886_1a67ab721549baf7cdcf68825698b451bb" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> MeshGeneratorSPtr</type>
-        <definition>static C3D_API MeshGeneratorSPtr castor3d::Sphere::create</definition>
-        <argsstring>()</argsstring>
-        <name>create</name>
-        <briefdescription>
-<para>Creation function, used by Factory. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para><ref refid="dc/db8/a03870" kindref="compound">Cylinder</ref> </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Generator/Sphere.hpp" line="32" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d4/d72/a03886_1a1424ee4b6ceba752232d30bd13f66ff0" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>virtual C3D_API void castor3d::Sphere::doGenerate</definition>
-        <argsstring>(Mesh &amp;mesh, Parameters const &amp;parameters)</argsstring>
-        <name>doGenerate</name>
-        <reimplements refid="d0/d0b/a03910_1a690745122d7e670b311e317ae86c9b45">doGenerate</reimplements>
-        <param>
-          <type><ref refid="d9/d7a/a03902" kindref="compound">Mesh</ref> &amp;</type>
-          <declname>mesh</declname>
-        </param>
-        <param>
-          <type><ref refid="de/d13/a01473_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
-          <declname>parameters</declname>
-        </param>
-        <briefdescription>
-<para>Generates the mesh. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">mesh</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The mesh. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">parameters</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The generator parameters. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Generator/Sphere.hpp" line="35" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="friend">
-      <memberdef kind="friend" id="d4/d72/a03886_1a8e500083978601affb94c31d8b57e940" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>friend std::ostream &amp;</type>
-        <definition>std::ostream&amp; operator&lt;&lt;</definition>
-        <argsstring>(std::ostream &amp;o, Sphere const &amp;c)</argsstring>
-        <name>operator&lt;&lt;</name>
-        <param>
-          <type>std::ostream &amp;</type>
-          <declname>o</declname>
-        </param>
-        <param>
-          <type><ref refid="d4/d72/a03886" kindref="compound">Sphere</ref> const &amp;</type>
-          <declname>c</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Generator/Sphere.hpp" line="41" column="1" bodyfile="Model/Mesh/Generator/Sphere.hpp" bodystart="44" bodyend="47"/>
-      </memberdef>
-      </sectiondef>
+    <compoundname>castor3d::RenderQuadBuilder</compoundname>
+    <basecompoundref refid="d0/d61/a03858" prot="public" virt="non-virtual">castor3d::RenderQuadBuilderT&lt; rq::Config, RenderQuadBuilder &gt;</basecompoundref>
+    <includes local="no">RenderQuad.hpp</includes>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="4123">
-        <label>castor3d::MeshGenerator</label>
-        <link refid="d0/d0b/a03910"/>
-      </node>
-      <node id="4122">
-        <label>castor3d::Sphere</label>
-        <link refid="d4/d72/a03886"/>
-        <childnode refid="4123" relation="public-inheritance">
+      <node id="2">
+        <label>castor3d::RenderQuadBuilderT&lt; rq::Config, RenderQuadBuilder &gt;</label>
+        <link refid="d0/d61/a03858"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; rq::Config, RenderQuadBuilder &gt;</edgelabel>
         </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::RenderQuadBuilder</label>
+        <link refid="d4/d72/a03886"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;</label>
+        <link refid="d0/d61/a03858"/>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="4125">
-        <label>castor3d::MeshGenerator</label>
-        <link refid="d0/d0b/a03910"/>
-      </node>
-      <node id="4124">
-        <label>castor3d::Sphere</label>
-        <link refid="d4/d72/a03886"/>
-        <childnode refid="4125" relation="public-inheritance">
+      <node id="2">
+        <label>castor3d::RenderQuadBuilderT&lt; rq::Config, RenderQuadBuilder &gt;</label>
+        <link refid="d0/d61/a03858"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_config</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; rq::Config, RenderQuadBuilder &gt;</edgelabel>
         </childnode>
       </node>
+      <node id="1">
+        <label>castor3d::RenderQuadBuilder</label>
+        <link refid="d4/d72/a03886"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;</label>
+        <link refid="d0/d61/a03858"/>
+      </node>
+      <node id="3">
+        <label>castor3d::rq::ConfigT&lt; WrapperT &gt;</label>
+        <link refid="d0/d34/a03874"/>
+      </node>
     </collaborationgraph>
-    <location file="Model/Mesh/Generator/Sphere.hpp" line="13" column="1" bodyfile="Model/Mesh/Generator/Sphere.hpp" bodystart="11" bodyend="42"/>
+    <location file="Render/Passes/RenderQuad.hpp" line="758" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="760" bodyend="761"/>
     <listofallmembers>
-      <member refid="d0/d0b/a03910_1a3207825be521c851f6fc654751f54cf1" prot="public" virt="virtual"><scope>castor3d::Sphere</scope><name>computeNormals</name></member>
-      <member refid="d4/d72/a03886_1a67ab721549baf7cdcf68825698b451bb" prot="public" virt="non-virtual"><scope>castor3d::Sphere</scope><name>create</name></member>
-      <member refid="d4/d72/a03886_1a1424ee4b6ceba752232d30bd13f66ff0" prot="private" virt="virtual"><scope>castor3d::Sphere</scope><name>doGenerate</name></member>
-      <member refid="d0/d0b/a03910_1a9fdc140f2d871ca6cb81029250c346ae" prot="public" virt="virtual"><scope>castor3d::Sphere</scope><name>generate</name></member>
-      <member refid="d4/d72/a03886_1ad8a69e89e7a3e4dcc6fd23fcd7a9a14b" prot="private" virt="non-virtual"><scope>castor3d::Sphere</scope><name>m_nbFaces</name></member>
-      <member refid="d4/d72/a03886_1a77e8f3267c6e329d57b8cf79a017948b" prot="private" virt="non-virtual"><scope>castor3d::Sphere</scope><name>m_radius</name></member>
-      <member refid="d0/d0b/a03910_1a3ccec3fd88667bbca33c6e81afdeff19" prot="public" virt="non-virtual"><scope>castor3d::Sphere</scope><name>MeshGenerator</name></member>
-      <member refid="d4/d72/a03886_1a8e500083978601affb94c31d8b57e940" prot="private" virt="non-virtual"><scope>castor3d::Sphere</scope><name>operator&lt;&lt;</name></member>
-      <member refid="d4/d72/a03886_1ad6ab2353e5bd9449d7729f1680d67502" prot="public" virt="non-virtual"><scope>castor3d::Sphere</scope><name>Sphere</name></member>
-      <member refid="d0/d0b/a03910_1adee42c7c921b0dff4cbbc99c29faf31f" prot="public" virt="virtual"><scope>castor3d::Sphere</scope><name>~MeshGenerator</name></member>
-      <member refid="d4/d72/a03886_1a0ea52aba3f8587305570d4f73cce60ef" prot="public" virt="non-virtual"><scope>castor3d::Sphere</scope><name>~Sphere</name></member>
+      <member refid="d0/d61/a03858_1a2d157c5fa13f40f5fae84a33c6f26365" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>binding</name></member>
+      <member refid="d0/d61/a03858_1a4c77483c0d73db74aae5fe59e03a6d54" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>binding</name></member>
+      <member refid="d0/d61/a03858_1ac1edfedf55abf1b02776b6ee9719482c" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>binding</name></member>
+      <member refid="d0/d61/a03858_1a970a0bf93dfb36ba6f349bd07725e521" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>bindings</name></member>
+      <member refid="d0/d61/a03858_1a062561625f7ff24ed0cfa65f3bfc8688" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>blendMode</name></member>
+      <member refid="d0/d61/a03858_1a4a58abd503ed0bff1600be8605477258" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>build</name></member>
+      <member refid="d0/d61/a03858_1aa7fc146147deb53c51c646122d66eef6" prot="protected" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>m_config</name></member>
+      <member refid="d0/d61/a03858_1a2b7159354bb4ab5f87da28299e2e21da" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>range</name></member>
+      <member refid="d0/d61/a03858_1a13037f2937494dc1ab0f713225aeedd6" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>RenderQuadBuilderT</name></member>
+      <member refid="d0/d61/a03858_1a4a4f339fd319b5c843eb831cbe6ca153" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>tex3DResult</name></member>
+      <member refid="d0/d61/a03858_1a12f59a1dbb62bd1cc2fc3d26db8b1897" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>texcoordConfig</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

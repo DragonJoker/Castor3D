@@ -1,0 +1,786 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d3/d12/a02354" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</compoundname>
+    <basecompoundref refid="d4/dde/a02422" prot="public" virt="non-virtual">castor3d::ObjectCacheBase&lt; BillboardList, castor::String &gt;</basecompoundref>
+    <includes local="no">BillboardCache.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d3/d12/a02354_1a41a6ddb328964af394340517a19ccbdb" prot="public" static="no">
+        <type><ref refid="d4/dde/a02422" kindref="compound">ObjectCacheBase</ref>&lt; <ref refid="d5/d6d/a05142" kindref="compound">BillboardList</ref>, castor::String &gt;</type>
+        <definition>using castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::MyObjectCache =  ObjectCacheBase&lt; BillboardList, castor::String &gt;</definition>
+        <argsstring></argsstring>
+        <name>MyObjectCache</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="27" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d3/d12/a02354_1a2c8e416d69bda1583151bc86f11c8742" prot="public" static="no">
+        <type>typename <ref refid="d4/dde/a02422_1aef5afe4f28d88051d0f84742a0d45b7f" kindref="member">MyObjectCacheType::MyObjectCacheTraits</ref></type>
+        <definition>using castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::MyObjectCacheTraits =  typename MyObjectCacheType::MyObjectCacheTraits</definition>
+        <argsstring></argsstring>
+        <name>MyObjectCacheTraits</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="28" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d3/d12/a02354_1ac0882208d8f90921965cb1d0913cb0c5" prot="public" static="no">
+        <type>typename <ref refid="d4/dde/a02422_1a2695fd8f7d4bef271326195ab84d6f86" kindref="member">MyObjectCacheType::Element</ref></type>
+        <definition>using castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::Element =  typename MyObjectCacheType::Element</definition>
+        <argsstring></argsstring>
+        <name>Element</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="29" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d3/d12/a02354_1a87a6c3bca60986a672fb9f30deccd476" prot="public" static="no">
+        <type>typename <ref refid="d4/dde/a02422_1a58aa6f84262945e82a965d654289ca22" kindref="member">MyObjectCacheType::Key</ref></type>
+        <definition>using castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::Key =  typename MyObjectCacheType::Key</definition>
+        <argsstring></argsstring>
+        <name>Key</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="30" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d3/d12/a02354_1aa82d7a578f20c248aa78e5b6bc6971ce" prot="public" static="no">
+        <type>typename <ref refid="d4/dde/a02422_1af44fe4e2622342b0256466f52d791869" kindref="member">MyObjectCacheType::Collection</ref></type>
+        <definition>using castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::Collection =  typename MyObjectCacheType::Collection</definition>
+        <argsstring></argsstring>
+        <name>Collection</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="31" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d3/d12/a02354_1a9f5188c98bc1fa5822a98563110e20f2" prot="public" static="no">
+        <type>typename <ref refid="d4/dde/a02422_1a6dbfb5d5c3648f477f8a366a88e41bc9" kindref="member">MyObjectCacheType::LockType</ref></type>
+        <definition>using castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::LockType =  typename MyObjectCacheType::LockType</definition>
+        <argsstring></argsstring>
+        <name>LockType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="32" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d3/d12/a02354_1aae22a8c72e6c911cd78319f5242e0038" prot="public" static="no">
+        <type>typename <ref refid="d4/dde/a02422_1aaea33a6e2634758a9959a36d2d191adf" kindref="member">MyObjectCacheType::ElementPtr</ref></type>
+        <definition>using castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::ElementPtr =  typename MyObjectCacheType::ElementPtr</definition>
+        <argsstring></argsstring>
+        <name>ElementPtr</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="33" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d3/d12/a02354_1a615a151c5177295906a45e7d88629c32" prot="public" static="no">
+        <type>typename <ref refid="d4/dde/a02422_1a5273357e4b90c055f34dccaa0f18c1d9" kindref="member">MyObjectCacheType::Producer</ref></type>
+        <definition>using castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::Producer =  typename MyObjectCacheType::Producer</definition>
+        <argsstring></argsstring>
+        <name>Producer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="34" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d3/d12/a02354_1a37113c33060dd988ea369a567186080f" prot="public" static="no">
+        <type>typename <ref refid="d4/dde/a02422_1a709002f742a234401899e221db822a69" kindref="member">MyObjectCacheType::Initialiser</ref></type>
+        <definition>using castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::Initialiser =  typename MyObjectCacheType::Initialiser</definition>
+        <argsstring></argsstring>
+        <name>Initialiser</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="35" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d3/d12/a02354_1afc37c522f43039939d40b274a6882093" prot="public" static="no">
+        <type>typename <ref refid="d4/dde/a02422_1ae9d6a190e7471d9ee2fd8b23d35d084f" kindref="member">MyObjectCacheType::Cleaner</ref></type>
+        <definition>using castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::Cleaner =  typename MyObjectCacheType::Cleaner</definition>
+        <argsstring></argsstring>
+        <name>Cleaner</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="36" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d3/d12/a02354_1abbb80e5a9eb86f5b55163eb8aebfa3f2" prot="public" static="no">
+        <type>typename <ref refid="d4/dde/a02422_1adf465fa19aa985e191560d94fbfd0ddd" kindref="member">MyObjectCacheType::Merger</ref></type>
+        <definition>using castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::Merger =  typename MyObjectCacheType::Merger</definition>
+        <argsstring></argsstring>
+        <name>Merger</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="37" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d3/d12/a02354_1ad08d7478a4c8515015dc02c7bc921db9" prot="public" static="no">
+        <type>typename <ref refid="d4/dde/a02422_1acbd254e0f131c3ecd6d93ca42929daba" kindref="member">MyObjectCacheType::Attacher</ref></type>
+        <definition>using castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::Attacher =  typename MyObjectCacheType::Attacher</definition>
+        <argsstring></argsstring>
+        <name>Attacher</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="38" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d3/d12/a02354_1a7d86ff315f8d4543730930b5d7b391ce" prot="public" static="no">
+        <type>typename <ref refid="d4/dde/a02422_1adfa07c51d1421cbbd46d0c04e3213dc6" kindref="member">MyObjectCacheType::Detacher</ref></type>
+        <definition>using castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::Detacher =  typename MyObjectCacheType::Detacher</definition>
+        <argsstring></argsstring>
+        <name>Detacher</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="39" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d3/d12/a02354_1af2677a6ca3c7cde32cb5ab8151a4cac4" prot="private" static="no" mutable="no">
+        <type>BillboardUboPoolsSPtr</type>
+        <definition>BillboardUboPoolsSPtr castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::m_pools</definition>
+        <argsstring></argsstring>
+        <name>m_pools</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="163" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="163" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d12/a02354_1aacdc1d0163b5986c2159f7c275937f31" prot="private" static="no" mutable="no">
+        <type>std::set&lt; <ref refid="d6/d1b/a04590" kindref="compound">SceneRenderPass</ref> const * &gt;</type>
+        <definition>std::set&lt; SceneRenderPass const * &gt; castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::m_pendingPasses</definition>
+        <argsstring></argsstring>
+        <name>m_pendingPasses</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="164" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="164" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d12/a02354_1a6e9cf410e2fe70c53f1ebb552138cebe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::ObjectCache</definition>
+        <argsstring>(Engine &amp;engine, Scene &amp;scene, SceneNodeSPtr rootNode, SceneNodeSPtr rootCameraNode, SceneNodeSPtr rootObjectNode, Producer &amp;&amp;produce, Initialiser &amp;&amp;initialise=Initialiser{}, Cleaner &amp;&amp;clean=Cleaner{}, Merger &amp;&amp;merge=Merger{}, Attacher &amp;&amp;attach=Attacher{}, Detacher &amp;&amp;detach=Detacher{})</argsstring>
+        <name>ObjectCache</name>
+        <param>
+          <type><ref refid="df/d9b/a02514" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d66/a05238" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type>SceneNodeSPtr</type>
+          <declname>rootNode</declname>
+        </param>
+        <param>
+          <type>SceneNodeSPtr</type>
+          <declname>rootCameraNode</declname>
+        </param>
+        <param>
+          <type>SceneNodeSPtr</type>
+          <declname>rootObjectNode</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d12/a02354_1a615a151c5177295906a45e7d88629c32" kindref="member">Producer</ref> &amp;&amp;</type>
+          <declname>produce</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d12/a02354_1a37113c33060dd988ea369a567186080f" kindref="member">Initialiser</ref> &amp;&amp;</type>
+          <declname>initialise</declname>
+          <defval><ref refid="d3/d12/a02354_1a37113c33060dd988ea369a567186080f" kindref="member">Initialiser</ref>{}</defval>
+        </param>
+        <param>
+          <type><ref refid="d3/d12/a02354_1afc37c522f43039939d40b274a6882093" kindref="member">Cleaner</ref> &amp;&amp;</type>
+          <declname>clean</declname>
+          <defval><ref refid="d3/d12/a02354_1afc37c522f43039939d40b274a6882093" kindref="member">Cleaner</ref>{}</defval>
+        </param>
+        <param>
+          <type><ref refid="d3/d12/a02354_1abbb80e5a9eb86f5b55163eb8aebfa3f2" kindref="member">Merger</ref> &amp;&amp;</type>
+          <declname>merge</declname>
+          <defval><ref refid="d3/d12/a02354_1abbb80e5a9eb86f5b55163eb8aebfa3f2" kindref="member">Merger</ref>{}</defval>
+        </param>
+        <param>
+          <type><ref refid="d3/d12/a02354_1ad08d7478a4c8515015dc02c7bc921db9" kindref="member">Attacher</ref> &amp;&amp;</type>
+          <declname>attach</declname>
+          <defval><ref refid="d3/d12/a02354_1ad08d7478a4c8515015dc02c7bc921db9" kindref="member">Attacher</ref>{}</defval>
+        </param>
+        <param>
+          <type><ref refid="d3/d12/a02354_1a7d86ff315f8d4543730930b5d7b391ce" kindref="member">Detacher</ref> &amp;&amp;</type>
+          <declname>detach</declname>
+          <defval><ref refid="d3/d12/a02354_1a7d86ff315f8d4543730930b5d7b391ce" kindref="member">Detacher</ref>{}</defval>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">rootNode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The root node. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">rootCameraNode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The cameras root node. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">rootObjectNode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The objects root node. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">produce</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element producer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">initialise</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element initialiser. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">clean</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element cleaner. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">merge</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element collection merger. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">attach</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element attacher (to a scene node). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">detach</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element detacher (from a scene node). </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="68" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d12/a02354_1ad56ec6e31fc129f68c58799edc031dc3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::~ObjectCache</definition>
+        <argsstring>()</argsstring>
+        <name>~ObjectCache</name>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="85" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d12/a02354_1af796e459edfb72482669db7f6d68c4cf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::registerPass</definition>
+        <argsstring>(SceneRenderPass const &amp;renderPass)</argsstring>
+        <name>registerPass</name>
+        <param>
+          <type><ref refid="d6/d1b/a04590" kindref="compound">SceneRenderPass</ref> const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="87" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d12/a02354_1a6bf54c9634da0a8c9ee3428362b2c7c9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::unregisterPass</definition>
+        <argsstring>(SceneRenderPass const *renderPass, uint32_t instanceMult)</argsstring>
+        <name>unregisterPass</name>
+        <param>
+          <type><ref refid="d6/d1b/a04590" kindref="compound">SceneRenderPass</ref> const *</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>instanceMult</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="88" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d12/a02354_1ad08bc6ec97df43b2249c3d4e82e668df" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>initialise</name>
+        <param>
+          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Initialises the UBO pools. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="98" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d12/a02354_1a4c5ecf27d33710845ad36a85e58bb68e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::cleanup</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>cleanup</name>
+        <param>
+          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Cleans up the UBO pools. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="107" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d12/a02354_1afed71deff5d17b219093a027ee98fee6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::clear</definition>
+        <argsstring>()</argsstring>
+        <name>clear</name>
+        <briefdescription>
+<para>Flushes the collection. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="114" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d12/a02354_1afa5fc7c04d145de022ec53e003fc6684" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <param>
+          <type><ref refid="d5/d03/a04582" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, CPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="123" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d12/a02354_1aec80fdf1205397e86d373cb66adfc7f0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/d12/a02354_1aae22a8c72e6c911cd78319f5242e0038" kindref="member">ElementPtr</ref></type>
+        <definition>C3D_API ElementPtr castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::add</definition>
+        <argsstring>(Key const &amp;name, SceneNode &amp;parent)</argsstring>
+        <name>add</name>
+        <param>
+          <type><ref refid="d3/d12/a02354_1a87a6c3bca60986a672fb9f30deccd476" kindref="member">Key</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/de7/a05250" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>parent</declname>
+        </param>
+        <briefdescription>
+<para>Creates a new object and adds it to the collection. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent scene node. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The created object. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="136" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d12/a02354_1a7dfdf443d0d966d5f68c096e38b2a21c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::add</definition>
+        <argsstring>(ElementPtr element)</argsstring>
+        <name>add</name>
+        <param>
+          <type><ref refid="d3/d12/a02354_1aae22a8c72e6c911cd78319f5242e0038" kindref="member">ElementPtr</ref></type>
+          <declname>element</declname>
+        </param>
+        <briefdescription>
+<para>Adds an existing object. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">element</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="146" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d12/a02354_1a28bbf4693ecab9ab46a26dc741843f3c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::remove</definition>
+        <argsstring>(Key const &amp;name)</argsstring>
+        <name>remove</name>
+        <param>
+          <type><ref refid="d3/d12/a02354_1a87a6c3bca60986a672fb9f30deccd476" kindref="member">Key</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Removes an object, given a name. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object name. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="155" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d12/a02354_1a658ba6abb7f1a70a038b89aad25d0296" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/d94/a02358" kindref="compound">BillboardUboPools</ref> &amp;</type>
+        <definition>BillboardUboPools&amp; castor3d::ObjectCache&lt; BillboardList, castor::String &gt;::getUboPools</definition>
+        <argsstring>() const</argsstring>
+        <name>getUboPools</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardCache.hpp" line="157" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="157" bodyend="160"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para><ref refid="d5/d6d/a05142" kindref="compound">BillboardList</ref> cache. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="date"><para>24/04/2018 </para>
+</simplesect>
+<simplesect kind="version"><para>0.11.0 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2236">
+        <label>castor3d::ObjectCacheBase&lt; BillboardList, castor::String &gt;</label>
+        <link refid="d4/dde/a02422"/>
+        <childnode refid="2237" relation="template-instance">
+          <edgelabel>&lt; BillboardList, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2237">
+        <label>castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</label>
+        <link refid="d4/dde/a02422"/>
+      </node>
+      <node id="2235">
+        <label>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</label>
+        <link refid="d3/d12/a02354"/>
+        <childnode refid="2236" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2239">
+        <label>castor3d::ObjectCacheBase&lt; BillboardList, castor::String &gt;</label>
+        <link refid="d4/dde/a02422"/>
+        <childnode refid="2240" relation="usage">
+          <edgelabel>m_engine</edgelabel>
+        </childnode>
+        <childnode refid="2242" relation="usage">
+          <edgelabel>m_scene</edgelabel>
+        </childnode>
+        <childnode refid="2246" relation="template-instance">
+          <edgelabel>&lt; BillboardList, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2245">
+        <label>Named</label>
+      </node>
+      <node id="2246">
+        <label>castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</label>
+        <link refid="d4/dde/a02422"/>
+        <childnode refid="2240" relation="usage">
+          <edgelabel>m_engine</edgelabel>
+        </childnode>
+        <childnode refid="2242" relation="usage">
+          <edgelabel>m_scene</edgelabel>
+        </childnode>
+      </node>
+      <node id="2241">
+        <label>castor::Unique&lt; Engine &gt;</label>
+      </node>
+      <node id="2238">
+        <label>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</label>
+        <link refid="d3/d12/a02354"/>
+        <childnode refid="2239" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2243">
+        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
+      </node>
+      <node id="2244">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="2240">
+        <label>castor3d::Engine</label>
+        <link refid="df/d9b/a02514"/>
+        <childnode refid="2241" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2242">
+        <label>castor3d::Scene</label>
+        <link refid="d6/d66/a05238"/>
+        <childnode refid="2243" relation="public-inheritance">
+        </childnode>
+        <childnode refid="2244" relation="public-inheritance">
+        </childnode>
+        <childnode refid="2245" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Cache/BillboardCache.hpp" line="25" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="23" bodyend="165"/>
+    <listofallmembers>
+      <member refid="d3/d12/a02354_1aec80fdf1205397e86d373cb66adfc7f0" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>add</name></member>
+      <member refid="d3/d12/a02354_1a7dfdf443d0d966d5f68c096e38b2a21c" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>add</name></member>
+      <member refid="d4/dde/a02422_1af9759fea89bf19c68bc66e344d09186d" prot="public" virt="non-virtual" ambiguityscope="ObjectCacheBase&lt; BillboardList, castor::String &gt;::"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>add</name></member>
+      <member refid="d4/dde/a02422_1a90ebd9f168c722ea95d5f9304b9b1217" prot="public" virt="non-virtual" ambiguityscope="ObjectCacheBase&lt; BillboardList, castor::String &gt;::"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>add</name></member>
+      <member refid="d3/d12/a02354_1ad08d7478a4c8515015dc02c7bc921db9" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>Attacher</name></member>
+      <member refid="d4/dde/a02422_1a3739ff1bfab106c799abbb123b8b2c07" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>begin</name></member>
+      <member refid="d4/dde/a02422_1a0c0491f58f585ffd973ae19360aa75f1" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>begin</name></member>
+      <member refid="d3/d12/a02354_1afc37c522f43039939d40b274a6882093" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>Cleaner</name></member>
+      <member refid="d3/d12/a02354_1a4c5ecf27d33710845ad36a85e58bb68e" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>cleanup</name></member>
+      <member refid="d4/dde/a02422_1af2d19098583cd5ea5b54c904d755cd0b" prot="public" virt="non-virtual" ambiguityscope="ObjectCacheBase&lt; BillboardList, castor::String &gt;::"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>cleanup</name></member>
+      <member refid="d3/d12/a02354_1afed71deff5d17b219093a027ee98fee6" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>clear</name></member>
+      <member refid="d3/d12/a02354_1aa82d7a578f20c248aa78e5b6bc6971ce" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>Collection</name></member>
+      <member refid="d3/d12/a02354_1a7d86ff315f8d4543730930b5d7b391ce" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>Detacher</name></member>
+      <member refid="d4/dde/a02422_1ab405bfd99e69c230efc69ab4b095d540" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>doReportCreation</name></member>
+      <member refid="d4/dde/a02422_1ade6b95376020032814e329727ac80f99" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>doReportDuplicate</name></member>
+      <member refid="d4/dde/a02422_1a4237b4fb13d344ea69cfb591cf56f503" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>doReportNull</name></member>
+      <member refid="d3/d12/a02354_1ac0882208d8f90921965cb1d0913cb0c5" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>Element</name></member>
+      <member refid="d3/d12/a02354_1aae22a8c72e6c911cd78319f5242e0038" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>ElementPtr</name></member>
+      <member refid="d4/dde/a02422_1a3e06a8ce082e6930a431e01facb08e3a" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>end</name></member>
+      <member refid="d4/dde/a02422_1ade3bc57cb192566db4dae322c85365d8" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>end</name></member>
+      <member refid="d4/dde/a02422_1a14387c5f23e7fd0815bd4c33af7614d4" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>find</name></member>
+      <member refid="d4/dde/a02422_1a85b6e3f4e4c70c809d4d008ac4d98949" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>forEach</name></member>
+      <member refid="d4/dde/a02422_1a443b919cff2e2228029093f393b3fe82" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>forEach</name></member>
+      <member refid="d4/dde/a02422_1ae6ddf773f8add1142811092ccd36b9df" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>getEngine</name></member>
+      <member refid="d4/dde/a02422_1a3d40eb7457663d6cbc86a058bb045058" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>getObjectCount</name></member>
+      <member refid="d4/dde/a02422_1ac269d479bb39d6a5e00a6e6880d171fa" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>getObjectTypeName</name></member>
+      <member refid="d4/dde/a02422_1a2587657f54febcb8b004bcee9a6c92ab" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>getScene</name></member>
+      <member refid="d3/d12/a02354_1a658ba6abb7f1a70a038b89aad25d0296" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>getUboPools</name></member>
+      <member refid="d4/dde/a02422_1a3bc5af869c9083396d70b1828d3d209b" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>has</name></member>
+      <member refid="d3/d12/a02354_1ad08bc6ec97df43b2249c3d4e82e668df" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>initialise</name></member>
+      <member refid="d3/d12/a02354_1a37113c33060dd988ea369a567186080f" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>Initialiser</name></member>
+      <member refid="d4/dde/a02422_1a0439587c305aa796b9cafedd3f2369bd" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>isEmpty</name></member>
+      <member refid="d3/d12/a02354_1a87a6c3bca60986a672fb9f30deccd476" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>Key</name></member>
+      <member refid="d4/dde/a02422_1aa3ba76b0fbe1ad271523bbe9671d1faa" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>lock</name></member>
+      <member refid="d3/d12/a02354_1a9f5188c98bc1fa5822a98563110e20f2" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>LockType</name></member>
+      <member refid="d4/dde/a02422_1ac3f72c525786dc253c29e6674cb6978c" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_attach</name></member>
+      <member refid="d4/dde/a02422_1a9de051c43f5b9c441cfa9381ecd91d28" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_clean</name></member>
+      <member refid="d4/dde/a02422_1a4c9ee09ca33c7ec6307e2f2bebf2980d" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_detach</name></member>
+      <member refid="d4/dde/a02422_1aa11fe5cbfb29bcf3e319ca694f8f5603" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_elements</name></member>
+      <member refid="d4/dde/a02422_1ad748056662bca1881dd32be9fbfb1447" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_engine</name></member>
+      <member refid="d4/dde/a02422_1a50f47a48272ca0230e17b675738ea13b" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_initialise</name></member>
+      <member refid="d4/dde/a02422_1a8d5730d90d8167deadf9052777cd1b15" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_merge</name></member>
+      <member refid="d3/d12/a02354_1aacdc1d0163b5986c2159f7c275937f31" prot="private" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_pendingPasses</name></member>
+      <member refid="d3/d12/a02354_1af2677a6ca3c7cde32cb5ab8151a4cac4" prot="private" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_pools</name></member>
+      <member refid="d4/dde/a02422_1aafb61e38ec9b4f8cb99fb35b533c1b30" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_produce</name></member>
+      <member refid="d4/dde/a02422_1a07c88851e111e9f40f3f7c37c28eca0d" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_rootCameraNode</name></member>
+      <member refid="d4/dde/a02422_1a44b6a6b909cadf254335686a41faf7d9" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_rootNode</name></member>
+      <member refid="d4/dde/a02422_1a122965a381ff816b8e7b2a1ce509175e" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_rootObjectNode</name></member>
+      <member refid="d4/dde/a02422_1abc0e272ee55045d8715814844c846074" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>m_scene</name></member>
+      <member refid="d4/dde/a02422_1a90a3f6b831e5328972c33503869194ea" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>mergeInto</name></member>
+      <member refid="d3/d12/a02354_1abbb80e5a9eb86f5b55163eb8aebfa3f2" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>Merger</name></member>
+      <member refid="d3/d12/a02354_1a41a6ddb328964af394340517a19ccbdb" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>MyObjectCache</name></member>
+      <member refid="d3/d12/a02354_1a2c8e416d69bda1583151bc86f11c8742" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>MyObjectCacheTraits</name></member>
+      <member refid="d4/dde/a02422_1a04425b77112bcd2a88ab266f46825054" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>MyObjectCacheType</name></member>
+      <member refid="d3/d12/a02354_1a6e9cf410e2fe70c53f1ebb552138cebe" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>ObjectCache</name></member>
+      <member refid="d4/dde/a02422_1a87b6ff3ae10c416c825c84a50b9b90fa" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>ObjectCacheBase</name></member>
+      <member refid="d4/dde/a02422_1a2f0b42b4fd8d962bf259ff02a34a0f40" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>onChanged</name></member>
+      <member refid="d4/dde/a02422_1a2ff465c4a26af4220dd2ca96e5ebb826" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>OnChanged</name></member>
+      <member refid="d4/dde/a02422_1a2e158cd273db210c3168334dfca4d38f" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>OnChangedFunction</name></member>
+      <member refid="d3/d12/a02354_1a615a151c5177295906a45e7d88629c32" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>Producer</name></member>
+      <member refid="d3/d12/a02354_1af796e459edfb72482669db7f6d68c4cf" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>registerPass</name></member>
+      <member refid="d3/d12/a02354_1a28bbf4693ecab9ab46a26dc741843f3c" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>remove</name></member>
+      <member refid="d4/dde/a02422_1ae34ecf5dbaca1411e7adb6b895a99698" prot="public" virt="non-virtual" ambiguityscope="ObjectCacheBase&lt; BillboardList, castor::String &gt;::"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>remove</name></member>
+      <member refid="d4/dde/a02422_1a6f639f5f995c02d63be3ec8d5df66b22" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>unlock</name></member>
+      <member refid="d3/d12/a02354_1a6bf54c9634da0a8c9ee3428362b2c7c9" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>unregisterPass</name></member>
+      <member refid="d3/d12/a02354_1afa5fc7c04d145de022ec53e003fc6684" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>update</name></member>
+      <member refid="d3/d12/a02354_1ad56ec6e31fc129f68c58799edc031dc3" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>~ObjectCache</name></member>
+      <member refid="d4/dde/a02422_1a101827b877ba6ec9adef7a35ece78ce6" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</scope><name>~ObjectCacheBase</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

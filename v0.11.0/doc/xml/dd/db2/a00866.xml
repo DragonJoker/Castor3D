@@ -1,0 +1,627 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dd/db2/a00866" kind="file" language="C++">
+    <compoundname>SsaoModule.hpp</compoundname>
+    <includes local="no">CastorUtils/CastorUtilsPrerequisites.hpp</includes>
+    <includedby refid="de/d79/a00203" local="yes">Cache/CacheModule.hpp</includedby>
+    <includedby refid="dd/dd7/a00260" local="yes">Cache/TechniqueCache.hpp</includedby>
+    <includedby refid="d2/d5e/a00860" local="yes">Render/Ssao/SsaoBlurPass.hpp</includedby>
+    <includedby refid="d7/d49/a00863" local="yes">Render/Ssao/SsaoConfig.hpp</includedby>
+    <includedby refid="d3/db2/a00869" local="yes">Render/Ssao/SsaoRawAOPass.hpp</includedby>
+    <includedby refid="d5/da3/a00953" local="yes">Render/Technique/Opaque/SsaoPass.hpp</includedby>
+    <includedby refid="d7/d51/a01340" local="yes">Shader/Ubos/SsaoConfigUbo.hpp</includedby>
+    <incdepgraph>
+      <node id="18109">
+        <label>CastorUtils/CastorUtilsPrerequisites.hpp</label>
+      </node>
+      <node id="18108">
+        <label>Render/Ssao/SsaoModule.hpp</label>
+        <link refid="dd/db2/a00866"/>
+        <childnode refid="18109" relation="include">
+        </childnode>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="18182">
+        <label>Render/Ssao/SsaoConfig.hpp</label>
+        <link refid="d7/d49/a00863"/>
+        <childnode refid="18147" relation="include">
+        </childnode>
+        <childnode refid="18183" relation="include">
+        </childnode>
+        <childnode refid="18184" relation="include">
+        </childnode>
+        <childnode refid="18185" relation="include">
+        </childnode>
+        <childnode refid="18192" relation="include">
+        </childnode>
+        <childnode refid="18194" relation="include">
+        </childnode>
+      </node>
+      <node id="18148">
+        <label>Render/PostEffect/PostEffect.hpp</label>
+        <link refid="d8/dba/a00773"/>
+      </node>
+      <node id="18159">
+        <label>Render/Technique/Opaque/DeferredRendering.hpp</label>
+        <link refid="d1/d93/a00875"/>
+      </node>
+      <node id="18140">
+        <label>Castor3DPch.hpp</label>
+        <link refid="d5/d42/a00269"/>
+      </node>
+      <node id="18178">
+        <label>Shader/Program.hpp</label>
+        <link refid="d9/d31/a01208"/>
+        <childnode refid="18179" relation="include">
+        </childnode>
+        <childnode refid="18180" relation="include">
+        </childnode>
+      </node>
+      <node id="18169">
+        <label>Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp</label>
+        <link refid="d3/d29/a00947"/>
+        <childnode refid="18155" relation="include">
+        </childnode>
+      </node>
+      <node id="18187">
+        <label>Render/Technique/ForwardRenderTechniquePass.hpp</label>
+        <link refid="dc/d17/a00872"/>
+      </node>
+      <node id="18192">
+        <label>Scene/SceneFileParser.hpp</label>
+        <link refid="d6/df2/a01175"/>
+        <childnode refid="18193" relation="include">
+        </childnode>
+      </node>
+      <node id="18165">
+        <label>Scene/Scene.hpp</label>
+        <link refid="d6/db6/a01172"/>
+        <childnode refid="18126" relation="include">
+        </childnode>
+        <childnode refid="18133" relation="include">
+        </childnode>
+        <childnode refid="18152" relation="include">
+        </childnode>
+        <childnode refid="18155" relation="include">
+        </childnode>
+        <childnode refid="18166" relation="include">
+        </childnode>
+      </node>
+      <node id="18116">
+        <label>Cache/Cache.hpp</label>
+        <link refid="de/db1/a00197"/>
+        <childnode refid="18117" relation="include">
+        </childnode>
+        <childnode refid="18118" relation="include">
+        </childnode>
+        <childnode refid="18119" relation="include">
+        </childnode>
+        <childnode refid="18120" relation="include">
+        </childnode>
+        <childnode refid="18121" relation="include">
+        </childnode>
+      </node>
+      <node id="18154">
+        <label>Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp</label>
+        <link refid="d5/d54/a00938"/>
+        <childnode refid="18155" relation="include">
+        </childnode>
+        <childnode refid="18156" relation="include">
+        </childnode>
+        <childnode refid="18157" relation="include">
+        </childnode>
+        <childnode refid="18169" relation="include">
+        </childnode>
+        <childnode refid="18170" relation="include">
+        </childnode>
+        <childnode refid="18171" relation="include">
+        </childnode>
+      </node>
+      <node id="18157">
+        <label>Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp</label>
+        <link refid="d9/dce/a00944"/>
+        <childnode refid="18158" relation="include">
+        </childnode>
+        <childnode refid="18160" relation="include">
+        </childnode>
+        <childnode refid="18168" relation="include">
+        </childnode>
+      </node>
+      <node id="18150">
+        <label>Render/Technique/Opaque/LightVolumeGI/LightVolumeGIModule.hpp</label>
+        <link refid="d4/ddc/a00917"/>
+        <childnode refid="18151" relation="include">
+        </childnode>
+        <childnode refid="18133" relation="include">
+        </childnode>
+        <childnode refid="18152" relation="include">
+        </childnode>
+        <childnode refid="18153" relation="include">
+        </childnode>
+      </node>
+      <node id="18161">
+        <label>Scene/Light/Light.hpp</label>
+        <link refid="dd/d09/a01118"/>
+        <childnode refid="18162" relation="include">
+        </childnode>
+        <childnode refid="18133" relation="include">
+        </childnode>
+        <childnode refid="18163" relation="include">
+        </childnode>
+        <childnode refid="18164" relation="include">
+        </childnode>
+      </node>
+      <node id="18151">
+        <label>Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp</label>
+        <link refid="d0/d85/a00908"/>
+        <childnode refid="18133" relation="include">
+        </childnode>
+      </node>
+      <node id="18132">
+        <label>Cache/LightCache.hpp</label>
+        <link refid="dc/d9a/a00218"/>
+        <childnode refid="18133" relation="include">
+        </childnode>
+      </node>
+      <node id="18129">
+        <label>Cache/ElementProducer.hpp</label>
+        <link refid="dd/dc1/a00212"/>
+      </node>
+      <node id="18112">
+        <label>Cache/BillboardUboPools.hpp</label>
+        <link refid="dc/d57/a00194"/>
+        <childnode refid="18113" relation="include">
+        </childnode>
+      </node>
+      <node id="18147">
+        <label>Render/RenderTarget.hpp</label>
+        <link refid="d8/d1c/a00824"/>
+        <childnode refid="18148" relation="include">
+        </childnode>
+        <childnode refid="18149" relation="include">
+        </childnode>
+      </node>
+      <node id="18193">
+        <label>Scene/SceneFileParser_Parsers.hpp</label>
+        <link refid="d8/d11/a01178"/>
+      </node>
+      <node id="18149">
+        <label>Text/TextRenderTarget.hpp</label>
+        <link refid="d5/da5/a01424"/>
+      </node>
+      <node id="18127">
+        <label>Cache/CacheView.hpp</label>
+        <link refid="d5/df1/a00206"/>
+      </node>
+      <node id="18141">
+        <label>Engine.hpp</label>
+        <link refid="d3/d5e/a00275"/>
+        <childnode refid="18142" relation="include">
+        </childnode>
+      </node>
+      <node id="18172">
+        <label>Scene/Light/DirectionalLight.hpp</label>
+        <link refid="df/dd5/a01115"/>
+        <childnode refid="18133" relation="include">
+        </childnode>
+        <childnode refid="18152" relation="include">
+        </childnode>
+        <childnode refid="18173" relation="include">
+        </childnode>
+      </node>
+      <node id="18123">
+        <label>Cache/OverlayCache.hpp</label>
+        <link refid="d7/d40/a00236"/>
+        <childnode refid="18124" relation="include">
+        </childnode>
+      </node>
+      <node id="18173">
+        <label>Text/TextDirectionalLight.hpp</label>
+        <link refid="d8/dbe/a01370"/>
+      </node>
+      <node id="18189">
+        <label>Render/Technique/Transparent/TransparentPass.hpp</label>
+        <link refid="d0/d3c/a00971"/>
+        <childnode refid="18190" relation="include">
+        </childnode>
+        <childnode refid="18191" relation="include">
+        </childnode>
+      </node>
+      <node id="18162">
+        <label>Render/Technique/Opaque/Lighting/LightPassShadow.hpp</label>
+        <link refid="d7/d46/a00890"/>
+        <childnode refid="18133" relation="include">
+        </childnode>
+        <childnode refid="18152" relation="include">
+        </childnode>
+        <childnode refid="18155" relation="include">
+        </childnode>
+      </node>
+      <node id="18122">
+        <label>Cache/MaterialCache.hpp</label>
+        <link refid="d5/ddf/a00224"/>
+      </node>
+      <node id="18176">
+        <label>Scene/Light/SpotLight.hpp</label>
+        <link refid="db/d28/a01133"/>
+        <childnode refid="18152" relation="include">
+        </childnode>
+        <childnode refid="18177" relation="include">
+        </childnode>
+      </node>
+      <node id="18144">
+        <label>Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp</label>
+        <link refid="da/d46/a00665"/>
+      </node>
+      <node id="18121">
+        <label>Cache/WindowCache.hpp</label>
+        <link refid="df/da9/a00263"/>
+      </node>
+      <node id="18177">
+        <label>Text/TextSpotLight.hpp</label>
+        <link refid="d3/dbc/a01451"/>
+      </node>
+      <node id="18194">
+        <label>Text/TextSsaoConfig.hpp</label>
+        <link refid="da/df6/a01454"/>
+      </node>
+      <node id="18171">
+        <label>Scene/Light/LightCategory.hpp</label>
+        <link refid="dd/de4/a01121"/>
+        <childnode refid="18172" relation="include">
+        </childnode>
+        <childnode refid="18161" relation="include">
+        </childnode>
+        <childnode refid="18174" relation="include">
+        </childnode>
+        <childnode refid="18176" relation="include">
+        </childnode>
+      </node>
+      <node id="18111">
+        <label>Cache/CacheModule.hpp</label>
+        <link refid="de/d79/a00203"/>
+        <childnode refid="18112" relation="include">
+        </childnode>
+        <childnode refid="18114" relation="include">
+        </childnode>
+        <childnode refid="18127" relation="include">
+        </childnode>
+        <childnode refid="18128" relation="include">
+        </childnode>
+        <childnode refid="18129" relation="include">
+        </childnode>
+        <childnode refid="18117" relation="include">
+        </childnode>
+        <childnode refid="18118" relation="include">
+        </childnode>
+        <childnode refid="18130" relation="include">
+        </childnode>
+        <childnode refid="18135" relation="include">
+        </childnode>
+        <childnode refid="18119" relation="include">
+        </childnode>
+        <childnode refid="18126" relation="include">
+        </childnode>
+        <childnode refid="18136" relation="include">
+        </childnode>
+        <childnode refid="18137" relation="include">
+        </childnode>
+        <childnode refid="18138" relation="include">
+        </childnode>
+        <childnode refid="18120" relation="include">
+        </childnode>
+        <childnode refid="18121" relation="include">
+        </childnode>
+        <childnode refid="18139" relation="include">
+        </childnode>
+        <childnode refid="18141" relation="include">
+        </childnode>
+        <childnode refid="18143" relation="include">
+        </childnode>
+        <childnode refid="18145" relation="include">
+        </childnode>
+        <childnode refid="18146" relation="include">
+        </childnode>
+        <childnode refid="18147" relation="include">
+        </childnode>
+        <childnode refid="18150" relation="include">
+        </childnode>
+        <childnode refid="18154" relation="include">
+        </childnode>
+        <childnode refid="18169" relation="include">
+        </childnode>
+        <childnode refid="18170" relation="include">
+        </childnode>
+        <childnode refid="18165" relation="include">
+        </childnode>
+        <childnode refid="18178" relation="include">
+        </childnode>
+      </node>
+      <node id="18125">
+        <label>Cache/PluginCache.hpp</label>
+        <link refid="d2/dc8/a00242"/>
+      </node>
+      <node id="18186">
+        <label>Render/Passes/DepthPass.hpp</label>
+        <link refid="df/df7/a00731"/>
+      </node>
+      <node id="18167">
+        <label>Text/TextShadow.hpp</label>
+        <link refid="d0/de2/a01442"/>
+      </node>
+      <node id="18115">
+        <label>Cache/AnimatedObjectGroupCache.hpp</label>
+        <link refid="da/d15/a00188"/>
+      </node>
+      <node id="18174">
+        <label>Scene/Light/PointLight.hpp</label>
+        <link refid="d0/d61/a01130"/>
+        <childnode refid="18152" relation="include">
+        </childnode>
+        <childnode refid="18175" relation="include">
+        </childnode>
+      </node>
+      <node id="18113">
+        <label>Cache/BillboardCache.hpp</label>
+        <link refid="d9/dd0/a00191"/>
+      </node>
+      <node id="18180">
+        <label>Text/TextProgram.hpp</label>
+        <link refid="d4/d20/a01421"/>
+      </node>
+      <node id="18110">
+        <label>Render/Ssao/SsaoModule.hpp</label>
+        <link refid="dd/db2/a00866"/>
+        <childnode refid="18111" relation="include">
+        </childnode>
+        <childnode refid="18120" relation="include">
+        </childnode>
+        <childnode refid="18181" relation="include">
+        </childnode>
+        <childnode refid="18182" relation="include">
+        </childnode>
+        <childnode refid="18183" relation="include">
+        </childnode>
+        <childnode refid="18195" relation="include">
+        </childnode>
+        <childnode refid="18196" relation="include">
+        </childnode>
+      </node>
+      <node id="18170">
+        <label>Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp</label>
+        <link refid="df/d39/a00950"/>
+        <childnode refid="18155" relation="include">
+        </childnode>
+      </node>
+      <node id="18163">
+        <label>Scene/Light/LightFactory.hpp</label>
+        <link refid="d0/dc8/a01124"/>
+      </node>
+      <node id="18120">
+        <label>Cache/TechniqueCache.hpp</label>
+        <link refid="dd/dd7/a00260"/>
+      </node>
+      <node id="18118">
+        <label>Cache/MeshCache.hpp</label>
+        <link refid="d9/d01/a00227"/>
+      </node>
+      <node id="18117">
+        <label>Cache/ListenerCache.hpp</label>
+        <link refid="dd/d52/a00221"/>
+      </node>
+      <node id="18196">
+        <label>Shader/Ubos/SsaoConfigUbo.hpp</label>
+        <link refid="d7/d51/a01340"/>
+      </node>
+      <node id="18184">
+        <label>Render/Technique/RenderTechnique.hpp</label>
+        <link refid="d3/de5/a00956"/>
+      </node>
+      <node id="18114">
+        <label>Cache/CacheBase.hpp</label>
+        <link refid="d3/db1/a00200"/>
+        <childnode refid="18115" relation="include">
+        </childnode>
+        <childnode refid="18116" relation="include">
+        </childnode>
+        <childnode refid="18122" relation="include">
+        </childnode>
+        <childnode refid="18123" relation="include">
+        </childnode>
+        <childnode refid="18125" relation="include">
+        </childnode>
+        <childnode refid="18126" relation="include">
+        </childnode>
+      </node>
+      <node id="18188">
+        <label>Render/Technique/Opaque/OpaquePass.hpp</label>
+        <link refid="d8/d38/a00926"/>
+      </node>
+      <node id="18181">
+        <label>Render/Ssao/SsaoBlurPass.hpp</label>
+        <link refid="d2/d5e/a00860"/>
+      </node>
+      <node id="18195">
+        <label>Render/Technique/Opaque/SsaoPass.hpp</label>
+        <link refid="d5/da3/a00953"/>
+        <childnode refid="18159" relation="include">
+        </childnode>
+      </node>
+      <node id="18152">
+        <label>Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp</label>
+        <link refid="d3/dd1/a00914"/>
+      </node>
+      <node id="18146">
+        <label>Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp</label>
+        <link refid="d8/d73/a00674"/>
+      </node>
+      <node id="18156">
+        <label>Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp</label>
+        <link refid="d6/dad/a00941"/>
+      </node>
+      <node id="18131">
+        <label>Cache/GeometryCache.hpp</label>
+        <link refid="d3/dd5/a00215"/>
+      </node>
+      <node id="18136">
+        <label>Cache/SceneNodeCache.hpp</label>
+        <link refid="d3/d1a/a00251"/>
+      </node>
+      <node id="18191">
+        <label>Render/Technique/Transparent/WeightedBlendRendering.hpp</label>
+        <link refid="db/d20/a00980"/>
+      </node>
+      <node id="18138">
+        <label>Cache/TargetCache.hpp</label>
+        <link refid="d9/d39/a00257"/>
+      </node>
+      <node id="18143">
+        <label>Render/GlobalIllumination/LightPropagationVolumes/GeometryInjectionPass.hpp</label>
+        <link refid="dc/df1/a00662"/>
+        <childnode refid="18144" relation="include">
+        </childnode>
+      </node>
+      <node id="18164">
+        <label>Text/TextLight.hpp</label>
+        <link refid="df/d68/a01385"/>
+      </node>
+      <node id="18153">
+        <label>Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp</label>
+        <link refid="d6/d82/a00920"/>
+        <childnode refid="18152" relation="include">
+        </childnode>
+      </node>
+      <node id="18133">
+        <label>Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp</label>
+        <link refid="d7/d12/a00911"/>
+      </node>
+      <node id="18126">
+        <label>Cache/SceneCache.hpp</label>
+        <link refid="dd/dd7/a00248"/>
+      </node>
+      <node id="18190">
+        <label>Render/Technique/Transparent/TransparentResolvePass.hpp</label>
+        <link refid="d5/d6c/a00977"/>
+        <childnode refid="18191" relation="include">
+        </childnode>
+      </node>
+      <node id="18160">
+        <label>Scene/Shadow.hpp</label>
+        <link refid="dc/d70/a01187"/>
+        <childnode refid="18161" relation="include">
+        </childnode>
+        <childnode refid="18165" relation="include">
+        </childnode>
+        <childnode refid="18167" relation="include">
+        </childnode>
+      </node>
+      <node id="18155">
+        <label>Render/Technique/Opaque/ReflectiveShadowMapGI/LightPassReflectiveShadow.hpp</label>
+        <link refid="d8/d19/a00935"/>
+      </node>
+      <node id="18166">
+        <label>Text/TextScene.hpp</label>
+        <link refid="dc/d85/a01436"/>
+      </node>
+      <node id="18119">
+        <label>Cache/SamplerCache.hpp</label>
+        <link refid="d6/d22/a00245"/>
+      </node>
+      <node id="18124">
+        <label>Overlay/DebugOverlays.hpp</label>
+        <link refid="d0/d3e/a00566"/>
+      </node>
+      <node id="18185">
+        <label>Render/Technique/RenderTechniquePass.hpp</label>
+        <link refid="db/d40/a00959"/>
+        <childnode refid="18186" relation="include">
+        </childnode>
+        <childnode refid="18187" relation="include">
+        </childnode>
+        <childnode refid="18188" relation="include">
+        </childnode>
+        <childnode refid="18189" relation="include">
+        </childnode>
+      </node>
+      <node id="18134">
+        <label>Cache/ObjectCache.hpp</label>
+        <link refid="d1/da8/a00230"/>
+        <childnode refid="18128" relation="include">
+        </childnode>
+        <childnode refid="18135" relation="include">
+        </childnode>
+        <childnode refid="18136" relation="include">
+        </childnode>
+      </node>
+      <node id="18145">
+        <label>Render/GlobalIllumination/LightPropagationVolumes/LightInjectionPass.hpp</label>
+        <link refid="d0/d5c/a00668"/>
+        <childnode refid="18144" relation="include">
+        </childnode>
+      </node>
+      <node id="18139">
+        <label>Castor3DPrerequisites.hpp</label>
+        <link refid="d9/dd6/a00272"/>
+        <childnode refid="18140" relation="include">
+        </childnode>
+      </node>
+      <node id="18135">
+        <label>Cache/ParticleSystemCache.hpp</label>
+        <link refid="d0/d27/a00239"/>
+      </node>
+      <node id="18158">
+        <label>Render/Technique/Opaque/LightingPass.hpp</label>
+        <link refid="da/d5b/a00905"/>
+        <childnode refid="18159" relation="include">
+        </childnode>
+      </node>
+      <node id="18137">
+        <label>Cache/ShaderCache.hpp</label>
+        <link refid="d7/d03/a00254"/>
+      </node>
+      <node id="18142">
+        <label>Render/Node/RenderNode_Render.hpp</label>
+        <link refid="d4/d6a/a00704"/>
+      </node>
+      <node id="18130">
+        <label>Cache/ObjectCacheBase.hpp</label>
+        <link refid="d6/de1/a00233"/>
+        <childnode refid="18113" relation="include">
+        </childnode>
+        <childnode refid="18131" relation="include">
+        </childnode>
+        <childnode refid="18132" relation="include">
+        </childnode>
+        <childnode refid="18134" relation="include">
+        </childnode>
+      </node>
+      <node id="18179">
+        <label>Render/ToTexture/RenderDepthQuad.hpp</label>
+        <link refid="df/dbc/a01004"/>
+      </node>
+      <node id="18183">
+        <label>Render/Ssao/SsaoRawAOPass.hpp</label>
+        <link refid="d3/db2/a00869"/>
+      </node>
+      <node id="18175">
+        <label>Text/TextPointLight.hpp</label>
+        <link refid="de/d70/a01415"/>
+      </node>
+      <node id="18168">
+        <label>Text/TextRsmConfig.hpp</label>
+        <link refid="d8/dd0/a01430"/>
+      </node>
+      <node id="18128">
+        <label>Cache/CameraCache.hpp</label>
+        <link refid="d3/de5/a00209"/>
+      </node>
+    </invincdepgraph>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Ssao/SsaoModule.hpp"/>
+  </compounddef>
+</doxygen>

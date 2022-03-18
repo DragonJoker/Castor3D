@@ -1,30 +1,839 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d5/dd2/a04543" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::NonTexturedCube::Quad::Vertex</compoundname>
-    <includes local="no">RenderModule.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d5/dd2/a04543_1a194606a9b2bd3ea311e627eb0362f824" prot="public" static="no" mutable="no">
-        <type>castor::Point3f</type>
-        <definition>castor::Point3f castor3d::NonTexturedCube::Quad::Vertex::position</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d5/dd2/a04543" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ComputeParticleSystem</compoundname>
+    <basecompoundref refid="d0/d9d/a04583" prot="public" virt="non-virtual">castor3d::ParticleSystemImpl</basecompoundref>
+    <includes local="no">ComputeParticleSystem.hpp</includes>
+    <innerclass refid="d0/da8/a04547" prot="protected">castor3d::ComputeParticleSystem::Configuration</innerclass>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d5/dd2/a04543_1af513fca4fa2c20860dc92af700ef3c7a" prot="protected" static="no" mutable="no">
+        <type><ref refid="d1/dce/a04559" kindref="compound">ParticleDeclaration</ref></type>
+        <definition>ParticleDeclaration castor3d::ComputeParticleSystem::m_inputs</definition>
         <argsstring></argsstring>
-        <name>position</name>
+        <name>m_inputs</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::m_inputs</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="50" column="1" bodyfile="Render/RenderModule.hpp" bodystart="50" bodyend="-1"/>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="119" column="21" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="119" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dd2/a04543_1aac43fc8399e994c7c6af35f2db030292" prot="protected" static="no" mutable="no">
+        <type>ShaderProgramSPtr</type>
+        <definition>ShaderProgramSPtr castor3d::ComputeParticleSystem::m_program</definition>
+        <argsstring></argsstring>
+        <name>m_program</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::m_program</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="120" column="19" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="120" bodyend="-1"/>
+        <referencedby refid="d5/dd2/a04543_1a7c53a1717e0b8204626c426028cbf033" compoundref="d1/dfa/a01097" startline="97" endline="100">getUpdateProgram</referencedby>
+        <referencedby refid="d5/dd2/a04543_1a5724153d3a41ee4defb08c020fed38c6" compoundref="d1/dfa/a01097" startline="87" endline="90">hasUpdateProgram</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dd2/a04543_1ad50611c43303e35edf6ea08a1f15d150" prot="protected" static="no" mutable="no">
+        <type><ref refid="d0/d01/a02511" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d0/da8/a04547" kindref="compound">Configuration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::ComputeParticleSystem::m_ubo</definition>
+        <argsstring></argsstring>
+        <name>m_ubo</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::m_ubo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="121" column="22" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dd2/a04543_1a6b7c2b05b0a1d3968e01a4586df9e654" prot="protected" static="no" mutable="no">
+        <type>std::array&lt; ashes::BufferPtr&lt; uint8_t &gt;, 2 &gt;</type>
+        <definition>std::array&lt; ashes::BufferPtr&lt; uint8_t &gt;, 2 &gt; castor3d::ComputeParticleSystem::m_particlesStorages</definition>
+        <argsstring></argsstring>
+        <name>m_particlesStorages</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::m_particlesStorages</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="122" column="12" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dd2/a04543_1a1f10128cc86d81a56572959eb8282908" prot="protected" static="no" mutable="no">
+        <type>ashes::BufferPtr&lt; uint32_t &gt;</type>
+        <definition>ashes::BufferPtr&lt; uint32_t &gt; castor3d::ComputeParticleSystem::m_generatedCountBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_generatedCountBuffer</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::m_generatedCountBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="123" column="18" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="123" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dd2/a04543_1a14c42931abdc974459161b3da0648128" prot="protected" static="no" mutable="no">
+        <type>ashes::BufferPtr&lt; castor::Point4f &gt;</type>
+        <definition>ashes::BufferPtr&lt; castor::Point4f &gt; castor3d::ComputeParticleSystem::m_randomStorage</definition>
+        <argsstring></argsstring>
+        <name>m_randomStorage</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::m_randomStorage</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="124" column="18" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dd2/a04543_1a78c6cbb5253864a06c1c72dacf65f533" prot="protected" static="no" mutable="no">
+        <type>ashes::DescriptorSetLayoutPtr</type>
+        <definition>ashes::DescriptorSetLayoutPtr castor3d::ComputeParticleSystem::m_descriptorLayout</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorLayout</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::m_descriptorLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="125" column="31" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="125" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dd2/a04543_1a3d5d1f7fd49475870ffc0eb90e6c4969" prot="protected" static="no" mutable="no">
+        <type>ashes::PipelineLayoutPtr</type>
+        <definition>ashes::PipelineLayoutPtr castor3d::ComputeParticleSystem::m_pipelineLayout</definition>
+        <argsstring></argsstring>
+        <name>m_pipelineLayout</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::m_pipelineLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="126" column="26" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="126" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dd2/a04543_1a8b75d84fe20b31a68348310993d67f7a" prot="protected" static="no" mutable="no">
+        <type>ashes::ComputePipelinePtr</type>
+        <definition>ashes::ComputePipelinePtr castor3d::ComputeParticleSystem::m_pipeline</definition>
+        <argsstring></argsstring>
+        <name>m_pipeline</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::m_pipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="127" column="27" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="127" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dd2/a04543_1a898cf46adeebc7fed760b05d11a68378" prot="protected" static="no" mutable="no">
+        <type>ashes::DescriptorSetPoolPtr</type>
+        <definition>ashes::DescriptorSetPoolPtr castor3d::ComputeParticleSystem::m_descriptorPool</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorPool</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::m_descriptorPool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="128" column="29" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dd2/a04543_1a5266bf2fe30b43b2eef191d7af8861b2" prot="protected" static="no" mutable="no">
+        <type>std::array&lt; ashes::DescriptorSetPtr, 2u &gt;</type>
+        <definition>std::array&lt; ashes::DescriptorSetPtr, 2u &gt; castor3d::ComputeParticleSystem::m_descriptorSets</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorSets</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::m_descriptorSets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="129" column="12" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dd2/a04543_1abc6b5b078d2625f322b82f15aa39ca22" prot="protected" static="no" mutable="no">
+        <type>ashes::CommandBufferPtr</type>
+        <definition>ashes::CommandBufferPtr castor3d::ComputeParticleSystem::m_commandBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_commandBuffer</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::m_commandBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="130" column="25" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="130" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dd2/a04543_1a4de3b826f6f09d2241365d908e4fc330" prot="protected" static="no" mutable="no">
+        <type>ashes::FencePtr</type>
+        <definition>ashes::FencePtr castor3d::ComputeParticleSystem::m_fence</definition>
+        <argsstring></argsstring>
+        <name>m_fence</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::m_fence</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="131" column="17" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="131" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dd2/a04543_1a65d003d7be73c61f02a790b1ed163d1a" prot="protected" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ComputeParticleSystem::m_particlesCount</definition>
+        <argsstring></argsstring>
+        <name>m_particlesCount</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::m_particlesCount</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="132" column="10" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="132" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dd2/a04543_1a13aee7d81094e8f06c2495fc722e9a77" prot="protected" static="no" mutable="no">
+        <type>castor::Point3i</type>
+        <definition>castor::Point3i castor3d::ComputeParticleSystem::m_worgGroupSizes</definition>
+        <argsstring></argsstring>
+        <name>m_worgGroupSizes</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::m_worgGroupSizes</qualifiedname>
+        <initializer>{ 128, 1, 1 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="133" column="17" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="133" bodyend="-1"/>
+        <referencedby refid="d5/dd2/a04543_1ae6a322c6425389f9c1c5b692646c4425" compoundref="d1/dfa/a01097" startline="77" endline="80">setGroupSizes</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dd2/a04543_1ac6f09dd09115f87219f26089bb790924" prot="protected" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ComputeParticleSystem::m_in</definition>
+        <argsstring></argsstring>
+        <name>m_in</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::m_in</qualifiedname>
+        <initializer>{ 0 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="134" column="10" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="134" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dd2/a04543_1a3c7598fcf55e43b945044426a63bc1ae" prot="protected" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ComputeParticleSystem::m_out</definition>
+        <argsstring></argsstring>
+        <name>m_out</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::m_out</qualifiedname>
+        <initializer>{ 1 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="135" column="10" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/dd2/a04543_1a00de2edebb5a79d8da382e0ca67f05d8" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ComputeParticleSystem::ComputeParticleSystem</definition>
+        <argsstring>(ParticleSystem &amp;parent)</argsstring>
+        <name>ComputeParticleSystem</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::ComputeParticleSystem</qualifiedname>
+        <param>
+          <type><ref refid="d0/d61/a04579" kindref="compound">ParticleSystem</ref> &amp;</type>
+          <declname>parent</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent particle system. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="37" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dd2/a04543_1a0f708359f8644baa1d072b397c2c4be2" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::ComputeParticleSystem::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device) override</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::initialise</qualifiedname>
+        <reimplements refid="d0/d9d/a04583_1a15116afb02d14395677a0ecfbfe8048a">initialise</reimplements>
+        <param>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Initialises the implementation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The current device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> if all is OK. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="41" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dd2/a04543_1a018a8fe8400dd53216507a3f4a619cc0" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ComputeParticleSystem::cleanup</definition>
+        <argsstring>(RenderDevice const &amp;device) override</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::cleanup</qualifiedname>
+        <reimplements refid="d0/d9d/a04583_1a3e66a4283ec662354f4f5bcee495eb9e">cleanup</reimplements>
+        <param>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Cleans the implementation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The current device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="45" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dd2/a04543_1aa8dec5df1359ac7852f1d6f8368b43a9" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ComputeParticleSystem::update</definition>
+        <argsstring>(CpuUpdater &amp;updater) override</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::update</qualifiedname>
+        <reimplements refid="d0/d9d/a04583_1a801b0450eb33126c92e11a55ee5f35bf">update</reimplements>
+        <param>
+          <type><ref refid="d6/dae/a04043" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, CPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="49" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dd2/a04543_1a2a3e1139e0c6572dd55b67f011c8835f" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::ComputeParticleSystem::update</definition>
+        <argsstring>(GpuUpdater &amp;updater) override</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::update</qualifiedname>
+        <reimplements refid="d0/d9d/a04583_1a8897e0ae4c894f736ebe83374ee04e1b">update</reimplements>
+        <param>
+          <type><ref refid="d1/d46/a04047" kindref="compound">GpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, CPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="53" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dd2/a04543_1aa69cc7c4fcc2f875423ec93cf64d65c1" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ComputeParticleSystem::addParticleVariable</definition>
+        <argsstring>(castor::String const &amp;name, ParticleFormat type, castor::String const &amp;defaultValue) override</argsstring>
+        <name>addParticleVariable</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::addParticleVariable</qualifiedname>
+        <reimplements refid="d0/d9d/a04583_1a5f80503a4bb525d090dbf8836feb5785">addParticleVariable</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a4fdd8bd8042f3a3ae81042067e1ac250" kindref="member">ParticleFormat</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>defaultValue</declname>
+        </param>
+        <briefdescription>
+<para>adds a particle variable. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The variable name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The variable type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">defaultValue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The variable default value. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="57" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dd2/a04543_1a1cd04f94fb7bfeb205278c5f04597856" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ComputeParticleSystem::setUpdateProgram</definition>
+        <argsstring>(ShaderProgramSPtr program)</argsstring>
+        <name>setUpdateProgram</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::setUpdateProgram</qualifiedname>
+        <param>
+          <type>ShaderProgramSPtr</type>
+          <declname>program</declname>
+        </param>
+        <briefdescription>
+<para>Defines the program used to update the particles. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">program</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The shader program. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="68" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dd2/a04543_1ae6a322c6425389f9c1c5b692646c4425" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ComputeParticleSystem::setGroupSizes</definition>
+        <argsstring>(castor::Point3i sizes)</argsstring>
+        <name>setGroupSizes</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::setGroupSizes</qualifiedname>
+        <param>
+          <type>castor::Point3i</type>
+          <declname>sizes</declname>
+        </param>
+        <briefdescription>
+<para>Defines the workgroup sizes, as defined inside the compute shader. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">sizes</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The sizes. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="77" column="6" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="77" bodyend="80"/>
+        <references refid="d5/dd2/a04543_1a13aee7d81094e8f06c2495fc722e9a77" compoundref="d1/dfa/a01097" startline="133">m_worgGroupSizes</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/dd2/a04543_1a5724153d3a41ee4defb08c020fed38c6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ComputeParticleSystem::hasUpdateProgram</definition>
+        <argsstring>() const</argsstring>
+        <name>hasUpdateProgram</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::hasUpdateProgram</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>false</computeroutput> if the update program has not been set. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="87" column="6" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="87" bodyend="90"/>
+        <references refid="d5/dd2/a04543_1aac43fc8399e994c7c6af35f2db030292" compoundref="d1/dfa/a01097" startline="120">m_program</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/dd2/a04543_1a7c53a1717e0b8204626c426028cbf033" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d0/d5e/a04655" kindref="compound">ShaderProgram</ref> const &amp;</type>
+        <definition>ShaderProgram const  &amp; castor3d::ComputeParticleSystem::getUpdateProgram</definition>
+        <argsstring>() const</argsstring>
+        <name>getUpdateProgram</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::getUpdateProgram</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The update program. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="97" column="22" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="97" bodyend="100"/>
+        <references refid="d5/dd2/a04543_1aac43fc8399e994c7c6af35f2db030292" compoundref="d1/dfa/a01097" startline="120">m_program</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d5/dd2/a04543_1abc584a0fd8730f7630a471d0666b80f5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ComputeParticleSystem::doInitialiseParticleStorage</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>doInitialiseParticleStorage</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::doInitialiseParticleStorage</qualifiedname>
+        <param>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="103" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dd2/a04543_1aae16ba07fe1fedb67b188852e86eaa43" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ComputeParticleSystem::doCreateRandomStorage</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>doCreateRandomStorage</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::doCreateRandomStorage</qualifiedname>
+        <param>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="104" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dd2/a04543_1ac76297bbd28f7d7c23a8e9ac490f06ef" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ComputeParticleSystem::doInitialisePipeline</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>doInitialisePipeline</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::doInitialisePipeline</qualifiedname>
+        <param>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="105" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dd2/a04543_1a4c7f2193ac23adf666bf07ef0225ac7a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ComputeParticleSystem::doPrepareCommandBuffers</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>doPrepareCommandBuffers</name>
+        <qualifiedname>castor3d::ComputeParticleSystem::doPrepareCommandBuffers</qualifiedname>
+        <param>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="106" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/RenderModule.hpp" line="49" column="1" bodyfile="Render/RenderModule.hpp" bodystart="48" bodyend="51"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::ComputeParticleSystem</label>
+        <link refid="d5/dd2/a04543"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ParticleSystemImpl</label>
+        <link refid="d0/d9d/a04583"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="9">
+        <label>Animable</label>
+        <link refid="de/d59/a02219"/>
+        <childnode refid="10" relation="public-inheritance">
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>K</label>
+      </node>
+      <node id="14">
+        <label>T</label>
+      </node>
+      <node id="18">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ComputeParticleSystem::Configuration &gt;</label>
+        <link refid="d0/d01/a02511"/>
+        <childnode refid="19" relation="template-instance">
+          <edgelabel>&lt; castor3d::ComputeParticleSystem::Configuration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>std::array&lt; ashes::BufferPtr&lt; uint8_t &gt;, 2 &gt;</label>
+        <childnode refid="21" relation="template-instance">
+          <edgelabel>&lt; ashes::BufferPtr&lt; uint8_t &gt;, 2 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>std::array&lt; ashes::DescriptorSetPtr, 2u &gt;</label>
+        <childnode refid="21" relation="template-instance">
+          <edgelabel>&lt; ashes::DescriptorSetPtr, 2u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="de/d59/a02219"/>
+        <childnode refid="16" relation="public-inheritance">
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ComputeParticleSystem</label>
+        <link refid="d5/dd2/a04543"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>m_inputs</edgelabel>
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>m_ubo</edgelabel>
+        </childnode>
+        <childnode refid="20" relation="usage">
+          <edgelabel>m_particlesStorages</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>m_descriptorSets</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::MovableObject</label>
+        <link refid="df/dd3/a04527"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::ParticleDeclaration</label>
+        <link refid="d1/dce/a04559"/>
+      </node>
+      <node id="3">
+        <label>castor3d::ParticleSystem</label>
+        <link refid="d0/d61/a04579"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>m_inputs</edgelabel>
+        </childnode>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_impl</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ParticleSystemImpl</label>
+        <link refid="d0/d9d/a04583"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_parent</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::SceneNode</label>
+        <link refid="d1/d30/a04639"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor3d::UniformBufferOffsetT&lt; DataT &gt;</label>
+        <link refid="d0/d01/a02511"/>
+      </node>
+      <node id="6">
+        <label>castor::Named</label>
+      </node>
+      <node id="16">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="10">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="5">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="11">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="14" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
+      </node>
+      <node id="12">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="13" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="25" column="1" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="27" bodyend="136"/>
     <listofallmembers>
-      <member refid="d5/dd2/a04543_1a194606a9b2bd3ea311e627eb0362f824" prot="public" virt="non-virtual"><scope>castor3d::NonTexturedCube::Quad::Vertex</scope><name>position</name></member>
+      <member refid="d5/dd2/a04543_1aa69cc7c4fcc2f875423ec93cf64d65c1" prot="public" virt="virtual"><scope>castor3d::ComputeParticleSystem</scope><name>addParticleVariable</name></member>
+      <member refid="d5/dd2/a04543_1a018a8fe8400dd53216507a3f4a619cc0" prot="public" virt="virtual"><scope>castor3d::ComputeParticleSystem</scope><name>cleanup</name></member>
+      <member refid="d5/dd2/a04543_1a00de2edebb5a79d8da382e0ca67f05d8" prot="public" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>ComputeParticleSystem</name></member>
+      <member refid="d5/dd2/a04543_1aae16ba07fe1fedb67b188852e86eaa43" prot="private" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>doCreateRandomStorage</name></member>
+      <member refid="d5/dd2/a04543_1abc584a0fd8730f7630a471d0666b80f5" prot="private" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>doInitialiseParticleStorage</name></member>
+      <member refid="d5/dd2/a04543_1ac76297bbd28f7d7c23a8e9ac490f06ef" prot="private" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>doInitialisePipeline</name></member>
+      <member refid="d5/dd2/a04543_1a4c7f2193ac23adf666bf07ef0225ac7a" prot="private" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>doPrepareCommandBuffers</name></member>
+      <member refid="d0/d9d/a04583_1a99d68cfdabb0559f24203f7163f96ddb" prot="public" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>getParent</name></member>
+      <member refid="d0/d9d/a04583_1ae3b9349259ea0f58000533333f19e45f" prot="public" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>getType</name></member>
+      <member refid="d5/dd2/a04543_1a7c53a1717e0b8204626c426028cbf033" prot="public" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>getUpdateProgram</name></member>
+      <member refid="d5/dd2/a04543_1a5724153d3a41ee4defb08c020fed38c6" prot="public" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>hasUpdateProgram</name></member>
+      <member refid="d5/dd2/a04543_1a0f708359f8644baa1d072b397c2c4be2" prot="public" virt="virtual"><scope>castor3d::ComputeParticleSystem</scope><name>initialise</name></member>
+      <member refid="d5/dd2/a04543_1abc6b5b078d2625f322b82f15aa39ca22" prot="protected" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>m_commandBuffer</name></member>
+      <member refid="d5/dd2/a04543_1a78c6cbb5253864a06c1c72dacf65f533" prot="protected" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>m_descriptorLayout</name></member>
+      <member refid="d5/dd2/a04543_1a898cf46adeebc7fed760b05d11a68378" prot="protected" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>m_descriptorPool</name></member>
+      <member refid="d5/dd2/a04543_1a5266bf2fe30b43b2eef191d7af8861b2" prot="protected" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>m_descriptorSets</name></member>
+      <member refid="d5/dd2/a04543_1a4de3b826f6f09d2241365d908e4fc330" prot="protected" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>m_fence</name></member>
+      <member refid="d5/dd2/a04543_1a1f10128cc86d81a56572959eb8282908" prot="protected" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>m_generatedCountBuffer</name></member>
+      <member refid="d5/dd2/a04543_1ac6f09dd09115f87219f26089bb790924" prot="protected" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>m_in</name></member>
+      <member refid="d5/dd2/a04543_1af513fca4fa2c20860dc92af700ef3c7a" prot="protected" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>m_inputs</name></member>
+      <member refid="d5/dd2/a04543_1a3c7598fcf55e43b945044426a63bc1ae" prot="protected" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>m_out</name></member>
+      <member refid="d0/d9d/a04583_1a37bc57bd0e70805a0dd0864661e144cb" prot="protected" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>m_parent</name></member>
+      <member refid="d5/dd2/a04543_1a65d003d7be73c61f02a790b1ed163d1a" prot="protected" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>m_particlesCount</name></member>
+      <member refid="d5/dd2/a04543_1a6b7c2b05b0a1d3968e01a4586df9e654" prot="protected" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>m_particlesStorages</name></member>
+      <member refid="d5/dd2/a04543_1a8b75d84fe20b31a68348310993d67f7a" prot="protected" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>m_pipeline</name></member>
+      <member refid="d5/dd2/a04543_1a3d5d1f7fd49475870ffc0eb90e6c4969" prot="protected" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>m_pipelineLayout</name></member>
+      <member refid="d5/dd2/a04543_1aac43fc8399e994c7c6af35f2db030292" prot="protected" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>m_program</name></member>
+      <member refid="d5/dd2/a04543_1a14c42931abdc974459161b3da0648128" prot="protected" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>m_randomStorage</name></member>
+      <member refid="d0/d9d/a04583_1a99d513ff315e6521e3dbd37af40de96e" prot="protected" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>m_type</name></member>
+      <member refid="d5/dd2/a04543_1ad50611c43303e35edf6ea08a1f15d150" prot="protected" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>m_ubo</name></member>
+      <member refid="d5/dd2/a04543_1a13aee7d81094e8f06c2495fc722e9a77" prot="protected" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>m_worgGroupSizes</name></member>
+      <member refid="d0/d9d/a04583_1a0baafdbf0bc8704985cbad0cbb714f11" prot="public" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>ParticleSystemImpl</name></member>
+      <member refid="d5/dd2/a04543_1ae6a322c6425389f9c1c5b692646c4425" prot="public" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>setGroupSizes</name></member>
+      <member refid="d5/dd2/a04543_1a1cd04f94fb7bfeb205278c5f04597856" prot="public" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>setUpdateProgram</name></member>
+      <member refid="d0/d9d/a04583_1a68c487749293661310e8aad9a36f6b64" prot="public" virt="non-virtual"><scope>castor3d::ComputeParticleSystem</scope><name>Type</name></member>
+      <member refid="d5/dd2/a04543_1aa8dec5df1359ac7852f1d6f8368b43a9" prot="public" virt="virtual"><scope>castor3d::ComputeParticleSystem</scope><name>update</name></member>
+      <member refid="d5/dd2/a04543_1a2a3e1139e0c6572dd55b67f011c8835f" prot="public" virt="virtual"><scope>castor3d::ComputeParticleSystem</scope><name>update</name></member>
+      <member refid="d0/d9d/a04583_1a759714fb8ef9487de8bc28687fc551bf" prot="public" virt="virtual"><scope>castor3d::ComputeParticleSystem</scope><name>~ParticleSystemImpl</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

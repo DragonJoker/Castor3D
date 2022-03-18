@@ -1,242 +1,142 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d0/dce/a03971" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::Submesh</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Mesh &gt;</basecompoundref>
-    <basecompoundref prot="public" virt="non-virtual">std::enable_shared_from_this&lt; Submesh &gt;</basecompoundref>
-    <includes local="no">Submesh.hpp</includes>
-      <sectiondef kind="user-defined">
-      <memberdef kind="friend" id="d0/dce/a03971_1a5b13cff7ddcee234e4e7d925a5ec1dc5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>friend class</type>
-        <definition>friend class BinaryWriter&lt; Submesh &gt;</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d0/dce/a03971" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::RenderLoop</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <derivedcompoundref refid="d1/d42/a03979" prot="public" virt="non-virtual">castor3d::RenderLoopAsync</derivedcompoundref>
+    <derivedcompoundref refid="d1/de2/a03983" prot="public" virt="non-virtual">castor3d::RenderLoopSync</derivedcompoundref>
+    <includes local="no">RenderLoop.hpp</includes>
+    <innerclass refid="df/d2e/a03975" prot="protected">castor3d::RenderLoop::UploadResources</innerclass>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d0/dce/a03971_1a886e62492a8383af4e913c392e9c13af" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr uint32_t</type>
+        <definition>constexpr uint32_t castor3d::RenderLoop::UnlimitedFPS</definition>
         <argsstring></argsstring>
-        <name>BinaryWriter&lt; Submesh &gt;</name>
+        <name>UnlimitedFPS</name>
+        <qualifiedname>castor3d::RenderLoop::UnlimitedFPS</qualifiedname>
+        <initializer>= 0xFFFFFFFFu</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="387" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="389" bodyend="-1"/>
+        <location file="Render/RenderLoop.hpp" line="28" column="27" bodyfile="Render/RenderLoop.hpp" bodystart="28" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="friend" id="d0/dce/a03971_1a8abe7fb84a9ecaea48dc4299d7beeb2b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>friend class</type>
-        <definition>friend class BinaryParser&lt; Submesh &gt;</definition>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d0/dce/a03971_1a12c0e4650d67b30b6d3d8af64a6fdea6" prot="protected" static="no" mutable="no">
+        <type><ref refid="d3/d9a/a04075" kindref="compound">RenderSystem</ref> &amp;</type>
+        <definition>RenderSystem&amp; castor3d::RenderLoop::m_renderSystem</definition>
         <argsstring></argsstring>
-        <name>BinaryParser&lt; Submesh &gt;</name>
+        <name>m_renderSystem</name>
+        <qualifiedname>castor3d::RenderLoop::m_renderSystem</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The current <ref refid="d3/d9a/a04075" kindref="compound">RenderSystem</ref>. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="387" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="390" bodyend="-1"/>
+        <location file="Render/RenderLoop.hpp" line="242" column="15" bodyfile="Render/RenderLoop.hpp" bodystart="242" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d0/dce/a03971_1a687784b28e3500437a466ea7b247f20d" prot="public" static="yes" mutable="no">
-        <type>uint32_t constexpr</type>
-        <definition>uint32_t constexpr castor3d::Submesh::Position</definition>
-        <argsstring></argsstring>
-        <name>Position</name>
-        <initializer>= 0u</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="360" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="360" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/dce/a03971_1afb6117f80bdadb0715b40377f1d7112a" prot="public" static="yes" mutable="no">
-        <type>uint32_t constexpr</type>
-        <definition>uint32_t constexpr castor3d::Submesh::Normal</definition>
-        <argsstring></argsstring>
-        <name>Normal</name>
-        <initializer>= 1u</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="361" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="361" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/dce/a03971_1a79af2c02b68ea47643fb741b3faf805c" prot="public" static="yes" mutable="no">
-        <type>uint32_t constexpr</type>
-        <definition>uint32_t constexpr castor3d::Submesh::Tangent</definition>
-        <argsstring></argsstring>
-        <name>Tangent</name>
-        <initializer>= 2u</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="362" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="362" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/dce/a03971_1af6947b55819dac18d564efabc0027cdc" prot="public" static="yes" mutable="no">
-        <type>uint32_t constexpr</type>
-        <definition>uint32_t constexpr castor3d::Submesh::Bitangent</definition>
-        <argsstring></argsstring>
-        <name>Bitangent</name>
-        <initializer>= 3u</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="363" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="363" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/dce/a03971_1aed06d7ffafd6d1aa579b37fea8df9d04" prot="public" static="yes" mutable="no">
-        <type>uint32_t constexpr</type>
-        <definition>uint32_t constexpr castor3d::Submesh::Texture</definition>
-        <argsstring></argsstring>
-        <name>Texture</name>
-        <initializer>= 4u</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="364" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="364" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/dce/a03971_1a2a638d1939fae033f9c59658b11fb380" prot="private" static="no" mutable="no">
-        <type><ref refid="d5/d45/a03887" kindref="compound">Mesh</ref> &amp;</type>
-        <definition>Mesh&amp; castor3d::Submesh::m_parentMesh</definition>
-        <argsstring></argsstring>
-        <name>m_parentMesh</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="367" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="367" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/dce/a03971_1aac8dacf5e8886b4d4a33f4704409ca57" prot="private" static="no" mutable="no">
+      <memberdef kind="variable" id="d0/dce/a03971_1aca51dfa60d759d003d2e706b33124933" prot="protected" static="no" mutable="no">
         <type>uint32_t</type>
-        <definition>uint32_t castor3d::Submesh::m_id</definition>
+        <definition>uint32_t castor3d::RenderLoop::m_wantedFPS</definition>
         <argsstring></argsstring>
-        <name>m_id</name>
+        <name>m_wantedFPS</name>
+        <qualifiedname>castor3d::RenderLoop::m_wantedFPS</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The wanted FPS, used in threaded render mode. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="245" column="10" bodyfile="Render/RenderLoop.hpp" bodystart="245" bodyend="-1"/>
+        <referencedby refid="d0/dce/a03971_1a4f497f75e762e1308a6d972114f845ac" compoundref="d0/dad/a00806" startline="205" endline="208">getWantedFps</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dce/a03971_1a3fdea4c3d454da13b6874d71d031772a" prot="protected" static="no" mutable="no">
+        <type>castor::Milliseconds</type>
+        <definition>castor::Milliseconds castor3d::RenderLoop::m_frameTime</definition>
+        <argsstring></argsstring>
+        <name>m_frameTime</name>
+        <qualifiedname>castor3d::RenderLoop::m_frameTime</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The wanted time for a frame. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="248" column="22" bodyfile="Render/RenderLoop.hpp" bodystart="248" bodyend="-1"/>
+        <referencedby refid="d0/dce/a03971_1abce67ba6a22426d1555dcfb813432242" compoundref="d0/dad/a00806" startline="195" endline="198">getFrameTime</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dce/a03971_1aadd20893be5df0f0a8bdfe52b5f4d148" prot="protected" static="no" mutable="no">
+        <type>std::atomic&lt; castor::Microseconds &gt;</type>
+        <definition>std::atomic&lt; castor::Microseconds &gt; castor3d::RenderLoop::m_lastFrameTime</definition>
+        <argsstring></argsstring>
+        <name>m_lastFrameTime</name>
+        <qualifiedname>castor3d::RenderLoop::m_lastFrameTime</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The elapsed time for the last frame. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="251" column="13" bodyfile="Render/RenderLoop.hpp" bodystart="251" bodyend="-1"/>
+        <referencedby refid="d0/dce/a03971_1a74acb481115f9d2c3084bfb81a3dbe3f" compoundref="d0/dad/a00806" startline="215" endline="218">getLastFrameTime</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dce/a03971_1a3df1d0d853b8d30a64f9491ba2b64206" prot="protected" static="no" mutable="no">
+        <type>std::unique_ptr&lt; <ref refid="d5/d70/a03499" kindref="compound">DebugOverlays</ref> &gt;</type>
+        <definition>std::unique_ptr&lt; DebugOverlays &gt; castor3d::RenderLoop::m_debugOverlays</definition>
+        <argsstring></argsstring>
+        <name>m_debugOverlays</name>
+        <qualifiedname>castor3d::RenderLoop::m_debugOverlays</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The debug overlays. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="254" column="17" bodyfile="Render/RenderLoop.hpp" bodystart="254" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dce/a03971_1acda37a7285dc00458860bd65822d34a6" prot="protected" static="no" mutable="no">
+        <type>std::mutex</type>
+        <definition>std::mutex castor3d::RenderLoop::m_debugOverlaysMtx</definition>
+        <argsstring></argsstring>
+        <name>m_debugOverlaysMtx</name>
+        <qualifiedname>castor3d::RenderLoop::m_debugOverlaysMtx</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="368" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="368" bodyend="-1"/>
+        <location file="Render/RenderLoop.hpp" line="255" column="12" bodyfile="Render/RenderLoop.hpp" bodystart="255" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d0/dce/a03971_1aa42a6cff7fdaf956ac8ffd45cb3f0872" prot="private" static="no" mutable="no">
-        <type>MaterialWPtr</type>
-        <definition>MaterialWPtr castor3d::Submesh::m_defaultMaterial</definition>
+      <memberdef kind="variable" id="d0/dce/a03971_1a110d978875d737faa37572c0d01417f3" prot="protected" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="df/d2e/a03975" kindref="compound">UploadResources</ref>, 2u &gt;</type>
+        <definition>std::array&lt; UploadResources, 2u &gt; castor3d::RenderLoop::m_uploadResources</definition>
         <argsstring></argsstring>
-        <name>m_defaultMaterial</name>
+        <name>m_uploadResources</name>
+        <qualifiedname>castor3d::RenderLoop::m_uploadResources</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="369" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="369" bodyend="-1"/>
+        <location file="Render/RenderLoop.hpp" line="269" column="12" bodyfile="Render/RenderLoop.hpp" bodystart="269" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d0/dce/a03971_1a7fb1b2216f7123ff7d24b4b0528d519e" prot="private" static="no" mutable="no">
-        <type>castor::BoundingBox</type>
-        <definition>castor::BoundingBox castor3d::Submesh::m_box</definition>
+      <memberdef kind="variable" id="d0/dce/a03971_1a03f6c7a9ec87f3e1e24dfc1bf8868b89" prot="protected" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderLoop::m_currentUpdate</definition>
         <argsstring></argsstring>
-        <name>m_box</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="370" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="370" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/dce/a03971_1a9efab87300f9174a2c782c5c77bf0755" prot="private" static="no" mutable="no">
-        <type>castor::BoundingSphere</type>
-        <definition>castor::BoundingSphere castor3d::Submesh::m_sphere</definition>
-        <argsstring></argsstring>
-        <name>m_sphere</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="371" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="371" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/dce/a03971_1a3f874672009d6ce7835badb2c2a140c9" prot="private" static="no" mutable="no">
-        <type><ref refid="d7/dd1/a01458_1acc83a5f6efdad2c69d185e0595e52b4d" kindref="member">InterleavedVertexArray</ref></type>
-        <definition>InterleavedVertexArray castor3d::Submesh::m_points</definition>
-        <argsstring></argsstring>
-        <name>m_points</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="372" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="372" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/dce/a03971_1a293343306501e647630062c255f26496" prot="private" static="no" mutable="no">
-        <type>SubmeshComponentStrMap</type>
-        <definition>SubmeshComponentStrMap castor3d::Submesh::m_components</definition>
-        <argsstring></argsstring>
-        <name>m_components</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="373" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="373" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/dce/a03971_1a6317c343fd568f0d0afee2669ae59d4b" prot="private" static="no" mutable="no">
-        <type>InstantiationComponentSPtr</type>
-        <definition>InstantiationComponentSPtr castor3d::Submesh::m_instantiation</definition>
-        <argsstring></argsstring>
-        <name>m_instantiation</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="374" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="374" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/dce/a03971_1a3e6af3ee37fb8e10c3cf8115c259bffd" prot="private" static="no" mutable="no">
-        <type>BonesInstantiationComponentSPtr</type>
-        <definition>BonesInstantiationComponentSPtr castor3d::Submesh::m_instantiatedBones</definition>
-        <argsstring></argsstring>
-        <name>m_instantiatedBones</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="375" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="375" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/dce/a03971_1a8a7a2ff664206d87a37dcee6d75c9191" prot="private" static="no" mutable="no">
-        <type>IndexMappingSPtr</type>
-        <definition>IndexMappingSPtr castor3d::Submesh::m_indexMapping</definition>
-        <argsstring></argsstring>
-        <name>m_indexMapping</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="376" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="376" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/dce/a03971_1aa32ac6585a2808b88385c40fa04bf53f" prot="private" static="no" mutable="no">
-        <type><ref refid="d7/dd1/a01458_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
-        <definition>ProgramFlags castor3d::Submesh::m_programFlags</definition>
-        <argsstring></argsstring>
-        <name>m_programFlags</name>
+        <name>m_currentUpdate</name>
+        <qualifiedname>castor3d::RenderLoop::m_currentUpdate</qualifiedname>
         <initializer>{ 0u }</initializer>
         <briefdescription>
         </briefdescription>
@@ -244,675 +144,115 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="377" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="377" bodyend="-1"/>
+        <location file="Render/RenderLoop.hpp" line="270" column="10" bodyfile="Render/RenderLoop.hpp" bodystart="270" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d0/dce/a03971_1a39ca34fa26be5e4efe106de4733ce6eb" prot="private" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::Submesh::m_generated</definition>
+      <memberdef kind="variable" id="d0/dce/a03971_1a6ff0941180c29396e2176994260c9fd5" prot="protected" static="no" mutable="no">
+        <type>crg::SemaphoreWaitArray</type>
+        <definition>crg::SemaphoreWaitArray castor3d::RenderLoop::m_toWait</definition>
         <argsstring></argsstring>
-        <name>m_generated</name>
-        <initializer>{ false }</initializer>
+        <name>m_toWait</name>
+        <qualifiedname>castor3d::RenderLoop::m_toWait</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="378" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="378" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/dce/a03971_1a1852b4e6fc1256d188c9593755d4c083" prot="private" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::Submesh::m_initialised</definition>
-        <argsstring></argsstring>
-        <name>m_initialised</name>
-        <initializer>{ false }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="379" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="379" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/dce/a03971_1a2691cebd9c8909574d5cde30a24d132c" prot="private" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::Submesh::m_dirty</definition>
-        <argsstring></argsstring>
-        <name>m_dirty</name>
-        <initializer>{ true }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="380" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="380" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/dce/a03971_1ae4e3b6f4469ac65e5e8c6445faaf1448" prot="private" static="no" mutable="no">
-        <type>VkPrimitiveTopology</type>
-        <definition>VkPrimitiveTopology castor3d::Submesh::m_topology</definition>
-        <argsstring></argsstring>
-        <name>m_topology</name>
-        <initializer>{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="381" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="381" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/dce/a03971_1aaf37acb36d701b09a09744379b589747" prot="private" static="no" mutable="no">
-        <type>ashes::VertexBufferPtr&lt; <ref refid="d7/dd1/a01458_1abe36058ac642536d26cfcc7f2931e62c" kindref="member">InterleavedVertex</ref> &gt;</type>
-        <definition>ashes::VertexBufferPtr&lt; InterleavedVertex &gt; castor3d::Submesh::m_vertexBuffer</definition>
-        <argsstring></argsstring>
-        <name>m_vertexBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="382" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="382" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/dce/a03971_1aa7be6bee59004135edc5351f0bf74825" prot="private" static="no" mutable="no">
-        <type>ashes::PipelineVertexInputStateCreateInfoPtr</type>
-        <definition>ashes::PipelineVertexInputStateCreateInfoPtr castor3d::Submesh::m_vertexLayout</definition>
-        <argsstring></argsstring>
-        <name>m_vertexLayout</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="383" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="383" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/dce/a03971_1a403636d32744bd3df57d977c25dc860d" prot="private" static="no" mutable="no">
-        <type>ashes::PipelineVertexInputStateCreateInfoPtr</type>
-        <definition>ashes::PipelineVertexInputStateCreateInfoPtr castor3d::Submesh::m_vertexLayoutNoTex</definition>
-        <argsstring></argsstring>
-        <name>m_vertexLayoutNoTex</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="384" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="384" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/dce/a03971_1a419b6430dc2a950f6aaaad8c0739550e" prot="private" static="no" mutable="no">
-        <type>ashes::BufferPtr&lt; uint32_t &gt;</type>
-        <definition>ashes::BufferPtr&lt; uint32_t &gt; castor3d::Submesh::m_indexBuffer</definition>
-        <argsstring></argsstring>
-        <name>m_indexBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="385" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="385" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/dce/a03971_1a14cdf5458b15e08d0db35fd345580bcc" prot="private" static="no" mutable="yes">
-        <type>std::unordered_map&lt; size_t, <ref refid="df/d04/a02287" kindref="compound">GeometryBuffers</ref> &gt;</type>
-        <definition>std::unordered_map&lt; size_t, GeometryBuffers &gt; castor3d::Submesh::m_geometryBuffers</definition>
-        <argsstring></argsstring>
-        <name>m_geometryBuffers</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="386" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="386" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/dce/a03971_1a10c9757034259b8a144898430605079d" prot="private" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::Submesh::m_needsNormalsCompute</definition>
-        <argsstring></argsstring>
-        <name>m_needsNormalsCompute</name>
-        <initializer>{ false }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="387" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="387" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a0b510f19d9ef76e19f170ca2af172cd7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::Submesh::doGenerateVertexBuffer</definition>
-        <argsstring>(RenderDevice const &amp;device)</argsstring>
-        <name>doGenerateVertexBuffer</name>
-        <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="357" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a158d718de0573854b1e7e8862aeae68a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>SkeletonSPtr</type>
-        <definition>SkeletonSPtr castor3d::Submesh::getSkeleton</definition>
-        <argsstring>() const</argsstring>
-        <name>getSkeleton</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>name Getters. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="321" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a2f96f51dfc87e46f45ba17471c0c2cd7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d7/dd1/a01458_1abe36058ac642536d26cfcc7f2931e62c" kindref="member">InterleavedVertex</ref> const  &amp;</type>
-        <definition>InterleavedVertex const&amp; castor3d::Submesh::operator[]</definition>
-        <argsstring>(uint32_t index) const</argsstring>
-        <name>operator[]</name>
-        <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="322" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a5d32e94572aceeca7116b3ed160e4c85" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d7/dd1/a01458_1abe36058ac642536d26cfcc7f2931e62c" kindref="member">InterleavedVertex</ref> &amp;</type>
-        <definition>InterleavedVertex&amp; castor3d::Submesh::operator[]</definition>
-        <argsstring>(uint32_t index)</argsstring>
-        <name>operator[]</name>
-        <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="323" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1adf9c917d346221be173385482a41ef1e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d7/dd1/a01458_1abe36058ac642536d26cfcc7f2931e62c" kindref="member">InterleavedVertex</ref> const  &amp;</type>
-        <definition>InterleavedVertex const&amp; castor3d::Submesh::getPoint</definition>
-        <argsstring>(uint32_t index) const</argsstring>
-        <name>getPoint</name>
-        <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="324" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a45aae8d7e43fc20e297c49d3d525dfbc" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d7/dd1/a01458_1abe36058ac642536d26cfcc7f2931e62c" kindref="member">InterleavedVertex</ref> &amp;</type>
-        <definition>InterleavedVertex&amp; castor3d::Submesh::getPoint</definition>
-        <argsstring>(uint32_t index)</argsstring>
-        <name>getPoint</name>
-        <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="325" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a52f78d870fa945491aa7d594ce5ac103" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>MaterialSPtr</type>
-        <definition>MaterialSPtr castor3d::Submesh::getDefaultMaterial</definition>
-        <argsstring>() const</argsstring>
-        <name>getDefaultMaterial</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="326" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a5da0fd9c10089af2469728491d6b2037" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::BoundingBox const  &amp;</type>
-        <definition>castor::BoundingBox const&amp; castor3d::Submesh::getBoundingBox</definition>
-        <argsstring>() const</argsstring>
-        <name>getBoundingBox</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="327" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a617cfe558973d273fcbf8f546c6d5762" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::BoundingBox &amp;</type>
-        <definition>castor::BoundingBox&amp; castor3d::Submesh::getBoundingBox</definition>
-        <argsstring>()</argsstring>
-        <name>getBoundingBox</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="328" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a3b6e3971e9b7c0d055d96099e8fbe7e1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::BoundingSphere const  &amp;</type>
-        <definition>castor::BoundingSphere const&amp; castor3d::Submesh::getBoundingSphere</definition>
-        <argsstring>() const</argsstring>
-        <name>getBoundingSphere</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="329" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1ada1f45d08e6b0a88189e70245021d3cc" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::BoundingSphere &amp;</type>
-        <definition>castor::BoundingSphere&amp; castor3d::Submesh::getBoundingSphere</definition>
-        <argsstring>()</argsstring>
-        <name>getBoundingSphere</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="330" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a7749539022f9c813f9e04025bf2244cb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d7/dd1/a01458_1acc83a5f6efdad2c69d185e0595e52b4d" kindref="member">InterleavedVertexArray</ref> const  &amp;</type>
-        <definition>InterleavedVertexArray const&amp; castor3d::Submesh::getPoints</definition>
-        <argsstring>() const</argsstring>
-        <name>getPoints</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="331" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a65f904a3f8668296774e5cadc671824e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d7/dd1/a01458_1acc83a5f6efdad2c69d185e0595e52b4d" kindref="member">InterleavedVertexArray</ref> &amp;</type>
-        <definition>InterleavedVertexArray&amp; castor3d::Submesh::getPoints</definition>
-        <argsstring>()</argsstring>
-        <name>getPoints</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="332" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a33deb58cb8c1ec6b82b6ca5fed4702e4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::Submesh::hasVertexBuffer</definition>
-        <argsstring>() const</argsstring>
-        <name>hasVertexBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="333" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a897148b76b06590ee787f610f9119e9c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::VertexBuffer&lt; <ref refid="d7/dd1/a01458_1abe36058ac642536d26cfcc7f2931e62c" kindref="member">InterleavedVertex</ref> &gt; const  &amp;</type>
-        <definition>ashes::VertexBuffer&lt; InterleavedVertex &gt; const&amp; castor3d::Submesh::getVertexBuffer</definition>
-        <argsstring>() const</argsstring>
-        <name>getVertexBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="334" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1af1c62419c3af09fafc95e4f11bbd7e10" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::VertexBuffer&lt; <ref refid="d7/dd1/a01458_1abe36058ac642536d26cfcc7f2931e62c" kindref="member">InterleavedVertex</ref> &gt; &amp;</type>
-        <definition>ashes::VertexBuffer&lt; InterleavedVertex &gt;&amp; castor3d::Submesh::getVertexBuffer</definition>
-        <argsstring>()</argsstring>
-        <name>getVertexBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="335" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1aadaed7a4d0a2643421eaafa6e6951c8e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::Submesh::hasVertexLayout</definition>
-        <argsstring>() const</argsstring>
-        <name>hasVertexLayout</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="336" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a7752535242e22e7d3e81ad8810827b68" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::PipelineVertexInputStateCreateInfo const  &amp;</type>
-        <definition>ashes::PipelineVertexInputStateCreateInfo const&amp; castor3d::Submesh::getVertexLayout</definition>
-        <argsstring>() const</argsstring>
-        <name>getVertexLayout</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="337" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1acb4fe6fb92825699fc310a947ca22067" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::Submesh::hasIndexBuffer</definition>
-        <argsstring>() const</argsstring>
-        <name>hasIndexBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="338" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a33a3bdf1d9195920697328ca6899824d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::Buffer&lt; uint32_t &gt; const  &amp;</type>
-        <definition>ashes::Buffer&lt; uint32_t &gt; const&amp; castor3d::Submesh::getIndexBuffer</definition>
-        <argsstring>() const</argsstring>
-        <name>getIndexBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="339" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a1960b6bc7a1f64e19e124958f8624aec" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::Buffer&lt; uint32_t &gt; &amp;</type>
-        <definition>ashes::Buffer&lt; uint32_t &gt;&amp; castor3d::Submesh::getIndexBuffer</definition>
-        <argsstring>()</argsstring>
-        <name>getIndexBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="340" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1af4fdd3cecfbce12f31f1d91e6353b60b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::Submesh::isInitialised</definition>
-        <argsstring>() const</argsstring>
-        <name>isInitialised</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="341" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1af2aaedc698cfaedc41fcb6a0a4222c6e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d5/d45/a03887" kindref="compound">Mesh</ref> const  &amp;</type>
-        <definition>Mesh const&amp; castor3d::Submesh::getParent</definition>
-        <argsstring>() const</argsstring>
-        <name>getParent</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="342" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1aa52d23a83b9467d4851189f76e41397f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d5/d45/a03887" kindref="compound">Mesh</ref> &amp;</type>
-        <definition>Mesh&amp; castor3d::Submesh::getParent</definition>
-        <argsstring>()</argsstring>
-        <name>getParent</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="343" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a8bfc3d1a435305982bbb00ecf08ae98e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::Submesh::getId</definition>
-        <argsstring>() const</argsstring>
-        <name>getId</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="344" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a3a108e0b9b2462b2723120a5d7e6f452" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::Submesh::hasComponent</definition>
-        <argsstring>(castor::String const &amp;name) const</argsstring>
-        <name>hasComponent</name>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="345" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1ae320ab69978c67a26b7bbb2041cca4fc" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>SubmeshComponentSPtr</type>
-        <definition>SubmeshComponentSPtr castor3d::Submesh::getComponent</definition>
-        <argsstring>(castor::String const &amp;name) const</argsstring>
-        <name>getComponent</name>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="346" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1ad1835c8e1952a99e099c7924cf526004" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename T</type>
-          </param>
-        </templateparamlist>
-        <type>std::shared_ptr&lt; T &gt;</type>
-        <definition>std::shared_ptr&lt; T &gt; castor3d::Submesh::getComponent</definition>
-        <argsstring>() const</argsstring>
-        <name>getComponent</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="348" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a5dd37cae9337edeba0cb5f6300eb2eda" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d0/ddf/a03935" kindref="compound">InstantiationComponent</ref> &amp;</type>
-        <definition>InstantiationComponent&amp; castor3d::Submesh::getInstantiation</definition>
-        <argsstring>()</argsstring>
-        <name>getInstantiation</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="349" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1aab2136de7502603f7eebedfbca500ad6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d0/ddf/a03935" kindref="compound">InstantiationComponent</ref> const  &amp;</type>
-        <definition>InstantiationComponent const&amp; castor3d::Submesh::getInstantiation</definition>
-        <argsstring>() const</argsstring>
-        <name>getInstantiation</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="350" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a84ca813b60fb227eea69cd60f57939e6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="db/d27/a03907" kindref="compound">BonesInstantiationComponent</ref> &amp;</type>
-        <definition>BonesInstantiationComponent&amp; castor3d::Submesh::getInstantiatedBones</definition>
-        <argsstring>()</argsstring>
-        <name>getInstantiatedBones</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="351" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1aa327bbca8aa92fd4569e4de32f533da1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="db/d27/a03907" kindref="compound">BonesInstantiationComponent</ref> const  &amp;</type>
-        <definition>BonesInstantiationComponent const&amp; castor3d::Submesh::getInstantiatedBones</definition>
-        <argsstring>() const</argsstring>
-        <name>getInstantiatedBones</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="352" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a0165eb8de545187b059e2d15836556df" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>SubmeshComponentStrMap const  &amp;</type>
-        <definition>SubmeshComponentStrMap const&amp; castor3d::Submesh::getComponents</definition>
-        <argsstring>() const</argsstring>
-        <name>getComponents</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="353" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1ad7518aa97ceb7c91fbcfe10fbb62be7b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>VkPrimitiveTopology</type>
-        <definition>VkPrimitiveTopology castor3d::Submesh::getTopology</definition>
-        <argsstring>() const</argsstring>
-        <name>getTopology</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="354" column="1"/>
+        <location file="Render/RenderLoop.hpp" line="271" column="25" bodyfile="Render/RenderLoop.hpp" bodystart="271" bodyend="-1"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="friend">
-      <memberdef kind="friend" id="d0/dce/a03971_1add4bb3729d7f98b0574aed1cebcfafdb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename T</type>
-          </param>
-        </templateparamlist>
-        <type>friend struct</type>
-        <definition>friend struct SubmeshComponentAdder</definition>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/dce/a03971_1ac732a05b63ca16e9203fc139a9e633e8" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderLoop::m_first</definition>
         <argsstring></argsstring>
-        <name>SubmeshComponentAdder</name>
+        <name>m_first</name>
+        <qualifiedname>castor3d::RenderLoop::m_first</qualifiedname>
+        <initializer>= true</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="40" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="40" bodyend="-1"/>
+        <location file="Render/RenderLoop.hpp" line="274" column="6" bodyfile="Render/RenderLoop.hpp" bodystart="274" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d0/dce/a03971_1abc7a1626cbe2af2479dde06024b7953b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::Submesh::CU_DeclareList</definition>
-        <argsstring>(castor::ByteArray, BytePtr)</argsstring>
-        <name>CU_DeclareList</name>
-        <param>
-          <type>castor::ByteArray</type>
-        </param>
-        <param>
-          <type>BytePtr</type>
-        </param>
+      <memberdef kind="variable" id="d0/dce/a03971_1a988efd95b7ab6cc581a3e663e35616e5" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d1d/a03947" kindref="compound">QueueData</ref> const  *</type>
+        <definition>QueueData const* castor3d::RenderLoop::m_queueData</definition>
+        <argsstring></argsstring>
+        <name>m_queueData</name>
+        <qualifiedname>castor3d::RenderLoop::m_queueData</qualifiedname>
+        <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="38" column="1"/>
+        <location file="Render/RenderLoop.hpp" line="275" column="18" bodyfile="Render/RenderLoop.hpp" bodystart="275" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dce/a03971_1a7b4ad346335b41bdfa0a52bf5c2b8b9f" prot="private" static="no" mutable="no">
+        <type>std::unordered_set&lt; <ref refid="db/da5/a04663" kindref="compound">ShaderBuffer</ref> const * &gt;</type>
+        <definition>std::unordered_set&lt; ShaderBuffer const * &gt; castor3d::RenderLoop::m_shaderBuffers</definition>
+        <argsstring></argsstring>
+        <name>m_shaderBuffers</name>
+        <qualifiedname>castor3d::RenderLoop::m_shaderBuffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="276" column="20" bodyfile="Render/RenderLoop.hpp" bodystart="276" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dce/a03971_1a3b6d4587b9d875ee203a0e312b297e2b" prot="private" static="no" mutable="no">
+        <type>std::mutex</type>
+        <definition>std::mutex castor3d::RenderLoop::m_shaderBuffersMtx</definition>
+        <argsstring></argsstring>
+        <name>m_shaderBuffersMtx</name>
+        <qualifiedname>castor3d::RenderLoop::m_shaderBuffersMtx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="277" column="12" bodyfile="Render/RenderLoop.hpp" bodystart="277" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dce/a03971_1a4a120c4fe2819ab38ec6e60a1988d2ac" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; crg::FramePassTimer &gt;</type>
+        <definition>std::unique_ptr&lt; crg::FramePassTimer &gt; castor3d::RenderLoop::m_uploadTimer</definition>
+        <argsstring></argsstring>
+        <name>m_uploadTimer</name>
+        <qualifiedname>castor3d::RenderLoop::m_uploadTimer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="278" column="17" bodyfile="Render/RenderLoop.hpp" bodystart="278" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d0/dce/a03971_1a003f0e5e63eaf148c369f8e26f2e1668" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d0/dce/a03971_1a92f9f97a35dd1d47e537f6e6024952b7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::Submesh::Submesh</definition>
-        <argsstring>(Mesh &amp;mesh, uint32_t id=1)</argsstring>
-        <name>Submesh</name>
+        <definition>C3D_API castor3d::RenderLoop::RenderLoop</definition>
+        <argsstring>(Engine &amp;engine, uint32_t wantedFPS, bool isAsync)</argsstring>
+        <name>RenderLoop</name>
+        <qualifiedname>castor3d::RenderLoop::RenderLoop</qualifiedname>
         <param>
-          <type><ref refid="d5/d45/a03887" kindref="compound">Mesh</ref> &amp;</type>
-          <declname>mesh</declname>
+          <type><ref refid="d8/dd0/a02711" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
         </param>
         <param>
           <type>uint32_t</type>
-          <declname>id</declname>
-          <defval>1</defval>
+          <declname>wantedFPS</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isAsync</declname>
         </param>
         <briefdescription>
 <para>Constructor. </para>
@@ -920,18 +260,26 @@
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">mesh</parametername>
+<parametername direction="in">engine</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The parent mesh. </para>
+<para>The engine. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">id</parametername>
+<parametername direction="in">wantedFPS</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The submesh ID. </para>
+<para>The wanted FPS count. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">isAsync</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tells if the render loop is asynchronous. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -939,13 +287,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="53" column="1"/>
+        <location file="Render/RenderLoop.hpp" line="43" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1ab1a52735bf64b7ff17ae947e806cf033" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d0/dce/a03971_1a98370f8e34e7f81f1c9277129c71b718" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::Submesh::~Submesh</definition>
+        <definition>virtual C3D_API castor3d::RenderLoop::~RenderLoop</definition>
         <argsstring>()</argsstring>
-        <name>~Submesh</name>
+        <name>~RenderLoop</name>
+        <qualifiedname>castor3d::RenderLoop::~RenderLoop</qualifiedname>
         <briefdescription>
 <para>Destructor. </para>
         </briefdescription>
@@ -953,380 +302,43 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="60" column="1"/>
+        <location file="Render/RenderLoop.hpp" line="52" column="17"/>
       </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1abd898509dfcefd373c22467d8618b90f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d0/dce/a03971_1ad8988f97407d38c23b3f7ab1c5aa6c91" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::Submesh::initialise</definition>
-        <argsstring>(RenderDevice const &amp;device)</argsstring>
-        <name>initialise</name>
-        <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-<para>Initialises the submesh. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="67" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1af29b97be20e1032c158e92ca2a8c1917" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::Submesh::cleanup</definition>
+        <definition>C3D_API void castor3d::RenderLoop::cleanup</definition>
         <argsstring>()</argsstring>
         <name>cleanup</name>
+        <qualifiedname>castor3d::RenderLoop::cleanup</qualifiedname>
         <briefdescription>
-<para>Cleans the submesh. </para>
+<para>Cleans up the render loop. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="74" column="1"/>
+        <location file="Render/RenderLoop.hpp" line="59" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a312244d2e8584c8914d51ad81a3ece7a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d0/dce/a03971_1aebff987d3a1a626374752685dff11c05" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::Submesh::update</definition>
-        <argsstring>()</argsstring>
-        <name>update</name>
-        <briefdescription>
-<para>Updates the buffers. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="81" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a3364d08ba1b300f7b30672b4877f9205" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::Submesh::computeContainers</definition>
-        <argsstring>()</argsstring>
-        <name>computeContainers</name>
-        <briefdescription>
-<para>Computes the containers (cube and sphere) </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="88" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a1d3c351cd26d927bc86b96b2490785f6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::Submesh::updateContainers</definition>
-        <argsstring>(castor::BoundingBox const &amp;boundingBox)</argsstring>
-        <name>updateContainers</name>
-        <param>
-          <type>castor::BoundingBox const &amp;</type>
-          <declname>boundingBox</declname>
-        </param>
-        <briefdescription>
-<para>Updates containers from given bounding box. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="95" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a72a1b0fd8e7ab57265530b1a04b8c3ba" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
-        <definition>C3D_API uint32_t castor3d::Submesh::getFaceCount</definition>
-        <argsstring>() const</argsstring>
-        <name>getFaceCount</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The faces number </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="102" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a7962bb49989f7023e56801c4107e39bb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
-        <definition>C3D_API uint32_t castor3d::Submesh::getPointsCount</definition>
-        <argsstring>() const</argsstring>
-        <name>getPointsCount</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The points count </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="109" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1aa16a1ed85c867b48e085311c25dea0ce" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> int</type>
-        <definition>C3D_API int castor3d::Submesh::isInMyPoints</definition>
-        <argsstring>(castor::Point3f const &amp;position, double precision)</argsstring>
-        <name>isInMyPoints</name>
-        <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>position</declname>
-        </param>
-        <param>
-          <type>double</type>
-          <declname>precision</declname>
-        </param>
-        <briefdescription>
-<para>Tests if the given Point3f is in mine. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">position</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The vertex to test </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">precision</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The comparison precision </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The index of the vertex equal to parameter, -1 if not found </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="122" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1abac87f2341e978a3a7788fa319bf0a27" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/dd1/a01458_1abe36058ac642536d26cfcc7f2931e62c" kindref="member">InterleavedVertex</ref></type>
-        <definition>C3D_API InterleavedVertex castor3d::Submesh::addPoint</definition>
-        <argsstring>(float x, float y, float z)</argsstring>
-        <name>addPoint</name>
-        <param>
-          <type>float</type>
-          <declname>x</declname>
-        </param>
-        <param>
-          <type>float</type>
-          <declname>y</declname>
-        </param>
-        <param>
-          <type>float</type>
-          <declname>z</declname>
-        </param>
-        <briefdescription>
-<para>Creates and Adds a vertex to my list. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">x</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The vertex X coordinate </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">y</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The vertex Y coordinate </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">z</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The vertex Z coordinate </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The created vertex </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="137" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1ab9e10891ec3e1b1d20351c938ad627f9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/dd1/a01458_1abe36058ac642536d26cfcc7f2931e62c" kindref="member">InterleavedVertex</ref></type>
-        <definition>C3D_API InterleavedVertex castor3d::Submesh::addPoint</definition>
-        <argsstring>(castor::Point3f const &amp;value)</argsstring>
-        <name>addPoint</name>
-        <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-<para>Adds a vertex to my list. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The vertex to add </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The vertex </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="148" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1ad1aaddc973269597f039662e8b8486fb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/dd1/a01458_1abe36058ac642536d26cfcc7f2931e62c" kindref="member">InterleavedVertex</ref></type>
-        <definition>C3D_API InterleavedVertex castor3d::Submesh::addPoint</definition>
-        <argsstring>(float *value)</argsstring>
-        <name>addPoint</name>
-        <param>
-          <type>float *</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-<para>Creates and Adds a vertex to my list. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The vertex coordinates </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The created vertex </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="159" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a3c35f525e86068c548bdbff6334c527d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::Submesh::addPoint</definition>
-        <argsstring>(InterleavedVertex const &amp;value)</argsstring>
-        <name>addPoint</name>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1abe36058ac642536d26cfcc7f2931e62c" kindref="member">InterleavedVertex</ref> const &amp;</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-<para>Adds a vertex to the list. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The vertex. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="168" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1ad054e37ab93189bf2e3a95e3e71e3162" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::Submesh::addPoints</definition>
-        <argsstring>(InterleavedVertex const *const begin, InterleavedVertex const *const end)</argsstring>
-        <name>addPoints</name>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1abe36058ac642536d26cfcc7f2931e62c" kindref="member">InterleavedVertex</ref> const *const</type>
-          <declname>begin</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1abe36058ac642536d26cfcc7f2931e62c" kindref="member">InterleavedVertex</ref> const *const</type>
-          <declname>end</declname>
-        </param>
-        <briefdescription>
-<para>Adds a points list to my list. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">begin</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The vertices data begin. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">end</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The vertices data end. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="179" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a6152ef001195bccf68390115d3d001ba" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::Submesh::computeNormals</definition>
-        <argsstring>(bool reverted=false)</argsstring>
-        <name>computeNormals</name>
+        <definition>C3D_API void castor3d::RenderLoop::showDebugOverlays</definition>
+        <argsstring>(bool show)</argsstring>
+        <name>showDebugOverlays</name>
+        <qualifiedname>castor3d::RenderLoop::showDebugOverlays</qualifiedname>
         <param>
           <type>bool</type>
-          <declname>reverted</declname>
-          <defval>false</defval>
+          <declname>show</declname>
         </param>
         <briefdescription>
-<para>Generates normals and tangents. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="187" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a9948b4d3bf5e6e8d848e3c3626a18166" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::Submesh::sortByDistance</definition>
-        <argsstring>(castor::Point3f const &amp;cameraPosition)</argsstring>
-        <name>sortByDistance</name>
-        <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>cameraPosition</declname>
-        </param>
-        <briefdescription>
-<para>Sorts the face from farthest to nearest from the camera. </para>
+<para>Show or hide debug overlays. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">cameraPosition</parametername>
+<parametername direction="in">show</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The camera position, relative to submesh </para>
+<para>The status. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -1334,129 +346,29 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="196" column="1"/>
+        <location file="Render/RenderLoop.hpp" line="68" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1ae999835d38b2eb41197c77b86cc1ce44" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/dd1/a01458_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
-        <definition>C3D_API ProgramFlags castor3d::Submesh::getProgramFlags</definition>
-        <argsstring>(MaterialSPtr material) const</argsstring>
-        <name>getProgramFlags</name>
-        <param>
-          <type>MaterialSPtr</type>
-          <declname>material</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The shader program flags. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="203" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a8eafe4a59ac743bc64d1d87356dff87f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d0/dce/a03971_1a9920fa7ccc5a06415b08e238e1f4754f" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::Submesh::setMaterial</definition>
-        <argsstring>(MaterialSPtr oldMaterial, MaterialSPtr newMaterial, bool update)</argsstring>
-        <name>setMaterial</name>
-        <param>
-          <type>MaterialSPtr</type>
-          <declname>oldMaterial</declname>
-        </param>
-        <param>
-          <type>MaterialSPtr</type>
-          <declname>newMaterial</declname>
-        </param>
+        <definition>virtual C3D_API void castor3d::RenderLoop::enableVSync</definition>
+        <argsstring>(bool enable)</argsstring>
+        <name>enableVSync</name>
+        <qualifiedname>castor3d::RenderLoop::enableVSync</qualifiedname>
+        <reimplementedby refid="d1/d42/a03979_1a80f64ba0cc5c44dbddcf0d2e4e6c31ce">enableVSync</reimplementedby>
         <param>
           <type>bool</type>
-          <declname>update</declname>
+          <declname>enable</declname>
         </param>
         <briefdescription>
-<para>Sets the material. </para>
+<para>Updates the V-Sync status. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">oldMaterial</parametername>
+<parametername direction="in">enable</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The old material. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">newMaterial</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The new material. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">update</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if the buffers must be updated. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>true</computeroutput> si le matériau a changé. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="218" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a3120c891c2cf03ce80993d2464777d26" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="df/d04/a02287" kindref="compound">GeometryBuffers</ref> const  &amp;</type>
-        <definition>C3D_API GeometryBuffers const&amp; castor3d::Submesh::getGeometryBuffers</definition>
-        <argsstring>(MaterialSPtr material, uint32_t instanceMult, TextureFlagsArray const &amp;mask) const</argsstring>
-        <name>getGeometryBuffers</name>
-        <param>
-          <type>MaterialSPtr</type>
-          <declname>material</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>instanceMult</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1afa51b269ca00eaeff4f95f361bf2208f" kindref="member">TextureFlagsArray</ref> const &amp;</type>
-          <declname>mask</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The geometry buffers for given material. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="227" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a676eda8e6dabd207e649cb7e73c1eef9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::Submesh::addPoints</definition>
-        <argsstring>(std::vector&lt; InterleavedVertex &gt; const &amp;vertices)</argsstring>
-        <name>addPoints</name>
-        <param>
-          <type>std::vector&lt; <ref refid="d7/dd1/a01458_1abe36058ac642536d26cfcc7f2931e62c" kindref="member">InterleavedVertex</ref> &gt; const &amp;</type>
-          <declname>vertices</declname>
-        </param>
-        <briefdescription>
-<para>Adds a points list to my list. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">vertices</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The vertices </para>
+<para>The status. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -1464,193 +376,98 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="238" column="1"/>
+        <location file="Render/RenderLoop.hpp" line="77" column="22"/>
       </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1aeec5f5d1a0b1b6e7ff649155828a3dad" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>size_t</type>
-            <declname>Count</declname>
-            <defname>Count</defname>
-          </param>
-        </templateparamlist>
-        <type>void</type>
-        <definition>void castor3d::Submesh::addPoints</definition>
-        <argsstring>(std::array&lt; InterleavedVertex, Count &gt; const &amp;vertices)</argsstring>
-        <name>addPoints</name>
-        <param>
-          <type>std::array&lt; <ref refid="d7/dd1/a01458_1abe36058ac642536d26cfcc7f2931e62c" kindref="member">InterleavedVertex</ref>, Count &gt; const &amp;</type>
-          <declname>vertices</declname>
-        </param>
-        <briefdescription>
-<para>Adds a points list to my list. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">vertices</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The vertices </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="248" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a7b53552d9b9b75bedf8c95523f68512a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::Submesh::setDefaultMaterial</definition>
-        <argsstring>(MaterialSPtr material)</argsstring>
-        <name>setDefaultMaterial</name>
-        <param>
-          <type>MaterialSPtr</type>
-          <declname>material</declname>
-        </param>
-        <briefdescription>
-<para>Sets the material. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">material</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The new value </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="257" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1ac9a7a21d4696b21ad935460a38ab7bfa" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::Submesh::needsUpdate</definition>
+      <memberdef kind="function" id="d0/dce/a03971_1ab0cce3459fd96396758d47675c0d0f45" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderLoop::flushEvents</definition>
         <argsstring>()</argsstring>
-        <name>needsUpdate</name>
+        <name>flushEvents</name>
+        <qualifiedname>castor3d::RenderLoop::flushEvents</qualifiedname>
         <briefdescription>
-<para>Sets the submesh to be updated. </para>
+<para>Flushs all events of all frame listeners. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="264" column="1"/>
+        <location file="Render/RenderLoop.hpp" line="84" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a9a192388d4214e81f311ba55e7f58a4a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::Submesh::setIndexMapping</definition>
-        <argsstring>(IndexMappingSPtr mapping)</argsstring>
-        <name>setIndexMapping</name>
-        <param>
-          <type>IndexMappingSPtr</type>
-          <declname>mapping</declname>
-        </param>
-        <briefdescription>
-<para>Sets the index mapping. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">mapping</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The mapping. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="273" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a01b25e8a057adb9a8a5a71ceb8094b18" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>IndexMappingSPtr</type>
-        <definition>IndexMappingSPtr castor3d::Submesh::getIndexMapping</definition>
-        <argsstring>() const</argsstring>
-        <name>getIndexMapping</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The index mapping. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="280" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1aaf63ef83be210ca5c58766cb90e053d5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::Submesh::addComponent</definition>
-        <argsstring>(castor::String const &amp;name, SubmeshComponentSPtr component)</argsstring>
-        <name>addComponent</name>
+      <memberdef kind="function" id="d0/dce/a03971_1a26a0b1e129f0ee670917a424b133e012" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::RenderLoop::registerTimer</definition>
+        <argsstring>(castor::String const &amp;category, FramePassTimer &amp;timer)</argsstring>
+        <name>registerTimer</name>
+        <qualifiedname>castor3d::RenderLoop::registerTimer</qualifiedname>
         <param>
           <type>castor::String const &amp;</type>
-          <declname>name</declname>
+          <declname>category</declname>
         </param>
         <param>
-          <type>SubmeshComponentSPtr</type>
-          <declname>component</declname>
+          <type>FramePassTimer &amp;</type>
+          <declname>timer</declname>
         </param>
         <briefdescription>
-<para>Adds a component. </para>
+<para>Registers a render pass timer. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">name</parametername>
+<parametername direction="in">category</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The component name. </para>
+<para>The timer category name. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">component</parametername>
+<parametername direction="in">timer</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The component. </para>
+<para>The timer to register. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
+<simplesect kind="return"><para>The query ID. </para>
+</simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="291" column="1"/>
+        <location file="Render/RenderLoop.hpp" line="97" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1ab26500513165be8530eb3e0e3df5475f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename T</type>
-          </param>
-        </templateparamlist>
-        <type>void</type>
-        <definition>void castor3d::Submesh::addComponent</definition>
-        <argsstring>(std::shared_ptr&lt; T &gt; component)</argsstring>
-        <name>addComponent</name>
+      <memberdef kind="function" id="d0/dce/a03971_1a32c564fbdef938f9fd21f10834c028ac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderLoop::unregisterTimer</definition>
+        <argsstring>(castor::String const &amp;category, FramePassTimer &amp;timer)</argsstring>
+        <name>unregisterTimer</name>
+        <qualifiedname>castor3d::RenderLoop::unregisterTimer</qualifiedname>
         <param>
-          <type>std::shared_ptr&lt; T &gt;</type>
-          <declname>component</declname>
+          <type>castor::String const &amp;</type>
+          <declname>category</declname>
+        </param>
+        <param>
+          <type>FramePassTimer &amp;</type>
+          <declname>timer</declname>
         </param>
         <briefdescription>
-<para>Adds a component. </para>
+<para>Unregisters a render pass timer. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">component</parametername>
+<parametername direction="in">category</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The component. </para>
+<para>The timer category name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">timer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The timer to unregister. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -1658,27 +475,28 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="302" column="1"/>
+        <location file="Render/RenderLoop.hpp" line="109" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d0/dce/a03971_1a26bbf2b81e8a8714c81f061d47bf3383" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::Submesh::setTopology</definition>
-        <argsstring>(VkPrimitiveTopology value)</argsstring>
-        <name>setTopology</name>
+      <memberdef kind="function" id="d0/dce/a03971_1a0d67947c5b1193af46bbaf0e0cc7585a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderLoop::registerBuffer</definition>
+        <argsstring>(ShaderBuffer const &amp;buffer)</argsstring>
+        <name>registerBuffer</name>
+        <qualifiedname>castor3d::RenderLoop::registerBuffer</qualifiedname>
         <param>
-          <type>VkPrimitiveTopology</type>
-          <declname>value</declname>
+          <type><ref refid="db/da5/a04663" kindref="compound">ShaderBuffer</ref> const &amp;</type>
+          <declname>buffer</declname>
         </param>
         <briefdescription>
-<para>Sets the topology. </para>
+<para>Registers a <ref refid="db/da5/a04663" kindref="compound">ShaderBuffer</ref>. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">value</parametername>
+<parametername direction="in">buffer</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The new value. </para>
+<para>The <ref refid="db/da5/a04663" kindref="compound">ShaderBuffer</ref>. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -1686,7 +504,360 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Submesh.hpp" line="311" column="1"/>
+        <location file="Render/RenderLoop.hpp" line="119" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dce/a03971_1a602c3f0c8a347db8331c9a5926ce0235" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderLoop::unregisterBuffer</definition>
+        <argsstring>(ShaderBuffer const &amp;buffer)</argsstring>
+        <name>unregisterBuffer</name>
+        <qualifiedname>castor3d::RenderLoop::unregisterBuffer</qualifiedname>
+        <param>
+          <type><ref refid="db/da5/a04663" kindref="compound">ShaderBuffer</ref> const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Unregisters a <ref refid="db/da5/a04663" kindref="compound">ShaderBuffer</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The <ref refid="db/da5/a04663" kindref="compound">ShaderBuffer</ref>. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="128" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dce/a03971_1a60b8176ab5eb5ca6b25663f955780e3e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::RenderLoop::hasDebugOverlays</definition>
+        <argsstring>() const</argsstring>
+        <name>hasDebugOverlays</name>
+        <qualifiedname>castor3d::RenderLoop::hasDebugOverlays</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The debug overlays shown status. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="135" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dce/a03971_1a04a7351eb46eba5aa6c227512f3903c3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderLoop::dumpFrameTimes</definition>
+        <argsstring>(Parameters &amp;params) const</argsstring>
+        <name>dumpFrameTimes</name>
+        <qualifiedname>castor3d::RenderLoop::dumpFrameTimes</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> &amp;</type>
+          <declname>params</declname>
+        </param>
+        <briefdescription>
+<para>The average frame time, in nanoseconds. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="142" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dce/a03971_1a60e53e14809ebd66fa6fbfbc92e14d58" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Nanoseconds</type>
+        <definition>C3D_API castor::Nanoseconds castor3d::RenderLoop::getAvgFrameTime</definition>
+        <argsstring>() const</argsstring>
+        <name>getAvgFrameTime</name>
+        <qualifiedname>castor3d::RenderLoop::getAvgFrameTime</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The average frame time, in nanoseconds. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="149" column="29"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dce/a03971_1a7842a7d67f402edcc24be8fd09973818" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::RenderLoop::beginRendering</definition>
+        <argsstring>()=0</argsstring>
+        <name>beginRendering</name>
+        <qualifiedname>castor3d::RenderLoop::beginRendering</qualifiedname>
+        <reimplementedby refid="d1/d42/a03979_1a1659e9cacfacd9115e6aa1bad410c9d9">beginRendering</reimplementedby>
+        <reimplementedby refid="d1/de2/a03983_1ac849b8aea69ba1e907d697d8d6fec1a9">beginRendering</reimplementedby>
+        <briefdescription>
+<para>Starts threaded render loop. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="156" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dce/a03971_1aabd4de0429c0e2659058545c6ec1bad2" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::RenderLoop::renderSyncFrame</definition>
+        <argsstring>(castor::Milliseconds tslf=0_ms)=0</argsstring>
+        <name>renderSyncFrame</name>
+        <qualifiedname>castor3d::RenderLoop::renderSyncFrame</qualifiedname>
+        <reimplementedby refid="d1/d42/a03979_1a64cff74d50b270e8dc6fcfac0ff915e0">renderSyncFrame</reimplementedby>
+        <reimplementedby refid="d1/de2/a03983_1ae5926ec23f7697887648816bc68ed00c">renderSyncFrame</reimplementedby>
+        <param>
+          <type>castor::Milliseconds</type>
+          <declname>tslf</declname>
+          <defval>0_ms</defval>
+        </param>
+        <briefdescription>
+<para>Renders one frame, only if not in render loop. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">tslf</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The time elapsed since last frame. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="165" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dce/a03971_1afbc75c36ac22821c05f284e6fee155af" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::RenderLoop::pause</definition>
+        <argsstring>()=0</argsstring>
+        <name>pause</name>
+        <qualifiedname>castor3d::RenderLoop::pause</qualifiedname>
+        <reimplementedby refid="d1/d42/a03979_1a972e43d249ca40bb3120dc7396c6a17b">pause</reimplementedby>
+        <reimplementedby refid="d1/de2/a03983_1aa8e92d2a1df7dbd0a8d5881af5d4bc24">pause</reimplementedby>
+        <briefdescription>
+<para>Pauses the render loop. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="172" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dce/a03971_1ae909f2e21ba004087428391048d8db86" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::RenderLoop::resume</definition>
+        <argsstring>()=0</argsstring>
+        <name>resume</name>
+        <qualifiedname>castor3d::RenderLoop::resume</qualifiedname>
+        <reimplementedby refid="d1/d42/a03979_1a41474a08868fa78570450ff97369f123">resume</reimplementedby>
+        <reimplementedby refid="d1/de2/a03983_1a59027889dfb53d02becb6189b482fda9">resume</reimplementedby>
+        <briefdescription>
+<para>Resumes the render loop. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="179" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dce/a03971_1ad9ec6cf47938ab0fb37512d0cf177a51" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::RenderLoop::endRendering</definition>
+        <argsstring>()=0</argsstring>
+        <name>endRendering</name>
+        <qualifiedname>castor3d::RenderLoop::endRendering</qualifiedname>
+        <reimplementedby refid="d1/d42/a03979_1a7032d625b973c83fc5671654eabf57f0">endRendering</reimplementedby>
+        <reimplementedby refid="d1/de2/a03983_1a3976c0787f2b3fd8c413b15f601aae48">endRendering</reimplementedby>
+        <briefdescription>
+<para>Ends the render, cleans up engine. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Ends the threaded render loop, if any. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="188" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dce/a03971_1abce67ba6a22426d1555dcfb813432242" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Milliseconds</type>
+        <definition>castor::Milliseconds castor3d::RenderLoop::getFrameTime</definition>
+        <argsstring>() const</argsstring>
+        <name>getFrameTime</name>
+        <qualifiedname>castor3d::RenderLoop::getFrameTime</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The wanted frame time, in milliseconds. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="195" column="22" bodyfile="Render/RenderLoop.hpp" bodystart="195" bodyend="198"/>
+        <references refid="d0/dce/a03971_1a3fdea4c3d454da13b6874d71d031772a" compoundref="d0/dad/a00806" startline="248">m_frameTime</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/dce/a03971_1a4f497f75e762e1308a6d972114f845ac" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderLoop::getWantedFps</definition>
+        <argsstring>() const</argsstring>
+        <name>getWantedFps</name>
+        <qualifiedname>castor3d::RenderLoop::getWantedFps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The wanted refresh rate. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="205" column="10" bodyfile="Render/RenderLoop.hpp" bodystart="205" bodyend="208"/>
+        <references refid="d0/dce/a03971_1aca51dfa60d759d003d2e706b33124933" compoundref="d0/dad/a00806" startline="245">m_wantedFPS</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/dce/a03971_1a74acb481115f9d2c3084bfb81a3dbe3f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Microseconds</type>
+        <definition>castor::Microseconds castor3d::RenderLoop::getLastFrameTime</definition>
+        <argsstring>() const</argsstring>
+        <name>getLastFrameTime</name>
+        <qualifiedname>castor3d::RenderLoop::getLastFrameTime</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The last frame time, in milliseconds. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="215" column="22" bodyfile="Render/RenderLoop.hpp" bodystart="215" bodyend="218"/>
+        <references refid="d0/dce/a03971_1aadd20893be5df0f0a8bdfe52b5f4d148" compoundref="d0/dad/a00806" startline="251">m_lastFrameTime</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d0/dce/a03971_1adb8cd1592c293d4f956365f0e958e92d" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderLoop::doRenderFrame</definition>
+        <argsstring>(castor::Milliseconds tslf=0_ms)</argsstring>
+        <name>doRenderFrame</name>
+        <qualifiedname>castor3d::RenderLoop::doRenderFrame</qualifiedname>
+        <param>
+          <type>castor::Milliseconds</type>
+          <declname>tslf</declname>
+          <defval>0_ms</defval>
+        </param>
+        <briefdescription>
+<para>Starts threaded render loop. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">tslf</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The time elapsed since last frame. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="229" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d0/dce/a03971_1aeeb7bd04a75a01c5730edc4438fb929f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderLoop::doProcessEvents</definition>
+        <argsstring>(EventType eventType)</argsstring>
+        <name>doProcessEvents</name>
+        <qualifiedname>castor3d::RenderLoop::doProcessEvents</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1ad442bf3c1ba8a06ac36f710ba30b2870" kindref="member">EventType</ref></type>
+          <declname>eventType</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="232" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dce/a03971_1a388da5e91fadfc7572c6f1ccb1e85d9b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderLoop::doProcessEvents</definition>
+        <argsstring>(EventType eventType, RenderDevice const &amp;device, QueueData const &amp;queueData)</argsstring>
+        <name>doProcessEvents</name>
+        <qualifiedname>castor3d::RenderLoop::doProcessEvents</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1ad442bf3c1ba8a06ac36f710ba30b2870" kindref="member">EventType</ref></type>
+          <declname>eventType</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d1d/a03947" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="233" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dce/a03971_1a46b0cc863b92df2de27a18b850f944c9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderLoop::doGpuStep</definition>
+        <argsstring>(RenderInfo &amp;info)</argsstring>
+        <name>doGpuStep</name>
+        <qualifiedname>castor3d::RenderLoop::doGpuStep</qualifiedname>
+        <param>
+          <type><ref refid="df/d0c/a03967" kindref="compound">RenderInfo</ref> &amp;</type>
+          <declname>info</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="236" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dce/a03971_1a3c52485f195f64ddd2182423c3cf8f91" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderLoop::doCpuStep</definition>
+        <argsstring>(castor::Milliseconds tslf)</argsstring>
+        <name>doCpuStep</name>
+        <qualifiedname>castor3d::RenderLoop::doCpuStep</qualifiedname>
+        <param>
+          <type>castor::Milliseconds</type>
+          <declname>tslf</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="237" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -1694,132 +865,168 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="4282">
-        <label>castor::OwnedBy&lt; Mesh &gt;</label>
-      </node>
-      <node id="4281">
-        <label>castor3d::Submesh</label>
+      <node id="1">
+        <label>castor3d::RenderLoop</label>
         <link refid="d0/dce/a03971"/>
-        <childnode refid="4282" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4283" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="4283">
-        <label>std::enable_shared_from_this&lt; Submesh &gt;</label>
+      <node id="3">
+        <label>castor3d::RenderLoopAsync</label>
+        <link refid="d1/d42/a03979"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::RenderLoopSync</label>
+        <link refid="d1/de2/a03983"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="4285">
-        <label>castor::OwnedBy&lt; Mesh &gt;</label>
+      <node id="6">
+        <label>T</label>
       </node>
-      <node id="4284">
-        <label>castor3d::Submesh</label>
+      <node id="11">
+        <label>std::array&lt; castor3d::RenderLoop::UploadResources, 2u &gt;</label>
+        <childnode refid="12" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; castor3d::RenderLoop::UploadResources, 2u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::atomic&lt; castor::Microseconds &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; castor::Microseconds &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::CommandsSemaphore</label>
+        <link refid="d7/dab/a03815"/>
+      </node>
+      <node id="8">
+        <label>castor3d::DebugOverlays</label>
+        <link refid="d5/d70/a03499"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::RenderLoop</label>
         <link refid="d0/dce/a03971"/>
-        <childnode refid="4285" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
-        <childnode refid="4286" relation="public-inheritance">
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_lastFrameTime</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_debugOverlays</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_debugOverlaysMtx</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>m_uploadResources</edgelabel>
         </childnode>
       </node>
-      <node id="4286">
-        <label>std::enable_shared_from_this&lt; Submesh &gt;</label>
+      <node id="12">
+        <label>castor3d::RenderLoop::UploadResources</label>
+        <link refid="df/d2e/a03975"/>
+        <childnode refid="13" relation="usage">
+          <edgelabel>commands</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d3/d9a/a04075"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="14">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::atomic&lt; T &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::mutex</label>
+      </node>
+      <node id="9">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::unique_ptr&lt; castor3d::DebugOverlays &gt;</label>
+        <childnode refid="8" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; castor3d::DebugOverlays &gt;</edgelabel>
+        </childnode>
       </node>
     </collaborationgraph>
-    <location file="Model/Mesh/Submesh/Submesh.hpp" line="36" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="33" bodyend="391"/>
+    <location file="Render/RenderLoop.hpp" line="24" column="1" bodyfile="Render/RenderLoop.hpp" bodystart="26" bodyend="279"/>
     <listofallmembers>
-      <member refid="d0/dce/a03971_1aaf63ef83be210ca5c58766cb90e053d5" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>addComponent</name></member>
-      <member refid="d0/dce/a03971_1ab26500513165be8530eb3e0e3df5475f" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>addComponent</name></member>
-      <member refid="d0/dce/a03971_1abac87f2341e978a3a7788fa319bf0a27" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>addPoint</name></member>
-      <member refid="d0/dce/a03971_1ab9e10891ec3e1b1d20351c938ad627f9" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>addPoint</name></member>
-      <member refid="d0/dce/a03971_1ad1aaddc973269597f039662e8b8486fb" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>addPoint</name></member>
-      <member refid="d0/dce/a03971_1a3c35f525e86068c548bdbff6334c527d" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>addPoint</name></member>
-      <member refid="d0/dce/a03971_1ad054e37ab93189bf2e3a95e3e71e3162" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>addPoints</name></member>
-      <member refid="d0/dce/a03971_1a676eda8e6dabd207e649cb7e73c1eef9" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>addPoints</name></member>
-      <member refid="d0/dce/a03971_1aeec5f5d1a0b1b6e7ff649155828a3dad" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>addPoints</name></member>
-      <member refid="d0/dce/a03971_1a8abe7fb84a9ecaea48dc4299d7beeb2b" prot="private" virt="non-virtual"><scope>castor3d::Submesh</scope><name>BinaryParser&lt; Submesh &gt;</name></member>
-      <member refid="d0/dce/a03971_1a5b13cff7ddcee234e4e7d925a5ec1dc5" prot="private" virt="non-virtual"><scope>castor3d::Submesh</scope><name>BinaryWriter&lt; Submesh &gt;</name></member>
-      <member refid="d0/dce/a03971_1af6947b55819dac18d564efabc0027cdc" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>Bitangent</name></member>
-      <member refid="d0/dce/a03971_1af29b97be20e1032c158e92ca2a8c1917" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>cleanup</name></member>
-      <member refid="d0/dce/a03971_1a3364d08ba1b300f7b30672b4877f9205" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>computeContainers</name></member>
-      <member refid="d0/dce/a03971_1a6152ef001195bccf68390115d3d001ba" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>computeNormals</name></member>
-      <member refid="d0/dce/a03971_1abc7a1626cbe2af2479dde06024b7953b" prot="private" virt="non-virtual"><scope>castor3d::Submesh</scope><name>CU_DeclareList</name></member>
-      <member refid="d0/dce/a03971_1a0b510f19d9ef76e19f170ca2af172cd7" prot="private" virt="non-virtual"><scope>castor3d::Submesh</scope><name>doGenerateVertexBuffer</name></member>
-      <member refid="d0/dce/a03971_1a5da0fd9c10089af2469728491d6b2037" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getBoundingBox</name></member>
-      <member refid="d0/dce/a03971_1a617cfe558973d273fcbf8f546c6d5762" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getBoundingBox</name></member>
-      <member refid="d0/dce/a03971_1a3b6e3971e9b7c0d055d96099e8fbe7e1" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getBoundingSphere</name></member>
-      <member refid="d0/dce/a03971_1ada1f45d08e6b0a88189e70245021d3cc" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getBoundingSphere</name></member>
-      <member refid="d0/dce/a03971_1ae320ab69978c67a26b7bbb2041cca4fc" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getComponent</name></member>
-      <member refid="d0/dce/a03971_1ad1835c8e1952a99e099c7924cf526004" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getComponent</name></member>
-      <member refid="d0/dce/a03971_1a0165eb8de545187b059e2d15836556df" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getComponents</name></member>
-      <member refid="d0/dce/a03971_1a52f78d870fa945491aa7d594ce5ac103" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getDefaultMaterial</name></member>
-      <member refid="d0/dce/a03971_1a72a1b0fd8e7ab57265530b1a04b8c3ba" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getFaceCount</name></member>
-      <member refid="d0/dce/a03971_1a3120c891c2cf03ce80993d2464777d26" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getGeometryBuffers</name></member>
-      <member refid="d0/dce/a03971_1a8bfc3d1a435305982bbb00ecf08ae98e" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getId</name></member>
-      <member refid="d0/dce/a03971_1a33a3bdf1d9195920697328ca6899824d" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getIndexBuffer</name></member>
-      <member refid="d0/dce/a03971_1a1960b6bc7a1f64e19e124958f8624aec" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getIndexBuffer</name></member>
-      <member refid="d0/dce/a03971_1a01b25e8a057adb9a8a5a71ceb8094b18" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getIndexMapping</name></member>
-      <member refid="d0/dce/a03971_1a84ca813b60fb227eea69cd60f57939e6" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getInstantiatedBones</name></member>
-      <member refid="d0/dce/a03971_1aa327bbca8aa92fd4569e4de32f533da1" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getInstantiatedBones</name></member>
-      <member refid="d0/dce/a03971_1a5dd37cae9337edeba0cb5f6300eb2eda" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getInstantiation</name></member>
-      <member refid="d0/dce/a03971_1aab2136de7502603f7eebedfbca500ad6" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getInstantiation</name></member>
-      <member refid="d0/dce/a03971_1af2aaedc698cfaedc41fcb6a0a4222c6e" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getParent</name></member>
-      <member refid="d0/dce/a03971_1aa52d23a83b9467d4851189f76e41397f" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getParent</name></member>
-      <member refid="d0/dce/a03971_1adf9c917d346221be173385482a41ef1e" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getPoint</name></member>
-      <member refid="d0/dce/a03971_1a45aae8d7e43fc20e297c49d3d525dfbc" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getPoint</name></member>
-      <member refid="d0/dce/a03971_1a7749539022f9c813f9e04025bf2244cb" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getPoints</name></member>
-      <member refid="d0/dce/a03971_1a65f904a3f8668296774e5cadc671824e" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getPoints</name></member>
-      <member refid="d0/dce/a03971_1a7962bb49989f7023e56801c4107e39bb" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getPointsCount</name></member>
-      <member refid="d0/dce/a03971_1ae999835d38b2eb41197c77b86cc1ce44" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getProgramFlags</name></member>
-      <member refid="d0/dce/a03971_1a158d718de0573854b1e7e8862aeae68a" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getSkeleton</name></member>
-      <member refid="d0/dce/a03971_1ad7518aa97ceb7c91fbcfe10fbb62be7b" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getTopology</name></member>
-      <member refid="d0/dce/a03971_1a897148b76b06590ee787f610f9119e9c" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getVertexBuffer</name></member>
-      <member refid="d0/dce/a03971_1af1c62419c3af09fafc95e4f11bbd7e10" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getVertexBuffer</name></member>
-      <member refid="d0/dce/a03971_1a7752535242e22e7d3e81ad8810827b68" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>getVertexLayout</name></member>
-      <member refid="d0/dce/a03971_1a3a108e0b9b2462b2723120a5d7e6f452" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>hasComponent</name></member>
-      <member refid="d0/dce/a03971_1acb4fe6fb92825699fc310a947ca22067" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>hasIndexBuffer</name></member>
-      <member refid="d0/dce/a03971_1a33deb58cb8c1ec6b82b6ca5fed4702e4" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>hasVertexBuffer</name></member>
-      <member refid="d0/dce/a03971_1aadaed7a4d0a2643421eaafa6e6951c8e" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>hasVertexLayout</name></member>
-      <member refid="d0/dce/a03971_1abd898509dfcefd373c22467d8618b90f" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>initialise</name></member>
-      <member refid="d0/dce/a03971_1af4fdd3cecfbce12f31f1d91e6353b60b" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>isInitialised</name></member>
-      <member refid="d0/dce/a03971_1aa16a1ed85c867b48e085311c25dea0ce" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>isInMyPoints</name></member>
-      <member refid="d0/dce/a03971_1a7fb1b2216f7123ff7d24b4b0528d519e" prot="private" virt="non-virtual"><scope>castor3d::Submesh</scope><name>m_box</name></member>
-      <member refid="d0/dce/a03971_1a293343306501e647630062c255f26496" prot="private" virt="non-virtual"><scope>castor3d::Submesh</scope><name>m_components</name></member>
-      <member refid="d0/dce/a03971_1aa42a6cff7fdaf956ac8ffd45cb3f0872" prot="private" virt="non-virtual"><scope>castor3d::Submesh</scope><name>m_defaultMaterial</name></member>
-      <member refid="d0/dce/a03971_1a2691cebd9c8909574d5cde30a24d132c" prot="private" virt="non-virtual"><scope>castor3d::Submesh</scope><name>m_dirty</name></member>
-      <member refid="d0/dce/a03971_1a39ca34fa26be5e4efe106de4733ce6eb" prot="private" virt="non-virtual"><scope>castor3d::Submesh</scope><name>m_generated</name></member>
-      <member refid="d0/dce/a03971_1a14cdf5458b15e08d0db35fd345580bcc" prot="private" virt="non-virtual"><scope>castor3d::Submesh</scope><name>m_geometryBuffers</name></member>
-      <member refid="d0/dce/a03971_1aac8dacf5e8886b4d4a33f4704409ca57" prot="private" virt="non-virtual"><scope>castor3d::Submesh</scope><name>m_id</name></member>
-      <member refid="d0/dce/a03971_1a419b6430dc2a950f6aaaad8c0739550e" prot="private" virt="non-virtual"><scope>castor3d::Submesh</scope><name>m_indexBuffer</name></member>
-      <member refid="d0/dce/a03971_1a8a7a2ff664206d87a37dcee6d75c9191" prot="private" virt="non-virtual"><scope>castor3d::Submesh</scope><name>m_indexMapping</name></member>
-      <member refid="d0/dce/a03971_1a1852b4e6fc1256d188c9593755d4c083" prot="private" virt="non-virtual"><scope>castor3d::Submesh</scope><name>m_initialised</name></member>
-      <member refid="d0/dce/a03971_1a3e6af3ee37fb8e10c3cf8115c259bffd" prot="private" virt="non-virtual"><scope>castor3d::Submesh</scope><name>m_instantiatedBones</name></member>
-      <member refid="d0/dce/a03971_1a6317c343fd568f0d0afee2669ae59d4b" prot="private" virt="non-virtual"><scope>castor3d::Submesh</scope><name>m_instantiation</name></member>
-      <member refid="d0/dce/a03971_1a10c9757034259b8a144898430605079d" prot="private" virt="non-virtual"><scope>castor3d::Submesh</scope><name>m_needsNormalsCompute</name></member>
-      <member refid="d0/dce/a03971_1a2a638d1939fae033f9c59658b11fb380" prot="private" virt="non-virtual"><scope>castor3d::Submesh</scope><name>m_parentMesh</name></member>
-      <member refid="d0/dce/a03971_1a3f874672009d6ce7835badb2c2a140c9" prot="private" virt="non-virtual"><scope>castor3d::Submesh</scope><name>m_points</name></member>
-      <member refid="d0/dce/a03971_1aa32ac6585a2808b88385c40fa04bf53f" prot="private" virt="non-virtual"><scope>castor3d::Submesh</scope><name>m_programFlags</name></member>
-      <member refid="d0/dce/a03971_1a9efab87300f9174a2c782c5c77bf0755" prot="private" virt="non-virtual"><scope>castor3d::Submesh</scope><name>m_sphere</name></member>
-      <member refid="d0/dce/a03971_1ae4e3b6f4469ac65e5e8c6445faaf1448" prot="private" virt="non-virtual"><scope>castor3d::Submesh</scope><name>m_topology</name></member>
-      <member refid="d0/dce/a03971_1aaf37acb36d701b09a09744379b589747" prot="private" virt="non-virtual"><scope>castor3d::Submesh</scope><name>m_vertexBuffer</name></member>
-      <member refid="d0/dce/a03971_1aa7be6bee59004135edc5351f0bf74825" prot="private" virt="non-virtual"><scope>castor3d::Submesh</scope><name>m_vertexLayout</name></member>
-      <member refid="d0/dce/a03971_1a403636d32744bd3df57d977c25dc860d" prot="private" virt="non-virtual"><scope>castor3d::Submesh</scope><name>m_vertexLayoutNoTex</name></member>
-      <member refid="d0/dce/a03971_1ac9a7a21d4696b21ad935460a38ab7bfa" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>needsUpdate</name></member>
-      <member refid="d0/dce/a03971_1afb6117f80bdadb0715b40377f1d7112a" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>Normal</name></member>
-      <member refid="d0/dce/a03971_1a2f96f51dfc87e46f45ba17471c0c2cd7" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>operator[]</name></member>
-      <member refid="d0/dce/a03971_1a5d32e94572aceeca7116b3ed160e4c85" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>operator[]</name></member>
-      <member refid="d0/dce/a03971_1a687784b28e3500437a466ea7b247f20d" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>Position</name></member>
-      <member refid="d0/dce/a03971_1a7b53552d9b9b75bedf8c95523f68512a" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>setDefaultMaterial</name></member>
-      <member refid="d0/dce/a03971_1a9a192388d4214e81f311ba55e7f58a4a" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>setIndexMapping</name></member>
-      <member refid="d0/dce/a03971_1a8eafe4a59ac743bc64d1d87356dff87f" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>setMaterial</name></member>
-      <member refid="d0/dce/a03971_1a26bbf2b81e8a8714c81f061d47bf3383" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>setTopology</name></member>
-      <member refid="d0/dce/a03971_1a9948b4d3bf5e6e8d848e3c3626a18166" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>sortByDistance</name></member>
-      <member refid="d0/dce/a03971_1a003f0e5e63eaf148c369f8e26f2e1668" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>Submesh</name></member>
-      <member refid="d0/dce/a03971_1add4bb3729d7f98b0574aed1cebcfafdb" prot="private" virt="non-virtual"><scope>castor3d::Submesh</scope><name>SubmeshComponentAdder</name></member>
-      <member refid="d0/dce/a03971_1a79af2c02b68ea47643fb741b3faf805c" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>Tangent</name></member>
-      <member refid="d0/dce/a03971_1aed06d7ffafd6d1aa579b37fea8df9d04" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>Texture</name></member>
-      <member refid="d0/dce/a03971_1a312244d2e8584c8914d51ad81a3ece7a" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>update</name></member>
-      <member refid="d0/dce/a03971_1a1d3c351cd26d927bc86b96b2490785f6" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>updateContainers</name></member>
-      <member refid="d0/dce/a03971_1ab1a52735bf64b7ff17ae947e806cf033" prot="public" virt="non-virtual"><scope>castor3d::Submesh</scope><name>~Submesh</name></member>
+      <member refid="d0/dce/a03971_1a7842a7d67f402edcc24be8fd09973818" prot="public" virt="pure-virtual"><scope>castor3d::RenderLoop</scope><name>beginRendering</name></member>
+      <member refid="d0/dce/a03971_1ad8988f97407d38c23b3f7ab1c5aa6c91" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>cleanup</name></member>
+      <member refid="d0/dce/a03971_1a3c52485f195f64ddd2182423c3cf8f91" prot="private" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>doCpuStep</name></member>
+      <member refid="d0/dce/a03971_1a46b0cc863b92df2de27a18b850f944c9" prot="private" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>doGpuStep</name></member>
+      <member refid="d0/dce/a03971_1aeeb7bd04a75a01c5730edc4438fb929f" prot="private" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>doProcessEvents</name></member>
+      <member refid="d0/dce/a03971_1a388da5e91fadfc7572c6f1ccb1e85d9b" prot="private" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>doProcessEvents</name></member>
+      <member refid="d0/dce/a03971_1adb8cd1592c293d4f956365f0e958e92d" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>doRenderFrame</name></member>
+      <member refid="d0/dce/a03971_1a04a7351eb46eba5aa6c227512f3903c3" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>dumpFrameTimes</name></member>
+      <member refid="d0/dce/a03971_1a9920fa7ccc5a06415b08e238e1f4754f" prot="public" virt="virtual"><scope>castor3d::RenderLoop</scope><name>enableVSync</name></member>
+      <member refid="d0/dce/a03971_1ad9ec6cf47938ab0fb37512d0cf177a51" prot="public" virt="pure-virtual"><scope>castor3d::RenderLoop</scope><name>endRendering</name></member>
+      <member refid="d0/dce/a03971_1ab0cce3459fd96396758d47675c0d0f45" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>flushEvents</name></member>
+      <member refid="d0/dce/a03971_1a60e53e14809ebd66fa6fbfbc92e14d58" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>getAvgFrameTime</name></member>
+      <member refid="d0/dce/a03971_1abce67ba6a22426d1555dcfb813432242" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>getFrameTime</name></member>
+      <member refid="d0/dce/a03971_1a74acb481115f9d2c3084bfb81a3dbe3f" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>getLastFrameTime</name></member>
+      <member refid="d0/dce/a03971_1a4f497f75e762e1308a6d972114f845ac" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>getWantedFps</name></member>
+      <member refid="d0/dce/a03971_1a60b8176ab5eb5ca6b25663f955780e3e" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>hasDebugOverlays</name></member>
+      <member refid="d0/dce/a03971_1a03f6c7a9ec87f3e1e24dfc1bf8868b89" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_currentUpdate</name></member>
+      <member refid="d0/dce/a03971_1a3df1d0d853b8d30a64f9491ba2b64206" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_debugOverlays</name></member>
+      <member refid="d0/dce/a03971_1acda37a7285dc00458860bd65822d34a6" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_debugOverlaysMtx</name></member>
+      <member refid="d0/dce/a03971_1ac732a05b63ca16e9203fc139a9e633e8" prot="private" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_first</name></member>
+      <member refid="d0/dce/a03971_1a3fdea4c3d454da13b6874d71d031772a" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_frameTime</name></member>
+      <member refid="d0/dce/a03971_1aadd20893be5df0f0a8bdfe52b5f4d148" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_lastFrameTime</name></member>
+      <member refid="d0/dce/a03971_1a988efd95b7ab6cc581a3e663e35616e5" prot="private" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_queueData</name></member>
+      <member refid="d0/dce/a03971_1a12c0e4650d67b30b6d3d8af64a6fdea6" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_renderSystem</name></member>
+      <member refid="d0/dce/a03971_1a7b4ad346335b41bdfa0a52bf5c2b8b9f" prot="private" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_shaderBuffers</name></member>
+      <member refid="d0/dce/a03971_1a3b6d4587b9d875ee203a0e312b297e2b" prot="private" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_shaderBuffersMtx</name></member>
+      <member refid="d0/dce/a03971_1a6ff0941180c29396e2176994260c9fd5" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_toWait</name></member>
+      <member refid="d0/dce/a03971_1a110d978875d737faa37572c0d01417f3" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_uploadResources</name></member>
+      <member refid="d0/dce/a03971_1a4a120c4fe2819ab38ec6e60a1988d2ac" prot="private" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_uploadTimer</name></member>
+      <member refid="d0/dce/a03971_1aca51dfa60d759d003d2e706b33124933" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>m_wantedFPS</name></member>
+      <member refid="d0/dce/a03971_1afbc75c36ac22821c05f284e6fee155af" prot="public" virt="pure-virtual"><scope>castor3d::RenderLoop</scope><name>pause</name></member>
+      <member refid="d0/dce/a03971_1a0d67947c5b1193af46bbaf0e0cc7585a" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>registerBuffer</name></member>
+      <member refid="d0/dce/a03971_1a26a0b1e129f0ee670917a424b133e012" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>registerTimer</name></member>
+      <member refid="d0/dce/a03971_1a92f9f97a35dd1d47e537f6e6024952b7" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>RenderLoop</name></member>
+      <member refid="d0/dce/a03971_1aabd4de0429c0e2659058545c6ec1bad2" prot="public" virt="pure-virtual"><scope>castor3d::RenderLoop</scope><name>renderSyncFrame</name></member>
+      <member refid="d0/dce/a03971_1ae909f2e21ba004087428391048d8db86" prot="public" virt="pure-virtual"><scope>castor3d::RenderLoop</scope><name>resume</name></member>
+      <member refid="d0/dce/a03971_1aebff987d3a1a626374752685dff11c05" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>showDebugOverlays</name></member>
+      <member refid="d0/dce/a03971_1a886e62492a8383af4e913c392e9c13af" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>UnlimitedFPS</name></member>
+      <member refid="d0/dce/a03971_1a602c3f0c8a347db8331c9a5926ce0235" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>unregisterBuffer</name></member>
+      <member refid="d0/dce/a03971_1a32c564fbdef938f9fd21f10834c028ac" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop</scope><name>unregisterTimer</name></member>
+      <member refid="d0/dce/a03971_1a98370f8e34e7f81f1c9277129c71b718" prot="public" virt="virtual"><scope>castor3d::RenderLoop</scope><name>~RenderLoop</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

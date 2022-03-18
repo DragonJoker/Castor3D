@@ -1,5 +1,4 @@
-<map id="castor3d::PhongPass" name="castor3d::PhongPass">
-<area shape="rect" id="node1" title=" " alt="" coords="28,155,175,181"/>
-<area shape="rect" id="node2" href="$db/d39/a02575.html" title=" " alt="" coords="46,80,157,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,197,32"/>
+<map id="castor3d::UniformBufferPool" name="castor3d::UniformBufferPool">
+<area shape="rect" id="node1" title=" " alt="" coords="30,80,213,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,237,32"/>
 </map>

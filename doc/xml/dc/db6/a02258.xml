@@ -1,98 +1,44 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dc/db6/a02258" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::ChunkParser&lt; castor::String &gt;</compoundname>
-    <basecompoundref refid="d4/d48/a02250" prot="public" virt="non-virtual">castor3d::ChunkParserBase</basecompoundref>
-    <includes local="no">ChunkParser.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dc/db6/a02258" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ChunkTyper&lt; Animation &gt;</compoundname>
+    <includes local="no">BinaryAnimation.hpp</includes>
     <templateparamlist>
     </templateparamlist>
-      <sectiondef kind="public-static-func">
-      <memberdef kind="function" id="dc/db6/a02258_1acf5c3a4513e23e175339295361d35119" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>static bool castor3d::ChunkParser&lt; castor::String &gt;::parse</definition>
-        <argsstring>(castor::String &amp;value, BinaryChunk &amp;chunk)</argsstring>
-        <name>parse</name>
-        <param>
-          <type>castor::String &amp;</type>
-          <declname>value</declname>
-        </param>
-        <param>
-          <type><ref refid="d0/dfe/a02102" kindref="compound">BinaryChunk</ref> &amp;</type>
-          <declname>chunk</declname>
-        </param>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="dc/db6/a02258_1a649cf382bfc47818805de4bd2f33e840" prot="public" static="yes" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref> const</type>
+        <definition>ChunkType const castor3d::ChunkTyper&lt; Animation &gt;::Value</definition>
+        <argsstring></argsstring>
+        <name>Value</name>
+        <qualifiedname>castor3d::ChunkTyper&lt; Animation &gt;::Value</qualifiedname>
+        <initializer>= <ref refid="dc/df4/a01401_1a742783d4e4b7354fac3e375ae107414daf8b3bcfa9a9160ba9956d2197892e796" kindref="member">ChunkType::eAnimation</ref></initializer>
         <briefdescription>
-<para>Retrieves a value from a chunk. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="out">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Receives the parsed value </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">chunk</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The chunk containing the value </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Binary/ChunkParser.hpp" line="135" column="1" bodyfile="Binary/ChunkParser.hpp" bodystart="135" bodyend="155"/>
-        <references refid="d0/dfe/a02102_1af711032d94753cb2d482fe2bcf3afb17">castor3d::BinaryChunk::checkAvailable</references>
-        <references refid="d0/dfe/a02102_1a2819c7ddf95251296b5a61bf40435358">castor3d::BinaryChunk::getRemaining</references>
-        <references refid="d4/d48/a02250_1a062463121032ba679336be2382c508d0" compoundref="d2/df5/a00137" startline="30" endline="42">castor3d::ChunkParserBase::parse</references>
+        <location file="Binary/BinaryAnimation.hpp" line="28" column="24" bodyfile="Binary/BinaryAnimation.hpp" bodystart="28" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para><ref refid="dc/d5a/a02254" kindref="compound">ChunkParser</ref> specialisation for castor::String. </para>
+<para>Helper structure to find ChunkType from a type. </para>
     </briefdescription>
     <detaileddescription>
 <para><simplesect kind="author"><para>Sylvain DOREMUS </para>
 </simplesect>
-<simplesect kind="version"><para>0.7.0.0 </para>
+<simplesect kind="version"><para>0.9.0 </para>
 </simplesect>
-<simplesect kind="date"><para>08/04/2014 </para>
+<simplesect kind="date"><para>28/05/2016</para>
+</simplesect>
+<simplesect kind="remark"><para>Specialisation for Animation. </para>
 </simplesect>
 </para>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="667">
-        <label>castor3d::ChunkParser&lt; castor::String &gt;</label>
-        <link refid="dc/db6/a02258"/>
-        <childnode refid="668" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="668">
-        <label>castor3d::ChunkParserBase</label>
-        <link refid="d4/d48/a02250"/>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="669">
-        <label>castor3d::ChunkParser&lt; castor::String &gt;</label>
-        <link refid="dc/db6/a02258"/>
-        <childnode refid="670" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="670">
-        <label>castor3d::ChunkParserBase</label>
-        <link refid="d4/d48/a02250"/>
-      </node>
-    </collaborationgraph>
-    <location file="Binary/ChunkParser.hpp" line="121" column="1" bodyfile="Binary/ChunkParser.hpp" bodystart="119" bodyend="156"/>
+    <location file="Binary/BinaryAnimation.hpp" line="26" column="1" bodyfile="Binary/BinaryAnimation.hpp" bodystart="27" bodyend="29"/>
     <listofallmembers>
-      <member refid="dc/db6/a02258_1acf5c3a4513e23e175339295361d35119" prot="public" virt="non-virtual"><scope>castor3d::ChunkParser&lt; castor::String &gt;</scope><name>parse</name></member>
-      <member refid="d4/d48/a02250_1a062463121032ba679336be2382c508d0" prot="public" virt="non-virtual" ambiguityscope="castor3d::ChunkParserBase::"><scope>castor3d::ChunkParser&lt; castor::String &gt;</scope><name>parse</name></member>
+      <member refid="dc/db6/a02258_1a649cf382bfc47818805de4bd2f33e840" prot="public" virt="non-virtual"><scope>castor3d::ChunkTyper&lt; Animation &gt;</scope><name>Value</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,33 +1,71 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dd/d6d/a03547" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkDescriptorSetVariableDescriptorCountAllocateInfoEXT &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="dd/d6d/a03547_1a6287f2433959f29903edc5de74d420f7" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkDescriptorSetVariableDescriptorCountAllocateInfoEXT &gt;::value</definition>
-        <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO_EXT</initializer>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dd/d6d/a03547" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::OverlayFactory</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::Factory&lt; OverlayCategory, OverlayType &gt;</basecompoundref>
+    <includes local="no">OverlayFactory.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/d6d/a03547_1aa44bc6e7bb3bff7b7ea4f7a0477da430" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::OverlayFactory::OverlayFactory</definition>
+        <argsstring>()</argsstring>
+        <name>OverlayFactory</name>
+        <qualifiedname>castor3d::OverlayFactory::OverlayFactory</qualifiedname>
         <briefdescription>
+<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="303" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="303" bodyend="-1"/>
+        <location file="Overlay/OverlayFactory.hpp" line="23" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d6d/a03547_1a1641b6641ed4763a801163c2d38676b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::OverlayFactory::~OverlayFactory</definition>
+        <argsstring>()</argsstring>
+        <name>~OverlayFactory</name>
+        <qualifiedname>castor3d::OverlayFactory::~OverlayFactory</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayFactory.hpp" line="30" column="17"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="303" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="303" bodyend="303"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::OverlayFactory</label>
+        <link refid="dd/d6d/a03547"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Factory&lt; OverlayCategory, OverlayType &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::OverlayFactory</label>
+        <link refid="dd/d6d/a03547"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Factory&lt; OverlayCategory, OverlayType &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Overlay/OverlayFactory.hpp" line="13" column="1" bodyfile="Overlay/OverlayFactory.hpp" bodystart="15" bodyend="31"/>
     <listofallmembers>
-      <member refid="dd/d6d/a03547_1a6287f2433959f29903edc5de74d420f7" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkDescriptorSetVariableDescriptorCountAllocateInfoEXT &gt;</scope><name>value</name></member>
+      <member refid="dd/d6d/a03547_1aa44bc6e7bb3bff7b7ea4f7a0477da430" prot="public" virt="non-virtual"><scope>castor3d::OverlayFactory</scope><name>OverlayFactory</name></member>
+      <member refid="dd/d6d/a03547_1a1641b6641ed4763a801163c2d38676b3" prot="public" virt="virtual"><scope>castor3d::OverlayFactory</scope><name>~OverlayFactory</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

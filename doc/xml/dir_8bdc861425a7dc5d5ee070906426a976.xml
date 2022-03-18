@@ -1,14 +1,11 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_8bdc861425a7dc5d5ee070906426a976" kind="dir">
     <compoundname>Render/ToTexture</compoundname>
-    <innerfile refid="d9/d9a/a00998">EquirectangularToCube.hpp</innerfile>
-    <innerfile refid="df/d59/a01001">RenderCube.hpp</innerfile>
-    <innerfile refid="df/dbc/a01004">RenderDepthQuad.hpp</innerfile>
-    <innerfile refid="d6/d8d/a01007">RenderToTextureModule.hpp</innerfile>
-    <innerfile refid="d0/d2b/a01010">Texture3DTo2D.hpp</innerfile>
-    <innerfile refid="d7/d59/a01013">TextureProjection.hpp</innerfile>
-    <innerfile refid="de/def/a01016">TextureProjectionToCube.hpp</innerfile>
+    <innerfile refid="d7/dd4/a00968">EquirectangularToCube.hpp</innerfile>
+    <innerfile refid="d0/d3c/a00971">RenderCube.hpp</innerfile>
+    <innerfile refid="df/dce/a00974">RenderToTextureModule.hpp</innerfile>
+    <innerfile refid="d5/d6c/a00977">Texture3DTo2D.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

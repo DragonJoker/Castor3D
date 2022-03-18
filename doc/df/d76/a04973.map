@@ -1,5 +1,4 @@
-<map id="castor3d::RenderDepthQuad" name="castor3d::RenderDepthQuad">
-<area shape="rect" id="node1" title=" " alt="" coords="5,155,192,181"/>
-<area shape="rect" id="node2" href="$d8/d1f/a04450.html" title=" " alt="" coords="23,80,175,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="67,5,130,32"/>
+<map id="castor3d::shader::ShadowMapData" name="castor3d::shader::ShadowMapData">
+<area shape="rect" id="node1" title=" " alt="" coords="5,80,179,121"/>
+<area shape="rect" id="node2" title=" " alt="" coords="23,5,161,32"/>
 </map>

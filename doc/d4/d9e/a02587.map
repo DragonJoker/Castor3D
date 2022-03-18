@@ -1,4 +1,5 @@
-<map id="castor3d::TextureSource" name="castor3d::TextureSource">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,169,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="56,5,119,32"/>
+<map id="castor3d::UniformBufferBase" name="castor3d::UniformBufferBase">
+<area shape="rect" id="node1" title=" " alt="" coords="5,11,192,38"/>
+<area shape="rect" id="node2" href="$d3/df4/a02504.html" title=" " alt="" coords="683,5,929,47"/>
+<area shape="rect" id="node3" href="$d3/df4/a02504.html" title="A uniform typed buffer, than can contain multiple sub&#45;buffers." alt="" coords="241,40,405,81"/>
 </map>

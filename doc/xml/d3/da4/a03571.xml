@@ -1,33 +1,45 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d3/da4/a03571" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkRayTracingPipelineCreateInfoNV &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d3/da4/a03571_1a5de6e6926f0b611942a001af6f079d5c" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkRayTracingPipelineCreateInfoNV &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d3/da4/a03571" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::OverlayRenderer::Configuration</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/da4/a03571_1aa9c288e52458682de7e463c398d2ab9f" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::OverlayRenderer::Configuration::positionRatio</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_RAY_TRACING_PIPELINE_CREATE_INFO_NV</initializer>
+        <name>positionRatio</name>
+        <qualifiedname>castor3d::OverlayRenderer::Configuration::positionRatio</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="309" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="309" bodyend="-1"/>
+        <location file="Overlay/OverlayRenderer.hpp" line="201" column="17" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="201" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/da4/a03571_1ad7e2c1f50ae1a7259fc8fda411a0bb62" prot="public" static="no" mutable="no">
+        <type>castor::Point4i</type>
+        <definition>castor::Point4i castor3d::OverlayRenderer::Configuration::renderSizeIndex</definition>
+        <argsstring></argsstring>
+        <name>renderSizeIndex</name>
+        <qualifiedname>castor3d::OverlayRenderer::Configuration::renderSizeIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="202" column="17" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="202" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="309" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="309" bodyend="309"/>
+    <location file="Overlay/OverlayRenderer.hpp" line="199" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="200" bodyend="203"/>
     <listofallmembers>
-      <member refid="d3/da4/a03571_1a5de6e6926f0b611942a001af6f079d5c" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkRayTracingPipelineCreateInfoNV &gt;</scope><name>value</name></member>
+      <member refid="d3/da4/a03571_1aa9c288e52458682de7e463c398d2ab9f" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::Configuration</scope><name>positionRatio</name></member>
+      <member refid="d3/da4/a03571_1ad7e2c1f50ae1a7259fc8fda411a0bb62" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::Configuration</scope><name>renderSizeIndex</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

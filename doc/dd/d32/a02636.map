@@ -1,8 +1,7 @@
-<map id="castor3d::CubeView" name="castor3d::CubeView">
-<area shape="rect" id="node1" title=" " alt="" coords="84,481,223,508"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,377,149,419"/>
-<area shape="rect" id="node3" href="$df/d0c/a02634.html" title=" " alt="" coords="133,288,262,315"/>
-<area shape="rect" id="node4" title=" " alt="" coords="103,184,268,225"/>
-<area shape="rect" id="node5" title="STL class." alt="" coords="7,95,121,121"/>
-<area shape="rect" id="node6" title=" " alt="" coords="45,5,83,32"/>
+<map id="castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;" name="castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="523,57,708,98"/>
+<area shape="rect" id="node2" title=" " alt="" coords="228,5,411,32"/>
+<area shape="rect" id="node3" title=" " alt="" coords="225,57,413,98"/>
+<area shape="rect" id="node4" href="$d1/d3c/a02714.html" title=" " alt="" coords="259,123,379,149"/>
+<area shape="rect" id="node5" title=" " alt="" coords="5,123,176,149"/>
 </map>

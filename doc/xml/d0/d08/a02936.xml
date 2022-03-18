@@ -1,33 +1,2225 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d0/d08/a02936" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPhysicalDeviceGroupProperties &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d0/d08/a02936_1a3976eb8cf0e79e44157fa54ed47f4d97" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPhysicalDeviceGroupProperties &gt;::value</definition>
-        <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_GROUP_PROPERTIES</initializer>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d0/d08/a02936" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::TextureLayout</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; RenderSystem &gt;</basecompoundref>
+    <includes local="no">TextureLayout.hpp</includes>
+      <sectiondef kind="user-defined">
+      <header>Whole texture access.</header>
+      <memberdef kind="function" id="d0/d08/a02936_1a8b1a4cae2adb069628163e614868042c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureLayout::setSource</definition>
+        <argsstring>(castor::PxBufferBaseSPtr buffer, uint32_t bufferOrigLevels, bool isStatic=false)</argsstring>
+        <name>setSource</name>
+        <qualifiedname>castor3d::TextureLayout::setSource</qualifiedname>
+        <param>
+          <type>castor::PxBufferBaseSPtr</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>bufferOrigLevels</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isStatic</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>Sets the whole layout source. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="295" column="14"/>
+        <referencedby refid="d0/d08/a02936_1a70882c26b5e0900cb83d3bb68d56b782" compoundref="d4/def/a00359" startline="305" endline="310">setSource</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1acbeb71420a9c65033124193235fc6178" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureLayout::setSource</definition>
+        <argsstring>(castor::PxBufferBaseSPtr buffer, bool isStatic=false)</argsstring>
+        <name>setSource</name>
+        <qualifiedname>castor3d::TextureLayout::setSource</qualifiedname>
+        <param>
+          <type>castor::PxBufferBaseSPtr</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isStatic</declname>
+          <defval>false</defval>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="74" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="74" bodyend="-1"/>
+        <location file="Material/Texture/TextureLayout.hpp" line="298" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1aff7685a313629e0be811112c2da0334a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureLayout::setSource</definition>
+        <argsstring>(castor::Path const &amp;folder, castor::Path const &amp;relative, castor::ImageLoaderConfig config={ true, true, true })</argsstring>
+        <name>setSource</name>
+        <qualifiedname>castor3d::TextureLayout::setSource</qualifiedname>
+        <param>
+          <type>castor::Path const &amp;</type>
+          <declname>folder</declname>
+        </param>
+        <param>
+          <type>castor::Path const &amp;</type>
+          <declname>relative</declname>
+        </param>
+        <param>
+          <type>castor::ImageLoaderConfig</type>
+          <declname>config</declname>
+          <defval>{ true, true, true }</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="300" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1aee81558bd667f6701ef019f4af1375f9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureLayout::setSource</definition>
+        <argsstring>(VkExtent3D const &amp;extent, VkFormat format)</argsstring>
+        <name>setSource</name>
+        <qualifiedname>castor3d::TextureLayout::setSource</qualifiedname>
+        <param>
+          <type>VkExtent3D const &amp;</type>
+          <declname>extent</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>format</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="303" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a70882c26b5e0900cb83d3bb68d56b782" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextureLayout::setSource</definition>
+        <argsstring>(VkExtent2D const &amp;extent, VkFormat format)</argsstring>
+        <name>setSource</name>
+        <qualifiedname>castor3d::TextureLayout::setSource</qualifiedname>
+        <param>
+          <type>VkExtent2D const &amp;</type>
+          <declname>extent</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>format</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="305" column="6" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="305" bodyend="310"/>
+        <references refid="d0/d08/a02936_1a8b1a4cae2adb069628163e614868042c">setSource</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>Getters.</header>
+      <memberdef kind="function" id="d0/d08/a02936_1acb2b7dfd11c9dd1b0fb868684e8fb544" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d1b/a02960" kindref="compound">TextureView</ref> const &amp;</type>
+        <definition>TextureView const  &amp; castor3d::TextureLayout::getDefaultView</definition>
+        <argsstring>() const</argsstring>
+        <name>getDefaultView</name>
+        <qualifiedname>castor3d::TextureLayout::getDefaultView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="315" column="20" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="315" bodyend="319"/>
+        <references refid="d1/d77/a02920_1ad7934d51067a1952360f589a74f18775" compoundref="d4/def/a00359" startline="22">castor3d::MipView::view</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a7448d9e87e785fffc28de1ae58716e7a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d1b/a02960" kindref="compound">TextureView</ref> &amp;</type>
+        <definition>TextureView &amp; castor3d::TextureLayout::getDefaultView</definition>
+        <argsstring>()</argsstring>
+        <name>getDefaultView</name>
+        <qualifiedname>castor3d::TextureLayout::getDefaultView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="321" column="14" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="321" bodyend="325"/>
+        <references refid="d1/d77/a02920_1ad7934d51067a1952360f589a74f18775" compoundref="d4/def/a00359" startline="22">castor3d::MipView::view</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a1e6306453161f69aba749169ef5bd4ee" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d1/d77/a02920" kindref="compound">MipView</ref> const &amp;</type>
+        <definition>MipView const  &amp; castor3d::TextureLayout::getDefault</definition>
+        <argsstring>() const</argsstring>
+        <name>getDefault</name>
+        <qualifiedname>castor3d::TextureLayout::getDefault</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="327" column="16" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="327" bodyend="330"/>
+        <referencedby refid="d0/d08/a02936_1af59903466653eec027f322153533cb89" compoundref="d4/def/a00359" startline="338" endline="342">getMipView</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1af8c17d35e42c3d2df4d2ee91f21d2b16" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureLayout::getLayersCount</definition>
+        <argsstring>() const</argsstring>
+        <name>getLayersCount</name>
+        <qualifiedname>castor3d::TextureLayout::getLayersCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="384" column="10" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="384" bodyend="387"/>
+        <referencedby refid="d0/d08/a02936_1afa5cf3d0285a165f36035860ca3d4c34" compoundref="d4/def/a00359" startline="394" endline="401">getLayer2D</referencedby>
+        <referencedby refid="d0/d08/a02936_1a3e189c6afff1e6c98055d16f74f528c8" compoundref="d4/def/a00359" startline="503" endline="508">isCube</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1aa829b0b38ecc76af774ec8786d7903ea" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/dad/a02928" kindref="compound">ArrayView</ref>&lt; <ref refid="d1/d77/a02920" kindref="compound">MipView</ref> &gt; const &amp;</type>
+        <definition>ArrayView&lt; MipView &gt; const  &amp; castor3d::TextureLayout::getArray2D</definition>
+        <argsstring>() const</argsstring>
+        <name>getArray2D</name>
+        <qualifiedname>castor3d::TextureLayout::getArray2D</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="389" column="18" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="389" bodyend="392"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1afa5cf3d0285a165f36035860ca3d4c34" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d1/d77/a02920" kindref="compound">MipView</ref> const &amp;</type>
+        <definition>MipView const  &amp; castor3d::TextureLayout::getLayer2D</definition>
+        <argsstring>(size_t layer) const</argsstring>
+        <name>getLayer2D</name>
+        <qualifiedname>castor3d::TextureLayout::getLayer2D</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>layer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="394" column="16" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="394" bodyend="401"/>
+        <references refid="d0/d08/a02936_1af8c17d35e42c3d2df4d2ee91f21d2b16" compoundref="d4/def/a00359" startline="384" endline="387">getLayersCount</references>
+        <referencedby refid="d0/d08/a02936_1a4f45749736a658c467cd88c9d13cf655" compoundref="d4/def/a00359" startline="412" endline="416">getLayer2DView</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a95aad459db46f11aa20477da36b36e90" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d1/d77/a02920" kindref="compound">MipView</ref> &amp;</type>
+        <definition>MipView &amp; castor3d::TextureLayout::getLayer2D</definition>
+        <argsstring>(size_t layer)</argsstring>
+        <name>getLayer2D</name>
+        <qualifiedname>castor3d::TextureLayout::getLayer2D</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>layer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="403" column="10" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="403" bodyend="410"/>
+        <references refid="d0/d08/a02936_1af8c17d35e42c3d2df4d2ee91f21d2b16" compoundref="d4/def/a00359" startline="384" endline="387">getLayersCount</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a4f45749736a658c467cd88c9d13cf655" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d1b/a02960" kindref="compound">TextureView</ref> const &amp;</type>
+        <definition>TextureView const  &amp; castor3d::TextureLayout::getLayer2DView</definition>
+        <argsstring>(size_t layer) const</argsstring>
+        <name>getLayer2DView</name>
+        <qualifiedname>castor3d::TextureLayout::getLayer2DView</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>layer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="412" column="20" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="412" bodyend="416"/>
+        <references refid="d0/d08/a02936_1afa5cf3d0285a165f36035860ca3d4c34" compoundref="d4/def/a00359" startline="394" endline="401">getLayer2D</references>
+        <references refid="d1/d77/a02920_1ad7934d51067a1952360f589a74f18775" compoundref="d4/def/a00359" startline="22">castor3d::MipView::view</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a49904aac5d9d2409eaa48a120c36da1b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d1b/a02960" kindref="compound">TextureView</ref> &amp;</type>
+        <definition>TextureView &amp; castor3d::TextureLayout::getLayer2DView</definition>
+        <argsstring>(size_t layer)</argsstring>
+        <name>getLayer2DView</name>
+        <qualifiedname>castor3d::TextureLayout::getLayer2DView</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>layer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="418" column="14" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="418" bodyend="422"/>
+        <references refid="d0/d08/a02936_1afa5cf3d0285a165f36035860ca3d4c34" compoundref="d4/def/a00359" startline="394" endline="401">getLayer2D</references>
+        <references refid="d1/d77/a02920_1ad7934d51067a1952360f589a74f18775" compoundref="d4/def/a00359" startline="22">castor3d::MipView::view</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <description><para>2D texture&apos;s mip level access. </para>
+</description>
+      <memberdef kind="function" id="d0/d08/a02936_1af59903466653eec027f322153533cb89" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d1b/a02960" kindref="compound">TextureView</ref> const &amp;</type>
+        <definition>TextureView const  &amp; castor3d::TextureLayout::getMipView</definition>
+        <argsstring>(size_t level) const</argsstring>
+        <name>getMipView</name>
+        <qualifiedname>castor3d::TextureLayout::getMipView</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="338" column="20" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="338" bodyend="342"/>
+        <references refid="d0/d08/a02936_1a1e6306453161f69aba749169ef5bd4ee" compoundref="d4/def/a00359" startline="327" endline="330">getDefault</references>
+        <references refid="d1/d77/a02920_1af1ba49261a22ad78a07f148018293b05" compoundref="d4/def/a00359" startline="23">castor3d::MipView::levels</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a0668a8ee41f8f73c1739e2c5dfece8b7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d1b/a02960" kindref="compound">TextureView</ref> &amp;</type>
+        <definition>TextureView &amp; castor3d::TextureLayout::getMipView</definition>
+        <argsstring>(size_t level)</argsstring>
+        <name>getMipView</name>
+        <qualifiedname>castor3d::TextureLayout::getMipView</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="344" column="14" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="344" bodyend="348"/>
+        <references refid="d0/d08/a02936_1a1e6306453161f69aba749169ef5bd4ee" compoundref="d4/def/a00359" startline="327" endline="330">getDefault</references>
+        <references refid="d1/d77/a02920_1af1ba49261a22ad78a07f148018293b05" compoundref="d4/def/a00359" startline="23">castor3d::MipView::levels</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>Texture array&apos;s layer access.</header>
+      <memberdef kind="function" id="d0/d08/a02936_1aab75779d6d465aff62e7f2f0aadedab1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureLayout::setLayerSource</definition>
+        <argsstring>(uint32_t index, castor::PxBufferBaseSPtr buffer, uint32_t bufferOrigLevels)</argsstring>
+        <name>setLayerSource</name>
+        <qualifiedname>castor3d::TextureLayout::setLayerSource</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>castor::PxBufferBaseSPtr</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>bufferOrigLevels</declname>
+        </param>
+        <briefdescription>
+<para>Sets the source for all mip lever of one layer in the layout. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="360" column="14"/>
+        <referencedby refid="d0/d08/a02936_1a11b25984f33fbe350a931f5215802146" compoundref="d4/def/a00359" startline="372" endline="379">setLayerSource</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a3142cca95a5b0ab3237aa0ed88628c2d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureLayout::setLayerSource</definition>
+        <argsstring>(uint32_t index, castor::PxBufferBaseSPtr buffer)</argsstring>
+        <name>setLayerSource</name>
+        <qualifiedname>castor3d::TextureLayout::setLayerSource</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>castor::PxBufferBaseSPtr</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="363" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1ab5d16061661a41b88d21eb7a4684107d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureLayout::setLayerSource</definition>
+        <argsstring>(uint32_t index, castor::Path const &amp;folder, castor::Path const &amp;relative, castor::ImageLoaderConfig config={ true, true, false })</argsstring>
+        <name>setLayerSource</name>
+        <qualifiedname>castor3d::TextureLayout::setLayerSource</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>castor::Path const &amp;</type>
+          <declname>folder</declname>
+        </param>
+        <param>
+          <type>castor::Path const &amp;</type>
+          <declname>relative</declname>
+        </param>
+        <param>
+          <type>castor::ImageLoaderConfig</type>
+          <declname>config</declname>
+          <defval>{ true, true, false }</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="365" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1af1bd0a5db462e9e367d68e2131fe7a42" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureLayout::setLayerSource</definition>
+        <argsstring>(uint32_t index, VkExtent3D const &amp;extent, VkFormat format)</argsstring>
+        <name>setLayerSource</name>
+        <qualifiedname>castor3d::TextureLayout::setLayerSource</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>VkExtent3D const &amp;</type>
+          <declname>extent</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>format</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="369" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a11b25984f33fbe350a931f5215802146" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextureLayout::setLayerSource</definition>
+        <argsstring>(uint32_t index, VkExtent2D const &amp;extent, VkFormat format)</argsstring>
+        <name>setLayerSource</name>
+        <qualifiedname>castor3d::TextureLayout::setLayerSource</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>VkExtent2D const &amp;</type>
+          <declname>extent</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>format</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="372" column="6" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="372" bodyend="379"/>
+        <references refid="d0/d08/a02936_1aab75779d6d465aff62e7f2f0aadedab1">setLayerSource</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>Texture array layer&apos;s mip level access.</header>
+      <memberdef kind="function" id="d0/d08/a02936_1a4dacfd44ffe655b1bd66f627a31e8dd4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureLayout::setLayerMipSource</definition>
+        <argsstring>(uint32_t index, uint32_t level, castor::PxBufferBaseSPtr buffer)</argsstring>
+        <name>setLayerMipSource</name>
+        <qualifiedname>castor3d::TextureLayout::setLayerMipSource</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <param>
+          <type>castor::PxBufferBaseSPtr</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Sets the source for one mip level of a layer in the layout. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="434" column="14"/>
+        <referencedby refid="d0/d08/a02936_1a383dd14141d8a87ed9fb7fb35ebe6aac" compoundref="d4/def/a00359" startline="446" endline="455">setLayerMipSource</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a75dc2ff6d1977e1d8dbb6c32ad8773a0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureLayout::setLayerMipSource</definition>
+        <argsstring>(uint32_t index, uint32_t level, castor::Path const &amp;folder, castor::Path const &amp;relative, castor::ImageLoaderConfig config={ true, false, false })</argsstring>
+        <name>setLayerMipSource</name>
+        <qualifiedname>castor3d::TextureLayout::setLayerMipSource</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <param>
+          <type>castor::Path const &amp;</type>
+          <declname>folder</declname>
+        </param>
+        <param>
+          <type>castor::Path const &amp;</type>
+          <declname>relative</declname>
+        </param>
+        <param>
+          <type>castor::ImageLoaderConfig</type>
+          <declname>config</declname>
+          <defval>{ true, false, false }</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="437" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1ae1dadef43b5aacac3b7df99f6e81b6d3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureLayout::setLayerMipSource</definition>
+        <argsstring>(uint32_t index, uint32_t level, VkExtent3D const &amp;extent, VkFormat format)</argsstring>
+        <name>setLayerMipSource</name>
+        <qualifiedname>castor3d::TextureLayout::setLayerMipSource</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <param>
+          <type>VkExtent3D const &amp;</type>
+          <declname>extent</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>format</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="442" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a383dd14141d8a87ed9fb7fb35ebe6aac" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextureLayout::setLayerMipSource</definition>
+        <argsstring>(uint32_t index, uint32_t level, VkExtent2D const &amp;extent, VkFormat format)</argsstring>
+        <name>setLayerMipSource</name>
+        <qualifiedname>castor3d::TextureLayout::setLayerMipSource</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <param>
+          <type>VkExtent2D const &amp;</type>
+          <declname>extent</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>format</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="446" column="6" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="446" bodyend="455"/>
+        <references refid="d0/d08/a02936_1a4dacfd44ffe655b1bd66f627a31e8dd4">setLayerMipSource</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>3D texture&apos;s slice access.</header>
+      <memberdef kind="function" id="d0/d08/a02936_1aa0bc918962559fd6fc69b8e00ad1007b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/d0c/a02932" kindref="compound">SliceView</ref>&lt; <ref refid="d1/d77/a02920" kindref="compound">MipView</ref> &gt; const &amp;</type>
+        <definition>SliceView&lt; MipView &gt; const  &amp; castor3d::TextureLayout::getSlices3D</definition>
+        <argsstring>() const</argsstring>
+        <name>getSlices3D</name>
+        <qualifiedname>castor3d::TextureLayout::getSlices3D</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="461" column="18" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="461" bodyend="464"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1acebe84c2586cff6f89e1d7e553650596" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d1/d77/a02920" kindref="compound">MipView</ref> const &amp;</type>
+        <definition>MipView const  &amp; castor3d::TextureLayout::getSlice</definition>
+        <argsstring>(size_t slice) const</argsstring>
+        <name>getSlice</name>
+        <qualifiedname>castor3d::TextureLayout::getSlice</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>slice</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="466" column="16" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="466" bodyend="473"/>
+        <references refid="d0/d08/a02936_1a966144c5556a163b0b26ca95dc628c6b" compoundref="d4/def/a00359" startline="695" endline="698">getDepth</references>
+        <referencedby refid="d0/d08/a02936_1a921eff6295e3d366f8e6950922097d49" compoundref="d4/def/a00359" startline="484" endline="488">getSliceView</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1ae601291239020bb58da49ca768a1e558" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d1/d77/a02920" kindref="compound">MipView</ref> &amp;</type>
+        <definition>MipView &amp; castor3d::TextureLayout::getSlice</definition>
+        <argsstring>(size_t slice)</argsstring>
+        <name>getSlice</name>
+        <qualifiedname>castor3d::TextureLayout::getSlice</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>slice</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="475" column="10" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="475" bodyend="482"/>
+        <references refid="d0/d08/a02936_1a966144c5556a163b0b26ca95dc628c6b" compoundref="d4/def/a00359" startline="695" endline="698">getDepth</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a921eff6295e3d366f8e6950922097d49" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d1b/a02960" kindref="compound">TextureView</ref> const &amp;</type>
+        <definition>TextureView const  &amp; castor3d::TextureLayout::getSliceView</definition>
+        <argsstring>(size_t slice) const</argsstring>
+        <name>getSliceView</name>
+        <qualifiedname>castor3d::TextureLayout::getSliceView</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>slice</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="484" column="20" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="484" bodyend="488"/>
+        <references refid="d0/d08/a02936_1acebe84c2586cff6f89e1d7e553650596" compoundref="d4/def/a00359" startline="466" endline="473">getSlice</references>
+        <references refid="d1/d77/a02920_1ad7934d51067a1952360f589a74f18775" compoundref="d4/def/a00359" startline="22">castor3d::MipView::view</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a1e7a3c17d7f39a86ef88d785ad5f90dc" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d1b/a02960" kindref="compound">TextureView</ref> &amp;</type>
+        <definition>TextureView &amp; castor3d::TextureLayout::getSliceView</definition>
+        <argsstring>(size_t slice)</argsstring>
+        <name>getSliceView</name>
+        <qualifiedname>castor3d::TextureLayout::getSliceView</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>slice</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="490" column="14" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="490" bodyend="494"/>
+        <references refid="d0/d08/a02936_1acebe84c2586cff6f89e1d7e553650596" compoundref="d4/def/a00359" startline="466" endline="473">getSlice</references>
+        <references refid="d1/d77/a02920_1ad7934d51067a1952360f589a74f18775" compoundref="d4/def/a00359" startline="22">castor3d::MipView::view</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <description><para><ref refid="d0/d7c/a03300" kindref="compound">Cube</ref> array&apos;s texture access. <simplesect kind="remark"><para>A simple cube texture is a cube array of size 1. </para>
+</simplesect>
+</para>
+</description>
+      <memberdef kind="function" id="d0/d08/a02936_1a3e189c6afff1e6c98055d16f74f528c8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureLayout::isCube</definition>
+        <argsstring>() const</argsstring>
+        <name>isCube</name>
+        <qualifiedname>castor3d::TextureLayout::isCube</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="503" column="10" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="503" bodyend="508"/>
+        <references refid="d0/d08/a02936_1af8c17d35e42c3d2df4d2ee91f21d2b16" compoundref="d4/def/a00359" startline="384" endline="387">getLayersCount</references>
+        <referencedby refid="d0/d08/a02936_1a4b4e81b4b665c1647a1decfc1705b38d" compoundref="d4/def/a00359" startline="515" endline="522">getLayerCube</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1aead9f16f47a393f5444c10961c58f2a1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/dad/a02928" kindref="compound">ArrayView</ref>&lt; <ref refid="d9/dc5/a02924" kindref="compound">CubeView</ref> &gt; const &amp;</type>
+        <definition>ArrayView&lt; CubeView &gt; const  &amp; castor3d::TextureLayout::getArrayCube</definition>
+        <argsstring>() const</argsstring>
+        <name>getArrayCube</name>
+        <qualifiedname>castor3d::TextureLayout::getArrayCube</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="510" column="18" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="510" bodyend="513"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a4b4e81b4b665c1647a1decfc1705b38d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/dc5/a02924" kindref="compound">CubeView</ref> const &amp;</type>
+        <definition>CubeView const  &amp; castor3d::TextureLayout::getLayerCube</definition>
+        <argsstring>(size_t layer) const</argsstring>
+        <name>getLayerCube</name>
+        <qualifiedname>castor3d::TextureLayout::getLayerCube</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>layer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="515" column="17" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="515" bodyend="522"/>
+        <references refid="d0/d08/a02936_1a3e189c6afff1e6c98055d16f74f528c8" compoundref="d4/def/a00359" startline="503" endline="508">isCube</references>
+        <referencedby refid="d0/d08/a02936_1ad47f2bcbe8671dfd2de4fd16b000c1a5" compoundref="d4/def/a00359" startline="549" endline="553">getLayerCubeFace</referencedby>
+        <referencedby refid="d0/d08/a02936_1a9313c8cc918bc3ee434cbeaaeb85b94a" compoundref="d4/def/a00359" startline="533" endline="537">getLayerCubeView</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a15fa1c252905107d958c7ce1b60ade1e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/dc5/a02924" kindref="compound">CubeView</ref> &amp;</type>
+        <definition>CubeView &amp; castor3d::TextureLayout::getLayerCube</definition>
+        <argsstring>(size_t layer)</argsstring>
+        <name>getLayerCube</name>
+        <qualifiedname>castor3d::TextureLayout::getLayerCube</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>layer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="524" column="11" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="524" bodyend="531"/>
+        <references refid="d0/d08/a02936_1a3e189c6afff1e6c98055d16f74f528c8" compoundref="d4/def/a00359" startline="503" endline="508">isCube</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a9313c8cc918bc3ee434cbeaaeb85b94a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d1b/a02960" kindref="compound">TextureView</ref> const &amp;</type>
+        <definition>TextureView const  &amp; castor3d::TextureLayout::getLayerCubeView</definition>
+        <argsstring>(size_t layer) const</argsstring>
+        <name>getLayerCubeView</name>
+        <qualifiedname>castor3d::TextureLayout::getLayerCubeView</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>layer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="533" column="20" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="533" bodyend="537"/>
+        <references refid="d0/d08/a02936_1a4b4e81b4b665c1647a1decfc1705b38d" compoundref="d4/def/a00359" startline="515" endline="522">getLayerCube</references>
+        <references refid="d1/d77/a02920_1ad7934d51067a1952360f589a74f18775" compoundref="d4/def/a00359" startline="22">castor3d::MipView::view</references>
+        <references refid="d9/dc5/a02924_1a80994da423e22c00a0e265a66debd84d" compoundref="d4/def/a00359" startline="70">castor3d::CubeView::view</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1aa005ca92782e551758acaa5653c60b99" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d1b/a02960" kindref="compound">TextureView</ref> &amp;</type>
+        <definition>TextureView &amp; castor3d::TextureLayout::getLayerCubeView</definition>
+        <argsstring>(size_t layer)</argsstring>
+        <name>getLayerCubeView</name>
+        <qualifiedname>castor3d::TextureLayout::getLayerCubeView</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>layer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="539" column="14" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="539" bodyend="543"/>
+        <references refid="d0/d08/a02936_1a4b4e81b4b665c1647a1decfc1705b38d" compoundref="d4/def/a00359" startline="515" endline="522">getLayerCube</references>
+        <references refid="d1/d77/a02920_1ad7934d51067a1952360f589a74f18775" compoundref="d4/def/a00359" startline="22">castor3d::MipView::view</references>
+        <references refid="d9/dc5/a02924_1a80994da423e22c00a0e265a66debd84d" compoundref="d4/def/a00359" startline="70">castor3d::CubeView::view</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>Cube array texture layer&apos;s face access.</header>
+      <memberdef kind="function" id="d0/d08/a02936_1ad47f2bcbe8671dfd2de4fd16b000c1a5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d1/d77/a02920" kindref="compound">MipView</ref> const &amp;</type>
+        <definition>MipView const  &amp; castor3d::TextureLayout::getLayerCubeFace</definition>
+        <argsstring>(size_t layer, CubeMapFace face) const</argsstring>
+        <name>getLayerCubeFace</name>
+        <qualifiedname>castor3d::TextureLayout::getLayerCubeFace</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>layer</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a13e6b0c4ce255c1deb4c525562111e5b" kindref="member">CubeMapFace</ref></type>
+          <declname>face</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="549" column="16" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="549" bodyend="553"/>
+        <references refid="d9/dc5/a02924_1a0fe245e7abfe95bd67276e81bcc0c059" compoundref="d4/def/a00359" startline="71">castor3d::CubeView::faces</references>
+        <references refid="d0/d08/a02936_1a4b4e81b4b665c1647a1decfc1705b38d" compoundref="d4/def/a00359" startline="515" endline="522">getLayerCube</references>
+        <referencedby refid="d0/d08/a02936_1a925d66f156c7f15dc7f3e6c132c312d6" compoundref="d4/def/a00359" startline="599" endline="606">getLayerCubeFaceMipView</referencedby>
+        <referencedby refid="d0/d08/a02936_1a694466c7e3d6599168b68e14dac548eb" compoundref="d4/def/a00359" startline="561" endline="566">getLayerCubeFaceView</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a03b098bd7cc37e9f92deea51bf3c8d9b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d1/d77/a02920" kindref="compound">MipView</ref> &amp;</type>
+        <definition>MipView &amp; castor3d::TextureLayout::getLayerCubeFace</definition>
+        <argsstring>(size_t layer, CubeMapFace face)</argsstring>
+        <name>getLayerCubeFace</name>
+        <qualifiedname>castor3d::TextureLayout::getLayerCubeFace</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>layer</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a13e6b0c4ce255c1deb4c525562111e5b" kindref="member">CubeMapFace</ref></type>
+          <declname>face</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="555" column="10" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="555" bodyend="559"/>
+        <references refid="d9/dc5/a02924_1a0fe245e7abfe95bd67276e81bcc0c059" compoundref="d4/def/a00359" startline="71">castor3d::CubeView::faces</references>
+        <references refid="d0/d08/a02936_1a4b4e81b4b665c1647a1decfc1705b38d" compoundref="d4/def/a00359" startline="515" endline="522">getLayerCube</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a694466c7e3d6599168b68e14dac548eb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d1b/a02960" kindref="compound">TextureView</ref> const &amp;</type>
+        <definition>TextureView const  &amp; castor3d::TextureLayout::getLayerCubeFaceView</definition>
+        <argsstring>(size_t layer, CubeMapFace face) const</argsstring>
+        <name>getLayerCubeFaceView</name>
+        <qualifiedname>castor3d::TextureLayout::getLayerCubeFaceView</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>layer</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a13e6b0c4ce255c1deb4c525562111e5b" kindref="member">CubeMapFace</ref></type>
+          <declname>face</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="561" column="20" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="561" bodyend="566"/>
+        <references refid="d0/d08/a02936_1ad47f2bcbe8671dfd2de4fd16b000c1a5" compoundref="d4/def/a00359" startline="549" endline="553">getLayerCubeFace</references>
+        <references refid="d1/d77/a02920_1ad7934d51067a1952360f589a74f18775" compoundref="d4/def/a00359" startline="22">castor3d::MipView::view</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a45253545ab6ecf736c136799f5b3f3d7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d1b/a02960" kindref="compound">TextureView</ref> &amp;</type>
+        <definition>TextureView &amp; castor3d::TextureLayout::getLayerCubeFaceView</definition>
+        <argsstring>(size_t layer, CubeMapFace face)</argsstring>
+        <name>getLayerCubeFaceView</name>
+        <qualifiedname>castor3d::TextureLayout::getLayerCubeFaceView</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>layer</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a13e6b0c4ce255c1deb4c525562111e5b" kindref="member">CubeMapFace</ref></type>
+          <declname>face</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="568" column="14" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="568" bodyend="573"/>
+        <references refid="d0/d08/a02936_1ad47f2bcbe8671dfd2de4fd16b000c1a5" compoundref="d4/def/a00359" startline="549" endline="553">getLayerCubeFace</references>
+        <references refid="d1/d77/a02920_1ad7934d51067a1952360f589a74f18775" compoundref="d4/def/a00359" startline="22">castor3d::MipView::view</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1aa2b7cb629f1af8f25eb3256a53d4e10f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureLayout::setLayerCubeFaceSource</definition>
+        <argsstring>(uint32_t layer, CubeMapFace face, castor::PxBufferBaseSPtr buffer)</argsstring>
+        <name>setLayerCubeFaceSource</name>
+        <qualifiedname>castor3d::TextureLayout::setLayerCubeFaceSource</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>layer</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a13e6b0c4ce255c1deb4c525562111e5b" kindref="member">CubeMapFace</ref></type>
+          <declname>face</declname>
+        </param>
+        <param>
+          <type>castor::PxBufferBaseSPtr</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Sets the source for a layer cube&apos;s face in the layout. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="581" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1ac23952e7f99ca3aedf81c9235f06fd4d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureLayout::setLayerCubeFaceSource</definition>
+        <argsstring>(uint32_t layer, CubeMapFace face, castor::Path const &amp;folder, castor::Path const &amp;relative, castor::ImageLoaderConfig config={ true, true, false })</argsstring>
+        <name>setLayerCubeFaceSource</name>
+        <qualifiedname>castor3d::TextureLayout::setLayerCubeFaceSource</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>layer</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a13e6b0c4ce255c1deb4c525562111e5b" kindref="member">CubeMapFace</ref></type>
+          <declname>face</declname>
+        </param>
+        <param>
+          <type>castor::Path const &amp;</type>
+          <declname>folder</declname>
+        </param>
+        <param>
+          <type>castor::Path const &amp;</type>
+          <declname>relative</declname>
+        </param>
+        <param>
+          <type>castor::ImageLoaderConfig</type>
+          <declname>config</declname>
+          <defval>{ true, true, false }</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="584" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a7608eca11de86cc66d43f8d323a38b10" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextureLayout::setLayerCubeFaceSource</definition>
+        <argsstring>(uint32_t layer, CubeMapFace face, VkExtent2D const &amp;extent, VkFormat format)</argsstring>
+        <name>setLayerCubeFaceSource</name>
+        <qualifiedname>castor3d::TextureLayout::setLayerCubeFaceSource</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>layer</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a13e6b0c4ce255c1deb4c525562111e5b" kindref="member">CubeMapFace</ref></type>
+          <declname>face</declname>
+        </param>
+        <param>
+          <type>VkExtent2D const &amp;</type>
+          <declname>extent</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>format</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="589" column="6"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>Cube array texture layer face&apos;s mip level access.</header>
+      <memberdef kind="function" id="d0/d08/a02936_1a925d66f156c7f15dc7f3e6c132c312d6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d1b/a02960" kindref="compound">TextureView</ref> const &amp;</type>
+        <definition>TextureView const  &amp; castor3d::TextureLayout::getLayerCubeFaceMipView</definition>
+        <argsstring>(size_t layer, CubeMapFace face, uint32_t level) const</argsstring>
+        <name>getLayerCubeFaceMipView</name>
+        <qualifiedname>castor3d::TextureLayout::getLayerCubeFaceMipView</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>layer</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a13e6b0c4ce255c1deb4c525562111e5b" kindref="member">CubeMapFace</ref></type>
+          <declname>face</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="599" column="20" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="599" bodyend="606"/>
+        <references refid="d0/d08/a02936_1ad47f2bcbe8671dfd2de4fd16b000c1a5" compoundref="d4/def/a00359" startline="549" endline="553">getLayerCubeFace</references>
+        <references refid="d1/d77/a02920_1af1ba49261a22ad78a07f148018293b05" compoundref="d4/def/a00359" startline="23">castor3d::MipView::levels</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a63c4c3d6d88c63dd248db73e2186cd7f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d1b/a02960" kindref="compound">TextureView</ref> &amp;</type>
+        <definition>TextureView &amp; castor3d::TextureLayout::getLayerCubeFaceMipView</definition>
+        <argsstring>(size_t layer, CubeMapFace face, uint32_t level)</argsstring>
+        <name>getLayerCubeFaceMipView</name>
+        <qualifiedname>castor3d::TextureLayout::getLayerCubeFaceMipView</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>layer</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a13e6b0c4ce255c1deb4c525562111e5b" kindref="member">CubeMapFace</ref></type>
+          <declname>face</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="608" column="14" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="608" bodyend="615"/>
+        <references refid="d0/d08/a02936_1ad47f2bcbe8671dfd2de4fd16b000c1a5" compoundref="d4/def/a00359" startline="549" endline="553">getLayerCubeFace</references>
+        <references refid="d1/d77/a02920_1af1ba49261a22ad78a07f148018293b05" compoundref="d4/def/a00359" startline="23">castor3d::MipView::levels</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1aecdf43b76e0f3b72edeb6751baf85fea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureLayout::setLayerCubeFaceMipSource</definition>
+        <argsstring>(uint32_t layer, CubeMapFace face, uint32_t level, castor::PxBufferBaseSPtr buffer)</argsstring>
+        <name>setLayerCubeFaceMipSource</name>
+        <qualifiedname>castor3d::TextureLayout::setLayerCubeFaceMipSource</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>layer</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a13e6b0c4ce255c1deb4c525562111e5b" kindref="member">CubeMapFace</ref></type>
+          <declname>face</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <param>
+          <type>castor::PxBufferBaseSPtr</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Sets the source for a face of layer in the layout. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="623" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a86adc488d3c0dc41ca77e4b9bb3a0754" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureLayout::setLayerCubeFaceMipSource</definition>
+        <argsstring>(uint32_t layer, CubeMapFace face, uint32_t level, castor::Path const &amp;folder, castor::Path const &amp;relative, castor::ImageLoaderConfig config={ true, false, false })</argsstring>
+        <name>setLayerCubeFaceMipSource</name>
+        <qualifiedname>castor3d::TextureLayout::setLayerCubeFaceMipSource</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>layer</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a13e6b0c4ce255c1deb4c525562111e5b" kindref="member">CubeMapFace</ref></type>
+          <declname>face</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <param>
+          <type>castor::Path const &amp;</type>
+          <declname>folder</declname>
+        </param>
+        <param>
+          <type>castor::Path const &amp;</type>
+          <declname>relative</declname>
+        </param>
+        <param>
+          <type>castor::ImageLoaderConfig</type>
+          <declname>config</declname>
+          <defval>{ true, false, false }</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="627" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1adbc242a9a0825e4382c9b65da708f7ae" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextureLayout::setLayerCubeFaceMipSource</definition>
+        <argsstring>(uint32_t layer, CubeMapFace face, uint32_t level, VkExtent2D const &amp;extent, VkFormat format)</argsstring>
+        <name>setLayerCubeFaceMipSource</name>
+        <qualifiedname>castor3d::TextureLayout::setLayerCubeFaceMipSource</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>layer</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a13e6b0c4ce255c1deb4c525562111e5b" kindref="member">CubeMapFace</ref></type>
+          <declname>face</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <param>
+          <type>VkExtent2D const &amp;</type>
+          <declname>extent</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>format</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="633" column="6"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d0/d08/a02936_1a93e6ea5882f18cbbfa5b15f0465b77a3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String</type>
+        <definition>C3D_API castor::String castor3d::TextureLayout::getName</definition>
+        <argsstring>() const</argsstring>
+        <name>getName</name>
+        <qualifiedname>castor3d::TextureLayout::getName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="645" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a0295aaff1f2219473910a6515b62ef11" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Path</type>
+        <definition>C3D_API castor::Path castor3d::TextureLayout::getPath</definition>
+        <argsstring>() const</argsstring>
+        <name>getPath</name>
+        <qualifiedname>castor3d::TextureLayout::getPath</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="646" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a72dbb24d3d703a4861f92551b6b798ca" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::TextureLayout::needsYInversion</definition>
+        <argsstring>() const</argsstring>
+        <name>needsYInversion</name>
+        <qualifiedname>castor3d::TextureLayout::needsYInversion</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="647" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a2494537b45df96be10fdb00ce5fdce79" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::TextureLayout::isInitialised</definition>
+        <argsstring>() const</argsstring>
+        <name>isInitialised</name>
+        <qualifiedname>castor3d::TextureLayout::isInitialised</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="649" column="6" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="649" bodyend="652"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a4facf4ec1a23e581f6588ea1ed010a93" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::TextureLayout::isStatic</definition>
+        <argsstring>() const</argsstring>
+        <name>isStatic</name>
+        <qualifiedname>castor3d::TextureLayout::isStatic</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="654" column="6" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="654" bodyend="657"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a987b7c0a8500a6a8d2a624b78adf6fc8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkImageType</type>
+        <definition>VkImageType castor3d::TextureLayout::getType</definition>
+        <argsstring>() const</argsstring>
+        <name>getType</name>
+        <qualifiedname>castor3d::TextureLayout::getType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="659" column="13" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="659" bodyend="662"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1abe77a291c3ae53e9767d345ec2743fed" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Image const &amp;</type>
+        <definition>castor::Image const  &amp; castor3d::TextureLayout::getImage</definition>
+        <argsstring>() const</argsstring>
+        <name>getImage</name>
+        <qualifiedname>castor3d::TextureLayout::getImage</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="664" column="22" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="664" bodyend="667"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a8b7b209d3d7f3718f4f4ed22108a9a8a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Image &amp;</type>
+        <definition>castor::Image &amp; castor3d::TextureLayout::getImage</definition>
+        <argsstring>()</argsstring>
+        <name>getImage</name>
+        <qualifiedname>castor3d::TextureLayout::getImage</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="669" column="16" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="669" bodyend="672"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a1d9411d79a8f07e7e58643a1c93127ef" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Image const &amp;</type>
+        <definition>ashes::Image const  &amp; castor3d::TextureLayout::getTexture</definition>
+        <argsstring>() const</argsstring>
+        <name>getTexture</name>
+        <qualifiedname>castor3d::TextureLayout::getTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="674" column="21" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="674" bodyend="678"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a4a2f17381cb6958b915e59a989186802" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::ImageCreateInfo const &amp;</type>
+        <definition>ashes::ImageCreateInfo const  &amp; castor3d::TextureLayout::getCreateInfo</definition>
+        <argsstring>() const</argsstring>
+        <name>getCreateInfo</name>
+        <qualifiedname>castor3d::TextureLayout::getCreateInfo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="680" column="31" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="680" bodyend="683"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a9e41e7e305e91a8f778a9bb7785d2a2b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureLayout::getWidth</definition>
+        <argsstring>() const</argsstring>
+        <name>getWidth</name>
+        <qualifiedname>castor3d::TextureLayout::getWidth</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="685" column="10" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="685" bodyend="688"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a1f7f9c58be8687b635d9c42035bd878e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureLayout::getHeight</definition>
+        <argsstring>() const</argsstring>
+        <name>getHeight</name>
+        <qualifiedname>castor3d::TextureLayout::getHeight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="690" column="10" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="690" bodyend="693"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a966144c5556a163b0b26ca95dc628c6b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureLayout::getDepth</definition>
+        <argsstring>() const</argsstring>
+        <name>getDepth</name>
+        <qualifiedname>castor3d::TextureLayout::getDepth</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="695" column="10" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="695" bodyend="698"/>
+        <referencedby refid="d0/d08/a02936_1acebe84c2586cff6f89e1d7e553650596" compoundref="d4/def/a00359" startline="466" endline="473">getSlice</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a49ea57d0a65e6dce7c2ae46f81dcf0d8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureLayout::getMipmapCount</definition>
+        <argsstring>() const</argsstring>
+        <name>getMipmapCount</name>
+        <qualifiedname>castor3d::TextureLayout::getMipmapCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="700" column="10" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="700" bodyend="703"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1aa68ced9e034dcff70273901cd65f33c2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkExtent3D const &amp;</type>
+        <definition>VkExtent3D const  &amp; castor3d::TextureLayout::getDimensions</definition>
+        <argsstring>() const</argsstring>
+        <name>getDimensions</name>
+        <qualifiedname>castor3d::TextureLayout::getDimensions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="705" column="19" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="705" bodyend="708"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a404f38407a61a79225e6e432b9b09073" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkFormat</type>
+        <definition>VkFormat castor3d::TextureLayout::getPixelFormat</definition>
+        <argsstring>() const</argsstring>
+        <name>getPixelFormat</name>
+        <qualifiedname>castor3d::TextureLayout::getPixelFormat</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="710" column="10" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="710" bodyend="713"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d0/d08/a02936_1ac81cdcc9deac35d38d45bf5085b92bcf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FuncT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::TextureLayout::forEachView</definition>
+        <argsstring>(FuncT function) const</argsstring>
+        <name>forEachView</name>
+        <qualifiedname>castor3d::TextureLayout::forEachView</qualifiedname>
+        <param>
+          <type>FuncT</type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Views parsing. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="725" column="6" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="725" bodyend="741"/>
+        <references refid="d1/d77/a02920_1ac23bed4d978ef4c38473672b09fe4e25" compoundref="d4/def/a00359" startline="48" endline="52">castor3d::MipView::forEachView</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1abd9e4b858ad805cfa5746588031566ff" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FuncT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::TextureLayout::forEachFirstMipView</definition>
+        <argsstring>(FuncT function) const</argsstring>
+        <name>forEachFirstMipView</name>
+        <qualifiedname>castor3d::TextureLayout::forEachFirstMipView</qualifiedname>
+        <param>
+          <type>FuncT</type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="744" column="6" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="744" bodyend="762"/>
+        <references refid="d1/d77/a02920_1a63ac7209185df2c391cab3451317221e" compoundref="d4/def/a00359" startline="55" endline="65">castor3d::MipView::forEachFirstMipView</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1ab14de992a49bb8077063c1976a0e62e4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FuncT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::TextureLayout::forEachLeafView</definition>
+        <argsstring>(FuncT function) const</argsstring>
+        <name>forEachLeafView</name>
+        <qualifiedname>castor3d::TextureLayout::forEachLeafView</qualifiedname>
+        <param>
+          <type>FuncT</type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="765" column="6" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="765" bodyend="779"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="d0/d08/a02936_1a38d122cc3c76362e353ea342b041636e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class TextureView</definition>
+        <argsstring></argsstring>
+        <name>TextureView</name>
+        <qualifiedname>castor3d::TextureLayout::TextureView</qualifiedname>
+        <param>
+          <type><ref refid="db/d1b/a02960" kindref="compound">TextureView</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="182" column="14" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="182" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/d08/a02936_1abb4e7ba8bb8241f57f2667c84b320882" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::TextureLayout::m_initialised</definition>
+        <argsstring></argsstring>
+        <name>m_initialised</name>
+        <qualifiedname>castor3d::TextureLayout::m_initialised</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="791" column="6" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="791" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d08/a02936_1a9a9e73f297fb0010219f2cc8dd0b2ef1" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::TextureLayout::m_static</definition>
+        <argsstring></argsstring>
+        <name>m_static</name>
+        <qualifiedname>castor3d::TextureLayout::m_static</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="792" column="6" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="792" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d08/a02936_1a893c83ce79ad0bf4b2cbf75a70897c54" prot="private" static="no" mutable="no">
+        <type>ashes::ImageCreateInfo</type>
+        <definition>ashes::ImageCreateInfo castor3d::TextureLayout::m_info</definition>
+        <argsstring></argsstring>
+        <name>m_info</name>
+        <qualifiedname>castor3d::TextureLayout::m_info</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="793" column="24" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="793" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d08/a02936_1addb3faee8a01d6a5846f6cd95384894b" prot="private" static="no" mutable="no">
+        <type>VkMemoryPropertyFlags</type>
+        <definition>VkMemoryPropertyFlags castor3d::TextureLayout::m_properties</definition>
+        <argsstring></argsstring>
+        <name>m_properties</name>
+        <qualifiedname>castor3d::TextureLayout::m_properties</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="794" column="23" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="794" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d08/a02936_1a14cee824776b5a145bd865e5321cc4a8" prot="private" static="no" mutable="no">
+        <type>castor::Image</type>
+        <definition>castor::Image castor3d::TextureLayout::m_image</definition>
+        <argsstring></argsstring>
+        <name>m_image</name>
+        <qualifiedname>castor3d::TextureLayout::m_image</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="795" column="15" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="795" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d08/a02936_1acdc021024bf7b219739a157507bfda7d" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/d77/a02920" kindref="compound">MipView</ref></type>
+        <definition>MipView castor3d::TextureLayout::m_defaultView</definition>
+        <argsstring></argsstring>
+        <name>m_defaultView</name>
+        <qualifiedname>castor3d::TextureLayout::m_defaultView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="796" column="9" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="796" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d08/a02936_1a416b6b427d2aee2b519ecc1866a9068e" prot="private" static="no" mutable="no">
+        <type><ref refid="da/dad/a02928" kindref="compound">ArrayView</ref>&lt; <ref refid="d1/d77/a02920" kindref="compound">MipView</ref> &gt;</type>
+        <definition>ArrayView&lt; MipView &gt; castor3d::TextureLayout::m_arrayView</definition>
+        <argsstring></argsstring>
+        <name>m_arrayView</name>
+        <qualifiedname>castor3d::TextureLayout::m_arrayView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="797" column="11" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="797" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d08/a02936_1ad1ad3e24470b8f254c937a9815288857" prot="private" static="no" mutable="no">
+        <type><ref refid="da/dad/a02928" kindref="compound">ArrayView</ref>&lt; <ref refid="d9/dc5/a02924" kindref="compound">CubeView</ref> &gt;</type>
+        <definition>ArrayView&lt; CubeView &gt; castor3d::TextureLayout::m_cubeView</definition>
+        <argsstring></argsstring>
+        <name>m_cubeView</name>
+        <qualifiedname>castor3d::TextureLayout::m_cubeView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="798" column="11" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="798" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d08/a02936_1aeee6bb4c7f7fe408b45d48c8450c0f39" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/d0c/a02932" kindref="compound">SliceView</ref>&lt; <ref refid="d1/d77/a02920" kindref="compound">MipView</ref> &gt;</type>
+        <definition>SliceView&lt; MipView &gt; castor3d::TextureLayout::m_sliceView</definition>
+        <argsstring></argsstring>
+        <name>m_sliceView</name>
+        <qualifiedname>castor3d::TextureLayout::m_sliceView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="799" column="11" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="799" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d08/a02936_1a5c42f303dd75d9348314ba355f59ed11" prot="private" static="no" mutable="no">
+        <type>ashes::ImagePtr</type>
+        <definition>ashes::ImagePtr castor3d::TextureLayout::m_ownTexture</definition>
+        <argsstring></argsstring>
+        <name>m_ownTexture</name>
+        <qualifiedname>castor3d::TextureLayout::m_ownTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="800" column="17" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="800" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d08/a02936_1aa758d553938bac0f22e4a07da7fb8f3e" prot="private" static="no" mutable="no">
+        <type>ashes::Image *</type>
+        <definition>ashes::Image* castor3d::TextureLayout::m_texture</definition>
+        <argsstring></argsstring>
+        <name>m_texture</name>
+        <qualifiedname>castor3d::TextureLayout::m_texture</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="801" column="15" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="801" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d08/a02936_1ae6f8be6177279a23ec2efb0c9c2b83ac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::TextureLayout::TextureLayout</definition>
+        <argsstring>(RenderSystem &amp;renderSystem, ashes::ImageCreateInfo info, VkMemoryPropertyFlags memoryProperties, castor::String debugName, bool isStatic=false)</argsstring>
+        <name>TextureLayout</name>
+        <qualifiedname>castor3d::TextureLayout::TextureLayout</qualifiedname>
+        <param>
+          <type><ref refid="d2/dbb/a04072" kindref="compound">RenderSystem</ref> &amp;</type>
+          <declname>renderSystem</declname>
+        </param>
+        <param>
+          <type>ashes::ImageCreateInfo</type>
+          <declname>info</declname>
+        </param>
+        <param>
+          <type>VkMemoryPropertyFlags</type>
+          <declname>memoryProperties</declname>
+        </param>
+        <param>
+          <type>castor::String</type>
+          <declname>debugName</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isStatic</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">renderSystem</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render system. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">info</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The image informations. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">memoryProperties</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The required memory properties. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">debugName</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The debug name for this layout. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">isStatic</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tells if this layout is static. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="201" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1ac6418e33f6cbc136e07cc79c77057733" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::TextureLayout::TextureLayout</definition>
+        <argsstring>(RenderSystem &amp;renderSystem, VkImage image, crg::ImageViewId imageView)</argsstring>
+        <name>TextureLayout</name>
+        <qualifiedname>castor3d::TextureLayout::TextureLayout</qualifiedname>
+        <param>
+          <type><ref refid="d2/dbb/a04072" kindref="compound">RenderSystem</ref> &amp;</type>
+          <declname>renderSystem</declname>
+        </param>
+        <param>
+          <type>VkImage</type>
+          <declname>image</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId</type>
+          <declname>imageView</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">renderSystem</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render system. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">info</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The image informations. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="216" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a77ed83f4d34250f0daf619674791a08c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::TextureLayout::TextureLayout</definition>
+        <argsstring>(RenderSystem &amp;renderSystem, ashes::ImagePtr image, VkImageCreateInfo const &amp;createInfo)</argsstring>
+        <name>TextureLayout</name>
+        <qualifiedname>castor3d::TextureLayout::TextureLayout</qualifiedname>
+        <param>
+          <type><ref refid="d2/dbb/a04072" kindref="compound">RenderSystem</ref> &amp;</type>
+          <declname>renderSystem</declname>
+        </param>
+        <param>
+          <type>ashes::ImagePtr</type>
+          <declname>image</declname>
+        </param>
+        <param>
+          <type>VkImageCreateInfo const &amp;</type>
+          <declname>createInfo</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">renderSystem</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render system. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">info</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The image informations. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="229" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a78cacaa4597d5ac2129248b21d82cfbb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::TextureLayout::~TextureLayout</definition>
+        <argsstring>()</argsstring>
+        <name>~TextureLayout</name>
+        <qualifiedname>castor3d::TextureLayout::~TextureLayout</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="238" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1ab4320c932e32d1041b038331e2195e6f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::TextureLayout::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device, QueueData const &amp;queueData)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::TextureLayout::initialise</qualifiedname>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dde/a03944" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <briefdescription>
+<para>Initialises the texture and all its views. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> if OK. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="249" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a3ef716cd4701738d3650079621d93b4e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureLayout::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor3d::TextureLayout::cleanup</qualifiedname>
+        <briefdescription>
+<para>Cleans up the texture and all its views. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="257" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a61d1737427296a9df3cefa49ab639d8b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureLayout::generateMipmaps</definition>
+        <argsstring>(RenderDevice const &amp;device) const</argsstring>
+        <name>generateMipmaps</name>
+        <qualifiedname>castor3d::TextureLayout::generateMipmaps</qualifiedname>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Generate texture mipmaps. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="266" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1ab08f5d2f28985d81e5b60a8bfaaefb55" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureLayout::generateMipmaps</definition>
+        <argsstring>(QueueData const &amp;queueData) const</argsstring>
+        <name>generateMipmaps</name>
+        <qualifiedname>castor3d::TextureLayout::generateMipmaps</qualifiedname>
+        <param>
+          <type><ref refid="dd/dde/a03944" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <briefdescription>
+<para>Generate texture mipmaps. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="275" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1ad24e11ea1f50eea59a543605b8d609ab" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureLayout::generateMipmaps</definition>
+        <argsstring>(ashes::CommandBuffer &amp;cmd) const</argsstring>
+        <name>generateMipmaps</name>
+        <qualifiedname>castor3d::TextureLayout::generateMipmaps</qualifiedname>
+        <param>
+          <type>ashes::CommandBuffer &amp;</type>
+          <declname>cmd</declname>
+        </param>
+        <briefdescription>
+<para>Generate texture mipmaps. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">cmd</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The command buffer recording the commands. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="284" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d0/d08/a02936_1a904fc55c9b0e4f4cd81b8a1bf63db545" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureLayout::doUpdateViews</definition>
+        <argsstring>()</argsstring>
+        <name>doUpdateViews</name>
+        <qualifiedname>castor3d::TextureLayout::doUpdateViews</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="783" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a4677c01162c04db13e48533de65befc1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextureLayout::doUpdateCreateInfo</definition>
+        <argsstring>(castor::ImageLayout const &amp;layout)</argsstring>
+        <name>doUpdateCreateInfo</name>
+        <qualifiedname>castor3d::TextureLayout::doUpdateCreateInfo</qualifiedname>
+        <param>
+          <type>castor::ImageLayout const &amp;</type>
+          <declname>layout</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="784" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1abaaf1d7120d5a2fe3ad6222b818c16ee" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextureLayout::doUpdateFromFirstImage</definition>
+        <argsstring>(uint32_t mipLevel, castor::ImageLayout layout)</argsstring>
+        <name>doUpdateFromFirstImage</name>
+        <qualifiedname>castor3d::TextureLayout::doUpdateFromFirstImage</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>mipLevel</declname>
+        </param>
+        <param>
+          <type>castor::ImageLayout</type>
+          <declname>layout</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="785" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1adc7d6cc07ea8817267166df58172c1d1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextureLayout::doUpdateMips</definition>
+        <argsstring>(bool genNeeded, uint32_t mipLevels)</argsstring>
+        <name>doUpdateMips</name>
+        <qualifiedname>castor3d::TextureLayout::doUpdateMips</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>genNeeded</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>mipLevels</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="786" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a32305b9ef49022bdeb278501565df89a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextureLayout::doUpdateLayerMip</definition>
+        <argsstring>(bool genNeeded, uint32_t layer, uint32_t level)</argsstring>
+        <name>doUpdateLayerMip</name>
+        <qualifiedname>castor3d::TextureLayout::doUpdateLayerMip</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>genNeeded</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>layer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="787" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d08/a02936_1a9322e8c732a84beeb59e93a7aa2c485c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextureLayout::doUpdateLayerMips</definition>
+        <argsstring>(bool genNeeded, uint32_t layer, uint32_t mipLevels)</argsstring>
+        <name>doUpdateLayerMips</name>
+        <qualifiedname>castor3d::TextureLayout::doUpdateLayerMips</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>genNeeded</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>layer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>mipLevels</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="788" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="74" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="74" bodyend="74"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::TextureLayout</label>
+        <link refid="d0/d08/a02936"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; RenderSystem &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::TextureLayout</label>
+        <link refid="d0/d08/a02936"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; RenderSystem &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Texture/TextureLayout.hpp" line="179" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="181" bodyend="802"/>
     <listofallmembers>
-      <member refid="d0/d08/a02936_1a3976eb8cf0e79e44157fa54ed47f4d97" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPhysicalDeviceGroupProperties &gt;</scope><name>value</name></member>
+      <member refid="d0/d08/a02936_1a3ef716cd4701738d3650079621d93b4e" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>cleanup</name></member>
+      <member refid="d0/d08/a02936_1a4677c01162c04db13e48533de65befc1" prot="private" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>doUpdateCreateInfo</name></member>
+      <member refid="d0/d08/a02936_1abaaf1d7120d5a2fe3ad6222b818c16ee" prot="private" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>doUpdateFromFirstImage</name></member>
+      <member refid="d0/d08/a02936_1a32305b9ef49022bdeb278501565df89a" prot="private" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>doUpdateLayerMip</name></member>
+      <member refid="d0/d08/a02936_1a9322e8c732a84beeb59e93a7aa2c485c" prot="private" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>doUpdateLayerMips</name></member>
+      <member refid="d0/d08/a02936_1adc7d6cc07ea8817267166df58172c1d1" prot="private" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>doUpdateMips</name></member>
+      <member refid="d0/d08/a02936_1a904fc55c9b0e4f4cd81b8a1bf63db545" prot="private" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>doUpdateViews</name></member>
+      <member refid="d0/d08/a02936_1abd9e4b858ad805cfa5746588031566ff" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>forEachFirstMipView</name></member>
+      <member refid="d0/d08/a02936_1ab14de992a49bb8077063c1976a0e62e4" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>forEachLeafView</name></member>
+      <member refid="d0/d08/a02936_1ac81cdcc9deac35d38d45bf5085b92bcf" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>forEachView</name></member>
+      <member refid="d0/d08/a02936_1a61d1737427296a9df3cefa49ab639d8b" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>generateMipmaps</name></member>
+      <member refid="d0/d08/a02936_1ab08f5d2f28985d81e5b60a8bfaaefb55" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>generateMipmaps</name></member>
+      <member refid="d0/d08/a02936_1ad24e11ea1f50eea59a543605b8d609ab" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>generateMipmaps</name></member>
+      <member refid="d0/d08/a02936_1aa829b0b38ecc76af774ec8786d7903ea" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getArray2D</name></member>
+      <member refid="d0/d08/a02936_1aead9f16f47a393f5444c10961c58f2a1" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getArrayCube</name></member>
+      <member refid="d0/d08/a02936_1a4a2f17381cb6958b915e59a989186802" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getCreateInfo</name></member>
+      <member refid="d0/d08/a02936_1a1e6306453161f69aba749169ef5bd4ee" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getDefault</name></member>
+      <member refid="d0/d08/a02936_1acb2b7dfd11c9dd1b0fb868684e8fb544" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getDefaultView</name></member>
+      <member refid="d0/d08/a02936_1a7448d9e87e785fffc28de1ae58716e7a" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getDefaultView</name></member>
+      <member refid="d0/d08/a02936_1a966144c5556a163b0b26ca95dc628c6b" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getDepth</name></member>
+      <member refid="d0/d08/a02936_1aa68ced9e034dcff70273901cd65f33c2" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getDimensions</name></member>
+      <member refid="d0/d08/a02936_1a1f7f9c58be8687b635d9c42035bd878e" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getHeight</name></member>
+      <member refid="d0/d08/a02936_1abe77a291c3ae53e9767d345ec2743fed" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getImage</name></member>
+      <member refid="d0/d08/a02936_1a8b7b209d3d7f3718f4f4ed22108a9a8a" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getImage</name></member>
+      <member refid="d0/d08/a02936_1afa5cf3d0285a165f36035860ca3d4c34" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getLayer2D</name></member>
+      <member refid="d0/d08/a02936_1a95aad459db46f11aa20477da36b36e90" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getLayer2D</name></member>
+      <member refid="d0/d08/a02936_1a4f45749736a658c467cd88c9d13cf655" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getLayer2DView</name></member>
+      <member refid="d0/d08/a02936_1a49904aac5d9d2409eaa48a120c36da1b" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getLayer2DView</name></member>
+      <member refid="d0/d08/a02936_1a4b4e81b4b665c1647a1decfc1705b38d" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getLayerCube</name></member>
+      <member refid="d0/d08/a02936_1a15fa1c252905107d958c7ce1b60ade1e" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getLayerCube</name></member>
+      <member refid="d0/d08/a02936_1ad47f2bcbe8671dfd2de4fd16b000c1a5" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getLayerCubeFace</name></member>
+      <member refid="d0/d08/a02936_1a03b098bd7cc37e9f92deea51bf3c8d9b" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getLayerCubeFace</name></member>
+      <member refid="d0/d08/a02936_1a925d66f156c7f15dc7f3e6c132c312d6" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getLayerCubeFaceMipView</name></member>
+      <member refid="d0/d08/a02936_1a63c4c3d6d88c63dd248db73e2186cd7f" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getLayerCubeFaceMipView</name></member>
+      <member refid="d0/d08/a02936_1a694466c7e3d6599168b68e14dac548eb" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getLayerCubeFaceView</name></member>
+      <member refid="d0/d08/a02936_1a45253545ab6ecf736c136799f5b3f3d7" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getLayerCubeFaceView</name></member>
+      <member refid="d0/d08/a02936_1a9313c8cc918bc3ee434cbeaaeb85b94a" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getLayerCubeView</name></member>
+      <member refid="d0/d08/a02936_1aa005ca92782e551758acaa5653c60b99" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getLayerCubeView</name></member>
+      <member refid="d0/d08/a02936_1af8c17d35e42c3d2df4d2ee91f21d2b16" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getLayersCount</name></member>
+      <member refid="d0/d08/a02936_1a49ea57d0a65e6dce7c2ae46f81dcf0d8" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getMipmapCount</name></member>
+      <member refid="d0/d08/a02936_1af59903466653eec027f322153533cb89" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getMipView</name></member>
+      <member refid="d0/d08/a02936_1a0668a8ee41f8f73c1739e2c5dfece8b7" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getMipView</name></member>
+      <member refid="d0/d08/a02936_1a93e6ea5882f18cbbfa5b15f0465b77a3" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getName</name></member>
+      <member refid="d0/d08/a02936_1a0295aaff1f2219473910a6515b62ef11" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getPath</name></member>
+      <member refid="d0/d08/a02936_1a404f38407a61a79225e6e432b9b09073" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getPixelFormat</name></member>
+      <member refid="d0/d08/a02936_1acebe84c2586cff6f89e1d7e553650596" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getSlice</name></member>
+      <member refid="d0/d08/a02936_1ae601291239020bb58da49ca768a1e558" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getSlice</name></member>
+      <member refid="d0/d08/a02936_1aa0bc918962559fd6fc69b8e00ad1007b" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getSlices3D</name></member>
+      <member refid="d0/d08/a02936_1a921eff6295e3d366f8e6950922097d49" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getSliceView</name></member>
+      <member refid="d0/d08/a02936_1a1e7a3c17d7f39a86ef88d785ad5f90dc" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getSliceView</name></member>
+      <member refid="d0/d08/a02936_1a1d9411d79a8f07e7e58643a1c93127ef" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getTexture</name></member>
+      <member refid="d0/d08/a02936_1a987b7c0a8500a6a8d2a624b78adf6fc8" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getType</name></member>
+      <member refid="d0/d08/a02936_1a9e41e7e305e91a8f778a9bb7785d2a2b" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>getWidth</name></member>
+      <member refid="d0/d08/a02936_1ab4320c932e32d1041b038331e2195e6f" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>initialise</name></member>
+      <member refid="d0/d08/a02936_1a3e189c6afff1e6c98055d16f74f528c8" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>isCube</name></member>
+      <member refid="d0/d08/a02936_1a2494537b45df96be10fdb00ce5fdce79" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>isInitialised</name></member>
+      <member refid="d0/d08/a02936_1a4facf4ec1a23e581f6588ea1ed010a93" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>isStatic</name></member>
+      <member refid="d0/d08/a02936_1a416b6b427d2aee2b519ecc1866a9068e" prot="private" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>m_arrayView</name></member>
+      <member refid="d0/d08/a02936_1ad1ad3e24470b8f254c937a9815288857" prot="private" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>m_cubeView</name></member>
+      <member refid="d0/d08/a02936_1acdc021024bf7b219739a157507bfda7d" prot="private" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>m_defaultView</name></member>
+      <member refid="d0/d08/a02936_1a14cee824776b5a145bd865e5321cc4a8" prot="private" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>m_image</name></member>
+      <member refid="d0/d08/a02936_1a893c83ce79ad0bf4b2cbf75a70897c54" prot="private" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>m_info</name></member>
+      <member refid="d0/d08/a02936_1abb4e7ba8bb8241f57f2667c84b320882" prot="private" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>m_initialised</name></member>
+      <member refid="d0/d08/a02936_1a5c42f303dd75d9348314ba355f59ed11" prot="private" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>m_ownTexture</name></member>
+      <member refid="d0/d08/a02936_1addb3faee8a01d6a5846f6cd95384894b" prot="private" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>m_properties</name></member>
+      <member refid="d0/d08/a02936_1aeee6bb4c7f7fe408b45d48c8450c0f39" prot="private" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>m_sliceView</name></member>
+      <member refid="d0/d08/a02936_1a9a9e73f297fb0010219f2cc8dd0b2ef1" prot="private" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>m_static</name></member>
+      <member refid="d0/d08/a02936_1aa758d553938bac0f22e4a07da7fb8f3e" prot="private" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>m_texture</name></member>
+      <member refid="d0/d08/a02936_1a72dbb24d3d703a4861f92551b6b798ca" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>needsYInversion</name></member>
+      <member refid="d0/d08/a02936_1aecdf43b76e0f3b72edeb6751baf85fea" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>setLayerCubeFaceMipSource</name></member>
+      <member refid="d0/d08/a02936_1a86adc488d3c0dc41ca77e4b9bb3a0754" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>setLayerCubeFaceMipSource</name></member>
+      <member refid="d0/d08/a02936_1adbc242a9a0825e4382c9b65da708f7ae" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>setLayerCubeFaceMipSource</name></member>
+      <member refid="d0/d08/a02936_1aa2b7cb629f1af8f25eb3256a53d4e10f" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>setLayerCubeFaceSource</name></member>
+      <member refid="d0/d08/a02936_1ac23952e7f99ca3aedf81c9235f06fd4d" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>setLayerCubeFaceSource</name></member>
+      <member refid="d0/d08/a02936_1a7608eca11de86cc66d43f8d323a38b10" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>setLayerCubeFaceSource</name></member>
+      <member refid="d0/d08/a02936_1a4dacfd44ffe655b1bd66f627a31e8dd4" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>setLayerMipSource</name></member>
+      <member refid="d0/d08/a02936_1a75dc2ff6d1977e1d8dbb6c32ad8773a0" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>setLayerMipSource</name></member>
+      <member refid="d0/d08/a02936_1ae1dadef43b5aacac3b7df99f6e81b6d3" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>setLayerMipSource</name></member>
+      <member refid="d0/d08/a02936_1a383dd14141d8a87ed9fb7fb35ebe6aac" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>setLayerMipSource</name></member>
+      <member refid="d0/d08/a02936_1aab75779d6d465aff62e7f2f0aadedab1" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>setLayerSource</name></member>
+      <member refid="d0/d08/a02936_1a3142cca95a5b0ab3237aa0ed88628c2d" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>setLayerSource</name></member>
+      <member refid="d0/d08/a02936_1ab5d16061661a41b88d21eb7a4684107d" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>setLayerSource</name></member>
+      <member refid="d0/d08/a02936_1af1bd0a5db462e9e367d68e2131fe7a42" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>setLayerSource</name></member>
+      <member refid="d0/d08/a02936_1a11b25984f33fbe350a931f5215802146" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>setLayerSource</name></member>
+      <member refid="d0/d08/a02936_1a8b1a4cae2adb069628163e614868042c" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>setSource</name></member>
+      <member refid="d0/d08/a02936_1acbeb71420a9c65033124193235fc6178" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>setSource</name></member>
+      <member refid="d0/d08/a02936_1aff7685a313629e0be811112c2da0334a" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>setSource</name></member>
+      <member refid="d0/d08/a02936_1aee81558bd667f6701ef019f4af1375f9" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>setSource</name></member>
+      <member refid="d0/d08/a02936_1a70882c26b5e0900cb83d3bb68d56b782" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>setSource</name></member>
+      <member refid="d0/d08/a02936_1ae6f8be6177279a23ec2efb0c9c2b83ac" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>TextureLayout</name></member>
+      <member refid="d0/d08/a02936_1ac6418e33f6cbc136e07cc79c77057733" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>TextureLayout</name></member>
+      <member refid="d0/d08/a02936_1a77ed83f4d34250f0daf619674791a08c" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>TextureLayout</name></member>
+      <member refid="d0/d08/a02936_1a38d122cc3c76362e353ea342b041636e" prot="private" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>TextureView</name></member>
+      <member refid="d0/d08/a02936_1a78cacaa4597d5ac2129248b21d82cfbb" prot="public" virt="non-virtual"><scope>castor3d::TextureLayout</scope><name>~TextureLayout</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

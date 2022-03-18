@@ -1,62 +1,51 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d2/d08/a02532" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::FrameListener</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">Named</basecompoundref>
-    <includes local="no">FrameListener.hpp</includes>
-      <sectiondef kind="protected-attrib">
-      <memberdef kind="variable" id="d2/d08/a02532_1a9af77d499ee6abb82b349492bc87f759" prot="protected" static="no" mutable="no">
-        <type>std::array&lt; CpuFrameEventPtrArray, size_t(<ref refid="da/d1e/a01479_1ad442bf3c1ba8a06ac36f710ba30b2870ae558bb69fadec037d9eae46601a4df8e" kindref="member">EventType::eCount</ref>) &gt;</type>
-        <definition>std::array&lt; CpuFrameEventPtrArray, size_t( EventType::eCount ) &gt; castor3d::FrameListener::m_cpuEvents</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d2/d08/a02532" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::GpuBufferBuddyAllocatorTraits</compoundname>
+    <includes local="no">GpuBufferBuddyAllocator.hpp</includes>
+    <innerclass refid="d6/d24/a02536" prot="public">castor3d::GpuBufferBuddyAllocatorTraits::Block</innerclass>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d2/d08/a02532_1ad5aca6297e2f1509e1a9195e846f05ff" prot="public" static="no">
+        <type>VkDeviceSize</type>
+        <definition>using castor3d::GpuBufferBuddyAllocatorTraits::PointerType =  VkDeviceSize</definition>
         <argsstring></argsstring>
-        <name>m_cpuEvents</name>
+        <name>PointerType</name>
+        <qualifiedname>castor3d::GpuBufferBuddyAllocatorTraits::PointerType</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The CPU events arrays. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/Frame/FrameListener.hpp" line="106" column="1" bodyfile="Event/Frame/FrameListener.hpp" bodystart="106" bodyend="-1"/>
+        <location file="Buffer/GpuBufferBuddyAllocator.hpp" line="13" column="1" bodyfile="Buffer/GpuBufferBuddyAllocator.hpp" bodystart="13" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d2/d08/a02532_1a72f1425020cf11f3bbb31b88926ddd6c" prot="protected" static="no" mutable="no">
-        <type>std::array&lt; GpuFrameEventPtrArray, size_t(<ref refid="da/d1e/a01479_1ad442bf3c1ba8a06ac36f710ba30b2870ae558bb69fadec037d9eae46601a4df8e" kindref="member">EventType::eCount</ref>) &gt;</type>
-        <definition>std::array&lt; GpuFrameEventPtrArray, size_t( EventType::eCount ) &gt; castor3d::FrameListener::m_gpuEvents</definition>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/d08/a02532_1a94cac27b661b4dd57b6903dbe827f74a" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t castor3d::GpuBufferBuddyAllocatorTraits::m_allocatedSize</definition>
         <argsstring></argsstring>
-        <name>m_gpuEvents</name>
+        <name>m_allocatedSize</name>
+        <qualifiedname>castor3d::GpuBufferBuddyAllocatorTraits::m_allocatedSize</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The GPU events arrays. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/Frame/FrameListener.hpp" line="109" column="1" bodyfile="Event/Frame/FrameListener.hpp" bodystart="109" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d08/a02532_1a93e737a2b96c7055ff61d5693760645e" prot="protected" static="no" mutable="no">
-        <type>std::recursive_mutex</type>
-        <definition>std::recursive_mutex castor3d::FrameListener::m_mutex</definition>
-        <argsstring></argsstring>
-        <name>m_mutex</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>Mutex to make this class thread safe. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/Frame/FrameListener.hpp" line="112" column="1" bodyfile="Event/Frame/FrameListener.hpp" bodystart="112" bodyend="-1"/>
+        <location file="Buffer/GpuBufferBuddyAllocator.hpp" line="91" column="8" bodyfile="Buffer/GpuBufferBuddyAllocator.hpp" bodystart="91" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d2/d08/a02532_1a64b32864fdc87929f37bf48346c227e7" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::FrameListener::FrameListener</definition>
-        <argsstring>(castor::String const &amp;name)</argsstring>
-        <name>FrameListener</name>
+      <memberdef kind="function" id="d2/d08/a02532_1a43bd14d8ea329bc90a1af0764aa6264c" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::GpuBufferBuddyAllocatorTraits::GpuBufferBuddyAllocatorTraits</definition>
+        <argsstring>(size_t size)</argsstring>
+        <name>GpuBufferBuddyAllocatorTraits</name>
+        <qualifiedname>castor3d::GpuBufferBuddyAllocatorTraits::GpuBufferBuddyAllocatorTraits</qualifiedname>
         <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
+          <type>size_t</type>
+          <declname>size</declname>
         </param>
         <briefdescription>
 <para>Constructor. </para>
@@ -64,10 +53,10 @@
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">name</parametername>
+<parametername direction="in">size</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The listener&apos;s name. </para>
+<para>The allocator size. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -75,276 +64,143 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/Frame/FrameListener.hpp" line="26" column="1"/>
+        <location file="Buffer/GpuBufferBuddyAllocator.hpp" line="26" column="10" bodyfile="Buffer/GpuBufferBuddyAllocator.hpp" bodystart="26" bodyend="29"/>
       </memberdef>
-      <memberdef kind="function" id="d2/d08/a02532_1a4447d77062c5b6fc46d83aca47406f74" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::FrameListener::~FrameListener</definition>
-        <argsstring>()</argsstring>
-        <name>~FrameListener</name>
+      <memberdef kind="function" id="d2/d08/a02532_1a02ac77d52188f9642ea79fefc7832510" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor3d::GpuBufferBuddyAllocatorTraits::getSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getSize</name>
+        <qualifiedname>castor3d::GpuBufferBuddyAllocatorTraits::getSize</qualifiedname>
         <briefdescription>
-<para>Destructor. </para>
         </briefdescription>
         <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/Frame/FrameListener.hpp" line="33" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d08/a02532_1a658666c30883ca63d72257bf78aea02b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::FrameListener::flush</definition>
-        <argsstring>()</argsstring>
-        <name>flush</name>
-        <briefdescription>
-<para>Empties the event lists. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/Frame/FrameListener.hpp" line="40" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d08/a02532_1a2c62573911a7ed3c2149fd37a7de9df0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::FrameListener::postEvent</definition>
-        <argsstring>(CpuFrameEventUPtr event)</argsstring>
-        <name>postEvent</name>
-        <param>
-          <type>CpuFrameEventUPtr</type>
-          <declname>event</declname>
-        </param>
-        <briefdescription>
-<para>Puts an event in the corresponding array. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">event</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The event to put. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/Frame/FrameListener.hpp" line="49" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d08/a02532_1ab787d573e00427a919f198f7ddab4be2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::FrameListener::postEvent</definition>
-        <argsstring>(GpuFrameEventUPtr event)</argsstring>
-        <name>postEvent</name>
-        <param>
-          <type>GpuFrameEventUPtr</type>
-          <declname>event</declname>
-        </param>
-        <briefdescription>
-<para>Puts an event in the corresponding array. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">event</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The event to put. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/Frame/FrameListener.hpp" line="58" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d08/a02532_1acbec6c2f66576af08570d08a57c4b304" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::FrameListener::fireEvents</definition>
-        <argsstring>(EventType type, RenderDevice const &amp;device)</argsstring>
-        <name>fireEvents</name>
-        <param>
-          <type><ref refid="da/d1e/a01479_1ad442bf3c1ba8a06ac36f710ba30b2870" kindref="member">EventType</ref></type>
-          <declname>type</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-<para>Applies all events of a given type, then discards them. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">type</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The type of events to fire. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>true</computeroutput> si tous les évènements se sont exécutés sans erreur. </para>
+<para><simplesect kind="return"><para>The allocator size. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/Frame/FrameListener.hpp" line="71" column="1"/>
+        <location file="Buffer/GpuBufferBuddyAllocator.hpp" line="36" column="8" bodyfile="Buffer/GpuBufferBuddyAllocator.hpp" bodystart="36" bodyend="39"/>
       </memberdef>
-      <memberdef kind="function" id="d2/d08/a02532_1a92434ace05937d07300e2180cb7e997d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::FrameListener::fireEvents</definition>
-        <argsstring>(EventType type)</argsstring>
-        <name>fireEvents</name>
+      <memberdef kind="function" id="d2/d08/a02532_1ae68ecde83c22b02c5ce41abc72186b87" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/d08/a02532_1ad5aca6297e2f1509e1a9195e846f05ff" kindref="member">PointerType</ref></type>
+        <definition>PointerType castor3d::GpuBufferBuddyAllocatorTraits::getPointer</definition>
+        <argsstring>(uint32_t offset)</argsstring>
+        <name>getPointer</name>
+        <qualifiedname>castor3d::GpuBufferBuddyAllocatorTraits::getPointer</qualifiedname>
         <param>
-          <type><ref refid="da/d1e/a01479_1ad442bf3c1ba8a06ac36f710ba30b2870" kindref="member">EventType</ref></type>
-          <declname>type</declname>
+          <type>uint32_t</type>
+          <declname>offset</declname>
         </param>
         <briefdescription>
-<para>Applies all events of a given type, then discards them. </para>
+<para>Creates a memory block. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">type</parametername>
+<parametername direction="in">offset</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The type of events to fire. </para>
+<para>The block memory offset. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para><computeroutput>true</computeroutput> si tous les évènements se sont exécutés sans erreur. </para>
+<simplesect kind="return"><para>The block. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/Frame/FrameListener.hpp" line="83" column="1"/>
+        <location file="Buffer/GpuBufferBuddyAllocator.hpp" line="50" column="13" bodyfile="Buffer/GpuBufferBuddyAllocator.hpp" bodystart="50" bodyend="53"/>
       </memberdef>
-      <memberdef kind="function" id="d2/d08/a02532_1a2a54c785e4fc7043a3045f85e866c09f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::FrameListener::flushEvents</definition>
-        <argsstring>(EventType type)</argsstring>
-        <name>flushEvents</name>
+      <memberdef kind="function" id="d2/d08/a02532_1aacaef2fa74ac324eea6ba898a10d1b12" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor3d::GpuBufferBuddyAllocatorTraits::getOffset</definition>
+        <argsstring>(PointerType pointer) const</argsstring>
+        <name>getOffset</name>
+        <qualifiedname>castor3d::GpuBufferBuddyAllocatorTraits::getOffset</qualifiedname>
         <param>
-          <type><ref refid="da/d1e/a01479_1ad442bf3c1ba8a06ac36f710ba30b2870" kindref="member">EventType</ref></type>
-          <declname>type</declname>
+          <type><ref refid="d2/d08/a02532_1ad5aca6297e2f1509e1a9195e846f05ff" kindref="member">PointerType</ref></type>
+          <declname>pointer</declname>
         </param>
         <briefdescription>
-<para>Discards all events of a given type. </para>
+<para>Retrieves the offset from a memory block. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">type</parametername>
+<parametername direction="in">pointer</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The type of events to fire. </para>
+<para>The memory block. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
+<simplesect kind="return"><para>The offset. </para>
+</simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/Frame/FrameListener.hpp" line="92" column="1"/>
+        <location file="Buffer/GpuBufferBuddyAllocator.hpp" line="64" column="8" bodyfile="Buffer/GpuBufferBuddyAllocator.hpp" bodystart="64" bodyend="67"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="protected-func">
-      <memberdef kind="function" id="d2/d08/a02532_1a89005d31cf015a87d21e0742d742bb7b" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>virtual C3D_API void castor3d::FrameListener::doFlush</definition>
-        <argsstring>()</argsstring>
-        <name>doFlush</name>
+      <memberdef kind="function" id="d2/d08/a02532_1a7fb9bb2e57612f1ec88a56c0cc419ae6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d6/d24/a02536" kindref="compound">Block</ref></type>
+        <definition>Block castor3d::GpuBufferBuddyAllocatorTraits::getNull</definition>
+        <argsstring>() const</argsstring>
+        <name>getNull</name>
+        <qualifiedname>castor3d::GpuBufferBuddyAllocatorTraits::getNull</qualifiedname>
         <briefdescription>
-<para>Empties the event lists. </para>
         </briefdescription>
         <detaileddescription>
+<para><simplesect kind="return"><para>The null memory block. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/Frame/FrameListener.hpp" line="101" column="1" bodyfile="Event/Frame/FrameListener.hpp" bodystart="101" bodyend="101"/>
+        <location file="Buffer/GpuBufferBuddyAllocator.hpp" line="74" column="7" bodyfile="Buffer/GpuBufferBuddyAllocator.hpp" bodystart="74" bodyend="78"/>
+        <referencedby refid="d2/d08/a02532_1ad6e226481f38134632f4f82aa5c3aab1" compoundref="d6/d7d/a00161" startline="85" endline="88">isNull</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d2/d08/a02532_1ad6e226481f38134632f4f82aa5c3aab1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::GpuBufferBuddyAllocatorTraits::isNull</definition>
+        <argsstring>(PointerType pointer) const</argsstring>
+        <name>isNull</name>
+        <qualifiedname>castor3d::GpuBufferBuddyAllocatorTraits::isNull</qualifiedname>
+        <param>
+          <type><ref refid="d2/d08/a02532_1ad5aca6297e2f1509e1a9195e846f05ff" kindref="member">PointerType</ref></type>
+          <declname>pointer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The null memory block. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferBuddyAllocator.hpp" line="85" column="6" bodyfile="Buffer/GpuBufferBuddyAllocator.hpp" bodystart="85" bodyend="88"/>
+        <references refid="d6/d24/a02536_1a35b84f4c8e3c9cb893d72247a4c17631" compoundref="d6/d7d/a00161" startline="16">castor3d::GpuBufferBuddyAllocatorTraits::Block::data</references>
+        <references refid="d2/d08/a02532_1a7fb9bb2e57612f1ec88a56c0cc419ae6" compoundref="d6/d7d/a00161" startline="74" endline="78">getNull</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="1211">
-        <label>Named</label>
-      </node>
-      <node id="1210">
-        <label>castor3d::FrameListener</label>
-        <link refid="d2/d08/a02532"/>
-        <childnode refid="1211" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="1216">
-        <label>T</label>
-      </node>
-      <node id="1215">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="1216" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="1214">
-        <label>std::array&lt; CpuFrameEventPtrArray, size_t(EventType::eCount) &gt;</label>
-        <childnode refid="1215" relation="template-instance">
-          <edgelabel>&lt; CpuFrameEventPtrArray, size_t(EventType::eCount) &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1213">
-        <label>Named</label>
-      </node>
-      <node id="1212">
-        <label>castor3d::FrameListener</label>
-        <link refid="d2/d08/a02532"/>
-        <childnode refid="1213" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1214" relation="usage">
-          <edgelabel>m_cpuEvents</edgelabel>
-        </childnode>
-        <childnode refid="1217" relation="usage">
-          <edgelabel>m_gpuEvents</edgelabel>
-        </childnode>
-      </node>
-      <node id="1217">
-        <label>std::array&lt; GpuFrameEventPtrArray, size_t(EventType::eCount) &gt;</label>
-        <childnode refid="1215" relation="template-instance">
-          <edgelabel>&lt; GpuFrameEventPtrArray, size_t(EventType::eCount) &gt;</edgelabel>
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Event/Frame/FrameListener.hpp" line="16" column="1" bodyfile="Event/Frame/FrameListener.hpp" bodystart="14" bodyend="113"/>
+    <location file="Buffer/GpuBufferBuddyAllocator.hpp" line="11" column="1" bodyfile="Buffer/GpuBufferBuddyAllocator.hpp" bodystart="12" bodyend="92"/>
     <listofallmembers>
-      <member refid="d2/d08/a02532_1a89005d31cf015a87d21e0742d742bb7b" prot="protected" virt="virtual"><scope>castor3d::FrameListener</scope><name>doFlush</name></member>
-      <member refid="d2/d08/a02532_1acbec6c2f66576af08570d08a57c4b304" prot="public" virt="non-virtual"><scope>castor3d::FrameListener</scope><name>fireEvents</name></member>
-      <member refid="d2/d08/a02532_1a92434ace05937d07300e2180cb7e997d" prot="public" virt="non-virtual"><scope>castor3d::FrameListener</scope><name>fireEvents</name></member>
-      <member refid="d2/d08/a02532_1a658666c30883ca63d72257bf78aea02b" prot="public" virt="non-virtual"><scope>castor3d::FrameListener</scope><name>flush</name></member>
-      <member refid="d2/d08/a02532_1a2a54c785e4fc7043a3045f85e866c09f" prot="public" virt="non-virtual"><scope>castor3d::FrameListener</scope><name>flushEvents</name></member>
-      <member refid="d2/d08/a02532_1a64b32864fdc87929f37bf48346c227e7" prot="public" virt="non-virtual"><scope>castor3d::FrameListener</scope><name>FrameListener</name></member>
-      <member refid="d2/d08/a02532_1a9af77d499ee6abb82b349492bc87f759" prot="protected" virt="non-virtual"><scope>castor3d::FrameListener</scope><name>m_cpuEvents</name></member>
-      <member refid="d2/d08/a02532_1a72f1425020cf11f3bbb31b88926ddd6c" prot="protected" virt="non-virtual"><scope>castor3d::FrameListener</scope><name>m_gpuEvents</name></member>
-      <member refid="d2/d08/a02532_1a93e737a2b96c7055ff61d5693760645e" prot="protected" virt="non-virtual"><scope>castor3d::FrameListener</scope><name>m_mutex</name></member>
-      <member refid="d2/d08/a02532_1a2c62573911a7ed3c2149fd37a7de9df0" prot="public" virt="non-virtual"><scope>castor3d::FrameListener</scope><name>postEvent</name></member>
-      <member refid="d2/d08/a02532_1ab787d573e00427a919f198f7ddab4be2" prot="public" virt="non-virtual"><scope>castor3d::FrameListener</scope><name>postEvent</name></member>
-      <member refid="d2/d08/a02532_1a4447d77062c5b6fc46d83aca47406f74" prot="public" virt="non-virtual"><scope>castor3d::FrameListener</scope><name>~FrameListener</name></member>
+      <member refid="d2/d08/a02532_1a7fb9bb2e57612f1ec88a56c0cc419ae6" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBuddyAllocatorTraits</scope><name>getNull</name></member>
+      <member refid="d2/d08/a02532_1aacaef2fa74ac324eea6ba898a10d1b12" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBuddyAllocatorTraits</scope><name>getOffset</name></member>
+      <member refid="d2/d08/a02532_1ae68ecde83c22b02c5ce41abc72186b87" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBuddyAllocatorTraits</scope><name>getPointer</name></member>
+      <member refid="d2/d08/a02532_1a02ac77d52188f9642ea79fefc7832510" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBuddyAllocatorTraits</scope><name>getSize</name></member>
+      <member refid="d2/d08/a02532_1a43bd14d8ea329bc90a1af0764aa6264c" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBuddyAllocatorTraits</scope><name>GpuBufferBuddyAllocatorTraits</name></member>
+      <member refid="d2/d08/a02532_1ad6e226481f38134632f4f82aa5c3aab1" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBuddyAllocatorTraits</scope><name>isNull</name></member>
+      <member refid="d2/d08/a02532_1a94cac27b661b4dd57b6903dbe827f74a" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferBuddyAllocatorTraits</scope><name>m_allocatedSize</name></member>
+      <member refid="d2/d08/a02532_1ad5aca6297e2f1509e1a9195e846f05ff" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBuddyAllocatorTraits</scope><name>PointerType</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

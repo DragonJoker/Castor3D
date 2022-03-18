@@ -1,0 +1,470 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d2/dd2/a02279" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::UniformBufferOffsetT</compoundname>
+    <includes local="no">UniformBufferOffset.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename</type>
+        <declname>DataT</declname>
+        <defname>DataT</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/dd2/a02279_1a3117ce5906b0dfad47eb07efae8a4f97" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/d40/a02307" kindref="compound">PoolUniformBuffer</ref> *</type>
+        <definition>PoolUniformBuffer* castor3d::UniformBufferOffsetT&lt; DataT &gt;::buffer</definition>
+        <argsstring></argsstring>
+        <name>buffer</name>
+        <initializer>{ nullptr }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferOffset.hpp" line="17" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/dd2/a02279_1a1d26718436319b3fbb99c18baecacf61" prot="public" static="no" mutable="no">
+        <type>VkMemoryPropertyFlags</type>
+        <definition>VkMemoryPropertyFlags castor3d::UniformBufferOffsetT&lt; DataT &gt;::flags</definition>
+        <argsstring></argsstring>
+        <name>flags</name>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferOffset.hpp" line="20" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dd2/a02279_1ab51520c7931ecdafe28653604734fb73" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::UniformBufferOffsetT&lt; DataT &gt;::offset</definition>
+        <argsstring></argsstring>
+        <name>offset</name>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferOffset.hpp" line="21" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="21" bodyend="-1"/>
+        <referencedby refid="d2/dd2/a02279_1a2c6ad146d4910651544564c25ca7dccd" compoundref="d6/db8/a00158" startline="70" endline="79">castor3d::UniformBufferOffsetT&lt; castor3d::SkinningUboConfiguration &gt;::createSizedBinding</referencedby>
+        <referencedby refid="d2/dd2/a02279_1a30110cf344fed3ed16b4d7972ebd263d" compoundref="d6/db8/a00158" startline="35" endline="38">castor3d::UniformBufferOffsetT&lt; castor3d::SkinningUboConfiguration &gt;::getData</referencedby>
+        <referencedby refid="d2/dd2/a02279_1ad7dcad7c96a620540d10eb85f3d4586b" compoundref="d6/db8/a00158" startline="81" endline="94">castor3d::UniformBufferOffsetT&lt; castor3d::SkinningUboConfiguration &gt;::getDescriptorWrite</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dd2/a02279_1a2a86f23b4e59cbd966c463b700562f63" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::UniformBufferOffsetT&lt; DataT &gt;::range</definition>
+        <argsstring></argsstring>
+        <name>range</name>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferOffset.hpp" line="22" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="22" bodyend="-1"/>
+        <referencedby refid="d2/dd2/a02279_1a2c6ad146d4910651544564c25ca7dccd" compoundref="d6/db8/a00158" startline="70" endline="79">castor3d::UniformBufferOffsetT&lt; castor3d::SkinningUboConfiguration &gt;::createSizedBinding</referencedby>
+        <referencedby refid="d2/dd2/a02279_1ad7dcad7c96a620540d10eb85f3d4586b" compoundref="d6/db8/a00158" startline="81" endline="94">castor3d::UniformBufferOffsetT&lt; castor3d::SkinningUboConfiguration &gt;::getDescriptorWrite</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/dd2/a02279_1a1fa7ff048545c978eb2f031a158de792" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::UniformBufferOffsetT&lt; DataT &gt;::setPool</definition>
+        <argsstring>(PoolUniformBuffer &amp;pool)</argsstring>
+        <name>setPool</name>
+        <param>
+          <type><ref refid="d2/d40/a02307" kindref="compound">PoolUniformBuffer</ref> &amp;</type>
+          <declname>pool</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferOffset.hpp" line="24" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="24" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dd2/a02279_1ad7a4b5aef7f032e598077b111714ad28" prot="public" static="no" const="yes" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::UniformBufferOffsetT&lt; DataT &gt;::operator bool</definition>
+        <argsstring>() const</argsstring>
+        <name>operator bool</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferOffset.hpp" line="29" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="29" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dd2/a02279_1a30110cf344fed3ed16b4d7972ebd263d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>DataT const  &amp;</type>
+        <definition>DataT const&amp; castor3d::UniformBufferOffsetT&lt; DataT &gt;::getData</definition>
+        <argsstring>() const</argsstring>
+        <name>getData</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferOffset.hpp" line="35" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="35" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dd2/a02279_1a59e6572d14eef98230c4528b03bb8abd" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>DataT &amp;</type>
+        <definition>DataT&amp; castor3d::UniformBufferOffsetT&lt; DataT &gt;::getData</definition>
+        <argsstring>()</argsstring>
+        <name>getData</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferOffset.hpp" line="40" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="40" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dd2/a02279_1ac0fba92ce126ac045a59bdf34cb2a28e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/d40/a02307" kindref="compound">PoolUniformBuffer</ref> const  &amp;</type>
+        <definition>PoolUniformBuffer const&amp; castor3d::UniformBufferOffsetT&lt; DataT &gt;::getPool</definition>
+        <argsstring>() const</argsstring>
+        <name>getPool</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferOffset.hpp" line="45" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="45" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dd2/a02279_1af3ab4fb1c5a51d3c277c360d5d904f15" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/d40/a02307" kindref="compound">PoolUniformBuffer</ref> &amp;</type>
+        <definition>PoolUniformBuffer&amp; castor3d::UniformBufferOffsetT&lt; DataT &gt;::getPool</definition>
+        <argsstring>()</argsstring>
+        <name>getPool</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferOffset.hpp" line="50" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="50" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dd2/a02279_1adc389f5d4fd605791054221d7119cdae" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::UniformBuffer const  &amp;</type>
+        <definition>ashes::UniformBuffer const&amp; castor3d::UniformBufferOffsetT&lt; DataT &gt;::getBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>getBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferOffset.hpp" line="55" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="55" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dd2/a02279_1abd6e7c0458d09a9fe7097df3f84417a0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::UniformBuffer &amp;</type>
+        <definition>ashes::UniformBuffer&amp; castor3d::UniformBufferOffsetT&lt; DataT &gt;::getBuffer</definition>
+        <argsstring>()</argsstring>
+        <name>getBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferOffset.hpp" line="60" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="60" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dd2/a02279_1a27740308743c3e5d9e0a84631b3df4b9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::UniformBufferOffsetT&lt; DataT &gt;::getAlignedSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getAlignedSize</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferOffset.hpp" line="65" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="65" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dd2/a02279_1a2c6ad146d4910651544564c25ca7dccd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</argsstring>
+        <name>createSizedBinding</name>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>layoutBinding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferOffset.hpp" line="70" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="70" bodyend="79"/>
+        <referencedby refid="df/d7e/a05499_1a329e3cca96d30cfb46fcfa67c51ca404" compoundref="d6/dae/a01304" startline="36" endline="40">castor3d::PickingUbo::createSizedBinding</referencedby>
+        <referencedby refid="d3/dd4/a05455_1ab75a8a861f800ea0ac6a5f95b39b3683" compoundref="d2/d1d/a01277" startline="67" endline="71">castor3d::LayeredLpvGridConfigUbo::createSizedBinding</referencedby>
+        <referencedby refid="dd/d83/a05443_1a5d2c9c7da7669ef53a90758a44b7619c" compoundref="dd/d39/a01271" startline="70" endline="74">castor3d::GpInfoUbo::createSizedBinding</referencedby>
+        <referencedby refid="d6/d15/a05503_1a409d04099ce176f7ba8601720b85c9b5" compoundref="d2/d4c/a01307" startline="78" endline="82">castor3d::RsmConfigUbo::createSizedBinding</referencedby>
+        <referencedby refid="d6/d94/a05479_1ae20924059170ff6f59e934828e26ef9c" compoundref="d9/dda/a01289" startline="78" endline="82">castor3d::ModelInstancesUbo::createSizedBinding</referencedby>
+        <referencedby refid="d4/da8/a05511_1a33ff803524d407253ea98caeeb038418" compoundref="de/d90/a01313" startline="79" endline="83">castor3d::ShadowMapUbo::createSizedBinding</referencedby>
+        <referencedby refid="d5/d35/a05471_1a55564c6a2a416333c26436076181029c" compoundref="d5/da7/a01283" startline="81" endline="85">castor3d::LpvLightConfigUbo::createSizedBinding</referencedby>
+        <referencedby refid="da/d34/a05463_1a25c8501fecd9349223a1b66f7a9393e7" compoundref="d8/d0d/a01280" startline="91" endline="95">castor3d::LpvGridConfigUbo::createSizedBinding</referencedby>
+        <referencedby refid="d1/d27/a05483_1a00aa24677e5950ec3108ac546ef1cdf5" compoundref="d8/d7a/a01292" startline="96" endline="100">castor3d::ModelMatrixUbo::createSizedBinding</referencedby>
+        <referencedby refid="d9/dae/a05475_1ac31062a614833908640fbbeed9cb92fe" compoundref="d0/d00/a01286" startline="103" endline="107">castor3d::MatrixUbo::createSizedBinding</referencedby>
+        <referencedby refid="d6/df6/a05611_1ac12f32dda8736e904642f50f0d6be562" compoundref="dc/dd9/a01328" startline="112" endline="116">castor3d::VoxelizerUbo::createSizedBinding</referencedby>
+        <referencedby refid="d0/d2f/a05507_1a3820ea1f3fdb87e2fe8b95009c8a55fa" compoundref="da/d79/a01310" startline="118" endline="122">castor3d::SceneUbo::createSizedBinding</referencedby>
+        <referencedby refid="d9/d91/a05523_1a073ca04d26a7b693d1bad1049ed59890" compoundref="d1/d72/a01319" startline="147" endline="151">castor3d::SsaoConfigUbo::createSizedBinding</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d2/dd2/a02279_1ad7dcad7c96a620540d10eb85f3d4586b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::WriteDescriptorSet</type>
+        <definition>ashes::WriteDescriptorSet castor3d::UniformBufferOffsetT&lt; DataT &gt;::getDescriptorWrite</definition>
+        <argsstring>(uint32_t dstBinding, uint32_t dstArrayElement=0u) const</argsstring>
+        <name>getDescriptorWrite</name>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstArrayElement</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferOffset.hpp" line="81" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="81" bodyend="94"/>
+        <referencedby refid="da/d95/a04435_1a612d681d62631e6bb92d9601c660b48e" compoundref="df/d3b/a00728" startline="363" endline="369">castor3d::RenderQuad::makeDescriptorWrite</referencedby>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>A UniformBuffer and an offset from the <ref refid="dd/d3b/a02291" kindref="compound">GpuBuffer</ref>. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4612">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ShadowMapUboConfiguration &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="4591" relation="template-instance">
+          <edgelabel>&lt; castor3d::ShadowMapUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4611">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::SubsurfaceScatteringPass::BlurConfiguration &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="4591" relation="template-instance">
+          <edgelabel>&lt; castor3d::SubsurfaceScatteringPass::BlurConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4610">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ComputeParticleSystem::Configuration &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="4591" relation="template-instance">
+          <edgelabel>&lt; castor3d::ComputeParticleSystem::Configuration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4594">
+        <label>castor3d::UniformBufferOffsetT&lt; MinifyConfiguration &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="4591" relation="template-instance">
+          <edgelabel>&lt; MinifyConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4605">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::LpvLightConfigUboConfiguration &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="4591" relation="template-instance">
+          <edgelabel>&lt; castor3d::LpvLightConfigUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4607">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::GaussianBlur::Configuration &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="4591" relation="template-instance">
+          <edgelabel>&lt; castor3d::GaussianBlur::Configuration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4615">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::HdrConfig &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="4591" relation="template-instance">
+          <edgelabel>&lt; castor3d::HdrConfig &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4601">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelUboConfiguration &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="4591" relation="template-instance">
+          <edgelabel>&lt; castor3d::ModelUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4602">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::PickingUboConfiguration &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="4591" relation="template-instance">
+          <edgelabel>&lt; castor3d::PickingUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4617">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::SkinningUboConfiguration &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="4591" relation="template-instance">
+          <edgelabel>&lt; castor3d::SkinningUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4591">
+        <label>castor3d::UniformBufferOffsetT&lt; DataT &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+      </node>
+      <node id="4597">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::SceneUboConfiguration &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="4591" relation="template-instance">
+          <edgelabel>&lt; castor3d::SceneUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4592">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelInstancesUboConfiguration &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="4591" relation="template-instance">
+          <edgelabel>&lt; castor3d::ModelInstancesUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4596">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::MatrixUboConfiguration &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="4591" relation="template-instance">
+          <edgelabel>&lt; castor3d::MatrixUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4599">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::GpInfoUboConfiguration &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="4591" relation="template-instance">
+          <edgelabel>&lt; castor3d::GpInfoUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4616">
+        <label>castor3d::UniformBufferOffsetT&lt; castor::Point3f &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="4591" relation="template-instance">
+          <edgelabel>&lt; castor::Point3f &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4608">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::SubsurfaceScatteringPass::BlurWeights &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="4591" relation="template-instance">
+          <edgelabel>&lt; castor3d::SubsurfaceScatteringPass::BlurWeights &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4598">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::BillboardUboConfiguration &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="4591" relation="template-instance">
+          <edgelabel>&lt; castor3d::BillboardUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4593">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelMatrixUboConfiguration &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="4591" relation="template-instance">
+          <edgelabel>&lt; castor3d::ModelMatrixUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4613">
+        <label>castor3d::UniformBufferOffsetT&lt; Configuration &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="4591" relation="template-instance">
+          <edgelabel>&lt; Configuration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4614">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::RsmUboConfiguration &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="4591" relation="template-instance">
+          <edgelabel>&lt; castor3d::RsmUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4609">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::MorphingUboConfiguration &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="4591" relation="template-instance">
+          <edgelabel>&lt; castor3d::MorphingUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4603">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::VoxelizerUboConfiguration &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="4591" relation="template-instance">
+          <edgelabel>&lt; castor3d::VoxelizerUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4604">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::LpvGridConfigUboConfiguration &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="4591" relation="template-instance">
+          <edgelabel>&lt; castor3d::LpvGridConfigUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4600">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::LayeredLpvGridConfigUboConfiguration &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="4591" relation="template-instance">
+          <edgelabel>&lt; castor3d::LayeredLpvGridConfigUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4606">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::Texture3DTo2DData &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="4591" relation="template-instance">
+          <edgelabel>&lt; castor3d::Texture3DTo2DData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4595">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::TexturesUboConfiguration &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="4591" relation="template-instance">
+          <edgelabel>&lt; castor3d::TexturesUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="Buffer/BufferModule.hpp" line="109" column="1" bodyfile="Buffer/BufferModule.hpp" bodystart="109" bodyend="-1"/>
+    <listofallmembers>
+      <member refid="d2/dd2/a02279_1a3117ce5906b0dfad47eb07efae8a4f97" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>buffer</name></member>
+      <member refid="d2/dd2/a02279_1a2c6ad146d4910651544564c25ca7dccd" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>createSizedBinding</name></member>
+      <member refid="d2/dd2/a02279_1a1d26718436319b3fbb99c18baecacf61" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>flags</name></member>
+      <member refid="d2/dd2/a02279_1a27740308743c3e5d9e0a84631b3df4b9" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>getAlignedSize</name></member>
+      <member refid="d2/dd2/a02279_1adc389f5d4fd605791054221d7119cdae" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>getBuffer</name></member>
+      <member refid="d2/dd2/a02279_1abd6e7c0458d09a9fe7097df3f84417a0" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>getBuffer</name></member>
+      <member refid="d2/dd2/a02279_1a30110cf344fed3ed16b4d7972ebd263d" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>getData</name></member>
+      <member refid="d2/dd2/a02279_1a59e6572d14eef98230c4528b03bb8abd" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>getData</name></member>
+      <member refid="d2/dd2/a02279_1ad7dcad7c96a620540d10eb85f3d4586b" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>getDescriptorWrite</name></member>
+      <member refid="d2/dd2/a02279_1ac0fba92ce126ac045a59bdf34cb2a28e" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>getPool</name></member>
+      <member refid="d2/dd2/a02279_1af3ab4fb1c5a51d3c277c360d5d904f15" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>getPool</name></member>
+      <member refid="d2/dd2/a02279_1ab51520c7931ecdafe28653604734fb73" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>offset</name></member>
+      <member refid="d2/dd2/a02279_1ad7a4b5aef7f032e598077b111714ad28" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>operator bool</name></member>
+      <member refid="d2/dd2/a02279_1a2a86f23b4e59cbd966c463b700562f63" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>range</name></member>
+      <member refid="d2/dd2/a02279_1a1fa7ff048545c978eb2f031a158de792" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>setPool</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

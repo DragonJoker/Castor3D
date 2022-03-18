@@ -1,86 +1,206 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d9/d0c/a04563" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::IntermediateView</compoundname>
-    <includes local="no">RenderModule.hpp</includes>
+    <compoundname>castor3d::ParticleElementDeclaration</compoundname>
+    <includes local="no">ParticleElementDeclaration.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d9/d0c/a04563_1a1141a95460931ea697dc733f6928c6fe" prot="public" static="no" mutable="no">
+      <memberdef kind="variable" id="d9/d0c/a04563_1ad48a43be5c97ce61e08322ecc9486cf5" prot="public" static="no" mutable="no">
         <type>castor::String</type>
-        <definition>castor::String castor3d::IntermediateView::name</definition>
+        <definition>castor::String castor3d::ParticleElementDeclaration::m_name</definition>
         <argsstring></argsstring>
-        <name>name</name>
+        <name>m_name</name>
+        <qualifiedname>castor3d::ParticleElementDeclaration::m_name</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The associated variable name. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="271" column="1" bodyfile="Render/RenderModule.hpp" bodystart="271" bodyend="-1"/>
+        <location file="Scene/ParticleSystem/ParticleElementDeclaration.hpp" line="45" column="16" bodyfile="Scene/ParticleSystem/ParticleElementDeclaration.hpp" bodystart="45" bodyend="-1"/>
+        <referencedby refid="da/de3/a01398_1a4f9731a2af40fa7e66ea720feb6838cd" compoundref="d8/dbf/a01109" startline="83" endline="90">castor3d::operator!=</referencedby>
+        <referencedby refid="da/de3/a01398_1ad8bc5aa3ee1f0b471e537817aede563a" compoundref="d8/dbf/a01109" startline="67" endline="74">castor3d::operator==</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="d9/d0c/a04563_1a6a75eadd256df0feb771dd1deb7b8d16" prot="public" static="no" mutable="no">
-        <type>ashes::ImageView</type>
-        <definition>ashes::ImageView castor3d::IntermediateView::view</definition>
+      <memberdef kind="variable" id="d9/d0c/a04563_1aa857460b42e9639d688ab83f64ade880" prot="public" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1a18a79c59c605cf0a19240fe9e9c8893c" kindref="member">ElementUsages</ref></type>
+        <definition>ElementUsages castor3d::ParticleElementDeclaration::m_usages</definition>
         <argsstring></argsstring>
-        <name>view</name>
+        <name>m_usages</name>
+        <qualifiedname>castor3d::ParticleElementDeclaration::m_usages</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>Element usage. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="272" column="1" bodyfile="Render/RenderModule.hpp" bodystart="272" bodyend="-1"/>
+        <location file="Scene/ParticleSystem/ParticleElementDeclaration.hpp" line="48" column="15" bodyfile="Scene/ParticleSystem/ParticleElementDeclaration.hpp" bodystart="48" bodyend="-1"/>
+        <referencedby refid="da/de3/a01398_1a4f9731a2af40fa7e66ea720feb6838cd" compoundref="d8/dbf/a01109" startline="83" endline="90">castor3d::operator!=</referencedby>
+        <referencedby refid="da/de3/a01398_1ad8bc5aa3ee1f0b471e537817aede563a" compoundref="d8/dbf/a01109" startline="67" endline="74">castor3d::operator==</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="d9/d0c/a04563_1a712670fad3512b89d8e3b405e0efa185" prot="public" static="no" mutable="no">
-        <type>VkImageLayout</type>
-        <definition>VkImageLayout castor3d::IntermediateView::layout</definition>
+      <memberdef kind="variable" id="d9/d0c/a04563_1ac91b50b324cc8986e482250e383655ad" prot="public" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1a4fdd8bd8042f3a3ae81042067e1ac250" kindref="member">ParticleFormat</ref></type>
+        <definition>ParticleFormat castor3d::ParticleElementDeclaration::m_dataType</definition>
         <argsstring></argsstring>
-        <name>layout</name>
+        <name>m_dataType</name>
+        <qualifiedname>castor3d::ParticleElementDeclaration::m_dataType</qualifiedname>
+        <initializer>{ <ref refid="da/de3/a01398_1a4fdd8bd8042f3a3ae81042067e1ac250aa81e9d0c1658f7a130fc2174bb154433" kindref="member">ParticleFormat::eVec4f</ref> }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>Element type. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="273" column="1" bodyfile="Render/RenderModule.hpp" bodystart="273" bodyend="-1"/>
+        <location file="Scene/ParticleSystem/ParticleElementDeclaration.hpp" line="51" column="16" bodyfile="Scene/ParticleSystem/ParticleElementDeclaration.hpp" bodystart="51" bodyend="-1"/>
+        <referencedby refid="da/de3/a01398_1a4f9731a2af40fa7e66ea720feb6838cd" compoundref="d8/dbf/a01109" startline="83" endline="90">castor3d::operator!=</referencedby>
+        <referencedby refid="da/de3/a01398_1ad8bc5aa3ee1f0b471e537817aede563a" compoundref="d8/dbf/a01109" startline="67" endline="74">castor3d::operator==</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="d9/d0c/a04563_1add453463fc060b27897b33a3545bc006" prot="public" static="no" mutable="no">
-        <type><ref refid="da/d1a/a03803" kindref="compound">TextureFactors</ref></type>
-        <definition>TextureFactors castor3d::IntermediateView::factors</definition>
+      <memberdef kind="variable" id="d9/d0c/a04563_1aad5b25bb08bf45909da03dd1e74fece4" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ParticleElementDeclaration::m_offset</definition>
         <argsstring></argsstring>
-        <name>factors</name>
+        <name>m_offset</name>
+        <qualifiedname>castor3d::ParticleElementDeclaration::m_offset</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Offset in buffer. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleElementDeclaration.hpp" line="54" column="10" bodyfile="Scene/ParticleSystem/ParticleElementDeclaration.hpp" bodystart="54" bodyend="-1"/>
+        <referencedby refid="da/de3/a01398_1a4f9731a2af40fa7e66ea720feb6838cd" compoundref="d8/dbf/a01109" startline="83" endline="90">castor3d::operator!=</referencedby>
+        <referencedby refid="da/de3/a01398_1ad8bc5aa3ee1f0b471e537817aede563a" compoundref="d8/dbf/a01109" startline="67" endline="74">castor3d::operator==</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d0c/a04563_1a5aa9795c1ceaaeeeda9808e57ca017eb" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ParticleElementDeclaration::m_divisor</definition>
+        <argsstring></argsstring>
+        <name>m_divisor</name>
+        <qualifiedname>castor3d::ParticleElementDeclaration::m_divisor</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Instantiation attribute increment. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleElementDeclaration.hpp" line="57" column="10" bodyfile="Scene/ParticleSystem/ParticleElementDeclaration.hpp" bodystart="57" bodyend="-1"/>
+        <referencedby refid="da/de3/a01398_1a4f9731a2af40fa7e66ea720feb6838cd" compoundref="d8/dbf/a01109" startline="83" endline="90">castor3d::operator!=</referencedby>
+        <referencedby refid="da/de3/a01398_1ad8bc5aa3ee1f0b471e537817aede563a" compoundref="d8/dbf/a01109" startline="67" endline="74">castor3d::operator==</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/d0c/a04563_1a8de5e2d174a594c1421f65e60d07b564" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ParticleElementDeclaration::ParticleElementDeclaration</definition>
+        <argsstring>()=default</argsstring>
+        <name>ParticleElementDeclaration</name>
+        <qualifiedname>castor3d::ParticleElementDeclaration::ParticleElementDeclaration</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="274" column="1" bodyfile="Render/RenderModule.hpp" bodystart="274" bodyend="-1"/>
+        <location file="Scene/ParticleSystem/ParticleElementDeclaration.hpp" line="13" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d0c/a04563_1a51da66fde4bd26f28afe78314040a7e6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ParticleElementDeclaration::ParticleElementDeclaration</definition>
+        <argsstring>(castor::String const &amp;name, ElementUsages const &amp;usages, ParticleFormat type, uint32_t offset=0u, uint32_t divisor=0u)</argsstring>
+        <name>ParticleElementDeclaration</name>
+        <qualifiedname>castor3d::ParticleElementDeclaration::ParticleElementDeclaration</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a18a79c59c605cf0a19240fe9e9c8893c" kindref="member">ElementUsages</ref> const &amp;</type>
+          <declname>usages</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a4fdd8bd8042f3a3ae81042067e1ac250" kindref="member">ParticleFormat</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>offset</declname>
+          <defval>0u</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>divisor</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The associated variable name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">usages</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Element possible usages (ElementUsage combination). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Element type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Offset in the stream. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">divisor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Instanciation attribute increment. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleElementDeclaration.hpp" line="30" column="8" bodyfile="Scene/ParticleSystem/ParticleElementDeclaration.hpp" bodystart="30" bodyend="41"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Holds minimal data for an intermediate view. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="1461">
-        <label>castor3d::IntermediateView</label>
-        <link refid="d9/d0c/a04563"/>
-        <childnode refid="1462" relation="usage">
-          <edgelabel>factors</edgelabel>
-        </childnode>
-      </node>
-      <node id="1462">
-        <label>castor3d::TextureFactors</label>
-        <link refid="da/d1a/a03803"/>
-      </node>
-    </collaborationgraph>
-    <location file="Render/RenderModule.hpp" line="270" column="1" bodyfile="Render/RenderModule.hpp" bodystart="269" bodyend="275"/>
+    <location file="Scene/ParticleSystem/ParticleElementDeclaration.hpp" line="11" column="1" bodyfile="Scene/ParticleSystem/ParticleElementDeclaration.hpp" bodystart="12" bodyend="58"/>
     <listofallmembers>
-      <member refid="d9/d0c/a04563_1add453463fc060b27897b33a3545bc006" prot="public" virt="non-virtual"><scope>castor3d::IntermediateView</scope><name>factors</name></member>
-      <member refid="d9/d0c/a04563_1a712670fad3512b89d8e3b405e0efa185" prot="public" virt="non-virtual"><scope>castor3d::IntermediateView</scope><name>layout</name></member>
-      <member refid="d9/d0c/a04563_1a1141a95460931ea697dc733f6928c6fe" prot="public" virt="non-virtual"><scope>castor3d::IntermediateView</scope><name>name</name></member>
-      <member refid="d9/d0c/a04563_1a6a75eadd256df0feb771dd1deb7b8d16" prot="public" virt="non-virtual"><scope>castor3d::IntermediateView</scope><name>view</name></member>
+      <member refid="d9/d0c/a04563_1ac91b50b324cc8986e482250e383655ad" prot="public" virt="non-virtual"><scope>castor3d::ParticleElementDeclaration</scope><name>m_dataType</name></member>
+      <member refid="d9/d0c/a04563_1a5aa9795c1ceaaeeeda9808e57ca017eb" prot="public" virt="non-virtual"><scope>castor3d::ParticleElementDeclaration</scope><name>m_divisor</name></member>
+      <member refid="d9/d0c/a04563_1ad48a43be5c97ce61e08322ecc9486cf5" prot="public" virt="non-virtual"><scope>castor3d::ParticleElementDeclaration</scope><name>m_name</name></member>
+      <member refid="d9/d0c/a04563_1aad5b25bb08bf45909da03dd1e74fece4" prot="public" virt="non-virtual"><scope>castor3d::ParticleElementDeclaration</scope><name>m_offset</name></member>
+      <member refid="d9/d0c/a04563_1aa857460b42e9639d688ab83f64ade880" prot="public" virt="non-virtual"><scope>castor3d::ParticleElementDeclaration</scope><name>m_usages</name></member>
+      <member refid="d9/d0c/a04563_1a8de5e2d174a594c1421f65e60d07b564" prot="public" virt="non-virtual"><scope>castor3d::ParticleElementDeclaration</scope><name>ParticleElementDeclaration</name></member>
+      <member refid="d9/d0c/a04563_1a51da66fde4bd26f28afe78314040a7e6" prot="public" virt="non-virtual"><scope>castor3d::ParticleElementDeclaration</scope><name>ParticleElementDeclaration</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

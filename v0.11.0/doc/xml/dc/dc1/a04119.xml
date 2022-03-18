@@ -1,0 +1,221 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dc/dc1/a04119" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::OverlayRenderer::VertexBufferIndex</compoundname>
+    <templateparamlist>
+      <param>
+        <type>typename VertexT</type>
+      </param>
+      <param>
+        <type>uint32_t</type>
+        <declname>CountT</declname>
+        <defname>CountT</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/dc1/a04119_1a309d8ecc8705c55a7aa1e2e80b0a2e12" prot="public" static="no" mutable="no">
+        <type>VertexBufferPool&lt; VertexT, CountT &gt; &amp;</type>
+        <definition>VertexBufferPool&lt; VertexT, CountT &gt;&amp; castor3d::OverlayRenderer::VertexBufferIndex&lt; VertexT, CountT &gt;::pool</definition>
+        <argsstring></argsstring>
+        <name>pool</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="243" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="243" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/dc1/a04119_1ad1b94a349861d0890073a39c17389c59" prot="public" static="no" mutable="no">
+        <type><ref refid="da/d53/a04111" kindref="compound">OverlayRenderNode</ref> &amp;</type>
+        <definition>OverlayRenderNode&amp; castor3d::OverlayRenderer::VertexBufferIndex&lt; VertexT, CountT &gt;::node</definition>
+        <argsstring></argsstring>
+        <name>node</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="244" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="244" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/dc1/a04119_1a7bbd63d9f0d7123076563e2a3b9e87be" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::OverlayRenderer::VertexBufferIndex&lt; VertexT, CountT &gt;::index</definition>
+        <argsstring></argsstring>
+        <name>index</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="245" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="245" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/dc1/a04119_1a5405bf995496324ac9e6856314064231" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; Configuration &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::OverlayRenderer::VertexBufferIndex&lt; VertexT, CountT &gt;::overlayUbo</definition>
+        <argsstring></argsstring>
+        <name>overlayUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="246" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="246" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/dc1/a04119_1af842d365bbb03bf759c4fe8b9f178ca9" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d1/d01/a05531_1a23fb677f7b96c3ebe0a5c589b1eac5ad" kindref="member">TexturesUbo::Configuration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; TexturesUbo::Configuration &gt; castor3d::OverlayRenderer::VertexBufferIndex&lt; VertexT, CountT &gt;::texturesUbo</definition>
+        <argsstring></argsstring>
+        <name>texturesUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="247" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="247" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/dc1/a04119_1a40731f40f9ab5125a1c148cc48eab05f" prot="public" static="no" mutable="no">
+        <type>OverlayGeometryBuffers</type>
+        <definition>OverlayGeometryBuffers castor3d::OverlayRenderer::VertexBufferIndex&lt; VertexT, CountT &gt;::geometryBuffers</definition>
+        <argsstring></argsstring>
+        <name>geometryBuffers</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="248" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="248" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/dc1/a04119_1af8bee193439396d392f71569f19af464" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::OverlayRenderer::VertexBufferIndex&lt; VertexT, CountT &gt;::descriptorSet</definition>
+        <argsstring></argsstring>
+        <name>descriptorSet</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="249" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="249" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/dc1/a04119_1ad2ff9b10a39ac7704ca4efdf5551230e" prot="public" static="no" mutable="no">
+        <type>FontTexture::OnChanged::connection</type>
+        <definition>FontTexture::OnChanged::connection castor3d::OverlayRenderer::VertexBufferIndex&lt; VertexT, CountT &gt;::connection</definition>
+        <argsstring></argsstring>
+        <name>connection</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="250" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="250" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/dc1/a04119_1ab921abb794fc4831c2855826b99ed260" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::OverlayRenderer::VertexBufferIndex&lt; VertexT, CountT &gt;::operator bool</definition>
+        <argsstring>() const</argsstring>
+        <name>operator bool</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="238" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="238" bodyend="241"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2480">
+        <label>castor3d::OverlayRenderer::VertexBufferIndex&lt; VertexT, CountT &gt;</label>
+        <childnode refid="2481" relation="usage">
+          <edgelabel>overlayUbo</edgelabel>
+        </childnode>
+        <childnode refid="2483" relation="usage">
+          <edgelabel>texturesUbo</edgelabel>
+        </childnode>
+        <childnode refid="2484" relation="usage">
+          <edgelabel>geometryBuffers</edgelabel>
+        </childnode>
+        <childnode refid="2486" relation="usage">
+          <edgelabel>node</edgelabel>
+        </childnode>
+      </node>
+      <node id="2489">
+        <label>castor::OwnedBy&lt; Material &gt;</label>
+      </node>
+      <node id="2487">
+        <label>castor3d::OverlayRenderer::Pipeline</label>
+      </node>
+      <node id="2482">
+        <label>castor3d::UniformBufferOffsetT&lt; DataT &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+      </node>
+      <node id="2486">
+        <label>castor3d::OverlayRenderer::OverlayRenderNode</label>
+        <link refid="da/d53/a04111"/>
+        <childnode refid="2487" relation="usage">
+          <edgelabel>pipeline</edgelabel>
+        </childnode>
+        <childnode refid="2488" relation="usage">
+          <edgelabel>pass</edgelabel>
+        </childnode>
+      </node>
+      <node id="2481">
+        <label>castor3d::UniformBufferOffsetT&lt; Configuration &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="2482" relation="template-instance">
+          <edgelabel>&lt; Configuration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2485">
+        <label>castor3d::GeometryBuffers</label>
+        <link refid="df/d04/a02287"/>
+      </node>
+      <node id="2484">
+        <label>castor3d::OverlayRenderer::OverlayGeometryBuffers</label>
+        <childnode refid="2485" relation="usage">
+          <edgelabel>noTexture</edgelabel>
+          <edgelabel>textured</edgelabel>
+        </childnode>
+      </node>
+      <node id="2488">
+        <label>castor3d::Pass</label>
+        <link refid="db/d39/a02575"/>
+        <childnode refid="2489" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2483">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::TexturesUboConfiguration &gt;</label>
+        <link refid="d2/dd2/a02279"/>
+        <childnode refid="2482" relation="template-instance">
+          <edgelabel>&lt; castor3d::TexturesUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Overlay/OverlayRenderer.hpp" line="209" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="209" bodyend="-1"/>
+    <listofallmembers>
+      <member refid="dc/dc1/a04119_1ad2ff9b10a39ac7704ca4efdf5551230e" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::VertexBufferIndex</scope><name>connection</name></member>
+      <member refid="dc/dc1/a04119_1af8bee193439396d392f71569f19af464" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::VertexBufferIndex</scope><name>descriptorSet</name></member>
+      <member refid="dc/dc1/a04119_1a40731f40f9ab5125a1c148cc48eab05f" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::VertexBufferIndex</scope><name>geometryBuffers</name></member>
+      <member refid="dc/dc1/a04119_1a7bbd63d9f0d7123076563e2a3b9e87be" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::VertexBufferIndex</scope><name>index</name></member>
+      <member refid="dc/dc1/a04119_1ad1b94a349861d0890073a39c17389c59" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::VertexBufferIndex</scope><name>node</name></member>
+      <member refid="dc/dc1/a04119_1ab921abb794fc4831c2855826b99ed260" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::VertexBufferIndex</scope><name>operator bool</name></member>
+      <member refid="dc/dc1/a04119_1a5405bf995496324ac9e6856314064231" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::VertexBufferIndex</scope><name>overlayUbo</name></member>
+      <member refid="dc/dc1/a04119_1a309d8ecc8705c55a7aa1e2e80b0a2e12" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::VertexBufferIndex</scope><name>pool</name></member>
+      <member refid="dc/dc1/a04119_1af842d365bbb03bf759c4fe8b9f178ca9" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::VertexBufferIndex</scope><name>texturesUbo</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

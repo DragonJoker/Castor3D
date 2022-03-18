@@ -1,33 +1,1388 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d3/de2/a02959" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPhysicalDeviceImageFormatInfo2 &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d3/de2/a02959_1a86fd95656a7b5e6518a189bda7d57bb8" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPhysicalDeviceImageFormatInfo2 &gt;::value</definition>
-        <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2</initializer>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d3/de2/a02959" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::TextureUnit</compoundname>
+    <basecompoundref refid="de/d59/a02219" prot="public" virt="non-virtual">castor3d::AnimableT&lt; Engine &gt;</basecompoundref>
+    <includes local="no">TextureUnit.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d3/de2/a02959_1a0391ed94ed82b9e288c4eeae9e084c4e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/d1a/a02895" kindref="compound">TextureAnimation</ref> &amp;</type>
+        <definition>C3D_API TextureAnimation &amp; castor3d::TextureUnit::createAnimation</definition>
+        <argsstring>()</argsstring>
+        <name>createAnimation</name>
+        <qualifiedname>castor3d::TextureUnit::createAnimation</qualifiedname>
+        <briefdescription>
+<para>Creates the animation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>name Animation.</para>
+<para><simplesect kind="return"><para>The animation </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="141" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1a040e5c26091a31164fcad8f888ea4bda" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureUnit::removeAnimation</definition>
+        <argsstring>()</argsstring>
+        <name>removeAnimation</name>
+        <qualifiedname>castor3d::TextureUnit::removeAnimation</qualifiedname>
+        <briefdescription>
+<para>Removes the animation. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="148" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1ad8f1e44f1e3b956ac4fb05f8f53f949d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/d1a/a02895" kindref="compound">TextureAnimation</ref> &amp;</type>
+        <definition>C3D_API TextureAnimation &amp; castor3d::TextureUnit::getAnimation</definition>
+        <argsstring>()</argsstring>
+        <name>getAnimation</name>
+        <qualifiedname>castor3d::TextureUnit::getAnimation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The animation. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="155" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1a542f3e8ddc9f975fec1f9fbc4e586741" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/d1a/a02895" kindref="compound">TextureAnimation</ref> const &amp;</type>
+        <definition>C3D_API TextureAnimation const  &amp; castor3d::TextureUnit::getAnimation</definition>
+        <argsstring>() const</argsstring>
+        <name>getAnimation</name>
+        <qualifiedname>castor3d::TextureUnit::getAnimation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The animation. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="162" column="33"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d3/de2/a02959_1aaf328c3309773c589b73481376d6c13d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkImageType</type>
+        <definition>C3D_API VkImageType castor3d::TextureUnit::getType</definition>
+        <argsstring>() const</argsstring>
+        <name>getType</name>
+        <qualifiedname>castor3d::TextureUnit::getType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="173" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1ae4f46046be243f2f4d0b4d6f209e92ba" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String</type>
+        <definition>C3D_API castor::String castor3d::TextureUnit::toString</definition>
+        <argsstring>() const</argsstring>
+        <name>toString</name>
+        <qualifiedname>castor3d::TextureUnit::toString</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="85" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="85" bodyend="-1"/>
+        <location file="Material/Texture/TextureUnit.hpp" line="174" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1a0adbe6fd569909b1e08489e084e1701e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="da/de3/a01398_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref></type>
+        <definition>C3D_API TextureFlags castor3d::TextureUnit::getFlags</definition>
+        <argsstring>() const</argsstring>
+        <name>getFlags</name>
+        <qualifiedname>castor3d::TextureUnit::getFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="175" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1aa9fc8de173e0c915a275f3a463bc1153" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::TextureUnit::isInitialised</definition>
+        <argsstring>() const</argsstring>
+        <name>isInitialised</name>
+        <qualifiedname>castor3d::TextureUnit::isInitialised</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="176" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1a8f1b129c0413ea6ef36526af03d09e28" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::TextureUnit::isTransformAnimated</definition>
+        <argsstring>() const</argsstring>
+        <name>isTransformAnimated</name>
+        <qualifiedname>castor3d::TextureUnit::isTransformAnimated</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="177" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1ae37abda7183f64869891cebfc5cd9471" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::TextureUnit::isTileAnimated</definition>
+        <argsstring>() const</argsstring>
+        <name>isTileAnimated</name>
+        <qualifiedname>castor3d::TextureUnit::isTileAnimated</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="178" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1abf1c4acc8a943645ab8401d5ed25c751" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>TextureLayoutSPtr</type>
+        <definition>TextureLayoutSPtr castor3d::TextureUnit::getTexture</definition>
+        <argsstring>() const</argsstring>
+        <name>getTexture</name>
+        <qualifiedname>castor3d::TextureUnit::getTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="180" column="19" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="180" bodyend="183"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1a0963d15dbdb7d6bc30ce7b929161959d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d6/deb/a02915" kindref="compound">TextureConfiguration</ref> const &amp;</type>
+        <definition>TextureConfiguration const  &amp; castor3d::TextureUnit::getConfiguration</definition>
+        <argsstring>() const</argsstring>
+        <name>getConfiguration</name>
+        <qualifiedname>castor3d::TextureUnit::getConfiguration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="185" column="29" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="185" bodyend="188"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1a64692ad80ca56076fd49e5bf23557d7f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/de3/a01398_1a723c56c48a833a5992bd2a5a9a366e45" kindref="member">SamplerResPtr</ref></type>
+        <definition>SamplerResPtr castor3d::TextureUnit::getSampler</definition>
+        <argsstring>() const</argsstring>
+        <name>getSampler</name>
+        <qualifiedname>castor3d::TextureUnit::getSampler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="190" column="15" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="190" bodyend="193"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1a0cd2559e378b7b161753884cf9e43720" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::TextureUnit::isTextured</definition>
+        <argsstring>() const</argsstring>
+        <name>isTextured</name>
+        <qualifiedname>castor3d::TextureUnit::isTextured</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="195" column="6" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="195" bodyend="198"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1a8d5eed56f89c2506cf33baec524eca99" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>RenderTargetSPtr</type>
+        <definition>RenderTargetSPtr castor3d::TextureUnit::getRenderTarget</definition>
+        <argsstring>() const</argsstring>
+        <name>getRenderTarget</name>
+        <qualifiedname>castor3d::TextureUnit::getRenderTarget</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="200" column="18" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="200" bodyend="203"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1a755fdfa79eed598a8de403bf84d0d028" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::WriteDescriptorSet</type>
+        <definition>ashes::WriteDescriptorSet castor3d::TextureUnit::getDescriptor</definition>
+        <argsstring>() const</argsstring>
+        <name>getDescriptor</name>
+        <qualifiedname>castor3d::TextureUnit::getDescriptor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="205" column="27" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="205" bodyend="208"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1a87763bd90a7ba6ba5c266ec4873ec574" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureUnit::getId</definition>
+        <argsstring>() const</argsstring>
+        <name>getId</name>
+        <qualifiedname>castor3d::TextureUnit::getId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="210" column="10" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="210" bodyend="213"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1a8af2cc0d94fd4f4c1f1053662dbf5945" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::TextureUnit::hasDevice</definition>
+        <argsstring>() const</argsstring>
+        <name>hasDevice</name>
+        <qualifiedname>castor3d::TextureUnit::hasDevice</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="215" column="6" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="215" bodyend="218"/>
+        <referencedby refid="d3/de2/a02959_1ab70da590d82e3bbe36cbae8f453ac633" compoundref="d5/db5/a00374" startline="220" endline="224">getDevice</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1ab70da590d82e3bbe36cbae8f453ac633" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+        <definition>RenderDevice const  &amp; castor3d::TextureUnit::getDevice</definition>
+        <argsstring>() const</argsstring>
+        <name>getDevice</name>
+        <qualifiedname>castor3d::TextureUnit::getDevice</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="220" column="21" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="220" bodyend="224"/>
+        <references refid="d3/de2/a02959_1a8af2cc0d94fd4f4c1f1053662dbf5945" compoundref="d5/db5/a00374" startline="215" endline="218">hasDevice</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1a33da41e218b36c5ec39ce775ac003f87" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::TextureUnit::hasAnimation</definition>
+        <argsstring>() const</argsstring>
+        <name>hasAnimation</name>
+        <qualifiedname>castor3d::TextureUnit::hasAnimation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="226" column="6" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="226" bodyend="229"/>
+        <references refid="d3/de2/a02959_1a33da41e218b36c5ec39ce775ac003f87" compoundref="d5/db5/a00374" startline="226" endline="229">hasAnimation</references>
+        <referencedby refid="d3/de2/a02959_1a33da41e218b36c5ec39ce775ac003f87" compoundref="d5/db5/a00374" startline="226" endline="229">hasAnimation</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1a8db4a1be8d1b748cf0ce1cc290536a24" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/d08/a02911" kindref="compound">TextureTransform</ref> const &amp;</type>
+        <definition>TextureTransform const  &amp; castor3d::TextureUnit::getTransform</definition>
+        <argsstring>() const</argsstring>
+        <name>getTransform</name>
+        <qualifiedname>castor3d::TextureUnit::getTransform</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="231" column="25" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="231" bodyend="234"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1ad6ff53c37d614d27efaa329077e35f9b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d0d/a02955" kindref="compound">TextureSourceInfo</ref> const &amp;</type>
+        <definition>TextureSourceInfo const  &amp; castor3d::TextureUnit::getSourceInfo</definition>
+        <argsstring>() const</argsstring>
+        <name>getSourceInfo</name>
+        <qualifiedname>castor3d::TextureUnit::getSourceInfo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="236" column="26" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="236" bodyend="239"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d3/de2/a02959_1ae52cba01f244718cb375ba46a1c667ee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureUnit::setConfiguration</definition>
+        <argsstring>(TextureConfiguration value)</argsstring>
+        <name>setConfiguration</name>
+        <qualifiedname>castor3d::TextureUnit::setConfiguration</qualifiedname>
+        <param>
+          <type><ref refid="d6/deb/a02915" kindref="compound">TextureConfiguration</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Mutators. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="250" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1ad82938d1f1cd7fb5b8f639b285062834" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureUnit::setTransform</definition>
+        <argsstring>(castor::Point3f const &amp;translate, castor::Angle const &amp;rotate, castor::Point3f const &amp;scale)</argsstring>
+        <name>setTransform</name>
+        <qualifiedname>castor3d::TextureUnit::setTransform</qualifiedname>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>translate</declname>
+        </param>
+        <param>
+          <type>castor::Angle const &amp;</type>
+          <declname>rotate</declname>
+        </param>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>scale</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="251" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1a8b77d7477200b6a14fe7e5645199244e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureUnit::setTransform</definition>
+        <argsstring>(TextureTransform const &amp;transform)</argsstring>
+        <name>setTransform</name>
+        <qualifiedname>castor3d::TextureUnit::setTransform</qualifiedname>
+        <param>
+          <type><ref refid="d9/d08/a02911" kindref="compound">TextureTransform</ref> const &amp;</type>
+          <declname>transform</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="254" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1a25f34c8ec9dbac28ef41890ee7217ad7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureUnit::setAnimationTransform</definition>
+        <argsstring>(castor::Point3f const &amp;translate, castor::Angle const &amp;rotate, castor::Point3f const &amp;scale)</argsstring>
+        <name>setAnimationTransform</name>
+        <qualifiedname>castor3d::TextureUnit::setAnimationTransform</qualifiedname>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>translate</declname>
+        </param>
+        <param>
+          <type>castor::Angle const &amp;</type>
+          <declname>rotate</declname>
+        </param>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>scale</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="255" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1a35449ed85e1be26d5b8f83d87ead4881" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextureUnit::setRenderTarget</definition>
+        <argsstring>(RenderTargetSPtr value)</argsstring>
+        <name>setRenderTarget</name>
+        <qualifiedname>castor3d::TextureUnit::setRenderTarget</qualifiedname>
+        <param>
+          <type>RenderTargetSPtr</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="259" column="6" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="259" bodyend="262"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1a4e71d21efcba4570e340a7191fe51e6d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextureUnit::setSampler</definition>
+        <argsstring>(SamplerResPtr value)</argsstring>
+        <name>setSampler</name>
+        <qualifiedname>castor3d::TextureUnit::setSampler</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1a723c56c48a833a5992bd2a5a9a366e45" kindref="member">SamplerResPtr</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="264" column="6" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="264" bodyend="267"/>
+        <referencedby refid="d3/de2/a02959_1a1afae083044db897d037021348fa891e" compoundref="d5/db5/a00374" startline="269" endline="273">setOwnSampler</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1a1afae083044db897d037021348fa891e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextureUnit::setOwnSampler</definition>
+        <argsstring>(SamplerRes value)</argsstring>
+        <name>setOwnSampler</name>
+        <qualifiedname>castor3d::TextureUnit::setOwnSampler</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1aa5438a2f1c77844059bd07a730127dc0" kindref="member">SamplerRes</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="269" column="6" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="269" bodyend="273"/>
+        <references refid="d3/de2/a02959_1a4e71d21efcba4570e340a7191fe51e6d" compoundref="d5/db5/a00374" startline="264" endline="267">setSampler</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1a6338ae007b47dbe2058e086f00a4f77d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextureUnit::setId</definition>
+        <argsstring>(uint32_t value)</argsstring>
+        <name>setId</name>
+        <qualifiedname>castor3d::TextureUnit::setId</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="275" column="6" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="275" bodyend="278"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d3/de2/a02959_1a7ee0c7ded0a3003afc0ca98550978b18" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/de2/a02959" kindref="compound">TextureUnit</ref></type>
+        <definition>static C3D_API TextureUnit castor3d::TextureUnit::create</definition>
+        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, castor::String const &amp;name, VkFormat format, uint32_t size, VkImageCreateFlags createFlags, VkImageUsageFlags usageFlags)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::TextureUnit::create</qualifiedname>
+        <param>
+          <type><ref refid="d8/dd0/a02711" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>format</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>VkImageCreateFlags</type>
+          <declname>createFlags</declname>
+        </param>
+        <param>
+          <type>VkImageUsageFlags</type>
+          <declname>usageFlags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Creators. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="39" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1af21f063b2aa3c526eb26b3cf00ff8e67" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/de2/a02959" kindref="compound">TextureUnit</ref></type>
+        <definition>static C3D_API TextureUnit castor3d::TextureUnit::create</definition>
+        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, castor::String const &amp;name, VkFormat format, uint32_t size, uint32_t arrayLayers, VkImageCreateFlags createFlags, VkImageUsageFlags usageFlags)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::TextureUnit::create</qualifiedname>
+        <param>
+          <type><ref refid="d8/dd0/a02711" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>format</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>arrayLayers</declname>
+        </param>
+        <param>
+          <type>VkImageCreateFlags</type>
+          <declname>createFlags</declname>
+        </param>
+        <param>
+          <type>VkImageUsageFlags</type>
+          <declname>usageFlags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="46" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1a30dff15fede259d894787f6469f61ab8" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/de2/a02959" kindref="compound">TextureUnit</ref></type>
+        <definition>static C3D_API TextureUnit castor3d::TextureUnit::create</definition>
+        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, castor::String const &amp;name, VkFormat format, VkExtent2D const &amp;size, VkImageCreateFlags createFlags, VkImageUsageFlags usageFlags)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::TextureUnit::create</qualifiedname>
+        <param>
+          <type><ref refid="d8/dd0/a02711" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>format</declname>
+        </param>
+        <param>
+          <type>VkExtent2D const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>VkImageCreateFlags</type>
+          <declname>createFlags</declname>
+        </param>
+        <param>
+          <type>VkImageUsageFlags</type>
+          <declname>usageFlags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="54" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1ac2086ce05b6cd363eb455d7caeab9972" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/de2/a02959" kindref="compound">TextureUnit</ref></type>
+        <definition>static C3D_API TextureUnit castor3d::TextureUnit::create</definition>
+        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, castor::String const &amp;name, VkFormat format, VkExtent2D const &amp;size, uint32_t arrayLayers, VkImageCreateFlags createFlags, VkImageUsageFlags usageFlags)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::TextureUnit::create</qualifiedname>
+        <param>
+          <type><ref refid="d8/dd0/a02711" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>format</declname>
+        </param>
+        <param>
+          <type>VkExtent2D const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>arrayLayers</declname>
+        </param>
+        <param>
+          <type>VkImageCreateFlags</type>
+          <declname>createFlags</declname>
+        </param>
+        <param>
+          <type>VkImageUsageFlags</type>
+          <declname>usageFlags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="61" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1a9e387d3f41c91f5c8b36a27858f1e87e" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/de2/a02959" kindref="compound">TextureUnit</ref></type>
+        <definition>static C3D_API TextureUnit castor3d::TextureUnit::create</definition>
+        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, castor::String const &amp;name, VkFormat format, VkExtent3D const &amp;size, VkImageCreateFlags createFlags, VkImageUsageFlags usageFlags)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::TextureUnit::create</qualifiedname>
+        <param>
+          <type><ref refid="d8/dd0/a02711" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>format</declname>
+        </param>
+        <param>
+          <type>VkExtent3D const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>VkImageCreateFlags</type>
+          <declname>createFlags</declname>
+        </param>
+        <param>
+          <type>VkImageUsageFlags</type>
+          <declname>usageFlags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="69" column="28"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/de2/a02959_1a30ef5bc823be095069f76b2d01b5c5b0" prot="public" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1a961e3ed00246ed2c62abbd43649864d0" kindref="member">OnTextureUnitChanged</ref></type>
+        <definition>OnTextureUnitChanged castor3d::TextureUnit::onChanged</definition>
+        <argsstring></argsstring>
+        <name>onChanged</name>
+        <qualifiedname>castor3d::TextureUnit::onChanged</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="282" column="22" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="282" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="d3/de2/a02959_1ab11846ece37ffec3b1a5591dff5dac0d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class TextureRenderer</definition>
+        <argsstring></argsstring>
+        <name>TextureRenderer</name>
+        <qualifiedname>castor3d::TextureUnit::TextureRenderer</qualifiedname>
+        <param>
+          <type>TextureRenderer</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="293" column="14" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="293" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d3/de2/a02959_1a6f4a228aa71b5c4cd47b3a9bf8c26783" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d0d/a02955" kindref="compound">TextureSourceInfo</ref></type>
+        <definition>TextureSourceInfo castor3d::TextureUnit::m_sourceInfo</definition>
+        <argsstring></argsstring>
+        <name>m_sourceInfo</name>
+        <qualifiedname>castor3d::TextureUnit::m_sourceInfo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="294" column="19" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="294" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/de2/a02959_1a81ed746b271932e3d12b2bbeca906b4c" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const  *</type>
+        <definition>RenderDevice const* castor3d::TextureUnit::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::TextureUnit::m_device</qualifiedname>
+        <initializer>{ nullptr }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="295" column="21" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="295" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/de2/a02959_1aeecbe7522d8982069b215ad73c5a2d1c" prot="private" static="no" mutable="no">
+        <type><ref refid="d6/deb/a02915" kindref="compound">TextureConfiguration</ref></type>
+        <definition>TextureConfiguration castor3d::TextureUnit::m_configuration</definition>
+        <argsstring></argsstring>
+        <name>m_configuration</name>
+        <qualifiedname>castor3d::TextureUnit::m_configuration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="296" column="22" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="296" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/de2/a02959_1a1d2795379587cd0f872f8887cc3b70e0" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/d08/a02911" kindref="compound">TextureTransform</ref></type>
+        <definition>TextureTransform castor3d::TextureUnit::m_transform</definition>
+        <argsstring></argsstring>
+        <name>m_transform</name>
+        <qualifiedname>castor3d::TextureUnit::m_transform</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="297" column="18" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="297" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/de2/a02959_1a138bd7d65adc4692caf85b637f22ddf2" prot="private" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::TextureUnit::m_transformations</definition>
+        <argsstring></argsstring>
+        <name>m_transformations</name>
+        <qualifiedname>castor3d::TextureUnit::m_transformations</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="298" column="20" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="298" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/de2/a02959_1abde5fd491172fd524889a7585a082a70" prot="private" static="no" mutable="no">
+        <type>TextureLayoutSPtr</type>
+        <definition>TextureLayoutSPtr castor3d::TextureUnit::m_texture</definition>
+        <argsstring></argsstring>
+        <name>m_texture</name>
+        <qualifiedname>castor3d::TextureUnit::m_texture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="299" column="19" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="299" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/de2/a02959_1a10611ea397ecdfececbd1b3dab79d699" prot="private" static="no" mutable="no">
+        <type>RenderTargetWPtr</type>
+        <definition>RenderTargetWPtr castor3d::TextureUnit::m_renderTarget</definition>
+        <argsstring></argsstring>
+        <name>m_renderTarget</name>
+        <qualifiedname>castor3d::TextureUnit::m_renderTarget</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="300" column="18" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="300" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/de2/a02959_1ae4ef9478e20754d53e518f65aa69022c" prot="private" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1a723c56c48a833a5992bd2a5a9a366e45" kindref="member">SamplerResPtr</ref></type>
+        <definition>SamplerResPtr castor3d::TextureUnit::m_sampler</definition>
+        <argsstring></argsstring>
+        <name>m_sampler</name>
+        <qualifiedname>castor3d::TextureUnit::m_sampler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="301" column="15" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="301" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/de2/a02959_1a70bb2aa807a4c06d335c3a4033be29a5" prot="private" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1aa5438a2f1c77844059bd07a730127dc0" kindref="member">SamplerRes</ref></type>
+        <definition>SamplerRes castor3d::TextureUnit::m_ownSampler</definition>
+        <argsstring></argsstring>
+        <name>m_ownSampler</name>
+        <qualifiedname>castor3d::TextureUnit::m_ownSampler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="302" column="12" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="302" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/de2/a02959_1a1eeaea53baef0ff394967adbdbc24fce" prot="private" static="no" mutable="no">
+        <type>ashes::WriteDescriptorSet</type>
+        <definition>ashes::WriteDescriptorSet castor3d::TextureUnit::m_descriptor</definition>
+        <argsstring></argsstring>
+        <name>m_descriptor</name>
+        <qualifiedname>castor3d::TextureUnit::m_descriptor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="303" column="27" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="303" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/de2/a02959_1a9d740275553f0913d27b07fcdec956a8" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureUnit::m_id</definition>
+        <argsstring></argsstring>
+        <name>m_id</name>
+        <qualifiedname>castor3d::TextureUnit::m_id</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="304" column="10" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="304" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/de2/a02959_1ab1385eb0e4e363627012ee08d736a905" prot="private" static="no" mutable="yes">
+        <type>bool</type>
+        <definition>bool castor3d::TextureUnit::m_changed</definition>
+        <argsstring></argsstring>
+        <name>m_changed</name>
+        <qualifiedname>castor3d::TextureUnit::m_changed</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="305" column="14" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="305" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/de2/a02959_1ab899bbb4148b903411eb2429b029accf" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::TextureUnit::m_name</definition>
+        <argsstring></argsstring>
+        <name>m_name</name>
+        <qualifiedname>castor3d::TextureUnit::m_name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="306" column="16" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="306" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/de2/a02959_1a4e7f38ca6677ebb0f0c975cb75c3f4b4" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::TextureUnit::m_initialised</definition>
+        <argsstring></argsstring>
+        <name>m_initialised</name>
+        <qualifiedname>castor3d::TextureUnit::m_initialised</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="307" column="6" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="307" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/de2/a02959_1a3815f939a4004f60b7823792eddc6e65" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::TextureUnit::m_animated</definition>
+        <argsstring></argsstring>
+        <name>m_animated</name>
+        <qualifiedname>castor3d::TextureUnit::m_animated</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="308" column="6" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="308" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/de2/a02959_1a0942eae556e80bdf7e2c606e53eea407" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::TextureUnit::TextureUnit</definition>
+        <argsstring>(TextureUnit const &amp;)=delete</argsstring>
+        <name>TextureUnit</name>
+        <qualifiedname>castor3d::TextureUnit::TextureUnit</qualifiedname>
+        <param>
+          <type><ref refid="d3/de2/a02959" kindref="compound">TextureUnit</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="26" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1a75ff32229dae813017ffadc782eb30c6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/de2/a02959" kindref="compound">TextureUnit</ref> &amp;</type>
+        <definition>TextureUnit &amp; castor3d::TextureUnit::operator=</definition>
+        <argsstring>(TextureUnit const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::TextureUnit::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d3/de2/a02959" kindref="compound">TextureUnit</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="27" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1ab5a705453d3d907b6838bd5875dca8d9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::TextureUnit::TextureUnit</definition>
+        <argsstring>(TextureUnit &amp;&amp;rhs)</argsstring>
+        <name>TextureUnit</name>
+        <qualifiedname>castor3d::TextureUnit::TextureUnit</qualifiedname>
+        <param>
+          <type><ref refid="d3/de2/a02959" kindref="compound">TextureUnit</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="28" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1a577aaff422fe45baf083c82158209f9c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/de2/a02959" kindref="compound">TextureUnit</ref> &amp;</type>
+        <definition>C3D_API TextureUnit &amp; castor3d::TextureUnit::operator=</definition>
+        <argsstring>(TextureUnit &amp;&amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::TextureUnit::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d3/de2/a02959" kindref="compound">TextureUnit</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="29" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1a063b91ab60b945de22ed2cd55399fd4b" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::TextureUnit::TextureUnit</definition>
+        <argsstring>(Engine &amp;engine, TextureSourceInfo const &amp;sourceInfo)</argsstring>
+        <name>TextureUnit</name>
+        <qualifiedname>castor3d::TextureUnit::TextureUnit</qualifiedname>
+        <param>
+          <type><ref refid="d8/dd0/a02711" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d0d/a02955" kindref="compound">TextureSourceInfo</ref> const &amp;</type>
+          <declname>sourceInfo</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>sourceInfo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The source informations. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="87" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1aac11cbff743ac531d8d4277072930c37" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::TextureUnit::~TextureUnit</definition>
+        <argsstring>() override</argsstring>
+        <name>~TextureUnit</name>
+        <qualifiedname>castor3d::TextureUnit::~TextureUnit</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="95" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1afbe2d6d8199612721004764222bbcb43" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::TextureUnit::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device, QueueData const &amp;queueData)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::TextureUnit::initialise</qualifiedname>
+        <param>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d1d/a03947" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <briefdescription>
+<para>Initialises the texture, id est : fills the image buffer, creates the texture in the render system. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">queueData</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue receiving the GPU commands. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="106" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1a4fd3a4cafac96999715382e8836e449a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureUnit::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor3d::TextureUnit::cleanup</qualifiedname>
+        <briefdescription>
+<para>Cleans up the texture. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="114" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/de2/a02959_1a3762ee5acc304c63fa551aa3879d7c87" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureUnit::setTexture</definition>
+        <argsstring>(TextureLayoutSPtr texture)</argsstring>
+        <name>setTexture</name>
+        <qualifiedname>castor3d::TextureUnit::setTexture</qualifiedname>
+        <param>
+          <type>TextureLayoutSPtr</type>
+          <declname>texture</declname>
+        </param>
+        <briefdescription>
+<para>Sets the texture. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">texture</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The texture. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="123" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d3/de2/a02959_1a5d5ef2b1d50f2e366c3b0abb966e32a6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextureUnit::doUpdateTransform</definition>
+        <argsstring>(castor::Point3f const &amp;translate, castor::Angle const &amp;rotate, castor::Point3f const &amp;scale)</argsstring>
+        <name>doUpdateTransform</name>
+        <qualifiedname>castor3d::TextureUnit::doUpdateTransform</qualifiedname>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>translate</declname>
+        </param>
+        <param>
+          <type>castor::Angle const &amp;</type>
+          <declname>rotate</declname>
+        </param>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>scale</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="288" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="85" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="85" bodyend="85"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::AnimableT&lt; Engine &gt;</label>
+        <link refid="de/d59/a02219"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="de/d59/a02219"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::TextureUnit</label>
+        <link refid="d3/de2/a02959"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::AnimableT&lt; Engine &gt;</label>
+        <link refid="de/d59/a02219"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>K</label>
+      </node>
+      <node id="7">
+        <label>T</label>
+      </node>
+      <node id="8">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="de/d59/a02219"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::TextureUnit</label>
+        <link refid="d3/de2/a02959"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="4">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Texture/TextureUnit.hpp" line="22" column="1" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="24" bodyend="309"/>
     <listofallmembers>
-      <member refid="d3/de2/a02959_1a86fd95656a7b5e6518a189bda7d57bb8" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPhysicalDeviceImageFormatInfo2 &gt;</scope><name>value</name></member>
+      <member refid="de/d59/a02219_1af537797cc01d440454c256b7d93134a7" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>addAnimation</name></member>
+      <member refid="de/d59/a02219_1acce1c5516d8c2b672521f796eca097f6" prot="protected" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>AnimableT</name></member>
+      <member refid="de/d59/a02219_1afe54e724ce1c5fd9741352a83cc15310" prot="protected" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>AnimableT</name></member>
+      <member refid="de/d59/a02219_1aa7d1ea320b354786c4d88e06999ce873" prot="protected" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>AnimableT</name></member>
+      <member refid="de/d59/a02219_1a29ec9b70c2d5c178be151157abb4caa4" prot="protected" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>Animation</name></member>
+      <member refid="de/d59/a02219_1aca88557443e107614050566026b351d2" prot="protected" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>AnimationPtr</name></member>
+      <member refid="de/d59/a02219_1af6c9f4d7479c5f8a0431ffe7cc988273" prot="protected" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>AnimationPtrStrMap</name></member>
+      <member refid="d3/de2/a02959_1a4fd3a4cafac96999715382e8836e449a" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>cleanup</name></member>
+      <member refid="de/d59/a02219_1a54363c138d022e02a6da2881e8cfcea2" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>cleanupAnimations</name></member>
+      <member refid="d3/de2/a02959_1a7ee0c7ded0a3003afc0ca98550978b18" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>create</name></member>
+      <member refid="d3/de2/a02959_1af21f063b2aa3c526eb26b3cf00ff8e67" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>create</name></member>
+      <member refid="d3/de2/a02959_1a30dff15fede259d894787f6469f61ab8" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>create</name></member>
+      <member refid="d3/de2/a02959_1ac2086ce05b6cd363eb455d7caeab9972" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>create</name></member>
+      <member refid="d3/de2/a02959_1a9e387d3f41c91f5c8b36a27858f1e87e" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>create</name></member>
+      <member refid="d3/de2/a02959_1a0391ed94ed82b9e288c4eeae9e084c4e" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>createAnimation</name></member>
+      <member refid="de/d59/a02219_1a1bebab2a91849a6d03743a60742855d2" prot="protected" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>doGetAnimation</name></member>
+      <member refid="de/d59/a02219_1ab0befd7350748e1d432232aef30bf3af" prot="protected" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>doGetAnimation</name></member>
+      <member refid="de/d59/a02219_1a5c0a28cfebad1a69862d34d5f15f9341" prot="protected" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>doRemoveAnimation</name></member>
+      <member refid="d3/de2/a02959_1a5d5ef2b1d50f2e366c3b0abb966e32a6" prot="private" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>doUpdateTransform</name></member>
+      <member refid="d3/de2/a02959_1ad8f1e44f1e3b956ac4fb05f8f53f949d" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>getAnimation</name></member>
+      <member refid="d3/de2/a02959_1a542f3e8ddc9f975fec1f9fbc4e586741" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>getAnimation</name></member>
+      <member refid="de/d59/a02219_1ab4eee25a3c5fa4b3ac239c9d94e41aed" prot="public" virt="non-virtual" ambiguityscope="AnimableT&lt; Engine &gt;::"><scope>castor3d::TextureUnit</scope><name>getAnimation</name></member>
+      <member refid="de/d59/a02219_1a9a19c79051ae04d61170004d981d72c3" prot="public" virt="non-virtual" ambiguityscope="AnimableT&lt; Engine &gt;::"><scope>castor3d::TextureUnit</scope><name>getAnimation</name></member>
+      <member refid="de/d59/a02219_1ac571ecbb144caf52d813ae3c838d8455" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>getAnimations</name></member>
+      <member refid="d3/de2/a02959_1a0963d15dbdb7d6bc30ce7b929161959d" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>getConfiguration</name></member>
+      <member refid="d3/de2/a02959_1a755fdfa79eed598a8de403bf84d0d028" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>getDescriptor</name></member>
+      <member refid="d3/de2/a02959_1ab70da590d82e3bbe36cbae8f453ac633" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>getDevice</name></member>
+      <member refid="d3/de2/a02959_1a0adbe6fd569909b1e08489e084e1701e" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>getFlags</name></member>
+      <member refid="d3/de2/a02959_1a87763bd90a7ba6ba5c266ec4873ec574" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>getId</name></member>
+      <member refid="d3/de2/a02959_1a8d5eed56f89c2506cf33baec524eca99" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>getRenderTarget</name></member>
+      <member refid="d3/de2/a02959_1a64692ad80ca56076fd49e5bf23557d7f" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>getSampler</name></member>
+      <member refid="d3/de2/a02959_1ad6ff53c37d614d27efaa329077e35f9b" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>getSourceInfo</name></member>
+      <member refid="d3/de2/a02959_1abf1c4acc8a943645ab8401d5ed25c751" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>getTexture</name></member>
+      <member refid="d3/de2/a02959_1a8db4a1be8d1b748cf0ce1cc290536a24" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>getTransform</name></member>
+      <member refid="d3/de2/a02959_1aaf328c3309773c589b73481376d6c13d" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>getType</name></member>
+      <member refid="d3/de2/a02959_1a33da41e218b36c5ec39ce775ac003f87" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>hasAnimation</name></member>
+      <member refid="de/d59/a02219_1ad49b8e50e5ed96d16d9c50c3854e0a22" prot="public" virt="non-virtual" ambiguityscope="AnimableT&lt; Engine &gt;::"><scope>castor3d::TextureUnit</scope><name>hasAnimation</name></member>
+      <member refid="d3/de2/a02959_1a8af2cc0d94fd4f4c1f1053662dbf5945" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>hasDevice</name></member>
+      <member refid="d3/de2/a02959_1afbe2d6d8199612721004764222bbcb43" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>initialise</name></member>
+      <member refid="d3/de2/a02959_1aa9fc8de173e0c915a275f3a463bc1153" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>isInitialised</name></member>
+      <member refid="d3/de2/a02959_1a0cd2559e378b7b161753884cf9e43720" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>isTextured</name></member>
+      <member refid="d3/de2/a02959_1ae37abda7183f64869891cebfc5cd9471" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>isTileAnimated</name></member>
+      <member refid="d3/de2/a02959_1a8f1b129c0413ea6ef36526af03d09e28" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>isTransformAnimated</name></member>
+      <member refid="d3/de2/a02959_1a3815f939a4004f60b7823792eddc6e65" prot="private" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>m_animated</name></member>
+      <member refid="de/d59/a02219_1a1fe2cb0e093c4e7a200531a0c6c4f09e" prot="protected" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>m_animations</name></member>
+      <member refid="d3/de2/a02959_1ab1385eb0e4e363627012ee08d736a905" prot="private" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>m_changed</name></member>
+      <member refid="d3/de2/a02959_1aeecbe7522d8982069b215ad73c5a2d1c" prot="private" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>m_configuration</name></member>
+      <member refid="d3/de2/a02959_1a1eeaea53baef0ff394967adbdbc24fce" prot="private" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>m_descriptor</name></member>
+      <member refid="d3/de2/a02959_1a81ed746b271932e3d12b2bbeca906b4c" prot="private" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>m_device</name></member>
+      <member refid="d3/de2/a02959_1a9d740275553f0913d27b07fcdec956a8" prot="private" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>m_id</name></member>
+      <member refid="d3/de2/a02959_1a4e7f38ca6677ebb0f0c975cb75c3f4b4" prot="private" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>m_initialised</name></member>
+      <member refid="d3/de2/a02959_1ab899bbb4148b903411eb2429b029accf" prot="private" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>m_name</name></member>
+      <member refid="d3/de2/a02959_1a70bb2aa807a4c06d335c3a4033be29a5" prot="private" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>m_ownSampler</name></member>
+      <member refid="d3/de2/a02959_1a10611ea397ecdfececbd1b3dab79d699" prot="private" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>m_renderTarget</name></member>
+      <member refid="d3/de2/a02959_1ae4ef9478e20754d53e518f65aa69022c" prot="private" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>m_sampler</name></member>
+      <member refid="d3/de2/a02959_1a6f4a228aa71b5c4cd47b3a9bf8c26783" prot="private" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>m_sourceInfo</name></member>
+      <member refid="d3/de2/a02959_1abde5fd491172fd524889a7585a082a70" prot="private" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>m_texture</name></member>
+      <member refid="d3/de2/a02959_1a1d2795379587cd0f872f8887cc3b70e0" prot="private" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>m_transform</name></member>
+      <member refid="d3/de2/a02959_1a138bd7d65adc4692caf85b637f22ddf2" prot="private" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>m_transformations</name></member>
+      <member refid="d3/de2/a02959_1a30ef5bc823be095069f76b2d01b5c5b0" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>onChanged</name></member>
+      <member refid="d3/de2/a02959_1a75ff32229dae813017ffadc782eb30c6" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>operator=</name></member>
+      <member refid="d3/de2/a02959_1a577aaff422fe45baf083c82158209f9c" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>operator=</name></member>
+      <member refid="de/d59/a02219_1a317d10f31a3f138315e2a18a41f37b80" prot="protected" virt="non-virtual" ambiguityscope="AnimableT&lt; Engine &gt;::"><scope>castor3d::TextureUnit</scope><name>operator=</name></member>
+      <member refid="de/d59/a02219_1a207720462d3a7e48b69b6ae188e4414b" prot="protected" virt="non-virtual" ambiguityscope="AnimableT&lt; Engine &gt;::"><scope>castor3d::TextureUnit</scope><name>operator=</name></member>
+      <member refid="d3/de2/a02959_1a040e5c26091a31164fcad8f888ea4bda" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>removeAnimation</name></member>
+      <member refid="d3/de2/a02959_1a25f34c8ec9dbac28ef41890ee7217ad7" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>setAnimationTransform</name></member>
+      <member refid="d3/de2/a02959_1ae52cba01f244718cb375ba46a1c667ee" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>setConfiguration</name></member>
+      <member refid="d3/de2/a02959_1a6338ae007b47dbe2058e086f00a4f77d" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>setId</name></member>
+      <member refid="d3/de2/a02959_1a1afae083044db897d037021348fa891e" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>setOwnSampler</name></member>
+      <member refid="d3/de2/a02959_1a35449ed85e1be26d5b8f83d87ead4881" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>setRenderTarget</name></member>
+      <member refid="d3/de2/a02959_1a4e71d21efcba4570e340a7191fe51e6d" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>setSampler</name></member>
+      <member refid="d3/de2/a02959_1a3762ee5acc304c63fa551aa3879d7c87" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>setTexture</name></member>
+      <member refid="d3/de2/a02959_1ad82938d1f1cd7fb5b8f639b285062834" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>setTransform</name></member>
+      <member refid="d3/de2/a02959_1a8b77d7477200b6a14fe7e5645199244e" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>setTransform</name></member>
+      <member refid="d3/de2/a02959_1ab11846ece37ffec3b1a5591dff5dac0d" prot="private" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>TextureRenderer</name></member>
+      <member refid="d3/de2/a02959_1a0942eae556e80bdf7e2c606e53eea407" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>TextureUnit</name></member>
+      <member refid="d3/de2/a02959_1ab5a705453d3d907b6838bd5875dca8d9" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>TextureUnit</name></member>
+      <member refid="d3/de2/a02959_1a063b91ab60b945de22ed2cd55399fd4b" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>TextureUnit</name></member>
+      <member refid="d3/de2/a02959_1ae4f46046be243f2f4d0b4d6f209e92ba" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>toString</name></member>
+      <member refid="de/d59/a02219_1ad8c43c6eb51ab1fa4bff4b1ade280e71" prot="public" virt="virtual"><scope>castor3d::TextureUnit</scope><name>~AnimableT</name></member>
+      <member refid="d3/de2/a02959_1aac11cbff743ac531d8d4277072930c37" prot="public" virt="non-virtual"><scope>castor3d::TextureUnit</scope><name>~TextureUnit</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

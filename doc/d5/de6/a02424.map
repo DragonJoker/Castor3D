@@ -1,10 +1,7 @@
-<map id="castor3d::ObjectCache&lt; ElementType, KeyType &gt;" name="castor3d::ObjectCache&lt; ElementType, KeyType &gt;">
-<area shape="rect" id="node1" title="Base class for a scene element cache." alt="" coords="705,54,887,95"/>
-<area shape="rect" id="node2" href="$d4/dde/a02422.html" title="Base class for a scene element cache." alt="" coords="471,54,656,95"/>
-<area shape="rect" id="node3" href="$df/d9b/a02514.html" title=" " alt="" coords="241,23,361,49"/>
-<area shape="rect" id="node4" title=" " alt="" coords="13,5,184,32"/>
-<area shape="rect" id="node5" href="$d6/d66/a05238.html" title=" " alt="" coords="243,107,360,133"/>
-<area shape="rect" id="node6" title=" " alt="" coords="27,57,170,98"/>
-<area shape="rect" id="node7" title=" " alt="" coords="5,123,192,149"/>
-<area shape="rect" id="node8" title=" " alt="" coords="67,173,130,200"/>
+<map id="castor3d::BinaryParser&lt; SkeletonAnimationKeyFrame &gt;" name="castor3d::BinaryParser&lt; SkeletonAnimationKeyFrame &gt;">
+<area shape="rect" id="node1" title="SkeletonAnimationKeyFrame binary loader." alt="" coords="41,289,255,331"/>
+<area shape="rect" id="node2" href="$d3/d09/a02334.html" title=" " alt="" coords="41,199,255,240"/>
+<area shape="rect" id="node3" href="$dd/dae/a02294.html" title=" " alt="" coords="5,5,160,32"/>
+<area shape="rect" id="node5" href="$d3/d09/a02334.html" title="Binary data chunk reader base class." alt="" coords="131,95,317,136"/>
+<area shape="rect" id="node4" href="$d4/d1b/a03282.html" title=" " alt="" coords="218,5,342,32"/>
 </map>

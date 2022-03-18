@@ -1,7 +1,5 @@
-<map id="castor3d::DepthPass" name="castor3d::DepthPass">
-<area shape="rect" id="node1" title=" " alt="" coords="101,229,245,256"/>
-<area shape="rect" id="node2" href="$d1/db7/a04924.html" title=" " alt="" coords="68,155,279,181"/>
-<area shape="rect" id="node3" href="$d8/d25/a04596.html" title=" " alt="" coords="79,80,267,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,5,192,32"/>
-<area shape="rect" id="node5" title=" " alt="" coords="217,5,279,32"/>
+<map id="castor3d::AnimatedTexture" name="castor3d::AnimatedTexture">
+<area shape="rect" id="node1" title=" " alt="" coords="5,155,184,181"/>
+<area shape="rect" id="node2" href="$d1/d13/a04368.html" title=" " alt="" coords="8,80,181,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="41,5,148,32"/>
 </map>

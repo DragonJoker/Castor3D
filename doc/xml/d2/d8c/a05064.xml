@@ -1,493 +1,71 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d2/d8c/a05064" kind="class" language="C++" prot="public" abstract="yes">
-    <compoundname>castor3d::AnimationInstance</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; AnimatedObject &gt;</basecompoundref>
-    <derivedcompoundref refid="d3/d96/a05072" prot="public" virt="non-virtual">castor3d::MeshAnimationInstance</derivedcompoundref>
-    <derivedcompoundref refid="de/d0b/a05080" prot="public" virt="non-virtual">castor3d::SkeletonAnimationInstance</derivedcompoundref>
-    <derivedcompoundref refid="d6/da5/a05100" prot="public" virt="non-virtual">castor3d::TextureAnimationInstance</derivedcompoundref>
-    <includes local="no">AnimationInstance.hpp</includes>
-      <sectiondef kind="protected-attrib">
-      <memberdef kind="variable" id="d2/d8c/a05064_1a4ea27648adc0879b6d44149b089c0295" prot="protected" static="no" mutable="no">
-        <type><ref refid="da/d1e/a01479_1a8b18030cabc04d1bc6651049b78e9874" kindref="member">Animation</ref> const  &amp;</type>
-        <definition>Animation const&amp; castor3d::AnimationInstance::m_animation</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d2/d8c/a05064" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::SceneBackground &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::SceneBackground &gt;</basecompoundref>
+    <includes local="no">TextBackground.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/d8c/a05064_1a4e84f87cd86e2dc3720a7f4073264ae3" prot="private" static="no" mutable="no">
+        <type>Path</type>
+        <definition>Path castor::TextWriter&lt; castor3d::SceneBackground &gt;::m_folder</definition>
         <argsstring></argsstring>
-        <name>m_animation</name>
+        <name>m_folder</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::SceneBackground &gt;::m_folder</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The animation. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/AnimationInstance.hpp" line="194" column="1" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="194" bodyend="-1"/>
-        <referencedby refid="d2/d8c/a05064_1aab33ccf8f14ea1991f4f3569fabd59f4" compoundref="d2/d71/a01055" startline="177" endline="180">getAnimation</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d8c/a05064_1aa313a440c453a3433cc6261e06b43a8a" prot="protected" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::AnimationInstance::m_scale</definition>
-        <argsstring></argsstring>
-        <name>m_scale</name>
-        <initializer>{ 1.0f }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The animation time scale. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimationInstance.hpp" line="197" column="1" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="197" bodyend="-1"/>
-        <referencedby refid="d2/d8c/a05064_1a3170af477f4a163dfc67f240baafa55d" compoundref="d2/d71/a01055" startline="79" endline="82">getScale</referencedby>
-        <referencedby refid="d2/d8c/a05064_1a338ffe9fbc76c64938f1fe8b072bbd41" compoundref="d2/d71/a01055" startline="91" endline="94">setScale</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d8c/a05064_1a5064a319a11f8d3928c81a4a629b5982" prot="protected" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::AnimationInstance::m_looped</definition>
-        <argsstring></argsstring>
-        <name>m_looped</name>
-        <initializer>{ false }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>Tells whether or not the animation is looped. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimationInstance.hpp" line="200" column="1" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="200" bodyend="-1"/>
-        <referencedby refid="d2/d8c/a05064_1a914538daf4453ee5ee35a32986d5dbec" compoundref="d2/d71/a01055" startline="155" endline="158">isLooped</referencedby>
-        <referencedby refid="d2/d8c/a05064_1a060d6999c9e24ab73e28400cb7e8850b" compoundref="d2/d71/a01055" startline="167" endline="170">setLooped</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d8c/a05064_1a1948260ac64b862bc876124d06f34673" prot="protected" static="no" mutable="no">
-        <type>castor::Milliseconds</type>
-        <definition>castor::Milliseconds castor3d::AnimationInstance::m_startingPoint</definition>
-        <argsstring></argsstring>
-        <name>m_startingPoint</name>
-        <initializer>{ 0 }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The starting point. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimationInstance.hpp" line="203" column="1" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="203" bodyend="-1"/>
-        <referencedby refid="d2/d8c/a05064_1aac09e282b3696b2e46f820a86449918f" compoundref="d2/d71/a01055" startline="101" endline="104">getStartingPoint</referencedby>
-        <referencedby refid="d2/d8c/a05064_1ab6dd01f7c83349132cd6e4d205e33e3a" compoundref="d2/d71/a01055" startline="113" endline="121">setStartingPoint</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d8c/a05064_1abd1d4de3d4e507ac453f0531026dd9db" prot="protected" static="no" mutable="no">
-        <type>castor::Milliseconds</type>
-        <definition>castor::Milliseconds castor3d::AnimationInstance::m_stoppingPoint</definition>
-        <argsstring></argsstring>
-        <name>m_stoppingPoint</name>
-        <initializer>{ 0 }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The stopping point. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimationInstance.hpp" line="206" column="1" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="206" bodyend="-1"/>
-        <referencedby refid="d2/d8c/a05064_1a6b8de0d470c6d060cc7f835c599ec4ae" compoundref="d2/d71/a01055" startline="128" endline="131">getStoppingPoint</referencedby>
-        <referencedby refid="d2/d8c/a05064_1aab7fdd5bb07392f6faba0743e1c6073b" compoundref="d2/d71/a01055" startline="140" endline="148">setStoppingPoint</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d8c/a05064_1a5a7017dbf729b5ddf98c80548804cf8f" prot="protected" static="no" mutable="no">
-        <type>castor::Milliseconds</type>
-        <definition>castor::Milliseconds castor3d::AnimationInstance::m_currentTime</definition>
-        <argsstring></argsstring>
-        <name>m_currentTime</name>
-        <initializer>{ 0 }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The current playing time. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimationInstance.hpp" line="209" column="1" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="209" bodyend="-1"/>
-        <referencedby refid="d2/d8c/a05064_1ab6dd01f7c83349132cd6e4d205e33e3a" compoundref="d2/d71/a01055" startline="113" endline="121">setStartingPoint</referencedby>
-        <referencedby refid="d2/d8c/a05064_1aab7fdd5bb07392f6faba0743e1c6073b" compoundref="d2/d71/a01055" startline="140" endline="148">setStoppingPoint</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d8c/a05064_1a2e5b588a84db6b90580577a93d9f5d20" prot="protected" static="no" mutable="no">
-        <type><ref refid="da/d1e/a01479_1a2405dedd7ac8a7be93c2a8c1f8848e04" kindref="member">AnimationState</ref></type>
-        <definition>AnimationState castor3d::AnimationInstance::m_state</definition>
-        <argsstring></argsstring>
-        <name>m_state</name>
-        <initializer>{ <ref refid="da/d1e/a01479_1a2405dedd7ac8a7be93c2a8c1f8848e04a018b60c4ea3e0441c86b65daf5b82b5f" kindref="member">AnimationState::eStopped</ref> }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The current state of the animation. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimationInstance.hpp" line="212" column="1" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="212" bodyend="-1"/>
-        <referencedby refid="d2/d8c/a05064_1ab2197aab90f85806400a9e4087761cc3" compoundref="d2/d71/a01055" startline="69" endline="72">getState</referencedby>
+        <location file="Text/TextBackground.hpp" line="24" column="6" bodyfile="Text/TextBackground.hpp" bodystart="24" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d2/d8c/a05064_1a23a7bfcdfcd7c97de734734aff4cd3c5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::AnimationInstance::AnimationInstance</definition>
-        <argsstring>(AnimatedObject &amp;object, Animation &amp;animation)</argsstring>
-        <name>AnimationInstance</name>
+      <memberdef kind="function" id="d2/d8c/a05064_1ad57fce506f8d08ce05ea8f15fb6484af" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::SceneBackground &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs, Path const &amp;folder)</argsstring>
+        <name>TextWriter</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::SceneBackground &gt;::TextWriter</qualifiedname>
         <param>
-          <type><ref refid="d0/d8b/a05048" kindref="compound">AnimatedObject</ref> &amp;</type>
-          <declname>object</declname>
+          <type>String const &amp;</type>
+          <declname>tabs</declname>
         </param>
         <param>
-          <type><ref refid="da/d1e/a01479_1a8b18030cabc04d1bc6651049b78e9874" kindref="member">Animation</ref> &amp;</type>
-          <declname>animation</declname>
+          <type>Path const &amp;</type>
+          <declname>folder</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">object</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parent <ref refid="d0/d8b/a05048" kindref="compound">AnimatedObject</ref>. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">animation</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The animation. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimationInstance.hpp" line="25" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d8c/a05064_1ac419fc44173c317197c06e8be55df362" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>virtual C3D_API castor3d::AnimationInstance::~AnimationInstance</definition>
-        <argsstring>()</argsstring>
-        <name>~AnimationInstance</name>
-        <briefdescription>
-<para>Destructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/AnimationInstance.hpp" line="32" column="1"/>
+        <location file="Text/TextBackground.hpp" line="18" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d2/d8c/a05064_1a3f89c5c509bba8c43af73cb0f068745b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::AnimationInstance::update</definition>
-        <argsstring>(castor::Milliseconds const &amp;elapsed)</argsstring>
-        <name>update</name>
+      <memberdef kind="function" id="d2/d8c/a05064_1a4ddd3a5e80fb69df43c65dc9b0843b1e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::SceneBackground &gt;::operator()</definition>
+        <argsstring>(castor3d::SceneBackground const &amp;overlay, castor::StringStream &amp;file) override</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::SceneBackground &gt;::operator()</qualifiedname>
         <param>
-          <type>castor::Milliseconds const &amp;</type>
-          <declname>elapsed</declname>
+          <type><ref refid="d1/d13/a04444" kindref="compound">castor3d::SceneBackground</ref> const &amp;</type>
+          <declname>overlay</declname>
         </param>
-        <briefdescription>
-<para>Updates the animation, updates the key frame at the good time index. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">elapsed</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The time since the last frame. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimationInstance.hpp" line="41" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d8c/a05064_1a59bea7025b5c52e5b09df209e95e4c6b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::AnimationInstance::play</definition>
-        <argsstring>()</argsstring>
-        <name>play</name>
-        <briefdescription>
-<para>Plays the animation. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimationInstance.hpp" line="48" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d8c/a05064_1ad18010efe608f7087115754ef77a3f7e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::AnimationInstance::pause</definition>
-        <argsstring>()</argsstring>
-        <name>pause</name>
-        <briefdescription>
-<para>Pauses the animation. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimationInstance.hpp" line="55" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d8c/a05064_1aeb6466ce1395148bbbed32cacfe49291" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::AnimationInstance::stop</definition>
-        <argsstring>()</argsstring>
-        <name>stop</name>
-        <briefdescription>
-<para>Stops the animation. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimationInstance.hpp" line="62" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d8c/a05064_1ab2197aab90f85806400a9e4087761cc3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="da/d1e/a01479_1a2405dedd7ac8a7be93c2a8c1f8848e04" kindref="member">AnimationState</ref></type>
-        <definition>AnimationState castor3d::AnimationInstance::getState</definition>
-        <argsstring>() const</argsstring>
-        <name>getState</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The animation state. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimationInstance.hpp" line="69" column="1" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="69" bodyend="72"/>
-        <references refid="d2/d8c/a05064_1a2e5b588a84db6b90580577a93d9f5d20" compoundref="d2/d71/a01055" startline="212">m_state</references>
-      </memberdef>
-      <memberdef kind="function" id="d2/d8c/a05064_1a3170af477f4a163dfc67f240baafa55d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>float</type>
-        <definition>float castor3d::AnimationInstance::getScale</definition>
-        <argsstring>() const</argsstring>
-        <name>getScale</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The animation time scale. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimationInstance.hpp" line="79" column="1" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="79" bodyend="82"/>
-        <references refid="d2/d8c/a05064_1aa313a440c453a3433cc6261e06b43a8a" compoundref="d2/d71/a01055" startline="197">m_scale</references>
-      </memberdef>
-      <memberdef kind="function" id="d2/d8c/a05064_1a338ffe9fbc76c64938f1fe8b072bbd41" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::AnimationInstance::setScale</definition>
-        <argsstring>(float value)</argsstring>
-        <name>setScale</name>
         <param>
-          <type>float</type>
-          <declname>value</declname>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
         </param>
         <briefdescription>
-<para>Sets the animation time scale. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The new value </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimationInstance.hpp" line="91" column="1" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="91" bodyend="94"/>
-        <references refid="d2/d8c/a05064_1aa313a440c453a3433cc6261e06b43a8a" compoundref="d2/d71/a01055" startline="197">m_scale</references>
-      </memberdef>
-      <memberdef kind="function" id="d2/d8c/a05064_1aac09e282b3696b2e46f820a86449918f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::Milliseconds</type>
-        <definition>castor::Milliseconds castor3d::AnimationInstance::getStartingPoint</definition>
-        <argsstring>() const</argsstring>
-        <name>getStartingPoint</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The animation stopping point. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimationInstance.hpp" line="101" column="1" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="101" bodyend="104"/>
-        <references refid="d2/d8c/a05064_1a1948260ac64b862bc876124d06f34673" compoundref="d2/d71/a01055" startline="203">m_startingPoint</references>
-      </memberdef>
-      <memberdef kind="function" id="d2/d8c/a05064_1ab6dd01f7c83349132cd6e4d205e33e3a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::AnimationInstance::setStartingPoint</definition>
-        <argsstring>(castor::Milliseconds value)</argsstring>
-        <name>setStartingPoint</name>
-        <param>
-          <type>castor::Milliseconds</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-<para>Sets the animation stopping point. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The new value. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimationInstance.hpp" line="113" column="1" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="113" bodyend="121"/>
-        <references refid="d2/d8c/a05064_1a5a7017dbf729b5ddf98c80548804cf8f" compoundref="d2/d71/a01055" startline="209">m_currentTime</references>
-        <references refid="d2/d8c/a05064_1a1948260ac64b862bc876124d06f34673" compoundref="d2/d71/a01055" startline="203">m_startingPoint</references>
-      </memberdef>
-      <memberdef kind="function" id="d2/d8c/a05064_1a6b8de0d470c6d060cc7f835c599ec4ae" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::Milliseconds</type>
-        <definition>castor::Milliseconds castor3d::AnimationInstance::getStoppingPoint</definition>
-        <argsstring>() const</argsstring>
-        <name>getStoppingPoint</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The animation stopping point. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimationInstance.hpp" line="128" column="1" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="128" bodyend="131"/>
-        <references refid="d2/d8c/a05064_1abd1d4de3d4e507ac453f0531026dd9db" compoundref="d2/d71/a01055" startline="206">m_stoppingPoint</references>
-      </memberdef>
-      <memberdef kind="function" id="d2/d8c/a05064_1aab7fdd5bb07392f6faba0743e1c6073b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::AnimationInstance::setStoppingPoint</definition>
-        <argsstring>(castor::Milliseconds value)</argsstring>
-        <name>setStoppingPoint</name>
-        <param>
-          <type>castor::Milliseconds</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-<para>Sets the animation stopping point. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The new value. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimationInstance.hpp" line="140" column="1" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="140" bodyend="148"/>
-        <references refid="d2/d8c/a05064_1a5a7017dbf729b5ddf98c80548804cf8f" compoundref="d2/d71/a01055" startline="209">m_currentTime</references>
-        <references refid="d2/d8c/a05064_1abd1d4de3d4e507ac453f0531026dd9db" compoundref="d2/d71/a01055" startline="206">m_stoppingPoint</references>
-      </memberdef>
-      <memberdef kind="function" id="d2/d8c/a05064_1a914538daf4453ee5ee35a32986d5dbec" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::AnimationInstance::isLooped</definition>
-        <argsstring>() const</argsstring>
-        <name>isLooped</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The animation loop status. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimationInstance.hpp" line="155" column="1" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="155" bodyend="158"/>
-        <references refid="d2/d8c/a05064_1a5064a319a11f8d3928c81a4a629b5982" compoundref="d2/d71/a01055" startline="200">m_looped</references>
-      </memberdef>
-      <memberdef kind="function" id="d2/d8c/a05064_1a060d6999c9e24ab73e28400cb7e8850b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::AnimationInstance::setLooped</definition>
-        <argsstring>(bool value)</argsstring>
-        <name>setLooped</name>
-        <param>
-          <type>bool</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-<para>Sets the animation loop status. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The new value </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimationInstance.hpp" line="167" column="1" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="167" bodyend="170"/>
-        <references refid="d2/d8c/a05064_1a5064a319a11f8d3928c81a4a629b5982" compoundref="d2/d71/a01055" startline="200">m_looped</references>
-      </memberdef>
-      <memberdef kind="function" id="d2/d8c/a05064_1aab33ccf8f14ea1991f4f3569fabd59f4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="da/d1e/a01479_1a8b18030cabc04d1bc6651049b78e9874" kindref="member">Animation</ref> const  &amp;</type>
-        <definition>Animation const&amp; castor3d::AnimationInstance::getAnimation</definition>
-        <argsstring>() const</argsstring>
-        <name>getAnimation</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The animation. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimationInstance.hpp" line="177" column="1" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="177" bodyend="180"/>
-        <references refid="d2/d8c/a05064_1a4ea27648adc0879b6d44149b089c0295" compoundref="d2/d71/a01055" startline="194">m_animation</references>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d2/d8c/a05064_1a3ae30f9d3201f11bb86ac99d8c5b58e7" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
-        <type>void</type>
-        <definition>virtual void castor3d::AnimationInstance::doUpdate</definition>
-        <argsstring>()=0</argsstring>
-        <name>doUpdate</name>
-        <reimplementedby refid="d6/da5/a05100_1ad571df38dde9162db24f1247ae3dc6f9">doUpdate</reimplementedby>
-        <reimplementedby refid="d3/d96/a05072_1a0b80de77ce6f39af0ed72ecfaed6dedc">doUpdate</reimplementedby>
-        <reimplementedby refid="de/d0b/a05080_1aab94a772ee5bc6288efb521e327b8840">doUpdate</reimplementedby>
-        <briefdescription>
-<para>Updates the animation, updates the key frame at the good time index. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/AnimationInstance.hpp" line="189" column="1"/>
+        <location file="Text/TextBackground.hpp" line="20" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -495,88 +73,32 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="92">
-        <label>castor3d::TextureAnimationInstance</label>
-        <link refid="d6/da5/a05100"/>
-        <childnode refid="88" relation="public-inheritance">
-        </childnode>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::SceneBackground &gt;</label>
       </node>
-      <node id="90">
-        <label>castor3d::MeshAnimationInstance</label>
-        <link refid="d3/d96/a05072"/>
-        <childnode refid="88" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="89">
-        <label>castor::OwnedBy&lt; AnimatedObject &gt;</label>
-      </node>
-      <node id="91">
-        <label>castor3d::SkeletonAnimationInstance</label>
-        <link refid="de/d0b/a05080"/>
-        <childnode refid="88" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="88">
-        <label>castor3d::AnimationInstance</label>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::SceneBackground &gt;</label>
         <link refid="d2/d8c/a05064"/>
-        <childnode refid="89" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="96">
-        <label>Named</label>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::SceneBackground &gt;</label>
       </node>
-      <node id="95">
-        <label>castor3d::AnimationT&lt; AnimableHanlerT &gt;</label>
-        <link refid="d4/ddd/a02040"/>
-        <childnode refid="96" relation="public-inheritance">
-        </childnode>
-        <childnode refid="97" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="94">
-        <label>castor::OwnedBy&lt; AnimatedObject &gt;</label>
-      </node>
-      <node id="97">
-        <label>castor::OwnedBy&lt; AnimableT&lt; AnimableHanlerT &gt; &gt;</label>
-      </node>
-      <node id="93">
-        <label>castor3d::AnimationInstance</label>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::SceneBackground &gt;</label>
         <link refid="d2/d8c/a05064"/>
-        <childnode refid="94" relation="public-inheritance">
-        </childnode>
-        <childnode refid="95" relation="usage">
-          <edgelabel>m_animation</edgelabel>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Scene/Animation/AnimationInstance.hpp" line="13" column="1" bodyfile="Scene/Animation/AnimationInstance.hpp" bodystart="11" bodyend="213"/>
+    <location file="Text/TextBackground.hpp" line="14" column="1" bodyfile="Text/TextBackground.hpp" bodystart="16" bodyend="25"/>
     <listofallmembers>
-      <member refid="d2/d8c/a05064_1a23a7bfcdfcd7c97de734734aff4cd3c5" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>AnimationInstance</name></member>
-      <member refid="d2/d8c/a05064_1a3ae30f9d3201f11bb86ac99d8c5b58e7" prot="private" virt="pure-virtual"><scope>castor3d::AnimationInstance</scope><name>doUpdate</name></member>
-      <member refid="d2/d8c/a05064_1aab33ccf8f14ea1991f4f3569fabd59f4" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>getAnimation</name></member>
-      <member refid="d2/d8c/a05064_1a3170af477f4a163dfc67f240baafa55d" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>getScale</name></member>
-      <member refid="d2/d8c/a05064_1aac09e282b3696b2e46f820a86449918f" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>getStartingPoint</name></member>
-      <member refid="d2/d8c/a05064_1ab2197aab90f85806400a9e4087761cc3" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>getState</name></member>
-      <member refid="d2/d8c/a05064_1a6b8de0d470c6d060cc7f835c599ec4ae" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>getStoppingPoint</name></member>
-      <member refid="d2/d8c/a05064_1a914538daf4453ee5ee35a32986d5dbec" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>isLooped</name></member>
-      <member refid="d2/d8c/a05064_1a4ea27648adc0879b6d44149b089c0295" prot="protected" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>m_animation</name></member>
-      <member refid="d2/d8c/a05064_1a5a7017dbf729b5ddf98c80548804cf8f" prot="protected" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>m_currentTime</name></member>
-      <member refid="d2/d8c/a05064_1a5064a319a11f8d3928c81a4a629b5982" prot="protected" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>m_looped</name></member>
-      <member refid="d2/d8c/a05064_1aa313a440c453a3433cc6261e06b43a8a" prot="protected" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>m_scale</name></member>
-      <member refid="d2/d8c/a05064_1a1948260ac64b862bc876124d06f34673" prot="protected" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>m_startingPoint</name></member>
-      <member refid="d2/d8c/a05064_1a2e5b588a84db6b90580577a93d9f5d20" prot="protected" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>m_state</name></member>
-      <member refid="d2/d8c/a05064_1abd1d4de3d4e507ac453f0531026dd9db" prot="protected" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>m_stoppingPoint</name></member>
-      <member refid="d2/d8c/a05064_1ad18010efe608f7087115754ef77a3f7e" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>pause</name></member>
-      <member refid="d2/d8c/a05064_1a59bea7025b5c52e5b09df209e95e4c6b" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>play</name></member>
-      <member refid="d2/d8c/a05064_1a060d6999c9e24ab73e28400cb7e8850b" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>setLooped</name></member>
-      <member refid="d2/d8c/a05064_1a338ffe9fbc76c64938f1fe8b072bbd41" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>setScale</name></member>
-      <member refid="d2/d8c/a05064_1ab6dd01f7c83349132cd6e4d205e33e3a" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>setStartingPoint</name></member>
-      <member refid="d2/d8c/a05064_1aab7fdd5bb07392f6faba0743e1c6073b" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>setStoppingPoint</name></member>
-      <member refid="d2/d8c/a05064_1aeb6466ce1395148bbbed32cacfe49291" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>stop</name></member>
-      <member refid="d2/d8c/a05064_1a3f89c5c509bba8c43af73cb0f068745b" prot="public" virt="non-virtual"><scope>castor3d::AnimationInstance</scope><name>update</name></member>
-      <member refid="d2/d8c/a05064_1ac419fc44173c317197c06e8be55df362" prot="public" virt="virtual"><scope>castor3d::AnimationInstance</scope><name>~AnimationInstance</name></member>
+      <member refid="d2/d8c/a05064_1a4e84f87cd86e2dc3720a7f4073264ae3" prot="private" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::SceneBackground &gt;</scope><name>m_folder</name></member>
+      <member refid="d2/d8c/a05064_1a4ddd3a5e80fb69df43c65dc9b0843b1e" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::SceneBackground &gt;</scope><name>operator()</name></member>
+      <member refid="d2/d8c/a05064_1ad57fce506f8d08ce05ea8f15fb6484af" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::SceneBackground &gt;</scope><name>TextWriter</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

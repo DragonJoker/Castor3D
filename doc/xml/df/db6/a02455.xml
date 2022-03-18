@@ -1,991 +1,117 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="df/db6/a02455" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</compoundname>
-    <basecompoundref refid="d4/dad/a02407" prot="public" virt="non-virtual">castor3d::ObjectCacheBase&lt; Geometry, castor::String &gt;</basecompoundref>
-    <includes local="no">GeometryCache.hpp</includes>
-    <innerclass refid="dc/d5c/a02459" prot="public">castor3d::ObjectCache&lt; Geometry, castor::String &gt;::PoolsEntry</innerclass>
+    <compoundname>castor3d::BinaryWriter&lt; Submesh &gt;</compoundname>
+    <basecompoundref refid="d2/da6/a02339" prot="public" virt="non-virtual">castor3d::BinaryWriterBase&lt; Submesh &gt;</basecompoundref>
+    <includes local="no">BinarySubmesh.hpp</includes>
     <templateparamlist>
     </templateparamlist>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="df/db6/a02455_1acfa8de1e05ac52748fe6816817aed1df" prot="public" static="no">
-        <type><ref refid="d4/dad/a02407" kindref="compound">ObjectCacheBase</ref>&lt; <ref refid="db/d6b/a05139" kindref="compound">Geometry</ref>, castor::String &gt;</type>
-        <definition>using castor3d::ObjectCache&lt; Geometry, castor::String &gt;::MyObjectCache =  ObjectCacheBase&lt; Geometry, castor::String &gt;</definition>
-        <argsstring></argsstring>
-        <name>MyObjectCache</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="47" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="47" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="df/db6/a02455_1ad5d6b68b70336340725e13155fd5dec8" prot="public" static="no">
-        <type>typename <ref refid="d4/dad/a02407_1aef5afe4f28d88051d0f84742a0d45b7f" kindref="member">MyObjectCacheType::MyObjectCacheTraits</ref></type>
-        <definition>using castor3d::ObjectCache&lt; Geometry, castor::String &gt;::MyObjectCacheTraits =  typename MyObjectCacheType::MyObjectCacheTraits</definition>
-        <argsstring></argsstring>
-        <name>MyObjectCacheTraits</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="48" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="48" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="df/db6/a02455_1a6f2a82601cb5e3bdbd8b3ab890e9216b" prot="public" static="no">
-        <type>typename <ref refid="d4/dad/a02407_1a2695fd8f7d4bef271326195ab84d6f86" kindref="member">MyObjectCacheType::Element</ref></type>
-        <definition>using castor3d::ObjectCache&lt; Geometry, castor::String &gt;::Element =  typename MyObjectCacheType::Element</definition>
-        <argsstring></argsstring>
-        <name>Element</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="49" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="49" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="df/db6/a02455_1ac45b0eb108cc464b247fa3712595bea1" prot="public" static="no">
-        <type>typename <ref refid="d4/dad/a02407_1a58aa6f84262945e82a965d654289ca22" kindref="member">MyObjectCacheType::Key</ref></type>
-        <definition>using castor3d::ObjectCache&lt; Geometry, castor::String &gt;::Key =  typename MyObjectCacheType::Key</definition>
-        <argsstring></argsstring>
-        <name>Key</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="50" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="50" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="df/db6/a02455_1a7f7da4be92811bc3808662f3e656bc61" prot="public" static="no">
-        <type>typename <ref refid="d4/dad/a02407_1af44fe4e2622342b0256466f52d791869" kindref="member">MyObjectCacheType::Collection</ref></type>
-        <definition>using castor3d::ObjectCache&lt; Geometry, castor::String &gt;::Collection =  typename MyObjectCacheType::Collection</definition>
-        <argsstring></argsstring>
-        <name>Collection</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="51" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="51" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="df/db6/a02455_1a1f0244e02b65271e110a5c0054080598" prot="public" static="no">
-        <type>typename <ref refid="d4/dad/a02407_1a6dbfb5d5c3648f477f8a366a88e41bc9" kindref="member">MyObjectCacheType::LockType</ref></type>
-        <definition>using castor3d::ObjectCache&lt; Geometry, castor::String &gt;::LockType =  typename MyObjectCacheType::LockType</definition>
-        <argsstring></argsstring>
-        <name>LockType</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="52" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="52" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="df/db6/a02455_1aeec710913aef27e0881b655f3440b600" prot="public" static="no">
-        <type>typename <ref refid="d4/dad/a02407_1aaea33a6e2634758a9959a36d2d191adf" kindref="member">MyObjectCacheType::ElementPtr</ref></type>
-        <definition>using castor3d::ObjectCache&lt; Geometry, castor::String &gt;::ElementPtr =  typename MyObjectCacheType::ElementPtr</definition>
-        <argsstring></argsstring>
-        <name>ElementPtr</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="53" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="53" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="df/db6/a02455_1a396f9045a0859aaab04cdd0c61ef8e97" prot="public" static="no">
-        <type>typename <ref refid="d4/dad/a02407_1a5273357e4b90c055f34dccaa0f18c1d9" kindref="member">MyObjectCacheType::Producer</ref></type>
-        <definition>using castor3d::ObjectCache&lt; Geometry, castor::String &gt;::Producer =  typename MyObjectCacheType::Producer</definition>
-        <argsstring></argsstring>
-        <name>Producer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="54" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="54" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="df/db6/a02455_1aa507bd2349ba01979028b1afdd26b857" prot="public" static="no">
-        <type>typename <ref refid="d4/dad/a02407_1a709002f742a234401899e221db822a69" kindref="member">MyObjectCacheType::Initialiser</ref></type>
-        <definition>using castor3d::ObjectCache&lt; Geometry, castor::String &gt;::Initialiser =  typename MyObjectCacheType::Initialiser</definition>
-        <argsstring></argsstring>
-        <name>Initialiser</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="55" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="55" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="df/db6/a02455_1aa2a53debb85013f58b17c1f0a6ed5308" prot="public" static="no">
-        <type>typename <ref refid="d4/dad/a02407_1ae9d6a190e7471d9ee2fd8b23d35d084f" kindref="member">MyObjectCacheType::Cleaner</ref></type>
-        <definition>using castor3d::ObjectCache&lt; Geometry, castor::String &gt;::Cleaner =  typename MyObjectCacheType::Cleaner</definition>
-        <argsstring></argsstring>
-        <name>Cleaner</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="56" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="56" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="df/db6/a02455_1a63f3dac3605255217fb9d6ebf483e4dd" prot="public" static="no">
-        <type>typename <ref refid="d4/dad/a02407_1adf465fa19aa985e191560d94fbfd0ddd" kindref="member">MyObjectCacheType::Merger</ref></type>
-        <definition>using castor3d::ObjectCache&lt; Geometry, castor::String &gt;::Merger =  typename MyObjectCacheType::Merger</definition>
-        <argsstring></argsstring>
-        <name>Merger</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="57" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="57" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="df/db6/a02455_1a8076f4fbbe31217a46b5d32adca30577" prot="public" static="no">
-        <type>typename <ref refid="d4/dad/a02407_1acbd254e0f131c3ecd6d93ca42929daba" kindref="member">MyObjectCacheType::Attacher</ref></type>
-        <definition>using castor3d::ObjectCache&lt; Geometry, castor::String &gt;::Attacher =  typename MyObjectCacheType::Attacher</definition>
-        <argsstring></argsstring>
-        <name>Attacher</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="58" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="58" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="df/db6/a02455_1ae80ae47c2d402e31ff979d2c8318d559" prot="public" static="no">
-        <type>typename <ref refid="d4/dad/a02407_1adfa07c51d1421cbbd46d0c04e3213dc6" kindref="member">MyObjectCacheType::Detacher</ref></type>
-        <definition>using castor3d::ObjectCache&lt; Geometry, castor::String &gt;::Detacher =  typename MyObjectCacheType::Detacher</definition>
-        <argsstring></argsstring>
-        <name>Detacher</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="59" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="59" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-type">
-      <memberdef kind="typedef" id="df/db6/a02455_1a637c4d7e97e3d1034180ab071246d4e6" prot="private" static="no">
-        <type>std::set&lt; <ref refid="d1/d48/a04575" kindref="compound">SceneRenderPass</ref> const * &gt;</type>
-        <definition>using castor3d::ObjectCache&lt; Geometry, castor::String &gt;::RenderPassSet =  std::set&lt; SceneRenderPass const * &gt;</definition>
-        <argsstring></argsstring>
-        <name>RenderPassSet</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="202" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="202" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="df/db6/a02455_1ad0d5a8ed408be5bc14271fc16648b51e" prot="private" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::ObjectCache&lt; Geometry, castor::String &gt;::m_faceCount</definition>
-        <argsstring></argsstring>
-        <name>m_faceCount</name>
-        <initializer>{ 0 }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="197" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="197" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="df/db6/a02455_1aac440c1acb5cff6910620d15858ef18a" prot="private" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::ObjectCache&lt; Geometry, castor::String &gt;::m_vertexCount</definition>
-        <argsstring></argsstring>
-        <name>m_vertexCount</name>
-        <initializer>{ 0 }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="198" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="198" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="df/db6/a02455_1a9d807c737ff0958410f40be89ffc99be" prot="private" static="no" mutable="no">
-        <type>std::map&lt; size_t, PoolsEntry &gt;</type>
-        <definition>std::map&lt; size_t, PoolsEntry &gt; castor3d::ObjectCache&lt; Geometry, castor::String &gt;::m_baseEntries</definition>
-        <argsstring></argsstring>
-        <name>m_baseEntries</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="199" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="199" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="df/db6/a02455_1ad8d946b78efd3af12d0372db5a1d6bcb" prot="private" static="no" mutable="no">
-        <type>std::map&lt; size_t, PoolsEntry &gt;</type>
-        <definition>std::map&lt; size_t, PoolsEntry &gt; castor3d::ObjectCache&lt; Geometry, castor::String &gt;::m_entries</definition>
-        <argsstring></argsstring>
-        <name>m_entries</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="200" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="200" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="df/db6/a02455_1a9df0b32bb9cf23921ab8fa33a5157bd2" prot="private" static="no" mutable="no">
-        <type>std::map&lt; <ref refid="db/d6b/a05139" kindref="compound">Geometry</ref> *, <ref refid="d7/dd1/a01458_1aa18db09cb65a6e2ddc11e83b62453e79" kindref="member">OnSubmeshMaterialChangedConnection</ref> &gt;</type>
-        <definition>std::map&lt; Geometry *, OnSubmeshMaterialChangedConnection &gt; castor3d::ObjectCache&lt; Geometry, castor::String &gt;::m_connections</definition>
-        <argsstring></argsstring>
-        <name>m_connections</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="201" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="201" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="df/db6/a02455_1a436cadc263895d6bdf6c20d360e3dd3e" prot="private" static="no" mutable="no">
-        <type>std::map&lt; uint32_t, RenderPassSet &gt;</type>
-        <definition>std::map&lt; uint32_t, RenderPassSet &gt; castor3d::ObjectCache&lt; Geometry, castor::String &gt;::m_instances</definition>
-        <argsstring></argsstring>
-        <name>m_instances</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="203" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="203" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="df/db6/a02455_1a87e228cc37b799ce16d4186746d3bc90" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::ObjectCache&lt; Geometry, castor::String &gt;::ObjectCache</definition>
-        <argsstring>(Engine &amp;engine, Scene &amp;scene, SceneNodeSPtr rootNode, SceneNodeSPtr rootCameraNode, SceneNodeSPtr rootObjectNode, Producer &amp;&amp;produce, Initialiser &amp;&amp;initialise=Initialiser{}, Cleaner &amp;&amp;clean=Cleaner{}, Merger &amp;&amp;merge=Merger{}, Attacher &amp;&amp;attach=Attacher{}, Detacher &amp;&amp;detach=Detacher{})</argsstring>
-        <name>ObjectCache</name>
-        <param>
-          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/d00/a05223" kindref="compound">Scene</ref> &amp;</type>
-          <declname>scene</declname>
-        </param>
-        <param>
-          <type>SceneNodeSPtr</type>
-          <declname>rootNode</declname>
-        </param>
-        <param>
-          <type>SceneNodeSPtr</type>
-          <declname>rootCameraNode</declname>
-        </param>
-        <param>
-          <type>SceneNodeSPtr</type>
-          <declname>rootObjectNode</declname>
-        </param>
-        <param>
-          <type><ref refid="df/db6/a02455_1a396f9045a0859aaab04cdd0c61ef8e97" kindref="member">Producer</ref> &amp;&amp;</type>
-          <declname>produce</declname>
-        </param>
-        <param>
-          <type><ref refid="df/db6/a02455_1aa507bd2349ba01979028b1afdd26b857" kindref="member">Initialiser</ref> &amp;&amp;</type>
-          <declname>initialise</declname>
-          <defval><ref refid="df/db6/a02455_1aa507bd2349ba01979028b1afdd26b857" kindref="member">Initialiser</ref>{}</defval>
-        </param>
-        <param>
-          <type><ref refid="df/db6/a02455_1aa2a53debb85013f58b17c1f0a6ed5308" kindref="member">Cleaner</ref> &amp;&amp;</type>
-          <declname>clean</declname>
-          <defval><ref refid="df/db6/a02455_1aa2a53debb85013f58b17c1f0a6ed5308" kindref="member">Cleaner</ref>{}</defval>
-        </param>
-        <param>
-          <type><ref refid="df/db6/a02455_1a63f3dac3605255217fb9d6ebf483e4dd" kindref="member">Merger</ref> &amp;&amp;</type>
-          <declname>merge</declname>
-          <defval><ref refid="df/db6/a02455_1a63f3dac3605255217fb9d6ebf483e4dd" kindref="member">Merger</ref>{}</defval>
-        </param>
-        <param>
-          <type><ref refid="df/db6/a02455_1a8076f4fbbe31217a46b5d32adca30577" kindref="member">Attacher</ref> &amp;&amp;</type>
-          <declname>attach</declname>
-          <defval><ref refid="df/db6/a02455_1a8076f4fbbe31217a46b5d32adca30577" kindref="member">Attacher</ref>{}</defval>
-        </param>
-        <param>
-          <type><ref refid="df/db6/a02455_1ae80ae47c2d402e31ff979d2c8318d559" kindref="member">Detacher</ref> &amp;&amp;</type>
-          <declname>detach</declname>
-          <defval><ref refid="df/db6/a02455_1ae80ae47c2d402e31ff979d2c8318d559" kindref="member">Detacher</ref>{}</defval>
-        </param>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">engine</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The engine. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">scene</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The scene. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">rootNode</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The root node. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">rootCameraNode</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The cameras root node. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">rootObjectNode</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The objects root node. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">produce</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element producer. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">initialise</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element initialiser. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">clean</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element cleaner. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">merge</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element collection merger. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">attach</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element attacher (to a scene node). </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">detach</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element detacher (from a scene node). </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="88" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="df/db6/a02455_1ae7747f2996073cb2e5bfac25ef26fb85" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::ObjectCache&lt; Geometry, castor::String &gt;::~ObjectCache</definition>
-        <argsstring>()</argsstring>
-        <name>~ObjectCache</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="105" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="df/db6/a02455_1a2680851c7b9c5c7c64c83b215edb694c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::ObjectCache&lt; Geometry, castor::String &gt;::registerPass</definition>
-        <argsstring>(SceneRenderPass const &amp;renderPass)</argsstring>
-        <name>registerPass</name>
-        <param>
-          <type><ref refid="d1/d48/a04575" kindref="compound">SceneRenderPass</ref> const &amp;</type>
-          <declname>renderPass</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="107" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="df/db6/a02455_1abe37111bf04d993dc4d5e3522e62ae96" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::ObjectCache&lt; Geometry, castor::String &gt;::unregisterPass</definition>
-        <argsstring>(SceneRenderPass const *renderPass, uint32_t instanceMult)</argsstring>
-        <name>unregisterPass</name>
-        <param>
-          <type><ref refid="d1/d48/a04575" kindref="compound">SceneRenderPass</ref> const *</type>
-          <declname>renderPass</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>instanceMult</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="108" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="df/db6/a02455_1aa69a82fcc6cbf69314b0494117a7ecb5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::ObjectCache&lt; Geometry, castor::String &gt;::fillInfo</definition>
-        <argsstring>(RenderInfo &amp;info) const</argsstring>
-        <name>fillInfo</name>
-        <param>
-          <type><ref refid="db/dd8/a04495" kindref="compound">RenderInfo</ref> &amp;</type>
-          <declname>info</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="111" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="df/db6/a02455_1a530752231d73337ca4abd03ff39cde9d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::ObjectCache&lt; Geometry, castor::String &gt;::update</definition>
-        <argsstring>(CpuUpdater &amp;updater)</argsstring>
-        <name>update</name>
-        <param>
-          <type><ref refid="db/d82/a04567" kindref="compound">CpuUpdater</ref> &amp;</type>
-          <declname>updater</declname>
-        </param>
-        <briefdescription>
-<para>Updates the render pass, CPU wise. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="inout">updater</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The update data. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="120" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="df/db6/a02455_1a3dfa253bf896ca83e26a56c19a89ca8c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> PoolsEntry</type>
-        <definition>C3D_API PoolsEntry castor3d::ObjectCache&lt; Geometry, castor::String &gt;::getUbos</definition>
-        <argsstring>(Geometry const &amp;geometry, Submesh const &amp;submesh, Pass const &amp;pass, uint32_t instanceMult) const</argsstring>
-        <name>getUbos</name>
-        <param>
-          <type><ref refid="db/d6b/a05139" kindref="compound">Geometry</ref> const &amp;</type>
-          <declname>geometry</declname>
-        </param>
-        <param>
-          <type><ref refid="d0/dce/a03971" kindref="compound">Submesh</ref> const &amp;</type>
-          <declname>submesh</declname>
-        </param>
-        <param>
-          <type><ref refid="db/d39/a02575" kindref="compound">Pass</ref> const &amp;</type>
-          <declname>pass</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>instanceMult</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The UBOs for given geometry, submesh and pass. </para>
-</simplesect>
-<parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">geometry</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The geometry. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">submesh</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The submesh. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">pass</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The material pass. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">instanceMult</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The instance multiplier. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="135" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="df/db6/a02455_1afedc69a657c075af82dfc2cc955b788c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::ObjectCache&lt; Geometry, castor::String &gt;::clear</definition>
-        <argsstring>(RenderDevice const &amp;device)</argsstring>
-        <name>clear</name>
-        <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-<para>Flushes the collection. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="147" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="df/db6/a02455_1ae5512134421d49612be64d9e5f09d5b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::ObjectCache&lt; Geometry, castor::String &gt;::add</definition>
-        <argsstring>(ElementPtr element)</argsstring>
-        <name>add</name>
-        <param>
-          <type><ref refid="df/db6/a02455_1aeec710913aef27e0881b655f3440b600" kindref="member">ElementPtr</ref></type>
-          <declname>element</declname>
-        </param>
-        <briefdescription>
-<para>Adds an object. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">element</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The object. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="156" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="df/db6/a02455_1ab7980e12f3ab6e6b50073e7b41521f82" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="df/db6/a02455_1aeec710913aef27e0881b655f3440b600" kindref="member">ElementPtr</ref></type>
-        <definition>C3D_API ElementPtr castor3d::ObjectCache&lt; Geometry, castor::String &gt;::add</definition>
-        <argsstring>(Key const &amp;name, SceneNode &amp;parent, MeshSPtr mesh)</argsstring>
-        <name>add</name>
-        <param>
-          <type><ref refid="df/db6/a02455_1ac45b0eb108cc464b247fa3712595bea1" kindref="member">Key</ref> const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type><ref refid="d8/dd0/a05235" kindref="compound">SceneNode</ref> &amp;</type>
-          <declname>parent</declname>
-        </param>
-        <param>
-          <type>MeshSPtr</type>
-          <declname>mesh</declname>
-        </param>
-        <briefdescription>
-<para>Creates an object. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The object name. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">parent</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parent scene node. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">mesh</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The mesh. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The created object. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="171" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="df/db6/a02455_1a2d0980bc2a51d20303d0a3bb51fcb625" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::ObjectCache&lt; Geometry, castor::String &gt;::remove</definition>
-        <argsstring>(Key const &amp;name)</argsstring>
-        <name>remove</name>
-        <param>
-          <type><ref refid="df/db6/a02455_1ac45b0eb108cc464b247fa3712595bea1" kindref="member">Key</ref> const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <briefdescription>
-<para>Removes an object, given a name. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The object name. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="182" column="1"/>
-      </memberdef>
-      </sectiondef>
       <sectiondef kind="private-func">
-      <memberdef kind="function" id="df/db6/a02455_1a1089e4f9363c2edd1dfb55512c8ea88d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::ObjectCache&lt; Geometry, castor::String &gt;::doCreateEntry</definition>
-        <argsstring>(RenderDevice const &amp;device, Geometry const &amp;geometry, Submesh const &amp;submesh, Pass const &amp;pass)</argsstring>
-        <name>doCreateEntry</name>
+      <memberdef kind="function" id="df/db6/a02455_1a2e106060645a94fe21d58a6cd5735079" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BinaryWriter&lt; Submesh &gt;::doWrite</definition>
+        <argsstring>(Submesh const &amp;obj) override</argsstring>
+        <name>doWrite</name>
+        <qualifiedname>castor3d::BinaryWriter&lt; Submesh &gt;::doWrite</qualifiedname>
+        <reimplements refid="d2/da6/a02339_1a720ab792b3e53c6556c3cb4e5b0e2d06">doWrite</reimplements>
         <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type><ref refid="db/d6b/a05139" kindref="compound">Geometry</ref> const &amp;</type>
-          <declname>geometry</declname>
-        </param>
-        <param>
-          <type><ref refid="d0/dce/a03971" kindref="compound">Submesh</ref> const &amp;</type>
-          <declname>submesh</declname>
-        </param>
-        <param>
-          <type><ref refid="db/d39/a02575" kindref="compound">Pass</ref> const &amp;</type>
-          <declname>pass</declname>
+          <type><ref refid="d3/da7/a03427" kindref="compound">Submesh</ref> const &amp;</type>
+          <declname>obj</declname>
         </param>
         <briefdescription>
+<para>Function used to fill the chunk from specific data. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to write. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="185" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="df/db6/a02455_1a56d20f715893c0787713dba7a519d387" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::ObjectCache&lt; Geometry, castor::String &gt;::doRemoveEntry</definition>
-        <argsstring>(RenderDevice const &amp;device, Geometry const &amp;geometry, Submesh const &amp;submesh, Pass const &amp;pass)</argsstring>
-        <name>doRemoveEntry</name>
-        <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type><ref refid="db/d6b/a05139" kindref="compound">Geometry</ref> const &amp;</type>
-          <declname>geometry</declname>
-        </param>
-        <param>
-          <type><ref refid="d0/dce/a03971" kindref="compound">Submesh</ref> const &amp;</type>
-          <declname>submesh</declname>
-        </param>
-        <param>
-          <type><ref refid="db/d39/a02575" kindref="compound">Pass</ref> const &amp;</type>
-          <declname>pass</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="189" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="df/db6/a02455_1a18c0d663735340034f1793b61f08e6ed" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::ObjectCache&lt; Geometry, castor::String &gt;::doRegister</definition>
-        <argsstring>(Geometry &amp;geometry)</argsstring>
-        <name>doRegister</name>
-        <param>
-          <type><ref refid="db/d6b/a05139" kindref="compound">Geometry</ref> &amp;</type>
-          <declname>geometry</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="193" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="df/db6/a02455_1a6e9024840d5980b05d8e177ebe0d1224" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::ObjectCache&lt; Geometry, castor::String &gt;::doUnregister</definition>
-        <argsstring>(Geometry &amp;geometry)</argsstring>
-        <name>doUnregister</name>
-        <param>
-          <type><ref refid="db/d6b/a05139" kindref="compound">Geometry</ref> &amp;</type>
-          <declname>geometry</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="194" column="1"/>
+        <location file="Binary/BinarySubmesh.hpp" line="53" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para><ref refid="db/d6b/a05139" kindref="compound">Geometry</ref> cache. </para>
+<para><ref refid="df/dd3/a04527" kindref="compound">MovableObject</ref> loader. </para>
     </briefdescription>
     <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="date"><para>14/02/2010</para>
+</simplesect>
+Loader de <ref refid="df/dd3/a04527" kindref="compound">MovableObject</ref> </para>
     </detaileddescription>
     <inheritancegraph>
-      <node id="2249">
-        <label>castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</label>
-        <link refid="d4/dad/a02407"/>
+      <node id="2">
+        <label>castor3d::BinaryWriterBase&lt; Submesh &gt;</label>
+        <link refid="d2/da6/a02339"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Submesh &gt;</edgelabel>
+        </childnode>
       </node>
-      <node id="2247">
-        <label>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</label>
+      <node id="1">
+        <label>castor3d::BinaryWriter&lt; Submesh &gt;</label>
         <link refid="df/db6/a02455"/>
-        <childnode refid="2248" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="2248">
-        <label>castor3d::ObjectCacheBase&lt; Geometry, castor::String &gt;</label>
-        <link refid="d4/dad/a02407"/>
-        <childnode refid="2249" relation="template-instance">
-          <edgelabel>&lt; Geometry, castor::String &gt;</edgelabel>
-        </childnode>
+      <node id="3">
+        <label>castor3d::BinaryWriterBase&lt; TWritten &gt;</label>
+        <link refid="d2/da6/a02339"/>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="2257">
-        <label>Named</label>
-      </node>
-      <node id="2258">
-        <label>castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</label>
-        <link refid="d4/dad/a02407"/>
-        <childnode refid="2252" relation="usage">
-          <edgelabel>m_engine</edgelabel>
+      <node id="2">
+        <label>castor3d::BinaryWriterBase&lt; Submesh &gt;</label>
+        <link refid="d2/da6/a02339"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
         </childnode>
-        <childnode refid="2254" relation="usage">
-          <edgelabel>m_scene</edgelabel>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Submesh &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="2253">
-        <label>castor::Unique&lt; Engine &gt;</label>
+      <node id="3">
+        <label>castor3d::BinaryChunk</label>
+        <link refid="dd/d3b/a02291"/>
       </node>
-      <node id="2255">
-        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
-      </node>
-      <node id="2250">
-        <label>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</label>
+      <node id="1">
+        <label>castor3d::BinaryWriter&lt; Submesh &gt;</label>
         <link refid="df/db6/a02455"/>
-        <childnode refid="2251" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="2256">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="2252">
-        <label>castor3d::Engine</label>
-        <link refid="d0/d7c/a02499"/>
-        <childnode refid="2253" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2251">
-        <label>castor3d::ObjectCacheBase&lt; Geometry, castor::String &gt;</label>
-        <link refid="d4/dad/a02407"/>
-        <childnode refid="2252" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="2254" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-        <childnode refid="2258" relation="template-instance">
-          <edgelabel>&lt; Geometry, castor::String &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2254">
-        <label>castor3d::Scene</label>
-        <link refid="d7/d00/a05223"/>
-        <childnode refid="2255" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2256" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2257" relation="public-inheritance">
+      <node id="4">
+        <label>castor3d::BinaryWriterBase&lt; TWritten &gt;</label>
+        <link refid="d2/da6/a02339"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Cache/GeometryCache.hpp" line="33" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="31" bodyend="204"/>
+    <location file="Binary/BinarySubmesh.hpp" line="39" column="1" bodyfile="Binary/BinarySubmesh.hpp" bodystart="41" bodyend="54"/>
     <listofallmembers>
-      <member refid="df/db6/a02455_1ae5512134421d49612be64d9e5f09d5b3" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>add</name></member>
-      <member refid="df/db6/a02455_1ab7980e12f3ab6e6b50073e7b41521f82" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>add</name></member>
-      <member refid="d4/dad/a02407_1af9759fea89bf19c68bc66e344d09186d" prot="public" virt="non-virtual" ambiguityscope="ObjectCacheBase&lt; Geometry, castor::String &gt;::"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>add</name></member>
-      <member refid="d4/dad/a02407_1a90ebd9f168c722ea95d5f9304b9b1217" prot="public" virt="non-virtual" ambiguityscope="ObjectCacheBase&lt; Geometry, castor::String &gt;::"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>add</name></member>
-      <member refid="df/db6/a02455_1a8076f4fbbe31217a46b5d32adca30577" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>Attacher</name></member>
-      <member refid="d4/dad/a02407_1a3739ff1bfab106c799abbb123b8b2c07" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>begin</name></member>
-      <member refid="d4/dad/a02407_1a0c0491f58f585ffd973ae19360aa75f1" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>begin</name></member>
-      <member refid="df/db6/a02455_1aa2a53debb85013f58b17c1f0a6ed5308" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>Cleaner</name></member>
-      <member refid="d4/dad/a02407_1af2d19098583cd5ea5b54c904d755cd0b" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>cleanup</name></member>
-      <member refid="df/db6/a02455_1afedc69a657c075af82dfc2cc955b788c" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>clear</name></member>
-      <member refid="d4/dad/a02407_1a2fa04676822f28ba029d1fb729f44816" prot="public" virt="non-virtual" ambiguityscope="ObjectCacheBase&lt; Geometry, castor::String &gt;::"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>clear</name></member>
-      <member refid="df/db6/a02455_1a7f7da4be92811bc3808662f3e656bc61" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>Collection</name></member>
-      <member refid="df/db6/a02455_1ae80ae47c2d402e31ff979d2c8318d559" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>Detacher</name></member>
-      <member refid="df/db6/a02455_1a1089e4f9363c2edd1dfb55512c8ea88d" prot="private" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>doCreateEntry</name></member>
-      <member refid="df/db6/a02455_1a18c0d663735340034f1793b61f08e6ed" prot="private" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>doRegister</name></member>
-      <member refid="df/db6/a02455_1a56d20f715893c0787713dba7a519d387" prot="private" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>doRemoveEntry</name></member>
-      <member refid="d4/dad/a02407_1ab405bfd99e69c230efc69ab4b095d540" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>doReportCreation</name></member>
-      <member refid="d4/dad/a02407_1ade6b95376020032814e329727ac80f99" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>doReportDuplicate</name></member>
-      <member refid="d4/dad/a02407_1a4237b4fb13d344ea69cfb591cf56f503" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>doReportNull</name></member>
-      <member refid="df/db6/a02455_1a6e9024840d5980b05d8e177ebe0d1224" prot="private" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>doUnregister</name></member>
-      <member refid="df/db6/a02455_1a6f2a82601cb5e3bdbd8b3ab890e9216b" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>Element</name></member>
-      <member refid="df/db6/a02455_1aeec710913aef27e0881b655f3440b600" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>ElementPtr</name></member>
-      <member refid="d4/dad/a02407_1a3e06a8ce082e6930a431e01facb08e3a" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>end</name></member>
-      <member refid="d4/dad/a02407_1ade3bc57cb192566db4dae322c85365d8" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>end</name></member>
-      <member refid="df/db6/a02455_1aa69a82fcc6cbf69314b0494117a7ecb5" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>fillInfo</name></member>
-      <member refid="d4/dad/a02407_1a14387c5f23e7fd0815bd4c33af7614d4" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>find</name></member>
-      <member refid="d4/dad/a02407_1a85b6e3f4e4c70c809d4d008ac4d98949" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>forEach</name></member>
-      <member refid="d4/dad/a02407_1a443b919cff2e2228029093f393b3fe82" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>forEach</name></member>
-      <member refid="d4/dad/a02407_1ae6ddf773f8add1142811092ccd36b9df" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>getEngine</name></member>
-      <member refid="d4/dad/a02407_1a3d40eb7457663d6cbc86a058bb045058" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>getObjectCount</name></member>
-      <member refid="d4/dad/a02407_1ac269d479bb39d6a5e00a6e6880d171fa" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>getObjectTypeName</name></member>
-      <member refid="d4/dad/a02407_1a2587657f54febcb8b004bcee9a6c92ab" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>getScene</name></member>
-      <member refid="df/db6/a02455_1a3dfa253bf896ca83e26a56c19a89ca8c" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>getUbos</name></member>
-      <member refid="d4/dad/a02407_1a3bc5af869c9083396d70b1828d3d209b" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>has</name></member>
-      <member refid="df/db6/a02455_1aa507bd2349ba01979028b1afdd26b857" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>Initialiser</name></member>
-      <member refid="d4/dad/a02407_1a0439587c305aa796b9cafedd3f2369bd" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>isEmpty</name></member>
-      <member refid="df/db6/a02455_1ac45b0eb108cc464b247fa3712595bea1" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>Key</name></member>
-      <member refid="d4/dad/a02407_1aa3ba76b0fbe1ad271523bbe9671d1faa" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>lock</name></member>
-      <member refid="df/db6/a02455_1a1f0244e02b65271e110a5c0054080598" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>LockType</name></member>
-      <member refid="d4/dad/a02407_1ac3f72c525786dc253c29e6674cb6978c" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>m_attach</name></member>
-      <member refid="df/db6/a02455_1a9d807c737ff0958410f40be89ffc99be" prot="private" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>m_baseEntries</name></member>
-      <member refid="d4/dad/a02407_1a9de051c43f5b9c441cfa9381ecd91d28" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>m_clean</name></member>
-      <member refid="df/db6/a02455_1a9df0b32bb9cf23921ab8fa33a5157bd2" prot="private" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>m_connections</name></member>
-      <member refid="d4/dad/a02407_1a4c9ee09ca33c7ec6307e2f2bebf2980d" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>m_detach</name></member>
-      <member refid="d4/dad/a02407_1aa11fe5cbfb29bcf3e319ca694f8f5603" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>m_elements</name></member>
-      <member refid="d4/dad/a02407_1ad748056662bca1881dd32be9fbfb1447" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>m_engine</name></member>
-      <member refid="df/db6/a02455_1ad8d946b78efd3af12d0372db5a1d6bcb" prot="private" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>m_entries</name></member>
-      <member refid="df/db6/a02455_1ad0d5a8ed408be5bc14271fc16648b51e" prot="private" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>m_faceCount</name></member>
-      <member refid="d4/dad/a02407_1a50f47a48272ca0230e17b675738ea13b" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>m_initialise</name></member>
-      <member refid="df/db6/a02455_1a436cadc263895d6bdf6c20d360e3dd3e" prot="private" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>m_instances</name></member>
-      <member refid="d4/dad/a02407_1a8d5730d90d8167deadf9052777cd1b15" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>m_merge</name></member>
-      <member refid="d4/dad/a02407_1aafb61e38ec9b4f8cb99fb35b533c1b30" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>m_produce</name></member>
-      <member refid="d4/dad/a02407_1a07c88851e111e9f40f3f7c37c28eca0d" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>m_rootCameraNode</name></member>
-      <member refid="d4/dad/a02407_1a44b6a6b909cadf254335686a41faf7d9" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>m_rootNode</name></member>
-      <member refid="d4/dad/a02407_1a122965a381ff816b8e7b2a1ce509175e" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>m_rootObjectNode</name></member>
-      <member refid="d4/dad/a02407_1abc0e272ee55045d8715814844c846074" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>m_scene</name></member>
-      <member refid="df/db6/a02455_1aac440c1acb5cff6910620d15858ef18a" prot="private" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>m_vertexCount</name></member>
-      <member refid="d4/dad/a02407_1a90a3f6b831e5328972c33503869194ea" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>mergeInto</name></member>
-      <member refid="df/db6/a02455_1a63f3dac3605255217fb9d6ebf483e4dd" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>Merger</name></member>
-      <member refid="df/db6/a02455_1acfa8de1e05ac52748fe6816817aed1df" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>MyObjectCache</name></member>
-      <member refid="df/db6/a02455_1ad5d6b68b70336340725e13155fd5dec8" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>MyObjectCacheTraits</name></member>
-      <member refid="d4/dad/a02407_1a04425b77112bcd2a88ab266f46825054" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>MyObjectCacheType</name></member>
-      <member refid="df/db6/a02455_1a87e228cc37b799ce16d4186746d3bc90" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>ObjectCache</name></member>
-      <member refid="d4/dad/a02407_1a87b6ff3ae10c416c825c84a50b9b90fa" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>ObjectCacheBase</name></member>
-      <member refid="d4/dad/a02407_1a2ff465c4a26af4220dd2ca96e5ebb826" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>OnChanged</name></member>
-      <member refid="d4/dad/a02407_1a2f0b42b4fd8d962bf259ff02a34a0f40" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>onChanged</name></member>
-      <member refid="d4/dad/a02407_1a2e158cd273db210c3168334dfca4d38f" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>OnChangedFunction</name></member>
-      <member refid="df/db6/a02455_1a396f9045a0859aaab04cdd0c61ef8e97" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>Producer</name></member>
-      <member refid="df/db6/a02455_1a2680851c7b9c5c7c64c83b215edb694c" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>registerPass</name></member>
-      <member refid="df/db6/a02455_1a2d0980bc2a51d20303d0a3bb51fcb625" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>remove</name></member>
-      <member refid="d4/dad/a02407_1ae34ecf5dbaca1411e7adb6b895a99698" prot="public" virt="non-virtual" ambiguityscope="ObjectCacheBase&lt; Geometry, castor::String &gt;::"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>remove</name></member>
-      <member refid="df/db6/a02455_1a637c4d7e97e3d1034180ab071246d4e6" prot="private" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>RenderPassSet</name></member>
-      <member refid="d4/dad/a02407_1a6f639f5f995c02d63be3ec8d5df66b22" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>unlock</name></member>
-      <member refid="df/db6/a02455_1abe37111bf04d993dc4d5e3522e62ae96" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>unregisterPass</name></member>
-      <member refid="df/db6/a02455_1a530752231d73337ca4abd03ff39cde9d" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>update</name></member>
-      <member refid="df/db6/a02455_1ae7747f2996073cb2e5bfac25ef26fb85" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>~ObjectCache</name></member>
-      <member refid="d4/dad/a02407_1a101827b877ba6ec9adef7a35ece78ce6" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;</scope><name>~ObjectCacheBase</name></member>
+      <member refid="df/db6/a02455_1a2e106060645a94fe21d58a6cd5735079" prot="private" virt="virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWrite</name></member>
+      <member refid="d2/da6/a02339_1a95685db95521fe46169767620976688c" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d2/da6/a02339_1ac978d1019caf2d37ad181911c78dde33" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d2/da6/a02339_1a5eef4da7e3bbce50e00c878bd7b32516" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d2/da6/a02339_1a5b782961d4526354e5d0e84e78c6bbbb" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d2/da6/a02339_1a3bd1cb047e1f2872668a4397496bd7c4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d2/da6/a02339_1a7bdb655caf767fdde8a4267602e06191" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d2/da6/a02339_1a8828d359b7a61ea2b657d5aada2dd87b" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>doWriteHeader</name></member>
+      <member refid="d2/da6/a02339_1ad6c66bdde51dd57ab2b27f4ddc8db513" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>m_chunk</name></member>
+      <member refid="d2/da6/a02339_1a21e7985d2f99ff20a6056d198aac07c5" prot="public" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>write</name></member>
+      <member refid="d2/da6/a02339_1a3b4ae75e6ecd0bdf9f5dc26381633dab" prot="public" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>write</name></member>
+      <member refid="d2/da6/a02339_1a455d885b04ddaed4d650461bbef1711c" prot="public" virt="virtual"><scope>castor3d::BinaryWriter&lt; Submesh &gt;</scope><name>~BinaryWriterBase</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

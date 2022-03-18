@@ -1,237 +1,84 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d7/d94/a04672" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::ShadowMapPassPoint</compoundname>
-    <basecompoundref refid="d1/d62/a04664" prot="public" virt="non-virtual">castor3d::ShadowMapPass</basecompoundref>
-    <includes local="no">ShadowMapPassPoint.hpp</includes>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d7/d94/a04672_1a41bd06467f7720cdf3f6562740b9aacc" prot="public" static="yes" mutable="no">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t const</type>
-        <definition>C3D_API uint32_t const castor3d::ShadowMapPassPoint::TextureSize</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d7/d94/a04672" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::LightBuffer::Float4x4</compoundname>
+    <includes local="no">LightBuffer.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/d94/a04672_1a2efb4a5929c0af4c2f28f0a0e12ae21d" prot="public" static="no" mutable="no">
+        <type><ref refid="d5/d43/a04668" kindref="compound">Float4</ref></type>
+        <definition>Float4 castor3d::LightBuffer::Float4x4::c0</definition>
         <argsstring></argsstring>
-        <name>TextureSize</name>
+        <name>c0</name>
+        <qualifiedname>castor3d::LightBuffer::Float4x4::c0</qualifiedname>
+        <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPassPoint.hpp" line="79" column="1" bodyfile="Render/ShadowMap/ShadowMapPassPoint.hpp" bodystart="79" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="75" column="8" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="75" bodyend="-1"/>
+        <referencedby refid="d7/d94/a04672_1af4d5f2ccd4d55848c8ac48be67e51d27" compoundref="d5/d16/a01154" startline="66" endline="73">operator=</referencedby>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d7/d94/a04672_1a9f08d3d693958cc03604937fd14ad604" prot="private" static="no" mutable="no">
-        <type><ref refid="da/d1e/a01479_1a93966e91ef2aff33b2963e1e8101cb3e" kindref="member">OnSceneNodeChangedConnection</ref></type>
-        <definition>OnSceneNodeChangedConnection castor3d::ShadowMapPassPoint::m_onNodeChanged</definition>
+      <memberdef kind="variable" id="d7/d94/a04672_1a372c2c3f7efcc62a4e95047223847091" prot="public" static="no" mutable="no">
+        <type><ref refid="d5/d43/a04668" kindref="compound">Float4</ref></type>
+        <definition>Float4 castor3d::LightBuffer::Float4x4::c1</definition>
         <argsstring></argsstring>
-        <name>m_onNodeChanged</name>
+        <name>c1</name>
+        <qualifiedname>castor3d::LightBuffer::Float4x4::c1</qualifiedname>
+        <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPassPoint.hpp" line="82" column="1" bodyfile="Render/ShadowMap/ShadowMapPassPoint.hpp" bodystart="82" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="76" column="8" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="76" bodyend="-1"/>
+        <referencedby refid="d7/d94/a04672_1af4d5f2ccd4d55848c8ac48be67e51d27" compoundref="d5/d16/a01154" startline="66" endline="73">operator=</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="d7/d94/a04672_1ab46ab034d2e61aadc8fc54a250933c6b" prot="private" static="no" mutable="no">
-        <type>castor::Matrix4x4f</type>
-        <definition>castor::Matrix4x4f castor3d::ShadowMapPassPoint::m_projection</definition>
+      <memberdef kind="variable" id="d7/d94/a04672_1a4933e6cc88270cd06281a2e0fecc2e3e" prot="public" static="no" mutable="no">
+        <type><ref refid="d5/d43/a04668" kindref="compound">Float4</ref></type>
+        <definition>Float4 castor3d::LightBuffer::Float4x4::c2</definition>
         <argsstring></argsstring>
-        <name>m_projection</name>
+        <name>c2</name>
+        <qualifiedname>castor3d::LightBuffer::Float4x4::c2</qualifiedname>
+        <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPassPoint.hpp" line="83" column="1" bodyfile="Render/ShadowMap/ShadowMapPassPoint.hpp" bodystart="83" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="77" column="8" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="77" bodyend="-1"/>
+        <referencedby refid="d7/d94/a04672_1af4d5f2ccd4d55848c8ac48be67e51d27" compoundref="d5/d16/a01154" startline="66" endline="73">operator=</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="d7/d94/a04672_1a76c9feed42b35a9e238d305bfcddb374" prot="private" static="no" mutable="no">
-        <type><ref refid="d6/df3/a05008" kindref="compound">Viewport</ref></type>
-        <definition>Viewport castor3d::ShadowMapPassPoint::m_viewport</definition>
+      <memberdef kind="variable" id="d7/d94/a04672_1a163f574b774f0802a7299958c82184ed" prot="public" static="no" mutable="no">
+        <type><ref refid="d5/d43/a04668" kindref="compound">Float4</ref></type>
+        <definition>Float4 castor3d::LightBuffer::Float4x4::c3</definition>
         <argsstring></argsstring>
-        <name>m_viewport</name>
+        <name>c3</name>
+        <qualifiedname>castor3d::LightBuffer::Float4x4::c3</qualifiedname>
+        <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPassPoint.hpp" line="84" column="1" bodyfile="Render/ShadowMap/ShadowMapPassPoint.hpp" bodystart="84" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d94/a04672_1ab91c3d98bb37eb8ff1b5939b13b3cd40" prot="private" static="no" mutable="no">
-        <type>std::array&lt; castor::Matrix4x4f, size_t(<ref refid="da/d1e/a01479_1a13e6b0c4ce255c1deb4c525562111e5bae558bb69fadec037d9eae46601a4df8e" kindref="member">CubeMapFace::eCount</ref>) &gt;</type>
-        <definition>std::array&lt; castor::Matrix4x4f, size_t( CubeMapFace::eCount ) &gt; castor3d::ShadowMapPassPoint::m_matrices</definition>
-        <argsstring></argsstring>
-        <name>m_matrices</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPassPoint.hpp" line="85" column="1" bodyfile="Render/ShadowMap/ShadowMapPassPoint.hpp" bodystart="85" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="78" column="8" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="78" bodyend="-1"/>
+        <referencedby refid="d7/d94/a04672_1af4d5f2ccd4d55848c8ac48be67e51d27" compoundref="d5/d16/a01154" startline="66" endline="73">operator=</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d7/d94/a04672_1a496a32869303d2b1ccb6c1490fb89f74" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::ShadowMapPassPoint::ShadowMapPassPoint</definition>
-        <argsstring>(Engine &amp;engine, uint32_t index, MatrixUbo &amp;matrixUbo, SceneCuller &amp;culler, ShadowMap const &amp;shadowMap)</argsstring>
-        <name>ShadowMapPassPoint</name>
+      <memberdef kind="function" id="d7/d94/a04672_1af4d5f2ccd4d55848c8ac48be67e51d27" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d7/d94/a04672" kindref="compound">Float4x4</ref> &amp;</type>
+        <definition>Float4x4 &amp; castor3d::LightBuffer::Float4x4::operator=</definition>
+        <argsstring>(castor::Matrix4x4f const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::LightBuffer::Float4x4::operator=</qualifiedname>
         <param>
-          <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
-        </param>
-        <param>
-          <type><ref refid="d2/d0e/a05496" kindref="compound">MatrixUbo</ref> &amp;</type>
-          <declname>matrixUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="d4/d4b/a04232" kindref="compound">SceneCuller</ref> &amp;</type>
-          <declname>culler</declname>
-        </param>
-        <param>
-          <type><ref refid="d5/d62/a04648" kindref="compound">ShadowMap</ref> const &amp;</type>
-          <declname>shadowMap</declname>
-        </param>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">engine</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The engine. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">index</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pass index. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">matrixUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The scene matrices UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">culler</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The culler for this pass. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">shadowMap</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parent shadow map. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPassPoint.hpp" line="36" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d94/a04672_1a37a8e24d5d62ecaaeab764bae089a0a2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::ShadowMapPassPoint::~ShadowMapPassPoint</definition>
-        <argsstring>()</argsstring>
-        <name>~ShadowMapPassPoint</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPassPoint.hpp" line="47" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d94/a04672_1acfbf0b14d3243ca7d164563948272d73" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>bool</type>
-        <definition>bool castor3d::ShadowMapPassPoint::update</definition>
-        <argsstring>(CpuUpdater &amp;updater) override</argsstring>
-        <name>update</name>
-        <reimplements refid="d1/d62/a04664_1abdf919b63696aa0dd45a619c43fef4f9">update</reimplements>
-        <param>
-          <type><ref refid="dc/d0d/a04588" kindref="compound">CpuUpdater</ref> &amp;</type>
-          <declname>updater</declname>
-        </param>
-        <briefdescription>
-<para>Updates the render pass, CPU wise. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="inout">updater</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The update data. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPassPoint.hpp" line="51" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d94/a04672_1a0e61c58e5f9ff5d57c4e156befd3905a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::ShadowMapPassPoint::update</definition>
-        <argsstring>(GpuUpdater &amp;updater) override</argsstring>
-        <name>update</name>
-        <reimplements refid="d1/d62/a04664_1a53f1118c66348855c94640539655f985">update</reimplements>
-        <param>
-          <type><ref refid="da/d34/a04592" kindref="compound">GpuUpdater</ref> &amp;</type>
-          <declname>updater</declname>
-        </param>
-        <briefdescription>
-<para>Updates the render pass, CPU wise. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="inout">updater</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The update data. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPassPoint.hpp" line="55" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="protected-func">
-      <memberdef kind="function" id="d7/d94/a04672_1a03a9b583857103ca8d1df48373dd8584" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::ShadowMapPassPoint::doUpdateNodes</definition>
-        <argsstring>(SceneCulledRenderNodes &amp;nodes)</argsstring>
-        <name>doUpdateNodes</name>
-        <param>
-          <type><ref refid="da/d16/a04336" kindref="compound">SceneCulledRenderNodes</ref> &amp;</type>
-          <declname>nodes</declname>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>rhs</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -239,829 +86,40 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPassPoint.hpp" line="58" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d7/d94/a04672_1a4b722cd13f26298183c07753039c5733" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>bool</type>
-        <definition>bool castor3d::ShadowMapPassPoint::doInitialise</definition>
-        <argsstring>(RenderDevice const &amp;device, castor::Size const &amp;size) override</argsstring>
-        <name>doInitialise</name>
-        <reimplements refid="d8/d25/a04596_1abb2cbf41043f25a8e5a7edf335d1f4c6">doInitialise</reimplements>
-        <param>
-          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>castor::Size const &amp;</type>
-          <declname>size</declname>
-        </param>
-        <briefdescription>
-<para>Initialises the pass. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername>size</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pass needed dimensions. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>true</computeroutput> on ok. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPassPoint.hpp" line="61" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d94/a04672_1a8dbc83d596ed9dece2205bfca92d705b" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::ShadowMapPassPoint::doCleanup</definition>
-        <argsstring>(RenderDevice const &amp;device) override</argsstring>
-        <name>doCleanup</name>
-        <reimplements refid="d8/d25/a04596_1a747fb083615688d7f6aed157719ef001">doCleanup</reimplements>
-        <param>
-          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-<para>Cleans up the pass. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPassPoint.hpp" line="63" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d94/a04672_1abc0ce1f1a55694e3db5af51c1e566909" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::ShadowMapPassPoint::doUpdateUbos</definition>
-        <argsstring>(CpuUpdater &amp;updater) override</argsstring>
-        <name>doUpdateUbos</name>
-        <reimplements refid="d8/d25/a04596_1acd676b5c76dd43d28372ae795dea952e">doUpdateUbos</reimplements>
-        <param>
-          <type><ref refid="dc/d0d/a04588" kindref="compound">CpuUpdater</ref> &amp;</type>
-          <declname>updater</declname>
-        </param>
-        <briefdescription>
-<para>Updates the render pass, CPU wise. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="inout">updater</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The update data. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPassPoint.hpp" line="64" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d94/a04672_1ac83c0e2bea7d9eb640a7c4dc6da8bfec" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::ShadowMapPassPoint::doFillUboDescriptor</definition>
-        <argsstring>(ashes::DescriptorSetLayout const &amp;layout, BillboardListRenderNode &amp;node) override</argsstring>
-        <name>doFillUboDescriptor</name>
-        <reimplements refid="d8/d25/a04596_1aa3c113ef6dd789de03b30c2579e773f0">doFillUboDescriptor</reimplements>
-        <param>
-          <type>ashes::DescriptorSetLayout const &amp;</type>
-          <declname>layout</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d1e/a01479_1a384f6fd61b75ba3fbac28239a79872cd" kindref="member">BillboardListRenderNode</ref> &amp;</type>
-          <declname>node</declname>
-        </param>
-        <briefdescription>
-<para>Initialises the descriptor set of a billboard node. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">layout</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The descriptors layout. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">node</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The node. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPassPoint.hpp" line="65" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d94/a04672_1a23c86cc71bd56a34610437a2d1c9a69a" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::ShadowMapPassPoint::doFillUboDescriptor</definition>
-        <argsstring>(ashes::DescriptorSetLayout const &amp;layout, SubmeshRenderNode &amp;node) override</argsstring>
-        <name>doFillUboDescriptor</name>
-        <reimplements refid="d8/d25/a04596_1ac876a1d4eac1cd8094444d6562cc7952">doFillUboDescriptor</reimplements>
-        <param>
-          <type>ashes::DescriptorSetLayout const &amp;</type>
-          <declname>layout</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d1e/a01479_1ae05cd0daba83f842b870aa2eb08b1b91" kindref="member">SubmeshRenderNode</ref> &amp;</type>
-          <declname>node</declname>
-        </param>
-        <briefdescription>
-<para>Initialises the descriptor set of a morphing node. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">layout</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The descriptors layout. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">node</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The node. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPassPoint.hpp" line="67" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d94/a04672_1af4447267f8e4f1ae88e658bfea454005" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type>ashes::VkDescriptorSetLayoutBindingArray</type>
-        <definition>ashes::VkDescriptorSetLayoutBindingArray castor3d::ShadowMapPassPoint::doCreateUboBindings</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
-        <name>doCreateUboBindings</name>
-        <reimplements refid="d8/d25/a04596_1ad540b45ce71ad9f060c3fee1e50da35f">doCreateUboBindings</reimplements>
-        <param>
-          <type><ref refid="dd/db6/a04580" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Creates the common UBO descriptor layout bindings. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPassPoint.hpp" line="69" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d94/a04672_1a431ad68d57f1286f2a56a3fe5ee4de3a" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type>ashes::PipelineDepthStencilStateCreateInfo</type>
-        <definition>ashes::PipelineDepthStencilStateCreateInfo castor3d::ShadowMapPassPoint::doCreateDepthStencilState</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
-        <name>doCreateDepthStencilState</name>
-        <reimplements refid="d8/d25/a04596_1a966911ad6ae24a856db42dc265df1c23">doCreateDepthStencilState</reimplements>
-        <param>
-          <type><ref refid="dd/db6/a04580" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Creates the depth stencil state. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPassPoint.hpp" line="70" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d94/a04672_1aa08621776475de14262f7aa035ab4ed8" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type>ashes::PipelineColorBlendStateCreateInfo</type>
-        <definition>ashes::PipelineColorBlendStateCreateInfo castor3d::ShadowMapPassPoint::doCreateBlendState</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
-        <name>doCreateBlendState</name>
-        <reimplements refid="d8/d25/a04596_1aee56eed63ba3932ab498d5b7a10a5d41">doCreateBlendState</reimplements>
-        <param>
-          <type><ref refid="dd/db6/a04580" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Creates the colour blend state. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPassPoint.hpp" line="71" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d94/a04672_1a87bcd0a12b6a9f2065b30e62817f363f" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::ShadowMapPassPoint::doUpdateFlags</definition>
-        <argsstring>(PipelineFlags &amp;flags) const override</argsstring>
-        <name>doUpdateFlags</name>
-        <reimplements refid="d8/d25/a04596_1a5d3dc93485a69008afb0170312d11e11">doUpdateFlags</reimplements>
-        <param>
-          <type><ref refid="dd/db6/a04580" kindref="compound">PipelineFlags</ref> &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Modifies the given flags to make them match the render pass requirements. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="inout">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPassPoint.hpp" line="72" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d94/a04672_1a708198a468325dc0df35b352a8d4b7e6" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="da/d1e/a01479_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
-        <definition>ShaderPtr castor3d::ShadowMapPassPoint::doGetVertexShaderSource</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
-        <name>doGetVertexShaderSource</name>
-        <reimplements refid="d8/d25/a04596_1a81135a22e0eb402b74c05a66abb4b7a9">doGetVertexShaderSource</reimplements>
-        <param>
-          <type><ref refid="dd/db6/a04580" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves the vertex shader source matching the given flags. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPassPoint.hpp" line="73" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d94/a04672_1aece8404b38fb9996fccd976f2fd5986d" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="da/d1e/a01479_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
-        <definition>ShaderPtr castor3d::ShadowMapPassPoint::doGetPhongPixelShaderSource</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
-        <name>doGetPhongPixelShaderSource</name>
-        <reimplements refid="d8/d25/a04596_1a64c67405e2954877ce96d89c3bd6b0ad">doGetPhongPixelShaderSource</reimplements>
-        <param>
-          <type><ref refid="dd/db6/a04580" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves the pixel shader source matching the given flags. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPassPoint.hpp" line="74" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d94/a04672_1a7296cc84bd9adddc58aaebbb2c9eefa6" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="da/d1e/a01479_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
-        <definition>ShaderPtr castor3d::ShadowMapPassPoint::doGetPbrMRPixelShaderSource</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
-        <name>doGetPbrMRPixelShaderSource</name>
-        <reimplements refid="d8/d25/a04596_1a840611696fdbf0542000710c0191781f">doGetPbrMRPixelShaderSource</reimplements>
-        <param>
-          <type><ref refid="dd/db6/a04580" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves the pixel shader source matching the given flags. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPassPoint.hpp" line="75" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d94/a04672_1a5345eacc264b2a980d90ed98be7659f5" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="da/d1e/a01479_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
-        <definition>ShaderPtr castor3d::ShadowMapPassPoint::doGetPbrSGPixelShaderSource</definition>
-        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
-        <name>doGetPbrSGPixelShaderSource</name>
-        <reimplements refid="d8/d25/a04596_1a26b38ac7476d3a153faa4b18573f3744">doGetPbrSGPixelShaderSource</reimplements>
-        <param>
-          <type><ref refid="dd/db6/a04580" kindref="compound">PipelineFlags</ref> const &amp;</type>
-          <declname>flags</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves the pixel shader source matching the given flags. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">flags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pipeline flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMapPassPoint.hpp" line="76" column="1"/>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="66" column="11" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="66" bodyend="73"/>
+        <references refid="d7/d94/a04672_1a2efb4a5929c0af4c2f28f0a0e12ae21d" compoundref="d5/d16/a01154" startline="75">c0</references>
+        <references refid="d7/d94/a04672_1a372c2c3f7efcc62a4e95047223847091" compoundref="d5/d16/a01154" startline="76">c1</references>
+        <references refid="d7/d94/a04672_1a4933e6cc88270cd06281a2e0fecc2e3e" compoundref="d5/d16/a01154" startline="77">c2</references>
+        <references refid="d7/d94/a04672_1a163f574b774f0802a7299958c82184ed" compoundref="d5/d16/a01154" startline="78">c3</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="3760">
-        <label>castor3d::ShadowMapPassPoint</label>
-        <link refid="d7/d94/a04672"/>
-        <childnode refid="3761" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3764">
-        <label>Named</label>
-      </node>
-      <node id="3762">
-        <label>castor3d::SceneRenderPass</label>
-        <link refid="d8/d25/a04596"/>
-        <childnode refid="3763" relation="public-inheritance">
-        </childnode>
-        <childnode refid="3764" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3761">
-        <label>castor3d::ShadowMapPass</label>
-        <link refid="d1/d62/a04664"/>
-        <childnode refid="3762" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3763">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-    </inheritancegraph>
     <collaborationgraph>
-      <node id="3781">
-        <label>castor3d::RenderQueue</label>
-        <link refid="d2/dfe/a04620"/>
-        <childnode refid="3782" relation="public-inheritance">
-        </childnode>
+      <node id="2">
+        <label>castor3d::LightBuffer::Float4</label>
+        <link refid="d5/d43/a04668"/>
       </node>
-      <node id="3783">
-        <label>castor3d::ShadowMapUbo</label>
-        <link refid="d4/de3/a05532"/>
-      </node>
-      <node id="3778">
-        <label>castor3d::SceneCuller</label>
-        <link refid="d4/d4b/a04232"/>
-      </node>
-      <node id="3777">
-        <label>castor3d::RenderSystem</label>
-        <link refid="d9/d38/a04624"/>
-        <childnode refid="3768" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3774">
-        <label>K</label>
-      </node>
-      <node id="3775">
-        <label>T</label>
-      </node>
-      <node id="3765">
-        <label>castor3d::ShadowMapPassPoint</label>
+      <node id="1">
+        <label>castor3d::LightBuffer::Float4x4</label>
         <link refid="d7/d94/a04672"/>
-        <childnode refid="3766" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3791">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="3775" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="3787">
-        <label>std::vector&lt; castor3d::ShadowMap::PassData &gt;</label>
-        <childnode refid="3788" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-        <childnode refid="3791" relation="template-instance">
-          <edgelabel>&lt; castor3d::ShadowMap::PassData &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3782">
-        <label>castor::OwnedBy&lt; SceneRenderPass &gt;</label>
-      </node>
-      <node id="3773">
-        <label>std::map&lt; K, T &gt;</label>
-        <childnode refid="3774" relation="usage">
-          <edgelabel>keys</edgelabel>
-        </childnode>
-        <childnode refid="3775" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="3772">
-        <label>castor3d::UniformBufferOffsetT&lt; DataT &gt;</label>
-        <link refid="d1/d47/a02300"/>
-      </node>
-      <node id="3790">
-        <label>std::unique_ptr&lt; T &gt;</label>
-        <childnode refid="3775" relation="usage">
-          <edgelabel>ptr</edgelabel>
-        </childnode>
-      </node>
-      <node id="3794">
-        <label>castor3d::ShadowMapResult</label>
-        <link refid="d9/dcf/a04692"/>
-        <childnode refid="3795" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3769">
-        <label>Named</label>
-      </node>
-      <node id="3784">
-        <label>castor3d::ShadowMap</label>
-        <link refid="d5/d62/a04648"/>
-        <childnode refid="3768" relation="public-inheritance">
-        </childnode>
-        <childnode refid="3785" relation="usage">
-          <edgelabel>m_geometryBuffers</edgelabel>
-        </childnode>
-        <childnode refid="3787" relation="usage">
-          <edgelabel>m_passes</edgelabel>
-        </childnode>
-        <childnode refid="3792" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-        <childnode refid="3794" relation="usage">
-          <edgelabel>m_result</edgelabel>
-        </childnode>
-      </node>
-      <node id="3771">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelInstancesUboConfiguration &gt;</label>
-        <link refid="d1/d47/a02300"/>
-        <childnode refid="3772" relation="template-instance">
-          <edgelabel>&lt; castor3d::ModelInstancesUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3798">
-        <label>castor::Unique&lt; Engine &gt;</label>
-      </node>
-      <node id="3785">
-        <label>std::set&lt; std::reference_wrapper&lt; castor3d::GeometryBuffers &gt; &gt;</label>
-        <childnode refid="3786" relation="template-instance">
-          <edgelabel>&lt; std::reference_wrapper&lt; castor3d::GeometryBuffers &gt; &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3767">
-        <label>castor3d::SceneRenderPass</label>
-        <link refid="d8/d25/a04596"/>
-        <childnode refid="3768" relation="public-inheritance">
-        </childnode>
-        <childnode refid="3769" relation="public-inheritance">
-        </childnode>
-        <childnode refid="3770" relation="usage">
-          <edgelabel>m_modelsInstances</edgelabel>
-        </childnode>
-        <childnode refid="3776" relation="usage">
-          <edgelabel>m_sceneUbo</edgelabel>
-        </childnode>
-        <childnode refid="3777" relation="usage">
-          <edgelabel>m_renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="3778" relation="usage">
-          <edgelabel>m_culler</edgelabel>
-        </childnode>
-        <childnode refid="3779" relation="usage">
-          <edgelabel>m_timer</edgelabel>
-        </childnode>
-        <childnode refid="3780" relation="usage">
-          <edgelabel>m_matrixUbo</edgelabel>
-        </childnode>
-        <childnode refid="3781" relation="usage">
-          <edgelabel>m_renderQueue</edgelabel>
-        </childnode>
-      </node>
-      <node id="3776">
-        <label>castor3d::SceneUbo</label>
-        <link refid="df/d63/a05528"/>
-      </node>
-      <node id="3793">
-        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
-      </node>
-      <node id="3766">
-        <label>castor3d::ShadowMapPass</label>
-        <link refid="d1/d62/a04664"/>
-        <childnode refid="3767" relation="public-inheritance">
-        </childnode>
-        <childnode refid="3783" relation="usage">
-          <edgelabel>m_shadowMapUbo</edgelabel>
-        </childnode>
-        <childnode refid="3784" relation="usage">
-          <edgelabel>m_shadowMap</edgelabel>
-        </childnode>
-      </node>
-      <node id="3779">
-        <label>castor3d::RenderPassTimer</label>
-        <link refid="d7/dc4/a04612"/>
-        <childnode refid="3769" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3768">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="3789">
-        <label>std::unique_ptr&lt; castor3d::MatrixUbo &gt;</label>
-        <childnode refid="3780" relation="usage">
-          <edgelabel>ptr</edgelabel>
-        </childnode>
-        <childnode refid="3790" relation="template-instance">
-          <edgelabel>&lt; castor3d::MatrixUbo &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3797">
-        <label>castor3d::Engine</label>
-        <link refid="dc/dbb/a02520"/>
-        <childnode refid="3798" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3799">
-        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
-        <link refid="d8/dc6/a04256"/>
-        <childnode refid="3796" relation="private-inheritance">
-        </childnode>
-        <childnode refid="3797" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-      </node>
-      <node id="3786">
-        <label>std::set&lt; K &gt;</label>
-        <childnode refid="3774" relation="usage">
-          <edgelabel>keys</edgelabel>
-        </childnode>
-      </node>
-      <node id="3796">
-        <label>castor3d::GBufferBase</label>
-        <link refid="dc/de4/a04252"/>
-        <childnode refid="3769" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3795">
-        <label>castor3d::GBufferT&lt; SmTexture &gt;</label>
-        <link refid="d8/dc6/a04256"/>
-        <childnode refid="3796" relation="private-inheritance">
-        </childnode>
-        <childnode refid="3797" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="3799" relation="template-instance">
-          <edgelabel>&lt; SmTexture &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3792">
-        <label>castor3d::Scene</label>
-        <link refid="d5/d76/a05244"/>
-        <childnode refid="3793" relation="public-inheritance">
-        </childnode>
-        <childnode refid="3768" relation="public-inheritance">
-        </childnode>
-        <childnode refid="3769" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3780">
-        <label>castor3d::MatrixUbo</label>
-        <link refid="d2/d0e/a05496"/>
-      </node>
-      <node id="3770">
-        <label>std::map&lt; size_t, castor3d::UniformBufferOffsetT&lt; castor3d::ModelInstancesUboConfiguration &gt; &gt;</label>
-        <childnode refid="3771" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-        <childnode refid="3773" relation="template-instance">
-          <edgelabel>&lt; size_t, castor3d::UniformBufferOffsetT&lt; castor3d::ModelInstancesUboConfiguration &gt; &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3788">
-        <label>castor3d::ShadowMap::PassData</label>
-        <link refid="d1/d2b/a04652"/>
-        <childnode refid="3789" relation="usage">
-          <edgelabel>matrixUbo</edgelabel>
+        <childnode refid="2" relation="usage">
+          <edgelabel>c0</edgelabel>
+          <edgelabel>c1</edgelabel>
+          <edgelabel>c2</edgelabel>
+          <edgelabel>c3</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Render/ShadowMap/ShadowMapPassPoint.hpp" line="18" column="1" bodyfile="Render/ShadowMap/ShadowMapPassPoint.hpp" bodystart="16" bodyend="86"/>
+    <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="64" column="1" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="65" bodyend="79"/>
     <listofallmembers>
-      <member refid="d8/d25/a04596_1ac5627bf8072801b914f5a7a8fde7c4ef" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>cleanup</name></member>
-      <member refid="d8/d25/a04596_1a7534bc2c8e7a5e8812685d23cf92da18" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>createBillboardNode</name></member>
-      <member refid="d8/d25/a04596_1a85a295a43ea151d07bbb59a983fc0a9b" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>createBlendState</name></member>
-      <member refid="d8/d25/a04596_1aef15f688cd35f6b8b50970e7b5f57d1b" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>createMorphingNode</name></member>
-      <member refid="d8/d25/a04596_1a1f6309ff1990fcf752d1b1fc4162707e" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>createSkinningNode</name></member>
-      <member refid="d8/d25/a04596_1ad06a7b233133bd72a5f40a6309bbb636" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>createStaticNode</name></member>
-      <member refid="d8/d25/a04596_1acfc7eaded98ff40bb227979eb6f56274" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>DistanceSortedNodeMap</name></member>
-      <member refid="d7/d94/a04672_1a8dbc83d596ed9dece2205bfca92d705b" prot="private" virt="virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doCleanup</name></member>
-      <member refid="d8/d25/a04596_1a5ad44dd6ff6eff2ff3ef28ffce50790d" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doCopyNodesBones</name></member>
-      <member refid="d8/d25/a04596_1af6a1dcd4de30a16371ff2801ae10c23a" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doCopyNodesBones</name></member>
-      <member refid="d8/d25/a04596_1ac7e8cea34069461a25c5dce78ad4133d" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doCopyNodesMatrices</name></member>
-      <member refid="d8/d25/a04596_1abedc9556fe34264878d1175e4c5dd76d" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doCopyNodesMatrices</name></member>
-      <member refid="d8/d25/a04596_1a8ea69998caa9d7ccc3c86d5fd5b4f0f0" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doCopyNodesMatrices</name></member>
-      <member refid="d8/d25/a04596_1a6bce0687b325c3413c94465655611170" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doCopyNodesMatrices</name></member>
-      <member refid="d7/d94/a04672_1aa08621776475de14262f7aa035ab4ed8" prot="private" virt="virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doCreateBlendState</name></member>
-      <member refid="d7/d94/a04672_1a431ad68d57f1286f2a56a3fe5ee4de3a" prot="private" virt="virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doCreateDepthStencilState</name></member>
-      <member refid="d8/d25/a04596_1ab989a2da21f70c26e1fed17823e39af6" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doCreatePassRenderNode</name></member>
-      <member refid="d8/d25/a04596_1a9bf6b45209c8b79cccfa152d51b3b144" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doCreateSceneRenderNode</name></member>
-      <member refid="d1/d62/a04664_1a20c06e8eb775f9e1f9509be38683df56" prot="protected" virt="virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doCreateTextureBindings</name></member>
-      <member refid="d7/d94/a04672_1af4447267f8e4f1ae88e658bfea454005" prot="private" virt="virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doCreateUboBindings</name></member>
-      <member refid="d7/d94/a04672_1ac83c0e2bea7d9eb640a7c4dc6da8bfec" prot="private" virt="virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doFillUboDescriptor</name></member>
-      <member refid="d7/d94/a04672_1a23c86cc71bd56a34610437a2d1c9a69a" prot="private" virt="virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doFillUboDescriptor</name></member>
-      <member refid="d8/d25/a04596_1adc154d1a476245fee3c7a997e51018ae" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doGetBackPipelines</name></member>
-      <member refid="d8/d25/a04596_1a31fa7bcde80cfbdcb6acce0810df198e" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doGetBackPipelines</name></member>
-      <member refid="d8/d25/a04596_1a1f4d8c2e2d67d3686c1059e189ab2d95" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doGetFrontPipelines</name></member>
-      <member refid="d8/d25/a04596_1ab11482c4f9eb0c4a7d91af6681bc558d" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doGetFrontPipelines</name></member>
-      <member refid="d7/d94/a04672_1a7296cc84bd9adddc58aaebbb2c9eefa6" prot="private" virt="virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doGetPbrMRPixelShaderSource</name></member>
-      <member refid="d7/d94/a04672_1a5345eacc264b2a980d90ed98be7659f5" prot="private" virt="virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doGetPbrSGPixelShaderSource</name></member>
-      <member refid="d7/d94/a04672_1aece8404b38fb9996fccd976f2fd5986d" prot="private" virt="virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doGetPhongPixelShaderSource</name></member>
-      <member refid="d8/d25/a04596_1a4b807ea9d74d5f1ccaba4b29e78c8085" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doGetProgram</name></member>
-      <member refid="d7/d94/a04672_1a708198a468325dc0df35b352a8d4b7e6" prot="private" virt="virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doGetVertexShaderSource</name></member>
-      <member refid="d7/d94/a04672_1a4b722cd13f26298183c07753039c5733" prot="private" virt="virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doInitialise</name></member>
-      <member refid="d8/d25/a04596_1a01dba0c138042186e5976fd73e716fc5" prot="protected" virt="virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doPrepareBackPipeline</name></member>
-      <member refid="d8/d25/a04596_1ab5eabfab3b395ee4a59d0302b0e245d1" prot="protected" virt="virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doPrepareFrontPipeline</name></member>
-      <member refid="d8/d25/a04596_1a1f6449a6facd708b63468e0cf2395133" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doUpdate</name></member>
-      <member refid="d8/d25/a04596_1a8daee9fd51dd6295fcfde8f29d9b0215" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doUpdate</name></member>
-      <member refid="d8/d25/a04596_1accb2dd43ffa84bee0d475a1f39135d2a" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doUpdate</name></member>
-      <member refid="d8/d25/a04596_1a42af41141686d6979c7f14d427b2b978" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doUpdate</name></member>
-      <member refid="d8/d25/a04596_1a8130e8bcfe91063cf2589979d4381e73" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doUpdate</name></member>
-      <member refid="d8/d25/a04596_1ab524ba33c1aaec1b9f95ab64b8efaab5" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doUpdate</name></member>
-      <member refid="d8/d25/a04596_1a8e02e08b5f5e4065d583926ae5a2b313" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doUpdate</name></member>
-      <member refid="d8/d25/a04596_1ae907440fd9c2237ba4bb5a4dec97a898" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doUpdate</name></member>
-      <member refid="d8/d25/a04596_1ab0c1a3251b5af55708ad6b6a13307fa6" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doUpdate</name></member>
-      <member refid="d8/d25/a04596_1acc81b152f8a75a0006f933aa9ad1c35b" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doUpdate</name></member>
-      <member refid="d8/d25/a04596_1ad95120cc3a5f5ae2566518fbfd1e96b1" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doUpdate</name></member>
-      <member refid="d8/d25/a04596_1abcc866dd44044031e30ed73d47357ed0" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doUpdate</name></member>
-      <member refid="d8/d25/a04596_1a7b644b338ea6bbbffec7ed1cf4936a38" prot="protected" virt="virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doUpdate</name></member>
-      <member refid="d7/d94/a04672_1a87bcd0a12b6a9f2065b30e62817f363f" prot="private" virt="virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doUpdateFlags</name></member>
-      <member refid="d7/d94/a04672_1a03a9b583857103ca8d1df48373dd8584" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doUpdateNodes</name></member>
-      <member refid="d7/d94/a04672_1abc0ce1f1a55694e3db5af51c1e566909" prot="private" virt="virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>doUpdateUbos</name></member>
-      <member refid="d8/d25/a04596_1a8dd34d9bcfcbf1cc93c73d633e26b375" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>forceTwoSided</name></member>
-      <member refid="d8/d25/a04596_1abcf02ee3b5e0f4dbfb0c9b5cf22a3245" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>getCommandBuffer</name></member>
-      <member refid="d8/d25/a04596_1a9ec598bacebe135008057204f4b7e498" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>getCuller</name></member>
-      <member refid="d8/d25/a04596_1ab06deeaf325f047f97f0fdd046b1db9a" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>getCuller</name></member>
-      <member refid="d8/d25/a04596_1ad17ff2b38eb4b3323973a04816eca7a9" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>getGeometryShaderSource</name></member>
-      <member refid="d8/d25/a04596_1ae964287f47d4145776448a31cb9a6ccd" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>getInstanceMult</name></member>
-      <member refid="d8/d25/a04596_1a283dc741d44f730b657f153ee8c0b21d" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>getMatrixUbo</name></member>
-      <member refid="d8/d25/a04596_1a3f2e595dabdcea8b9668d591a5e26879" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>getPipelineBack</name></member>
-      <member refid="d8/d25/a04596_1a9ee5e22f4b636f7d1eb3dc7993cc23a4" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>getPipelineFront</name></member>
-      <member refid="d8/d25/a04596_1a6f6289ae6913449d6cb3cb7a1ae64976" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>getPipelinesCount</name></member>
-      <member refid="d8/d25/a04596_1a32ad22d6a16a83d89a3a888599bf19ed" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>getPixelShaderSource</name></member>
-      <member refid="d8/d25/a04596_1af9a616bf4b5e1bf848d4a7783cff5dcf" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>getRenderPass</name></member>
-      <member refid="d8/d25/a04596_1a9ce55bbe9de899304219df9a29869ac2" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>getSceneUbo</name></member>
-      <member refid="d8/d25/a04596_1ad5bf1e846317bf671e0cac4118922226" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>getSceneUbo</name></member>
-      <member refid="d1/d62/a04664_1a641044a6e337993464b57845b52e1cec" prot="public" virt="virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>getTexturesMask</name></member>
-      <member refid="d1/d62/a04664_1a7b4c31a35a83999130cf2b32b82004f7" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>getTimer</name></member>
-      <member refid="d8/d25/a04596_1ab21b006fe9daf0ae6172c17f076c5f85" prot="public" virt="non-virtual" ambiguityscope="castor3d::SceneRenderPass::"><scope>castor3d::ShadowMapPassPoint</scope><name>getTimer</name></member>
-      <member refid="d8/d25/a04596_1a2d99705d33fb3391c2556e0c484d6ab8" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>getVertexShaderSource</name></member>
-      <member refid="d8/d25/a04596_1afaa168a458700f72a3365a1f4c550c55" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>hasNodes</name></member>
-      <member refid="d8/d25/a04596_1a659c1c103b9db5a461c77a6c0417be1b" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>initialise</name></member>
-      <member refid="d8/d25/a04596_1aa19a90dd2842009db8b987e205272135" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>initialise</name></member>
-      <member refid="d8/d25/a04596_1a3206b3416f9f404253530cd6a8bcf39d" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>initialiseTextureDescriptor</name></member>
-      <member refid="d8/d25/a04596_1a19fdc14553d98acdae5243a15a009b0e" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>initialiseTextureDescriptor</name></member>
-      <member refid="d8/d25/a04596_1a9f7a16a74d188c71932474d2dfabd496" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>initialiseTextureDescriptor</name></member>
-      <member refid="d8/d25/a04596_1a6293db061efb0ed860e247a10373b25b" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>initialiseTextureDescriptor</name></member>
-      <member refid="d8/d25/a04596_1a244414e5446292f40316010853b25a85" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>initialiseTextureDescriptor</name></member>
-      <member refid="d8/d25/a04596_1a80f92f9b5d2ac1396870e4a19d88baaa" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>initialiseTextureDescriptor</name></member>
-      <member refid="d8/d25/a04596_1a41e1f148667ede6bf4a4b15b63edbd09" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>initialiseUboDescriptor</name></member>
-      <member refid="d8/d25/a04596_1a1566db0372f6d6a3db34efc6c469cd26" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>initialiseUboDescriptor</name></member>
-      <member refid="d8/d25/a04596_1a6eb27cf641fd25efae02250beae221ac" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>initialiseUboDescriptor</name></member>
-      <member refid="d8/d25/a04596_1a8e22a05fc6dbb5c7a99030c0a688cc15" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>initialiseUboDescriptor</name></member>
-      <member refid="d8/d25/a04596_1a174e24b5897213c0dda6e3fcfb4d90d5" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>initialiseUboDescriptor</name></member>
-      <member refid="d8/d25/a04596_1ab6ccf8272797a7df98ad6dc8c7c43706" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>initialiseUboDescriptor</name></member>
-      <member refid="d8/d25/a04596_1a912328721eae90138599880d76a309ae" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>isDirty</name></member>
-      <member refid="d8/d25/a04596_1a4bac800c4178729d7e6c2324eb126fd6" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>isOrderIndependent</name></member>
-      <member refid="d1/d62/a04664_1a8d0470bdee92ed374a4782e0fa0dd289" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>isUpToDate</name></member>
-      <member refid="d8/d25/a04596_1aa7fc94ef9d99bc777795fb27941d7c65" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>m_category</name></member>
-      <member refid="d8/d25/a04596_1a16c632e89f0628620bcf01a70d520b2d" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>m_culler</name></member>
-      <member refid="d8/d25/a04596_1aa9df6fd78c7eb9ca9b59c10574776085" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>m_forceTwoSided</name></member>
-      <member refid="d8/d25/a04596_1a6e274505905d565cac4f9d6743b0417d" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>m_index</name></member>
-      <member refid="d1/d62/a04664_1af58da292ad1fc7eb1a7f1a5f1e879293" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>m_initialised</name></member>
-      <member refid="d8/d25/a04596_1afe43990c332123ca5bcaaa12e2204ff5" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>m_instanceMult</name></member>
-      <member refid="d8/d25/a04596_1ac70af3d0c68adfc6fa7ec2f68d5b6f12" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>m_isDirty</name></member>
-      <member refid="d7/d94/a04672_1ab91c3d98bb37eb8ff1b5939b13b3cd40" prot="private" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>m_matrices</name></member>
-      <member refid="d8/d25/a04596_1a6b0f370e15e18a3a554c56b09fba85b4" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>m_matrixUbo</name></member>
-      <member refid="d8/d25/a04596_1a927f5ac447cecf2b3419ce9501632fd7" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>m_mode</name></member>
-      <member refid="d8/d25/a04596_1a923ae0f7686d6ef4c9a27f0799ca62c8" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>m_modelsInstances</name></member>
-      <member refid="d8/d25/a04596_1a898939bc8fc037bb32daebe391e6263b" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>m_oit</name></member>
-      <member refid="d7/d94/a04672_1a9f08d3d693958cc03604937fd14ad604" prot="private" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>m_onNodeChanged</name></member>
-      <member refid="d1/d62/a04664_1a5ff1b32135e6d3e24f8aca869a60d2c1" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>m_outOfDate</name></member>
-      <member refid="d8/d25/a04596_1a5faf1387a50606631d9eccf95060f84a" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>m_ownTimer</name></member>
-      <member refid="d7/d94/a04672_1ab46ab034d2e61aadc8fc54a250933c6b" prot="private" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>m_projection</name></member>
-      <member refid="d8/d25/a04596_1a6f215acabcb9564bc85f30f8abeaba56" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>m_renderPass</name></member>
-      <member refid="d8/d25/a04596_1a3fd80e792cc2f052add8f252b531c0e2" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>m_renderQueue</name></member>
-      <member refid="d8/d25/a04596_1a1513ba71b682375fed01e9819105c894" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>m_renderSystem</name></member>
-      <member refid="d8/d25/a04596_1aa623f3557914bcc6e2e8cf058da1c5e5" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>m_sceneUbo</name></member>
-      <member refid="d1/d62/a04664_1a045831e9426dee9ff6e742f56ac2326d" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>m_shadowMap</name></member>
-      <member refid="d1/d62/a04664_1a7ecece374daff38d2857ff46a7eb6715" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>m_shadowMapUbo</name></member>
-      <member refid="d8/d25/a04596_1ab4b6ee7f462854794ed9e3fccdc5b10f" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>m_size</name></member>
-      <member refid="d8/d25/a04596_1a729739080d9153cd9ce71129b909a869" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>m_timer</name></member>
-      <member refid="d7/d94/a04672_1a76c9feed42b35a9e238d305bfcddb374" prot="private" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>m_viewport</name></member>
-      <member refid="d8/d25/a04596_1a1944832d81c804c1db58c6ce658aa50c" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>prepareBackPipeline</name></member>
-      <member refid="d8/d25/a04596_1aca7f84fa9420e1056a2254e7387c4c56" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>prepareBackPipeline</name></member>
-      <member refid="d8/d25/a04596_1a8ef8352df2d2af6d596e4b8f7f013679" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>prepareFrontPipeline</name></member>
-      <member refid="d8/d25/a04596_1ab2e52ba19699b996f9a24a209af5c50d" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>prepareFrontPipeline</name></member>
-      <member refid="d8/d25/a04596_1affb5828080147f1657a582841cbaca01" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>SceneRenderPass</name></member>
-      <member refid="d8/d25/a04596_1ac65dc41b8e3392db21bd3cadd94754d6" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>SceneRenderPass</name></member>
-      <member refid="d8/d25/a04596_1a7a964bd723f31105db6937b6c2016344" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>SceneRenderPass</name></member>
-      <member refid="d8/d25/a04596_1a78ae5b7ef98084673c04980da95e359f" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>SceneRenderPass</name></member>
-      <member refid="d8/d25/a04596_1adf551a42f8dec9de911b7f2ffc56b666" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>SceneRenderPass</name></member>
-      <member refid="d1/d62/a04664_1a26a96a2191aa6e72ef427a0af876095d" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>setUpToDate</name></member>
-      <member refid="d1/d62/a04664_1a67e336c571b873abf99a3aa39a5446fa" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>ShadowMapPass</name></member>
-      <member refid="d7/d94/a04672_1a496a32869303d2b1ccb6c1490fb89f74" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>ShadowMapPassPoint</name></member>
-      <member refid="d7/d94/a04672_1a41bd06467f7720cdf3f6562740b9aacc" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>TextureSize</name></member>
-      <member refid="d7/d94/a04672_1acfbf0b14d3243ca7d164563948272d73" prot="public" virt="virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>update</name></member>
-      <member refid="d7/d94/a04672_1a0e61c58e5f9ff5d57c4e156befd3905a" prot="public" virt="virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>update</name></member>
-      <member refid="d8/d25/a04596_1a49f451446a2b5cc5622aaaeda521bfbf" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>updateFlags</name></member>
-      <member refid="d8/d25/a04596_1aeb30d85455e3fb74cff7074377268d80" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>updatePipeline</name></member>
-      <member refid="d8/d25/a04596_1a8ece518761c68ec639b59e82cde459af" prot="public" virt="virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>~SceneRenderPass</name></member>
-      <member refid="d7/d94/a04672_1a37a8e24d5d62ecaaeab764bae089a0a2" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPassPoint</scope><name>~ShadowMapPassPoint</name></member>
+      <member refid="d7/d94/a04672_1a2efb4a5929c0af4c2f28f0a0e12ae21d" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::Float4x4</scope><name>c0</name></member>
+      <member refid="d7/d94/a04672_1a372c2c3f7efcc62a4e95047223847091" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::Float4x4</scope><name>c1</name></member>
+      <member refid="d7/d94/a04672_1a4933e6cc88270cd06281a2e0fecc2e3e" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::Float4x4</scope><name>c2</name></member>
+      <member refid="d7/d94/a04672_1a163f574b774f0802a7299958c82184ed" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::Float4x4</scope><name>c3</name></member>
+      <member refid="d7/d94/a04672_1af4d5f2ccd4d55848c8ac48be67e51d27" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::Float4x4</scope><name>operator=</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

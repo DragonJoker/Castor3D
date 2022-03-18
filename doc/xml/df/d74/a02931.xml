@@ -1,33 +1,192 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="df/d74/a02931" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkImageSparseMemoryRequirementsInfo2 &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
+    <compoundname>castor3d::ArrayView</compoundname>
+    <includes local="no">TextureLayout.hpp</includes>
     <templateparamlist>
+      <param>
+        <type>typename ViewT</type>
+      </param>
     </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="df/d74/a02931_1a66511587cbdd619eee5b4aecccc40522" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkImageSparseMemoryRequirementsInfo2 &gt;::value</definition>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/d74/a02931_1affa9ed91064c21995ebe2fe83b06ad5a" prot="public" static="no" mutable="no">
+        <type><ref refid="d6/df9/a02923" kindref="compound">MipView</ref> *</type>
+        <definition>MipView* castor3d::ArrayView&lt; ViewT &gt;::view</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_IMAGE_SPARSE_MEMORY_REQUIREMENTS_INFO_2</initializer>
+        <name>view</name>
+        <qualifiedname>castor3d::ArrayView::view</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="78" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="78" bodyend="-1"/>
+        <location file="Material/Texture/TextureLayout.hpp" line="103" column="10" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d74/a02931_1aa647ac8bc0ba7a50aaa05d7e2320fad9" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; ViewT &gt;</type>
+        <definition>std::vector&lt; ViewT &gt; castor3d::ArrayView&lt; ViewT &gt;::layers</definition>
+        <argsstring></argsstring>
+        <name>layers</name>
+        <qualifiedname>castor3d::ArrayView::layers</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="104" column="13" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="104" bodyend="-1"/>
+        <referencedby refid="df/d74/a02931_1a67ab0f0d5b204c536ac11ea7ca6ad9ac" compoundref="de/dd7/a00362" startline="116" endline="122">castor3d::ArrayView&lt; ViewT &gt;::forEachFirstMipView</referencedby>
+        <referencedby refid="df/d74/a02931_1aa2a9a6a8ad4dede91442f88e199fd8a2" compoundref="de/dd7/a00362" startline="125" endline="131">castor3d::ArrayView&lt; ViewT &gt;::forEachLeafView</referencedby>
+        <referencedby refid="df/d74/a02931_1a4326bf34de29aa53db509da1068b9b1c" compoundref="de/dd7/a00362" startline="107" endline="113">castor3d::ArrayView&lt; ViewT &gt;::forEachView</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d74/a02931_1a4326bf34de29aa53db509da1068b9b1c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FuncT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::ArrayView&lt; ViewT &gt;::forEachView</definition>
+        <argsstring>(FuncT function) const</argsstring>
+        <name>forEachView</name>
+        <qualifiedname>castor3d::ArrayView::forEachView</qualifiedname>
+        <param>
+          <type>FuncT</type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="107" column="6" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="107" bodyend="113"/>
+        <references refid="df/d74/a02931_1aa647ac8bc0ba7a50aaa05d7e2320fad9" compoundref="de/dd7/a00362" startline="104">castor3d::ArrayView&lt; ViewT &gt;::layers</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d74/a02931_1a67ab0f0d5b204c536ac11ea7ca6ad9ac" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FuncT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::ArrayView&lt; ViewT &gt;::forEachFirstMipView</definition>
+        <argsstring>(FuncT function) const</argsstring>
+        <name>forEachFirstMipView</name>
+        <qualifiedname>castor3d::ArrayView::forEachFirstMipView</qualifiedname>
+        <param>
+          <type>FuncT</type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="116" column="6" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="116" bodyend="122"/>
+        <references refid="df/d74/a02931_1aa647ac8bc0ba7a50aaa05d7e2320fad9" compoundref="de/dd7/a00362" startline="104">castor3d::ArrayView&lt; ViewT &gt;::layers</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d74/a02931_1aa2a9a6a8ad4dede91442f88e199fd8a2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FuncT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::ArrayView&lt; ViewT &gt;::forEachLeafView</definition>
+        <argsstring>(FuncT function) const</argsstring>
+        <name>forEachLeafView</name>
+        <qualifiedname>castor3d::ArrayView::forEachLeafView</qualifiedname>
+        <param>
+          <type>FuncT</type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="125" column="6" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="125" bodyend="131"/>
+        <references refid="df/d74/a02931_1aa647ac8bc0ba7a50aaa05d7e2320fad9" compoundref="de/dd7/a00362" startline="104">castor3d::ArrayView&lt; ViewT &gt;::layers</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="78" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="78" bodyend="78"/>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor3d::ArrayView&lt; castor3d::CubeView &gt;</label>
+        <link refid="df/d74/a02931"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::CubeView &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ArrayView&lt; castor3d::MipView &gt;</label>
+        <link refid="df/d74/a02931"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::MipView &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ArrayView&lt; ViewT &gt;</label>
+        <link refid="df/d74/a02931"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5">
+        <label>T</label>
+      </node>
+      <node id="1">
+        <label>castor3d::ArrayView&lt; ViewT &gt;</label>
+        <link refid="df/d74/a02931"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>view</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>layers</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::MipView</label>
+        <link refid="d6/df9/a02923"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>levels</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::vector&lt; TextureViewUPtr &gt;</label>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; TextureViewUPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::vector&lt; ViewT &gt;</label>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; ViewT &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Texture/TextureLayout.hpp" line="101" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="102" bodyend="132"/>
     <listofallmembers>
-      <member refid="df/d74/a02931_1a66511587cbdd619eee5b4aecccc40522" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkImageSparseMemoryRequirementsInfo2 &gt;</scope><name>value</name></member>
+      <member refid="df/d74/a02931_1a67ab0f0d5b204c536ac11ea7ca6ad9ac" prot="public" virt="non-virtual"><scope>castor3d::ArrayView</scope><name>forEachFirstMipView</name></member>
+      <member refid="df/d74/a02931_1aa2a9a6a8ad4dede91442f88e199fd8a2" prot="public" virt="non-virtual"><scope>castor3d::ArrayView</scope><name>forEachLeafView</name></member>
+      <member refid="df/d74/a02931_1a4326bf34de29aa53db509da1068b9b1c" prot="public" virt="non-virtual"><scope>castor3d::ArrayView</scope><name>forEachView</name></member>
+      <member refid="df/d74/a02931_1aa647ac8bc0ba7a50aaa05d7e2320fad9" prot="public" virt="non-virtual"><scope>castor3d::ArrayView</scope><name>layers</name></member>
+      <member refid="df/d74/a02931_1affa9ed91064c21995ebe2fe83b06ad5a" prot="public" virt="non-virtual"><scope>castor3d::ArrayView</scope><name>view</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

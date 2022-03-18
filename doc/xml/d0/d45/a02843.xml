@@ -1,33 +1,329 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d0/d45/a02843" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkCommandBufferBeginInfo &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d0/d45/a02843_1ad37e1be5801dbc12fa8b517242237672" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkCommandBufferBeginInfo &gt;::value</definition>
-        <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO</initializer>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d0/d45/a02843" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::PbrSGLightingModel</compoundname>
+    <basecompoundref refid="d6/d97/a02835" prot="public" virt="non-virtual">castor3d::shader::PbrLightingModel</basecompoundref>
+    <includes local="no">GlslPbrLighting.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d45/a02843_1abb109b7a8bae8e46616645c428ebaa75" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::PbrSGLightingModel::PbrSGLightingModel</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Utils &amp;utils, ShadowOptions shadowOptions, SssProfiles const *sssProfiles, bool isOpaqueProgram)</argsstring>
+        <name>PbrSGLightingModel</name>
+        <qualifiedname>castor3d::shader::PbrSGLightingModel::PbrSGLightingModel</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d9f/a04859" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/de5/a04867" kindref="compound">ShadowOptions</ref></type>
+          <declname>shadowOptions</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d95/a04811" kindref="compound">SssProfiles</ref> const *</type>
+          <declname>sssProfiles</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isOpaqueProgram</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="56" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="56" bodyend="-1"/>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrLighting.hpp" line="194" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d45/a02843_1a0ba7510d7ed4a1604cf925213a062a57" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; <ref refid="db/d92/a04791" kindref="compound">LightMaterial</ref> &gt;</type>
+        <definition>C3D_API std::unique_ptr&lt; LightMaterial &gt; castor3d::shader::PbrSGLightingModel::declMaterial</definition>
+        <argsstring>(std::string const &amp;name) override</argsstring>
+        <name>declMaterial</name>
+        <qualifiedname>castor3d::shader::PbrSGLightingModel::declMaterial</qualifiedname>
+        <reimplements refid="d5/df7/a04795_1afb2d2506e4e7e9145199649349ee3bb9">declMaterial</reimplements>
+        <param>
+          <type>std::string const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrLighting.hpp" line="207" column="25"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d0/d45/a02843_1add1f0b5f38350fad668614ae170c1ae8" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <definition>static C3D_API const castor::String castor3d::shader::PbrSGLightingModel::getName</definition>
+        <argsstring>()</argsstring>
+        <name>getName</name>
+        <qualifiedname>castor3d::shader::PbrSGLightingModel::getName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrLighting.hpp" line="200" column="37"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d45/a02843_1a5ab1356432d117ef1cd8f4ea9680c71b" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dc/d35/a01400_1a69009a36ab335c9cd7d4eed926a70037" kindref="member">LightingModelPtr</ref></type>
+        <definition>static C3D_API LightingModelPtr castor3d::shader::PbrSGLightingModel::create</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Utils &amp;utils, ShadowOptions shadowOptions, SssProfiles const *sssProfiles, bool isOpaqueProgram)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::shader::PbrSGLightingModel::create</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d9f/a04859" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/de5/a04867" kindref="compound">ShadowOptions</ref></type>
+          <declname>shadowOptions</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d95/a04811" kindref="compound">SssProfiles</ref> const *</type>
+          <declname>sssProfiles</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isOpaqueProgram</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PBR/Shaders/GlslPbrLighting.hpp" line="201" column="33"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="56" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="56" bodyend="56"/>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor3d::shader::LightingModel</label>
+        <link refid="d5/df7/a04795"/>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PbrLightingModel</label>
+        <link refid="d6/d97/a02835"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::PbrSGLightingModel</label>
+        <link refid="d0/d45/a02843"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="7">
+        <label>T</label>
+      </node>
+      <node id="17">
+        <label>castor3d::shader::CookTorranceBRDF</label>
+        <link refid="d0/dfa/a04759"/>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::LightingModel</label>
+        <link refid="d5/df7/a04795"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_utils</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_type</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>m_ssbo</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_tbo</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_prefix</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_shadowModel</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>m_sssTransmittance</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PbrLightingModel</label>
+        <link refid="d6/d97/a02835"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>m_cookTorrance</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::PbrSGLightingModel</label>
+        <link refid="d0/d45/a02843"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::shader::Shadow</label>
+        <link refid="d6/d34/a04823"/>
+      </node>
+      <node id="16">
+        <label>castor3d::shader::SssTransmittance</label>
+        <link refid="d6/da6/a04827"/>
+      </node>
+      <node id="4">
+        <label>castor3d::shader::Utils</label>
+        <link refid="da/d9f/a04859"/>
+      </node>
+      <node id="12">
+        <label>std::shared_ptr&lt; castor3d::shader::Shadow &gt;</label>
+        <childnode refid="13" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; castor3d::shader::Shadow &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>std::shared_ptr&lt; castor3d::shader::SssTransmittance &gt;</label>
+        <childnode refid="16" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; castor3d::shader::SssTransmittance &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="14">
+        <label>std::shared_ptr&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::string</label>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>std::unique_ptr&lt; sdw::RImageBufferRgba32 &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; sdw::RImageBufferRgba32 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::unique_ptr&lt; sdw::Ssbo &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; sdw::Ssbo &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::unique_ptr&lt; sdw::Struct &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; sdw::Struct &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/PBR/Shaders/GlslPbrLighting.hpp" line="190" column="1" bodyfile="Material/Pass/PBR/Shaders/GlslPbrLighting.hpp" bodystart="192" bodyend="208"/>
     <listofallmembers>
-      <member refid="d0/d45/a02843_1ad37e1be5801dbc12fa8b517242237672" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkCommandBufferBeginInfo &gt;</scope><name>value</name></member>
+      <member refid="d6/d97/a02835_1ab5b2ed9066d326dae4ce7a5c2ed8822e" prot="public" virt="virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>combine</name></member>
+      <member refid="d6/d97/a02835_1a870e818802900b2719d99ef43533ce19" prot="public" virt="virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>compute</name></member>
+      <member refid="d6/d97/a02835_1aebc8117ee19b7c72c7ff1971f45ea8f4" prot="public" virt="virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>compute</name></member>
+      <member refid="d6/d97/a02835_1a3c98eb8af0902591dff2503255620790" prot="public" virt="virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>compute</name></member>
+      <member refid="d5/df7/a04795_1a8db5a659754b8909c8f15040db7dade7" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>computeCombined</name></member>
+      <member refid="d5/df7/a04795_1add71e7bce8ee328d6f186773ca24e491" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>computeCombinedDiffuse</name></member>
+      <member refid="d6/d97/a02835_1a877ba57c0818c503bfd8046c8dc46110" prot="public" virt="virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>computeDiffuse</name></member>
+      <member refid="d6/d97/a02835_1a8de6c38cd5606506918bfb85165ee10f" prot="public" virt="virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>computeDiffuse</name></member>
+      <member refid="d6/d97/a02835_1a90e413355f824103934d4881279b793d" prot="public" virt="virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>computeDiffuse</name></member>
+      <member refid="d6/d97/a02835_1a8b1a2717c7e8a26cde660ba6a87e73e3" prot="public" virt="virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>computeMapContributions</name></member>
+      <member refid="d6/d97/a02835_1aeb9fd62a481ce64d0163582c0a0e016f" prot="public" virt="virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>computeMapDiffuseContributions</name></member>
+      <member refid="d0/d45/a02843_1a5ab1356432d117ef1cd8f4ea9680c71b" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>create</name></member>
+      <member refid="d5/df7/a04795_1ab85740393eda5904075078308e87a837" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>createDiffuseModel</name></member>
+      <member refid="d5/df7/a04795_1a673382163b59d65d96190c8b48419e8f" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>createDiffuseModelT</name></member>
+      <member refid="d5/df7/a04795_1adc48f26a84af1a43c55af62ac182da4f" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>createModel</name></member>
+      <member refid="d5/df7/a04795_1a8278cfe80352f0661cc4a1e01f962a6b" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>createModel</name></member>
+      <member refid="d5/df7/a04795_1a593c6a68891db8cd8254c6a0f6e51ff8" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>createModelT</name></member>
+      <member refid="d5/df7/a04795_1aa24840058a44d68dc0524f87f7b5b3cb" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>declareDiffuseModel</name></member>
+      <member refid="d5/df7/a04795_1a0cc52dad90b5068bad9d341f2cabb0ea" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>declareDirectionalModel</name></member>
+      <member refid="d5/df7/a04795_1a311bee3a27615b2cb051884164725877" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>declareModel</name></member>
+      <member refid="d5/df7/a04795_1a10744331a5704a42668d96a4fe7ecaa1" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>declarePointModel</name></member>
+      <member refid="d5/df7/a04795_1a9d2f3cd6795aa79d0f5a4e31de12e97d" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>declareSpotModel</name></member>
+      <member refid="d0/d45/a02843_1a0ba7510d7ed4a1604cf925213a062a57" prot="public" virt="virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>declMaterial</name></member>
+      <member refid="d6/d97/a02835_1a0535701cc570da5baf40323c69b6a858" prot="protected" virt="virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>doDeclareComputeDirectionalLight</name></member>
+      <member refid="d6/d97/a02835_1af5a436db70d6763028a05eb7834e3be2" prot="protected" virt="virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>doDeclareComputeDirectionalLightDiffuse</name></member>
+      <member refid="d6/d97/a02835_1a9dadcda15876dbf6acf3a5dbdc24fc55" prot="protected" virt="virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>doDeclareComputePointLight</name></member>
+      <member refid="d6/d97/a02835_1aab875643f167469cdd5f8eb96d98cbd3" prot="protected" virt="virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>doDeclareComputePointLightDiffuse</name></member>
+      <member refid="d6/d97/a02835_1a9becaebfb17b09191a8720fc6164cfc3" prot="protected" virt="virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>doDeclareComputeSpotLight</name></member>
+      <member refid="d6/d97/a02835_1ad842fc16ddc7ee36237487cf8fd7e2f1" prot="protected" virt="virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>doDeclareComputeSpotLightDiffuse</name></member>
+      <member refid="d6/d97/a02835_1a7ef051b4607ed0cfd30401a03845d965" prot="protected" virt="virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>doDeclareDiffuseModel</name></member>
+      <member refid="d5/df7/a04795_1a078ef33656d17feb0bc301563131dd54" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>doDeclareDirectionalLightUbo</name></member>
+      <member refid="d5/df7/a04795_1a601b0d6adbf1d1cfe51140debba408a9" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>doDeclareGetBaseLight</name></member>
+      <member refid="d5/df7/a04795_1a581d0e6a5c217533e521488ae0309d3c" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>doDeclareGetCascadeFactors</name></member>
+      <member refid="d5/df7/a04795_1a47f393ce5b750d7a8132df92ede2eaab" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>doDeclareGetDirectionalLight</name></member>
+      <member refid="d5/df7/a04795_1aa639e3a479f852a8738a962669961f79" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>doDeclareGetPointLight</name></member>
+      <member refid="d5/df7/a04795_1a14e3657549948e3665c5b7f47bc0e2a2" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>doDeclareGetSpotLight</name></member>
+      <member refid="d5/df7/a04795_1ac2dc1856992461f592d5c2fe6161444d" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>doDeclareLightsBuffer</name></member>
+      <member refid="d6/d97/a02835_1ae25604e99578333dd65a857db4c24538" prot="protected" virt="virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>doDeclareModel</name></member>
+      <member refid="d5/df7/a04795_1af4625cc4704620632fb7cc920a18527e" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>doDeclarePointLightUbo</name></member>
+      <member refid="d5/df7/a04795_1afd671443970f1e4798d5707fce08a2a8" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>doDeclareSpotLightUbo</name></member>
+      <member refid="d5/df7/a04795_1a5b33578c25cb0eb3401590f772e13691" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>getBaseLight</name></member>
+      <member refid="d5/df7/a04795_1a9dce2a67af8cfaefa176a0c4068bea7b" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>getDirectionalLight</name></member>
+      <member refid="d0/d45/a02843_1add1f0b5f38350fad668614ae170c1ae8" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>getName</name></member>
+      <member refid="d5/df7/a04795_1a0b32c9c9d9666a7e01ac4490b007de09" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>getPointLight</name></member>
+      <member refid="d6/d97/a02835_1a6c78a9e9eea5eb66a44df19474a0e575" prot="public" virt="virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>getReflectionModel</name></member>
+      <member refid="d5/df7/a04795_1ab08881a2f6849c79d50c70320d65d82c" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>getShadowModel</name></member>
+      <member refid="d5/df7/a04795_1add93c5e5787f7810a4c9375c27ae96e3" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>getSpotLight</name></member>
+      <member refid="d5/df7/a04795_1ad8d414481693a7732022b0679c12a2b9" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>LightingModel</name></member>
+      <member refid="d6/d97/a02835_1a33e583d547ae21ec7224acfb2c68c4b9" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>m_computeDirectional</name></member>
+      <member refid="d6/d97/a02835_1ae20f13ad209f36b46e1e553ab3490a0a" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>m_computeDirectionalDiffuse</name></member>
+      <member refid="d6/d97/a02835_1ac7dd9977b62bb101c23521538ea136b2" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>m_computePoint</name></member>
+      <member refid="d6/d97/a02835_1a622adbbd9a5b7480c10d92fc3ba78204" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>m_computePointDiffuse</name></member>
+      <member refid="d6/d97/a02835_1ae809b53222c8f5e5e644ecb82c6c1e7a" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>m_computeSpot</name></member>
+      <member refid="d6/d97/a02835_1ab0fa45de856a644e988fee15b2ad5794" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>m_computeSpotDiffuse</name></member>
+      <member refid="d6/d97/a02835_1a11c13c31f49aa23726ef9c81122f0465" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>m_cookTorrance</name></member>
+      <member refid="d5/df7/a04795_1a05823d225d40ae50737469729a128bca" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>m_getBaseLight</name></member>
+      <member refid="d5/df7/a04795_1a64689c5bb7ce2682e205cd001b5f6fd8" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>m_getCascadeFactors</name></member>
+      <member refid="d5/df7/a04795_1ab368de32c7f8f54ef2066cbb18dc199b" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>m_getDirectionalLight</name></member>
+      <member refid="d5/df7/a04795_1a98044cfa7b6795c534cc0f5382e3b694" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>m_getPointLight</name></member>
+      <member refid="d5/df7/a04795_1a22c68d438a913ae1437848af29e31e63" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>m_getSpotLight</name></member>
+      <member refid="d5/df7/a04795_1aa640956be672845c769c8127833993d3" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>m_getTileFactors</name></member>
+      <member refid="d5/df7/a04795_1a8bc492d16fd0eddb81da5af6017f6aa4" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>m_isOpaqueProgram</name></member>
+      <member refid="d6/d97/a02835_1a7d53b0c128c7eb856dd110edc247a01a" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>m_isSpecularGlossiness</name></member>
+      <member refid="d5/df7/a04795_1afef4b07d66515b86040b952a529c80a3" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>m_prefix</name></member>
+      <member refid="d5/df7/a04795_1a3e9407685cf7ba55a752a27437c09a74" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>m_shadowModel</name></member>
+      <member refid="d5/df7/a04795_1a7a0e87c50e65852b79e0dda88f060757" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>m_ssbo</name></member>
+      <member refid="d5/df7/a04795_1ad7a37427798d2c79b0ee95e8c713dea9" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>m_sssTransmittance</name></member>
+      <member refid="d5/df7/a04795_1a2a11c8a808450c5db734fe58007c5ad1" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>m_tbo</name></member>
+      <member refid="d5/df7/a04795_1adff9bdb8fb5bd4f7c6f1d4ce7af4edf1" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>m_type</name></member>
+      <member refid="d5/df7/a04795_1a9e5d3c9e33f06597c63d4c64b62bc564" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>m_utils</name></member>
+      <member refid="d5/df7/a04795_1a129490d8e4f0ea553f16dcaeb2b2c089" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>m_writer</name></member>
+      <member refid="d6/d97/a02835_1a0cce198fcea9ac9677445a2dc16ef628" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>PbrLightingModel</name></member>
+      <member refid="d0/d45/a02843_1abb109b7a8bae8e46616645c428ebaa75" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>PbrSGLightingModel</name></member>
+      <member refid="d5/df7/a04795_1abe10ab0abda22bc960dc51b76be2c739" prot="public" virt="virtual"><scope>castor3d::shader::PbrSGLightingModel</scope><name>~LightingModel</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

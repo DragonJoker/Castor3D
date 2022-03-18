@@ -1,0 +1,895 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d8/dc6/a04796" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::MeshLightPass</compoundname>
+    <basecompoundref refid="d8/dfa/a04756" prot="public" virt="non-virtual">castor3d::LightPass</basecompoundref>
+    <derivedcompoundref refid="d5/dc9/a04804" prot="public" virt="non-virtual">castor3d::PointLightPass</derivedcompoundref>
+    <derivedcompoundref refid="d1/daa/a04816" prot="public" virt="non-virtual">castor3d::SpotLightPass</derivedcompoundref>
+    <includes local="no">MeshLightPass.hpp</includes>
+    <innerclass refid="dd/df4/a04800" prot="protected">castor3d::MeshLightPass::Program</innerclass>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d8/dc6/a04796_1a455be4940ea50b3cd4b7f2a12b588edb" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/d9a/a02296" kindref="compound">UniformBufferT</ref>&lt; <ref refid="da/d9f/a05584" kindref="compound">ModelMatrixUboConfiguration</ref> &gt;</type>
+        <definition>UniformBufferT&lt; ModelMatrixUboConfiguration &gt; castor3d::MeshLightPass::m_modelMatrixUbo</definition>
+        <argsstring></argsstring>
+        <name>m_modelMatrixUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/MeshLightPass.hpp" line="162" column="1" bodyfile="Render/Technique/Opaque/Lighting/MeshLightPass.hpp" bodystart="162" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/dc6/a04796_1a355385affdef7eccc6653b5e59cf02af" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d9f/a05584" kindref="compound">ModelMatrixUboConfiguration</ref> *</type>
+        <definition>ModelMatrixUboConfiguration* castor3d::MeshLightPass::m_modelMatrixData</definition>
+        <argsstring></argsstring>
+        <name>m_modelMatrixData</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/MeshLightPass.hpp" line="163" column="1" bodyfile="Render/Technique/Opaque/Lighting/MeshLightPass.hpp" bodystart="163" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/dc6/a04796_1a455046f83e4954c0036232cad042dd21" prot="private" static="no" mutable="no">
+        <type><ref refid="df/d25/a04464" kindref="compound">StencilPass</ref></type>
+        <definition>StencilPass castor3d::MeshLightPass::m_stencilPass</definition>
+        <argsstring></argsstring>
+        <name>m_stencilPass</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/MeshLightPass.hpp" line="164" column="1" bodyfile="Render/Technique/Opaque/Lighting/MeshLightPass.hpp" bodystart="164" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/dc6/a04796_1ab9babc65ebde4e2eec71f31f3c74f42e" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d1e/a01479_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+        <definition>LightType castor3d::MeshLightPass::m_type</definition>
+        <argsstring></argsstring>
+        <name>m_type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/MeshLightPass.hpp" line="165" column="1" bodyfile="Render/Technique/Opaque/Lighting/MeshLightPass.hpp" bodystart="165" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/dc6/a04796_1af87329f01d6d79b15bb18899ca199d2a" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::MeshLightPass::m_count</definition>
+        <argsstring></argsstring>
+        <name>m_count</name>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/MeshLightPass.hpp" line="166" column="1" bodyfile="Render/Technique/Opaque/Lighting/MeshLightPass.hpp" bodystart="166" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/dc6/a04796_1ab12ac93664d3dfe313188bd40d68399c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::MeshLightPass::MeshLightPass</definition>
+        <argsstring>(RenderDevice const &amp;device, castor::String const &amp;suffix, LightPassConfig const &amp;lpConfig, VoxelizerUbo const *vctConfig, LightType type)</argsstring>
+        <name>MeshLightPass</name>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>suffix</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d0e/a04752" kindref="compound">LightPassConfig</ref> const &amp;</type>
+          <declname>lpConfig</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/da7/a05632" kindref="compound">VoxelizerUbo</ref> const *</type>
+          <declname>vctConfig</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">suffix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass name&apos;s suffix. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lpConfig</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The light pass configuration. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">vctConfig</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The voxelizer UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The light source type. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/MeshLightPass.hpp" line="91" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dc6/a04796_1a8d3e982c07d106fffae91031abeb72ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::MeshLightPass::~MeshLightPass</definition>
+        <argsstring>()</argsstring>
+        <name>~MeshLightPass</name>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/MeshLightPass.hpp" line="102" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dc6/a04796_1af3fcab0c6641fb7599b248756136d5e4" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::MeshLightPass::initialise</definition>
+        <argsstring>(Scene const &amp;scene, OpaquePassResult const &amp;gp, SceneUbo &amp;sceneUbo, RenderPassTimer &amp;timer) override</argsstring>
+        <name>initialise</name>
+        <reimplements refid="d8/dfa/a04756_1a37d13487b6db944c0ac3403ab48a0a46">initialise</reimplements>
+        <param>
+          <type><ref refid="d5/d76/a05244" kindref="compound">Scene</ref> const &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/dcd/a04880" kindref="compound">OpaquePassResult</ref> const &amp;</type>
+          <declname>gp</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d63/a05528" kindref="compound">SceneUbo</ref> &amp;</type>
+          <declname>sceneUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/dc4/a04612" kindref="compound">RenderPassTimer</ref> &amp;</type>
+          <declname>timer</declname>
+        </param>
+        <briefdescription>
+<para>Initialises the light pass. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">gp</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The geometry pass buffers. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sceneUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">timer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render pass timer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/MeshLightPass.hpp" line="106" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dc6/a04796_1aaf766672d8273c8c31abf6599e7a2a45" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::MeshLightPass::cleanup</definition>
+        <argsstring>() override</argsstring>
+        <name>cleanup</name>
+        <reimplements refid="d8/dfa/a04756_1a426f0725b3e6caa5c3982fc6aecbb9c8">cleanup</reimplements>
+        <briefdescription>
+<para>Cleans up the light pass. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/MeshLightPass.hpp" line="113" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dc6/a04796_1a8eb1d1024daebe6cd2e4145bca0400f8" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>ashes::Semaphore const  &amp;</type>
+        <definition>ashes::Semaphore const&amp; castor3d::MeshLightPass::render</definition>
+        <argsstring>(uint32_t index, ashes::Semaphore const &amp;toWait) override</argsstring>
+        <name>render</name>
+        <reimplements refid="d8/dfa/a04756_1afbcf07bce0c8d0d7466e19d7d056162a">render</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>ashes::Semaphore const &amp;</type>
+          <declname>toWait</declname>
+        </param>
+        <briefdescription>
+<para>Renders the light pass. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render pass index. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">toWait</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The semaphore from the previous render pass. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/MeshLightPass.hpp" line="117" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dc6/a04796_1aae94d1add2c29da7025556fdb7b1587b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::MeshLightPass::getCount</definition>
+        <argsstring>() const override</argsstring>
+        <name>getCount</name>
+        <reimplements refid="d8/dfa/a04756_1aad7f1ba5c2dccb46831e02d5b1b92b8d">getCount</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The number of primitives to draw. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/MeshLightPass.hpp" line="125" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d8/dc6/a04796_1a957049b158009f156ab6b86c73ec7fff" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::MeshLightPass::doUpdate</definition>
+        <argsstring>(bool first, castor::Size const &amp;size, Light const &amp;light, Camera const &amp;camera) override</argsstring>
+        <name>doUpdate</name>
+        <reimplements refid="d8/dfa/a04756_1aa247180f4440dce75b91908b70b2e6a7">doUpdate</reimplements>
+        <param>
+          <type>bool</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/de4/a05172" kindref="compound">Light</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d9c/a05152" kindref="compound">Camera</ref> const &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <briefdescription>
+<para>Updates the light pass. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">first</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tells if this is the first pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render area dimensions. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">light</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The light. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">camera</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The viewing camera. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/MeshLightPass.hpp" line="131" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dc6/a04796_1a5d2e5f997f6bf2125a80951946d28bb2" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="da/d1e/a01479_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
+        <definition>ShaderPtr castor3d::MeshLightPass::doGetVertexShaderSource</definition>
+        <argsstring>(SceneFlags const &amp;sceneFlags) const override</argsstring>
+        <name>doGetVertexShaderSource</name>
+        <reimplements refid="d8/dfa/a04756_1a54bebceacba4e9e20f8edc25746c1965">doGetVertexShaderSource</reimplements>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref> const &amp;</type>
+          <declname>sceneFlags</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves the vertex shader source for this light pass. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">sceneFlags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene flags. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The source. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/MeshLightPass.hpp" line="138" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dc6/a04796_1a19b7fc7d3b047f8dd12eb5b7798d4d4d" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type>castor::Point3fArray</type>
+        <definition>virtual castor::Point3fArray castor3d::MeshLightPass::doGenerateVertices</definition>
+        <argsstring>() const =0</argsstring>
+        <name>doGenerateVertices</name>
+        <reimplementedby refid="d1/daa/a04816_1a5fac3981f728f48107f069ce7b8dff12">doGenerateVertices</reimplementedby>
+        <reimplementedby refid="d5/dc9/a04804_1ae543a1e82e301f1328c3c32566b054fa">doGenerateVertices</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The vertices needed to draw the mesh. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/MeshLightPass.hpp" line="145" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dc6/a04796_1ae2cd0856b0b0d1ee520349afb168f097" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type>castor::Matrix4x4f</type>
+        <definition>virtual castor::Matrix4x4f castor3d::MeshLightPass::doComputeModelMatrix</definition>
+        <argsstring>(Light const &amp;light, Camera const &amp;camera) const =0</argsstring>
+        <name>doComputeModelMatrix</name>
+        <reimplementedby refid="d1/daa/a04816_1a57dcb66d870c40b23b577d1f65041de5">doComputeModelMatrix</reimplementedby>
+        <reimplementedby refid="d5/dc9/a04804_1a829f5c34e2aa7941f5fe27795a9cbe33">doComputeModelMatrix</reimplementedby>
+        <param>
+          <type><ref refid="d8/de4/a05172" kindref="compound">Light</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d9c/a05152" kindref="compound">Camera</ref> const &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <briefdescription>
+<para>Computes the matrix used to render the model. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">light</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The light. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">camera</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The viewing camera. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The matrix. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/MeshLightPass.hpp" line="158" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1968">
+        <label>castor3d::MeshLightPass</label>
+        <link refid="d8/dc6/a04796"/>
+        <childnode refid="1969" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1970">
+        <label>Named</label>
+      </node>
+      <node id="1969">
+        <label>castor3d::LightPass</label>
+        <link refid="d8/dfa/a04756"/>
+        <childnode refid="1970" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1971">
+        <label>castor3d::PointLightPass</label>
+        <link refid="d5/dc9/a04804"/>
+        <childnode refid="1968" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1972">
+        <label>castor3d::SpotLightPass</label>
+        <link refid="d1/daa/a04816"/>
+        <childnode refid="1968" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1973">
+        <label>castor3d::MeshLightPass</label>
+        <link refid="d8/dc6/a04796"/>
+        <childnode refid="1974" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1988">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d9/d38/a04624"/>
+        <childnode refid="1989" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2015">
+        <label>castor3d::UniformBufferT&lt; DataT &gt;</label>
+        <link refid="d8/d9a/a02296"/>
+        <childnode refid="2008" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2007">
+        <label>K</label>
+      </node>
+      <node id="1984">
+        <label>T</label>
+      </node>
+      <node id="1993">
+        <label>castor3d::GBufferT&lt; DsTexture &gt;</label>
+        <link refid="d8/dc6/a04256"/>
+        <childnode refid="1994" relation="private-inheritance">
+        </childnode>
+        <childnode refid="1979" relation="usage">
+          <edgelabel>m_engine</edgelabel>
+        </childnode>
+        <childnode refid="1995" relation="template-instance">
+          <edgelabel>&lt; DsTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1991">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="1984" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="1983">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="1984" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="1996">
+        <label>castor3d::VoxelizerUbo</label>
+        <link refid="dd/da7/a05632"/>
+      </node>
+      <node id="1990">
+        <label>std::vector&lt; ashes::CommandPoolPtr &gt;</label>
+        <childnode refid="1991" relation="template-instance">
+          <edgelabel>&lt; ashes::CommandPoolPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1987">
+        <label>std::array&lt; uint32_t, 4u &gt;</label>
+        <childnode refid="1983" relation="template-instance">
+          <edgelabel>&lt; uint32_t, 4u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2006">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="2007" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="1984" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="1998">
+        <label>std::unique_ptr&lt; Pipeline &gt;</label>
+        <childnode refid="1999" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+        <childnode refid="2003" relation="template-instance">
+          <edgelabel>&lt; Pipeline &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2003">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="1984" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="1975">
+        <label>Named</label>
+      </node>
+      <node id="1997">
+        <label>std::map&lt; size_t, PipelinePtr &gt;</label>
+        <childnode refid="1998" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="2006" relation="template-instance">
+          <edgelabel>&lt; size_t, PipelinePtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1980">
+        <label>castor::Unique&lt; Engine &gt;</label>
+      </node>
+      <node id="1999">
+        <label>castor3d::VoxelBufferToTexture::Pipeline</label>
+        <childnode refid="2000" relation="usage">
+          <edgelabel>commands</edgelabel>
+        </childnode>
+        <childnode refid="2001" relation="usage">
+          <edgelabel>computeShader</edgelabel>
+        </childnode>
+      </node>
+      <node id="1978">
+        <label>castor3d::LightPass::RenderPass</label>
+        <link refid="db/dc8/a04760"/>
+      </node>
+      <node id="2014">
+        <label>castor3d::UniformBufferT&lt; castor3d::ModelMatrixUboConfiguration &gt;</label>
+        <link refid="d8/d9a/a02296"/>
+        <childnode refid="2008" relation="public-inheritance">
+        </childnode>
+        <childnode refid="2015" relation="template-instance">
+          <edgelabel>&lt; castor3d::ModelMatrixUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2005">
+        <label>std::basic_string&lt; char &gt;</label>
+      </node>
+      <node id="2011">
+        <label>castor3d::LightPass::Pipeline</label>
+        <link refid="d5/d7a/a04768"/>
+        <childnode refid="2012" relation="usage">
+          <edgelabel>program</edgelabel>
+        </childnode>
+      </node>
+      <node id="1977">
+        <label>castor3d::SceneUbo</label>
+        <link refid="df/d63/a05528"/>
+      </node>
+      <node id="2010">
+        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
+      </node>
+      <node id="1981">
+        <label>castor3d::RenderPassTimer</label>
+        <link refid="d7/dc4/a04612"/>
+        <childnode refid="1975" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2002">
+        <label>std::unique_ptr&lt; ast::Shader &gt;</label>
+        <childnode refid="2003" relation="template-instance">
+          <edgelabel>&lt; ast::Shader &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1989">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="2008">
+        <label>castor3d::UniformBufferBase</label>
+        <link refid="d1/d03/a02332"/>
+      </node>
+      <node id="2013">
+        <label>castor3d::LightPass::Program</label>
+        <link refid="da/deb/a04764"/>
+        <childnode refid="1975" relation="public-inheritance">
+        </childnode>
+        <childnode refid="1979" relation="usage">
+          <edgelabel>m_engine</edgelabel>
+        </childnode>
+        <childnode refid="1986" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+      </node>
+      <node id="2000">
+        <label>castor3d::CommandsSemaphore</label>
+        <link refid="d1/da6/a04380"/>
+      </node>
+      <node id="2012">
+        <label>std::unique_ptr&lt; Program &gt;</label>
+        <childnode refid="2013" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+        <childnode refid="2003" relation="template-instance">
+          <edgelabel>&lt; Program &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1979">
+        <label>castor3d::Engine</label>
+        <link refid="dc/dbb/a02520"/>
+        <childnode refid="1980" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1976">
+        <label>castor3d::GpInfoUbo</label>
+        <link refid="d1/d22/a05464"/>
+      </node>
+      <node id="1995">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="d8/dc6/a04256"/>
+        <childnode refid="1994" relation="private-inheritance">
+        </childnode>
+        <childnode refid="1979" relation="usage">
+          <edgelabel>m_engine</edgelabel>
+        </childnode>
+      </node>
+      <node id="1994">
+        <label>castor3d::GBufferBase</label>
+        <link refid="dc/de4/a04252"/>
+        <childnode refid="1975" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1986">
+        <label>castor3d::RenderDevice</label>
+        <link refid="d1/def/a04512"/>
+        <childnode refid="1987" relation="usage">
+          <edgelabel>queueFamiliesIndex</edgelabel>
+        </childnode>
+        <childnode refid="1988" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="1990" relation="usage">
+          <edgelabel>commandPools</edgelabel>
+        </childnode>
+      </node>
+      <node id="1974">
+        <label>castor3d::LightPass</label>
+        <link refid="d8/dfa/a04756"/>
+        <childnode refid="1975" relation="public-inheritance">
+        </childnode>
+        <childnode refid="1976" relation="usage">
+          <edgelabel>m_gpInfoUbo</edgelabel>
+        </childnode>
+        <childnode refid="1977" relation="usage">
+          <edgelabel>m_sceneUbo</edgelabel>
+        </childnode>
+        <childnode refid="1978" relation="usage">
+          <edgelabel>m_firstRenderPass</edgelabel>
+          <edgelabel>m_blendRenderPass</edgelabel>
+        </childnode>
+        <childnode refid="1979" relation="usage">
+          <edgelabel>m_engine</edgelabel>
+        </childnode>
+        <childnode refid="1981" relation="usage">
+          <edgelabel>m_timer</edgelabel>
+        </childnode>
+        <childnode refid="1982" relation="usage">
+          <edgelabel>m_commandBuffers</edgelabel>
+        </childnode>
+        <childnode refid="1985" relation="usage">
+          <edgelabel>m_matrixUbo</edgelabel>
+        </childnode>
+        <childnode refid="1986" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+        <childnode refid="1992" relation="usage">
+          <edgelabel>m_opaquePassResult</edgelabel>
+        </childnode>
+        <childnode refid="1996" relation="usage">
+          <edgelabel>m_vctUbo</edgelabel>
+        </childnode>
+        <childnode refid="1997" relation="usage">
+          <edgelabel>m_pipelines</edgelabel>
+        </childnode>
+        <childnode refid="2001" relation="usage">
+          <edgelabel>m_vertexShader</edgelabel>
+          <edgelabel>m_pixelShader</edgelabel>
+        </childnode>
+        <childnode refid="2008" relation="usage">
+          <edgelabel>m_baseUbo</edgelabel>
+        </childnode>
+        <childnode refid="2009" relation="usage">
+          <edgelabel>m_scene</edgelabel>
+        </childnode>
+        <childnode refid="2011" relation="usage">
+          <edgelabel>m_pipeline</edgelabel>
+        </childnode>
+        <childnode refid="2014" relation="usage">
+          <edgelabel>m_mmUbo</edgelabel>
+        </childnode>
+      </node>
+      <node id="2001">
+        <label>castor3d::ShaderModule</label>
+        <link refid="d7/d32/a05312"/>
+        <childnode refid="2002" relation="usage">
+          <edgelabel>shader</edgelabel>
+        </childnode>
+        <childnode refid="2004" relation="usage">
+          <edgelabel>source</edgelabel>
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="1992">
+        <label>castor3d::OpaquePassResult</label>
+        <link refid="d1/dcd/a04880"/>
+        <childnode refid="1993" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1982">
+        <label>std::array&lt; ashes::CommandBufferPtr, 2u &gt;</label>
+        <childnode refid="1983" relation="template-instance">
+          <edgelabel>&lt; ashes::CommandBufferPtr, 2u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2009">
+        <label>castor3d::Scene</label>
+        <link refid="d5/d76/a05244"/>
+        <childnode refid="2010" relation="public-inheritance">
+        </childnode>
+        <childnode refid="1989" relation="public-inheritance">
+        </childnode>
+        <childnode refid="1975" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1985">
+        <label>castor3d::MatrixUbo</label>
+        <link refid="d2/d0e/a05496"/>
+      </node>
+      <node id="2004">
+        <label>std::string</label>
+        <childnode refid="2005" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Technique/Opaque/Lighting/MeshLightPass.hpp" line="18" column="1" bodyfile="Render/Technique/Opaque/Lighting/MeshLightPass.hpp" bodystart="16" bodyend="167"/>
+    <listofallmembers>
+      <member refid="d8/dfa/a04756_1ae19a24c1474bf13faac2ab5528d64c21" prot="public" virt="pure-virtual"><scope>castor3d::MeshLightPass</scope><name>accept</name></member>
+      <member refid="d8/dc6/a04796_1aaf766672d8273c8c31abf6599e7a2a45" prot="public" virt="virtual"><scope>castor3d::MeshLightPass</scope><name>cleanup</name></member>
+      <member refid="d8/dfa/a04756_1a4afddcea7663fa13cce58a077ad11129" prot="public" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>createPipeline</name></member>
+      <member refid="d8/dfa/a04756_1ad2eca290f328c80733c94383666e3d71" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>doCleanup</name></member>
+      <member refid="d8/dc6/a04796_1ae2cd0856b0b0d1ee520349afb168f097" prot="protected" virt="pure-virtual"><scope>castor3d::MeshLightPass</scope><name>doComputeModelMatrix</name></member>
+      <member refid="d8/dfa/a04756_1a18133f73e3be05dce62c09b5ea534488" prot="protected" virt="pure-virtual"><scope>castor3d::MeshLightPass</scope><name>doCreateProgram</name></member>
+      <member refid="d8/dc6/a04796_1a19b7fc7d3b047f8dd12eb5b7798d4d4d" prot="protected" virt="pure-virtual"><scope>castor3d::MeshLightPass</scope><name>doGenerateVertices</name></member>
+      <member refid="d8/dfa/a04756_1aee9d675a74df872ae690045324774f5b" prot="protected" virt="virtual"><scope>castor3d::MeshLightPass</scope><name>doGetPbrMRPixelShaderSource</name></member>
+      <member refid="d8/dfa/a04756_1a969b845a36a50c6ffba3817c3528ac64" prot="protected" virt="virtual"><scope>castor3d::MeshLightPass</scope><name>doGetPbrSGPixelShaderSource</name></member>
+      <member refid="d8/dfa/a04756_1a4bddd056f759045de302e9df7b57fb6d" prot="protected" virt="virtual"><scope>castor3d::MeshLightPass</scope><name>doGetPhongPixelShaderSource</name></member>
+      <member refid="d8/dfa/a04756_1a21aa63942deeea18807882a85c66710c" prot="protected" virt="virtual"><scope>castor3d::MeshLightPass</scope><name>doGetPipeline</name></member>
+      <member refid="d8/dc6/a04796_1a5d2e5f997f6bf2125a80951946d28bb2" prot="protected" virt="virtual"><scope>castor3d::MeshLightPass</scope><name>doGetVertexShaderSource</name></member>
+      <member refid="d8/dfa/a04756_1a787507aabaec58c31ed87b612ab98c98" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>doInitialise</name></member>
+      <member refid="d8/dfa/a04756_1aeaeb7631cf8de7588f8ca3a5d5aeec70" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>doPrepareCommandBuffer</name></member>
+      <member refid="d8/dc6/a04796_1a957049b158009f156ab6b86c73ec7fff" prot="protected" virt="virtual"><scope>castor3d::MeshLightPass</scope><name>doUpdate</name></member>
+      <member refid="d8/dc6/a04796_1aae94d1add2c29da7025556fdb7b1587b" prot="public" virt="virtual"><scope>castor3d::MeshLightPass</scope><name>getCount</name></member>
+      <member refid="d8/dfa/a04756_1a4abaa11bf377183f20c2a93f6855ef0e" prot="public" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>getName</name></member>
+      <member refid="d8/dfa/a04756_1a1b0636a2c82bf27a8fbf85bddc5348b2" prot="public" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>getSemaphore</name></member>
+      <member refid="d8/dc6/a04796_1af3fcab0c6641fb7599b248756136d5e4" prot="public" virt="virtual"><scope>castor3d::MeshLightPass</scope><name>initialise</name></member>
+      <member refid="d8/dfa/a04756_1a122257060ac558e79cd4426b94d50628" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>LightPass</name></member>
+      <member refid="d8/dfa/a04756_1ae624c2f8d832e08e51565065cfc55231" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_baseUbo</name></member>
+      <member refid="d8/dfa/a04756_1a8275b50b628b52faca50b89c125ed276" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_blendRenderPass</name></member>
+      <member refid="d8/dfa/a04756_1a8db2cfaf18f7eb95232a75b73a43460c" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_commandBufferIndex</name></member>
+      <member refid="d8/dfa/a04756_1a98b7919879b22fed3d50f9a1adb145f1" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_commandBuffers</name></member>
+      <member refid="d8/dc6/a04796_1af87329f01d6d79b15bb18899ca199d2a" prot="private" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_count</name></member>
+      <member refid="d8/dfa/a04756_1a3577184a1de44269d7b42bbf52b0d3d6" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_device</name></member>
+      <member refid="d8/dfa/a04756_1a100f227c7522dde4382b677b0ff15ceb" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_engine</name></member>
+      <member refid="d8/dfa/a04756_1a046e9fb34d56d3c8b41f30c73fb2912e" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_fence</name></member>
+      <member refid="d8/dfa/a04756_1a69e15bbca2376ad5b94d2ede26d89fb2" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_firstRenderPass</name></member>
+      <member refid="d8/dfa/a04756_1ab7e3625aaccda312a122873d9ae3e1fc" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_generatesIndirect</name></member>
+      <member refid="d8/dfa/a04756_1abb3d2a04d0a08e23b909496fcecb0c1c" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_gpInfoUbo</name></member>
+      <member refid="d8/dfa/a04756_1a868c320c9ab0d3a2bb4ed72c5ecb55d4" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_matrixUbo</name></member>
+      <member refid="d8/dfa/a04756_1aa44090c0406aa7ab5a98fd8a3a4038ae" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_mmUbo</name></member>
+      <member refid="d8/dc6/a04796_1a355385affdef7eccc6653b5e59cf02af" prot="private" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_modelMatrixData</name></member>
+      <member refid="d8/dc6/a04796_1a455be4940ea50b3cd4b7f2a12b588edb" prot="private" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_modelMatrixUbo</name></member>
+      <member refid="d8/dfa/a04756_1aa4b33c269d295973577af285863395d8" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_offset</name></member>
+      <member refid="d8/dfa/a04756_1ad7d9f0a588324638859f68b76550f79b" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_opaquePassResult</name></member>
+      <member refid="d8/dfa/a04756_1a48952992afaa603c263c1508cff292af" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_pipeline</name></member>
+      <member refid="d8/dfa/a04756_1a73d05751b9696afbd2f0f1b88ae3cf6d" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_pipelines</name></member>
+      <member refid="d8/dfa/a04756_1a1071ac920e68ca643eb2b7f5ee07cb81" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_pixelShader</name></member>
+      <member refid="d8/dfa/a04756_1acc2d836d22fb6a279c2f0b6e3206cafe" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_pUsedVertexLayout</name></member>
+      <member refid="d8/dfa/a04756_1a901605dc3f0017df91666753465205d3" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_sampler</name></member>
+      <member refid="d8/dfa/a04756_1a6409a1a02b703e8e77fb1784b4a3c91b" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_scene</name></member>
+      <member refid="d8/dfa/a04756_1aa11a6e214c1f31c4377520d3a39b2ca0" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_sceneUbo</name></member>
+      <member refid="d8/dfa/a04756_1aa8a2afe9cf77c03eeb417ed24c715fca" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_shadows</name></member>
+      <member refid="d8/dfa/a04756_1aa256b54a33253b76b1cf2149eee7e4ab" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_signalImgFinished</name></member>
+      <member refid="d8/dfa/a04756_1af3405f0b6ad447410743db51d975b6c1" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_signalImgReady</name></member>
+      <member refid="d8/dc6/a04796_1a455046f83e4954c0036232cad042dd21" prot="private" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_stencilPass</name></member>
+      <member refid="d8/dfa/a04756_1adf1137735a41db531c99a5959a28336f" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_timer</name></member>
+      <member refid="d8/dc6/a04796_1ab9babc65ebde4e2eec71f31f3c74f42e" prot="private" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_type</name></member>
+      <member refid="d8/dfa/a04756_1abb9ed610becb0753868b7bebb03c783b" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_usedVertexLayout</name></member>
+      <member refid="d8/dfa/a04756_1ad4f04148d6ee366f2f0db44b56489517" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_vctUbo</name></member>
+      <member refid="d8/dfa/a04756_1aba343014bf8c97c3b73c25061536b71b" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_vertexBuffer</name></member>
+      <member refid="d8/dfa/a04756_1ae2b8792cb3fb9c4e39816bcc673efc2b" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_vertexLayout</name></member>
+      <member refid="d8/dfa/a04756_1a9542379a411ad8d25be25061ee410a93" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_vertexShader</name></member>
+      <member refid="d8/dfa/a04756_1a184b5faa795f44a746795f27e8ed2f71" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>m_voxels</name></member>
+      <member refid="d8/dfa/a04756_1a1a2d417e2520d194d6d714f16974a357" prot="public" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>makeKey</name></member>
+      <member refid="d8/dc6/a04796_1ab12ac93664d3dfe313188bd40d68399c" prot="public" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>MeshLightPass</name></member>
+      <member refid="d8/dfa/a04756_1ac833356a5d27340172a06cb368cc8612" prot="public" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>PipelineArray</name></member>
+      <member refid="d8/dfa/a04756_1a9e4d88b9df29157d2234c11389813e30" prot="public" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>PipelineMap</name></member>
+      <member refid="d8/dfa/a04756_1a35eaddeac8070cb8b2360b6416f19122" prot="public" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>PipelinePtr</name></member>
+      <member refid="d8/dfa/a04756_1a07c410d7f0d4b6b0a2d9f7c73d459d23" prot="protected" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>ProgramPtr</name></member>
+      <member refid="d8/dc6/a04796_1a8eb1d1024daebe6cd2e4145bca0400f8" prot="public" virt="virtual"><scope>castor3d::MeshLightPass</scope><name>render</name></member>
+      <member refid="d8/dfa/a04756_1a940248f24bf4d96399a5cbc26f6a9e77" prot="public" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>update</name></member>
+      <member refid="d8/dfa/a04756_1ac285dbdf77fcd2f571d72fbc4d19581d" prot="public" virt="virtual"><scope>castor3d::MeshLightPass</scope><name>~LightPass</name></member>
+      <member refid="d8/dc6/a04796_1a8d3e982c07d106fffae91031abeb72ff" prot="public" virt="non-virtual"><scope>castor3d::MeshLightPass</scope><name>~MeshLightPass</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

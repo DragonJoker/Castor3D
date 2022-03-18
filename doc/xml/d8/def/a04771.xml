@@ -1,154 +1,125 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d8/def/a04771" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::LightPassShadow::Program</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">Program</basecompoundref>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="d8/def/a04771_1a13f6d3c3600bda7fcf5ace36b1940aa8" prot="public" static="no">
-        <type>typename my_pass_type::Program</type>
-        <definition>using castor3d::LightPassShadow&lt; LtType &gt;::Program::my_program_type =  typename my_pass_type::Program</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d8/def/a04771" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::LightData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">GlslLight.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/def/a04771_1a6ca28d819af31d38632d606cc7e8c211" prot="public" static="no" mutable="no">
+        <type>sdw::Array&lt; sdw::Vec4 &gt;</type>
+        <definition>sdw::Array&lt; sdw::Vec4 &gt; castor3d::shader::LightData::data</definition>
         <argsstring></argsstring>
-        <name>my_program_type</name>
+        <name>data</name>
+        <qualifiedname>castor3d::shader::LightData::data</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="108" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="108" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslLight.hpp" line="26" column="12" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="26" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d8/def/a04771_1a94fe2f6e06c4a60c18e7dc92d2a2a636" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::LightPassShadow&lt; LtType &gt;::Program::Program</definition>
-        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, LightPassShadow &amp;lightPass, ShaderModule const &amp;vtx, ShaderModule const &amp;pxl, bool hasVoxels, bool generatesIndirect)</argsstring>
-        <name>Program</name>
+      <memberdef kind="function" id="d8/def/a04771_1ad2a30c4ee119236d8886536e7878b215" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::LightData::LightData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>LightData</name>
+        <qualifiedname>castor3d::shader::LightData::LightData</qualifiedname>
         <param>
-          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
         </param>
         <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type><ref refid="dc/d43/a04727" kindref="compound">LightPassShadow</ref> &amp;</type>
-          <declname>lightPass</declname>
-        </param>
-        <param>
-          <type><ref refid="d8/dbd/a05291" kindref="compound">ShaderModule</ref> const &amp;</type>
-          <declname>vtx</declname>
-        </param>
-        <param>
-          <type><ref refid="d8/dbd/a05291" kindref="compound">ShaderModule</ref> const &amp;</type>
-          <declname>pxl</declname>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
         </param>
         <param>
           <type>bool</type>
-          <declname>hasVoxels</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>generatesIndirect</declname>
+          <declname>enabled</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">engine</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The engine. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">lightPass</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The light pass. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">vtx</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The vertex shader source. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">pxl</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The fragment shader source. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">hasVoxels</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if this program uses voxellisation result. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">generatesIndirect</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if this program generates indirect lighting. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="131" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="131" bodyend="147"/>
+        <location file="Shader/Shaders/GlslLight.hpp" line="19" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/def/a04771_1a2e9c1a29c5f0a9c80ebdb3317fa2c281" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::LightData::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, LightData)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::LightData::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        </param>
+        <param>
+          <type><ref refid="d8/def/a04771" kindref="compound">LightData</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="22" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d8/def/a04771_1a9d7361fd1c81e5b18ce300dd74d21fe3" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
+        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::LightData::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::LightData::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="24" column="41"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Base class for all light pass programs with shadow. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="1703">
-        <label>my_pass_type::Program</label>
-      </node>
-      <node id="1702">
-        <label>castor3d::LightPassShadow&lt; LtType &gt;::Program</label>
-        <childnode refid="1703" relation="public-inheritance">
+      <node id="1">
+        <label>castor3d::shader::LightData</label>
+        <link refid="d8/def/a04771"/>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="1705">
-        <label>my_pass_type::Program</label>
-      </node>
-      <node id="1704">
-        <label>castor3d::LightPassShadow&lt; LtType &gt;::Program</label>
-        <childnode refid="1705" relation="public-inheritance">
+      <node id="1">
+        <label>castor3d::shader::LightData</label>
+        <link refid="d8/def/a04771"/>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
     </collaborationgraph>
-    <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="106" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="104" bodyend="148"/>
+    <location file="Shader/Shaders/GlslLight.hpp" line="16" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="18" bodyend="27"/>
     <listofallmembers>
-      <member refid="d8/def/a04771_1a13f6d3c3600bda7fcf5ace36b1940aa8" prot="public" virt="non-virtual"><scope>castor3d::LightPassShadow::Program</scope><name>my_program_type</name></member>
-      <member refid="d8/def/a04771_1a94fe2f6e06c4a60c18e7dc92d2a2a636" prot="public" virt="non-virtual"><scope>castor3d::LightPassShadow::Program</scope><name>Program</name></member>
+      <member refid="d8/def/a04771_1a6ca28d819af31d38632d606cc7e8c211" prot="public" virt="non-virtual"><scope>castor3d::shader::LightData</scope><name>data</name></member>
+      <member refid="d8/def/a04771_1ad2a30c4ee119236d8886536e7878b215" prot="public" virt="non-virtual"><scope>castor3d::shader::LightData</scope><name>LightData</name></member>
+      <member refid="d8/def/a04771_1a9d7361fd1c81e5b18ce300dd74d21fe3" prot="public" virt="non-virtual"><scope>castor3d::shader::LightData</scope><name>makeType</name></member>
+      <member refid="d8/def/a04771_1a2e9c1a29c5f0a9c80ebdb3317fa2c281" prot="public" virt="non-virtual"><scope>castor3d::shader::LightData</scope><name>SDW_DeclStructInstance</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

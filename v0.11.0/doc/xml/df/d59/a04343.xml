@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="df/d59/a04343" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::CombinePassConfigT</compoundname>
+    <basecompoundref refid="d1/dd3/a04427" prot="public" virt="non-virtual">castor3d::rq::ConfigT&lt; WrapperT &gt;</basecompoundref>
+    <includes local="no">PassesModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>template&lt; typename ValueT &gt; typename</type>
+        <declname>WrapperT</declname>
+        <defname>WrapperT</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/d59/a04343_1a949875a08a33df7d643a191a6838cfb9" prot="public" static="no" mutable="no">
+        <type>WrapperT&lt; TextureLayoutSPtr &gt;</type>
+        <definition>WrapperT&lt; TextureLayoutSPtr &gt; castor3d::CombinePassConfigT&lt; WrapperT &gt;::resultTexture</definition>
+        <argsstring></argsstring>
+        <name>resultTexture</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="36" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="36" bodyend="-1"/>
+        <referencedby refid="d2/d8a/a04355_1a7630c9174a0efca28e7fe0c56f7af18d" compoundref="d4/d6a/a00704" startline="127" endline="131">castor3d::CombinePassBuilder::resultTexture</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/d59/a04343_1a1f6fafeb1d14c82b7db7eecf0ef87dec" prot="public" static="no" mutable="no">
+        <type>WrapperT&lt; VkImageLayout &gt;</type>
+        <definition>WrapperT&lt; VkImageLayout &gt; castor3d::CombinePassConfigT&lt; WrapperT &gt;::lhsLayout</definition>
+        <argsstring></argsstring>
+        <name>lhsLayout</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="37" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="37" bodyend="-1"/>
+        <referencedby refid="d2/d8a/a04355_1addc1ffaf03ac2984e7de4dc024c9688a" compoundref="d4/d6a/a00704" startline="133" endline="137">castor3d::CombinePassBuilder::lhsViewLayout</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/d59/a04343_1afd3d3153720dd635598e14e976b76d41" prot="public" static="no" mutable="no">
+        <type>WrapperT&lt; VkImageLayout &gt;</type>
+        <definition>WrapperT&lt; VkImageLayout &gt; castor3d::CombinePassConfigT&lt; WrapperT &gt;::rhsLayout</definition>
+        <argsstring></argsstring>
+        <name>rhsLayout</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="38" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="38" bodyend="-1"/>
+        <referencedby refid="d2/d8a/a04355_1a6253a280faf87b846fc13f378af33037" compoundref="d4/d6a/a00704" startline="139" endline="143">castor3d::CombinePassBuilder::rhsViewLayout</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/d59/a04343_1af284fa450224677ad95078d88cffc6d9" prot="public" static="no" mutable="no">
+        <type>WrapperT&lt; <ref refid="d9/d0c/a04563" kindref="compound">IntermediateView</ref> &gt;</type>
+        <definition>WrapperT&lt; IntermediateView &gt; castor3d::CombinePassConfigT&lt; WrapperT &gt;::tex3DResult</definition>
+        <argsstring></argsstring>
+        <name>tex3DResult</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="39" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="39" bodyend="-1"/>
+        <referencedby refid="d2/d8a/a04355_1abe3925a5b104b5cece629b61e6d30576" compoundref="d4/d6a/a00704" startline="145" endline="151">castor3d::CombinePassBuilder::tex3DResult</referencedby>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>The configuration to create a <ref refid="d2/d4f/a04347" kindref="compound">CombinePass</ref>. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="773">
+        <label>castor3d::CombinePassConfigT&lt; ashes::Optional &gt;</label>
+        <link refid="df/d59/a04343"/>
+        <childnode refid="771" relation="template-instance">
+          <edgelabel>&lt; ashes::Optional &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="771">
+        <label>castor3d::CombinePassConfigT&lt; WrapperT &gt;</label>
+        <link refid="df/d59/a04343"/>
+        <childnode refid="772" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="772">
+        <label>castor3d::rq::ConfigT&lt; WrapperT &gt;</label>
+        <link refid="d1/dd3/a04427"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="774">
+        <label>castor3d::CombinePassConfigT&lt; WrapperT &gt;</label>
+        <link refid="df/d59/a04343"/>
+        <childnode refid="775" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="775">
+        <label>castor3d::rq::ConfigT&lt; WrapperT &gt;</label>
+        <link refid="d1/dd3/a04427"/>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Passes/CombinePass.hpp" line="35" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="33" bodyend="40"/>
+    <listofallmembers>
+      <member refid="d1/dd3/a04427_1ac4d5fa2df58c23f29429178eff899699" prot="public" virt="non-virtual"><scope>castor3d::CombinePassConfigT</scope><name>bindings</name></member>
+      <member refid="d1/dd3/a04427_1aad18baaa7ab25c7cf1f27c9f3719104e" prot="public" virt="non-virtual"><scope>castor3d::CombinePassConfigT</scope><name>blendMode</name></member>
+      <member refid="df/d59/a04343_1a1f6fafeb1d14c82b7db7eecf0ef87dec" prot="public" virt="non-virtual"><scope>castor3d::CombinePassConfigT</scope><name>lhsLayout</name></member>
+      <member refid="d1/dd3/a04427_1a34e232f8e87ff523d0df7cd3f697124f" prot="public" virt="non-virtual"><scope>castor3d::CombinePassConfigT</scope><name>range</name></member>
+      <member refid="df/d59/a04343_1a949875a08a33df7d643a191a6838cfb9" prot="public" virt="non-virtual"><scope>castor3d::CombinePassConfigT</scope><name>resultTexture</name></member>
+      <member refid="df/d59/a04343_1afd3d3153720dd635598e14e976b76d41" prot="public" virt="non-virtual"><scope>castor3d::CombinePassConfigT</scope><name>rhsLayout</name></member>
+      <member refid="df/d59/a04343_1af284fa450224677ad95078d88cffc6d9" prot="public" virt="non-virtual"><scope>castor3d::CombinePassConfigT</scope><name>tex3DResult</name></member>
+      <member refid="d1/dd3/a04427_1a4e4283067ecc109099b08f65723dffae" prot="public" virt="non-virtual"><scope>castor3d::CombinePassConfigT</scope><name>texcoordConfig</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

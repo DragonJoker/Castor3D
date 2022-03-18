@@ -1,33 +1,199 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d2/d14/a03304" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPipelineViewportWScalingStateCreateInfoNV &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d2/d14/a03304_1ae23064f78b54430ba741d3ef8464b620" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPipelineViewportWScalingStateCreateInfoNV &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d2/d14/a03304" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Cylinder</compoundname>
+    <basecompoundref refid="da/dcf/a03344" prot="public" virt="non-virtual">castor3d::MeshGenerator</basecompoundref>
+    <includes local="no">Cylinder.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/d14/a03304_1ae9540ffeecfa9f77b5d5aecfac3b01c1" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::Cylinder::m_height</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_W_SCALING_STATE_CREATE_INFO_NV</initializer>
+        <name>m_height</name>
+        <qualifiedname>castor3d::Cylinder::m_height</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="237" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="237" bodyend="-1"/>
+        <location file="Model/Mesh/Generator/Cylinder.hpp" line="32" column="7" bodyfile="Model/Mesh/Generator/Cylinder.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d14/a03304_1ae5336d2cac824b9907fcb2347dd38771" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::Cylinder::m_radius</definition>
+        <argsstring></argsstring>
+        <name>m_radius</name>
+        <qualifiedname>castor3d::Cylinder::m_radius</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Cylinder.hpp" line="33" column="7" bodyfile="Model/Mesh/Generator/Cylinder.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d14/a03304_1af7acc8c5c9111fc580531f6e95b1d5da" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Cylinder::m_nbFaces</definition>
+        <argsstring></argsstring>
+        <name>m_nbFaces</name>
+        <qualifiedname>castor3d::Cylinder::m_nbFaces</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Cylinder.hpp" line="34" column="10" bodyfile="Model/Mesh/Generator/Cylinder.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/d14/a03304_1a618f9a927a2b79b9e47f2d6cddf6eb52" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Cylinder::Cylinder</definition>
+        <argsstring>()</argsstring>
+        <name>Cylinder</name>
+        <qualifiedname>castor3d::Cylinder::Cylinder</qualifiedname>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Cylinder.hpp" line="21" column="9"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d2/d14/a03304_1afabd42a17eef7b694eeffcb7185bf992" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> MeshGeneratorSPtr</type>
+        <definition>static C3D_API MeshGeneratorSPtr castor3d::Cylinder::create</definition>
+        <argsstring>()</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::Cylinder::create</qualifiedname>
+        <briefdescription>
+<para>Creation function, used by Factory. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><ref refid="d2/d14/a03304" kindref="compound">Cylinder</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Cylinder.hpp" line="25" column="34"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d2/d14/a03304_1ab5cd7f31fec49844ab9ff23debe004e0" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::Cylinder::doGenerate</definition>
+        <argsstring>(Mesh &amp;mesh, Parameters const &amp;parameters) override</argsstring>
+        <name>doGenerate</name>
+        <qualifiedname>castor3d::Cylinder::doGenerate</qualifiedname>
+        <reimplements refid="da/dcf/a03344_1a690745122d7e670b311e317ae86c9b45">doGenerate</reimplements>
+        <param>
+          <type><ref refid="d1/d24/a03336" kindref="compound">Mesh</ref> &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para>Generates the mesh. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mesh. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The generator parameters. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Cylinder.hpp" line="28" column="22"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="d2/d14/a03304_1a04a73d22a79eb68afd9768d9e3b2f800" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::ostream &amp;</type>
+        <definition>std::ostream &amp; operator&lt;&lt;</definition>
+        <argsstring>(std::ostream &amp;o, Cylinder const &amp;c)</argsstring>
+        <name>operator&lt;&lt;</name>
+        <qualifiedname>castor3d::Cylinder::operator&lt;&lt;</qualifiedname>
+        <param>
+          <type>std::ostream &amp;</type>
+          <declname>o</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d14/a03304" kindref="compound">Cylinder</ref> const &amp;</type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Cylinder.hpp" line="35" column="8" bodyfile="Model/Mesh/Generator/Cylinder.hpp" bodystart="39" bodyend="43"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="237" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="237" bodyend="237"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::Cylinder</label>
+        <link refid="d2/d14/a03304"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::MeshGenerator</label>
+        <link refid="da/dcf/a03344"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::Cylinder</label>
+        <link refid="d2/d14/a03304"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::MeshGenerator</label>
+        <link refid="da/dcf/a03344"/>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/Generator/Cylinder.hpp" line="11" column="1" bodyfile="Model/Mesh/Generator/Cylinder.hpp" bodystart="13" bodyend="37"/>
     <listofallmembers>
-      <member refid="d2/d14/a03304_1ae23064f78b54430ba741d3ef8464b620" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPipelineViewportWScalingStateCreateInfoNV &gt;</scope><name>value</name></member>
+      <member refid="da/dcf/a03344_1a3207825be521c851f6fc654751f54cf1" prot="public" virt="virtual"><scope>castor3d::Cylinder</scope><name>computeNormals</name></member>
+      <member refid="d2/d14/a03304_1afabd42a17eef7b694eeffcb7185bf992" prot="public" virt="non-virtual"><scope>castor3d::Cylinder</scope><name>create</name></member>
+      <member refid="d2/d14/a03304_1a618f9a927a2b79b9e47f2d6cddf6eb52" prot="public" virt="non-virtual"><scope>castor3d::Cylinder</scope><name>Cylinder</name></member>
+      <member refid="d2/d14/a03304_1ab5cd7f31fec49844ab9ff23debe004e0" prot="private" virt="virtual"><scope>castor3d::Cylinder</scope><name>doGenerate</name></member>
+      <member refid="da/dcf/a03344_1a9fdc140f2d871ca6cb81029250c346ae" prot="public" virt="virtual"><scope>castor3d::Cylinder</scope><name>generate</name></member>
+      <member refid="d2/d14/a03304_1ae9540ffeecfa9f77b5d5aecfac3b01c1" prot="private" virt="non-virtual"><scope>castor3d::Cylinder</scope><name>m_height</name></member>
+      <member refid="d2/d14/a03304_1af7acc8c5c9111fc580531f6e95b1d5da" prot="private" virt="non-virtual"><scope>castor3d::Cylinder</scope><name>m_nbFaces</name></member>
+      <member refid="d2/d14/a03304_1ae5336d2cac824b9907fcb2347dd38771" prot="private" virt="non-virtual"><scope>castor3d::Cylinder</scope><name>m_radius</name></member>
+      <member refid="da/dcf/a03344_1a3ccec3fd88667bbca33c6e81afdeff19" prot="public" virt="non-virtual"><scope>castor3d::Cylinder</scope><name>MeshGenerator</name></member>
+      <member refid="d2/d14/a03304_1a04a73d22a79eb68afd9768d9e3b2f800" prot="private" virt="non-virtual"><scope>castor3d::Cylinder</scope><name>operator&lt;&lt;</name></member>
+      <member refid="da/dcf/a03344_1adee42c7c921b0dff4cbbc99c29faf31f" prot="public" virt="virtual"><scope>castor3d::Cylinder</scope><name>~MeshGenerator</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

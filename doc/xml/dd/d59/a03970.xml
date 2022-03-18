@@ -1,344 +1,186 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dd/d59/a03970" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::MorphComponent</compoundname>
-    <basecompoundref refid="d4/d2e/a03974" prot="public" virt="non-virtual">castor3d::SubmeshComponent</basecompoundref>
-    <includes local="no">MorphComponent.hpp</includes>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="dd/d59/a03970_1ab93e0c391ee3abd3ab2fe6fba2f2a980" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
-        <definition>C3D_API castor::String const castor3d::MorphComponent::Name</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dd/d59/a03970" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::RenderInfo</compoundname>
+    <includes local="no">RenderInfo.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dd/d59/a03970_1a42a1cf2acdd2eecb3010e63985a1978c" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderInfo::m_totalVertexCount</definition>
         <argsstring></argsstring>
-        <name>Name</name>
+        <name>m_totalVertexCount</name>
+        <qualifiedname>castor3d::RenderInfo::m_totalVertexCount</qualifiedname>
+        <initializer>{ 0u }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The total vertex count. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="77" column="1" bodyfile="Model/Mesh/Submesh/Component/MorphComponent.hpp" bodystart="77" bodyend="-1"/>
+        <location file="Render/RenderInfo.hpp" line="15" column="10" bodyfile="Render/RenderInfo.hpp" bodystart="15" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dd/d59/a03970_1a9f51894e88b4ad784686d586221c7ee7" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t constexpr</type>
-        <definition>C3D_API uint32_t constexpr castor3d::MorphComponent::BindingPoint</definition>
+      <memberdef kind="variable" id="dd/d59/a03970_1a22b58b20b970cd62ee019e2c5a119bbf" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderInfo::m_totalFaceCount</definition>
         <argsstring></argsstring>
-        <name>BindingPoint</name>
-        <initializer>= 1u</initializer>
+        <name>m_totalFaceCount</name>
+        <qualifiedname>castor3d::RenderInfo::m_totalFaceCount</qualifiedname>
+        <initializer>{ 0u }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The total face count. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="78" column="1" bodyfile="Model/Mesh/Submesh/Component/MorphComponent.hpp" bodystart="78" bodyend="-1"/>
+        <location file="Render/RenderInfo.hpp" line="18" column="10" bodyfile="Render/RenderInfo.hpp" bodystart="18" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="dd/d59/a03970_1a7fbbd115aa3eb3efe4d3ddfd379ecf3e" prot="private" static="no" mutable="no">
-        <type>ashes::VertexBufferPtr&lt; <ref refid="de/d13/a01473_1abe36058ac642536d26cfcc7f2931e62c" kindref="member">InterleavedVertex</ref> &gt;</type>
-        <definition>ashes::VertexBufferPtr&lt; InterleavedVertex &gt; castor3d::MorphComponent::m_animBuffer</definition>
+      <memberdef kind="variable" id="dd/d59/a03970_1ab87bda7cb82d56c928e4bac946406be9" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderInfo::m_visibleVertexCount</definition>
         <argsstring></argsstring>
-        <name>m_animBuffer</name>
+        <name>m_visibleVertexCount</name>
+        <qualifiedname>castor3d::RenderInfo::m_visibleVertexCount</qualifiedname>
+        <initializer>{ 0u }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The visble objects vertex count. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="81" column="1" bodyfile="Model/Mesh/Submesh/Component/MorphComponent.hpp" bodystart="81" bodyend="-1"/>
+        <location file="Render/RenderInfo.hpp" line="21" column="10" bodyfile="Render/RenderInfo.hpp" bodystart="21" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dd/d59/a03970_1ac92b47aad1141f6ab65c3960088cc814" prot="private" static="no" mutable="no">
-        <type>ashes::PipelineVertexInputStateCreateInfoPtr</type>
-        <definition>ashes::PipelineVertexInputStateCreateInfoPtr castor3d::MorphComponent::m_animLayout</definition>
+      <memberdef kind="variable" id="dd/d59/a03970_1adb594317309db8028e6180db40b27b08" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderInfo::m_visibleFaceCount</definition>
         <argsstring></argsstring>
-        <name>m_animLayout</name>
+        <name>m_visibleFaceCount</name>
+        <qualifiedname>castor3d::RenderInfo::m_visibleFaceCount</qualifiedname>
+        <initializer>{ 0u }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The visible objects face count. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="82" column="1" bodyfile="Model/Mesh/Submesh/Component/MorphComponent.hpp" bodystart="82" bodyend="-1"/>
+        <location file="Render/RenderInfo.hpp" line="24" column="10" bodyfile="Render/RenderInfo.hpp" bodystart="24" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dd/d59/a03970_1aa6e19fbb6234b242e2bfcd3bd7f4de76" prot="private" static="no" mutable="no">
-        <type><ref refid="de/d13/a01473_1acc83a5f6efdad2c69d185e0595e52b4d" kindref="member">InterleavedVertexArray</ref></type>
-        <definition>InterleavedVertexArray castor3d::MorphComponent::m_data</definition>
+      <memberdef kind="variable" id="dd/d59/a03970_1aa2e07cf32198000f68fcaf724aecbae3" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderInfo::m_totalObjectsCount</definition>
         <argsstring></argsstring>
-        <name>m_data</name>
+        <name>m_totalObjectsCount</name>
+        <qualifiedname>castor3d::RenderInfo::m_totalObjectsCount</qualifiedname>
+        <initializer>{ 0u }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The total object count. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="83" column="1" bodyfile="Model/Mesh/Submesh/Component/MorphComponent.hpp" bodystart="83" bodyend="-1"/>
+        <location file="Render/RenderInfo.hpp" line="27" column="10" bodyfile="Render/RenderInfo.hpp" bodystart="27" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="dd/d59/a03970_1ae476cfff247b13cee204f046ab7801c0" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::MorphComponent::MorphComponent</definition>
-        <argsstring>(Submesh &amp;submesh)</argsstring>
-        <name>MorphComponent</name>
-        <param>
-          <type><ref refid="d7/df2/a03986" kindref="compound">Submesh</ref> &amp;</type>
-          <declname>submesh</declname>
-        </param>
+      <memberdef kind="variable" id="dd/d59/a03970_1ab4a562288c1e794d2275814f67e89e0e" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderInfo::m_visibleObjectsCount</definition>
+        <argsstring></argsstring>
+        <name>m_visibleObjectsCount</name>
+        <qualifiedname>castor3d::RenderInfo::m_visibleObjectsCount</qualifiedname>
+        <initializer>{ 0u }</initializer>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">submesh</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parent submesh. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
+<para>The visible objects count. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="23" column="1"/>
+        <location file="Render/RenderInfo.hpp" line="30" column="10" bodyfile="Render/RenderInfo.hpp" bodystart="30" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="dd/d59/a03970_1a72c004a6bbefe8fa72a42a8d03747891" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::MorphComponent::gather</definition>
-        <argsstring>(MaterialSPtr material, ashes::BufferCRefArray &amp;buffers, std::vector&lt; uint64_t &gt; &amp;offsets, ashes::PipelineVertexInputStateCreateInfoCRefArray &amp;layouts, uint32_t instanceMult) override</argsstring>
-        <name>gather</name>
-        <reimplements refid="d4/d2e/a03974_1a4b992d760e02c3c8dc32137aa43db62b">gather</reimplements>
-        <param>
-          <type>MaterialSPtr</type>
-          <declname>material</declname>
-        </param>
-        <param>
-          <type>ashes::BufferCRefArray &amp;</type>
-          <declname>buffers</declname>
-        </param>
-        <param>
-          <type>std::vector&lt; uint64_t &gt; &amp;</type>
-          <declname>offsets</declname>
-        </param>
-        <param>
-          <type>ashes::PipelineVertexInputStateCreateInfoCRefArray &amp;</type>
-          <declname>layouts</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>instanceMult</declname>
-        </param>
+      <memberdef kind="variable" id="dd/d59/a03970_1a8b21ba5c92eb4ec1a6dffd02449214eb" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderInfo::m_particlesCount</definition>
+        <argsstring></argsstring>
+        <name>m_particlesCount</name>
+        <qualifiedname>castor3d::RenderInfo::m_particlesCount</qualifiedname>
+        <initializer>{ 0u }</initializer>
         <briefdescription>
-<para>Gathers buffers that need to go in a VAO. </para>
         </briefdescription>
         <detaileddescription>
+<para>The particles count. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="27" column="1"/>
+        <location file="Render/RenderInfo.hpp" line="33" column="10" bodyfile="Render/RenderInfo.hpp" bodystart="33" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="dd/d59/a03970_1a53a67b42c9b02c15b09c112cc135b04e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::VertexBuffer&lt; <ref refid="de/d13/a01473_1abe36058ac642536d26cfcc7f2931e62c" kindref="member">InterleavedVertex</ref> &gt; const  &amp;</type>
-        <definition>ashes::VertexBuffer&lt; InterleavedVertex &gt; const&amp; castor3d::MorphComponent::getAnimationBuffer</definition>
-        <argsstring>() const</argsstring>
-        <name>getAnimationBuffer</name>
+      <memberdef kind="variable" id="dd/d59/a03970_1a1642c035de82be7bfdbb9407314036de" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderInfo::m_totalLightsCount</definition>
+        <argsstring></argsstring>
+        <name>m_totalLightsCount</name>
+        <qualifiedname>castor3d::RenderInfo::m_totalLightsCount</qualifiedname>
+        <initializer>{ 0u }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The VertexBuffer. </para>
-</simplesect>
-</para>
+<para>The total lights count. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="38" column="1" bodyfile="Model/Mesh/Submesh/Component/MorphComponent.hpp" bodystart="38" bodyend="41"/>
+        <location file="Render/RenderInfo.hpp" line="36" column="10" bodyfile="Render/RenderInfo.hpp" bodystart="36" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="dd/d59/a03970_1a9a3dcacae3abbc7058427ef5b5b7994a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::VertexBuffer&lt; <ref refid="de/d13/a01473_1abe36058ac642536d26cfcc7f2931e62c" kindref="member">InterleavedVertex</ref> &gt; &amp;</type>
-        <definition>ashes::VertexBuffer&lt; InterleavedVertex &gt;&amp; castor3d::MorphComponent::getAnimationBuffer</definition>
-        <argsstring>()</argsstring>
-        <name>getAnimationBuffer</name>
+      <memberdef kind="variable" id="dd/d59/a03970_1a82670c681dc496ea8b931250600e1d16" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderInfo::m_visibleLightsCount</definition>
+        <argsstring></argsstring>
+        <name>m_visibleLightsCount</name>
+        <qualifiedname>castor3d::RenderInfo::m_visibleLightsCount</qualifiedname>
+        <initializer>{ 0u }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The VertexBuffer. </para>
-</simplesect>
-</para>
+<para>The visible lights count. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="48" column="1" bodyfile="Model/Mesh/Submesh/Component/MorphComponent.hpp" bodystart="48" bodyend="51"/>
+        <location file="Render/RenderInfo.hpp" line="39" column="10" bodyfile="Render/RenderInfo.hpp" bodystart="39" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="dd/d59/a03970_1a48adf114bb095c3d9f18003e00222081" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="de/d13/a01473_1acc83a5f6efdad2c69d185e0595e52b4d" kindref="member">InterleavedVertexArray</ref> &amp;</type>
-        <definition>InterleavedVertexArray&amp; castor3d::MorphComponent::getData</definition>
-        <argsstring>()</argsstring>
-        <name>getData</name>
+      <memberdef kind="variable" id="dd/d59/a03970_1a0c19a5a051cb65c8b7d13548a8e3ac7b" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderInfo::m_drawCalls</definition>
+        <argsstring></argsstring>
+        <name>m_drawCalls</name>
+        <qualifiedname>castor3d::RenderInfo::m_drawCalls</qualifiedname>
+        <initializer>{ 0u }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The animated vertex buffer data. </para>
-</simplesect>
-</para>
+<para>The draw calls count. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="58" column="1" bodyfile="Model/Mesh/Submesh/Component/MorphComponent.hpp" bodystart="58" bodyend="61"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d59/a03970_1a14ac41bf5d6be3f00414081a5e0d1d28" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
-        <type><ref refid="de/d13/a01473_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
-        <definition>ProgramFlags castor3d::MorphComponent::getProgramFlags</definition>
-        <argsstring>(MaterialSPtr material) const override</argsstring>
-        <name>getProgramFlags</name>
-        <reimplements refid="d4/d2e/a03974_1aa5c81caafcdb1b7fa8610605060775f1">getProgramFlags</reimplements>
-        <param>
-          <type>MaterialSPtr</type>
-          <declname>material</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The shader program flags. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="65" column="1" bodyfile="Model/Mesh/Submesh/Component/MorphComponent.hpp" bodystart="65" bodyend="68"/>
-        <references refid="de/d13/a01473_1a6dbeb5480c4a424e0c24ace65835778bafc8be581627b97523b9662d9eae684b0">castor3d::eMorphing</references>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="dd/d59/a03970_1a70b00b312e7c034b3f5b4996118eb9ea" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>bool</type>
-        <definition>bool castor3d::MorphComponent::doInitialise</definition>
-        <argsstring>(RenderDevice const &amp;device) override</argsstring>
-        <name>doInitialise</name>
-        <reimplements refid="d4/d2e/a03974_1a02633de92cd3a940ea28bc2ee63cdefb">doInitialise</reimplements>
-        <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="71" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d59/a03970_1a59cd3fb273e5e7abc7bdc76eb0a21e03" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::MorphComponent::doCleanup</definition>
-        <argsstring>() override</argsstring>
-        <name>doCleanup</name>
-        <reimplements refid="d4/d2e/a03974_1a8574c2b5b3efa89e6446423448f4edfd">doCleanup</reimplements>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="72" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d59/a03970_1a12f16e7ecc1fdd3b08d07983e136f448" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::MorphComponent::doFill</definition>
-        <argsstring>(RenderDevice const &amp;device) override</argsstring>
-        <name>doFill</name>
-        <reimplements refid="d4/d2e/a03974_1a78f22f8994aae0890645c943e42c45c9">doFill</reimplements>
-        <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="73" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d59/a03970_1aabd246ad3d2bfd09d79fd9027574eac5" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::MorphComponent::doUpload</definition>
-        <argsstring>() override</argsstring>
-        <name>doUpload</name>
-        <reimplements refid="d4/d2e/a03974_1a66e01bf8274e1d77bd20a669cb637a2e">doUpload</reimplements>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="74" column="1"/>
+        <location file="Render/RenderInfo.hpp" line="42" column="10" bodyfile="Render/RenderInfo.hpp" bodystart="42" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="2087">
-        <label>castor3d::MorphComponent</label>
-        <link refid="dd/d59/a03970"/>
-        <childnode refid="2088" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2088">
-        <label>castor3d::SubmeshComponent</label>
-        <link refid="d4/d2e/a03974"/>
-        <childnode refid="2089" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2089">
-        <label>castor::OwnedBy&lt; Submesh &gt;</label>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="2090">
-        <label>castor3d::MorphComponent</label>
-        <link refid="dd/d59/a03970"/>
-        <childnode refid="2091" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2091">
-        <label>castor3d::SubmeshComponent</label>
-        <link refid="d4/d2e/a03974"/>
-        <childnode refid="2092" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2092">
-        <label>castor::OwnedBy&lt; Submesh &gt;</label>
-      </node>
-    </collaborationgraph>
-    <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="13" column="1" bodyfile="Model/Mesh/Submesh/Component/MorphComponent.hpp" bodystart="11" bodyend="84"/>
+    <location file="Render/RenderInfo.hpp" line="11" column="1" bodyfile="Render/RenderInfo.hpp" bodystart="12" bodyend="43"/>
     <listofallmembers>
-      <member refid="dd/d59/a03970_1a9f51894e88b4ad784686d586221c7ee7" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>BindingPoint</name></member>
-      <member refid="d4/d2e/a03974_1af13d08b9487f0501a06c0f7df4c89f8c" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>cleanup</name></member>
-      <member refid="dd/d59/a03970_1a59cd3fb273e5e7abc7bdc76eb0a21e03" prot="private" virt="virtual"><scope>castor3d::MorphComponent</scope><name>doCleanup</name></member>
-      <member refid="dd/d59/a03970_1a12f16e7ecc1fdd3b08d07983e136f448" prot="private" virt="virtual"><scope>castor3d::MorphComponent</scope><name>doFill</name></member>
-      <member refid="dd/d59/a03970_1a70b00b312e7c034b3f5b4996118eb9ea" prot="private" virt="virtual"><scope>castor3d::MorphComponent</scope><name>doInitialise</name></member>
-      <member refid="dd/d59/a03970_1aabd246ad3d2bfd09d79fd9027574eac5" prot="private" virt="virtual"><scope>castor3d::MorphComponent</scope><name>doUpload</name></member>
-      <member refid="d4/d2e/a03974_1a53837125323ab11c28a86acbb187a770" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>fill</name></member>
-      <member refid="dd/d59/a03970_1a72c004a6bbefe8fa72a42a8d03747891" prot="public" virt="virtual"><scope>castor3d::MorphComponent</scope><name>gather</name></member>
-      <member refid="dd/d59/a03970_1a53a67b42c9b02c15b09c112cc135b04e" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>getAnimationBuffer</name></member>
-      <member refid="dd/d59/a03970_1a9a3dcacae3abbc7058427ef5b5b7994a" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>getAnimationBuffer</name></member>
-      <member refid="dd/d59/a03970_1a48adf114bb095c3d9f18003e00222081" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>getData</name></member>
-      <member refid="dd/d59/a03970_1a14ac41bf5d6be3f00414081a5e0d1d28" prot="public" virt="virtual"><scope>castor3d::MorphComponent</scope><name>getProgramFlags</name></member>
-      <member refid="d4/d2e/a03974_1a3782f6784f793eeccd48e637e85a9d6c" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>getType</name></member>
-      <member refid="d4/d2e/a03974_1a98c6ad3457d19448c1eaa261598103ad" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>initialise</name></member>
-      <member refid="dd/d59/a03970_1a7fbbd115aa3eb3efe4d3ddfd379ecf3e" prot="private" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>m_animBuffer</name></member>
-      <member refid="dd/d59/a03970_1ac92b47aad1141f6ab65c3960088cc814" prot="private" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>m_animLayout</name></member>
-      <member refid="dd/d59/a03970_1aa6e19fbb6234b242e2bfcd3bd7f4de76" prot="private" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>m_data</name></member>
-      <member refid="dd/d59/a03970_1ae476cfff247b13cee204f046ab7801c0" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>MorphComponent</name></member>
-      <member refid="dd/d59/a03970_1ab93e0c391ee3abd3ab2fe6fba2f2a980" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>Name</name></member>
-      <member refid="d4/d2e/a03974_1a7e21e4eda223d50b6751c40cb44f77a7" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>needsUpdate</name></member>
-      <member refid="d4/d2e/a03974_1a06b2ee9400bab62f5472f8ce8a03ee27" prot="public" virt="virtual"><scope>castor3d::MorphComponent</scope><name>setMaterial</name></member>
-      <member refid="d4/d2e/a03974_1aafbe6064005a72343870bb444e1e6a1f" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>SubmeshComponent</name></member>
-      <member refid="d4/d2e/a03974_1a2dbcda2b8c26f4c9c52db78a5740a0f8" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>upload</name></member>
-      <member refid="d4/d2e/a03974_1a30231a167367ba38b41f9bf5b3bcd005" prot="public" virt="virtual"><scope>castor3d::MorphComponent</scope><name>~SubmeshComponent</name></member>
+      <member refid="dd/d59/a03970_1a0c19a5a051cb65c8b7d13548a8e3ac7b" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>m_drawCalls</name></member>
+      <member refid="dd/d59/a03970_1a8b21ba5c92eb4ec1a6dffd02449214eb" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>m_particlesCount</name></member>
+      <member refid="dd/d59/a03970_1a22b58b20b970cd62ee019e2c5a119bbf" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>m_totalFaceCount</name></member>
+      <member refid="dd/d59/a03970_1a1642c035de82be7bfdbb9407314036de" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>m_totalLightsCount</name></member>
+      <member refid="dd/d59/a03970_1aa2e07cf32198000f68fcaf724aecbae3" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>m_totalObjectsCount</name></member>
+      <member refid="dd/d59/a03970_1a42a1cf2acdd2eecb3010e63985a1978c" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>m_totalVertexCount</name></member>
+      <member refid="dd/d59/a03970_1adb594317309db8028e6180db40b27b08" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>m_visibleFaceCount</name></member>
+      <member refid="dd/d59/a03970_1a82670c681dc496ea8b931250600e1d16" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>m_visibleLightsCount</name></member>
+      <member refid="dd/d59/a03970_1ab4a562288c1e794d2275814f67e89e0e" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>m_visibleObjectsCount</name></member>
+      <member refid="dd/d59/a03970_1ab87bda7cb82d56c928e4bac946406be9" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>m_visibleVertexCount</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

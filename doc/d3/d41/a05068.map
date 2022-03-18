@@ -1,11 +1,4 @@
-<map id="castor3d::MeshAnimationInstanceSubmesh" name="castor3d::MeshAnimationInstanceSubmesh">
-<area shape="rect" id="node1" title=" " alt="" coords="999,71,1217,112"/>
-<area shape="rect" id="node2" title=" " alt="" coords="609,5,833,47"/>
-<area shape="rect" id="node3" href="$d5/d3b/a03990.html" title=" " alt="" coords="624,71,817,112"/>
-<area shape="rect" id="node4" href="$d0/d61/a03858.html" title=" " alt="" coords="608,137,833,163"/>
-<area shape="rect" id="node5" title=" " alt="" coords="241,78,477,105"/>
-<area shape="rect" id="node6" title=" " alt="" coords="233,129,484,171"/>
-<area shape="rect" id="node7" href="$d7/df2/a03986.html" title=" " alt="" coords="291,195,426,222"/>
-<area shape="rect" id="node8" title=" " alt="" coords="5,166,184,193"/>
-<area shape="rect" id="node9" title=" " alt="" coords="14,217,175,259"/>
+<map id="castor::TextWriter&lt; castor3d::SceneBackground &gt;" name="castor::TextWriter&lt; castor3d::SceneBackground &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="5,95,216,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="35,5,186,47"/>
 </map>

@@ -1,67 +1,83 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="de/d5f/a04763" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::LightPassShadowTraits&lt; LightType::ePoint &gt;</compoundname>
-    <includes local="no">LightPassShadow.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="de/d5f/a04763_1add078dce53be769c13210c52cf4d974b" prot="public" static="no">
-        <type><ref refid="d7/d05/a05163" kindref="compound">PointLight</ref></type>
-        <definition>using castor3d::LightPassShadowTraits&lt; LightType::ePoint &gt;::light_type =  PointLight</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="de/d5f/a04763" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::Fog</compoundname>
+    <includes local="no">GlslFog.hpp</includes>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="de/d5f/a04763_1a818ce0c5e2394483e664a8ea9a245220" prot="protected" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec4, sdw::InVec4, sdw::InVec4, sdw::InVec3, InSceneData &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec4 , sdw::InVec4 , sdw::InVec4 , sdw::InVec3 , InSceneData &gt; castor3d::shader::Fog::m_fog</definition>
         <argsstring></argsstring>
-        <name>light_type</name>
+        <name>m_fog</name>
+        <qualifiedname>castor3d::shader::Fog::m_fog</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The light source type. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="57" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="57" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslFog.hpp" line="31" column="2" bodyfile="Shader/Shaders/GlslFog.hpp" bodystart="31" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="typedef" id="de/d5f/a04763_1aad92446ef0d41ded8920133f63396741" prot="public" static="no">
-        <type><ref refid="d0/d9d/a04783" kindref="compound">PointLightPass</ref></type>
-        <definition>using castor3d::LightPassShadowTraits&lt; LightType::ePoint &gt;::light_pass_type =  PointLightPass</definition>
-        <argsstring></argsstring>
-        <name>light_pass_type</name>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/d5f/a04763_1a7413ef23e75baa5f273030d019702918" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::Fog::Fog</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>Fog</name>
+        <qualifiedname>castor3d::shader::Fog::Fog</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The light pass type. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="60" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="60" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslFog.hpp" line="20" column="18"/>
       </memberdef>
-      <memberdef kind="typedef" id="de/d5f/a04763_1a9a69d0621608d7532668ee4e60ab6543" prot="public" static="no">
-        <type><ref refid="de/d12/a04659" kindref="compound">ShadowMapPoint</ref></type>
-        <definition>using castor3d::LightPassShadowTraits&lt; LightType::ePoint &gt;::shadow_pass_type =  ShadowMapPoint</definition>
-        <argsstring></argsstring>
-        <name>shadow_pass_type</name>
+      <memberdef kind="function" id="de/d5f/a04763_1a948e9e44f98b28496ea045301de03d04" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::Fog::apply</definition>
+        <argsstring>(sdw::Vec4 const &amp;bgColour, sdw::Vec4 const &amp;colour, sdw::Vec3 const &amp;wsPosition, SceneData const &amp;sceneData)</argsstring>
+        <name>apply</name>
+        <qualifiedname>castor3d::shader::Fog::apply</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>bgColour</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsPosition</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d18/a04963" kindref="compound">SceneData</ref> const &amp;</type>
+          <declname>sceneData</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The shadow map type. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="63" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="63" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslFog.hpp" line="21" column="19"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Traits structure to specialise light passes with shadows. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="remark"><para>Specialisation for <ref refid="d7/dd1/a01458_1a381718aa9accc88c20afd97d76c30ed8a4ddd9f8296bf1271adcf1a2eea61bd57" kindref="member">LightType::ePoint</ref>. </para>
-</simplesect>
-</para>
     </detaileddescription>
-    <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="54" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="53" bodyend="64"/>
+    <location file="Shader/Shaders/GlslFog.hpp" line="17" column="1" bodyfile="Shader/Shaders/GlslFog.hpp" bodystart="18" bodyend="32"/>
     <listofallmembers>
-      <member refid="de/d5f/a04763_1aad92446ef0d41ded8920133f63396741" prot="public" virt="non-virtual"><scope>castor3d::LightPassShadowTraits&lt; LightType::ePoint &gt;</scope><name>light_pass_type</name></member>
-      <member refid="de/d5f/a04763_1add078dce53be769c13210c52cf4d974b" prot="public" virt="non-virtual"><scope>castor3d::LightPassShadowTraits&lt; LightType::ePoint &gt;</scope><name>light_type</name></member>
-      <member refid="de/d5f/a04763_1a9a69d0621608d7532668ee4e60ab6543" prot="public" virt="non-virtual"><scope>castor3d::LightPassShadowTraits&lt; LightType::ePoint &gt;</scope><name>shadow_pass_type</name></member>
+      <member refid="de/d5f/a04763_1a948e9e44f98b28496ea045301de03d04" prot="public" virt="non-virtual"><scope>castor3d::shader::Fog</scope><name>apply</name></member>
+      <member refid="de/d5f/a04763_1a7413ef23e75baa5f273030d019702918" prot="public" virt="non-virtual"><scope>castor3d::shader::Fog</scope><name>Fog</name></member>
+      <member refid="de/d5f/a04763_1a818ce0c5e2394483e664a8ea9a245220" prot="protected" virt="non-virtual"><scope>castor3d::shader::Fog</scope><name>m_fog</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

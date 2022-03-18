@@ -1,5 +1,6 @@
-<map id="castor3d::RenderQuadBuilder" name="castor3d::RenderQuadBuilder">
-<area shape="rect" id="node1" title=" " alt="" coords="23,215,215,241"/>
-<area shape="rect" id="node2" href="$de/dc4/a04428.html" title=" " alt="" coords="5,124,233,165"/>
-<area shape="rect" id="node3" href="$de/dc4/a04428.html" title="Used to create a RenderQuad variable." alt="" coords="23,5,215,47"/>
+<map id="castor3d::SkyboxBackground" name="castor3d::SkyboxBackground">
+<area shape="rect" id="node1" title=" " alt="" coords="87,155,281,181"/>
+<area shape="rect" id="node2" href="$d1/d13/a04444.html" title=" " alt="" coords="91,80,277,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,192,32"/>
+<area shape="rect" id="node4" title=" " alt="" coords="216,5,323,32"/>
 </map>

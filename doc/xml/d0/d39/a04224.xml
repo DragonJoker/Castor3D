@@ -1,200 +1,61 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d0/d39/a04224" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::CulledSubmesh</compoundname>
-    <includes local="no">SceneCuller.hpp</includes>
+    <compoundname>castor3d::SubsurfaceScatteringPass::BlurWeights</compoundname>
+    <includes local="no">SubsurfaceScatteringPass.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d0/d39/a04224_1a96fa74fd66959274cfbe3a4a89700aed" prot="public" static="no" mutable="no">
-        <type><ref refid="df/df0/a05160" kindref="compound">Geometry</ref> &amp;</type>
-        <definition>Geometry&amp; castor3d::CulledSubmesh::instance</definition>
+      <memberdef kind="variable" id="d0/d39/a04224_1a9f824803d0628b0dd429b3a58f6dfa69" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::SubsurfaceScatteringPass::BlurWeights::originalWeight</definition>
         <argsstring></argsstring>
-        <name>instance</name>
+        <name>originalWeight</name>
+        <qualifiedname>castor3d::SubsurfaceScatteringPass::BlurWeights::originalWeight</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Culling/SceneCuller.hpp" line="15" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="15" bodyend="-1"/>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="91" column="17" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="91" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d0/d39/a04224_1a4b14e97b622a762d06d9d49c065c21bf" prot="public" static="no" mutable="no">
-        <type><ref refid="d9/d0c/a03992" kindref="compound">Submesh</ref> &amp;</type>
-        <definition>Submesh&amp; castor3d::CulledSubmesh::data</definition>
-        <argsstring></argsstring>
-        <name>data</name>
+      <memberdef kind="variable" id="d0/d39/a04224_1a3229ded5b54533f92a6332f493eced2e" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::SubsurfaceScatteringPass::BlurWeights::blurWeights[3u]</definition>
+        <argsstring>[3u]</argsstring>
+        <name>blurWeights</name>
+        <qualifiedname>castor3d::SubsurfaceScatteringPass::BlurWeights::blurWeights</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Culling/SceneCuller.hpp" line="16" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="16" bodyend="-1"/>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="92" column="17" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="92" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d0/d39/a04224_1ab74e4cda1b777b998c871498ce1c9b29" prot="public" static="no" mutable="no">
-        <type>PassSPtr</type>
-        <definition>PassSPtr castor3d::CulledSubmesh::pass</definition>
+      <memberdef kind="variable" id="d0/d39/a04224_1a0bf0b2b2456f6fed0218719ac6e99e3e" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::SubsurfaceScatteringPass::BlurWeights::blurVariance</definition>
         <argsstring></argsstring>
-        <name>pass</name>
+        <name>blurVariance</name>
+        <qualifiedname>castor3d::SubsurfaceScatteringPass::BlurWeights::blurVariance</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Culling/SceneCuller.hpp" line="17" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="17" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/d39/a04224_1ac548faa68a758d6f3d334fd0b05253c0" prot="public" static="no" mutable="no">
-        <type><ref refid="da/d44/a05256" kindref="compound">SceneNode</ref> &amp;</type>
-        <definition>SceneNode&amp; castor3d::CulledSubmesh::sceneNode</definition>
-        <argsstring></argsstring>
-        <name>sceneNode</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Culling/SceneCuller.hpp" line="18" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="18" bodyend="-1"/>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="93" column="17" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="93" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="877">
-        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
-        <childnode refid="878" relation="template-instance">
-          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="879">
-        <label>K</label>
-      </node>
-      <node id="880">
-        <label>T</label>
-      </node>
-      <node id="873">
-        <label>castor3d::Geometry</label>
-        <link refid="df/df0/a05160"/>
-        <childnode refid="874" relation="public-inheritance">
-        </childnode>
-        <childnode refid="888" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="882">
-        <label>castor3d::SceneNode</label>
-        <link refid="da/d44/a05256"/>
-        <childnode refid="883" relation="public-inheritance">
-        </childnode>
-        <childnode refid="884" relation="public-inheritance">
-        </childnode>
-        <childnode refid="881" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="869">
-        <label>castor3d::CulledSubmesh</label>
-        <link refid="d0/d39/a04224"/>
-        <childnode refid="870" relation="usage">
-          <edgelabel>data</edgelabel>
-        </childnode>
-        <childnode refid="873" relation="usage">
-          <edgelabel>instance</edgelabel>
-        </childnode>
-        <childnode refid="882" relation="usage">
-          <edgelabel>sceneNode</edgelabel>
-        </childnode>
-      </node>
-      <node id="884">
-        <label>castor::OwnedBy&lt; Scene &gt;</label>
-      </node>
-      <node id="878">
-        <label>std::map&lt; K, T &gt;</label>
-        <childnode refid="879" relation="usage">
-          <edgelabel>keys</edgelabel>
-        </childnode>
-        <childnode refid="880" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="883">
-        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
-      </node>
-      <node id="874">
-        <label>castor3d::MovableObject</label>
-        <link refid="d9/d4a/a05192"/>
-        <childnode refid="875" relation="public-inheritance">
-        </childnode>
-        <childnode refid="881" relation="public-inheritance">
-        </childnode>
-        <childnode refid="882" relation="usage">
-          <edgelabel>m_sceneNode</edgelabel>
-        </childnode>
-        <childnode refid="885" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-      </node>
-      <node id="881">
-        <label>Named</label>
-      </node>
-      <node id="888">
-        <label>castor3d::RenderedObject</label>
-        <link refid="d5/d47/a05240"/>
-        <childnode refid="889" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="886">
-        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
-      </node>
-      <node id="871">
-        <label>castor::OwnedBy&lt; Mesh &gt;</label>
-      </node>
-      <node id="875">
-        <label>Animable</label>
-        <link refid="d7/db2/a02036"/>
-        <childnode refid="876" relation="public-inheritance">
-        </childnode>
-        <childnode refid="877" relation="usage">
-          <edgelabel>m_animations</edgelabel>
-        </childnode>
-      </node>
-      <node id="876">
-        <label>castor::OwnedBy&lt; AnimableHanlerT &gt;</label>
-      </node>
-      <node id="887">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="870">
-        <label>castor3d::Submesh</label>
-        <link refid="d9/d0c/a03992"/>
-        <childnode refid="871" relation="public-inheritance">
-        </childnode>
-        <childnode refid="872" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="889">
-        <label>std::enable_shared_from_this&lt; RenderedObject &gt;</label>
-      </node>
-      <node id="885">
-        <label>castor3d::Scene</label>
-        <link refid="d5/d76/a05244"/>
-        <childnode refid="886" relation="public-inheritance">
-        </childnode>
-        <childnode refid="887" relation="public-inheritance">
-        </childnode>
-        <childnode refid="881" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="872">
-        <label>std::enable_shared_from_this&lt; Submesh &gt;</label>
-      </node>
-    </collaborationgraph>
-    <location file="Render/Culling/SceneCuller.hpp" line="14" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="13" bodyend="19"/>
+    <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="89" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="90" bodyend="94"/>
     <listofallmembers>
-      <member refid="d0/d39/a04224_1a4b14e97b622a762d06d9d49c065c21bf" prot="public" virt="non-virtual"><scope>castor3d::CulledSubmesh</scope><name>data</name></member>
-      <member refid="d0/d39/a04224_1a96fa74fd66959274cfbe3a4a89700aed" prot="public" virt="non-virtual"><scope>castor3d::CulledSubmesh</scope><name>instance</name></member>
-      <member refid="d0/d39/a04224_1ab74e4cda1b777b998c871498ce1c9b29" prot="public" virt="non-virtual"><scope>castor3d::CulledSubmesh</scope><name>pass</name></member>
-      <member refid="d0/d39/a04224_1ac548faa68a758d6f3d334fd0b05253c0" prot="public" virt="non-virtual"><scope>castor3d::CulledSubmesh</scope><name>sceneNode</name></member>
+      <member refid="d0/d39/a04224_1a0bf0b2b2456f6fed0218719ac6e99e3e" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::BlurWeights</scope><name>blurVariance</name></member>
+      <member refid="d0/d39/a04224_1a3229ded5b54533f92a6332f493eced2e" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::BlurWeights</scope><name>blurWeights</name></member>
+      <member refid="d0/d39/a04224_1a9f824803d0628b0dd429b3a58f6dfa69" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::BlurWeights</scope><name>originalWeight</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

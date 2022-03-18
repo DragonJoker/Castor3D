@@ -1,33 +1,75 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d3/dbd/a03575" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkAccelerationStructureCreateInfoNV &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d3/dbd/a03575_1abe4c73204501d4f6b44ef3885d394196" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkAccelerationStructureCreateInfoNV &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d3/dbd/a03575" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::OverlayRenderer::Pipeline</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/dbd/a03575_1a658a865058be28f06bba4d994da19542" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetLayoutPtr</type>
+        <definition>ashes::DescriptorSetLayoutPtr castor3d::OverlayRenderer::Pipeline::descriptorLayout</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_NV</initializer>
+        <name>descriptorLayout</name>
+        <qualifiedname>castor3d::OverlayRenderer::Pipeline::descriptorLayout</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="310" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="310" bodyend="-1"/>
+        <location file="Overlay/OverlayRenderer.hpp" line="207" column="31" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="207" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dbd/a03575_1a39c2091ed08d4d057a7d0651f1aa33b3" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetPoolPtr</type>
+        <definition>ashes::DescriptorSetPoolPtr castor3d::OverlayRenderer::Pipeline::descriptorPool</definition>
+        <argsstring></argsstring>
+        <name>descriptorPool</name>
+        <qualifiedname>castor3d::OverlayRenderer::Pipeline::descriptorPool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="208" column="29" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="208" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dbd/a03575_1a3a08b07a23040d67724ce10521a3f586" prot="public" static="no" mutable="no">
+        <type>ashes::PipelineLayoutPtr</type>
+        <definition>ashes::PipelineLayoutPtr castor3d::OverlayRenderer::Pipeline::pipelineLayout</definition>
+        <argsstring></argsstring>
+        <name>pipelineLayout</name>
+        <qualifiedname>castor3d::OverlayRenderer::Pipeline::pipelineLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="209" column="26" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="209" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dbd/a03575_1a0aa2ced8af1850fb8bce296b2a9c175f" prot="public" static="no" mutable="no">
+        <type>ashes::GraphicsPipelinePtr</type>
+        <definition>ashes::GraphicsPipelinePtr castor3d::OverlayRenderer::Pipeline::pipeline</definition>
+        <argsstring></argsstring>
+        <name>pipeline</name>
+        <qualifiedname>castor3d::OverlayRenderer::Pipeline::pipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="210" column="28" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="210" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="310" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="310" bodyend="310"/>
+    <location file="Overlay/OverlayRenderer.hpp" line="205" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="206" bodyend="211"/>
     <listofallmembers>
-      <member refid="d3/dbd/a03575_1abe4c73204501d4f6b44ef3885d394196" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkAccelerationStructureCreateInfoNV &gt;</scope><name>value</name></member>
+      <member refid="d3/dbd/a03575_1a658a865058be28f06bba4d994da19542" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::Pipeline</scope><name>descriptorLayout</name></member>
+      <member refid="d3/dbd/a03575_1a39c2091ed08d4d057a7d0651f1aa33b3" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::Pipeline</scope><name>descriptorPool</name></member>
+      <member refid="d3/dbd/a03575_1a0aa2ced8af1850fb8bce296b2a9c175f" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::Pipeline</scope><name>pipeline</name></member>
+      <member refid="d3/dbd/a03575_1a3a08b07a23040d67724ce10521a3f586" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::Pipeline</scope><name>pipelineLayout</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

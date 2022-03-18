@@ -1,4 +1,8 @@
-<map id="castor3d::Sphere" name="castor3d::Sphere">
-<area shape="rect" id="node1" title=" " alt="" coords="29,80,151,107"/>
-<area shape="rect" id="node2" href="$dd/d4d/a03844.html" title=" " alt="" coords="5,5,175,32"/>
+<map id="castor3d::DepthPass" name="castor3d::DepthPass">
+<area shape="rect" id="node1" title=" " alt="" coords="197,229,341,256"/>
+<area shape="rect" id="node2" href="$dd/ddf/a04284.html" title=" " alt="" coords="164,155,375,181"/>
+<area shape="rect" id="node3" href="$dc/d8b/a04052.html" title=" " alt="" coords="175,80,363,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,5,192,32"/>
+<area shape="rect" id="node5" title=" " alt="" coords="216,5,323,32"/>
+<area shape="rect" id="node6" title=" " alt="" coords="347,5,466,32"/>
 </map>

@@ -1,133 +1,114 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d6/d6f/a04819" kind="class" language="C++" prot="private">
-    <compoundname>castor3d::SubsurfaceScatteringPass::Blur</compoundname>
-    <basecompoundref refid="da/d95/a04435" prot="private" virt="non-virtual">castor3d::RenderQuad</basecompoundref>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d6/d6f/a04819_1ab86fc3548e2f541dfe8500616171dd8d" prot="private" static="no" mutable="no">
-        <type><ref refid="da/d9f/a04859" kindref="compound">OpaquePassResult</ref> const  &amp;</type>
-        <definition>OpaquePassResult const&amp; castor3d::SubsurfaceScatteringPass::Blur::m_geometryBufferResult</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d6/d6f/a04819" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::shader::ReflectionModel</compoundname>
+    <derivedcompoundref refid="d1/d39/a02859" prot="public" virt="non-virtual">castor3d::shader::PbrReflectionModel</derivedcompoundref>
+    <derivedcompoundref refid="dd/d04/a02887" prot="public" virt="non-virtual">castor3d::shader::PhongReflectionModel</derivedcompoundref>
+    <includes local="no">GlslReflection.hpp</includes>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d6/d6f/a04819_1ae525d4f79a6aeb9c3283ad34fa60400d" prot="protected" static="no" mutable="no">
+        <type>sdw::ShaderWriter &amp;</type>
+        <definition>sdw::ShaderWriter&amp; castor3d::shader::ReflectionModel::m_writer</definition>
         <argsstring></argsstring>
-        <name>m_geometryBufferResult</name>
+        <name>m_writer</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::m_writer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="141" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="141" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="117" column="20" bodyfile="Shader/Shaders/GlslReflection.hpp" bodystart="117" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d6f/a04819_1a8c28fc8a4afb831cde55178cad8e6f32" prot="private" static="no" mutable="no">
-        <type><ref refid="dd/d83/a05443" kindref="compound">GpInfoUbo</ref> const  &amp;</type>
-        <definition>GpInfoUbo const&amp; castor3d::SubsurfaceScatteringPass::Blur::m_gpInfoUbo</definition>
+      <memberdef kind="variable" id="d6/d6f/a04819_1aca7e4f987a800a07a60e70823d3c227b" prot="protected" static="no" mutable="no">
+        <type><ref refid="da/d9f/a04859" kindref="compound">Utils</ref> &amp;</type>
+        <definition>Utils&amp; castor3d::shader::ReflectionModel::m_utils</definition>
         <argsstring></argsstring>
-        <name>m_gpInfoUbo</name>
+        <name>m_utils</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::m_utils</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="142" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="142" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="118" column="8" bodyfile="Shader/Shaders/GlslReflection.hpp" bodystart="118" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d6f/a04819_1ae8831d0ebdfa1854067f7e305bee09b3" prot="private" static="no" mutable="no">
-        <type><ref refid="d0/d2f/a05507" kindref="compound">SceneUbo</ref> &amp;</type>
-        <definition>SceneUbo&amp; castor3d::SubsurfaceScatteringPass::Blur::m_sceneUbo</definition>
+      <memberdef kind="variable" id="d6/d6f/a04819_1a551f1fdfd98b317996261cc500242841" prot="protected" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref></type>
+        <definition>PassFlags castor3d::shader::ReflectionModel::m_passFlags</definition>
         <argsstring></argsstring>
-        <name>m_sceneUbo</name>
+        <name>m_passFlags</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::m_passFlags</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="143" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="143" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="119" column="11" bodyfile="Shader/Shaders/GlslReflection.hpp" bodystart="119" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d6f/a04819_1a7bc1f33b06bd1ed7bf08c22612af3a54" prot="private" static="no" mutable="no">
-        <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d8/d95/a04811" kindref="compound">BlurConfiguration</ref> &gt;</type>
-        <definition>UniformBufferOffsetT&lt; BlurConfiguration &gt; castor3d::SubsurfaceScatteringPass::Blur::m_blurUbo</definition>
+      <memberdef kind="variable" id="d6/d6f/a04819_1a6295894be3ea19ea49a9ce8c8ca01474" prot="protected" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Boolean, sdw::InVec3, sdw::InVec3, sdw::InMat4, sdw::InCombinedImage2DR32, sdw::InVec2, sdw::InFloat, sdw::InBoolean, sdw::InVec3, sdw::InFloat, sdw::InFloat, sdw::InFloat, sdw::InFloat, sdw::InFloat, sdw::OutVec2, sdw::OutVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Boolean , sdw::InVec3 , sdw::InVec3 , sdw::InMat4 , sdw::InCombinedImage2DR32 , sdw::InVec2 , sdw::InFloat , sdw::InBoolean , sdw::InVec3 , sdw::InFloat , sdw::InFloat , sdw::InFloat , sdw::InFloat , sdw::InFloat , sdw::OutVec2 , sdw::OutVec3 &gt; castor3d::shader::ReflectionModel::m_traceScreenSpace</definition>
         <argsstring></argsstring>
-        <name>m_blurUbo</name>
+        <name>m_traceScreenSpace</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::m_traceScreenSpace</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="144" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="144" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="135" column="2" bodyfile="Shader/Shaders/GlslReflection.hpp" bodystart="135" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d6f/a04819_1a11c13d6540cb3114e41b004c7bd36929" prot="private" static="no" mutable="no">
-        <type>ashes::RenderPassPtr</type>
-        <definition>ashes::RenderPassPtr castor3d::SubsurfaceScatteringPass::Blur::m_renderPass</definition>
+      <memberdef kind="variable" id="d6/d6f/a04819_1a4dacf94e9e976b47e13deed31611e60e" prot="protected" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec4, sdw::InVec3, sdw::InVec3, sdw::InVec2, sdw::InVec4, sdw::InCombinedImage2DR32, sdw::InCombinedImage2DRgba32, sdw::InCombinedImage2DRgba32 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec4 , sdw::InVec3 , sdw::InVec3 , sdw::InVec2 , sdw::InVec4 , sdw::InCombinedImage2DR32 , sdw::InCombinedImage2DRgba32 , sdw::InCombinedImage2DRgba32 &gt; castor3d::shader::ReflectionModel::m_computeScreenSpace</definition>
         <argsstring></argsstring>
-        <name>m_renderPass</name>
+        <name>m_computeScreenSpace</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::m_computeScreenSpace</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="145" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="145" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="143" column="2" bodyfile="Shader/Shaders/GlslReflection.hpp" bodystart="143" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d6f/a04819_1ac5fee80cd0133ed8af9da9343dfd9e97" prot="private" static="no" mutable="no">
-        <type>ashes::FrameBufferPtr</type>
-        <definition>ashes::FrameBufferPtr castor3d::SubsurfaceScatteringPass::Blur::m_frameBuffer</definition>
+      <memberdef kind="variable" id="d6/d6f/a04819_1a37a538d646d2cfb7025db4c8ad990c99" prot="protected" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Float, InSurface, sdw::InFloat, sdw::InVec3, sdw::InFloat &gt;</type>
+        <definition>sdw::Function&lt; sdw::Float , InSurface , sdw::InFloat , sdw::InVec3 , sdw::InFloat &gt; castor3d::shader::ReflectionModel::m_computeFresnel</definition>
         <argsstring></argsstring>
-        <name>m_frameBuffer</name>
+        <name>m_computeFresnel</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::m_computeFresnel</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="146" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="146" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="148" column="2" bodyfile="Shader/Shaders/GlslReflection.hpp" bodystart="148" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d6/d6f/a04819_1a7da26d0d7c68d264bb4cc20518af42f6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::SubsurfaceScatteringPass::Blur::Blur</definition>
-        <argsstring>(RenderSystem &amp;renderSystem, RenderDevice const &amp;device, castor::Size const &amp;size, GpInfoUbo const &amp;gpInfoUbo, SceneUbo &amp;sceneUbo, OpaquePassResult const &amp;gpResult, TextureUnit const &amp;source, TextureUnit const &amp;destination, bool isVertic, ashes::PipelineShaderStageCreateInfoArray const &amp;shaderStages)</argsstring>
-        <name>Blur</name>
+      <memberdef kind="function" id="d6/d6f/a04819_1a04440c3303085df09f734548b4dfb29d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::ReflectionModel::ReflectionModel</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Utils &amp;utils, PassFlags const &amp;passFlags)</argsstring>
+        <name>ReflectionModel</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::ReflectionModel</qualifiedname>
         <param>
-          <type><ref refid="d6/d55/a04603" kindref="compound">RenderSystem</ref> &amp;</type>
-          <declname>renderSystem</declname>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
         </param>
         <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
+          <type><ref refid="da/d9f/a04859" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
         </param>
         <param>
-          <type>castor::Size const &amp;</type>
-          <declname>size</declname>
-        </param>
-        <param>
-          <type><ref refid="dd/d83/a05443" kindref="compound">GpInfoUbo</ref> const &amp;</type>
-          <declname>gpInfoUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="d0/d2f/a05507" kindref="compound">SceneUbo</ref> &amp;</type>
-          <declname>sceneUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d9f/a04859" kindref="compound">OpaquePassResult</ref> const &amp;</type>
-          <declname>gpResult</declname>
-        </param>
-        <param>
-          <type><ref refid="d8/dd7/a02643" kindref="compound">TextureUnit</ref> const &amp;</type>
-          <declname>source</declname>
-        </param>
-        <param>
-          <type><ref refid="d8/dd7/a02643" kindref="compound">TextureUnit</ref> const &amp;</type>
-          <declname>destination</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>isVertic</declname>
-        </param>
-        <param>
-          <type>ashes::PipelineShaderStageCreateInfoArray const &amp;</type>
-          <declname>shaderStages</declname>
+          <type><ref refid="da/de3/a01398_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref> const &amp;</type>
+          <declname>passFlags</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -135,16 +116,21 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="127" column="1"/>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="15" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d6/d6f/a04819_1a237e95f299b10dcebc657e1a0e14d533" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::SubsurfaceScatteringPass::Blur::Blur</definition>
-        <argsstring>(Blur &amp;&amp;rhs) noexcept</argsstring>
-        <name>Blur</name>
+      <memberdef kind="function" id="d6/d6f/a04819_1a665333520095ab79bcd6ceba1666bcde" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::ReflectionModel::ReflectionModel</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Utils &amp;utils)</argsstring>
+        <name>ReflectionModel</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::ReflectionModel</qualifiedname>
         <param>
-          <type>Blur &amp;&amp;</type>
-          <declname>rhs</declname>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d9f/a04859" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -152,16 +138,491 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="137" column="1"/>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="18" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d6/d6f/a04819_1a42714913d8775fca3cc9cfa4f68db37b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d6/d6f/a04819_1ab741a9bc5a596e2f5684120b015bd578" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::shader::ReflectionModel::~ReflectionModel</definition>
+        <argsstring>()=default</argsstring>
+        <name>~ReflectionModel</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::~ReflectionModel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="20" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d6f/a04819_1afb423e26805f3626a36dd3b062c21e6c" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::shader::ReflectionModel::computeDeferred</definition>
+        <argsstring>(LightMaterial &amp;material, Surface const &amp;surface, SceneData const &amp;sceneData, sdw::Int envMapIndex, sdw::Int const &amp;reflection, sdw::Int const &amp;refraction, sdw::Float const &amp;refractionRatio, sdw::Vec3 const &amp;transmission, sdw::Vec3 &amp;ambient, sdw::Vec3 &amp;reflected, sdw::Vec3 &amp;refracted)=0</argsstring>
+        <name>computeDeferred</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::computeDeferred</qualifiedname>
+        <reimplementedby refid="d1/d39/a02859_1ad4cf467ce1cff2ddea392e24ee4e3c6e">computeDeferred</reimplementedby>
+        <reimplementedby refid="dd/d04/a02887_1a101452a978f61428358a04039b721eb0">computeDeferred</reimplementedby>
+        <param>
+          <type><ref refid="db/d92/a04791" kindref="compound">LightMaterial</ref> &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d35/a01400_1afa7e0e1d1dbce1333aa48253fd404bf4" kindref="member">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d18/a04963" kindref="compound">SceneData</ref> const &amp;</type>
+          <declname>sceneData</declname>
+        </param>
+        <param>
+          <type>sdw::Int</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>reflection</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>refraction</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>transmission</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>ambient</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflected</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>refracted</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="21" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d6f/a04819_1aaef84e59f33340c7dfca92ffe9c23daf" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>virtual C3D_API sdw::Vec3 castor3d::shader::ReflectionModel::computeForward</definition>
+        <argsstring>(LightMaterial &amp;material, Surface const &amp;surface, SceneData const &amp;sceneData)=0</argsstring>
+        <name>computeForward</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::computeForward</qualifiedname>
+        <reimplementedby refid="d1/d39/a02859_1a47a539b678d401e4b8e51dddd9393c69">computeForward</reimplementedby>
+        <reimplementedby refid="dd/d04/a02887_1a84ff066cb9b910c6681cb4e590530bb7">computeForward</reimplementedby>
+        <param>
+          <type><ref refid="db/d92/a04791" kindref="compound">LightMaterial</ref> &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d35/a01400_1afa7e0e1d1dbce1333aa48253fd404bf4" kindref="member">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d18/a04963" kindref="compound">SceneData</ref> const &amp;</type>
+          <declname>sceneData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="32" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d6f/a04819_1a9d149fd79dbb80ab68e17d7fe9ddb7e0" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>virtual C3D_API sdw::Vec3 castor3d::shader::ReflectionModel::computeForward</definition>
+        <argsstring>(LightMaterial &amp;material, Surface const &amp;surface, SceneData const &amp;sceneData, sdw::Float const &amp;refractionRatio, sdw::Vec3 const &amp;transmission)=0</argsstring>
+        <name>computeForward</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::computeForward</qualifiedname>
+        <reimplementedby refid="d1/d39/a02859_1a44291837ed0a47e35c047c17cb51409a">computeForward</reimplementedby>
+        <reimplementedby refid="dd/d04/a02887_1a267f098f0812efaf4491f712b102854a">computeForward</reimplementedby>
+        <param>
+          <type><ref refid="db/d92/a04791" kindref="compound">LightMaterial</ref> &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d35/a01400_1afa7e0e1d1dbce1333aa48253fd404bf4" kindref="member">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d18/a04963" kindref="compound">SceneData</ref> const &amp;</type>
+          <declname>sceneData</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>transmission</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="35" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d6f/a04819_1a222f0fbe46b7f3f9b9223b703d5abf99" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::shader::ReflectionModel::computeForward</definition>
+        <argsstring>(LightMaterial &amp;material, Surface const &amp;surface, SceneData const &amp;sceneData, sdw::Float const &amp;refractionRatio, sdw::Vec3 const &amp;transmission, sdw::Vec3 &amp;ambient, sdw::Vec3 &amp;reflected, sdw::Vec3 &amp;refracted)=0</argsstring>
+        <name>computeForward</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::computeForward</qualifiedname>
+        <reimplementedby refid="d1/d39/a02859_1afd1ffa739b4801d3d2733a4345fc38f3">computeForward</reimplementedby>
+        <reimplementedby refid="dd/d04/a02887_1a5d93e67b5b95455e9fec105029e85a0e">computeForward</reimplementedby>
+        <param>
+          <type><ref refid="db/d92/a04791" kindref="compound">LightMaterial</ref> &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d35/a01400_1afa7e0e1d1dbce1333aa48253fd404bf4" kindref="member">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d18/a04963" kindref="compound">SceneData</ref> const &amp;</type>
+          <declname>sceneData</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>transmission</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>ambient</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflected</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>refracted</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="40" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d6f/a04819_1ada2c9ecbe4d8818abf37027f027b9ffb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>C3D_API sdw::Float castor3d::shader::ReflectionModel::computeFresnel</definition>
+        <argsstring>(LightMaterial &amp;material, Surface const &amp;surface, SceneData const &amp;sceneData, sdw::Float const &amp;refractionRatio)</argsstring>
+        <name>computeFresnel</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::computeFresnel</qualifiedname>
+        <param>
+          <type><ref refid="db/d92/a04791" kindref="compound">LightMaterial</ref> &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d35/a01400_1afa7e0e1d1dbce1333aa48253fd404bf4" kindref="member">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d18/a04963" kindref="compound">SceneData</ref> const &amp;</type>
+          <declname>sceneData</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="48" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d6f/a04819_1a4de8b9230c6f6c815bd7c305a44468f4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::ReflectionModel::computeScreenSpace</definition>
+        <argsstring>(MatrixData const &amp;matrixData, sdw::Vec3 const &amp;viewPosition, sdw::Vec3 const &amp;worldNormal, sdw::Vec2 const &amp;texcoord, sdw::Vec4 const &amp;ssrSettings, sdw::CombinedImage2DR32 const &amp;depthMap, sdw::CombinedImage2DRgba32 const &amp;normalMap, sdw::CombinedImage2DRgba32 const &amp;colourMap)</argsstring>
+        <name>computeScreenSpace</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::computeScreenSpace</qualifiedname>
+        <param>
+          <type><ref refid="d9/d52/a04923" kindref="compound">MatrixData</ref> const &amp;</type>
+          <declname>matrixData</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>viewPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldNormal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>texcoord</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>ssrSettings</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DR32 const &amp;</type>
+          <declname>depthMap</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>normalMap</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>colourMap</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="52" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d6f/a04819_1ad7af5ab2a285495abbdfbd19053ef700" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Boolean</type>
+        <definition>sdw::Boolean castor3d::shader::ReflectionModel::traceScreenSpace</definition>
+        <argsstring>(sdw::Vec3 csOrigin, sdw::Vec3 csDirection, sdw::Mat4 projectToPixelMatrix, sdw::CombinedImage2DR32 csZBuffer, sdw::Vec2 csZBufferSize, sdw::Float csZThickness, sdw::Boolean csZBufferIsHyperbolic, sdw::Vec3 clipInfo, sdw::Float nearPlaneZ, sdw::Float stride, sdw::Float jitterFraction, sdw::Float maxSteps, sdw::Float maxRayTraceDistance, sdw::Vec2 &amp;hitPixel, sdw::Vec3 &amp;csHitPoint)</argsstring>
+        <name>traceScreenSpace</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::traceScreenSpace</qualifiedname>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>csOrigin</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>csDirection</declname>
+        </param>
+        <param>
+          <type>sdw::Mat4</type>
+          <declname>projectToPixelMatrix</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DR32</type>
+          <declname>csZBuffer</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2</type>
+          <declname>csZBufferSize</declname>
+        </param>
+        <param>
+          <type>sdw::Float</type>
+          <declname>csZThickness</declname>
+        </param>
+        <param>
+          <type>sdw::Boolean</type>
+          <declname>csZBufferIsHyperbolic</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>clipInfo</declname>
+        </param>
+        <param>
+          <type>sdw::Float</type>
+          <declname>nearPlaneZ</declname>
+        </param>
+        <param>
+          <type>sdw::Float</type>
+          <declname>stride</declname>
+        </param>
+        <param>
+          <type>sdw::Float</type>
+          <declname>jitterFraction</declname>
+        </param>
+        <param>
+          <type>sdw::Float</type>
+          <declname>maxSteps</declname>
+        </param>
+        <param>
+          <type>sdw::Float</type>
+          <declname>maxRayTraceDistance</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 &amp;</type>
+          <declname>hitPixel</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>csHitPoint</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>csOrigin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Camera-space ray origin, which must be within the view volume and must have z &lt; -0.01 and project within the valid screen rectangle. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>csDirection</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Unit length camera-space ray direction. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>projectToPixelMatrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A projection matrix that maps to pixel coordinates (not [-1, +1] normalized device coordinates). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>csZBuffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The depth or camera-space Z buffer, depending on the value of <emphasis>csZBufferIsHyperbolic</emphasis>. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>csZBufferSize</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dimensions of csZBuffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>csZThickness</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="d7/dd6/a04479" kindref="compound">Camera</ref> space thickness to ascribe to each pixel in the depth buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>csZBufferIsHyperbolic</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>True if csZBuffer is an OpenGL depth buffer, false (faster) if csZBuffer contains (negative) &quot;linear&quot; camera space z values. Const so that the compiler can evaluate the branch based on it at compile time. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>clipInfo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>See G3D::Camera documentation. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>nearPlaneZ</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Negative number. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>stride</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Step in horizontal or vertical pixels between samples. This is a float because integer math is slow on GPUs, but should be set to an integer &gt;= 1. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>jitterFraction</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number between 0 and 1 for how far to bump the ray in stride units to conceal banding artifacts. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>maxSteps</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Maximum number of iterations. Higher gives better images but may be slow. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>maxRayTraceDistance</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Maximum camera-space distance to trace before returning a miss. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>hitPixel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pixel coordinates of the first intersection with the scene. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>csHitPoint</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="d7/dd6/a04479" kindref="compound">Camera</ref> space location of the ray hit. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="95" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d6/d6f/a04819_1aaf46556c3db082a3e71649a68d3edad9" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::SubsurfaceScatteringPass::Blur::prepareFrame</definition>
-        <argsstring>(ashes::CommandBuffer &amp;commandBuffer) const</argsstring>
-        <name>prepareFrame</name>
+        <definition>void castor3d::shader::ReflectionModel::declareTraceScreenSpace</definition>
+        <argsstring>()</argsstring>
+        <name>declareTraceScreenSpace</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::declareTraceScreenSpace</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="112" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d6f/a04819_1a896bf0ac2253775c748acf0bc05e34e9" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::ReflectionModel::declareComputeScreenSpace</definition>
+        <argsstring>(MatrixData const &amp;matrixData)</argsstring>
+        <name>declareComputeScreenSpace</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::declareComputeScreenSpace</qualifiedname>
         <param>
-          <type>ashes::CommandBuffer &amp;</type>
-          <declname>commandBuffer</declname>
+          <type><ref refid="d9/d52/a04923" kindref="compound">MatrixData</ref> const &amp;</type>
+          <declname>matrixData</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -169,7 +630,21 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="138" column="1"/>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="113" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d6f/a04819_1af0c88e8b7858f8efdb51502aacfeceb2" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::ReflectionModel::declareComputeFresnel</definition>
+        <argsstring>()</argsstring>
+        <name>declareComputeFresnel</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::declareComputeFresnel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="114" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -177,127 +652,57 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="4315">
-        <label>castor3d::RenderQuad</label>
-        <link refid="da/d95/a04435"/>
-        <childnode refid="4316" relation="public-inheritance">
+      <node id="2">
+        <label>castor3d::shader::PbrReflectionModel</label>
+        <link refid="d1/d39/a02859"/>
+        <childnode refid="1" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="4316">
-        <label>Named</label>
-      </node>
-      <node id="4314">
-        <label>castor3d::SubsurfaceScatteringPass::Blur</label>
-        <childnode refid="4315" relation="private-inheritance">
+      <node id="3">
+        <label>castor3d::shader::PhongReflectionModel</label>
+        <link refid="dd/d04/a02887"/>
+        <childnode refid="1" relation="public-inheritance">
         </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::ReflectionModel</label>
+        <link refid="d6/d6f/a04819"/>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="4320">
-        <label>castor3d::RenderSystem</label>
-        <link refid="d6/d55/a04603"/>
-        <childnode refid="4321" relation="public-inheritance">
+      <node id="1">
+        <label>castor3d::shader::ReflectionModel</label>
+        <link refid="d6/d6f/a04819"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_utils</edgelabel>
         </childnode>
       </node>
-      <node id="4318">
-        <label>castor3d::RenderQuad</label>
-        <link refid="da/d95/a04435"/>
-        <childnode refid="4319" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4320" relation="usage">
-          <edgelabel>m_renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="4322" relation="usage">
-          <edgelabel>m_device</edgelabel>
-        </childnode>
-      </node>
-      <node id="4325">
-        <label>T</label>
-      </node>
-      <node id="4327">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="4325" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="4324">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="4325" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="4326">
-        <label>std::vector&lt; ashes::CommandPoolPtr &gt;</label>
-        <childnode refid="4327" relation="template-instance">
-          <edgelabel>&lt; ashes::CommandPoolPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4323">
-        <label>std::array&lt; uint32_t, 4u &gt;</label>
-        <childnode refid="4324" relation="template-instance">
-          <edgelabel>&lt; uint32_t, 4u &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4319">
-        <label>Named</label>
-      </node>
-      <node id="4321">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="4317">
-        <label>castor3d::SubsurfaceScatteringPass::Blur</label>
-        <childnode refid="4318" relation="private-inheritance">
-        </childnode>
-      </node>
-      <node id="4322">
-        <label>castor3d::RenderDevice</label>
-        <link refid="de/ddb/a04491"/>
-        <childnode refid="4323" relation="usage">
-          <edgelabel>queueFamiliesIndex</edgelabel>
-        </childnode>
-        <childnode refid="4320" relation="usage">
-          <edgelabel>renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="4326" relation="usage">
-          <edgelabel>commandPools</edgelabel>
-        </childnode>
+      <node id="2">
+        <label>castor3d::shader::Utils</label>
+        <link refid="da/d9f/a04859"/>
       </node>
     </collaborationgraph>
-    <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="125" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="123" bodyend="147"/>
+    <location file="Shader/Shaders/GlslReflection.hpp" line="12" column="1" bodyfile="Shader/Shaders/GlslReflection.hpp" bodystart="13" bodyend="149"/>
     <listofallmembers>
-      <member refid="d6/d6f/a04819_1a7da26d0d7c68d264bb4cc20518af42f6" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>Blur</name></member>
-      <member refid="d6/d6f/a04819_1a237e95f299b10dcebc657e1a0e14d533" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>Blur</name></member>
-      <member refid="da/d95/a04435_1ab31f1f028639e2280dc81a5207c19361" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>cleanup</name></member>
-      <member refid="da/d95/a04435_1a2d8f7fe31e95ec7563ab7e49d47f847f" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>createPipeline</name></member>
-      <member refid="da/d95/a04435_1a9eed2ab1f518d2d215e10f79dd66b980" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>createPipelineAndPass</name></member>
-      <member refid="da/d95/a04435_1a208ae566cd29dc14e874ec5381a40676" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>getDevice</name></member>
-      <member refid="da/d95/a04435_1adf3b0cdd23bb9558df6d7f1b87b74ac6" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>getRenderSystem</name></member>
-      <member refid="da/d95/a04435_1a2b4ea1f81bda3deace1e6f5b159f90db" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>getSampler</name></member>
-      <member refid="da/d95/a04435_1a434520ea0e0f0a1ae885e7c9e19306a8" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>initialisePasses</name></member>
-      <member refid="d6/d6f/a04819_1a7bc1f33b06bd1ed7bf08c22612af3a54" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>m_blurUbo</name></member>
-      <member refid="da/d95/a04435_1ac07074df6fa0bb86ec6e9c76bf23f867" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>m_config</name></member>
-      <member refid="da/d95/a04435_1a0e0d911b83650f310a1d773e6774788c" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>m_device</name></member>
-      <member refid="d6/d6f/a04819_1ac5fee80cd0133ed8af9da9343dfd9e97" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>m_frameBuffer</name></member>
-      <member refid="d6/d6f/a04819_1ab86fc3548e2f541dfe8500616171dd8d" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>m_geometryBufferResult</name></member>
-      <member refid="d6/d6f/a04819_1a8c28fc8a4afb831cde55178cad8e6f32" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>m_gpInfoUbo</name></member>
-      <member refid="d6/d6f/a04819_1a11c13d6540cb3114e41b004c7bd36929" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>m_renderPass</name></member>
-      <member refid="da/d95/a04435_1a67e531e63c3eef4d22c89cd5dcf26d39" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>m_renderSystem</name></member>
-      <member refid="da/d95/a04435_1ac424bcc12b49f4788b6a78e181e7d8c9" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>m_sampler</name></member>
-      <member refid="d6/d6f/a04819_1ae8831d0ebdfa1854067f7e305bee09b3" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>m_sceneUbo</name></member>
-      <member refid="da/d95/a04435_1aba30b821ed0f043349148de3f91e1e28" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1abb76aa593ad380a88d949bd26fea0202" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1a612d681d62631e6bb92d9601c660b48e" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1af64b5bc8b9a9a3013e46accb200156f5" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1a43bab20a96e9bea365bc98d8667c977e" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1afacd916c61c3a5b315a0d3e94a8ba84d" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1a046a2ac1ba39bbd6114dfe87d4aaaf11" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>makeDescriptorWrite</name></member>
-      <member refid="d6/d6f/a04819_1a42714913d8775fca3cc9cfa4f68db37b" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>prepareFrame</name></member>
-      <member refid="da/d95/a04435_1ac0cf400425c8050429e895099c971715" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>registerPass</name></member>
-      <member refid="da/d95/a04435_1a62f21f0ecc9017c47eb029d0bc19e396" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>registerPass</name></member>
-      <member refid="da/d95/a04435_1a367adcd9b6cc6ac6b1c68a28b2580eb2" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>registerPassInputs</name></member>
-      <member refid="da/d95/a04435_1a48a49fffd036c545328e87e1449e141d" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>RenderQuad</name></member>
-      <member refid="da/d95/a04435_1aeaeeae8d7065de723f0a710360bab119" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>RenderQuad</name></member>
-      <member refid="da/d95/a04435_1a8a01faf0243638f02d6f052ff9e85b4b" prot="private" virt="virtual"><scope>castor3d::SubsurfaceScatteringPass::Blur</scope><name>~RenderQuad</name></member>
+      <member refid="d6/d6f/a04819_1afb423e26805f3626a36dd3b062c21e6c" prot="public" virt="pure-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>computeDeferred</name></member>
+      <member refid="d6/d6f/a04819_1aaef84e59f33340c7dfca92ffe9c23daf" prot="public" virt="pure-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>computeForward</name></member>
+      <member refid="d6/d6f/a04819_1a9d149fd79dbb80ab68e17d7fe9ddb7e0" prot="public" virt="pure-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>computeForward</name></member>
+      <member refid="d6/d6f/a04819_1a222f0fbe46b7f3f9b9223b703d5abf99" prot="public" virt="pure-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>computeForward</name></member>
+      <member refid="d6/d6f/a04819_1ada2c9ecbe4d8818abf37027f027b9ffb" prot="public" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>computeFresnel</name></member>
+      <member refid="d6/d6f/a04819_1a4de8b9230c6f6c815bd7c305a44468f4" prot="public" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>computeScreenSpace</name></member>
+      <member refid="d6/d6f/a04819_1af0c88e8b7858f8efdb51502aacfeceb2" prot="protected" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>declareComputeFresnel</name></member>
+      <member refid="d6/d6f/a04819_1a896bf0ac2253775c748acf0bc05e34e9" prot="protected" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>declareComputeScreenSpace</name></member>
+      <member refid="d6/d6f/a04819_1aaf46556c3db082a3e71649a68d3edad9" prot="protected" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>declareTraceScreenSpace</name></member>
+      <member refid="d6/d6f/a04819_1a37a538d646d2cfb7025db4c8ad990c99" prot="protected" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>m_computeFresnel</name></member>
+      <member refid="d6/d6f/a04819_1a4dacf94e9e976b47e13deed31611e60e" prot="protected" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>m_computeScreenSpace</name></member>
+      <member refid="d6/d6f/a04819_1a551f1fdfd98b317996261cc500242841" prot="protected" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>m_passFlags</name></member>
+      <member refid="d6/d6f/a04819_1a6295894be3ea19ea49a9ce8c8ca01474" prot="protected" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>m_traceScreenSpace</name></member>
+      <member refid="d6/d6f/a04819_1aca7e4f987a800a07a60e70823d3c227b" prot="protected" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>m_utils</name></member>
+      <member refid="d6/d6f/a04819_1ae525d4f79a6aeb9c3283ad34fa60400d" prot="protected" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>m_writer</name></member>
+      <member refid="d6/d6f/a04819_1a04440c3303085df09f734548b4dfb29d" prot="public" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>ReflectionModel</name></member>
+      <member refid="d6/d6f/a04819_1a665333520095ab79bcd6ceba1666bcde" prot="public" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>ReflectionModel</name></member>
+      <member refid="d6/d6f/a04819_1ad7af5ab2a285495abbdfbd19053ef700" prot="public" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>traceScreenSpace</name></member>
+      <member refid="d6/d6f/a04819_1ab741a9bc5a596e2f5684120b015bd578" prot="public" virt="virtual"><scope>castor3d::shader::ReflectionModel</scope><name>~ReflectionModel</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

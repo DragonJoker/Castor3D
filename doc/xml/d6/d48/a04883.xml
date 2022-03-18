@@ -1,79 +1,113 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d6/d48/a04883" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::RsmConfig</compoundname>
-    <includes local="no">RsmConfig.hpp</includes>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d6/d48/a04883_1a9818a93a8767f1c0315fc16bcd1ceff2" prot="public" static="yes" mutable="no">
-        <type>constexpr uint32_t</type>
-        <definition>constexpr uint32_t castor3d::RsmConfig::MaxRange</definition>
+    <compoundname>castor3d::shader::GpInfoData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">GpInfoUbo.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d6/d48/a04883_1aa88df2a2be62d99addc81e50d9059a46" prot="private" static="no" mutable="no">
+        <type>sdw::Mat4</type>
+        <definition>sdw::Mat4 castor3d::shader::GpInfoData::m_mtxInvViewProj</definition>
         <argsstring></argsstring>
-        <name>MaxRange</name>
-        <initializer>= 800u</initializer>
+        <name>m_mtxInvViewProj</name>
+        <qualifiedname>castor3d::shader::GpInfoData::m_mtxInvViewProj</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp" line="22" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp" bodystart="22" bodyend="-1"/>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="53" column="11" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="53" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d6/d48/a04883_1a508137cf40bcad324c86d581629a273a" prot="public" static="no" mutable="no">
-        <type>castor::ChangeTracked&lt; float &gt;</type>
-        <definition>castor::ChangeTracked&lt; float &gt; castor3d::RsmConfig::intensity</definition>
+      <memberdef kind="variable" id="d6/d48/a04883_1aa3f397b7cb8bc4201416280a136d07f2" prot="private" static="no" mutable="no">
+        <type>sdw::Mat4</type>
+        <definition>sdw::Mat4 castor3d::shader::GpInfoData::m_mtxInvView</definition>
         <argsstring></argsstring>
-        <name>intensity</name>
+        <name>m_mtxInvView</name>
+        <qualifiedname>castor3d::shader::GpInfoData::m_mtxInvView</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp" line="24" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp" bodystart="24" bodyend="-1"/>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="54" column="11" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="54" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d48/a04883_1ad8032cec156015c1ed788b972fdaea54" prot="public" static="no" mutable="no">
-        <type>castor::ChangeTracked&lt; float &gt;</type>
-        <definition>castor::ChangeTracked&lt; float &gt; castor3d::RsmConfig::maxRadius</definition>
+      <memberdef kind="variable" id="d6/d48/a04883_1a48583f3cf52a3f18322cb58c0223ab29" prot="private" static="no" mutable="no">
+        <type>sdw::Mat4</type>
+        <definition>sdw::Mat4 castor3d::shader::GpInfoData::m_mtxInvProj</definition>
         <argsstring></argsstring>
-        <name>maxRadius</name>
+        <name>m_mtxInvProj</name>
+        <qualifiedname>castor3d::shader::GpInfoData::m_mtxInvProj</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp" line="25" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp" bodystart="25" bodyend="-1"/>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="55" column="11" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="55" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/d48/a04883_1adf7f2dfd8cbf6704433baab1a3eb4da3" prot="public" static="no" mutable="no">
-        <type>castor::ChangeTracked&lt; castor::RangedValue&lt; uint32_t &gt; &gt;</type>
-        <definition>castor::ChangeTracked&lt; castor::RangedValue&lt; uint32_t &gt; &gt; castor3d::RsmConfig::sampleCount</definition>
+      <memberdef kind="variable" id="d6/d48/a04883_1adeafade5f5277cafa9f71f46802eda89" prot="private" static="no" mutable="no">
+        <type>sdw::Mat4</type>
+        <definition>sdw::Mat4 castor3d::shader::GpInfoData::m_mtxGView</definition>
         <argsstring></argsstring>
-        <name>sampleCount</name>
-        <initializer>{ castor::makeRangedValue( 100u, 20u, MaxRange ) }</initializer>
+        <name>m_mtxGView</name>
+        <qualifiedname>castor3d::shader::GpInfoData::m_mtxGView</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp" line="26" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp" bodystart="26" bodyend="-1"/>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="56" column="11" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d48/a04883_1a964af7d8fc4f5f07b4264623d85f8617" prot="private" static="no" mutable="no">
+        <type>sdw::Mat4</type>
+        <definition>sdw::Mat4 castor3d::shader::GpInfoData::m_mtxGProj</definition>
+        <argsstring></argsstring>
+        <name>m_mtxGProj</name>
+        <qualifiedname>castor3d::shader::GpInfoData::m_mtxGProj</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="57" column="11" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d48/a04883_1a43f2d8b5779c167f54b4cef833f8db11" prot="private" static="no" mutable="no">
+        <type>sdw::Vec2</type>
+        <definition>sdw::Vec2 castor3d::shader::GpInfoData::m_renderSize</definition>
+        <argsstring></argsstring>
+        <name>m_renderSize</name>
+        <qualifiedname>castor3d::shader::GpInfoData::m_renderSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="58" column="11" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="58" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d6/d48/a04883_1adabd3e2bd5e3383dc5be814c20b4e5f7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RsmConfig::accept</definition>
-        <argsstring>(castor::String const &amp;name, PipelineVisitorBase &amp;visitor)</argsstring>
-        <name>accept</name>
+      <memberdef kind="function" id="d6/d48/a04883_1a6476eafa997b74cf51d28abd106bb801" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::GpInfoData::GpInfoData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>GpInfoData</name>
+        <qualifiedname>castor3d::shader::GpInfoData::GpInfoData</qualifiedname>
         <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
         </param>
         <param>
-          <type><ref refid="d7/dab/a03815" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
-          <declname>visitor</declname>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -81,20 +115,235 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp" line="19" column="1"/>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="24" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d48/a04883_1a6733566f9ce3258587867f498680ab59" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::GpInfoData::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, GpInfoData)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::GpInfoData::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        </param>
+        <param>
+          <type><ref refid="d6/d48/a04883" kindref="compound">GpInfoData</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="27" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d48/a04883_1ae83952828e0c1ab75bb569b03967ff92" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::GpInfoData::readNormal</definition>
+        <argsstring>(sdw::Vec3 const &amp;input) const</argsstring>
+        <name>readNormal</name>
+        <qualifiedname>castor3d::shader::GpInfoData::readNormal</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>input</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="32" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d48/a04883_1a0beb9d5270686c2b0cdc85d3a7e6ac40" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::GpInfoData::writeNormal</definition>
+        <argsstring>(sdw::Vec3 const &amp;input) const</argsstring>
+        <name>writeNormal</name>
+        <qualifiedname>castor3d::shader::GpInfoData::writeNormal</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>input</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="33" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d48/a04883_1a13561e495bc0b129d5b0f46ed4cd396c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::GpInfoData::projToWorld</definition>
+        <argsstring>(Utils &amp;utils, sdw::Vec2 const &amp;texCoord, sdw::Float const &amp;depth) const</argsstring>
+        <name>projToWorld</name>
+        <qualifiedname>castor3d::shader::GpInfoData::projToWorld</qualifiedname>
+        <param>
+          <type><ref refid="da/d9f/a04859" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>texCoord</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>depth</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="34" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d48/a04883_1a587dd59f0c8626b3bc50bb173df1471e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::GpInfoData::projToView</definition>
+        <argsstring>(Utils &amp;utils, sdw::Vec2 const &amp;texCoord, sdw::Float const &amp;depth) const</argsstring>
+        <name>projToView</name>
+        <qualifiedname>castor3d::shader::GpInfoData::projToView</qualifiedname>
+        <param>
+          <type><ref refid="da/d9f/a04859" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>texCoord</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>depth</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="37" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d48/a04883_1a343fe46270dc2a36a69b60642239191c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec2</type>
+        <definition>C3D_API sdw::Vec2 castor3d::shader::GpInfoData::calcTexCoord</definition>
+        <argsstring>(Utils &amp;utils, sdw::Vec2 const &amp;fragCoord) const</argsstring>
+        <name>calcTexCoord</name>
+        <qualifiedname>castor3d::shader::GpInfoData::calcTexCoord</qualifiedname>
+        <param>
+          <type><ref refid="da/d9f/a04859" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>fragCoord</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="40" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d48/a04883_1a8a3b10152873963fca22d7f8292f930f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Mat4 const &amp;</type>
+        <definition>sdw::Mat4 const  &amp; castor3d::shader::GpInfoData::getInvViewProj</definition>
+        <argsstring>() const</argsstring>
+        <name>getInvViewProj</name>
+        <qualifiedname>castor3d::shader::GpInfoData::getInvViewProj</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="43" column="18" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="43" bodyend="46"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d6/d48/a04883_1a0c99527881063ed7aee889c3490931af" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
+        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::GpInfoData::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::GpInfoData::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="29" column="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d48/a04883_1a1acee6bebdddface92557e46af310152" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::GpInfoData::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::GpInfoData::declare</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="30" column="32"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp" line="18" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp" bodystart="17" bodyend="27"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::GpInfoData</label>
+        <link refid="d6/d48/a04883"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::GpInfoData</label>
+        <link refid="d6/d48/a04883"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Ubos/GpInfoUbo.hpp" line="21" column="1" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="23" bodyend="59"/>
     <listofallmembers>
-      <member refid="d6/d48/a04883_1adabd3e2bd5e3383dc5be814c20b4e5f7" prot="public" virt="non-virtual"><scope>castor3d::RsmConfig</scope><name>accept</name></member>
-      <member refid="d6/d48/a04883_1a508137cf40bcad324c86d581629a273a" prot="public" virt="non-virtual"><scope>castor3d::RsmConfig</scope><name>intensity</name></member>
-      <member refid="d6/d48/a04883_1ad8032cec156015c1ed788b972fdaea54" prot="public" virt="non-virtual"><scope>castor3d::RsmConfig</scope><name>maxRadius</name></member>
-      <member refid="d6/d48/a04883_1a9818a93a8767f1c0315fc16bcd1ceff2" prot="public" virt="non-virtual"><scope>castor3d::RsmConfig</scope><name>MaxRange</name></member>
-      <member refid="d6/d48/a04883_1adf7f2dfd8cbf6704433baab1a3eb4da3" prot="public" virt="non-virtual"><scope>castor3d::RsmConfig</scope><name>sampleCount</name></member>
+      <member refid="d6/d48/a04883_1a343fe46270dc2a36a69b60642239191c" prot="public" virt="non-virtual"><scope>castor3d::shader::GpInfoData</scope><name>calcTexCoord</name></member>
+      <member refid="d6/d48/a04883_1a1acee6bebdddface92557e46af310152" prot="public" virt="non-virtual"><scope>castor3d::shader::GpInfoData</scope><name>declare</name></member>
+      <member refid="d6/d48/a04883_1a8a3b10152873963fca22d7f8292f930f" prot="public" virt="non-virtual"><scope>castor3d::shader::GpInfoData</scope><name>getInvViewProj</name></member>
+      <member refid="d6/d48/a04883_1a6476eafa997b74cf51d28abd106bb801" prot="public" virt="non-virtual"><scope>castor3d::shader::GpInfoData</scope><name>GpInfoData</name></member>
+      <member refid="d6/d48/a04883_1a964af7d8fc4f5f07b4264623d85f8617" prot="private" virt="non-virtual"><scope>castor3d::shader::GpInfoData</scope><name>m_mtxGProj</name></member>
+      <member refid="d6/d48/a04883_1adeafade5f5277cafa9f71f46802eda89" prot="private" virt="non-virtual"><scope>castor3d::shader::GpInfoData</scope><name>m_mtxGView</name></member>
+      <member refid="d6/d48/a04883_1a48583f3cf52a3f18322cb58c0223ab29" prot="private" virt="non-virtual"><scope>castor3d::shader::GpInfoData</scope><name>m_mtxInvProj</name></member>
+      <member refid="d6/d48/a04883_1aa3f397b7cb8bc4201416280a136d07f2" prot="private" virt="non-virtual"><scope>castor3d::shader::GpInfoData</scope><name>m_mtxInvView</name></member>
+      <member refid="d6/d48/a04883_1aa88df2a2be62d99addc81e50d9059a46" prot="private" virt="non-virtual"><scope>castor3d::shader::GpInfoData</scope><name>m_mtxInvViewProj</name></member>
+      <member refid="d6/d48/a04883_1a43f2d8b5779c167f54b4cef833f8db11" prot="private" virt="non-virtual"><scope>castor3d::shader::GpInfoData</scope><name>m_renderSize</name></member>
+      <member refid="d6/d48/a04883_1a0c99527881063ed7aee889c3490931af" prot="public" virt="non-virtual"><scope>castor3d::shader::GpInfoData</scope><name>makeType</name></member>
+      <member refid="d6/d48/a04883_1a587dd59f0c8626b3bc50bb173df1471e" prot="public" virt="non-virtual"><scope>castor3d::shader::GpInfoData</scope><name>projToView</name></member>
+      <member refid="d6/d48/a04883_1a13561e495bc0b129d5b0f46ed4cd396c" prot="public" virt="non-virtual"><scope>castor3d::shader::GpInfoData</scope><name>projToWorld</name></member>
+      <member refid="d6/d48/a04883_1ae83952828e0c1ab75bb569b03967ff92" prot="public" virt="non-virtual"><scope>castor3d::shader::GpInfoData</scope><name>readNormal</name></member>
+      <member refid="d6/d48/a04883_1a6733566f9ce3258587867f498680ab59" prot="public" virt="non-virtual"><scope>castor3d::shader::GpInfoData</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="d6/d48/a04883_1a0beb9d5270686c2b0cdc85d3a7e6ac40" prot="public" virt="non-virtual"><scope>castor3d::shader::GpInfoData</scope><name>writeNormal</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,754 +1,125 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d8/d42/a05207" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::ParticleSystem</compoundname>
-    <basecompoundref refid="dc/d66/a05171" prot="public" virt="non-virtual">castor3d::MovableObject</basecompoundref>
-    <includes local="no">ParticleSystem.hpp</includes>
-      <sectiondef kind="protected-attrib">
-      <memberdef kind="variable" id="d8/d42/a05207_1ab55c45c46a04d8dd3dc172962b7cc99d" prot="protected" static="no" mutable="no">
-        <type>castor::String</type>
-        <definition>castor::String castor3d::ParticleSystem::m_particleType</definition>
+    <compoundname>castor::TextWriter&lt; castor3d::TextureUnit &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::TextureUnit &gt;</basecompoundref>
+    <includes local="no">TextTextureUnit.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d8/d42/a05207_1a7d2b8d963b57fd9c12a8ee8c698cd0b3" prot="private" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1a773fcfeb825d3fe54eb4a3dce23bca11" kindref="member">castor3d::PassTypeID</ref></type>
+        <definition>castor3d::PassTypeID castor::TextWriter&lt; castor3d::TextureUnit &gt;::m_type</definition>
         <argsstring></argsstring>
-        <name>m_particleType</name>
+        <name>m_type</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::TextureUnit &gt;::m_type</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The particles type name. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="232" column="1" bodyfile="Scene/ParticleSystem/ParticleSystem.hpp" bodystart="232" bodyend="-1"/>
-        <referencedby refid="d8/d42/a05207_1a407cf5ec4abd8ddcdf6f358f06ca5b6c" compoundref="d5/d3e/a01139" startline="204" endline="207">getParticleType</referencedby>
+        <location file="Text/TextTextureUnit.hpp" line="28" column="22" bodyfile="Text/TextTextureUnit.hpp" bodystart="28" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d8/d42/a05207_1a54941c8ceabd7b641a961f58ec98703a" prot="protected" static="no" mutable="no">
-        <type>castor::StrStrMap</type>
-        <definition>castor::StrStrMap castor3d::ParticleSystem::m_defaultValues</definition>
-        <argsstring></argsstring>
-        <name>m_defaultValues</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The map of default value per variable name. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="235" column="1" bodyfile="Scene/ParticleSystem/ParticleSystem.hpp" bodystart="235" bodyend="-1"/>
-        <referencedby refid="d8/d42/a05207_1a4c96a6bbb9ecfe383d49f1c312c19ca0" compoundref="d5/d3e/a01139" startline="194" endline="197">getDefaultValues</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="d8/d42/a05207_1ad082270461509b363eaf9d63d2467244" prot="protected" static="no" mutable="no">
-        <type><ref refid="de/d61/a05191" kindref="compound">ParticleDeclaration</ref></type>
-        <definition>ParticleDeclaration castor3d::ParticleSystem::m_inputs</definition>
-        <argsstring></argsstring>
-        <name>m_inputs</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The particle elements description. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="238" column="1" bodyfile="Scene/ParticleSystem/ParticleSystem.hpp" bodystart="238" bodyend="-1"/>
-        <referencedby refid="d8/d42/a05207_1a2040383f8699d4075d6d76c01455ccb3" compoundref="d5/d3e/a01139" startline="214" endline="217">getParticleVariables</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="d8/d42/a05207_1ac509c4b6348cd2e3056199fee6b37da6" prot="protected" static="no" mutable="no">
-        <type>BillboardBaseSPtr</type>
-        <definition>BillboardBaseSPtr castor3d::ParticleSystem::m_particlesBillboard</definition>
-        <argsstring></argsstring>
-        <name>m_particlesBillboard</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The billboards containing the particles. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="241" column="1" bodyfile="Scene/ParticleSystem/ParticleSystem.hpp" bodystart="241" bodyend="-1"/>
-        <referencedby refid="d8/d42/a05207_1a367d7b5828b75b8be6c1153dc66ae724" compoundref="d5/d3e/a01139" startline="184" endline="187">getBillboards</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="d8/d42/a05207_1a629b19a3ff4990a0df1609e35e72339e" prot="protected" static="no" mutable="no">
-        <type>castor::Point2f</type>
-        <definition>castor::Point2f castor3d::ParticleSystem::m_dimensions</definition>
-        <argsstring></argsstring>
-        <name>m_dimensions</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The billboards dimensions. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="244" column="1" bodyfile="Scene/ParticleSystem/ParticleSystem.hpp" bodystart="244" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/d42/a05207_1abb6a84c0995aed2c06953b6fb66d5eb9" prot="protected" static="no" mutable="no">
-        <type>MaterialWPtr</type>
-        <definition>MaterialWPtr castor3d::ParticleSystem::m_material</definition>
-        <argsstring></argsstring>
-        <name>m_material</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The <ref refid="dd/db2/a02563" kindref="compound">Material</ref>. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="247" column="1" bodyfile="Scene/ParticleSystem/ParticleSystem.hpp" bodystart="247" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/d42/a05207_1a2e451ea65bb0647daa340e103deaa07a" prot="protected" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::ParticleSystem::m_particlesCount</definition>
-        <argsstring></argsstring>
-        <name>m_particlesCount</name>
-        <initializer>{ 0u }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The particles count. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="250" column="1" bodyfile="Scene/ParticleSystem/ParticleSystem.hpp" bodystart="250" bodyend="-1"/>
-        <referencedby refid="d8/d42/a05207_1a1a01636a5e71ff073e339b552619f864" compoundref="d5/d3e/a01139" startline="174" endline="177">getMaxParticlesCount</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="d8/d42/a05207_1a2967dc50fdb76e0f93203e13530c6e1f" prot="protected" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::ParticleSystem::m_activeParticlesCount</definition>
-        <argsstring></argsstring>
-        <name>m_activeParticlesCount</name>
-        <initializer>{ 0u }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The active particles count. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="253" column="1" bodyfile="Scene/ParticleSystem/ParticleSystem.hpp" bodystart="253" bodyend="-1"/>
-        <referencedby refid="d8/d42/a05207_1ac265c5f7a8f888054efcc7143421a7be" compoundref="d5/d3e/a01139" startline="164" endline="167">getParticlesCount</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="d8/d42/a05207_1a09744eb407681c27ca75fa31f103cf2a" prot="protected" static="no" mutable="no">
-        <type>castor::PreciseTimer</type>
-        <definition>castor::PreciseTimer castor3d::ParticleSystem::m_timer</definition>
-        <argsstring></argsstring>
-        <name>m_timer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The timer, for the particles update. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="256" column="1" bodyfile="Scene/ParticleSystem/ParticleSystem.hpp" bodystart="256" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/d42/a05207_1ab842c9c54220593bf14ce12bd793501c" prot="protected" static="no" mutable="no">
+      <memberdef kind="variable" id="d8/d42/a05207_1a10e90b897c414753f888a935130eb106" prot="private" static="no" mutable="no">
         <type>bool</type>
-        <definition>bool castor3d::ParticleSystem::m_firstUpdate</definition>
+        <definition>bool castor::TextWriter&lt; castor3d::TextureUnit &gt;::m_isPbr</definition>
         <argsstring></argsstring>
-        <name>m_firstUpdate</name>
-        <initializer>{ true }</initializer>
+        <name>m_isPbr</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::TextureUnit &gt;::m_isPbr</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>Tells that the next update is the first one. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="259" column="1" bodyfile="Scene/ParticleSystem/ParticleSystem.hpp" bodystart="259" bodyend="-1"/>
+        <location file="Text/TextTextureUnit.hpp" line="29" column="6" bodyfile="Text/TextTextureUnit.hpp" bodystart="29" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d8/d42/a05207_1a1262f4251ec3e302c29515d84e7004dd" prot="protected" static="no" mutable="no">
-        <type>castor::Milliseconds</type>
-        <definition>castor::Milliseconds castor3d::ParticleSystem::m_totalTime</definition>
+      <memberdef kind="variable" id="d8/d42/a05207_1adbc1d8d0381ff7f2cb05eeb405aed623" prot="private" static="no" mutable="no">
+        <type>Path</type>
+        <definition>Path castor::TextWriter&lt; castor3d::TextureUnit &gt;::m_folder</definition>
         <argsstring></argsstring>
-        <name>m_totalTime</name>
-        <initializer>{ 0 }</initializer>
+        <name>m_folder</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::TextureUnit &gt;::m_folder</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The total elapsed time. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="262" column="1" bodyfile="Scene/ParticleSystem/ParticleSystem.hpp" bodystart="262" bodyend="-1"/>
+        <location file="Text/TextTextureUnit.hpp" line="30" column="6" bodyfile="Text/TextTextureUnit.hpp" bodystart="30" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d8/d42/a05207_1a54df22ec48a27c3d83835af8d72e124b" prot="protected" static="no" mutable="no">
-        <type>CpuParticleSystemUPtr</type>
-        <definition>CpuParticleSystemUPtr castor3d::ParticleSystem::m_cpuImpl</definition>
+      <memberdef kind="variable" id="d8/d42/a05207_1af88cd29714479315ad0bafffa0d226e5" prot="private" static="no" mutable="no">
+        <type>String</type>
+        <definition>String castor::TextWriter&lt; castor3d::TextureUnit &gt;::m_subFolder</definition>
         <argsstring></argsstring>
-        <name>m_cpuImpl</name>
+        <name>m_subFolder</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::TextureUnit &gt;::m_subFolder</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The CPU implementation. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="265" column="1" bodyfile="Scene/ParticleSystem/ParticleSystem.hpp" bodystart="265" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/d42/a05207_1aac0a9354633da844cc84a8d8a73ec726" prot="protected" static="no" mutable="no">
-        <type>ComputeParticleSystemUPtr</type>
-        <definition>ComputeParticleSystemUPtr castor3d::ParticleSystem::m_csImpl</definition>
-        <argsstring></argsstring>
-        <name>m_csImpl</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The implementation using compute shader. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="268" column="1" bodyfile="Scene/ParticleSystem/ParticleSystem.hpp" bodystart="268" bodyend="-1"/>
-        <referencedby refid="d8/d42/a05207_1a416a46b61397a0f16d5ac0a4f122d68e" compoundref="d5/d3e/a01139" startline="224" endline="227">getCompute</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="d8/d42/a05207_1a83402dae49bc18c0298923b8f7be156f" prot="protected" static="no" mutable="no">
-        <type><ref refid="d1/d50/a05211" kindref="compound">ParticleSystemImpl</ref> *</type>
-        <definition>ParticleSystemImpl* castor3d::ParticleSystem::m_impl</definition>
-        <argsstring></argsstring>
-        <name>m_impl</name>
-        <initializer>{ nullptr }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The implementation chosen after initialisation. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="271" column="1" bodyfile="Scene/ParticleSystem/ParticleSystem.hpp" bodystart="271" bodyend="-1"/>
+        <location file="Text/TextTextureUnit.hpp" line="31" column="8" bodyfile="Text/TextTextureUnit.hpp" bodystart="31" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d8/d42/a05207_1a1c450b453d0a58707a19b887bc1a340b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d8/d42/a05207_1a2c0ef4167669df5de1d2c1a6a3e58920" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::ParticleSystem::ParticleSystem</definition>
-        <argsstring>(castor::String const &amp;name, Scene &amp;scene, SceneNode &amp;parent, uint32_t count)</argsstring>
-        <name>ParticleSystem</name>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::TextureUnit &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs, castor3d::PassTypeID type, bool isPbr, Path const &amp;folder, String subFolder)</argsstring>
+        <name>TextWriter</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::TextureUnit &gt;::TextWriter</qualifiedname>
         <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
+          <type>String const &amp;</type>
+          <declname>tabs</declname>
         </param>
         <param>
-          <type><ref refid="d7/d00/a05223" kindref="compound">Scene</ref> &amp;</type>
-          <declname>scene</declname>
-        </param>
-        <param>
-          <type><ref refid="d8/dd0/a05235" kindref="compound">SceneNode</ref> &amp;</type>
-          <declname>parent</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>count</declname>
-        </param>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The name. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">scene</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parent scene. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">parent</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parent scene node. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">count</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The particles count. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="35" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/d42/a05207_1ab64ec424100f5cb4735d9c818a61c757" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::ParticleSystem::~ParticleSystem</definition>
-        <argsstring>()</argsstring>
-        <name>~ParticleSystem</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="45" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/d42/a05207_1a01a256d5ee51773ba96ea79097532f53" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::ParticleSystem::initialise</definition>
-        <argsstring>(RenderDevice const &amp;device)</argsstring>
-        <name>initialise</name>
-        <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-<para>Initialises GPU side elements. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>true</computeroutput> if all is OK. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="56" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/d42/a05207_1a8cdb7ee4e763a3467527f38d9bcbbac3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::ParticleSystem::cleanup</definition>
-        <argsstring>(RenderDevice const &amp;device)</argsstring>
-        <name>cleanup</name>
-        <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-<para>Cleans GPU side elements up. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="65" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/d42/a05207_1acd843c1801b691ea7883e3fb38238778" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::ParticleSystem::update</definition>
-        <argsstring>(CpuUpdater &amp;updater)</argsstring>
-        <name>update</name>
-        <param>
-          <type><ref refid="db/d82/a04567" kindref="compound">CpuUpdater</ref> &amp;</type>
-          <declname>updater</declname>
-        </param>
-        <briefdescription>
-<para>CPU Update. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="inout">updater</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The update data. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="74" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/d42/a05207_1a57e23eceb4fe99d1da001dc53e0afb8d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::ParticleSystem::update</definition>
-        <argsstring>(GpuUpdater &amp;updater)</argsstring>
-        <name>update</name>
-        <param>
-          <type><ref refid="d0/dff/a04571" kindref="compound">GpuUpdater</ref> &amp;</type>
-          <declname>updater</declname>
-        </param>
-        <briefdescription>
-<para>GPU Update. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="inout">updater</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The update data. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="83" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/d42/a05207_1a2adc2484dd6bd770d19a95978aae4f11" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::ParticleSystem::setMaterial</definition>
-        <argsstring>(MaterialSPtr value)</argsstring>
-        <name>setMaterial</name>
-        <param>
-          <type>MaterialSPtr</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-<para>Sets the material. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The new value </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="92" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/d42/a05207_1abf7b28d400476682d1fb18a0c346d34a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::ParticleSystem::setDimensions</definition>
-        <argsstring>(castor::Point2f const &amp;value)</argsstring>
-        <name>setDimensions</name>
-        <param>
-          <type>castor::Point2f const &amp;</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-<para>Sets the particles dimensions. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The new value. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="101" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/d42/a05207_1a870de6045e4c19359bde00483c1562e9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::ParticleSystem::setParticleType</definition>
-        <argsstring>(castor::String const &amp;value)</argsstring>
-        <name>setParticleType</name>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-<para>Sets the particles type name. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The new value. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="110" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/d42/a05207_1a4589615914ce0ef9c00d0818b8b98595" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> MaterialSPtr</type>
-        <definition>C3D_API MaterialSPtr castor3d::ParticleSystem::getMaterial</definition>
-        <argsstring>() const</argsstring>
-        <name>getMaterial</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The material. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="117" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/d42/a05207_1a2f9d15aca2439d4d9fb3babc58d8bb73" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Point2f const  &amp;</type>
-        <definition>C3D_API castor::Point2f const&amp; castor3d::ParticleSystem::getDimensions</definition>
-        <argsstring>() const</argsstring>
-        <name>getDimensions</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The billboards dimensions. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="124" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/d42/a05207_1a9ead6904a11be324932bc0552faad980" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::ParticleSystem::addParticleVariable</definition>
-        <argsstring>(castor::String const &amp;name, ParticleFormat type, castor::String const &amp;defaultValue)</argsstring>
-        <name>addParticleVariable</name>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1a4fdd8bd8042f3a3ae81042067e1ac250" kindref="member">ParticleFormat</ref></type>
+          <type><ref refid="da/de3/a01398_1a773fcfeb825d3fe54eb4a3dce23bca11" kindref="member">castor3d::PassTypeID</ref></type>
           <declname>type</declname>
         </param>
         <param>
-          <type>castor::String const &amp;</type>
-          <declname>defaultValue</declname>
+          <type>bool</type>
+          <declname>isPbr</declname>
         </param>
-        <briefdescription>
-<para>adds a particle variable. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The variable name. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">type</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The variable type. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">defaultValue</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The variable default value. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="137" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/d42/a05207_1a4d1cdc8fbb3d7415a55153c38f899828" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::ParticleSystem::setCSUpdateProgram</definition>
-        <argsstring>(ShaderProgramSPtr program)</argsstring>
-        <name>setCSUpdateProgram</name>
         <param>
-          <type>ShaderProgramSPtr</type>
-          <declname>program</declname>
+          <type>Path const &amp;</type>
+          <declname>folder</declname>
         </param>
-        <briefdescription>
-<para>Defines the program used to update the particles through compute shader. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">program</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The program. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="148" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d8/d42/a05207_1a60b5f44f3076d3396df24ab354ef1e72" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::ParticleSystem::setCSGroupSizes</definition>
-        <argsstring>(castor::Point3i sizes)</argsstring>
-        <name>setCSGroupSizes</name>
         <param>
-          <type>castor::Point3i</type>
-          <declname>sizes</declname>
+          <type>String</type>
+          <declname>subFolder</declname>
         </param>
         <briefdescription>
-<para>Defines the workgroup sizes, as defined inside the compute shader. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">sizes</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The sizes. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="157" column="1"/>
+        <location file="Text/TextTextureUnit.hpp" line="19" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d8/d42/a05207_1ac265c5f7a8f888054efcc7143421a7be" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
-        <definition>C3D_API uint32_t castor3d::ParticleSystem::getParticlesCount</definition>
-        <argsstring>() const</argsstring>
-        <name>getParticlesCount</name>
+      <memberdef kind="function" id="d8/d42/a05207_1a3e264498209aa7f1bdcdd1af7b586bca" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::TextureUnit &gt;::operator()</definition>
+        <argsstring>(castor3d::TextureUnit const &amp;unit, StringStream &amp;file) override</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::TextureUnit &gt;::operator()</qualifiedname>
+        <param>
+          <type><ref refid="d3/de2/a02959" kindref="compound">castor3d::TextureUnit</ref> const &amp;</type>
+          <declname>unit</declname>
+        </param>
+        <param>
+          <type>StringStream &amp;</type>
+          <declname>file</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The particles written at last update. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="164" column="1" bodyfile="Scene/ParticleSystem/ParticleSystem.hpp" bodystart="164" bodyend="167"/>
-        <references refid="d8/d42/a05207_1a2967dc50fdb76e0f93203e13530c6e1f" compoundref="d5/d3e/a01139" startline="253">m_activeParticlesCount</references>
-      </memberdef>
-      <memberdef kind="function" id="d8/d42/a05207_1a1a01636a5e71ff073e339b552619f864" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
-        <definition>C3D_API uint32_t castor3d::ParticleSystem::getMaxParticlesCount</definition>
-        <argsstring>() const</argsstring>
-        <name>getMaxParticlesCount</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The maximum particles count. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="174" column="1" bodyfile="Scene/ParticleSystem/ParticleSystem.hpp" bodystart="174" bodyend="177"/>
-        <references refid="d8/d42/a05207_1a2e451ea65bb0647daa340e103deaa07a" compoundref="d5/d3e/a01139" startline="250">m_particlesCount</references>
-      </memberdef>
-      <memberdef kind="function" id="d8/d42/a05207_1a367d7b5828b75b8be6c1153dc66ae724" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>BillboardBaseSPtr</type>
-        <definition>BillboardBaseSPtr castor3d::ParticleSystem::getBillboards</definition>
-        <argsstring>() const</argsstring>
-        <name>getBillboards</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The billboards. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="184" column="1" bodyfile="Scene/ParticleSystem/ParticleSystem.hpp" bodystart="184" bodyend="187"/>
-        <references refid="d8/d42/a05207_1ac509c4b6348cd2e3056199fee6b37da6" compoundref="d5/d3e/a01139" startline="241">m_particlesBillboard</references>
-      </memberdef>
-      <memberdef kind="function" id="d8/d42/a05207_1a4c96a6bbb9ecfe383d49f1c312c19ca0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::StrStrMap const  &amp;</type>
-        <definition>castor::StrStrMap const&amp; castor3d::ParticleSystem::getDefaultValues</definition>
-        <argsstring>() const</argsstring>
-        <name>getDefaultValues</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The particle&apos;s components default values. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="194" column="1" bodyfile="Scene/ParticleSystem/ParticleSystem.hpp" bodystart="194" bodyend="197"/>
-        <references refid="d8/d42/a05207_1a54941c8ceabd7b641a961f58ec98703a" compoundref="d5/d3e/a01139" startline="235">m_defaultValues</references>
-      </memberdef>
-      <memberdef kind="function" id="d8/d42/a05207_1a407cf5ec4abd8ddcdf6f358f06ca5b6c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::String const  &amp;</type>
-        <definition>castor::String const&amp; castor3d::ParticleSystem::getParticleType</definition>
-        <argsstring>() const</argsstring>
-        <name>getParticleType</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The particles type name. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="204" column="1" bodyfile="Scene/ParticleSystem/ParticleSystem.hpp" bodystart="204" bodyend="207"/>
-        <references refid="d8/d42/a05207_1ab55c45c46a04d8dd3dc172962b7cc99d" compoundref="d5/d3e/a01139" startline="232">m_particleType</references>
-      </memberdef>
-      <memberdef kind="function" id="d8/d42/a05207_1a2040383f8699d4075d6d76c01455ccb3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="de/d61/a05191" kindref="compound">ParticleDeclaration</ref> const  &amp;</type>
-        <definition>ParticleDeclaration const&amp; castor3d::ParticleSystem::getParticleVariables</definition>
-        <argsstring>() const</argsstring>
-        <name>getParticleVariables</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The particles variables. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="214" column="1" bodyfile="Scene/ParticleSystem/ParticleSystem.hpp" bodystart="214" bodyend="217"/>
-        <references refid="d8/d42/a05207_1ad082270461509b363eaf9d63d2467244" compoundref="d5/d3e/a01139" startline="238">m_inputs</references>
-      </memberdef>
-      <memberdef kind="function" id="d8/d42/a05207_1a416a46b61397a0f16d5ac0a4f122d68e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="dc/d07/a05175" kindref="compound">ComputeParticleSystem</ref> const  &amp;</type>
-        <definition>ComputeParticleSystem const&amp; castor3d::ParticleSystem::getCompute</definition>
-        <argsstring>() const</argsstring>
-        <name>getCompute</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The compute shader based implementation. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="224" column="1" bodyfile="Scene/ParticleSystem/ParticleSystem.hpp" bodystart="224" bodyend="227"/>
-        <references refid="d8/d42/a05207_1aac0a9354633da844cc84a8d8a73ec726" compoundref="d5/d3e/a01139" startline="268">m_csImpl</references>
+        <location file="Text/TextTextureUnit.hpp" line="24" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -756,208 +127,35 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="2536">
-        <label>castor3d::MovableObject</label>
-        <link refid="dc/d66/a05171"/>
-        <childnode refid="2537" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2539" relation="public-inheritance">
-        </childnode>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::TextureUnit &gt;</label>
       </node>
-      <node id="2539">
-        <label>Named</label>
-      </node>
-      <node id="2535">
-        <label>castor3d::ParticleSystem</label>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::TextureUnit &gt;</label>
         <link refid="d8/d42/a05207"/>
-        <childnode refid="2536" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
-      </node>
-      <node id="2537">
-        <label>Animable</label>
-        <link refid="de/d0a/a02015"/>
-        <childnode refid="2538" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2538">
-        <label>castor::OwnedBy&lt; AnimableHanlerT &gt;</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="2544">
-        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
-        <childnode refid="2545" relation="template-instance">
-          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
-        </childnode>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::TextureUnit &gt;</label>
       </node>
-      <node id="2546">
-        <label>K</label>
-      </node>
-      <node id="2547">
-        <label>T</label>
-      </node>
-      <node id="2549">
-        <label>castor3d::SceneNode</label>
-        <link refid="d8/dd0/a05235"/>
-        <childnode refid="2550" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2551" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2548" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2551">
-        <label>castor::OwnedBy&lt; Scene &gt;</label>
-      </node>
-      <node id="2545">
-        <label>std::map&lt; K, T &gt;</label>
-        <childnode refid="2546" relation="usage">
-          <edgelabel>keys</edgelabel>
-        </childnode>
-        <childnode refid="2547" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="2550">
-        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
-      </node>
-      <node id="2556">
-        <label>castor3d::ParticleDeclaration</label>
-        <link refid="de/d61/a05191"/>
-      </node>
-      <node id="2541">
-        <label>castor3d::MovableObject</label>
-        <link refid="dc/d66/a05171"/>
-        <childnode refid="2542" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2548" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2549" relation="usage">
-          <edgelabel>m_sceneNode</edgelabel>
-        </childnode>
-        <childnode refid="2552" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-      </node>
-      <node id="2548">
-        <label>Named</label>
-      </node>
-      <node id="2540">
-        <label>castor3d::ParticleSystem</label>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::TextureUnit &gt;</label>
         <link refid="d8/d42/a05207"/>
-        <childnode refid="2541" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2555" relation="usage">
-          <edgelabel>m_impl</edgelabel>
-        </childnode>
-        <childnode refid="2556" relation="usage">
-          <edgelabel>m_inputs</edgelabel>
-        </childnode>
-      </node>
-      <node id="2553">
-        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
-      </node>
-      <node id="2555">
-        <label>castor3d::ParticleSystemImpl</label>
-        <link refid="d1/d50/a05211"/>
-        <childnode refid="2540" relation="usage">
-          <edgelabel>m_parent</edgelabel>
-        </childnode>
-      </node>
-      <node id="2542">
-        <label>Animable</label>
-        <link refid="de/d0a/a02015"/>
-        <childnode refid="2543" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2544" relation="usage">
-          <edgelabel>m_animations</edgelabel>
-        </childnode>
-      </node>
-      <node id="2543">
-        <label>castor::OwnedBy&lt; AnimableHanlerT &gt;</label>
-      </node>
-      <node id="2554">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="2552">
-        <label>castor3d::Scene</label>
-        <link refid="d7/d00/a05223"/>
-        <childnode refid="2553" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2554" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2548" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Scene/ParticleSystem/ParticleSystem.hpp" line="19" column="1" bodyfile="Scene/ParticleSystem/ParticleSystem.hpp" bodystart="17" bodyend="272"/>
+    <location file="Text/TextTextureUnit.hpp" line="15" column="1" bodyfile="Text/TextTextureUnit.hpp" bodystart="17" bodyend="32"/>
     <listofallmembers>
-      <member refid="de/d0a/a02015_1ad7eba8a02433ff32863bebcc5969f09e" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>addAnimation</name></member>
-      <member refid="d8/d42/a05207_1a9ead6904a11be324932bc0552faad980" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>addParticleVariable</name></member>
-      <member refid="de/d0a/a02015_1a299fd668f3d9d65aeb7d0dbc259f921b" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>AnimableT</name></member>
-      <member refid="de/d0a/a02015_1ad87437d17aba848283c70537eeeea2f9" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>AnimableT</name></member>
-      <member refid="de/d0a/a02015_1a09051c18d0af770f8a622b62f707a90e" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>AnimableT</name></member>
-      <member refid="de/d0a/a02015_1af166df7163a5b574419988ded46251ec" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>Animation</name></member>
-      <member refid="de/d0a/a02015_1aa3dd4f795f385e026ec4137d1b3d53f7" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>AnimationPtr</name></member>
-      <member refid="de/d0a/a02015_1a20eee9b6a0eff7dc185a62905823ce8c" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>AnimationPtrStrMap</name></member>
-      <member refid="dc/d66/a05171_1ab2169299d3e08b4e50066e400d1d86dc" prot="public" virt="virtual"><scope>castor3d::ParticleSystem</scope><name>attachTo</name></member>
-      <member refid="d8/d42/a05207_1a8cdb7ee4e763a3467527f38d9bcbbac3" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>cleanup</name></member>
-      <member refid="de/d0a/a02015_1a55e0aa0f614359a89b2c4f8b85c90b96" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>cleanupAnimations</name></member>
-      <member refid="dc/d66/a05171_1afbef8194f2a0b9e15c9cc483221a08ee" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>detach</name></member>
-      <member refid="de/d0a/a02015_1af490514e33d457d6ccb9a5f6417b9857" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>doGetAnimation</name></member>
-      <member refid="de/d0a/a02015_1a5cea5dff71a256fd1f56afd64d4ac065" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>doRemoveAnimation</name></member>
-      <member refid="de/d0a/a02015_1a56b5cc702f8369124b1bd0f74d5de9f8" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>getAnimation</name></member>
-      <member refid="de/d0a/a02015_1a4501da7f825e9b8a41fc8ab4f1aacfb0" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>getAnimation</name></member>
-      <member refid="de/d0a/a02015_1a0f731e4fa9d105d9dda6f409e552a755" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>getAnimations</name></member>
-      <member refid="d8/d42/a05207_1a367d7b5828b75b8be6c1153dc66ae724" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>getBillboards</name></member>
-      <member refid="d8/d42/a05207_1a416a46b61397a0f16d5ac0a4f122d68e" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>getCompute</name></member>
-      <member refid="d8/d42/a05207_1a4c96a6bbb9ecfe383d49f1c312c19ca0" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>getDefaultValues</name></member>
-      <member refid="d8/d42/a05207_1a2f9d15aca2439d4d9fb3babc58d8bb73" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>getDimensions</name></member>
-      <member refid="d8/d42/a05207_1a4589615914ce0ef9c00d0818b8b98595" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>getMaterial</name></member>
-      <member refid="d8/d42/a05207_1a1a01636a5e71ff073e339b552619f864" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>getMaxParticlesCount</name></member>
-      <member refid="dc/d66/a05171_1aeb1f1e4e6b8dcc933bb8aed4278458ce" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>getParent</name></member>
-      <member refid="d8/d42/a05207_1ac265c5f7a8f888054efcc7143421a7be" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>getParticlesCount</name></member>
-      <member refid="d8/d42/a05207_1a407cf5ec4abd8ddcdf6f358f06ca5b6c" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>getParticleType</name></member>
-      <member refid="d8/d42/a05207_1a2040383f8699d4075d6d76c01455ccb3" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>getParticleVariables</name></member>
-      <member refid="dc/d66/a05171_1a7b093c3d281c312dab1605bd8a189206" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>getScene</name></member>
-      <member refid="dc/d66/a05171_1acf2dafd94427b63121981ac18ac652a7" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>getType</name></member>
-      <member refid="de/d0a/a02015_1a599c19a3b4de9a4b80ad9a04d9dcdce3" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>hasAnimation</name></member>
-      <member refid="d8/d42/a05207_1a01a256d5ee51773ba96ea79097532f53" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>initialise</name></member>
-      <member refid="d8/d42/a05207_1a2967dc50fdb76e0f93203e13530c6e1f" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>m_activeParticlesCount</name></member>
-      <member refid="de/d0a/a02015_1ae1eba45f60f9583c766623aa1165415e" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>m_animations</name></member>
-      <member refid="d8/d42/a05207_1a54df22ec48a27c3d83835af8d72e124b" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>m_cpuImpl</name></member>
-      <member refid="d8/d42/a05207_1aac0a9354633da844cc84a8d8a73ec726" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>m_csImpl</name></member>
-      <member refid="d8/d42/a05207_1a54941c8ceabd7b641a961f58ec98703a" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>m_defaultValues</name></member>
-      <member refid="d8/d42/a05207_1a629b19a3ff4990a0df1609e35e72339e" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>m_dimensions</name></member>
-      <member refid="d8/d42/a05207_1ab842c9c54220593bf14ce12bd793501c" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>m_firstUpdate</name></member>
-      <member refid="d8/d42/a05207_1a83402dae49bc18c0298923b8f7be156f" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>m_impl</name></member>
-      <member refid="d8/d42/a05207_1ad082270461509b363eaf9d63d2467244" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>m_inputs</name></member>
-      <member refid="d8/d42/a05207_1abb6a84c0995aed2c06953b6fb66d5eb9" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>m_material</name></member>
-      <member refid="dc/d66/a05171_1a8385c7c8fd9aee20a3c6de804cb09514" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>m_notifyIndex</name></member>
-      <member refid="d8/d42/a05207_1ac509c4b6348cd2e3056199fee6b37da6" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>m_particlesBillboard</name></member>
-      <member refid="d8/d42/a05207_1a2e451ea65bb0647daa340e103deaa07a" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>m_particlesCount</name></member>
-      <member refid="d8/d42/a05207_1ab55c45c46a04d8dd3dc172962b7cc99d" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>m_particleType</name></member>
-      <member refid="dc/d66/a05171_1a3870fc0cca376a6cbab09a432ace4f0a" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>m_scene</name></member>
-      <member refid="dc/d66/a05171_1aa058c86365c45c7d4b85a04ce56a9d22" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>m_sceneNode</name></member>
-      <member refid="dc/d66/a05171_1ab9493ad12e9af9b47db11e76d372a156" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>m_strNodeName</name></member>
-      <member refid="d8/d42/a05207_1a09744eb407681c27ca75fa31f103cf2a" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>m_timer</name></member>
-      <member refid="d8/d42/a05207_1a1262f4251ec3e302c29515d84e7004dd" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>m_totalTime</name></member>
-      <member refid="dc/d66/a05171_1acf6726e80bb3098468fe1fcd5a1f720e" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>m_type</name></member>
-      <member refid="dc/d66/a05171_1a40b0fe7602fb945cb5b89de71a8cf4d8" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>MovableObject</name></member>
-      <member refid="dc/d66/a05171_1acf7517058566afbb2290a7856fc9dfee" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>MovableObject</name></member>
-      <member refid="de/d0a/a02015_1ac175c65ac8b324cee120925fd7d10773" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>operator=</name></member>
-      <member refid="de/d0a/a02015_1a6d58963898645284c95c86d7da5c23ee" prot="protected" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>operator=</name></member>
-      <member refid="d8/d42/a05207_1a1c450b453d0a58707a19b887bc1a340b" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>ParticleSystem</name></member>
-      <member refid="d8/d42/a05207_1a60b5f44f3076d3396df24ab354ef1e72" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>setCSGroupSizes</name></member>
-      <member refid="d8/d42/a05207_1a4d1cdc8fbb3d7415a55153c38f899828" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>setCSUpdateProgram</name></member>
-      <member refid="d8/d42/a05207_1abf7b28d400476682d1fb18a0c346d34a" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>setDimensions</name></member>
-      <member refid="d8/d42/a05207_1a2adc2484dd6bd770d19a95978aae4f11" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>setMaterial</name></member>
-      <member refid="d8/d42/a05207_1a870de6045e4c19359bde00483c1562e9" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>setParticleType</name></member>
-      <member refid="d8/d42/a05207_1acd843c1801b691ea7883e3fb38238778" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>update</name></member>
-      <member refid="d8/d42/a05207_1a57e23eceb4fe99d1da001dc53e0afb8d" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>update</name></member>
-      <member refid="de/d0a/a02015_1a31508c53a42741c828ca42c079631d69" prot="protected" virt="virtual"><scope>castor3d::ParticleSystem</scope><name>~AnimableT</name></member>
-      <member refid="dc/d66/a05171_1a05bd8e8940d26cb4361fccfa67733b03" prot="public" virt="virtual"><scope>castor3d::ParticleSystem</scope><name>~MovableObject</name></member>
-      <member refid="d8/d42/a05207_1ab64ec424100f5cb4735d9c818a61c757" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystem</scope><name>~ParticleSystem</name></member>
+      <member refid="d8/d42/a05207_1adbc1d8d0381ff7f2cb05eeb405aed623" prot="private" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::TextureUnit &gt;</scope><name>m_folder</name></member>
+      <member refid="d8/d42/a05207_1a10e90b897c414753f888a935130eb106" prot="private" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::TextureUnit &gt;</scope><name>m_isPbr</name></member>
+      <member refid="d8/d42/a05207_1af88cd29714479315ad0bafffa0d226e5" prot="private" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::TextureUnit &gt;</scope><name>m_subFolder</name></member>
+      <member refid="d8/d42/a05207_1a7d2b8d963b57fd9c12a8ee8c698cd0b3" prot="private" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::TextureUnit &gt;</scope><name>m_type</name></member>
+      <member refid="d8/d42/a05207_1a3e264498209aa7f1bdcdd1af7b586bca" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::TextureUnit &gt;</scope><name>operator()</name></member>
+      <member refid="d8/d42/a05207_1a2c0ef4167669df5de1d2c1a6a3e58920" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::TextureUnit &gt;</scope><name>TextWriter</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

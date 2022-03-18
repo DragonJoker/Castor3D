@@ -1,6 +1,5 @@
-<map id="castor3d::BinaryWriter&lt; Submesh &gt;" name="castor3d::BinaryWriter&lt; Submesh &gt;">
-<area shape="rect" id="node1" title="MovableObject loader." alt="" coords="21,289,173,331"/>
-<area shape="rect" id="node2" href="$d4/d5d/a02150.html" title=" " alt="" coords="5,199,188,240"/>
-<area shape="rect" id="node3" href="$d0/dfe/a02102.html" title=" " alt="" coords="51,5,206,32"/>
-<area shape="rect" id="node4" href="$d4/d5d/a02150.html" title="Binary data chunk writer base class." alt="" coords="157,95,340,136"/>
+<map id="castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;" name="castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;">
+<area shape="rect" id="node1" title="Handles the Quaternion linear interpolations." alt="" coords="5,200,185,256"/>
+<area shape="rect" id="node2" href="$d6/d41/a02222.html" title=" " alt="" coords="19,109,172,151"/>
+<area shape="rect" id="node3" href="$d6/d41/a02222.html" title="Template class which handles the interpolations, would it be quaternion, point, real,..." alt="" coords="23,5,167,47"/>
 </map>

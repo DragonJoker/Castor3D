@@ -1,105 +1,83 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d3/d41/a05068" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::GroupAnimation</compoundname>
-    <includes local="no">AnimationModule.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d3/d41/a05068_1aec5eef420d98c4cd706d29e4f6705cd9" prot="public" static="no" mutable="no">
-        <type>castor::String</type>
-        <definition>castor::String castor3d::GroupAnimation::name</definition>
-        <argsstring></argsstring>
-        <name>name</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d3/d41/a05068" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::BillboardList &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::BillboardList &gt;</basecompoundref>
+    <includes local="no">TextBillboardList.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d41/a05068_1a7ab1e6d5aeda23601f2b4996807c3939" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::BillboardList &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs)</argsstring>
+        <name>TextWriter</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::BillboardList &gt;::TextWriter</qualifiedname>
+        <param>
+          <type>String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/AnimationModule.hpp" line="83" column="1" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="83" bodyend="-1"/>
+        <location file="Text/TextBillboardList.hpp" line="18" column="18"/>
       </memberdef>
-      <memberdef kind="variable" id="d3/d41/a05068_1ac1cffe9fb3af1195cc920e3d69c3b7cd" prot="public" static="no" mutable="no">
-        <type><ref refid="da/d1e/a01479_1a2405dedd7ac8a7be93c2a8c1f8848e04" kindref="member">AnimationState</ref></type>
-        <definition>AnimationState castor3d::GroupAnimation::state</definition>
-        <argsstring></argsstring>
-        <name>state</name>
-        <initializer>{}</initializer>
+      <memberdef kind="function" id="d3/d41/a05068_1a63261ff6dee386533b747d388e07346b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::BillboardList &gt;::operator()</definition>
+        <argsstring>(castor3d::BillboardList const &amp;obj, castor::StringStream &amp;file) override</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::BillboardList &gt;::operator()</qualifiedname>
+        <param>
+          <type><ref refid="df/dfb/a04472" kindref="compound">castor3d::BillboardList</ref> const &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <param>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/AnimationModule.hpp" line="84" column="1" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="84" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d41/a05068_1a327556143a7996f9520e012f8e66b9a1" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::GroupAnimation::looped</definition>
-        <argsstring></argsstring>
-        <name>looped</name>
-        <initializer>{}</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimationModule.hpp" line="85" column="1" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="85" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d41/a05068_1aee527b7a918120e5a9d40248dff0f543" prot="public" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::GroupAnimation::scale</definition>
-        <argsstring></argsstring>
-        <name>scale</name>
-        <initializer>{}</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimationModule.hpp" line="86" column="1" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="86" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d41/a05068_1af2cddf741baf6e988bff84be6421a9b2" prot="public" static="no" mutable="no">
-        <type>castor::Milliseconds</type>
-        <definition>castor::Milliseconds castor3d::GroupAnimation::startingPoint</definition>
-        <argsstring></argsstring>
-        <name>startingPoint</name>
-        <initializer>{}</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimationModule.hpp" line="87" column="1" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="87" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d41/a05068_1a68e716393e98ef06874d686c6d51767b" prot="public" static="no" mutable="no">
-        <type>castor::Milliseconds</type>
-        <definition>castor::Milliseconds castor3d::GroupAnimation::stoppingPoint</definition>
-        <argsstring></argsstring>
-        <name>stoppingPoint</name>
-        <initializer>{}</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimationModule.hpp" line="88" column="1" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="88" bodyend="-1"/>
+        <location file="Text/TextBillboardList.hpp" line="19" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Scene/Animation/AnimationModule.hpp" line="82" column="1" bodyfile="Scene/Animation/AnimationModule.hpp" bodystart="81" bodyend="89"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::BillboardList &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::BillboardList &gt;</label>
+        <link refid="d3/d41/a05068"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::BillboardList &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::BillboardList &gt;</label>
+        <link refid="d3/d41/a05068"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextBillboardList.hpp" line="14" column="1" bodyfile="Text/TextBillboardList.hpp" bodystart="16" bodyend="21"/>
     <listofallmembers>
-      <member refid="d3/d41/a05068_1a327556143a7996f9520e012f8e66b9a1" prot="public" virt="non-virtual"><scope>castor3d::GroupAnimation</scope><name>looped</name></member>
-      <member refid="d3/d41/a05068_1aec5eef420d98c4cd706d29e4f6705cd9" prot="public" virt="non-virtual"><scope>castor3d::GroupAnimation</scope><name>name</name></member>
-      <member refid="d3/d41/a05068_1aee527b7a918120e5a9d40248dff0f543" prot="public" virt="non-virtual"><scope>castor3d::GroupAnimation</scope><name>scale</name></member>
-      <member refid="d3/d41/a05068_1af2cddf741baf6e988bff84be6421a9b2" prot="public" virt="non-virtual"><scope>castor3d::GroupAnimation</scope><name>startingPoint</name></member>
-      <member refid="d3/d41/a05068_1ac1cffe9fb3af1195cc920e3d69c3b7cd" prot="public" virt="non-virtual"><scope>castor3d::GroupAnimation</scope><name>state</name></member>
-      <member refid="d3/d41/a05068_1a68e716393e98ef06874d686c6d51767b" prot="public" virt="non-virtual"><scope>castor3d::GroupAnimation</scope><name>stoppingPoint</name></member>
+      <member refid="d3/d41/a05068_1a63261ff6dee386533b747d388e07346b" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::BillboardList &gt;</scope><name>operator()</name></member>
+      <member refid="d3/d41/a05068_1a7ab1e6d5aeda23601f2b4996807c3939" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::BillboardList &gt;</scope><name>TextWriter</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

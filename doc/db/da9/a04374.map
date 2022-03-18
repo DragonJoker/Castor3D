@@ -1,8 +1,5 @@
-<map id="castor3d::CombinePassBuilder" name="castor3d::CombinePassBuilder">
-<area shape="rect" id="node1" title=" " alt="" coords="932,45,1133,71"/>
-<area shape="rect" id="node2" href="$de/dc4/a04428.html" title=" " alt="" coords="636,30,883,86"/>
-<area shape="rect" id="node3" href="$d3/dd1/a04364.html" title="The configuration to create a CombinePass." alt="" coords="253,5,451,47"/>
-<area shape="rect" id="node4" href="$d5/d8e/a04448.html" title=" " alt="" coords="5,5,148,47"/>
-<area shape="rect" id="node5" href="$de/dc4/a04428.html" title="Used to create a RenderQuad variable." alt="" coords="256,71,448,112"/>
-<area shape="rect" id="node6" title=" " alt="" coords="44,78,109,105"/>
+<map id="castor3d::AnimatedObjectGroup" name="castor3d::AnimatedObjectGroup">
+<area shape="rect" id="node1" title=" " alt="" coords="56,80,229,121"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,112,32"/>
+<area shape="rect" id="node3" title=" " alt="" coords="137,5,319,32"/>
 </map>

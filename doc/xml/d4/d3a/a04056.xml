@@ -1,64 +1,61 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d4/d3a/a04056" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::SubmeshVertex</compoundname>
-    <includes local="no">Vertex.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d4/d3a/a04056" kind="struct" language="C++" prot="protected">
+    <compoundname>castor3d::RenderNodesPass::PassDescriptors</compoundname>
+    <includes local="no">RenderNodesPass.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d4/d3a/a04056_1aecb7a282637d441abc194a877d32ce43" prot="public" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::SubmeshVertex::m_index</definition>
+      <memberdef kind="variable" id="d4/d3a/a04056_1a6975487cdc316a268d3cc4269f15b444" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetPoolPtr</type>
+        <definition>ashes::DescriptorSetPoolPtr castor3d::RenderNodesPass::PassDescriptors::pool</definition>
         <argsstring></argsstring>
-        <name>m_index</name>
+        <name>pool</name>
+        <qualifiedname>castor3d::RenderNodesPass::PassDescriptors::pool</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Vertex.hpp" line="15" column="1" bodyfile="Model/Vertex.hpp" bodystart="15" bodyend="-1"/>
+        <location file="Render/RenderNodesPass.hpp" line="727" column="29" bodyfile="Render/RenderNodesPass.hpp" bodystart="727" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d4/d3a/a04056_1a2c7f953e4f93312e5eedbc6d3fdfc539" prot="public" static="no" mutable="no">
-        <type><ref refid="da/d1e/a01479_1abe36058ac642536d26cfcc7f2931e62c" kindref="member">InterleavedVertex</ref></type>
-        <definition>InterleavedVertex castor3d::SubmeshVertex::m_vertex</definition>
+      <memberdef kind="variable" id="d4/d3a/a04056_1ac5c72404db985687f07693349fbbbb89" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetLayoutPtr</type>
+        <definition>ashes::DescriptorSetLayoutPtr castor3d::RenderNodesPass::PassDescriptors::layout</definition>
         <argsstring></argsstring>
-        <name>m_vertex</name>
+        <name>layout</name>
+        <qualifiedname>castor3d::RenderNodesPass::PassDescriptors::layout</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Vertex.hpp" line="16" column="1" bodyfile="Model/Vertex.hpp" bodystart="16" bodyend="-1"/>
+        <location file="Render/RenderNodesPass.hpp" line="728" column="31" bodyfile="Render/RenderNodesPass.hpp" bodystart="728" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d3a/a04056_1a4acccca72f68d68ed2933fea0b967ac7" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::RenderNodesPass::PassDescriptors::set</definition>
+        <argsstring></argsstring>
+        <name>set</name>
+        <qualifiedname>castor3d::RenderNodesPass::PassDescriptors::set</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderNodesPass.hpp" line="729" column="25" bodyfile="Render/RenderNodesPass.hpp" bodystart="729" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="4307">
-        <label>castor3d::InterleavedVertexT&lt; T &gt;</label>
-        <link refid="d9/def/a04004"/>
-      </node>
-      <node id="4306">
-        <label>castor3d::InterleavedVertexT&lt; float &gt;</label>
-        <link refid="d9/def/a04004"/>
-        <childnode refid="4307" relation="template-instance">
-          <edgelabel>&lt; float &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4305">
-        <label>castor3d::SubmeshVertex</label>
-        <link refid="d4/d3a/a04056"/>
-        <childnode refid="4306" relation="usage">
-          <edgelabel>m_vertex</edgelabel>
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Model/Vertex.hpp" line="14" column="1" bodyfile="Model/Vertex.hpp" bodystart="13" bodyend="17"/>
+    <location file="Render/RenderNodesPass.hpp" line="725" column="1" bodyfile="Render/RenderNodesPass.hpp" bodystart="726" bodyend="730"/>
     <listofallmembers>
-      <member refid="d4/d3a/a04056_1aecb7a282637d441abc194a877d32ce43" prot="public" virt="non-virtual"><scope>castor3d::SubmeshVertex</scope><name>m_index</name></member>
-      <member refid="d4/d3a/a04056_1a2c7f953e4f93312e5eedbc6d3fdfc539" prot="public" virt="non-virtual"><scope>castor3d::SubmeshVertex</scope><name>m_vertex</name></member>
+      <member refid="d4/d3a/a04056_1ac5c72404db985687f07693349fbbbb89" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPass::PassDescriptors</scope><name>layout</name></member>
+      <member refid="d4/d3a/a04056_1a6975487cdc316a268d3cc4269f15b444" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPass::PassDescriptors</scope><name>pool</name></member>
+      <member refid="d4/d3a/a04056_1a4acccca72f68d68ed2933fea0b967ac7" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPass::PassDescriptors</scope><name>set</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

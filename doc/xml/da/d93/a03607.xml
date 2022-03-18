@@ -1,33 +1,115 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="da/d93/a03607" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkRayTracingShaderGroupCreateInfoNV &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="da/d93/a03607_1a03dcd395b6861e4e1cf41133b3e9bb29" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkRayTracingShaderGroupCreateInfoNV &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="da/d93/a03607" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::TextOverlay::DisplayableLine</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/d93/a03607_1a9f2ac2751fca1115467d7854ace59109" prot="public" static="no" mutable="no">
+        <type>castor::Point2d</type>
+        <definition>castor::Point2d castor3d::TextOverlay::DisplayableLine::m_position</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_NV</initializer>
+        <name>m_position</name>
+        <qualifiedname>castor3d::TextOverlay::DisplayableLine::m_position</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The line position. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="318" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="318" bodyend="-1"/>
+        <location file="Overlay/TextOverlay.hpp" line="335" column="17" bodyfile="Overlay/TextOverlay.hpp" bodystart="335" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d93/a03607_1a52c971fa4e1dedc9e59f1f5fbc9d7732" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double castor3d::TextOverlay::DisplayableLine::m_width</definition>
+        <argsstring></argsstring>
+        <name>m_width</name>
+        <qualifiedname>castor3d::TextOverlay::DisplayableLine::m_width</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The line width. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="338" column="8" bodyfile="Overlay/TextOverlay.hpp" bodystart="338" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d93/a03607_1a585cac610b44ac128b9615b98e774e83" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double castor3d::TextOverlay::DisplayableLine::m_height</definition>
+        <argsstring></argsstring>
+        <name>m_height</name>
+        <qualifiedname>castor3d::TextOverlay::DisplayableLine::m_height</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The line height. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="341" column="8" bodyfile="Overlay/TextOverlay.hpp" bodystart="341" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d93/a03607_1ab266c8d211aa41fabf8e11af0b17f348" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; DisplayableChar &gt;</type>
+        <definition>std::vector&lt; DisplayableChar &gt; castor3d::TextOverlay::DisplayableLine::m_characters</definition>
+        <argsstring></argsstring>
+        <name>m_characters</name>
+        <qualifiedname>castor3d::TextOverlay::DisplayableLine::m_characters</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The displayable characters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="344" column="13" bodyfile="Overlay/TextOverlay.hpp" bodystart="344" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>A text line, along with its size and position. </para>
     </briefdescription>
     <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="date"><para>28/01/2016 </para>
+</simplesect>
+</para>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="318" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="318" bodyend="318"/>
+    <collaborationgraph>
+      <node id="5">
+        <label>T</label>
+      </node>
+      <node id="3">
+        <label>castor3d::TextOverlay::DisplayableChar</label>
+      </node>
+      <node id="1">
+        <label>castor3d::TextOverlay::DisplayableLine</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_characters</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::vector&lt; DisplayableChar &gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; DisplayableChar &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Overlay/TextOverlay.hpp" line="331" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="332" bodyend="345"/>
     <listofallmembers>
-      <member refid="da/d93/a03607_1a03dcd395b6861e4e1cf41133b3e9bb29" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkRayTracingShaderGroupCreateInfoNV &gt;</scope><name>value</name></member>
+      <member refid="da/d93/a03607_1ab266c8d211aa41fabf8e11af0b17f348" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableLine</scope><name>m_characters</name></member>
+      <member refid="da/d93/a03607_1a585cac610b44ac128b9615b98e774e83" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableLine</scope><name>m_height</name></member>
+      <member refid="da/d93/a03607_1a9f2ac2751fca1115467d7854ace59109" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableLine</scope><name>m_position</name></member>
+      <member refid="da/d93/a03607_1a52c971fa4e1dedc9e59f1f5fbc9d7732" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableLine</scope><name>m_width</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,58 +1,45 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d3/dd6/a04092" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::DebugOverlays::CategoryOverlays::TimeOverlays</compoundname>
+    <compoundname>castor3d::RenderWindow::Configuration</compoundname>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d3/dd6/a04092_1a58b8dd4fc3854530938d82b78bebd576" prot="public" static="no" mutable="no">
-        <type>castor::Nanoseconds</type>
-        <definition>castor::Nanoseconds castor3d::DebugOverlays::CategoryOverlays::TimeOverlays::time</definition>
+      <memberdef kind="variable" id="d3/dd6/a04092_1a88e88b7dbb4c84f4bd9da6ac57e8151a" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::RenderWindow::Configuration::multiply</definition>
         <argsstring></argsstring>
-        <name>time</name>
-        <initializer>{ 0_ns }</initializer>
+        <name>multiply</name>
+        <qualifiedname>castor3d::RenderWindow::Configuration::multiply</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="268" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="268" bodyend="-1"/>
+        <location file="Render/RenderWindow.hpp" line="56" column="17" bodyfile="Render/RenderWindow.hpp" bodystart="56" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d3/dd6/a04092_1a48e25c217413b7bf91a6fdce3b9be12b" prot="public" static="no" mutable="no">
-        <type>TextOverlaySPtr</type>
-        <definition>TextOverlaySPtr castor3d::DebugOverlays::CategoryOverlays::TimeOverlays::name</definition>
+      <memberdef kind="variable" id="d3/dd6/a04092_1a306ea3d26df54d14084b0ec4ba0537a9" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::RenderWindow::Configuration::add</definition>
         <argsstring></argsstring>
-        <name>name</name>
+        <name>add</name>
+        <qualifiedname>castor3d::RenderWindow::Configuration::add</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="269" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="269" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/dd6/a04092_1a6f047f75e189c91bf759a3e656407dde" prot="public" static="no" mutable="no">
-        <type>TextOverlaySPtr</type>
-        <definition>TextOverlaySPtr castor3d::DebugOverlays::CategoryOverlays::TimeOverlays::value</definition>
-        <argsstring></argsstring>
-        <name>value</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="270" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="270" bodyend="-1"/>
+        <location file="Render/RenderWindow.hpp" line="57" column="17" bodyfile="Render/RenderWindow.hpp" bodystart="57" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Overlay/DebugOverlays.hpp" line="267" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="266" bodyend="271"/>
+    <location file="Render/RenderWindow.hpp" line="54" column="1" bodyfile="Render/RenderWindow.hpp" bodystart="55" bodyend="58"/>
     <listofallmembers>
-      <member refid="d3/dd6/a04092_1a48e25c217413b7bf91a6fdce3b9be12b" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays::TimeOverlays</scope><name>name</name></member>
-      <member refid="d3/dd6/a04092_1a58b8dd4fc3854530938d82b78bebd576" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays::TimeOverlays</scope><name>time</name></member>
-      <member refid="d3/dd6/a04092_1a6f047f75e189c91bf759a3e656407dde" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays::TimeOverlays</scope><name>value</name></member>
+      <member refid="d3/dd6/a04092_1a306ea3d26df54d14084b0ec4ba0537a9" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::Configuration</scope><name>add</name></member>
+      <member refid="d3/dd6/a04092_1a88e88b7dbb4c84f4bd9da6ac57e8151a" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::Configuration</scope><name>multiply</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

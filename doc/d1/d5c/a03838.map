@@ -1,5 +1,4 @@
-<map id="castor3d::MeshAnimationKeyFrame" name="castor3d::MeshAnimationKeyFrame">
-<area shape="rect" id="node1" title=" " alt="" coords="128,80,321,121"/>
-<area shape="rect" id="node2" href="$d6/d5d/a02023.html" title=" " alt="" coords="5,5,204,32"/>
-<area shape="rect" id="node3" title=" " alt="" coords="228,5,464,32"/>
+<map id="castor3d::OverlayPass" name="castor3d::OverlayPass">
+<area shape="rect" id="node1" title=" " alt="" coords="5,80,159,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="16,5,148,32"/>
 </map>

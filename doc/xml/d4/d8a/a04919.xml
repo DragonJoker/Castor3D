@@ -1,122 +1,93 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d4/d8a/a04919" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::TransparentResolveProgram</compoundname>
-    <includes local="no">TransparentResolvePass.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d4/d8a/a04919" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::LpvLightConfigUbo</compoundname>
+    <includes local="no">LpvLightConfigUbo.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d4/d8a/a04919_1a5fb8fc110f4ddaccfc55143b1fa1e0d1" prot="public" static="no">
+        <type><ref refid="db/dc2/a05011" kindref="compound">LpvLightConfigUboConfiguration</ref></type>
+        <definition>using castor3d::LpvLightConfigUbo::Configuration =  LpvLightConfigUboConfiguration</definition>
+        <argsstring></argsstring>
+        <name>Configuration</name>
+        <qualifiedname>castor3d::LpvLightConfigUbo::Configuration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="50" column="1" bodyfile="Shader/Ubos/LpvLightConfigUbo.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d4/d8a/a04919_1ae936589e2eaf4dd3a1d7445c2cb23759" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const std::string</type>
+        <definition>C3D_API const std::string castor3d::LpvLightConfigUbo::LpvLightConfig</definition>
+        <argsstring></argsstring>
+        <name>LpvLightConfig</name>
+        <qualifiedname>castor3d::LpvLightConfigUbo::LpvLightConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="90" column="34" bodyfile="Shader/Ubos/LpvLightConfigUbo.hpp" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d8a/a04919_1ae8236a9ae9df0e8a1a6ebc22a0156766" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const std::string</type>
+        <definition>C3D_API const std::string castor3d::LpvLightConfigUbo::LpvLightData</definition>
+        <argsstring></argsstring>
+        <name>LpvLightData</name>
+        <qualifiedname>castor3d::LpvLightConfigUbo::LpvLightData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="91" column="34" bodyfile="Shader/Ubos/LpvLightConfigUbo.hpp" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d4/d8a/a04919_1a7143e9b321e36a27987e33c3ee39a7c3" prot="private" static="no" mutable="no">
-        <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
-        <definition>Engine&amp; castor3d::TransparentResolveProgram::m_engine</definition>
+      <memberdef kind="variable" id="d4/d8a/a04919_1a30acf2a41d9f7900aaadb034e093e3e9" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::LpvLightConfigUbo::m_device</definition>
         <argsstring></argsstring>
-        <name>m_engine</name>
+        <name>m_device</name>
+        <qualifiedname>castor3d::LpvLightConfigUbo::m_device</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="45" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="45" bodyend="-1"/>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="94" column="21" bodyfile="Shader/Ubos/LpvLightConfigUbo.hpp" bodystart="94" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d4/d8a/a04919_1a7b2200d9c7f7af66bb72f16c434c2f38" prot="private" static="no" mutable="no">
-        <type><ref refid="d7/db9/a04591" kindref="compound">RenderPassTimer</ref> &amp;</type>
-        <definition>RenderPassTimer&amp; castor3d::TransparentResolveProgram::m_timer</definition>
+      <memberdef kind="variable" id="d4/d8a/a04919_1aa67f1fd9a57ad5c10505896bd53966b7" prot="private" static="no" mutable="no">
+        <type><ref refid="d0/d01/a02511" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d4/d8a/a04919_1a5fb8fc110f4ddaccfc55143b1fa1e0d1" kindref="member">Configuration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::LpvLightConfigUbo::m_ubo</definition>
         <argsstring></argsstring>
-        <name>m_timer</name>
+        <name>m_ubo</name>
+        <qualifiedname>castor3d::LpvLightConfigUbo::m_ubo</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="46" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="46" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/d8a/a04919_1a276c68e5048017823294f781a25ee1c5" prot="private" static="no" mutable="no">
-        <type>ashes::RenderPass const  &amp;</type>
-        <definition>ashes::RenderPass const&amp; castor3d::TransparentResolveProgram::m_renderPass</definition>
-        <argsstring></argsstring>
-        <name>m_renderPass</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="47" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="47" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/d8a/a04919_1a5e5420688eab6d8b591ddb82d5ee45f1" prot="private" static="no" mutable="no">
-        <type><ref refid="d8/dbd/a05291" kindref="compound">ShaderModule</ref></type>
-        <definition>ShaderModule castor3d::TransparentResolveProgram::m_vertexShader</definition>
-        <argsstring></argsstring>
-        <name>m_vertexShader</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="48" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="48" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/d8a/a04919_1a4450e32899868ce591e50a23645ecd7f" prot="private" static="no" mutable="no">
-        <type><ref refid="d8/dbd/a05291" kindref="compound">ShaderModule</ref></type>
-        <definition>ShaderModule castor3d::TransparentResolveProgram::m_pixelShader</definition>
-        <argsstring></argsstring>
-        <name>m_pixelShader</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="49" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="49" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/d8a/a04919_1a0958490b49c5c531344a66c710af7aad" prot="private" static="no" mutable="no">
-        <type>ashes::PipelineLayoutPtr</type>
-        <definition>ashes::PipelineLayoutPtr castor3d::TransparentResolveProgram::m_pipelineLayout</definition>
-        <argsstring></argsstring>
-        <name>m_pipelineLayout</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="50" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="50" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/d8a/a04919_1a33183a048db22739e45cfa852b99b053" prot="private" static="no" mutable="no">
-        <type>ashes::GraphicsPipelinePtr</type>
-        <definition>ashes::GraphicsPipelinePtr castor3d::TransparentResolveProgram::m_pipeline</definition>
-        <argsstring></argsstring>
-        <name>m_pipeline</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="51" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="51" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/d8a/a04919_1a6e346a9c3a13b2f31a3522f21333d6eb" prot="private" static="no" mutable="no">
-        <type>ashes::CommandBufferPtr</type>
-        <definition>ashes::CommandBufferPtr castor3d::TransparentResolveProgram::m_commandBuffer</definition>
-        <argsstring></argsstring>
-        <name>m_commandBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="52" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="52" bodyend="-1"/>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="95" column="22" bodyfile="Shader/Ubos/LpvLightConfigUbo.hpp" bodystart="95" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d4/d8a/a04919_1a2c1a7166d305ffebb3ace12ca4eeb656" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::TransparentResolveProgram::TransparentResolveProgram</definition>
-        <argsstring>(TransparentResolveProgram const &amp;rhs)=delete</argsstring>
-        <name>TransparentResolveProgram</name>
+      <memberdef kind="function" id="d4/d8a/a04919_1ac8156e99bc22442e9a0680e88e9a497e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LpvLightConfigUbo::LpvLightConfigUbo</definition>
+        <argsstring>(LpvLightConfigUbo const &amp;rhs)=delete</argsstring>
+        <name>LpvLightConfigUbo</name>
+        <qualifiedname>castor3d::LpvLightConfigUbo::LpvLightConfigUbo</qualifiedname>
         <param>
-          <type><ref refid="d4/d8a/a04919" kindref="compound">TransparentResolveProgram</ref> const &amp;</type>
+          <type><ref refid="d4/d8a/a04919" kindref="compound">LpvLightConfigUbo</ref> const &amp;</type>
           <declname>rhs</declname>
         </param>
         <briefdescription>
@@ -125,15 +96,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="19" column="1"/>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="53" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d4/d8a/a04919_1af33765be90cc67ac20b0caf84f4a7171" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d4/d8a/a04919" kindref="compound">TransparentResolveProgram</ref> &amp;</type>
-        <definition>TransparentResolveProgram&amp; castor3d::TransparentResolveProgram::operator=</definition>
-        <argsstring>(TransparentResolveProgram const &amp;rhs)=delete</argsstring>
+      <memberdef kind="function" id="d4/d8a/a04919_1a40f309eec1c5e14ed8c33d261bdd4f28" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/d8a/a04919" kindref="compound">LpvLightConfigUbo</ref> &amp;</type>
+        <definition>C3D_API LpvLightConfigUbo &amp; castor3d::LpvLightConfigUbo::operator=</definition>
+        <argsstring>(LpvLightConfigUbo const &amp;rhs)=delete</argsstring>
         <name>operator=</name>
+        <qualifiedname>castor3d::LpvLightConfigUbo::operator=</qualifiedname>
         <param>
-          <type><ref refid="d4/d8a/a04919" kindref="compound">TransparentResolveProgram</ref> const &amp;</type>
+          <type><ref refid="d4/d8a/a04919" kindref="compound">LpvLightConfigUbo</ref> const &amp;</type>
           <declname>rhs</declname>
         </param>
         <briefdescription>
@@ -142,15 +114,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="20" column="1"/>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="54" column="28"/>
       </memberdef>
-      <memberdef kind="function" id="d4/d8a/a04919_1ab8ed4d660191e6fb5274c27d09285fd0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::TransparentResolveProgram::TransparentResolveProgram</definition>
-        <argsstring>(TransparentResolveProgram &amp;&amp;rhs)=default</argsstring>
-        <name>TransparentResolveProgram</name>
+      <memberdef kind="function" id="d4/d8a/a04919_1ae71b54b1e923c7f51ae92f5a66eff67b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LpvLightConfigUbo::LpvLightConfigUbo</definition>
+        <argsstring>(LpvLightConfigUbo &amp;&amp;rhs)=default</argsstring>
+        <name>LpvLightConfigUbo</name>
+        <qualifiedname>castor3d::LpvLightConfigUbo::LpvLightConfigUbo</qualifiedname>
         <param>
-          <type><ref refid="d4/d8a/a04919" kindref="compound">TransparentResolveProgram</ref> &amp;&amp;</type>
+          <type><ref refid="d4/d8a/a04919" kindref="compound">LpvLightConfigUbo</ref> &amp;&amp;</type>
           <declname>rhs</declname>
         </param>
         <briefdescription>
@@ -159,15 +132,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="21" column="1"/>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="55" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d4/d8a/a04919_1a494aa9ecb56c65e9e481ba0f3c107a82" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d4/d8a/a04919" kindref="compound">TransparentResolveProgram</ref> &amp;</type>
-        <definition>TransparentResolveProgram&amp; castor3d::TransparentResolveProgram::operator=</definition>
-        <argsstring>(TransparentResolveProgram &amp;&amp;rhs)=delete</argsstring>
+      <memberdef kind="function" id="d4/d8a/a04919_1a9b7dbe574b6349f950d597d3a1590e73" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/d8a/a04919" kindref="compound">LpvLightConfigUbo</ref> &amp;</type>
+        <definition>C3D_API LpvLightConfigUbo &amp; castor3d::LpvLightConfigUbo::operator=</definition>
+        <argsstring>(LpvLightConfigUbo &amp;&amp;rhs)=delete</argsstring>
         <name>operator=</name>
+        <qualifiedname>castor3d::LpvLightConfigUbo::operator=</qualifiedname>
         <param>
-          <type><ref refid="d4/d8a/a04919" kindref="compound">TransparentResolveProgram</ref> &amp;&amp;</type>
+          <type><ref refid="d4/d8a/a04919" kindref="compound">LpvLightConfigUbo</ref> &amp;&amp;</type>
           <declname>rhs</declname>
         </param>
         <briefdescription>
@@ -176,107 +150,57 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="22" column="1"/>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="56" column="28"/>
       </memberdef>
-      <memberdef kind="function" id="d4/d8a/a04919_1a5c73b5516c2f55ab26dd714f759bb4f6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::TransparentResolveProgram::TransparentResolveProgram</definition>
-        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, ashes::RenderPass const &amp;renderPass, RenderPassTimer &amp;timer, ashes::DescriptorSetLayout const &amp;uboLayout, ashes::DescriptorSetLayout const &amp;texLayout, ashes::PipelineVertexInputStateCreateInfo const &amp;vtxLayout, FogType fogType)</argsstring>
-        <name>TransparentResolveProgram</name>
+      <memberdef kind="function" id="d4/d8a/a04919_1ab19c89d6c1af1df3900097cdcd5d1574" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LpvLightConfigUbo::LpvLightConfigUbo</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>LpvLightConfigUbo</name>
+        <qualifiedname>castor3d::LpvLightConfigUbo::LpvLightConfigUbo</qualifiedname>
         <param>
-          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
-        </param>
-        <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
           <declname>device</declname>
         </param>
-        <param>
-          <type>ashes::RenderPass const &amp;</type>
-          <declname>renderPass</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/db9/a04591" kindref="compound">RenderPassTimer</ref> &amp;</type>
-          <declname>timer</declname>
-        </param>
-        <param>
-          <type>ashes::DescriptorSetLayout const &amp;</type>
-          <declname>uboLayout</declname>
-        </param>
-        <param>
-          <type>ashes::DescriptorSetLayout const &amp;</type>
-          <declname>texLayout</declname>
-        </param>
-        <param>
-          <type>ashes::PipelineVertexInputStateCreateInfo const &amp;</type>
-          <declname>vtxLayout</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1a99a6b51dbe68abcf95c70f03008dd3a3" kindref="member">FogType</ref></type>
-          <declname>fogType</declname>
-        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="23" column="1"/>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="57" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d4/d8a/a04919_1af86ea3b76c017452c962d6ec0f2bafbb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::TransparentResolveProgram::~TransparentResolveProgram</definition>
+      <memberdef kind="function" id="d4/d8a/a04919_1a441a9a051c2a5d633270d5e9c8ee14a6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LpvLightConfigUbo::~LpvLightConfigUbo</definition>
         <argsstring>()</argsstring>
-        <name>~TransparentResolveProgram</name>
+        <name>~LpvLightConfigUbo</name>
+        <qualifiedname>castor3d::LpvLightConfigUbo::~LpvLightConfigUbo</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="31" column="1"/>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="58" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d4/d8a/a04919_1a11ea883632a603f7af0f6a7e91f1b9d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::TransparentResolveProgram::prepare</definition>
-        <argsstring>(ashes::FrameBuffer const &amp;frameBuffer, ashes::DescriptorSet const &amp;uboDescriptorSet, ashes::DescriptorSet const &amp;texDescriptorSet, ashes::BufferBase const &amp;vbo, TransparentPassResult const &amp;wbResult)</argsstring>
-        <name>prepare</name>
+      <memberdef kind="function" id="d4/d8a/a04919_1aef40587be07fcc44f2d1735b62c7aeae" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LpvLightConfigUbo::cpuUpdate</definition>
+        <argsstring>(Light const &amp;light, float lpvCellSize, uint32_t faceIndex)</argsstring>
+        <name>cpuUpdate</name>
+        <qualifiedname>castor3d::LpvLightConfigUbo::cpuUpdate</qualifiedname>
         <param>
-          <type>ashes::FrameBuffer const &amp;</type>
-          <declname>frameBuffer</declname>
+          <type><ref refid="da/dec/a04499" kindref="compound">Light</ref> const &amp;</type>
+          <declname>light</declname>
         </param>
         <param>
-          <type>ashes::DescriptorSet const &amp;</type>
-          <declname>uboDescriptorSet</declname>
+          <type>float</type>
+          <declname>lpvCellSize</declname>
         </param>
         <param>
-          <type>ashes::DescriptorSet const &amp;</type>
-          <declname>texDescriptorSet</declname>
-        </param>
-        <param>
-          <type>ashes::BufferBase const &amp;</type>
-          <declname>vbo</declname>
-        </param>
-        <param>
-          <type><ref refid="da/dea/a04915" kindref="compound">TransparentPassResult</ref> const &amp;</type>
-          <declname>wbResult</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="32" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/d8a/a04919_1a9fc1070342436200871b648dfce13d9b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::TransparentResolveProgram::accept</definition>
-        <argsstring>(PipelineVisitorBase &amp;visitor)</argsstring>
-        <name>accept</name>
-        <param>
-          <type><ref refid="d7/dab/a03815" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
-          <declname>visitor</declname>
+          <type>uint32_t</type>
+          <declname>faceIndex</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -284,45 +208,150 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="37" column="1"/>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="60" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d4/d8a/a04919_1a36b87c16094790a655a16463eb5fce3e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::CommandBuffer const  &amp;</type>
-        <definition>ashes::CommandBuffer const&amp; castor3d::TransparentResolveProgram::getCommandBuffer</definition>
+      <memberdef kind="function" id="d4/d8a/a04919_1af999aba26f88c3c0c366ffcb86b276ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LpvLightConfigUbo::cpuUpdate</definition>
+        <argsstring>(DirectionalLight const &amp;light, uint32_t cascadeIndex, float lpvCellSize)</argsstring>
+        <name>cpuUpdate</name>
+        <qualifiedname>castor3d::LpvLightConfigUbo::cpuUpdate</qualifiedname>
+        <param>
+          <type><ref refid="db/dd8/a04495" kindref="compound">DirectionalLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>cascadeIndex</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>lpvCellSize</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="63" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d8a/a04919_1a61f9cd783b8815567d75314e7fbe7d78" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d0/d01/a02511" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d4/d8a/a04919_1a5fb8fc110f4ddaccfc55143b1fa1e0d1" kindref="member">Configuration</ref> &gt; &amp;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; &amp; castor3d::LpvLightConfigUbo::getUbo</definition>
+        <argsstring>()</argsstring>
+        <name>getUbo</name>
+        <qualifiedname>castor3d::LpvLightConfigUbo::getUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="67" column="23" bodyfile="Shader/Ubos/LpvLightConfigUbo.hpp" bodystart="67" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d8a/a04919_1a864dc480364bb7cd2aa48f3595be4576" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d0/d01/a02511" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d4/d8a/a04919_1a5fb8fc110f4ddaccfc55143b1fa1e0d1" kindref="member">Configuration</ref> &gt; const &amp;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; const  &amp; castor3d::LpvLightConfigUbo::getUbo</definition>
         <argsstring>() const</argsstring>
-        <name>getCommandBuffer</name>
+        <name>getUbo</name>
+        <qualifiedname>castor3d::LpvLightConfigUbo::getUbo</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="38" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="38" bodyend="42"/>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="72" column="29" bodyfile="Shader/Ubos/LpvLightConfigUbo.hpp" bodystart="72" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d8a/a04919_1a4f0ad3b1d168b107edde59d544718037" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LpvLightConfigUbo::createPassBinding</definition>
+        <argsstring>(crg::FramePass &amp;pass, uint32_t binding) const</argsstring>
+        <name>createPassBinding</name>
+        <qualifiedname>castor3d::LpvLightConfigUbo::createPassBinding</qualifiedname>
+        <param>
+          <type>crg::FramePass &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="77" column="6" bodyfile="Shader/Ubos/LpvLightConfigUbo.hpp" bodystart="77" bodyend="81"/>
+        <references refid="d0/d01/a02511_1ae2c055477d81767157b9832b18baa027" compoundref="dc/d57/a00194" startline="86" endline="94">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createPassBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/d8a/a04919_1a55564c6a2a416333c26436076181029c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LpvLightConfigUbo::createSizedBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</argsstring>
+        <name>createSizedBinding</name>
+        <qualifiedname>castor3d::LpvLightConfigUbo::createSizedBinding</qualifiedname>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>layoutBinding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="83" column="6" bodyfile="Shader/Ubos/LpvLightConfigUbo.hpp" bodystart="83" bodyend="87"/>
+        <references refid="d0/d01/a02511_1a2c6ad146d4910651544564c25ca7dccd" compoundref="dc/d57/a00194" startline="96" endline="105">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Technique/Transparent/TransparentResolvePass.hpp" line="18" column="1" bodyfile="Render/Technique/Transparent/TransparentResolvePass.hpp" bodystart="17" bodyend="53"/>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::LpvLightConfigUbo</label>
+        <link refid="d4/d8a/a04919"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>LpvLightConfig</edgelabel>
+          <edgelabel>LpvLightData</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::string</label>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="47" column="1" bodyfile="Shader/Ubos/LpvLightConfigUbo.hpp" bodystart="48" bodyend="96"/>
     <listofallmembers>
-      <member refid="d4/d8a/a04919_1a9fc1070342436200871b648dfce13d9b" prot="public" virt="non-virtual"><scope>castor3d::TransparentResolveProgram</scope><name>accept</name></member>
-      <member refid="d4/d8a/a04919_1a36b87c16094790a655a16463eb5fce3e" prot="public" virt="non-virtual"><scope>castor3d::TransparentResolveProgram</scope><name>getCommandBuffer</name></member>
-      <member refid="d4/d8a/a04919_1a6e346a9c3a13b2f31a3522f21333d6eb" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolveProgram</scope><name>m_commandBuffer</name></member>
-      <member refid="d4/d8a/a04919_1a7143e9b321e36a27987e33c3ee39a7c3" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolveProgram</scope><name>m_engine</name></member>
-      <member refid="d4/d8a/a04919_1a33183a048db22739e45cfa852b99b053" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolveProgram</scope><name>m_pipeline</name></member>
-      <member refid="d4/d8a/a04919_1a0958490b49c5c531344a66c710af7aad" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolveProgram</scope><name>m_pipelineLayout</name></member>
-      <member refid="d4/d8a/a04919_1a4450e32899868ce591e50a23645ecd7f" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolveProgram</scope><name>m_pixelShader</name></member>
-      <member refid="d4/d8a/a04919_1a276c68e5048017823294f781a25ee1c5" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolveProgram</scope><name>m_renderPass</name></member>
-      <member refid="d4/d8a/a04919_1a7b2200d9c7f7af66bb72f16c434c2f38" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolveProgram</scope><name>m_timer</name></member>
-      <member refid="d4/d8a/a04919_1a5e5420688eab6d8b591ddb82d5ee45f1" prot="private" virt="non-virtual"><scope>castor3d::TransparentResolveProgram</scope><name>m_vertexShader</name></member>
-      <member refid="d4/d8a/a04919_1af33765be90cc67ac20b0caf84f4a7171" prot="public" virt="non-virtual"><scope>castor3d::TransparentResolveProgram</scope><name>operator=</name></member>
-      <member refid="d4/d8a/a04919_1a494aa9ecb56c65e9e481ba0f3c107a82" prot="public" virt="non-virtual"><scope>castor3d::TransparentResolveProgram</scope><name>operator=</name></member>
-      <member refid="d4/d8a/a04919_1a11ea883632a603f7af0f6a7e91f1b9d7" prot="public" virt="non-virtual"><scope>castor3d::TransparentResolveProgram</scope><name>prepare</name></member>
-      <member refid="d4/d8a/a04919_1a2c1a7166d305ffebb3ace12ca4eeb656" prot="public" virt="non-virtual"><scope>castor3d::TransparentResolveProgram</scope><name>TransparentResolveProgram</name></member>
-      <member refid="d4/d8a/a04919_1ab8ed4d660191e6fb5274c27d09285fd0" prot="public" virt="non-virtual"><scope>castor3d::TransparentResolveProgram</scope><name>TransparentResolveProgram</name></member>
-      <member refid="d4/d8a/a04919_1a5c73b5516c2f55ab26dd714f759bb4f6" prot="public" virt="non-virtual"><scope>castor3d::TransparentResolveProgram</scope><name>TransparentResolveProgram</name></member>
-      <member refid="d4/d8a/a04919_1af86ea3b76c017452c962d6ec0f2bafbb" prot="public" virt="non-virtual"><scope>castor3d::TransparentResolveProgram</scope><name>~TransparentResolveProgram</name></member>
+      <member refid="d4/d8a/a04919_1a5fb8fc110f4ddaccfc55143b1fa1e0d1" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>Configuration</name></member>
+      <member refid="d4/d8a/a04919_1aef40587be07fcc44f2d1735b62c7aeae" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>cpuUpdate</name></member>
+      <member refid="d4/d8a/a04919_1af999aba26f88c3c0c366ffcb86b276ad" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>cpuUpdate</name></member>
+      <member refid="d4/d8a/a04919_1a4f0ad3b1d168b107edde59d544718037" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>createPassBinding</name></member>
+      <member refid="d4/d8a/a04919_1a55564c6a2a416333c26436076181029c" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>createSizedBinding</name></member>
+      <member refid="d4/d8a/a04919_1a61f9cd783b8815567d75314e7fbe7d78" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>getUbo</name></member>
+      <member refid="d4/d8a/a04919_1a864dc480364bb7cd2aa48f3595be4576" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>getUbo</name></member>
+      <member refid="d4/d8a/a04919_1ae936589e2eaf4dd3a1d7445c2cb23759" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>LpvLightConfig</name></member>
+      <member refid="d4/d8a/a04919_1ac8156e99bc22442e9a0680e88e9a497e" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>LpvLightConfigUbo</name></member>
+      <member refid="d4/d8a/a04919_1ae71b54b1e923c7f51ae92f5a66eff67b" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>LpvLightConfigUbo</name></member>
+      <member refid="d4/d8a/a04919_1ab19c89d6c1af1df3900097cdcd5d1574" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>LpvLightConfigUbo</name></member>
+      <member refid="d4/d8a/a04919_1ae8236a9ae9df0e8a1a6ebc22a0156766" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>LpvLightData</name></member>
+      <member refid="d4/d8a/a04919_1a30acf2a41d9f7900aaadb034e093e3e9" prot="private" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>m_device</name></member>
+      <member refid="d4/d8a/a04919_1aa67f1fd9a57ad5c10505896bd53966b7" prot="private" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>m_ubo</name></member>
+      <member refid="d4/d8a/a04919_1a40f309eec1c5e14ed8c33d261bdd4f28" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>operator=</name></member>
+      <member refid="d4/d8a/a04919_1a9b7dbe574b6349f950d597d3a1590e73" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>operator=</name></member>
+      <member refid="d4/d8a/a04919_1a441a9a051c2a5d633270d5e9c8ee14a6" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>~LpvLightConfigUbo</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

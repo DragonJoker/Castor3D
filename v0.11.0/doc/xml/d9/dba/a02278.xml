@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d9/dba/a02278" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ChunkWriter&lt; castor::Path &gt;</compoundname>
+    <basecompoundref refid="d3/d6e/a02266" prot="public" virt="non-virtual">castor3d::ChunkWriterBase</basecompoundref>
+    <includes local="no">ChunkWriter.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d9/dba/a02278_1afdeae129e73ddd2c7980afdd4441dba0" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool castor3d::ChunkWriter&lt; castor::Path &gt;::write</definition>
+        <argsstring>(castor::Path const &amp;value, ChunkType type, BinaryChunk &amp;chunk)</argsstring>
+        <name>write</name>
+        <param>
+          <type>castor::Path const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d13/a01473_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/dfe/a02102" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Writes a subchunk value into a chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The value </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The subchunk type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/ChunkWriter.hpp" line="201" column="1" bodyfile="Binary/ChunkWriter.hpp" bodystart="201" bodyend="219"/>
+        <references refid="d3/d6e/a02266_1a6d5639d69c83f6b59094817e85f17398" compoundref="d5/db1/a00140" startline="32" endline="51">castor3d::ChunkWriterBase::write</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para><ref refid="d4/de7/a02270" kindref="compound">ChunkWriter</ref> specialisation for castor::Path. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="version"><para>0.9.0 </para>
+</simplesect>
+<simplesect kind="date"><para>30/05/2016 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="708">
+        <label>castor3d::ChunkWriter&lt; castor::Path &gt;</label>
+        <link refid="d9/dba/a02278"/>
+        <childnode refid="709" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="709">
+        <label>castor3d::ChunkWriterBase</label>
+        <link refid="d3/d6e/a02266"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="710">
+        <label>castor3d::ChunkWriter&lt; castor::Path &gt;</label>
+        <link refid="d9/dba/a02278"/>
+        <childnode refid="711" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="711">
+        <label>castor3d::ChunkWriterBase</label>
+        <link refid="d3/d6e/a02266"/>
+      </node>
+    </collaborationgraph>
+    <location file="Binary/ChunkWriter.hpp" line="185" column="1" bodyfile="Binary/ChunkWriter.hpp" bodystart="183" bodyend="220"/>
+    <listofallmembers>
+      <member refid="d9/dba/a02278_1afdeae129e73ddd2c7980afdd4441dba0" prot="public" virt="non-virtual"><scope>castor3d::ChunkWriter&lt; castor::Path &gt;</scope><name>write</name></member>
+      <member refid="d3/d6e/a02266_1a6d5639d69c83f6b59094817e85f17398" prot="public" virt="non-virtual" ambiguityscope="castor3d::ChunkWriterBase::"><scope>castor3d::ChunkWriter&lt; castor::Path &gt;</scope><name>write</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

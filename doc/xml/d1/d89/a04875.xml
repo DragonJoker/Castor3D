@@ -1,231 +1,251 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d1/d89/a04875" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::RsmLightPassConfig</compoundname>
-    <includes local="no">ReflectiveShadowMapGIModule.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d1/d89/a04875_1a67b5155db40e54d849f00a25dca050a9" prot="public" static="no" mutable="no">
-        <type><ref refid="dc/d6b/a04731" kindref="compound">LightPassConfig</ref></type>
-        <definition>LightPassConfig castor3d::RsmLightPassConfig::base</definition>
+    <compoundname>castor3d::shader::BillboardData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">BillboardUbo.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/d89/a04875_1a766f4b3d53bcdb83598a56a01db84d40" prot="private" static="no" mutable="no">
+        <type>sdw::Vec2</type>
+        <definition>sdw::Vec2 castor3d::shader::BillboardData::m_dimensions</definition>
         <argsstring></argsstring>
-        <name>base</name>
+        <name>m_dimensions</name>
+        <qualifiedname>castor3d::shader::BillboardData::m_dimensions</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" line="87" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" bodystart="87" bodyend="-1"/>
-        <referencedby refid="da/dbb/a04871_1aec682c16bf1f28ec46627a6a18825c0c" compoundref="d3/dd1/a00914" startline="43" endline="53">castor3d::LightPassReflectiveShadow&lt; LtType &gt;::LightPassReflectiveShadow</referencedby>
+        <location file="Shader/Ubos/BillboardUbo.hpp" line="41" column="11" bodyfile="Shader/Ubos/BillboardUbo.hpp" bodystart="41" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d89/a04875_1a11f7d9d7a7d1f670b6ca95dd8e1fe84a" prot="public" static="no" mutable="no">
-        <type><ref refid="d7/dd1/a01458_1a563d137a64a10483b6a4ba4b5174d05d" kindref="member">LightCache</ref> const  &amp;</type>
-        <definition>LightCache const&amp; castor3d::RsmLightPassConfig::lightCache</definition>
+      <memberdef kind="variable" id="d1/d89/a04875_1a4e1c1cc88d6e10febd3d9746514868ca" prot="private" static="no" mutable="no">
+        <type>sdw::Vec2</type>
+        <definition>sdw::Vec2 castor3d::shader::BillboardData::m_dummy</definition>
         <argsstring></argsstring>
-        <name>lightCache</name>
+        <name>m_dummy</name>
+        <qualifiedname>castor3d::shader::BillboardData::m_dummy</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" line="88" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" bodystart="88" bodyend="-1"/>
+        <location file="Shader/Ubos/BillboardUbo.hpp" line="42" column="11" bodyfile="Shader/Ubos/BillboardUbo.hpp" bodystart="42" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d89/a04875_1aceccd989804b00062417cb5a49230b4e" prot="public" static="no" mutable="no">
-        <type><ref refid="da/d9f/a04859" kindref="compound">OpaquePassResult</ref> const  &amp;</type>
-        <definition>OpaquePassResult const&amp; castor3d::RsmLightPassConfig::gpResult</definition>
-        <argsstring></argsstring>
-        <name>gpResult</name>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d89/a04875_1a92adba4ffc93e6971fccb4e7ebc95f91" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::BillboardData::BillboardData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>BillboardData</name>
+        <qualifiedname>castor3d::shader::BillboardData::BillboardData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" line="89" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" bodystart="89" bodyend="-1"/>
+        <location file="Shader/Ubos/BillboardUbo.hpp" line="19" column="9"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d89/a04875_1af99f8ae3de57fd69a1917c28aa986075" prot="public" static="no" mutable="no">
-        <type><ref refid="db/dc1/a04671" kindref="compound">ShadowMapResult</ref> const  &amp;</type>
-        <definition>ShadowMapResult const&amp; castor3d::RsmLightPassConfig::smResult</definition>
-        <argsstring></argsstring>
-        <name>smResult</name>
+      <memberdef kind="function" id="d1/d89/a04875_1a959d3f3bb00aaad81bbbd7eba6b20ea9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::BillboardData::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, BillboardData)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::BillboardData::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        </param>
+        <param>
+          <type><ref refid="d1/d89/a04875" kindref="compound">BillboardData</ref></type>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" line="90" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" bodystart="90" bodyend="-1"/>
+        <location file="Shader/Ubos/BillboardUbo.hpp" line="22" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d89/a04875_1a2f94ac2cd816acd46d56c23fc4cd4280" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::BillboardData::getCameraRight</definition>
+        <argsstring>(ProgramFlags programFlags, MatrixData const &amp;matrixData) const</argsstring>
+        <name>getCameraRight</name>
+        <qualifiedname>castor3d::shader::BillboardData::getCameraRight</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
+          <declname>programFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d52/a04923" kindref="compound">MatrixData</ref> const &amp;</type>
+          <declname>matrixData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/BillboardUbo.hpp" line="27" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d89/a04875_1ae737111fa342106df56f57b13fd50d64" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::BillboardData::getCameraUp</definition>
+        <argsstring>(ProgramFlags programFlags, MatrixData const &amp;matrixData) const</argsstring>
+        <name>getCameraUp</name>
+        <qualifiedname>castor3d::shader::BillboardData::getCameraUp</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
+          <declname>programFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d52/a04923" kindref="compound">MatrixData</ref> const &amp;</type>
+          <declname>matrixData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/BillboardUbo.hpp" line="29" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d89/a04875_1a8dd305f270bfd5a1f29bba35163487e1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>C3D_API sdw::Float castor3d::shader::BillboardData::getWidth</definition>
+        <argsstring>(ProgramFlags programFlags, SceneData const &amp;sceneData) const</argsstring>
+        <name>getWidth</name>
+        <qualifiedname>castor3d::shader::BillboardData::getWidth</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
+          <declname>programFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d18/a04963" kindref="compound">SceneData</ref> const &amp;</type>
+          <declname>sceneData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/BillboardUbo.hpp" line="31" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d89/a04875_1a0f2ef7ebadb849913aae168590343555" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>C3D_API sdw::Float castor3d::shader::BillboardData::getHeight</definition>
+        <argsstring>(ProgramFlags programFlags, SceneData const &amp;sceneData) const</argsstring>
+        <name>getHeight</name>
+        <qualifiedname>castor3d::shader::BillboardData::getHeight</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
+          <declname>programFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d18/a04963" kindref="compound">SceneData</ref> const &amp;</type>
+          <declname>sceneData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/BillboardUbo.hpp" line="33" column="20"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d1/d89/a04875_1adfd65c0774fa18af20b25bc5ff61af04" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
+        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::BillboardData::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::BillboardData::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/BillboardUbo.hpp" line="24" column="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d89/a04875_1ab9c876b12792e4188d90261b4e75c6d0" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::BillboardData::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::BillboardData::declare</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/BillboardUbo.hpp" line="25" column="32"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="3237">
-        <label>castor3d::GBufferT&lt; DsTexture &gt;</label>
-        <link refid="de/d93/a04235"/>
-        <childnode refid="3234" relation="private-inheritance">
-        </childnode>
-        <childnode refid="3223" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="3235" relation="template-instance">
-          <edgelabel>&lt; DsTexture &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3222">
-        <label>castor3d::ObjectCacheBase&lt; Light, castor::String &gt;</label>
-        <link refid="d4/dad/a02407"/>
-        <childnode refid="3223" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="3225" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-        <childnode refid="3229" relation="template-instance">
-          <edgelabel>&lt; Light, castor::String &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3233">
-        <label>castor3d::GBufferT&lt; LpTexture &gt;</label>
-        <link refid="de/d93/a04235"/>
-        <childnode refid="3234" relation="private-inheritance">
-        </childnode>
-        <childnode refid="3223" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="3235" relation="template-instance">
-          <edgelabel>&lt; LpTexture &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3232">
-        <label>castor3d::LightPassResult</label>
-        <link refid="df/d9b/a04755"/>
-        <childnode refid="3233" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3221">
-        <label>castor3d::ObjectCache&lt; Light, castor::String &gt;</label>
-        <link refid="dc/d6a/a02463"/>
-        <childnode refid="3222" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3220">
-        <label>castor3d::RsmLightPassConfig</label>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::BillboardData</label>
         <link refid="d1/d89/a04875"/>
-        <childnode refid="3221" relation="usage">
-          <edgelabel>lightCache</edgelabel>
-        </childnode>
-        <childnode refid="3230" relation="usage">
-          <edgelabel>base</edgelabel>
-        </childnode>
-        <childnode refid="3236" relation="usage">
-          <edgelabel>gpResult</edgelabel>
-        </childnode>
-        <childnode refid="3238" relation="usage">
-          <edgelabel>smResult</edgelabel>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="3238">
-        <label>castor3d::ShadowMapResult</label>
-        <link refid="db/dc1/a04671"/>
-        <childnode refid="3239" relation="public-inheritance">
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::BillboardData</label>
+        <link refid="d1/d89/a04875"/>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="3228">
-        <label>Named</label>
-      </node>
-      <node id="3229">
-        <label>castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</label>
-        <link refid="d4/dad/a02407"/>
-        <childnode refid="3223" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="3225" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-      </node>
-      <node id="3224">
-        <label>castor::Unique&lt; Engine &gt;</label>
-      </node>
-      <node id="3226">
-        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
-      </node>
-      <node id="3227">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="3223">
-        <label>castor3d::Engine</label>
-        <link refid="d0/d7c/a02499"/>
-        <childnode refid="3224" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3231">
-        <label>castor3d::GpInfoUbo</label>
-        <link refid="dd/d83/a05443"/>
-      </node>
-      <node id="3235">
-        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
-        <link refid="de/d93/a04235"/>
-        <childnode refid="3234" relation="private-inheritance">
-        </childnode>
-        <childnode refid="3223" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-      </node>
-      <node id="3230">
-        <label>castor3d::LightPassConfig</label>
-        <link refid="dc/d6b/a04731"/>
-        <childnode refid="3231" relation="usage">
-          <edgelabel>gpInfoUbo</edgelabel>
-        </childnode>
-        <childnode refid="3232" relation="usage">
-          <edgelabel>lpResult</edgelabel>
-        </childnode>
-      </node>
-      <node id="3234">
-        <label>castor3d::GBufferBase</label>
-        <link refid="d7/da1/a04231"/>
-        <childnode refid="3228" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3239">
-        <label>castor3d::GBufferT&lt; SmTexture &gt;</label>
-        <link refid="de/d93/a04235"/>
-        <childnode refid="3234" relation="private-inheritance">
-        </childnode>
-        <childnode refid="3223" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="3235" relation="template-instance">
-          <edgelabel>&lt; SmTexture &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3236">
-        <label>castor3d::OpaquePassResult</label>
-        <link refid="da/d9f/a04859"/>
-        <childnode refid="3237" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3225">
-        <label>castor3d::Scene</label>
-        <link refid="d7/d00/a05223"/>
-        <childnode refid="3226" relation="public-inheritance">
-        </childnode>
-        <childnode refid="3227" relation="public-inheritance">
-        </childnode>
-        <childnode refid="3228" relation="public-inheritance">
-        </childnode>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </collaborationgraph>
-    <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" line="86" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" bodystart="85" bodyend="91"/>
+    <location file="Shader/Ubos/BillboardUbo.hpp" line="16" column="1" bodyfile="Shader/Ubos/BillboardUbo.hpp" bodystart="18" bodyend="43"/>
     <listofallmembers>
-      <member refid="d1/d89/a04875_1a67b5155db40e54d849f00a25dca050a9" prot="public" virt="non-virtual"><scope>castor3d::RsmLightPassConfig</scope><name>base</name></member>
-      <member refid="d1/d89/a04875_1aceccd989804b00062417cb5a49230b4e" prot="public" virt="non-virtual"><scope>castor3d::RsmLightPassConfig</scope><name>gpResult</name></member>
-      <member refid="d1/d89/a04875_1a11f7d9d7a7d1f670b6ca95dd8e1fe84a" prot="public" virt="non-virtual"><scope>castor3d::RsmLightPassConfig</scope><name>lightCache</name></member>
-      <member refid="d1/d89/a04875_1af99f8ae3de57fd69a1917c28aa986075" prot="public" virt="non-virtual"><scope>castor3d::RsmLightPassConfig</scope><name>smResult</name></member>
+      <member refid="d1/d89/a04875_1a92adba4ffc93e6971fccb4e7ebc95f91" prot="public" virt="non-virtual"><scope>castor3d::shader::BillboardData</scope><name>BillboardData</name></member>
+      <member refid="d1/d89/a04875_1ab9c876b12792e4188d90261b4e75c6d0" prot="public" virt="non-virtual"><scope>castor3d::shader::BillboardData</scope><name>declare</name></member>
+      <member refid="d1/d89/a04875_1a2f94ac2cd816acd46d56c23fc4cd4280" prot="public" virt="non-virtual"><scope>castor3d::shader::BillboardData</scope><name>getCameraRight</name></member>
+      <member refid="d1/d89/a04875_1ae737111fa342106df56f57b13fd50d64" prot="public" virt="non-virtual"><scope>castor3d::shader::BillboardData</scope><name>getCameraUp</name></member>
+      <member refid="d1/d89/a04875_1a0f2ef7ebadb849913aae168590343555" prot="public" virt="non-virtual"><scope>castor3d::shader::BillboardData</scope><name>getHeight</name></member>
+      <member refid="d1/d89/a04875_1a8dd305f270bfd5a1f29bba35163487e1" prot="public" virt="non-virtual"><scope>castor3d::shader::BillboardData</scope><name>getWidth</name></member>
+      <member refid="d1/d89/a04875_1a766f4b3d53bcdb83598a56a01db84d40" prot="private" virt="non-virtual"><scope>castor3d::shader::BillboardData</scope><name>m_dimensions</name></member>
+      <member refid="d1/d89/a04875_1a4e1c1cc88d6e10febd3d9746514868ca" prot="private" virt="non-virtual"><scope>castor3d::shader::BillboardData</scope><name>m_dummy</name></member>
+      <member refid="d1/d89/a04875_1adfd65c0774fa18af20b25bc5ff61af04" prot="public" virt="non-virtual"><scope>castor3d::shader::BillboardData</scope><name>makeType</name></member>
+      <member refid="d1/d89/a04875_1a959d3f3bb00aaad81bbbd7eba6b20ea9" prot="public" virt="non-virtual"><scope>castor3d::shader::BillboardData</scope><name>SDW_DeclStructInstance</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,33 +1,122 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dc/d6a/a02779" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPipelineColorBlendStateCreateInfo &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="dc/d6a/a02779_1a78ddb43965476354889d067d24754bcd" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPipelineColorBlendStateCreateInfo &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dc/d6a/a02779" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::UserInputEvent</compoundname>
+    <derivedcompoundref refid="dc/d40/a02767" prot="public" virt="non-virtual">castor3d::HandlerEvent</derivedcompoundref>
+    <derivedcompoundref refid="d0/dbd/a02771" prot="public" virt="non-virtual">castor3d::KeyboardEvent</derivedcompoundref>
+    <derivedcompoundref refid="d4/d72/a02775" prot="public" virt="non-virtual">castor3d::MouseEvent</derivedcompoundref>
+    <includes local="no">UserInputEvent.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dc/d6a/a02779_1a5973899c9785c2dffaae34250aec448b" prot="private" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1abdf15c31ed466fee351daf42b2b45ad5" kindref="member">UserInputEventType</ref></type>
+        <definition>UserInputEventType castor3d::UserInputEvent::m_eventType</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO</initializer>
+        <name>m_eventType</name>
+        <qualifiedname>castor3d::UserInputEvent::m_eventType</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="40" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="40" bodyend="-1"/>
+        <location file="Event/UserInput/UserInputEvent.hpp" line="56" column="20" bodyfile="Event/UserInput/UserInputEvent.hpp" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d6a/a02779_1a1d946a77fa49158379ee4e5dfb84a556" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::UserInputEvent::UserInputEvent</definition>
+        <argsstring>(UserInputEventType type)</argsstring>
+        <name>UserInputEvent</name>
+        <qualifiedname>castor3d::UserInputEvent::UserInputEvent</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1abdf15c31ed466fee351daf42b2b45ad5" kindref="member">UserInputEventType</ref></type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/UserInputEvent.hpp" line="33" column="10" bodyfile="Event/UserInput/UserInputEvent.hpp" bodystart="33" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d6a/a02779_1aeb147bea0593ab4b7e1ad4217d383948" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual castor3d::UserInputEvent::~UserInputEvent</definition>
+        <argsstring>()=default</argsstring>
+        <name>~UserInputEvent</name>
+        <qualifiedname>castor3d::UserInputEvent::~UserInputEvent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/UserInputEvent.hpp" line="43" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d6a/a02779_1ab45ab37b6687ae9a35165ea5b18f0a71" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/de3/a01398_1abdf15c31ed466fee351daf42b2b45ad5" kindref="member">UserInputEventType</ref></type>
+        <definition>UserInputEventType castor3d::UserInputEvent::getEventType</definition>
+        <argsstring>() const</argsstring>
+        <name>getEventType</name>
+        <qualifiedname>castor3d::UserInputEvent::getEventType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The user input event type. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/UserInputEvent.hpp" line="50" column="20" bodyfile="Event/UserInput/UserInputEvent.hpp" bodystart="50" bodyend="53"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>Description of a user input event. </para>
     </briefdescription>
     <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="date"><para>17/04/2016 </para>
+</simplesect>
+<simplesect kind="version"><para>0.9.0</para>
+</simplesect>
+<simplesect kind="remark"><para>You may use this one, but prefer using <ref refid="d4/d72/a02775" kindref="compound">MouseEvent</ref> or <ref refid="d0/dbd/a02771" kindref="compound">KeyboardEvent</ref>. </para>
+</simplesect>
+</para>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="40" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="40" bodyend="40"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::HandlerEvent</label>
+        <link refid="dc/d40/a02767"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::KeyboardEvent</label>
+        <link refid="d0/dbd/a02771"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::MouseEvent</label>
+        <link refid="d4/d72/a02775"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::UserInputEvent</label>
+        <link refid="dc/d6a/a02779"/>
+      </node>
+    </inheritancegraph>
+    <location file="Event/UserInput/UserInputEvent.hpp" line="22" column="1" bodyfile="Event/UserInput/UserInputEvent.hpp" bodystart="23" bodyend="57"/>
     <listofallmembers>
-      <member refid="dc/d6a/a02779_1a78ddb43965476354889d067d24754bcd" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPipelineColorBlendStateCreateInfo &gt;</scope><name>value</name></member>
+      <member refid="dc/d6a/a02779_1ab45ab37b6687ae9a35165ea5b18f0a71" prot="public" virt="non-virtual"><scope>castor3d::UserInputEvent</scope><name>getEventType</name></member>
+      <member refid="dc/d6a/a02779_1a5973899c9785c2dffaae34250aec448b" prot="private" virt="non-virtual"><scope>castor3d::UserInputEvent</scope><name>m_eventType</name></member>
+      <member refid="dc/d6a/a02779_1a1d946a77fa49158379ee4e5dfb84a556" prot="public" virt="non-virtual"><scope>castor3d::UserInputEvent</scope><name>UserInputEvent</name></member>
+      <member refid="dc/d6a/a02779_1aeb147bea0593ab4b7e1ad4217d383948" prot="public" virt="virtual"><scope>castor3d::UserInputEvent</scope><name>~UserInputEvent</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

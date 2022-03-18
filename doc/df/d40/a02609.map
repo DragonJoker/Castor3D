@@ -1,5 +1,23 @@
-<map id="castor3d::PhongPass" name="castor3d::PhongPass">
-<area shape="rect" id="node1" title=" " alt="" coords="28,155,175,181"/>
-<area shape="rect" id="node2" href="$df/d57/a02590.html" title=" " alt="" coords="46,80,157,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,197,32"/>
+<map id="castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;::MeshPoolsEntry" name="castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;::MeshPoolsEntry">
+<area shape="rect" id="node1" title=" " alt="" coords="2539,29,2793,100"/>
+<area shape="rect" id="node2" href="$de/d2b/a04375.html" title=" " alt="" coords="1748,5,1921,47"/>
+<area shape="rect" id="node3" title=" " alt="" coords="1139,106,1245,133"/>
+<area shape="rect" id="node6" href="$dd/d06/a04371.html" title=" " alt="" coords="1551,55,1724,82"/>
+<area shape="rect" id="node7" href="$d1/d13/a03339.html" title=" " alt="" coords="1371,106,1483,133"/>
+<area shape="rect" id="node17" href="$df/dd3/a04527.html" title=" " alt="" coords="1752,207,1917,234"/>
+<area shape="rect" id="node18" href="$d1/d30/a04639.html" title=" " alt="" coords="1354,258,1501,285"/>
+<area shape="rect" id="node4" title=" " alt="" coords="1336,157,1519,183"/>
+<area shape="rect" id="node5" href="$dd/db4/a04367.html" title=" " alt="" coords="2287,105,2453,131"/>
+<area shape="rect" id="node8" href="$de/d59/a02219.html" title=" " alt="" coords="1154,229,1230,255"/>
+<area shape="rect" id="node9" title=" " alt="" coords="801,170,988,197"/>
+<area shape="rect" id="node10" title=" " alt="" coords="491,275,657,316"/>
+<area shape="rect" id="node14" href="$de/d59/a02219.html" title="Animable public interface." alt="" coords="819,221,970,263"/>
+<area shape="rect" id="node11" title=" " alt="" coords="149,282,271,309"/>
+<area shape="rect" id="node12" title=" " alt="" coords="5,257,44,283"/>
+<area shape="rect" id="node13" title=" " alt="" coords="5,307,44,334"/>
+<area shape="rect" id="node15" title=" " alt="" coords="480,203,668,244"/>
+<area shape="rect" id="node16" href="$d8/dc4/a04487.html" title=" " alt="" coords="2024,207,2161,234"/>
+<area shape="rect" id="node19" title=" " alt="" coords="1105,300,1279,341"/>
+<area shape="rect" id="node20" href="$d7/db9/a04591.html" title=" " alt="" coords="1748,287,1921,314"/>
+<area shape="rect" id="node21" title=" " alt="" coords="1328,309,1527,351"/>
 </map>

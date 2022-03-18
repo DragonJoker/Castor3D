@@ -1,6 +1,6 @@
-<map id="castor3d::MipView" name="castor3d::MipView">
-<area shape="rect" id="node1" title=" " alt="" coords="23,288,153,315"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,184,171,225"/>
-<area shape="rect" id="node3" title="STL class." alt="" coords="31,95,145,121"/>
-<area shape="rect" id="node4" title=" " alt="" coords="69,5,107,32"/>
+<map id="castor3d::ObjectCacheT&lt; ObjT, KeyT, TraitsT &gt;" name="castor3d::ObjectCacheT&lt; ObjT, KeyT, TraitsT &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="119,184,282,225"/>
+<area shape="rect" id="node2" href="$d9/d07/a02635.html" title=" " alt="" coords="108,95,293,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,13,188,39"/>
+<area shape="rect" id="node4" title=" " alt="" coords="212,5,400,47"/>
 </map>

@@ -1,57 +1,45 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d6/dfd/a03915" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::FaceIndices</compoundname>
-    <includes local="no">FaceIndices.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d6/dfd/a03915" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::RadianceComputer::RenderPass</compoundname>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d6/dfd/a03915_1adf8426df8bab8f2e89269aad090a1d01" prot="public" static="no" mutable="no">
-        <type>std::array&lt; uint32_t, 3 &gt;</type>
-        <definition>std::array&lt; uint32_t, 3 &gt; castor3d::FaceIndices::m_index</definition>
+      <memberdef kind="variable" id="d6/dfd/a03915_1ae6f348857362fa6e06d9f55028f8582f" prot="public" static="no" mutable="no">
+        <type>VkImageView</type>
+        <definition>VkImageView castor3d::RadianceComputer::RenderPass::dstView</definition>
         <argsstring></argsstring>
-        <name>m_index</name>
+        <name>dstView</name>
+        <qualifiedname>castor3d::RadianceComputer::RenderPass::dstView</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The indices. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/FaceIndices.hpp" line="17" column="1" bodyfile="Model/Mesh/Submesh/Component/FaceIndices.hpp" bodystart="17" bodyend="-1"/>
-        <referencedby refid="d4/da4/a03911_1a9eabd49da77fe21c77805a5047bc0753" compoundref="da/d65/a00458" startline="33" endline="37">castor3d::Face::operator[]</referencedby>
-        <referencedby refid="d7/dd1/a01458_1a4bf10f2f11fde3269c70845bbc572fbf" compoundref="df/d6a/a00119" startline="1286" endline="1294">castor3d::prepareChunkData</referencedby>
+        <location file="Render/PBR/RadianceComputer.hpp" line="86" column="13" bodyfile="Render/PBR/RadianceComputer.hpp" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/dfd/a03915_1aed4d3d28b57eeb0bbbe70969869f9a65" prot="public" static="no" mutable="no">
+        <type>ashes::FrameBufferPtr</type>
+        <definition>ashes::FrameBufferPtr castor3d::RadianceComputer::RenderPass::frameBuffer</definition>
+        <argsstring></argsstring>
+        <name>frameBuffer</name>
+        <qualifiedname>castor3d::RadianceComputer::RenderPass::frameBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/RadianceComputer.hpp" line="87" column="23" bodyfile="Render/PBR/RadianceComputer.hpp" bodystart="87" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="1137">
-        <label>std::array&lt; uint32_t, 3 &gt;</label>
-        <childnode refid="1138" relation="template-instance">
-          <edgelabel>&lt; uint32_t, 3 &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1139">
-        <label>T</label>
-      </node>
-      <node id="1136">
-        <label>castor3d::FaceIndices</label>
-        <link refid="d6/dfd/a03915"/>
-        <childnode refid="1137" relation="usage">
-          <edgelabel>m_index</edgelabel>
-        </childnode>
-      </node>
-      <node id="1138">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="1139" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Model/Mesh/Submesh/Component/FaceIndices.hpp" line="14" column="1" bodyfile="Model/Mesh/Submesh/Component/FaceIndices.hpp" bodystart="13" bodyend="18"/>
+    <location file="Render/PBR/RadianceComputer.hpp" line="84" column="1" bodyfile="Render/PBR/RadianceComputer.hpp" bodystart="85" bodyend="88"/>
     <listofallmembers>
-      <member refid="d6/dfd/a03915_1adf8426df8bab8f2e89269aad090a1d01" prot="public" virt="non-virtual"><scope>castor3d::FaceIndices</scope><name>m_index</name></member>
+      <member refid="d6/dfd/a03915_1ae6f348857362fa6e06d9f55028f8582f" prot="public" virt="non-virtual"><scope>castor3d::RadianceComputer::RenderPass</scope><name>dstView</name></member>
+      <member refid="d6/dfd/a03915_1aed4d3d28b57eeb0bbbe70969869f9a65" prot="public" virt="non-virtual"><scope>castor3d::RadianceComputer::RenderPass</scope><name>frameBuffer</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

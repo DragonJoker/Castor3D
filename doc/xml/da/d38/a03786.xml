@@ -1,33 +1,33 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="da/d38/a03786" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPhysicalDeviceBufferAddressFeaturesEXT &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
+    <compoundname>castor3d::RenderNodeTraitsT&lt; BillboardRenderNode &gt;</compoundname>
+    <includes local="no">RenderNodeModule.hpp</includes>
     <templateparamlist>
     </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="da/d38/a03786_1afe383a5c2085d42f079deedc36f78ffe" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPhysicalDeviceBufferAddressFeaturesEXT &gt;::value</definition>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="da/d38/a03786_1a95212f23507c34c8d60f0f2f39598889" prot="public" static="no">
+        <type><ref refid="dc/d50/a04474" kindref="compound">BillboardBase</ref></type>
+        <definition>using castor3d::RenderNodeTraitsT&lt; BillboardRenderNode &gt;::Object =  BillboardBase</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_ADDRESS_FEATURES_EXT</initializer>
+        <name>Object</name>
+        <qualifiedname>castor3d::RenderNodeTraitsT&lt; BillboardRenderNode &gt;::Object</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="359" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="359" bodyend="-1"/>
+        <location file="Render/Node/RenderNodeModule.hpp" line="90" column="1" bodyfile="Render/Node/RenderNodeModule.hpp" bodystart="90" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="359" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="359" bodyend="359"/>
+    <location file="Render/Node/RenderNodeModule.hpp" line="88" column="1" bodyfile="Render/Node/RenderNodeModule.hpp" bodystart="89" bodyend="91"/>
     <listofallmembers>
-      <member refid="da/d38/a03786_1afe383a5c2085d42f079deedc36f78ffe" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPhysicalDeviceBufferAddressFeaturesEXT &gt;</scope><name>value</name></member>
+      <member refid="da/d38/a03786_1a95212f23507c34c8d60f0f2f39598889" prot="public" virt="non-virtual"><scope>castor3d::RenderNodeTraitsT&lt; BillboardRenderNode &gt;</scope><name>Object</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

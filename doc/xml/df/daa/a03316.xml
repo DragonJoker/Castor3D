@@ -1,33 +1,283 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="df/daa/a03316" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkDeviceEventInfoEXT &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="df/daa/a03316_1ae8c094f1ef203267e495d7f66f30b1f4" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkDeviceEventInfoEXT &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="df/daa/a03316" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Projection</compoundname>
+    <basecompoundref refid="da/dcf/a03344" prot="public" virt="non-virtual">castor3d::MeshGenerator</basecompoundref>
+    <includes local="no">Projection.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="df/daa/a03316_1a610a1483adeebd7da3b9f367f59bc162" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/d44/a03252" kindref="compound">Pattern</ref>&lt; castor::Point3f &gt;</type>
+        <definition>Pattern&lt; castor::Point3f &gt; castor3d::Projection::m_pattern</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_DEVICE_EVENT_INFO_EXT</initializer>
+        <name>m_pattern</name>
+        <qualifiedname>castor3d::Projection::m_pattern</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="240" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="240" bodyend="-1"/>
+        <location file="Model/Mesh/Generator/Projection.hpp" line="48" column="9" bodyfile="Model/Mesh/Generator/Projection.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/daa/a03316_1ac7ae91f5f525e75715396166a43e3589" prot="private" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::Projection::m_axis</definition>
+        <argsstring></argsstring>
+        <name>m_axis</name>
+        <qualifiedname>castor3d::Projection::m_axis</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Projection.hpp" line="49" column="17" bodyfile="Model/Mesh/Generator/Projection.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/daa/a03316_1a3e3cf0f23afbe342197992bd6fc89b62" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::Projection::m_depth</definition>
+        <argsstring></argsstring>
+        <name>m_depth</name>
+        <qualifiedname>castor3d::Projection::m_depth</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Projection.hpp" line="50" column="7" bodyfile="Model/Mesh/Generator/Projection.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/daa/a03316_1a11469fcd5d4927d528b77eed354bc218" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::Projection::m_closed</definition>
+        <argsstring></argsstring>
+        <name>m_closed</name>
+        <qualifiedname>castor3d::Projection::m_closed</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Projection.hpp" line="51" column="6" bodyfile="Model/Mesh/Generator/Projection.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/daa/a03316_1a6d7131ef190c3d4100dceb0175358997" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Projection::m_nbFaces</definition>
+        <argsstring></argsstring>
+        <name>m_nbFaces</name>
+        <qualifiedname>castor3d::Projection::m_nbFaces</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Projection.hpp" line="52" column="10" bodyfile="Model/Mesh/Generator/Projection.hpp" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/daa/a03316_1add96dad4d7bc615fbdfdcf321b45720a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Projection::Projection</definition>
+        <argsstring>()</argsstring>
+        <name>Projection</name>
+        <qualifiedname>castor3d::Projection::Projection</qualifiedname>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Projection.hpp" line="22" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="df/daa/a03316_1af02dc7bd12b02aa35717ebeaccb3f95c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Projection::setPoints</definition>
+        <argsstring>(Pattern&lt; castor::Point3f &gt; const &amp;pattern, castor::Point3f const &amp;axis, bool closed)</argsstring>
+        <name>setPoints</name>
+        <qualifiedname>castor3d::Projection::setPoints</qualifiedname>
+        <param>
+          <type><ref refid="d7/d44/a03252" kindref="compound">Pattern</ref>&lt; castor::Point3f &gt; const &amp;</type>
+          <declname>pattern</declname>
+        </param>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>axis</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>closed</declname>
+        </param>
+        <briefdescription>
+<para>Defines the pattern used to build the projection. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pattern</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The arc to project. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">axis</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The projection axis. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">closed</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tells if the projection must be closed. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Projection.hpp" line="39" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="df/daa/a03316_1a226b77ad4eb41d29bf7597b9a13e31be" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> MeshGeneratorSPtr</type>
+        <definition>static C3D_API MeshGeneratorSPtr castor3d::Projection::create</definition>
+        <argsstring>()</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::Projection::create</qualifiedname>
+        <briefdescription>
+<para>Creation function, used by Factory. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><ref refid="d2/d14/a03304" kindref="compound">Cylinder</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Projection.hpp" line="26" column="34"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="df/daa/a03316_1a96eea4fe0c0eb99a0491a750ee7d3b88" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Projection::doGenerate</definition>
+        <argsstring>(Mesh &amp;mesh, Parameters const &amp;parameters) override</argsstring>
+        <name>doGenerate</name>
+        <qualifiedname>castor3d::Projection::doGenerate</qualifiedname>
+        <reimplements refid="da/dcf/a03344_1a690745122d7e670b311e317ae86c9b45">doGenerate</reimplements>
+        <param>
+          <type><ref refid="d1/d24/a03336" kindref="compound">Mesh</ref> &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para>Generates the mesh. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mesh. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The generator parameters. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Projection.hpp" line="44" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="df/daa/a03316_1a1cb108ae7fb60c2f450c8a3c94a04cf7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::ostream &amp;</type>
+        <definition>std::ostream &amp; operator&lt;&lt;</definition>
+        <argsstring>(std::ostream &amp;o, Projection const &amp;c)</argsstring>
+        <name>operator&lt;&lt;</name>
+        <qualifiedname>castor3d::Projection::operator&lt;&lt;</qualifiedname>
+        <param>
+          <type>std::ostream &amp;</type>
+          <declname>o</declname>
+        </param>
+        <param>
+          <type><ref refid="df/daa/a03316" kindref="compound">Projection</ref> const &amp;</type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Projection.hpp" line="53" column="8" bodyfile="Model/Mesh/Generator/Projection.hpp" bodystart="56" bodyend="59"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="240" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="240" bodyend="240"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::MeshGenerator</label>
+        <link refid="da/dcf/a03344"/>
+      </node>
+      <node id="1">
+        <label>castor3d::Projection</label>
+        <link refid="df/daa/a03316"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::MeshGenerator</label>
+        <link refid="da/dcf/a03344"/>
+      </node>
+      <node id="1">
+        <label>castor3d::Projection</label>
+        <link refid="df/daa/a03316"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/Generator/Projection.hpp" line="12" column="1" bodyfile="Model/Mesh/Generator/Projection.hpp" bodystart="14" bodyend="54"/>
     <listofallmembers>
-      <member refid="df/daa/a03316_1ae8c094f1ef203267e495d7f66f30b1f4" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkDeviceEventInfoEXT &gt;</scope><name>value</name></member>
+      <member refid="da/dcf/a03344_1a3207825be521c851f6fc654751f54cf1" prot="public" virt="virtual"><scope>castor3d::Projection</scope><name>computeNormals</name></member>
+      <member refid="df/daa/a03316_1a226b77ad4eb41d29bf7597b9a13e31be" prot="public" virt="non-virtual"><scope>castor3d::Projection</scope><name>create</name></member>
+      <member refid="df/daa/a03316_1a96eea4fe0c0eb99a0491a750ee7d3b88" prot="private" virt="virtual"><scope>castor3d::Projection</scope><name>doGenerate</name></member>
+      <member refid="da/dcf/a03344_1a9fdc140f2d871ca6cb81029250c346ae" prot="public" virt="virtual"><scope>castor3d::Projection</scope><name>generate</name></member>
+      <member refid="df/daa/a03316_1ac7ae91f5f525e75715396166a43e3589" prot="private" virt="non-virtual"><scope>castor3d::Projection</scope><name>m_axis</name></member>
+      <member refid="df/daa/a03316_1a11469fcd5d4927d528b77eed354bc218" prot="private" virt="non-virtual"><scope>castor3d::Projection</scope><name>m_closed</name></member>
+      <member refid="df/daa/a03316_1a3e3cf0f23afbe342197992bd6fc89b62" prot="private" virt="non-virtual"><scope>castor3d::Projection</scope><name>m_depth</name></member>
+      <member refid="df/daa/a03316_1a6d7131ef190c3d4100dceb0175358997" prot="private" virt="non-virtual"><scope>castor3d::Projection</scope><name>m_nbFaces</name></member>
+      <member refid="df/daa/a03316_1a610a1483adeebd7da3b9f367f59bc162" prot="private" virt="non-virtual"><scope>castor3d::Projection</scope><name>m_pattern</name></member>
+      <member refid="da/dcf/a03344_1a3ccec3fd88667bbca33c6e81afdeff19" prot="public" virt="non-virtual"><scope>castor3d::Projection</scope><name>MeshGenerator</name></member>
+      <member refid="df/daa/a03316_1a1cb108ae7fb60c2f450c8a3c94a04cf7" prot="private" virt="non-virtual"><scope>castor3d::Projection</scope><name>operator&lt;&lt;</name></member>
+      <member refid="df/daa/a03316_1add96dad4d7bc615fbdfdcf321b45720a" prot="public" virt="non-virtual"><scope>castor3d::Projection</scope><name>Projection</name></member>
+      <member refid="df/daa/a03316_1af02dc7bd12b02aa35717ebeaccb3f95c" prot="public" virt="non-virtual"><scope>castor3d::Projection</scope><name>setPoints</name></member>
+      <member refid="da/dcf/a03344_1adee42c7c921b0dff4cbbc99c29faf31f" prot="public" virt="virtual"><scope>castor3d::Projection</scope><name>~MeshGenerator</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

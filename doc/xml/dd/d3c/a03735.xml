@@ -1,33 +1,193 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dd/d3c/a03735" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPhysicalDevicePCIBusInfoPropertiesEXT &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="dd/d3c/a03735_1ac63cc67186fb5a820f99804bc10fa601" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPhysicalDevicePCIBusInfoPropertiesEXT &gt;::value</definition>
-        <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PCI_BUS_INFO_PROPERTIES_EXT</initializer>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dd/d3c/a03735" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::LightVolumePassResult</compoundname>
+    <basecompoundref refid="d6/dc7/a03683" prot="public" virt="non-virtual">castor3d::GBufferT&lt; LpvTexture &gt;</basecompoundref>
+    <includes local="no">LightVolumePassResult.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/d3c/a03735_1acbfe88127ea97e04649e1abc1f1e5635" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LightVolumePassResult::LightVolumePassResult</definition>
+        <argsstring>(crg::ResourceHandler &amp;handler, RenderDevice const &amp;device, castor::String const &amp;prefix, uint32_t size)</argsstring>
+        <name>LightVolumePassResult</name>
+        <qualifiedname>castor3d::LightVolumePassResult::LightVolumePassResult</qualifiedname>
+        <param>
+          <type>crg::ResourceHandler &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>prefix</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>size</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="350" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="350" bodyend="-1"/>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp" line="17" column="9"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="350" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="350" bodyend="350"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::GBufferT&lt; LpvTexture &gt;</label>
+        <link refid="d6/dc7/a03683"/>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; LpvTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::GBufferBase</label>
+        <link refid="d1/d7a/a03679"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="d6/dc7/a03683"/>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::LightVolumePassResult</label>
+        <link refid="dd/d3c/a03735"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::GBufferT&lt; LpvTexture &gt;</label>
+        <link refid="d6/dc7/a03683"/>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_result</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; LpvTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>T</label>
+      </node>
+      <node id="3">
+        <label>castor3d::GBufferBase</label>
+        <link refid="d1/d7a/a03679"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="d6/dc7/a03683"/>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_result</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::LightVolumePassResult</label>
+        <link refid="dd/d3c/a03735"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::QueuesData</label>
+        <link refid="d5/d04/a03955"/>
+      </node>
+      <node id="5">
+        <label>castor3d::RenderDevice</label>
+        <link refid="d4/d87/a03963"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>queueFamilies</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d3/d9a/a04075"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
+      </node>
+      <node id="7">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="13">
+        <label>std::shared_ptr&lt; T &gt;</label>
+        <childnode refid="11" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="11" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::vector&lt; QueuesData &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; QueuesData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>std::vector&lt; TexturePtr &gt;</label>
+        <childnode refid="13" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; TexturePtr &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp" line="13" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp" bodystart="15" bodyend="21"/>
     <listofallmembers>
-      <member refid="dd/d3c/a03735_1ac63cc67186fb5a820f99804bc10fa601" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPhysicalDevicePCIBusInfoPropertiesEXT &gt;</scope><name>value</name></member>
+      <member refid="d6/dc7/a03683_1a794584976030474106bba3b69f4a7f80" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>begin</name></member>
+      <member refid="d6/dc7/a03683_1ae8ca53c58a918901635ec3492d4e064d" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>begin</name></member>
+      <member refid="d6/dc7/a03683_1ad184cb851604a0fdad0f1f8136ea6457" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>cbegin</name></member>
+      <member refid="d6/dc7/a03683_1a53d2fc5d9e1c83c50823f591a9650095" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>cend</name></member>
+      <member refid="d6/dc7/a03683_1a8939bb90032a1e4ec33e7840cb71c6c4" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>create</name></member>
+      <member refid="d6/dc7/a03683_1a54feb2c94b179d3ae6e16284d05a124c" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>end</name></member>
+      <member refid="d6/dc7/a03683_1a12e053e63b5593edca663b4a01962d6d" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>end</name></member>
+      <member refid="d6/dc7/a03683_1a67a677fc6cbdb36e74fa6b74a65c5015" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>GBufferT</name></member>
+      <member refid="d6/dc7/a03683_1a1ab6068973c95bddb3229dc2d9b1cc39" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>GBufferT</name></member>
+      <member refid="d6/dc7/a03683_1a1bb04fa8833cb8e9df999784c3f4e72d" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>GBufferT</name></member>
+      <member refid="d6/dc7/a03683_1aad84cb58cfbead8aa670554e5b015e54" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>GBufferT</name></member>
+      <member refid="dd/d3c/a03735_1acbfe88127ea97e04649e1abc1f1e5635" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>LightVolumePassResult</name></member>
+      <member refid="d6/dc7/a03683_1ab53983ea6cfcc95da08034abb5e20d6b" prot="protected" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>m_result</name></member>
+      <member refid="d6/dc7/a03683_1aa803d666fd91abf546fa7bb32507b038" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>operator=</name></member>
+      <member refid="d6/dc7/a03683_1a8c693c6743416a4b36022e98193e3aa3" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>operator=</name></member>
+      <member refid="d6/dc7/a03683_1afc570eab10faf45040bd5ecafcc39104" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>operator[]</name></member>
+      <member refid="d6/dc7/a03683_1a84462bb3e4892ec0bb69d310bf08a7c3" prot="public" virt="non-virtual"><scope>castor3d::LightVolumePassResult</scope><name>~GBufferT</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

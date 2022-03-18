@@ -1,67 +1,329 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d2/d13/a04784" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::LightPassShadowTraits&lt; LightType::ePoint &gt;</compoundname>
-    <includes local="no">LightPassShadow.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="d2/d13/a04784_1add078dce53be769c13210c52cf4d974b" prot="public" static="no">
-        <type><ref refid="dc/ded/a05184" kindref="compound">PointLight</ref></type>
-        <definition>using castor3d::LightPassShadowTraits&lt; LightType::ePoint &gt;::light_type =  PointLight</definition>
+    <compoundname>castor3d::shader::SpotLight</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">GlslLight.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/d13/a04784_1adfd3757d93c9f30c5399b01723b655b4" prot="public" static="no" mutable="no">
+        <type><ref refid="d0/d95/a04772" kindref="compound">Light</ref></type>
+        <definition>Light castor3d::shader::SpotLight::base</definition>
         <argsstring></argsstring>
-        <name>light_type</name>
+        <name>base</name>
+        <qualifiedname>castor3d::shader::SpotLight::base</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The light source type. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="57" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="57" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslLight.hpp" line="146" column="7" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="146" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="typedef" id="d2/d13/a04784_1aad92446ef0d41ded8920133f63396741" prot="public" static="no">
-        <type><ref refid="d5/dc9/a04804" kindref="compound">PointLightPass</ref></type>
-        <definition>using castor3d::LightPassShadowTraits&lt; LightType::ePoint &gt;::light_pass_type =  PointLightPass</definition>
+      <memberdef kind="variable" id="d2/d13/a04784_1a1001c80c9b9cead607b073362897def9" prot="public" static="no" mutable="no">
+        <type>sdw::Mat4</type>
+        <definition>sdw::Mat4 castor3d::shader::SpotLight::transform</definition>
         <argsstring></argsstring>
-        <name>light_pass_type</name>
+        <name>transform</name>
+        <qualifiedname>castor3d::shader::SpotLight::transform</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The light pass type. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="60" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="60" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslLight.hpp" line="157" column="11" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="157" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="typedef" id="d2/d13/a04784_1a9a69d0621608d7532668ee4e60ab6543" prot="public" static="no">
-        <type><ref refid="d5/dfd/a04680" kindref="compound">ShadowMapPoint</ref></type>
-        <definition>using castor3d::LightPassShadowTraits&lt; LightType::ePoint &gt;::shadow_pass_type =  ShadowMapPoint</definition>
+      <memberdef kind="variable" id="d2/d13/a04784_1a21194baed6dd071931dfd84451942a58" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::SpotLight::position</definition>
         <argsstring></argsstring>
-        <name>shadow_pass_type</name>
+        <name>position</name>
+        <qualifiedname>castor3d::shader::SpotLight::position</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The shadow map type. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="63" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="63" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslLight.hpp" line="159" column="11" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="159" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d13/a04784_1ae651927a25fd8cb6ed796008ff8b796f" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::SpotLight::direction</definition>
+        <argsstring></argsstring>
+        <name>direction</name>
+        <qualifiedname>castor3d::shader::SpotLight::direction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="160" column="11" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="160" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d13/a04784_1a38422a2722081957852b0d9b291f1fd3" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::SpotLight::exponent</definition>
+        <argsstring></argsstring>
+        <name>exponent</name>
+        <qualifiedname>castor3d::shader::SpotLight::exponent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="161" column="12" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="161" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d13/a04784_1acb446b602ff1ab397b22fcb152282aa7" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::SpotLight::cutOff</definition>
+        <argsstring></argsstring>
+        <name>cutOff</name>
+        <qualifiedname>castor3d::shader::SpotLight::cutOff</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="162" column="12" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="162" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="d2/d13/a04784_1ae0ec198d71105a937ac89250db1b9dd9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class LightingModel</definition>
+        <argsstring></argsstring>
+        <name>LightingModel</name>
+        <qualifiedname>castor3d::shader::SpotLight::LightingModel</qualifiedname>
+        <param>
+          <type><ref refid="da/d11/a04792" kindref="compound">LightingModel</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="149" column="14" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="149" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/d13/a04784_1a33bc05a07f64e3ad73a19de511ea7398" prot="private" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::SpotLight::m_position4</definition>
+        <argsstring></argsstring>
+        <name>m_position4</name>
+        <qualifiedname>castor3d::shader::SpotLight::m_position4</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="151" column="11" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="151" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d13/a04784_1abbacc48d111e9fdfa8f89b9ed9e5dcf8" prot="private" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::SpotLight::m_attenuation4</definition>
+        <argsstring></argsstring>
+        <name>m_attenuation4</name>
+        <qualifiedname>castor3d::shader::SpotLight::m_attenuation4</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="152" column="11" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="152" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d13/a04784_1a6135119bbdee9305bf0707e2a6c4efb5" prot="private" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::SpotLight::m_direction4</definition>
+        <argsstring></argsstring>
+        <name>m_direction4</name>
+        <qualifiedname>castor3d::shader::SpotLight::m_direction4</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="153" column="11" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="153" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d13/a04784_1ab2c1f6628a861c0f789f73d661578709" prot="private" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::SpotLight::m_exponentCutOff</definition>
+        <argsstring></argsstring>
+        <name>m_exponentCutOff</name>
+        <qualifiedname>castor3d::shader::SpotLight::m_exponentCutOff</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="154" column="11" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="154" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/d13/a04784_1a095cb3462bc1350da119571e3ee53727" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::SpotLight::SpotLight</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>SpotLight</name>
+        <qualifiedname>castor3d::shader::SpotLight::SpotLight</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="136" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d13/a04784_1aa5d20d6e83c7d29ccf6ffec738a41713" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::SpotLight::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, SpotLight)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::SpotLight::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        </param>
+        <param>
+          <type><ref refid="d2/d13/a04784" kindref="compound">SpotLight</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="139" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d13/a04784_1a85a8a38951e2641301111876202e5302" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>C3D_API sdw::Float castor3d::shader::SpotLight::getAttenuationFactor</definition>
+        <argsstring>(sdw::Float const &amp;distance) const</argsstring>
+        <name>getAttenuationFactor</name>
+        <qualifiedname>castor3d::shader::SpotLight::getAttenuationFactor</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>distance</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="141" column="20"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d2/d13/a04784_1ac646362a4d204bda1e091bc895b12d19" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
+        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::SpotLight::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::SpotLight::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="143" column="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d13/a04784_1a7ce0fb875e566ec0157161b878309416" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::SpotLight::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::SpotLight::declare</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="144" column="32"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Traits structure to specialise light passes with shadows. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="remark"><para>Specialisation for <ref refid="da/d1e/a01479_1a381718aa9accc88c20afd97d76c30ed8a4ddd9f8296bf1271adcf1a2eea61bd57" kindref="member">LightType::ePoint</ref>. </para>
-</simplesect>
-</para>
     </detaileddescription>
-    <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="54" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="53" bodyend="64"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::SpotLight</label>
+        <link refid="d2/d13/a04784"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor3d::shader::Light</label>
+        <link refid="d0/d95/a04772"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::SpotLight</label>
+        <link refid="d2/d13/a04784"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>base</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslLight.hpp" line="133" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="135" bodyend="167"/>
     <listofallmembers>
-      <member refid="d2/d13/a04784_1aad92446ef0d41ded8920133f63396741" prot="public" virt="non-virtual"><scope>castor3d::LightPassShadowTraits&lt; LightType::ePoint &gt;</scope><name>light_pass_type</name></member>
-      <member refid="d2/d13/a04784_1add078dce53be769c13210c52cf4d974b" prot="public" virt="non-virtual"><scope>castor3d::LightPassShadowTraits&lt; LightType::ePoint &gt;</scope><name>light_type</name></member>
-      <member refid="d2/d13/a04784_1a9a69d0621608d7532668ee4e60ab6543" prot="public" virt="non-virtual"><scope>castor3d::LightPassShadowTraits&lt; LightType::ePoint &gt;</scope><name>shadow_pass_type</name></member>
+      <member refid="d2/d13/a04784_1adfd3757d93c9f30c5399b01723b655b4" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>base</name></member>
+      <member refid="d2/d13/a04784_1acb446b602ff1ab397b22fcb152282aa7" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>cutOff</name></member>
+      <member refid="d2/d13/a04784_1a7ce0fb875e566ec0157161b878309416" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>declare</name></member>
+      <member refid="d2/d13/a04784_1ae651927a25fd8cb6ed796008ff8b796f" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>direction</name></member>
+      <member refid="d2/d13/a04784_1a38422a2722081957852b0d9b291f1fd3" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>exponent</name></member>
+      <member refid="d2/d13/a04784_1a85a8a38951e2641301111876202e5302" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>getAttenuationFactor</name></member>
+      <member refid="d2/d13/a04784_1ae0ec198d71105a937ac89250db1b9dd9" prot="private" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>LightingModel</name></member>
+      <member refid="d2/d13/a04784_1abbacc48d111e9fdfa8f89b9ed9e5dcf8" prot="private" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>m_attenuation4</name></member>
+      <member refid="d2/d13/a04784_1a6135119bbdee9305bf0707e2a6c4efb5" prot="private" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>m_direction4</name></member>
+      <member refid="d2/d13/a04784_1ab2c1f6628a861c0f789f73d661578709" prot="private" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>m_exponentCutOff</name></member>
+      <member refid="d2/d13/a04784_1a33bc05a07f64e3ad73a19de511ea7398" prot="private" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>m_position4</name></member>
+      <member refid="d2/d13/a04784_1ac646362a4d204bda1e091bc895b12d19" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>makeType</name></member>
+      <member refid="d2/d13/a04784_1a21194baed6dd071931dfd84451942a58" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>position</name></member>
+      <member refid="d2/d13/a04784_1aa5d20d6e83c7d29ccf6ffec738a41713" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="d2/d13/a04784_1a095cb3462bc1350da119571e3ee53727" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>SpotLight</name></member>
+      <member refid="d2/d13/a04784_1a1001c80c9b9cead607b073362897def9" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>transform</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

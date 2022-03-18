@@ -1,90 +1,127 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d9/d62/a04803" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::SpotLightPass::Config</compoundname>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d9/d62/a04803_1ad8e254ecddf91496bd01ce9018a1f316" prot="public" static="no" mutable="no">
-        <type><ref refid="da/d9d/a04751" kindref="compound">LightPass::Config</ref></type>
-        <definition>LightPass::Config castor3d::SpotLightPass::Config::base</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d9/d62/a04803" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::Materials</compoundname>
+    <includes local="no">GlslMaterial.hpp</includes>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d9/d62/a04803_1a63eb1763b48202eb0e2baca6a77c4a52" prot="protected" static="no" mutable="no">
+        <type>sdw::ShaderWriter &amp;</type>
+        <definition>sdw::ShaderWriter&amp; castor3d::shader::Materials::m_writer</definition>
         <argsstring></argsstring>
-        <name>base</name>
+        <name>m_writer</name>
+        <qualifiedname>castor3d::shader::Materials::m_writer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="142" column="1" bodyfile="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" bodystart="142" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="76" column="20" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="76" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d9/d62/a04803_1ad8d85443186a6013d409dc98173b3ab0" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::SpotLightPass::Config::position</definition>
+      <memberdef kind="variable" id="d9/d62/a04803_1a2dadaf77ab37114b38848bff5d95a1d6" prot="protected" static="no" mutable="no">
+        <type>std::unique_ptr&lt; sdw::ArraySsboT&lt; <ref refid="d5/d6b/a04799" kindref="compound">Material</ref> &gt; &gt;</type>
+        <definition>std::unique_ptr&lt; sdw::ArraySsboT&lt; Material &gt; &gt; castor3d::shader::Materials::m_ssbo</definition>
         <argsstring></argsstring>
-        <name>position</name>
+        <name>m_ssbo</name>
+        <qualifiedname>castor3d::shader::Materials::m_ssbo</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The variable containing the light position (RGB). </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="145" column="1" bodyfile="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" bodystart="145" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="77" column="17" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="77" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d9/d62/a04803_1a56fbd30e4dbfe7089696505779862e98" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::SpotLightPass::Config::attenuation</definition>
-        <argsstring></argsstring>
-        <name>attenuation</name>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/d62/a04803_1a9e8ec68b6c1099de440e616faa20de8c" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::Materials::Materials</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>Materials</name>
+        <qualifiedname>castor3d::shader::Materials::Materials</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The variable containing the light attenuation (RGB) and index (A). </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="148" column="1" bodyfile="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" bodystart="148" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="66" column="18"/>
       </memberdef>
-      <memberdef kind="variable" id="d9/d62/a04803_1af76a2d96499514cb22bef18b1cda3e98" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::SpotLightPass::Config::direction</definition>
-        <argsstring></argsstring>
-        <name>direction</name>
+      <memberdef kind="function" id="d9/d62/a04803_1ae12b479d537a3fe223df54b64ff91f7a" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::Materials::Materials</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, uint32_t binding, uint32_t set, bool enable=true)</argsstring>
+        <name>Materials</name>
+        <qualifiedname>castor3d::shader::Materials::Materials</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enable</declname>
+          <defval>true</defval>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The variable containing the light direction (RGB). </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="151" column="1" bodyfile="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" bodystart="151" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="67" column="18"/>
       </memberdef>
-      <memberdef kind="variable" id="d9/d62/a04803_1a1d677655b597dee9f505c8a9ac573edf" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::SpotLightPass::Config::exponentCutOff</definition>
-        <argsstring></argsstring>
-        <name>exponentCutOff</name>
+      <memberdef kind="function" id="d9/d62/a04803_1a19ab37375d70497bb9c6ff532268beb2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::Materials::declare</definition>
+        <argsstring>(uint32_t binding, uint32_t set)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::Materials::declare</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The variable containing the light exponent (R) and cutoff (G). </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="154" column="1" bodyfile="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" bodystart="154" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="71" column="14"/>
       </memberdef>
-      <memberdef kind="variable" id="d9/d62/a04803_1abb4a8be3cb2e6194a6da4668a5a16ceb" prot="public" static="no" mutable="no">
-        <type>castor::Matrix4x4f</type>
-        <definition>castor::Matrix4x4f castor3d::SpotLightPass::Config::transform</definition>
-        <argsstring></argsstring>
-        <name>transform</name>
+      <memberdef kind="function" id="d9/d62/a04803_1a2a7ca08c0b39ee2b9c233c095a96e83e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/d6b/a04799" kindref="compound">Material</ref></type>
+        <definition>C3D_API Material castor3d::shader::Materials::getMaterial</definition>
+        <argsstring>(sdw::UInt const &amp;index) const</argsstring>
+        <name>getMaterial</name>
+        <qualifiedname>castor3d::shader::Materials::getMaterial</qualifiedname>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>index</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The variable containing the light space transformation matrix. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="157" column="1" bodyfile="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" bodystart="157" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="73" column="18"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -92,25 +129,37 @@
     <detaileddescription>
     </detaileddescription>
     <collaborationgraph>
-      <node id="4184">
-        <label>castor3d::SpotLightPass::Config</label>
-        <childnode refid="4185" relation="usage">
-          <edgelabel>base</edgelabel>
+      <node id="4">
+        <label>T</label>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::Materials</label>
+        <link refid="d9/d62/a04803"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_ssbo</edgelabel>
         </childnode>
       </node>
-      <node id="4185">
-        <label>castor3d::LightPass::Config</label>
-        <link refid="da/d9d/a04751"/>
+      <node id="3">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::unique_ptr&lt; sdw::ArraySsboT&lt; castor3d::shader::Material &gt; &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; sdw::ArraySsboT&lt; castor3d::shader::Material &gt; &gt;</edgelabel>
+        </childnode>
       </node>
     </collaborationgraph>
-    <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="141" column="1" bodyfile="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" bodystart="140" bodyend="158"/>
+    <location file="Shader/Shaders/GlslMaterial.hpp" line="63" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="64" bodyend="78"/>
     <listofallmembers>
-      <member refid="d9/d62/a04803_1a56fbd30e4dbfe7089696505779862e98" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Config</scope><name>attenuation</name></member>
-      <member refid="d9/d62/a04803_1ad8e254ecddf91496bd01ce9018a1f316" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Config</scope><name>base</name></member>
-      <member refid="d9/d62/a04803_1af76a2d96499514cb22bef18b1cda3e98" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Config</scope><name>direction</name></member>
-      <member refid="d9/d62/a04803_1a1d677655b597dee9f505c8a9ac573edf" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Config</scope><name>exponentCutOff</name></member>
-      <member refid="d9/d62/a04803_1ad8d85443186a6013d409dc98173b3ab0" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Config</scope><name>position</name></member>
-      <member refid="d9/d62/a04803_1abb4a8be3cb2e6194a6da4668a5a16ceb" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Config</scope><name>transform</name></member>
+      <member refid="d9/d62/a04803_1a19ab37375d70497bb9c6ff532268beb2" prot="public" virt="non-virtual"><scope>castor3d::shader::Materials</scope><name>declare</name></member>
+      <member refid="d9/d62/a04803_1a2a7ca08c0b39ee2b9c233c095a96e83e" prot="public" virt="non-virtual"><scope>castor3d::shader::Materials</scope><name>getMaterial</name></member>
+      <member refid="d9/d62/a04803_1a2dadaf77ab37114b38848bff5d95a1d6" prot="protected" virt="non-virtual"><scope>castor3d::shader::Materials</scope><name>m_ssbo</name></member>
+      <member refid="d9/d62/a04803_1a63eb1763b48202eb0e2baca6a77c4a52" prot="protected" virt="non-virtual"><scope>castor3d::shader::Materials</scope><name>m_writer</name></member>
+      <member refid="d9/d62/a04803_1a9e8ec68b6c1099de440e616faa20de8c" prot="public" virt="non-virtual"><scope>castor3d::shader::Materials</scope><name>Materials</name></member>
+      <member refid="d9/d62/a04803_1ae12b479d537a3fe223df54b64ff91f7a" prot="public" virt="non-virtual"><scope>castor3d::shader::Materials</scope><name>Materials</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

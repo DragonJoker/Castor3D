@@ -1,44 +1,57 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d9/d73/a04542" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::TexturedQuad</compoundname>
-    <includes local="no">RenderModule.hpp</includes>
-    <innerclass refid="d9/d6e/a04546" prot="public">castor3d::TexturedQuad::Vertex</innerclass>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d9/d73/a04542_1aff91a561df99650c86eb2d046f4c6919" prot="public" static="no" mutable="no">
-        <type><ref refid="d9/d6e/a04546" kindref="compound">Vertex</ref></type>
-        <definition>Vertex castor3d::TexturedQuad::vertex[6]</definition>
-        <argsstring>[6]</argsstring>
-        <name>vertex</name>
+    <compoundname>castor3d::MovableDetacherT</compoundname>
+    <includes local="no">MovableObject.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename CacheT</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d9/d73/a04542_1aec7df6754fc974c37f2d768669801128" prot="public" static="no">
+        <type>typename CacheT::ElementT</type>
+        <definition>using castor3d::MovableDetacherT&lt; CacheT &gt;::ElementT =  typename CacheT::ElementT</definition>
+        <argsstring></argsstring>
+        <name>ElementT</name>
+        <qualifiedname>castor3d::MovableDetacherT::ElementT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="41" column="1" bodyfile="Render/RenderModule.hpp" bodystart="41" bodyend="-1"/>
+        <location file="Scene/MovableObject.hpp" line="164" column="1" bodyfile="Scene/MovableObject.hpp" bodystart="164" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/d73/a04542_1ac5c319d17beee0533d3deb66470b9a81" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::MovableDetacherT&lt; CacheT &gt;::operator()</definition>
+        <argsstring>(ElementT &amp;element)</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor3d::MovableDetacherT::operator()</qualifiedname>
+        <param>
+          <type><ref refid="d9/d73/a04542_1aec7df6754fc974c37f2d768669801128" kindref="member">ElementT</ref> &amp;</type>
+          <declname>element</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/MovableObject.hpp" line="166" column="6" bodyfile="Scene/MovableObject.hpp" bodystart="166" bodyend="169"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="4417">
-        <label>castor3d::TexturedQuad::Vertex</label>
-        <link refid="d9/d6e/a04546"/>
-      </node>
-      <node id="4416">
-        <label>castor3d::TexturedQuad</label>
-        <link refid="d9/d73/a04542"/>
-        <childnode refid="4417" relation="usage">
-          <edgelabel>vertex</edgelabel>
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Render/RenderModule.hpp" line="34" column="1" bodyfile="Render/RenderModule.hpp" bodystart="33" bodyend="42"/>
+    <location file="Scene/MovableObject.hpp" line="162" column="1" bodyfile="Scene/MovableObject.hpp" bodystart="163" bodyend="170"/>
     <listofallmembers>
-      <member refid="d9/d73/a04542_1aff91a561df99650c86eb2d046f4c6919" prot="public" virt="non-virtual"><scope>castor3d::TexturedQuad</scope><name>vertex</name></member>
+      <member refid="d9/d73/a04542_1aec7df6754fc974c37f2d768669801128" prot="public" virt="non-virtual"><scope>castor3d::MovableDetacherT</scope><name>ElementT</name></member>
+      <member refid="d9/d73/a04542_1ac5c319d17beee0533d3deb66470b9a81" prot="public" virt="non-virtual"><scope>castor3d::MovableDetacherT</scope><name>operator()</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,33 +1,668 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d6/deb/a02915" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPhysicalDeviceGroupProperties &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d6/deb/a02915_1a3976eb8cf0e79e44157fa54ed47f4d97" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPhysicalDeviceGroupProperties &gt;::value</definition>
+    <compoundname>castor3d::TextureConfiguration</compoundname>
+    <includes local="no">TextureConfiguration.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="variable" id="d6/deb/a02915_1a05a2089f0200bcc2f8c98dd16996c0f2" prot="public" static="no" mutable="no">
+        <type>castor::Point2ui</type>
+        <definition>castor::Point2ui castor3d::TextureConfiguration::colourMask</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_GROUP_PROPERTIES</initializer>
+        <name>colourMask</name>
+        <qualifiedname>castor3d::TextureConfiguration::colourMask</qualifiedname>
+        <initializer>{ 0u, 0u }</initializer>
+        <briefdescription>
+<para>Masks and start indices, used to filter image components (AARRGGBB). </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para></para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="52" column="18" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1a1017b8e1b11ddf67c472bb33d5ee9651" prot="public" static="no" mutable="no">
+        <type>castor::Point2ui</type>
+        <definition>castor::Point2ui castor3d::TextureConfiguration::specularMask</definition>
+        <argsstring></argsstring>
+        <name>specularMask</name>
+        <qualifiedname>castor3d::TextureConfiguration::specularMask</qualifiedname>
+        <initializer>{ 0u, 0u }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="74" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="74" bodyend="-1"/>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="53" column="18" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1a46ef88d5d5cd0228ef8384874f951142" prot="public" static="no" mutable="no">
+        <type>castor::Point2ui</type>
+        <definition>castor::Point2ui castor3d::TextureConfiguration::metalnessMask</definition>
+        <argsstring></argsstring>
+        <name>metalnessMask</name>
+        <qualifiedname>castor3d::TextureConfiguration::metalnessMask</qualifiedname>
+        <initializer>{ 0u, 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="54" column="18" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1adca365e19ec991730dc151bf607feb94" prot="public" static="no" mutable="no">
+        <type>castor::Point2ui</type>
+        <definition>castor::Point2ui castor3d::TextureConfiguration::glossinessMask</definition>
+        <argsstring></argsstring>
+        <name>glossinessMask</name>
+        <qualifiedname>castor3d::TextureConfiguration::glossinessMask</qualifiedname>
+        <initializer>{ 0u, 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="55" column="18" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1ab2b874728fcb54a6a801040e9a739cb6" prot="public" static="no" mutable="no">
+        <type>castor::Point2ui</type>
+        <definition>castor::Point2ui castor3d::TextureConfiguration::roughnessMask</definition>
+        <argsstring></argsstring>
+        <name>roughnessMask</name>
+        <qualifiedname>castor3d::TextureConfiguration::roughnessMask</qualifiedname>
+        <initializer>{ 0u, 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="56" column="18" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1a50e1bd878e9de8c305d652a7c483d2b8" prot="public" static="no" mutable="no">
+        <type>castor::Point2ui</type>
+        <definition>castor::Point2ui castor3d::TextureConfiguration::opacityMask</definition>
+        <argsstring></argsstring>
+        <name>opacityMask</name>
+        <qualifiedname>castor3d::TextureConfiguration::opacityMask</qualifiedname>
+        <initializer>{ 0u, 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="57" column="18" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1ad5c88e4693af0fbc965a07c1b3cfac2a" prot="public" static="no" mutable="no">
+        <type>castor::Point2ui</type>
+        <definition>castor::Point2ui castor3d::TextureConfiguration::emissiveMask</definition>
+        <argsstring></argsstring>
+        <name>emissiveMask</name>
+        <qualifiedname>castor3d::TextureConfiguration::emissiveMask</qualifiedname>
+        <initializer>{ 0u, 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="58" column="18" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1ae3bf51358d53a19f4849039de7c7fa5f" prot="public" static="no" mutable="no">
+        <type>castor::Point2ui</type>
+        <definition>castor::Point2ui castor3d::TextureConfiguration::normalMask</definition>
+        <argsstring></argsstring>
+        <name>normalMask</name>
+        <qualifiedname>castor3d::TextureConfiguration::normalMask</qualifiedname>
+        <initializer>{ 0u, 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="59" column="18" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1a94a89db0f6ebd7060b09d228554c427f" prot="public" static="no" mutable="no">
+        <type>castor::Point2ui</type>
+        <definition>castor::Point2ui castor3d::TextureConfiguration::heightMask</definition>
+        <argsstring></argsstring>
+        <name>heightMask</name>
+        <qualifiedname>castor3d::TextureConfiguration::heightMask</qualifiedname>
+        <initializer>{ 0u, 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="60" column="18" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1a3b65e53826ea0fd9bb224e9fc855208c" prot="public" static="no" mutable="no">
+        <type>castor::Point2ui</type>
+        <definition>castor::Point2ui castor3d::TextureConfiguration::occlusionMask</definition>
+        <argsstring></argsstring>
+        <name>occlusionMask</name>
+        <qualifiedname>castor3d::TextureConfiguration::occlusionMask</qualifiedname>
+        <initializer>{ 0u, 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="61" column="18" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1a15288b8ff925f1b78bcc11715b942c4a" prot="public" static="no" mutable="no">
+        <type>castor::Point2ui</type>
+        <definition>castor::Point2ui castor3d::TextureConfiguration::transmittanceMask</definition>
+        <argsstring></argsstring>
+        <name>transmittanceMask</name>
+        <qualifiedname>castor3d::TextureConfiguration::transmittanceMask</qualifiedname>
+        <initializer>{ 0u, 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="62" column="18" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="variable" id="d6/deb/a02915_1af23965a94a9babab1b70406a160cf77a" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::TextureConfiguration::normalFactor</definition>
+        <argsstring></argsstring>
+        <name>normalFactor</name>
+        <qualifiedname>castor3d::TextureConfiguration::normalFactor</qualifiedname>
+        <initializer>{ 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Factors. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="73" column="7" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1ae87745fcc34f0fcb467c0a1fcf211abe" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::TextureConfiguration::heightFactor</definition>
+        <argsstring></argsstring>
+        <name>heightFactor</name>
+        <qualifiedname>castor3d::TextureConfiguration::heightFactor</qualifiedname>
+        <initializer>{ 0.1f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="74" column="7" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="variable" id="d6/deb/a02915_1ae673444c3fed9086871c049a59cdf824" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::TextureConfiguration::normalGMultiplier</definition>
+        <argsstring></argsstring>
+        <name>normalGMultiplier</name>
+        <qualifiedname>castor3d::TextureConfiguration::normalGMultiplier</qualifiedname>
+        <initializer>{ 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Miscellaneous. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="85" column="7" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1aca8b015720ca4e9413339fa73f7792aa" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureConfiguration::needsYInversion</definition>
+        <argsstring></argsstring>
+        <name>needsYInversion</name>
+        <qualifiedname>castor3d::TextureConfiguration::needsYInversion</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="86" column="10" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1aab176a1e2e0c162f2ce0a2eb7764b5e2" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/d08/a02911" kindref="compound">TextureTransform</ref></type>
+        <definition>TextureTransform castor3d::TextureConfiguration::transform</definition>
+        <argsstring></argsstring>
+        <name>transform</name>
+        <qualifiedname>castor3d::TextureConfiguration::transform</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="87" column="18" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1ac68614b978222e8f06127cab5167e5d4" prot="public" static="no" mutable="no">
+        <type>castor::Point4ui</type>
+        <definition>castor::Point4ui castor3d::TextureConfiguration::tileSet</definition>
+        <argsstring></argsstring>
+        <name>tileSet</name>
+        <qualifiedname>castor3d::TextureConfiguration::tileSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="88" column="18" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1a8cf554cc4d3b20562b94bfc68afde3a3" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureConfiguration::tiles</definition>
+        <argsstring></argsstring>
+        <name>tiles</name>
+        <qualifiedname>castor3d::TextureConfiguration::tiles</qualifiedname>
+        <initializer>{ 1u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="89" column="10" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1ac0a1052e53ea847443579fe431f3396e" prot="public" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1a25bb1f0235e1c248f89ec5430ef066fa" kindref="member">TextureSpace</ref></type>
+        <definition>TextureSpace castor3d::TextureConfiguration::textureSpace</definition>
+        <argsstring></argsstring>
+        <name>textureSpace</name>
+        <qualifiedname>castor3d::TextureConfiguration::textureSpace</qualifiedname>
+        <initializer>{ <ref refid="da/de3/a01398_1a25bb1f0235e1c248f89ec5430ef066faa933e146a34d99e16a319642574089a34" kindref="member">TextureSpace::eColour</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="90" column="14" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="variable" id="d6/deb/a02915_1a08266317dfaf2b1b3397e8a92d924ff7" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::TextureConfiguration::AlphaMask</definition>
+        <argsstring></argsstring>
+        <name>AlphaMask</name>
+        <qualifiedname>castor3d::TextureConfiguration::AlphaMask</qualifiedname>
+        <initializer>= 0xFF000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Component masks. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="101" column="27" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1a77139eca6daf70effa77cadacbf4f0a1" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::TextureConfiguration::BlueMask</definition>
+        <argsstring></argsstring>
+        <name>BlueMask</name>
+        <qualifiedname>castor3d::TextureConfiguration::BlueMask</qualifiedname>
+        <initializer>= 0x00FF0000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="102" column="27" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1a8072240d1b0b5402696182509486911e" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::TextureConfiguration::GreenMask</definition>
+        <argsstring></argsstring>
+        <name>GreenMask</name>
+        <qualifiedname>castor3d::TextureConfiguration::GreenMask</qualifiedname>
+        <initializer>= 0x0000FF00</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="103" column="27" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1a0faace37898edaabac1d39780339c33c" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::TextureConfiguration::RedMask</definition>
+        <argsstring></argsstring>
+        <name>RedMask</name>
+        <qualifiedname>castor3d::TextureConfiguration::RedMask</qualifiedname>
+        <initializer>= 0x000000FF</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="104" column="27" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1aa7df15ca30e2c88b12952a3cb8942dae" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::TextureConfiguration::RgMask</definition>
+        <argsstring></argsstring>
+        <name>RgMask</name>
+        <qualifiedname>castor3d::TextureConfiguration::RgMask</qualifiedname>
+        <initializer>= <ref refid="d6/deb/a02915_1a0faace37898edaabac1d39780339c33c" kindref="member">RedMask</ref> | <ref refid="d6/deb/a02915_1a8072240d1b0b5402696182509486911e" kindref="member">GreenMask</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="105" column="27" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1aeb89d79621d24a60003abbde6a3f77d3" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::TextureConfiguration::RgbMask</definition>
+        <argsstring></argsstring>
+        <name>RgbMask</name>
+        <qualifiedname>castor3d::TextureConfiguration::RgbMask</qualifiedname>
+        <initializer>= <ref refid="d6/deb/a02915_1aa7df15ca30e2c88b12952a3cb8942dae" kindref="member">RgMask</ref> | <ref refid="d6/deb/a02915_1a77139eca6daf70effa77cadacbf4f0a1" kindref="member">BlueMask</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="106" column="27" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1a849a797776033f681f9a0190beae8b56" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::TextureConfiguration::RgbaMask</definition>
+        <argsstring></argsstring>
+        <name>RgbaMask</name>
+        <qualifiedname>castor3d::TextureConfiguration::RgbaMask</qualifiedname>
+        <initializer>= <ref refid="d6/deb/a02915_1aeb89d79621d24a60003abbde6a3f77d3" kindref="member">RgbMask</ref> | <ref refid="d6/deb/a02915_1a08266317dfaf2b1b3397e8a92d924ff7" kindref="member">AlphaMask</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="107" column="27" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="variable" id="d6/deb/a02915_1a94725c2e24e117b1cc70f49c3b5b1a72" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/deb/a02915" kindref="compound">TextureConfiguration</ref> const</type>
+        <definition>C3D_API TextureConfiguration const castor3d::TextureConfiguration::DiffuseTexture</definition>
+        <argsstring></argsstring>
+        <name>DiffuseTexture</name>
+        <qualifiedname>castor3d::TextureConfiguration::DiffuseTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Predefined texture configurations. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="118" column="43" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="118" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1ae639c36b97bddbc08d8a7d0439b121dc" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/deb/a02915" kindref="compound">TextureConfiguration</ref> const</type>
+        <definition>C3D_API TextureConfiguration const castor3d::TextureConfiguration::AlbedoTexture</definition>
+        <argsstring></argsstring>
+        <name>AlbedoTexture</name>
+        <qualifiedname>castor3d::TextureConfiguration::AlbedoTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="119" column="43" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="119" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1a5ef695d5bade131658f37e1a14f5f59b" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/deb/a02915" kindref="compound">TextureConfiguration</ref> const</type>
+        <definition>C3D_API TextureConfiguration const castor3d::TextureConfiguration::SpecularTexture</definition>
+        <argsstring></argsstring>
+        <name>SpecularTexture</name>
+        <qualifiedname>castor3d::TextureConfiguration::SpecularTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="120" column="43" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1abf8c99efcca210a3096954b172ad0e30" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/deb/a02915" kindref="compound">TextureConfiguration</ref> const</type>
+        <definition>C3D_API TextureConfiguration const castor3d::TextureConfiguration::MetalnessTexture</definition>
+        <argsstring></argsstring>
+        <name>MetalnessTexture</name>
+        <qualifiedname>castor3d::TextureConfiguration::MetalnessTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="121" column="43" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1a5fff4a8b8fcbc6d4722babbf215c75b8" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/deb/a02915" kindref="compound">TextureConfiguration</ref> const</type>
+        <definition>C3D_API TextureConfiguration const castor3d::TextureConfiguration::GlossinessTexture</definition>
+        <argsstring></argsstring>
+        <name>GlossinessTexture</name>
+        <qualifiedname>castor3d::TextureConfiguration::GlossinessTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="122" column="43" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1a7415a5c654a52aaea94cb4ee4c086bf9" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/deb/a02915" kindref="compound">TextureConfiguration</ref> const</type>
+        <definition>C3D_API TextureConfiguration const castor3d::TextureConfiguration::ShininessTexture</definition>
+        <argsstring></argsstring>
+        <name>ShininessTexture</name>
+        <qualifiedname>castor3d::TextureConfiguration::ShininessTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="123" column="43" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="123" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1a12c5aab14be36b3ec068fdbc81092c75" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/deb/a02915" kindref="compound">TextureConfiguration</ref> const</type>
+        <definition>C3D_API TextureConfiguration const castor3d::TextureConfiguration::RoughnessTexture</definition>
+        <argsstring></argsstring>
+        <name>RoughnessTexture</name>
+        <qualifiedname>castor3d::TextureConfiguration::RoughnessTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="124" column="43" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1a012d2bc3ccfc70374032151c7e9e95cd" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/deb/a02915" kindref="compound">TextureConfiguration</ref> const</type>
+        <definition>C3D_API TextureConfiguration const castor3d::TextureConfiguration::OpacityTexture</definition>
+        <argsstring></argsstring>
+        <name>OpacityTexture</name>
+        <qualifiedname>castor3d::TextureConfiguration::OpacityTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="125" column="43" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="125" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1aee510ac41b51e559707df72d38736ddd" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/deb/a02915" kindref="compound">TextureConfiguration</ref> const</type>
+        <definition>C3D_API TextureConfiguration const castor3d::TextureConfiguration::EmissiveTexture</definition>
+        <argsstring></argsstring>
+        <name>EmissiveTexture</name>
+        <qualifiedname>castor3d::TextureConfiguration::EmissiveTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="126" column="43" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="126" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1a1e51a1162a86703d81f7e98c1b4d1cdb" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/deb/a02915" kindref="compound">TextureConfiguration</ref> const</type>
+        <definition>C3D_API TextureConfiguration const castor3d::TextureConfiguration::NormalTexture</definition>
+        <argsstring></argsstring>
+        <name>NormalTexture</name>
+        <qualifiedname>castor3d::TextureConfiguration::NormalTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="127" column="43" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="127" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1abdf1e24f2ebcd26dcee4ab20ff4bddf7" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/deb/a02915" kindref="compound">TextureConfiguration</ref> const</type>
+        <definition>C3D_API TextureConfiguration const castor3d::TextureConfiguration::HeightTexture</definition>
+        <argsstring></argsstring>
+        <name>HeightTexture</name>
+        <qualifiedname>castor3d::TextureConfiguration::HeightTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="128" column="43" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1a02ffd9c3477eba313f1388d35fcb1dfc" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/deb/a02915" kindref="compound">TextureConfiguration</ref> const</type>
+        <definition>C3D_API TextureConfiguration const castor3d::TextureConfiguration::OcclusionTexture</definition>
+        <argsstring></argsstring>
+        <name>OcclusionTexture</name>
+        <qualifiedname>castor3d::TextureConfiguration::OcclusionTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="129" column="43" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/deb/a02915_1ac5b95bac39bad0142c5c6171e810b61f" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/deb/a02915" kindref="compound">TextureConfiguration</ref> const</type>
+        <definition>C3D_API TextureConfiguration const castor3d::TextureConfiguration::TransmittanceTexture</definition>
+        <argsstring></argsstring>
+        <name>TransmittanceTexture</name>
+        <qualifiedname>castor3d::TextureConfiguration::TransmittanceTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="130" column="43" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="130" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>Specifies the usages of a texture, per image component. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="74" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="74" bodyend="74"/>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::TextureConfiguration</label>
+        <link refid="d6/deb/a02915"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>transform</edgelabel>
+        </childnode>
+        <childnode refid="1" relation="usage">
+          <edgelabel>AlbedoTexture</edgelabel>
+          <edgelabel>DiffuseTexture</edgelabel>
+          <edgelabel>EmissiveTexture</edgelabel>
+          <edgelabel>GlossinessTexture</edgelabel>
+          <edgelabel>HeightTexture</edgelabel>
+          <edgelabel>MetalnessTexture</edgelabel>
+          <edgelabel>NormalTexture</edgelabel>
+          <edgelabel>OcclusionTexture</edgelabel>
+          <edgelabel>OpacityTexture</edgelabel>
+          <edgelabel>RoughnessTexture</edgelabel>
+          <edgelabel>...</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::TextureTransform</label>
+        <link refid="d9/d08/a02911"/>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Texture/TextureConfiguration.hpp" line="40" column="1" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="41" bodyend="132"/>
     <listofallmembers>
-      <member refid="d6/deb/a02915_1a3976eb8cf0e79e44157fa54ed47f4d97" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPhysicalDeviceGroupProperties &gt;</scope><name>value</name></member>
+      <member refid="d6/deb/a02915_1ae639c36b97bddbc08d8a7d0439b121dc" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>AlbedoTexture</name></member>
+      <member refid="d6/deb/a02915_1a08266317dfaf2b1b3397e8a92d924ff7" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>AlphaMask</name></member>
+      <member refid="d6/deb/a02915_1a77139eca6daf70effa77cadacbf4f0a1" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>BlueMask</name></member>
+      <member refid="d6/deb/a02915_1a05a2089f0200bcc2f8c98dd16996c0f2" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>colourMask</name></member>
+      <member refid="d6/deb/a02915_1a94725c2e24e117b1cc70f49c3b5b1a72" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>DiffuseTexture</name></member>
+      <member refid="d6/deb/a02915_1ad5c88e4693af0fbc965a07c1b3cfac2a" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>emissiveMask</name></member>
+      <member refid="d6/deb/a02915_1aee510ac41b51e559707df72d38736ddd" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>EmissiveTexture</name></member>
+      <member refid="d6/deb/a02915_1adca365e19ec991730dc151bf607feb94" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>glossinessMask</name></member>
+      <member refid="d6/deb/a02915_1a5fff4a8b8fcbc6d4722babbf215c75b8" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>GlossinessTexture</name></member>
+      <member refid="d6/deb/a02915_1a8072240d1b0b5402696182509486911e" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>GreenMask</name></member>
+      <member refid="d6/deb/a02915_1ae87745fcc34f0fcb467c0a1fcf211abe" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>heightFactor</name></member>
+      <member refid="d6/deb/a02915_1a94a89db0f6ebd7060b09d228554c427f" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>heightMask</name></member>
+      <member refid="d6/deb/a02915_1abdf1e24f2ebcd26dcee4ab20ff4bddf7" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>HeightTexture</name></member>
+      <member refid="d6/deb/a02915_1a46ef88d5d5cd0228ef8384874f951142" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>metalnessMask</name></member>
+      <member refid="d6/deb/a02915_1abf8c99efcca210a3096954b172ad0e30" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>MetalnessTexture</name></member>
+      <member refid="d6/deb/a02915_1aca8b015720ca4e9413339fa73f7792aa" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>needsYInversion</name></member>
+      <member refid="d6/deb/a02915_1af23965a94a9babab1b70406a160cf77a" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>normalFactor</name></member>
+      <member refid="d6/deb/a02915_1ae673444c3fed9086871c049a59cdf824" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>normalGMultiplier</name></member>
+      <member refid="d6/deb/a02915_1ae3bf51358d53a19f4849039de7c7fa5f" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>normalMask</name></member>
+      <member refid="d6/deb/a02915_1a1e51a1162a86703d81f7e98c1b4d1cdb" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>NormalTexture</name></member>
+      <member refid="d6/deb/a02915_1a3b65e53826ea0fd9bb224e9fc855208c" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>occlusionMask</name></member>
+      <member refid="d6/deb/a02915_1a02ffd9c3477eba313f1388d35fcb1dfc" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>OcclusionTexture</name></member>
+      <member refid="d6/deb/a02915_1a50e1bd878e9de8c305d652a7c483d2b8" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>opacityMask</name></member>
+      <member refid="d6/deb/a02915_1a012d2bc3ccfc70374032151c7e9e95cd" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>OpacityTexture</name></member>
+      <member refid="d6/deb/a02915_1a0faace37898edaabac1d39780339c33c" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>RedMask</name></member>
+      <member refid="d6/deb/a02915_1a849a797776033f681f9a0190beae8b56" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>RgbaMask</name></member>
+      <member refid="d6/deb/a02915_1aeb89d79621d24a60003abbde6a3f77d3" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>RgbMask</name></member>
+      <member refid="d6/deb/a02915_1aa7df15ca30e2c88b12952a3cb8942dae" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>RgMask</name></member>
+      <member refid="d6/deb/a02915_1ab2b874728fcb54a6a801040e9a739cb6" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>roughnessMask</name></member>
+      <member refid="d6/deb/a02915_1a12c5aab14be36b3ec068fdbc81092c75" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>RoughnessTexture</name></member>
+      <member refid="d6/deb/a02915_1a7415a5c654a52aaea94cb4ee4c086bf9" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>ShininessTexture</name></member>
+      <member refid="d6/deb/a02915_1a1017b8e1b11ddf67c472bb33d5ee9651" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>specularMask</name></member>
+      <member refid="d6/deb/a02915_1a5ef695d5bade131658f37e1a14f5f59b" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>SpecularTexture</name></member>
+      <member refid="d6/deb/a02915_1ac0a1052e53ea847443579fe431f3396e" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>textureSpace</name></member>
+      <member refid="d6/deb/a02915_1a8cf554cc4d3b20562b94bfc68afde3a3" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>tiles</name></member>
+      <member refid="d6/deb/a02915_1ac68614b978222e8f06127cab5167e5d4" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>tileSet</name></member>
+      <member refid="d6/deb/a02915_1aab176a1e2e0c162f2ce0a2eb7764b5e2" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>transform</name></member>
+      <member refid="d6/deb/a02915_1a15288b8ff925f1b78bcc11715b942c4a" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>transmittanceMask</name></member>
+      <member refid="d6/deb/a02915_1ac5b95bac39bad0142c5c6171e810b61f" prot="public" virt="non-virtual"><scope>castor3d::TextureConfiguration</scope><name>TransmittanceTexture</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

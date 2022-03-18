@@ -1,153 +1,175 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d1/dba/a03896" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::Torus</compoundname>
-    <basecompoundref refid="d2/d05/a03916" prot="public" virt="non-virtual">castor3d::MeshGenerator</basecompoundref>
-    <includes local="no">Torus.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d1/dba/a03896" kind="class" language="C++" prot="private">
+    <compoundname>castor3d::EnvironmentPrefilter::MipRenderCube</compoundname>
+    <basecompoundref refid="d9/dd1/a04340" prot="public" virt="non-virtual">castor3d::RenderCube</basecompoundref>
+    <innerclass refid="d8/da1/a03900" prot="private">castor3d::EnvironmentPrefilter::MipRenderCube::FrameBuffer</innerclass>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d1/dba/a03896_1a2261410e586943082d45419e9cb2b71c" prot="private" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::Torus::m_internalRadius</definition>
+      <memberdef kind="variable" id="d1/dba/a03896_1a72d6d400ab15b103925ad3da5af65fe5" prot="private" static="no" mutable="no">
+        <type>ashes::RenderPass const  &amp;</type>
+        <definition>ashes::RenderPass const&amp; castor3d::EnvironmentPrefilter::MipRenderCube::m_renderPass</definition>
         <argsstring></argsstring>
-        <name>m_internalRadius</name>
+        <name>m_renderPass</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::MipRenderCube::m_renderPass</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Generator/Torus.hpp" line="39" column="1" bodyfile="Model/Mesh/Generator/Torus.hpp" bodystart="39" bodyend="-1"/>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="50" column="26" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="50" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/dba/a03896_1a5f52bf56ad5b848befd623043e8f8e23" prot="private" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::Torus::m_externalRadius</definition>
+      <memberdef kind="variable" id="d1/dba/a03896_1ac79327589ada662a9898be8021a0a311" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/df5/a01395_1a723c56c48a833a5992bd2a5a9a366e45" kindref="member">SamplerResPtr</ref></type>
+        <definition>SamplerResPtr castor3d::EnvironmentPrefilter::MipRenderCube::m_sampler</definition>
         <argsstring></argsstring>
-        <name>m_externalRadius</name>
+        <name>m_sampler</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::MipRenderCube::m_sampler</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Generator/Torus.hpp" line="40" column="1" bodyfile="Model/Mesh/Generator/Torus.hpp" bodystart="40" bodyend="-1"/>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="51" column="15" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="51" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/dba/a03896_1a1ced169079687aab179257dd32c78eb3" prot="private" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::Torus::m_internalNbFaces</definition>
+      <memberdef kind="variable" id="d1/dba/a03896_1acbd9e755f8a9e92f57b03ec9070f2d9c" prot="private" static="no" mutable="no">
+        <type>std::array&lt; FrameBuffer, 6u &gt;</type>
+        <definition>std::array&lt; FrameBuffer, 6u &gt; castor3d::EnvironmentPrefilter::MipRenderCube::m_frameBuffers</definition>
         <argsstring></argsstring>
-        <name>m_internalNbFaces</name>
+        <name>m_frameBuffers</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::MipRenderCube::m_frameBuffers</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Generator/Torus.hpp" line="41" column="1" bodyfile="Model/Mesh/Generator/Torus.hpp" bodystart="41" bodyend="-1"/>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="52" column="12" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="52" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/dba/a03896_1a13c6ef4a2e27fd2a946722b688d5422f" prot="private" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::Torus::m_externalNbFaces</definition>
+      <memberdef kind="variable" id="d1/dba/a03896_1a5ca2088e8c75f2955703459f5a1f506d" prot="private" static="no" mutable="no">
+        <type><ref refid="d0/dd4/a03812" kindref="compound">CommandsSemaphore</ref></type>
+        <definition>CommandsSemaphore castor3d::EnvironmentPrefilter::MipRenderCube::m_commands</definition>
         <argsstring></argsstring>
-        <name>m_externalNbFaces</name>
+        <name>m_commands</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::MipRenderCube::m_commands</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Generator/Torus.hpp" line="42" column="1" bodyfile="Model/Mesh/Generator/Torus.hpp" bodystart="42" bodyend="-1"/>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="53" column="19" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="53" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d1/dba/a03896_1ae3c93c17c8da00684cf7cae08cf28188" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::Torus::Torus</definition>
-        <argsstring>()</argsstring>
-        <name>Torus</name>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Generator/Torus.hpp" line="21" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/dba/a03896_1a605cec5576857c8d91ec98035f3cc559" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::Torus::~Torus</definition>
-        <argsstring>()</argsstring>
-        <name>~Torus</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Generator/Torus.hpp" line="28" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-static-func">
-      <memberdef kind="function" id="d1/dba/a03896_1a67f55e8213492914c85b960ad0ff223e" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> MeshGeneratorSPtr</type>
-        <definition>static C3D_API MeshGeneratorSPtr castor3d::Torus::create</definition>
-        <argsstring>()</argsstring>
-        <name>create</name>
-        <briefdescription>
-<para>Creation function, used by Factory. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para><ref refid="d4/dfc/a03876" kindref="compound">Cylinder</ref> </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Generator/Torus.hpp" line="32" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d1/dba/a03896_1af6596806029ab3cce940d8eb7c9fde76" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>virtual C3D_API void castor3d::Torus::doGenerate</definition>
-        <argsstring>(Mesh &amp;mesh, Parameters const &amp;parameters)</argsstring>
-        <name>doGenerate</name>
-        <reimplements refid="d2/d05/a03916_1a690745122d7e670b311e317ae86c9b45">doGenerate</reimplements>
+      <memberdef kind="function" id="d1/dba/a03896_1abd44f495b438e2d2d22bba3c7d2bc5f7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::EnvironmentPrefilter::MipRenderCube::MipRenderCube</definition>
+        <argsstring>(RenderDevice const &amp;device, QueueData const &amp;queueData, crg::ResourceHandler &amp;handler, ashes::RenderPass const &amp;renderPass, uint32_t mipLevel, VkExtent2D const &amp;originalSize, VkExtent2D const &amp;size, ashes::ImageView const &amp;srcView, Texture const &amp;dstTexture, SamplerResPtr sampler)</argsstring>
+        <name>MipRenderCube</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::MipRenderCube::MipRenderCube</qualifiedname>
         <param>
-          <type><ref refid="dc/dce/a03908" kindref="compound">Mesh</ref> &amp;</type>
-          <declname>mesh</declname>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
         </param>
         <param>
-          <type><ref refid="da/d1e/a01479_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
-          <declname>parameters</declname>
+          <type><ref refid="dd/dde/a03944" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <param>
+          <type>crg::ResourceHandler &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <param>
+          <type>ashes::RenderPass const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>mipLevel</declname>
+        </param>
+        <param>
+          <type>VkExtent2D const &amp;</type>
+          <declname>originalSize</declname>
+        </param>
+        <param>
+          <type>VkExtent2D const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>ashes::ImageView const &amp;</type>
+          <declname>srcView</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d46/a04312" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>dstTexture</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a723c56c48a833a5992bd2a5a9a366e45" kindref="member">SamplerResPtr</ref></type>
+          <declname>sampler</declname>
         </param>
         <briefdescription>
-<para>Generates the mesh. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">mesh</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The mesh. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">parameters</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The generator parameters. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Generator/Torus.hpp" line="35" column="1"/>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="29" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dba/a03896_1af304382f5f40f4884ea144a07000846f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EnvironmentPrefilter::MipRenderCube::registerFrames</definition>
+        <argsstring>()</argsstring>
+        <name>registerFrames</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::MipRenderCube::registerFrames</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="39" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dba/a03896_1a4b5050976aa8064a351331ac157379b0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EnvironmentPrefilter::MipRenderCube::render</definition>
+        <argsstring>(QueueData const &amp;queueData)</argsstring>
+        <name>render</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::MipRenderCube::render</qualifiedname>
+        <param>
+          <type><ref refid="dd/dde/a03944" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="40" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dba/a03896_1a4d166c9e555315495415b85f2efbbd27" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ashes::Semaphore const &amp;</type>
+        <definition>ashes::Semaphore const  &amp; castor3d::EnvironmentPrefilter::MipRenderCube::render</definition>
+        <argsstring>(QueueData const &amp;queueData, ashes::Semaphore const &amp;toWait)</argsstring>
+        <name>render</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::MipRenderCube::render</qualifiedname>
+        <param>
+          <type><ref refid="dd/dde/a03944" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <param>
+          <type>ashes::Semaphore const &amp;</type>
+          <declname>toWait</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="41" column="25"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -155,43 +177,90 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="4510">
-        <label>castor3d::MeshGenerator</label>
-        <link refid="d2/d05/a03916"/>
-      </node>
-      <node id="4509">
-        <label>castor3d::Torus</label>
-        <link refid="d1/dba/a03896"/>
-        <childnode refid="4510" relation="public-inheritance">
+      <node id="1">
+        <label>castor3d::EnvironmentPrefilter::MipRenderCube</label>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::RenderCube</label>
+        <link refid="d9/dd1/a04340"/>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="4512">
-        <label>castor3d::MeshGenerator</label>
-        <link refid="d2/d05/a03916"/>
+      <node id="9">
+        <label>T</label>
       </node>
-      <node id="4511">
-        <label>castor3d::Torus</label>
-        <link refid="d1/dba/a03896"/>
-        <childnode refid="4512" relation="public-inheritance">
+      <node id="1">
+        <label>castor3d::EnvironmentPrefilter::MipRenderCube</label>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::QueuesData</label>
+        <link refid="d3/d70/a03952"/>
+      </node>
+      <node id="2">
+        <label>castor3d::RenderCube</label>
+        <link refid="d9/dd1/a04340"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::RenderDevice</label>
+        <link refid="d2/df2/a03960"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>queueFamilies</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d2/dbb/a04072"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="8">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::vector&lt; QueuesData &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; QueuesData &gt;</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Model/Mesh/Generator/Torus.hpp" line="13" column="1" bodyfile="Model/Mesh/Generator/Torus.hpp" bodystart="11" bodyend="43"/>
+    <location file="Render/PBR/EnvironmentPrefilter.hpp" line="25" column="1" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="27" bodyend="54"/>
     <listofallmembers>
-      <member refid="d2/d05/a03916_1a3207825be521c851f6fc654751f54cf1" prot="public" virt="virtual"><scope>castor3d::Torus</scope><name>computeNormals</name></member>
-      <member refid="d1/dba/a03896_1a67f55e8213492914c85b960ad0ff223e" prot="public" virt="non-virtual"><scope>castor3d::Torus</scope><name>create</name></member>
-      <member refid="d1/dba/a03896_1af6596806029ab3cce940d8eb7c9fde76" prot="private" virt="virtual"><scope>castor3d::Torus</scope><name>doGenerate</name></member>
-      <member refid="d2/d05/a03916_1a9fdc140f2d871ca6cb81029250c346ae" prot="public" virt="virtual"><scope>castor3d::Torus</scope><name>generate</name></member>
-      <member refid="d1/dba/a03896_1a13c6ef4a2e27fd2a946722b688d5422f" prot="private" virt="non-virtual"><scope>castor3d::Torus</scope><name>m_externalNbFaces</name></member>
-      <member refid="d1/dba/a03896_1a5f52bf56ad5b848befd623043e8f8e23" prot="private" virt="non-virtual"><scope>castor3d::Torus</scope><name>m_externalRadius</name></member>
-      <member refid="d1/dba/a03896_1a1ced169079687aab179257dd32c78eb3" prot="private" virt="non-virtual"><scope>castor3d::Torus</scope><name>m_internalNbFaces</name></member>
-      <member refid="d1/dba/a03896_1a2261410e586943082d45419e9cb2b71c" prot="private" virt="non-virtual"><scope>castor3d::Torus</scope><name>m_internalRadius</name></member>
-      <member refid="d2/d05/a03916_1a3ccec3fd88667bbca33c6e81afdeff19" prot="public" virt="non-virtual"><scope>castor3d::Torus</scope><name>MeshGenerator</name></member>
-      <member refid="d1/dba/a03896_1ae3c93c17c8da00684cf7cae08cf28188" prot="public" virt="non-virtual"><scope>castor3d::Torus</scope><name>Torus</name></member>
-      <member refid="d2/d05/a03916_1adee42c7c921b0dff4cbbc99c29faf31f" prot="public" virt="virtual"><scope>castor3d::Torus</scope><name>~MeshGenerator</name></member>
-      <member refid="d1/dba/a03896_1a605cec5576857c8d91ec98035f3cc559" prot="public" virt="non-virtual"><scope>castor3d::Torus</scope><name>~Torus</name></member>
+      <member refid="d9/dd1/a04340_1a3f0330fd2cd0b556433e50c505c2cfd0" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>cleanup</name></member>
+      <member refid="d9/dd1/a04340_1ae58f4e4abbd017b821ad1ce07bd1898c" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>createPipelines</name></member>
+      <member refid="d9/dd1/a04340_1a03e099cd27fb31640352a9925effa710" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>createPipelines</name></member>
+      <member refid="d1/dba/a03896_1a5ca2088e8c75f2955703459f5a1f506d" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>m_commands</name></member>
+      <member refid="d9/dd1/a04340_1af9d5218505481d37eec6dc49f638039a" prot="protected" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>m_device</name></member>
+      <member refid="d1/dba/a03896_1acbd9e755f8a9e92f57b03ec9070f2d9c" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>m_frameBuffers</name></member>
+      <member refid="d9/dd1/a04340_1a84414b79673d6fe5e891f6078bc8b782" prot="protected" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>m_pipelineLayout</name></member>
+      <member refid="d1/dba/a03896_1a72d6d400ab15b103925ad3da5af65fe5" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>m_renderPass</name></member>
+      <member refid="d1/dba/a03896_1ac79327589ada662a9898be8021a0a311" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>m_sampler</name></member>
+      <member refid="d1/dba/a03896_1abd44f495b438e2d2d22bba3c7d2bc5f7" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>MipRenderCube</name></member>
+      <member refid="d9/dd1/a04340_1a83fae0b06a6d865e7b3a9a12bf6ee6ff" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>prepareFrame</name></member>
+      <member refid="d9/dd1/a04340_1a4b8c2a6e867159e5545c6ae52e6ed246" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>registerFrame</name></member>
+      <member refid="d1/dba/a03896_1af304382f5f40f4884ea144a07000846f" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>registerFrames</name></member>
+      <member refid="d1/dba/a03896_1a4b5050976aa8064a351331ac157379b0" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>render</name></member>
+      <member refid="d1/dba/a03896_1a4d166c9e555315495415b85f2efbbd27" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>render</name></member>
+      <member refid="d9/dd1/a04340_1a60adc150ee325694e30b24bbe12c016b" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>RenderCube</name></member>
+      <member refid="d9/dd1/a04340_1a442e2372083596ae51f50d6aa8709e60" prot="public" virt="virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>~RenderCube</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

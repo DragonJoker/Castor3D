@@ -1,23 +1,51 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d1/d90/a05159" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::LightFactory</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">castor::Factory&lt; LightCategory, LightType, LightCategoryUPtr, std::function&lt; LightCategoryUPtr(Light &amp;) &gt; &gt;</basecompoundref>
-    <includes local="no">LightFactory.hpp</includes>
+    <compoundname>castor::TextWriter&lt; castor3d::RsmConfig &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::RsmConfig &gt;</basecompoundref>
+    <includes local="no">TextRsmConfig.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d1/d90/a05159_1a7ebdf8ce1805960773ba9c2a2d36ac53" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d1/d90/a05159_1aca99457a9cac25f6ef11c2974e6c16a5" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::LightFactory::LightFactory</definition>
-        <argsstring>()</argsstring>
-        <name>LightFactory</name>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::RsmConfig &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs)</argsstring>
+        <name>TextWriter</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::RsmConfig &gt;::TextWriter</qualifiedname>
+        <param>
+          <type>String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
         <briefdescription>
-<para>Registers default light types. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Light/LightFactory.hpp" line="25" column="1"/>
+        <location file="Text/TextRsmConfig.hpp" line="18" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d90/a05159_1ac47a901874fa53872b65a81a9dff090a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::RsmConfig &gt;::operator()</definition>
+        <argsstring>(castor3d::RsmConfig const &amp;config, castor::StringStream &amp;file) override</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::RsmConfig &gt;::operator()</qualifiedname>
+        <param>
+          <type><ref refid="d2/d5d/a04511" kindref="compound">castor3d::RsmConfig</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextRsmConfig.hpp" line="19" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -25,30 +53,31 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="1558">
-        <label>castor3d::LightFactory</label>
-        <link refid="d1/d90/a05159"/>
-        <childnode refid="1559" relation="public-inheritance">
-        </childnode>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::RsmConfig &gt;</label>
       </node>
-      <node id="1559">
-        <label>castor::Factory&lt; LightCategory, LightType, LightCategoryUPtr, std::function&lt; LightCategoryUPtr(Light &amp;) &gt; &gt;</label>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::RsmConfig &gt;</label>
+        <link refid="d1/d90/a05159"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="1560">
-        <label>castor3d::LightFactory</label>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::RsmConfig &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::RsmConfig &gt;</label>
         <link refid="d1/d90/a05159"/>
-        <childnode refid="1561" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="1561">
-        <label>castor::Factory&lt; LightCategory, LightType, LightCategoryUPtr, std::function&lt; LightCategoryUPtr(Light &amp;) &gt; &gt;</label>
-      </node>
     </collaborationgraph>
-    <location file="Scene/Light/LightFactory.hpp" line="15" column="1" bodyfile="Scene/Light/LightFactory.hpp" bodystart="13" bodyend="26"/>
+    <location file="Text/TextRsmConfig.hpp" line="14" column="1" bodyfile="Text/TextRsmConfig.hpp" bodystart="16" bodyend="21"/>
     <listofallmembers>
-      <member refid="d1/d90/a05159_1a7ebdf8ce1805960773ba9c2a2d36ac53" prot="public" virt="non-virtual"><scope>castor3d::LightFactory</scope><name>LightFactory</name></member>
+      <member refid="d1/d90/a05159_1ac47a901874fa53872b65a81a9dff090a" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::RsmConfig &gt;</scope><name>operator()</name></member>
+      <member refid="d1/d90/a05159_1aca99457a9cac25f6ef11c2974e6c16a5" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::RsmConfig &gt;</scope><name>TextWriter</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

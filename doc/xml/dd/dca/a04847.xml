@@ -1,268 +1,141 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dd/dca/a04847" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::LpvLightPassConfigT</compoundname>
-    <includes local="no">LightVolumeGIModule.hpp</includes>
-    <templateparamlist>
-      <param>
-        <type>typename LpvResultT</type>
-      </param>
-      <param>
-        <type>typename LpvGridConfigUboT</type>
-      </param>
-    </templateparamlist>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="dd/dca/a04847_1a9953dd65711dfed8d2155a7e0c95cb38" prot="public" static="no" mutable="no">
-        <type><ref refid="dc/d6b/a04731" kindref="compound">LightPassConfig</ref></type>
-        <definition>LightPassConfig castor3d::LpvLightPassConfigT&lt; LpvResultT, LpvGridConfigUboT &gt;::base</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dd/dca/a04847" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::TextureAnimations</compoundname>
+    <includes local="no">GlslTextureAnimation.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dd/dca/a04847_1a670aeedb234b6aa60ac37d23042cf1b7" prot="private" static="no" mutable="no">
+        <type>sdw::ShaderWriter &amp;</type>
+        <definition>sdw::ShaderWriter&amp; castor3d::shader::TextureAnimations::m_writer</definition>
         <argsstring></argsstring>
-        <name>base</name>
+        <name>m_writer</name>
+        <qualifiedname>castor3d::shader::TextureAnimations::m_writer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIModule.hpp" line="86" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIModule.hpp" bodystart="86" bodyend="-1"/>
-        <referencedby refid="db/db4/a04835_1a65b48f1398964b1bd666a838222b401c" compoundref="d7/d46/a00890" startline="56" endline="68">castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;::LightPassLayeredVolumePropagationShadowT</referencedby>
-        <referencedby refid="d4/d10/a04839_1a3cc321c9e48683bfef24686a3ff09586" compoundref="dc/d2c/a00893" startline="52" endline="64">castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;::LightPassVolumePropagationShadowT</referencedby>
+        <location file="Shader/Shaders/GlslTextureAnimation.hpp" line="56" column="20" bodyfile="Shader/Shaders/GlslTextureAnimation.hpp" bodystart="56" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dd/dca/a04847_1a37ee273c7d3ff8a5f0816d9a9f254715" prot="public" static="no" mutable="no">
-        <type><ref refid="d7/dd1/a01458_1a563d137a64a10483b6a4ba4b5174d05d" kindref="member">LightCache</ref> const  &amp;</type>
-        <definition>LightCache const&amp; castor3d::LpvLightPassConfigT&lt; LpvResultT, LpvGridConfigUboT &gt;::lightCache</definition>
+      <memberdef kind="variable" id="dd/dca/a04847_1aa8330f24632b120a2ed55100f728b876" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; sdw::ArraySsboT&lt; <ref refid="d4/d06/a04843" kindref="compound">TextureAnimData</ref> &gt; &gt;</type>
+        <definition>std::unique_ptr&lt; sdw::ArraySsboT&lt; TextureAnimData &gt; &gt; castor3d::shader::TextureAnimations::m_ssbo</definition>
         <argsstring></argsstring>
-        <name>lightCache</name>
+        <name>m_ssbo</name>
+        <qualifiedname>castor3d::shader::TextureAnimations::m_ssbo</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIModule.hpp" line="87" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIModule.hpp" bodystart="87" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslTextureAnimation.hpp" line="57" column="17" bodyfile="Shader/Shaders/GlslTextureAnimation.hpp" bodystart="57" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dd/dca/a04847_1a5a66895602bd38f15a922611781096f1" prot="public" static="no" mutable="no">
-        <type><ref refid="da/d9f/a04859" kindref="compound">OpaquePassResult</ref> const  &amp;</type>
-        <definition>OpaquePassResult const&amp; castor3d::LpvLightPassConfigT&lt; LpvResultT, LpvGridConfigUboT &gt;::gpResult</definition>
-        <argsstring></argsstring>
-        <name>gpResult</name>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/dca/a04847_1a48049a0817b0b39f3f2588982db549b8" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::TextureAnimations::TextureAnimations</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>TextureAnimations</name>
+        <qualifiedname>castor3d::shader::TextureAnimations::TextureAnimations</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIModule.hpp" line="88" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIModule.hpp" bodystart="88" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslTextureAnimation.hpp" line="46" column="18"/>
       </memberdef>
-      <memberdef kind="variable" id="dd/dca/a04847_1add1eb04350e570634cc63a8bbffbbc48" prot="public" static="no" mutable="no">
-        <type><ref refid="db/dc1/a04671" kindref="compound">ShadowMapResult</ref> const  &amp;</type>
-        <definition>ShadowMapResult const&amp; castor3d::LpvLightPassConfigT&lt; LpvResultT, LpvGridConfigUboT &gt;::smResult</definition>
-        <argsstring></argsstring>
-        <name>smResult</name>
+      <memberdef kind="function" id="dd/dca/a04847_1a595a7b26cc008d12fd64c5454fc53729" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::TextureAnimations::TextureAnimations</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, uint32_t binding, uint32_t set, bool enable=true)</argsstring>
+        <name>TextureAnimations</name>
+        <qualifiedname>castor3d::shader::TextureAnimations::TextureAnimations</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enable</declname>
+          <defval>true</defval>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIModule.hpp" line="89" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIModule.hpp" bodystart="89" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslTextureAnimation.hpp" line="47" column="18"/>
       </memberdef>
-      <memberdef kind="variable" id="dd/dca/a04847_1a3f07644454b592d1cb02563855544e87" prot="public" static="no" mutable="no">
-        <type>LpvResultT const  &amp;</type>
-        <definition>LpvResultT const&amp; castor3d::LpvLightPassConfigT&lt; LpvResultT, LpvGridConfigUboT &gt;::lpvResult</definition>
-        <argsstring></argsstring>
-        <name>lpvResult</name>
+      <memberdef kind="function" id="dd/dca/a04847_1a99078e8b7cdb9636c0cd179e13bc0a2e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::TextureAnimations::declare</definition>
+        <argsstring>(uint32_t binding, uint32_t set)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::TextureAnimations::declare</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIModule.hpp" line="90" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIModule.hpp" bodystart="90" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslTextureAnimation.hpp" line="51" column="14"/>
       </memberdef>
-      <memberdef kind="variable" id="dd/dca/a04847_1a813fc163f4ec62fc93aba375df0fd760" prot="public" static="no" mutable="no">
-        <type>LpvGridConfigUboT const  &amp;</type>
-        <definition>LpvGridConfigUboT const&amp; castor3d::LpvLightPassConfigT&lt; LpvResultT, LpvGridConfigUboT &gt;::lpvConfigUbo</definition>
-        <argsstring></argsstring>
-        <name>lpvConfigUbo</name>
+      <memberdef kind="function" id="dd/dca/a04847_1a390d36f6b8226f9e43717842134f78e2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/d06/a04843" kindref="compound">TextureAnimData</ref></type>
+        <definition>C3D_API TextureAnimData castor3d::shader::TextureAnimations::getTextureAnimation</definition>
+        <argsstring>(sdw::UInt const &amp;index) const</argsstring>
+        <name>getTextureAnimation</name>
+        <qualifiedname>castor3d::shader::TextureAnimations::getTextureAnimation</qualifiedname>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>index</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIModule.hpp" line="91" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIModule.hpp" bodystart="91" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslTextureAnimation.hpp" line="53" column="25"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="1833">
-        <label>castor3d::GBufferT&lt; DsTexture &gt;</label>
-        <link refid="de/d93/a04235"/>
-        <childnode refid="1830" relation="private-inheritance">
-        </childnode>
-        <childnode refid="1819" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="1831" relation="template-instance">
-          <edgelabel>&lt; DsTexture &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1818">
-        <label>castor3d::ObjectCacheBase&lt; Light, castor::String &gt;</label>
-        <link refid="d4/dad/a02407"/>
-        <childnode refid="1819" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="1821" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-        <childnode refid="1825" relation="template-instance">
-          <edgelabel>&lt; Light, castor::String &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1816">
-        <label>castor3d::LpvLightPassConfigT&lt; LpvResultT, LpvGridConfigUboT &gt;</label>
-        <link refid="dd/dca/a04847"/>
-        <childnode refid="1817" relation="usage">
-          <edgelabel>lightCache</edgelabel>
-        </childnode>
-        <childnode refid="1826" relation="usage">
-          <edgelabel>base</edgelabel>
-        </childnode>
-        <childnode refid="1832" relation="usage">
-          <edgelabel>gpResult</edgelabel>
-        </childnode>
-        <childnode refid="1834" relation="usage">
-          <edgelabel>smResult</edgelabel>
-        </childnode>
-      </node>
-      <node id="1829">
-        <label>castor3d::GBufferT&lt; LpTexture &gt;</label>
-        <link refid="de/d93/a04235"/>
-        <childnode refid="1830" relation="private-inheritance">
-        </childnode>
-        <childnode refid="1819" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="1831" relation="template-instance">
-          <edgelabel>&lt; LpTexture &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1828">
-        <label>castor3d::LightPassResult</label>
-        <link refid="df/d9b/a04755"/>
-        <childnode refid="1829" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1817">
-        <label>castor3d::ObjectCache&lt; Light, castor::String &gt;</label>
-        <link refid="dc/d6a/a02463"/>
-        <childnode refid="1818" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1834">
-        <label>castor3d::ShadowMapResult</label>
-        <link refid="db/dc1/a04671"/>
-        <childnode refid="1835" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1824">
-        <label>Named</label>
-      </node>
-      <node id="1825">
-        <label>castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</label>
-        <link refid="d4/dad/a02407"/>
-        <childnode refid="1819" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="1821" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-      </node>
-      <node id="1820">
-        <label>castor::Unique&lt; Engine &gt;</label>
-      </node>
-      <node id="1822">
-        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
-      </node>
-      <node id="1823">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="1819">
-        <label>castor3d::Engine</label>
-        <link refid="d0/d7c/a02499"/>
-        <childnode refid="1820" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1827">
-        <label>castor3d::GpInfoUbo</label>
-        <link refid="dd/d83/a05443"/>
-      </node>
-      <node id="1831">
-        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
-        <link refid="de/d93/a04235"/>
-        <childnode refid="1830" relation="private-inheritance">
-        </childnode>
-        <childnode refid="1819" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-      </node>
-      <node id="1826">
-        <label>castor3d::LightPassConfig</label>
-        <link refid="dc/d6b/a04731"/>
-        <childnode refid="1827" relation="usage">
-          <edgelabel>gpInfoUbo</edgelabel>
-        </childnode>
-        <childnode refid="1828" relation="usage">
-          <edgelabel>lpResult</edgelabel>
-        </childnode>
-      </node>
-      <node id="1830">
-        <label>castor3d::GBufferBase</label>
-        <link refid="d7/da1/a04231"/>
-        <childnode refid="1824" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1835">
-        <label>castor3d::GBufferT&lt; SmTexture &gt;</label>
-        <link refid="de/d93/a04235"/>
-        <childnode refid="1830" relation="private-inheritance">
-        </childnode>
-        <childnode refid="1819" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="1831" relation="template-instance">
-          <edgelabel>&lt; SmTexture &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1832">
-        <label>castor3d::OpaquePassResult</label>
-        <link refid="da/d9f/a04859"/>
-        <childnode refid="1833" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1821">
-        <label>castor3d::Scene</label>
-        <link refid="d7/d00/a05223"/>
-        <childnode refid="1822" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1823" relation="public-inheritance">
-        </childnode>
-        <childnode refid="1824" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIModule.hpp" line="85" column="1" bodyfile="Render/Technique/Opaque/LightVolumeGI/LightVolumeGIModule.hpp" bodystart="84" bodyend="92"/>
+    <location file="Shader/Shaders/GlslTextureAnimation.hpp" line="43" column="1" bodyfile="Shader/Shaders/GlslTextureAnimation.hpp" bodystart="44" bodyend="58"/>
     <listofallmembers>
-      <member refid="dd/dca/a04847_1a9953dd65711dfed8d2155a7e0c95cb38" prot="public" virt="non-virtual"><scope>castor3d::LpvLightPassConfigT</scope><name>base</name></member>
-      <member refid="dd/dca/a04847_1a5a66895602bd38f15a922611781096f1" prot="public" virt="non-virtual"><scope>castor3d::LpvLightPassConfigT</scope><name>gpResult</name></member>
-      <member refid="dd/dca/a04847_1a37ee273c7d3ff8a5f0816d9a9f254715" prot="public" virt="non-virtual"><scope>castor3d::LpvLightPassConfigT</scope><name>lightCache</name></member>
-      <member refid="dd/dca/a04847_1a813fc163f4ec62fc93aba375df0fd760" prot="public" virt="non-virtual"><scope>castor3d::LpvLightPassConfigT</scope><name>lpvConfigUbo</name></member>
-      <member refid="dd/dca/a04847_1a3f07644454b592d1cb02563855544e87" prot="public" virt="non-virtual"><scope>castor3d::LpvLightPassConfigT</scope><name>lpvResult</name></member>
-      <member refid="dd/dca/a04847_1add1eb04350e570634cc63a8bbffbbc48" prot="public" virt="non-virtual"><scope>castor3d::LpvLightPassConfigT</scope><name>smResult</name></member>
+      <member refid="dd/dca/a04847_1a99078e8b7cdb9636c0cd179e13bc0a2e" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureAnimations</scope><name>declare</name></member>
+      <member refid="dd/dca/a04847_1a390d36f6b8226f9e43717842134f78e2" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureAnimations</scope><name>getTextureAnimation</name></member>
+      <member refid="dd/dca/a04847_1aa8330f24632b120a2ed55100f728b876" prot="private" virt="non-virtual"><scope>castor3d::shader::TextureAnimations</scope><name>m_ssbo</name></member>
+      <member refid="dd/dca/a04847_1a670aeedb234b6aa60ac37d23042cf1b7" prot="private" virt="non-virtual"><scope>castor3d::shader::TextureAnimations</scope><name>m_writer</name></member>
+      <member refid="dd/dca/a04847_1a48049a0817b0b39f3f2588982db549b8" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureAnimations</scope><name>TextureAnimations</name></member>
+      <member refid="dd/dca/a04847_1a595a7b26cc008d12fd64c5454fc53729" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureAnimations</scope><name>TextureAnimations</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

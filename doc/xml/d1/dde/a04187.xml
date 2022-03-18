@@ -1,128 +1,627 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d1/dde/a04187" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::DummyCuller</compoundname>
-    <basecompoundref refid="dc/d2d/a04211" prot="public" virt="non-virtual">castor3d::SceneCuller</basecompoundref>
-    <includes local="no">DummyCuller.hpp</includes>
+    <compoundname>castor3d::DeferredRendering</compoundname>
+    <includes local="no">DeferredRendering.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/dde/a04187_1ad0f3cf107241c26366185bab90694f54" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::DeferredRendering::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::DeferredRendering::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="139" column="21" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="139" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dde/a04187_1a3987dd92ea2ebc9f601018de8aa711c8" prot="private" static="no" mutable="no">
+        <type>crg::FramePass const  &amp;</type>
+        <definition>crg::FramePass const&amp; castor3d::DeferredRendering::m_opaquePass</definition>
+        <argsstring></argsstring>
+        <name>m_opaquePass</name>
+        <qualifiedname>castor3d::DeferredRendering::m_opaquePass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="140" column="23" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dde/a04187_1adc3691f5e67cf3fa0c761c9fd65bd669" prot="private" static="no" mutable="no">
+        <type>crg::FramePass const  *</type>
+        <definition>crg::FramePass const* castor3d::DeferredRendering::m_lastPass</definition>
+        <argsstring></argsstring>
+        <name>m_lastPass</name>
+        <qualifiedname>castor3d::DeferredRendering::m_lastPass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="141" column="23" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dde/a04187_1a09eb9ba7c0bec5e3eace35158860a101" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/dc2/a04267" kindref="compound">OpaquePassResult</ref> const  &amp;</type>
+        <definition>OpaquePassResult const&amp; castor3d::DeferredRendering::m_opaquePassResult</definition>
+        <argsstring></argsstring>
+        <name>m_opaquePassResult</name>
+        <qualifiedname>castor3d::DeferredRendering::m_opaquePassResult</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="142" column="25" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dde/a04187_1a41ae2ad0fa3465d4576ad6b3eff5a918" prot="private" static="no" mutable="no">
+        <type><ref refid="de/d63/a04887" kindref="compound">GpInfoUbo</ref> const  &amp;</type>
+        <definition>GpInfoUbo const&amp; castor3d::DeferredRendering::m_gpInfoUbo</definition>
+        <argsstring></argsstring>
+        <name>m_gpInfoUbo</name>
+        <qualifiedname>castor3d::DeferredRendering::m_gpInfoUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="143" column="18" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="143" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dde/a04187_1a7cae6e79b6203cf6790e4bca8d091b37" prot="private" static="no" mutable="no">
+        <type>castor::Size</type>
+        <definition>castor::Size castor3d::DeferredRendering::m_size</definition>
+        <argsstring></argsstring>
+        <name>m_size</name>
+        <qualifiedname>castor3d::DeferredRendering::m_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="144" column="14" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="144" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dde/a04187_1ac4a9dc46a309817f54e892ce1a94ff86" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d2d/a04211" kindref="compound">LightPassResult</ref></type>
+        <definition>LightPassResult castor3d::DeferredRendering::m_lightPassResult</definition>
+        <argsstring></argsstring>
+        <name>m_lightPassResult</name>
+        <qualifiedname>castor3d::DeferredRendering::m_lightPassResult</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="145" column="17" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="145" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dde/a04187_1a2c32de4927d0478caa6bf22a10ef4cdd" prot="private" static="no" mutable="no">
+        <type>LightingPassUPtr</type>
+        <definition>LightingPassUPtr castor3d::DeferredRendering::m_lightingPass</definition>
+        <argsstring></argsstring>
+        <name>m_lightingPass</name>
+        <qualifiedname>castor3d::DeferredRendering::m_lightingPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="146" column="18" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="146" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dde/a04187_1ae8d76e442a8ef64cc9c196aaa7bcc19a" prot="private" static="no" mutable="no">
+        <type>IndirectLightingPassUPtr</type>
+        <definition>IndirectLightingPassUPtr castor3d::DeferredRendering::m_indirectLightingPass</definition>
+        <argsstring></argsstring>
+        <name>m_indirectLightingPass</name>
+        <qualifiedname>castor3d::DeferredRendering::m_indirectLightingPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="147" column="26" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="147" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dde/a04187_1afbe553fb05f48bd150db759210e1d695" prot="private" static="no" mutable="no">
+        <type>SubsurfaceScatteringPassUPtr</type>
+        <definition>SubsurfaceScatteringPassUPtr castor3d::DeferredRendering::m_subsurfaceScattering</definition>
+        <argsstring></argsstring>
+        <name>m_subsurfaceScattering</name>
+        <qualifiedname>castor3d::DeferredRendering::m_subsurfaceScattering</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="148" column="30" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="148" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dde/a04187_1a9954ed8e4450ce158133213925aa7fab" prot="private" static="no" mutable="no">
+        <type>OpaqueResolvePassUPtr</type>
+        <definition>OpaqueResolvePassUPtr castor3d::DeferredRendering::m_resolve</definition>
+        <argsstring></argsstring>
+        <name>m_resolve</name>
+        <qualifiedname>castor3d::DeferredRendering::m_resolve</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="149" column="23" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="149" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dde/a04187_1a4e0e8615dec8ddee9460abf6c519aea6" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; ashes::ImagePtr &gt;</type>
+        <definition>std::vector&lt; ashes::ImagePtr &gt; castor3d::DeferredRendering::m_results</definition>
+        <argsstring></argsstring>
+        <name>m_results</name>
+        <qualifiedname>castor3d::DeferredRendering::m_results</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="150" column="13" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="150" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d1/dde/a04187_1a1ffbd417f9ee65af37b676a121777355" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d1/dde/a04187_1a4c898e38dc2aee4c008f51467aedb2ab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::DummyCuller::DummyCuller</definition>
-        <argsstring>(Scene &amp;scene, Camera *camera=nullptr)</argsstring>
-        <name>DummyCuller</name>
+        <definition>C3D_API castor3d::DeferredRendering::DeferredRendering</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePass const &amp;opaquePass, RenderDevice const &amp;device, ProgressBar *progress, Texture const &amp;depth, OpaquePassResult const &amp;opaquePassResult, Texture const &amp;resultTexture, ShadowMapResult const &amp;smDirectionalResult, ShadowMapResult const &amp;smPointResult, ShadowMapResult const &amp;smSpotResult, LightVolumePassResult const &amp;lpvResult, LightVolumePassResultArray const &amp;llpvResult, Texture const &amp;vctFirstBounce, Texture const &amp;vctSecondaryBounce, Texture const &amp;ssao, castor::Size const &amp;size, Scene &amp;scene, SceneUbo const &amp;sceneUbo, HdrConfigUbo const &amp;hdrConfigUbo, GpInfoUbo const &amp;gpInfoUbo, LpvGridConfigUbo const &amp;lpvConfigUbo, LayeredLpvGridConfigUbo const &amp;llpvConfigUbo, VoxelizerUbo const &amp;vctConfigUbo, SsaoConfig &amp;ssaoConfig)</argsstring>
+        <name>DeferredRendering</name>
+        <qualifiedname>castor3d::DeferredRendering::DeferredRendering</qualifiedname>
         <param>
-          <type><ref refid="d7/d00/a05223" kindref="compound">Scene</ref> &amp;</type>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>opaquePass</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d13/a03271" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>depth</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/dc2/a04267" kindref="compound">OpaquePassResult</ref> const &amp;</type>
+          <declname>opaquePassResult</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>resultTexture</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/df1/a04143" kindref="compound">ShadowMapResult</ref> const &amp;</type>
+          <declname>smDirectionalResult</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/df1/a04143" kindref="compound">ShadowMapResult</ref> const &amp;</type>
+          <declname>smPointResult</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/df1/a04143" kindref="compound">ShadowMapResult</ref> const &amp;</type>
+          <declname>smSpotResult</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d3c/a03735" kindref="compound">LightVolumePassResult</ref> const &amp;</type>
+          <declname>lpvResult</declname>
+        </param>
+        <param>
+          <type>LightVolumePassResultArray const &amp;</type>
+          <declname>llpvResult</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>vctFirstBounce</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>vctSecondaryBounce</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>ssao</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dec/a04595" kindref="compound">Scene</ref> &amp;</type>
           <declname>scene</declname>
         </param>
         <param>
-          <type><ref refid="d0/dcf/a05131" kindref="compound">Camera</ref> *</type>
-          <declname>camera</declname>
-          <defval>nullptr</defval>
+          <type><ref refid="da/d70/a04967" kindref="compound">SceneUbo</ref> const &amp;</type>
+          <declname>sceneUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d46/a04895" kindref="compound">HdrConfigUbo</ref> const &amp;</type>
+          <declname>hdrConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d63/a04887" kindref="compound">GpInfoUbo</ref> const &amp;</type>
+          <declname>gpInfoUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/dda/a04911" kindref="compound">LpvGridConfigUbo</ref> const &amp;</type>
+          <declname>lpvConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d7b/a04903" kindref="compound">LayeredLpvGridConfigUbo</ref> const &amp;</type>
+          <declname>llpvConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/de9/a05059" kindref="compound">VoxelizerUbo</ref> const &amp;</type>
+          <declname>vctConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d64/a04167" kindref="compound">SsaoConfig</ref> &amp;</type>
+          <declname>ssaoConfig</declname>
         </param>
         <briefdescription>
+<para>Initialises deferred rendering related stuff. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">graph</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The graph passes group. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">opaquePass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The opaque nodes render pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">progress</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The progress status. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">depth</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render target depth texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">opaquePassResult</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The geometry pass buffers. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">resultTexture</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render technique texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">smDirectionalResult</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The directional lights shadow map. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">smPointResult</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The point lights shadow map. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">smSpotResult</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The spot lights shadow map. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lpvResult</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The LPV result. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">llpvResult</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The Layered LPV result. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">vctFirstBounce</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The VCT first bounce result. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">vctSecondaryBounce</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The VCT secondary bounce result. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ssao</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The SSAO result. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render dimensions. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The rendered scene. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sceneUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">hdrConfigUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The HDR configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">gpInfoUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GBuffer configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lpvConfigUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The LPV configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">llpvConfigUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The Layered LPV configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">vctConfigUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The VCT configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ssaoConfig</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The SSAO configuration. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="77" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dde/a04187_1a959554b22dc56456b29a76817a8ab97f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::DeferredRendering::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::DeferredRendering::update</qualifiedname>
+        <param>
+          <type><ref refid="d6/dae/a04043" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, CPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="109" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dde/a04187_1a458211a355f0e3c9e4a4918835d0abeb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::DeferredRendering::accept</definition>
+        <argsstring>(RenderTechniqueVisitor &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::DeferredRendering::accept</qualifiedname>
+        <param>
+          <type><ref refid="d6/d9f/a04291" kindref="compound">RenderTechniqueVisitor</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Visitor acceptance function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ... visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="118" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dde/a04187_1aeb874d015f17a64203cb30de9e5e4d45" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> crg::ImageViewId const &amp;</type>
+        <definition>C3D_API crg::ImageViewId const  &amp; castor3d::DeferredRendering::getLightDepthImgView</definition>
+        <argsstring>() const</argsstring>
+        <name>getLightDepthImgView</name>
+        <qualifiedname>castor3d::DeferredRendering::getLightDepthImgView</qualifiedname>
+        <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Culling/DummyCuller.hpp" line="15" column="1"/>
+        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="120" column="33"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dde/a04187_1a96b9a37e881ac07517686be0dd4d31ef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/d84/a04315" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>C3D_API Texture const  &amp; castor3d::DeferredRendering::getLightDiffuse</definition>
+        <argsstring>()</argsstring>
+        <name>getLightDiffuse</name>
+        <qualifiedname>castor3d::DeferredRendering::getLightDiffuse</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="121" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dde/a04187_1a7b9a2c9d8e02473bb171d67099176516" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>crg::FramePass const &amp;</type>
+        <definition>crg::FramePass const  &amp; castor3d::DeferredRendering::getLastPass</definition>
+        <argsstring>() const</argsstring>
+        <name>getLastPass</name>
+        <qualifiedname>castor3d::DeferredRendering::getLastPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="123" column="23" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="123" bodyend="126"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d1/dde/a04187_1a3b7badcec4705731e93f3bd939778784" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::DummyCuller::doCullGeometries</definition>
-        <argsstring>() override</argsstring>
-        <name>doCullGeometries</name>
-        <reimplements refid="dc/d2d/a04211_1a0d74224399dca0d24b63fdcfb00e4190">doCullGeometries</reimplements>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d1/dde/a04187_1a2fe018006ea84866260529924ae1ffbb" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>static uint32_t castor3d::DeferredRendering::countInitialisationSteps</definition>
+        <argsstring>()</argsstring>
+        <name>countInitialisationSteps</name>
+        <qualifiedname>castor3d::DeferredRendering::countInitialisationSteps</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Culling/DummyCuller.hpp" line="19" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/dde/a04187_1a5f24e8884b851c418a8420018b638931" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::DummyCuller::doCullBillboards</definition>
-        <argsstring>() override</argsstring>
-        <name>doCullBillboards</name>
-        <reimplements refid="dc/d2d/a04211_1a2fb1e62a81ff84a80abe983dce32ac07">doCullBillboards</reimplements>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Culling/DummyCuller.hpp" line="20" column="1"/>
+        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="128" column="17" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="128" bodyend="136"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="1063">
-        <label>castor3d::SceneCuller</label>
-        <link refid="dc/d2d/a04211"/>
-      </node>
-      <node id="1062">
-        <label>castor3d::DummyCuller</label>
-        <link refid="d1/dde/a04187"/>
-        <childnode refid="1063" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="1065">
-        <label>castor3d::SceneCuller</label>
-        <link refid="dc/d2d/a04211"/>
-      </node>
-      <node id="1064">
-        <label>castor3d::DummyCuller</label>
-        <link refid="d1/dde/a04187"/>
-        <childnode refid="1065" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Render/Culling/DummyCuller.hpp" line="13" column="1" bodyfile="Render/Culling/DummyCuller.hpp" bodystart="11" bodyend="21"/>
+    <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="20" column="1" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="21" bodyend="151"/>
     <listofallmembers>
-      <member refid="dc/d2d/a04211_1a385eeac18cb22989bb3900f38e453a01" prot="public" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>areAllChanged</name></member>
-      <member refid="dc/d2d/a04211_1a28bd1305c7e968e95dfc30a0b60829da" prot="public" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>areCulledChanged</name></member>
-      <member refid="dc/d2d/a04211_1a7857d0d5c604e95479f3fa25346f5c0f" prot="public" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>compute</name></member>
-      <member refid="dc/d2d/a04211_1ad426a8a02ca5248ca852870d93f29b90" prot="public" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>CulledInstanceArrayT</name></member>
-      <member refid="dc/d2d/a04211_1a0b052cfdf0e054608216e99895bf0fcb" prot="public" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>CulledInstancePtrArrayT</name></member>
-      <member refid="dc/d2d/a04211_1aa19eba8ff864b8bd60cabea05b2a8e82" prot="public" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>CulledInstancesPtrT</name></member>
-      <member refid="dc/d2d/a04211_1a9c15fc0d7699cb7f229301f26254823b" prot="public" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>CulledInstancesT</name></member>
-      <member refid="d1/dde/a04187_1a5f24e8884b851c418a8420018b638931" prot="private" virt="virtual"><scope>castor3d::DummyCuller</scope><name>doCullBillboards</name></member>
-      <member refid="d1/dde/a04187_1a3b7badcec4705731e93f3bd939778784" prot="private" virt="virtual"><scope>castor3d::DummyCuller</scope><name>doCullGeometries</name></member>
-      <member refid="d1/dde/a04187_1a1ffbd417f9ee65af37b676a121777355" prot="public" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>DummyCuller</name></member>
-      <member refid="dc/d2d/a04211_1ac412d8e72c7387d38ddafbc7ac4b7a7d" prot="public" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>getAllBillboards</name></member>
-      <member refid="dc/d2d/a04211_1aee63be8adc107e610a558a7b03ac9b4e" prot="public" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>getAllSubmeshes</name></member>
-      <member refid="dc/d2d/a04211_1a077cecd1a46e74a450261a883ddf35b7" prot="public" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>getCamera</name></member>
-      <member refid="dc/d2d/a04211_1a2e5fb1bc4ece5921fd2bdb683071afda" prot="public" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>getCamera</name></member>
-      <member refid="dc/d2d/a04211_1ac5b93c27f1ab0b38b9590df8a208cd09" prot="public" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>getCulledBillboards</name></member>
-      <member refid="dc/d2d/a04211_1a44e20efa2d5a9f3d8e00dbe16399e0cd" prot="public" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>getCulledSubmeshes</name></member>
-      <member refid="dc/d2d/a04211_1a4b4e96df5d91af5e78755bd85efd8d05" prot="protected" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>getInitialInstances</name></member>
-      <member refid="dc/d2d/a04211_1a07511192799a761b32cc0e650bafc3f0" prot="public" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>getMinCastersZ</name></member>
-      <member refid="dc/d2d/a04211_1a6592003d8709c0d012f51a63dae403ae" prot="public" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>getScene</name></member>
-      <member refid="dc/d2d/a04211_1a602a1b5c0447c9a02eaf7d65cde84e8c" prot="public" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>hasCamera</name></member>
-      <member refid="dc/d2d/a04211_1a0cefc1f593cb57eaf843597f115e8c19" prot="protected" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>m_allBillboards</name></member>
-      <member refid="dc/d2d/a04211_1abdf1e8aa03f098948ac9753740fda0b8" prot="protected" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>m_allChanged</name></member>
-      <member refid="dc/d2d/a04211_1a9111d51b93a796b7f1d495600d54df06" prot="protected" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>m_allSubmeshes</name></member>
-      <member refid="dc/d2d/a04211_1af1d4537361720c437487c5dc7398ad96" prot="protected" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>m_cameraChanged</name></member>
-      <member refid="dc/d2d/a04211_1aa41b2a37c6c7712c8123c72161276604" prot="protected" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>m_cameraDirty</name></member>
-      <member refid="dc/d2d/a04211_1abbd3eda69f045c90a4a0854757e03fce" prot="protected" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>m_culledBillboards</name></member>
-      <member refid="dc/d2d/a04211_1a92023fa128d7fd1c053bf5fccb4e7693" prot="protected" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>m_culledChanged</name></member>
-      <member refid="dc/d2d/a04211_1a278e4095875f301d31a3c4f6d4bfbeba" prot="protected" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>m_culledSubmeshes</name></member>
-      <member refid="dc/d2d/a04211_1aaa9431957b2d59de8e4d44f38aec32f7" prot="protected" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>m_instancesCount</name></member>
-      <member refid="dc/d2d/a04211_1a2d7f344f44ea50cbd5d58ee626bf700f" prot="protected" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>m_minCullersZ</name></member>
-      <member refid="dc/d2d/a04211_1a6a4720bed06bf39daf66f477cb308e13" prot="protected" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>m_sceneChanged</name></member>
-      <member refid="dc/d2d/a04211_1a4c384c2709f95373c862a17d31a584ec" prot="protected" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>m_sceneDirty</name></member>
-      <member refid="dc/d2d/a04211_1a332ff2fc76d0928ad82d675f863c1529" prot="public" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>onCompute</name></member>
-      <member refid="dc/d2d/a04211_1aede40b860edfad7c29dcca42ba0379d1" prot="public" virt="non-virtual"><scope>castor3d::DummyCuller</scope><name>SceneCuller</name></member>
-      <member refid="dc/d2d/a04211_1a7a69f93ed1489daa6f657854b04911bc" prot="public" virt="virtual"><scope>castor3d::DummyCuller</scope><name>~SceneCuller</name></member>
+      <member refid="d1/dde/a04187_1a458211a355f0e3c9e4a4918835d0abeb" prot="public" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>accept</name></member>
+      <member refid="d1/dde/a04187_1a2fe018006ea84866260529924ae1ffbb" prot="public" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>countInitialisationSteps</name></member>
+      <member refid="d1/dde/a04187_1a4c898e38dc2aee4c008f51467aedb2ab" prot="public" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>DeferredRendering</name></member>
+      <member refid="d1/dde/a04187_1a7b9a2c9d8e02473bb171d67099176516" prot="public" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>getLastPass</name></member>
+      <member refid="d1/dde/a04187_1aeb874d015f17a64203cb30de9e5e4d45" prot="public" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>getLightDepthImgView</name></member>
+      <member refid="d1/dde/a04187_1a96b9a37e881ac07517686be0dd4d31ef" prot="public" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>getLightDiffuse</name></member>
+      <member refid="d1/dde/a04187_1ad0f3cf107241c26366185bab90694f54" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_device</name></member>
+      <member refid="d1/dde/a04187_1a41ae2ad0fa3465d4576ad6b3eff5a918" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_gpInfoUbo</name></member>
+      <member refid="d1/dde/a04187_1ae8d76e442a8ef64cc9c196aaa7bcc19a" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_indirectLightingPass</name></member>
+      <member refid="d1/dde/a04187_1adc3691f5e67cf3fa0c761c9fd65bd669" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_lastPass</name></member>
+      <member refid="d1/dde/a04187_1a2c32de4927d0478caa6bf22a10ef4cdd" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_lightingPass</name></member>
+      <member refid="d1/dde/a04187_1ac4a9dc46a309817f54e892ce1a94ff86" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_lightPassResult</name></member>
+      <member refid="d1/dde/a04187_1a3987dd92ea2ebc9f601018de8aa711c8" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_opaquePass</name></member>
+      <member refid="d1/dde/a04187_1a09eb9ba7c0bec5e3eace35158860a101" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_opaquePassResult</name></member>
+      <member refid="d1/dde/a04187_1a9954ed8e4450ce158133213925aa7fab" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_resolve</name></member>
+      <member refid="d1/dde/a04187_1a4e0e8615dec8ddee9460abf6c519aea6" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_results</name></member>
+      <member refid="d1/dde/a04187_1a7cae6e79b6203cf6790e4bca8d091b37" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_size</name></member>
+      <member refid="d1/dde/a04187_1afbe553fb05f48bd150db759210e1d695" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_subsurfaceScattering</name></member>
+      <member refid="d1/dde/a04187_1a959554b22dc56456b29a76817a8ab97f" prot="public" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>update</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

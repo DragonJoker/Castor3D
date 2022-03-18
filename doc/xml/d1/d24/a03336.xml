@@ -1,33 +1,974 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d1/d24/a03336" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPipelineViewportSwizzleStateCreateInfoNV &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d1/d24/a03336_1ac1af3c7d010165b7bef567e257a93d62" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPipelineViewportSwizzleStateCreateInfoNV &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d1/d24/a03336" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Mesh</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::Named</basecompoundref>
+    <basecompoundref refid="d8/d5f/a02216" prot="public" virt="non-virtual">castor3d::AnimableT&lt; Engine &gt;</basecompoundref>
+    <includes local="no">Mesh.hpp</includes>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="d1/d24/a03336_1a1a16ada784391cfa779128881e4ae894" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class MeshGenerator</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_SWIZZLE_STATE_CREATE_INFO_NV</initializer>
+        <name>MeshGenerator</name>
+        <qualifiedname>castor3d::Mesh::MeshGenerator</qualifiedname>
+        <param>
+          <type><ref refid="da/dcf/a03344" kindref="compound">MeshGenerator</ref></type>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="245" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="245" bodyend="-1"/>
+        <location file="Model/Mesh/Mesh.hpp" line="304" column="14" bodyfile="Model/Mesh/Mesh.hpp" bodystart="304" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="d1/d24/a03336_1a068a7801b99ff97c8903aba1b4af5c8c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class BinaryWriter&lt; Mesh &gt;</definition>
+        <argsstring></argsstring>
+        <name>BinaryWriter&lt; Mesh &gt;</name>
+        <qualifiedname>castor3d::Mesh::BinaryWriter&lt; Mesh &gt;</qualifiedname>
+        <param>
+          <type><ref refid="df/d49/a02340" kindref="compound">BinaryWriter</ref>&lt; <ref refid="d1/d24/a03336" kindref="compound">Mesh</ref> &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="313" column="6" bodyfile="Model/Mesh/Mesh.hpp" bodystart="315" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="d1/d24/a03336_1a70663e3e4ba942d191a340d2d3fb1004" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class BinaryParser&lt; Mesh &gt;</definition>
+        <argsstring></argsstring>
+        <name>BinaryParser&lt; Mesh &gt;</name>
+        <qualifiedname>castor3d::Mesh::BinaryParser&lt; Mesh &gt;</qualifiedname>
+        <param>
+          <type><ref refid="d1/d03/a02332" kindref="compound">BinaryParser</ref>&lt; <ref refid="d1/d24/a03336" kindref="compound">Mesh</ref> &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="313" column="6" bodyfile="Model/Mesh/Mesh.hpp" bodystart="316" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/d24/a03336_1a97a09f41999aa9feb5d9273f1d1761a5" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d34/a04592" kindref="compound">Scene</ref> *</type>
+        <definition>Scene* castor3d::Mesh::m_scene</definition>
+        <argsstring></argsstring>
+        <name>m_scene</name>
+        <qualifiedname>castor3d::Mesh::m_scene</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="307" column="8" bodyfile="Model/Mesh/Mesh.hpp" bodystart="307" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d24/a03336_1ae96f6f2ce11657ebd5708586435b5a27" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::Mesh::m_modified</definition>
+        <argsstring></argsstring>
+        <name>m_modified</name>
+        <qualifiedname>castor3d::Mesh::m_modified</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="308" column="6" bodyfile="Model/Mesh/Mesh.hpp" bodystart="308" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d24/a03336_1a4289f802ba2abbb5ddc2eb2f0d40d914" prot="private" static="no" mutable="no">
+        <type>castor::BoundingBox</type>
+        <definition>castor::BoundingBox castor3d::Mesh::m_box</definition>
+        <argsstring></argsstring>
+        <name>m_box</name>
+        <qualifiedname>castor3d::Mesh::m_box</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="309" column="21" bodyfile="Model/Mesh/Mesh.hpp" bodystart="309" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d24/a03336_1a07cc5e0e98a55b3385809383f7c79046" prot="private" static="no" mutable="no">
+        <type>castor::BoundingSphere</type>
+        <definition>castor::BoundingSphere castor3d::Mesh::m_sphere</definition>
+        <argsstring></argsstring>
+        <name>m_sphere</name>
+        <qualifiedname>castor3d::Mesh::m_sphere</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="310" column="24" bodyfile="Model/Mesh/Mesh.hpp" bodystart="310" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d24/a03336_1a5d29c9c3bad293db415a794c7c08d6fd" prot="private" static="no" mutable="no">
+        <type>SubmeshPtrArray</type>
+        <definition>SubmeshPtrArray castor3d::Mesh::m_submeshes</definition>
+        <argsstring></argsstring>
+        <name>m_submeshes</name>
+        <qualifiedname>castor3d::Mesh::m_submeshes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="311" column="17" bodyfile="Model/Mesh/Mesh.hpp" bodystart="311" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d24/a03336_1aadb8e3098664568d697d764ad535e409" prot="private" static="no" mutable="no">
+        <type>SkeletonSPtr</type>
+        <definition>SkeletonSPtr castor3d::Mesh::m_skeleton</definition>
+        <argsstring></argsstring>
+        <name>m_skeleton</name>
+        <qualifiedname>castor3d::Mesh::m_skeleton</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="312" column="14" bodyfile="Model/Mesh/Mesh.hpp" bodystart="312" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d24/a03336_1a7bfbd1e4569ac0362e0e65eba5058ea6" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::Mesh::m_serialisable</definition>
+        <argsstring></argsstring>
+        <name>m_serialisable</name>
+        <qualifiedname>castor3d::Mesh::m_serialisable</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="313" column="6" bodyfile="Model/Mesh/Mesh.hpp" bodystart="313" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d24/a03336_1ae6e4019ad2b5e8fc1ba8b3c30d7f4a12" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Mesh::Mesh</definition>
+        <argsstring>(castor::String const &amp;name, Scene &amp;scene)</argsstring>
+        <name>Mesh</name>
+        <qualifiedname>castor3d::Mesh::Mesh</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d34/a04592" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>This mesh name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent scene. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="39" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1a493c25b31ac5c235af3122f2001421a9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Mesh::~Mesh</definition>
+        <argsstring>() override</argsstring>
+        <name>~Mesh</name>
+        <qualifiedname>castor3d::Mesh::~Mesh</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="47" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1afaa58c8bd779c55939803a6386d21768" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Mesh::Mesh</definition>
+        <argsstring>(Mesh &amp;&amp;rhs)=default</argsstring>
+        <name>Mesh</name>
+        <qualifiedname>castor3d::Mesh::Mesh</qualifiedname>
+        <param>
+          <type><ref refid="d1/d24/a03336" kindref="compound">Mesh</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Move constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="54" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1a8b716f3b0cad08bc0598b5c29380cd3f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/d24/a03336" kindref="compound">Mesh</ref> &amp;</type>
+        <definition>C3D_API Mesh &amp; castor3d::Mesh::operator=</definition>
+        <argsstring>(Mesh &amp;&amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::Mesh::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d1/d24/a03336" kindref="compound">Mesh</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Move assignment operator. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="61" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1a31d4bdcf1d072e93f4cdcffa2c099daa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Mesh::Mesh</definition>
+        <argsstring>(Mesh const &amp;rhs)=delete</argsstring>
+        <name>Mesh</name>
+        <qualifiedname>castor3d::Mesh::Mesh</qualifiedname>
+        <param>
+          <type><ref refid="d1/d24/a03336" kindref="compound">Mesh</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Copy constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="68" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1a3afecd9cd434b61a5f162a14ae9a6b61" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/d24/a03336" kindref="compound">Mesh</ref> &amp;</type>
+        <definition>C3D_API Mesh &amp; castor3d::Mesh::operator=</definition>
+        <argsstring>(Mesh const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::Mesh::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d1/d24/a03336" kindref="compound">Mesh</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Copy assignment operator. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="75" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1a71f6f75dbb82c14ed1200c54a442a50e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Mesh::initialise</definition>
+        <argsstring>()</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::Mesh::initialise</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="76" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1a72cbfbfd3e19549c2760019890173c60" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Mesh::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor3d::Mesh::cleanup</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="77" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1a3845df030ada47db5721e341a8f36b8c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Mesh::updateContainers</definition>
+        <argsstring>()</argsstring>
+        <name>updateContainers</name>
+        <qualifiedname>castor3d::Mesh::updateContainers</qualifiedname>
+        <briefdescription>
+<para>Computes the bounding box and sphere from the submeshes. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="84" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1ae0c03c3bf358fcd1f1d9386e06c60366" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Mesh::computeContainers</definition>
+        <argsstring>()</argsstring>
+        <name>computeContainers</name>
+        <qualifiedname>castor3d::Mesh::computeContainers</qualifiedname>
+        <briefdescription>
+<para>Computes the bounding box and sphere. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="91" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1a1a4002edf75c0cb4a8119ec9c30b73a2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::Mesh::getFaceCount</definition>
+        <argsstring>() const</argsstring>
+        <name>getFaceCount</name>
+        <qualifiedname>castor3d::Mesh::getFaceCount</qualifiedname>
+        <briefdescription>
+<para>Returns the total faces count. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The faces count </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="100" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1a0016ea32282bf4444980483a99d93d21" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::Mesh::getVertexCount</definition>
+        <argsstring>() const</argsstring>
+        <name>getVertexCount</name>
+        <qualifiedname>castor3d::Mesh::getVertexCount</qualifiedname>
+        <briefdescription>
+<para>Returns the total vertex count. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The vertex count </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="109" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1ae54729e5699607c929d58f0cc6d3a18e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> SubmeshSPtr</type>
+        <definition>C3D_API SubmeshSPtr castor3d::Mesh::getSubmesh</definition>
+        <argsstring>(uint32_t index) const</argsstring>
+        <name>getSubmesh</name>
+        <qualifiedname>castor3d::Mesh::getSubmesh</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Tries to retrieve the submesh at the given index. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The wanted submesh index </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The found submesh, nullptr if not found </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="120" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1a5ef7917e650ee2a61adea8c333858045" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> SubmeshSPtr</type>
+        <definition>C3D_API SubmeshSPtr castor3d::Mesh::createSubmesh</definition>
+        <argsstring>()</argsstring>
+        <name>createSubmesh</name>
+        <qualifiedname>castor3d::Mesh::createSubmesh</qualifiedname>
+        <briefdescription>
+<para>Creates a submesh. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The created submesh </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="129" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1a75edace82ba70b67b3c2253087bcb042" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Mesh::deleteSubmesh</definition>
+        <argsstring>(SubmeshSPtr &amp;submesh)</argsstring>
+        <name>deleteSubmesh</name>
+        <qualifiedname>castor3d::Mesh::deleteSubmesh</qualifiedname>
+        <param>
+          <type>SubmeshSPtr &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <briefdescription>
+<para>Deletes a given submesh if it is in the mesh&apos;s submeshes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The submesh to delete </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="138" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1a7238cc5a200c976fd43cb7e9b11bae47" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Mesh::computeNormals</definition>
+        <argsstring>(bool reverted=false)</argsstring>
+        <name>computeNormals</name>
+        <qualifiedname>castor3d::Mesh::computeNormals</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>reverted</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>Generates normals and tangents. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="145" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1aff69a0d283c7676a2359b2523c071a2c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Mesh::setSkeleton</definition>
+        <argsstring>(SkeletonSPtr skeleton)</argsstring>
+        <name>setSkeleton</name>
+        <qualifiedname>castor3d::Mesh::setSkeleton</qualifiedname>
+        <param>
+          <type>SkeletonSPtr</type>
+          <declname>skeleton</declname>
+        </param>
+        <briefdescription>
+<para>Sets the skeleton. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">skeleton</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="154" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1afa44ca9f2dd147f19ed891085af8d6ea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/d25/a03284" kindref="compound">MeshAnimation</ref> &amp;</type>
+        <definition>C3D_API MeshAnimation &amp; castor3d::Mesh::createAnimation</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>createAnimation</name>
+        <qualifiedname>castor3d::Mesh::createAnimation</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Creates an animation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation name </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The animation </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="165" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1adb3f3c9760670a63f3cc453d7f2bf6ef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Mesh::removeAnimation</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>removeAnimation</name>
+        <qualifiedname>castor3d::Mesh::removeAnimation</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Removes an animation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation name </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="174" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1ae5d09a82d74bbaca288bcb59b9bf0008" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>SubmeshPtrArrayIt</type>
+        <definition>SubmeshPtrArrayIt castor3d::Mesh::begin</definition>
+        <argsstring>()</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor3d::Mesh::begin</qualifiedname>
+        <briefdescription>
+<para>Retrieves an iterator to the begin of the submeshes. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="181" column="26" bodyfile="Model/Mesh/Mesh.hpp" bodystart="181" bodyend="184"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1a2fbc3f1fff9908b981650116200a8b3b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>SubmeshPtrArrayConstIt</type>
+        <definition>SubmeshPtrArrayConstIt castor3d::Mesh::begin</definition>
+        <argsstring>() const</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor3d::Mesh::begin</qualifiedname>
+        <briefdescription>
+<para>Retrieves a constant iterator to the begin of the submeshes. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="191" column="31" bodyfile="Model/Mesh/Mesh.hpp" bodystart="191" bodyend="194"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1ad7575627b37c1a57eae5d793f94b9c95" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>SubmeshPtrArrayIt</type>
+        <definition>SubmeshPtrArrayIt castor3d::Mesh::end</definition>
+        <argsstring>()</argsstring>
+        <name>end</name>
+        <qualifiedname>castor3d::Mesh::end</qualifiedname>
+        <briefdescription>
+<para>Retrieves an iterator to the end of the submeshes. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="201" column="26" bodyfile="Model/Mesh/Mesh.hpp" bodystart="201" bodyend="204"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1a1df001f0c165fffd13475eec3265186f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>SubmeshPtrArrayConstIt</type>
+        <definition>SubmeshPtrArrayConstIt castor3d::Mesh::end</definition>
+        <argsstring>() const</argsstring>
+        <name>end</name>
+        <qualifiedname>castor3d::Mesh::end</qualifiedname>
+        <briefdescription>
+<para>Retrieves a constant iterator to the end of the submeshes. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="211" column="31" bodyfile="Model/Mesh/Mesh.hpp" bodystart="211" bodyend="214"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1ac0c9924a2aa82e1c91a79983fd4ecdb7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::Mesh::isModified</definition>
+        <argsstring>() const</argsstring>
+        <name>isModified</name>
+        <qualifiedname>castor3d::Mesh::isModified</qualifiedname>
+        <briefdescription>
+<para>Retrieves the modify status. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="223" column="13" bodyfile="Model/Mesh/Mesh.hpp" bodystart="223" bodyend="226"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1acb7edbbc07cb86605c258453b4c28944" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Mesh::getSubmeshCount</definition>
+        <argsstring>() const</argsstring>
+        <name>getSubmeshCount</name>
+        <qualifiedname>castor3d::Mesh::getSubmeshCount</qualifiedname>
+        <briefdescription>
+<para>Retrieves the submesh count. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="235" column="17" bodyfile="Model/Mesh/Mesh.hpp" bodystart="235" bodyend="238"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1aad932584e1e171e8801c9be66df18479" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::BoundingBox const &amp;</type>
+        <definition>castor::BoundingBox const  &amp; castor3d::Mesh::getBoundingBox</definition>
+        <argsstring>() const</argsstring>
+        <name>getBoundingBox</name>
+        <qualifiedname>castor3d::Mesh::getBoundingBox</qualifiedname>
+        <briefdescription>
+<para>Retrieves the collision box. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="247" column="35" bodyfile="Model/Mesh/Mesh.hpp" bodystart="247" bodyend="250"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1af4cadbd5d247c9d65b5186d29e4cfb9d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::BoundingSphere const &amp;</type>
+        <definition>castor::BoundingSphere const  &amp; castor3d::Mesh::getBoundingSphere</definition>
+        <argsstring>() const</argsstring>
+        <name>getBoundingSphere</name>
+        <qualifiedname>castor3d::Mesh::getBoundingSphere</qualifiedname>
+        <briefdescription>
+<para>Retrieves the collision sphere. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="259" column="38" bodyfile="Model/Mesh/Mesh.hpp" bodystart="259" bodyend="262"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1a806210cad3cdf307cdec2f272fe4b4c2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>SkeletonSPtr</type>
+        <definition>SkeletonSPtr castor3d::Mesh::getSkeleton</definition>
+        <argsstring>() const</argsstring>
+        <name>getSkeleton</name>
+        <qualifiedname>castor3d::Mesh::getSkeleton</qualifiedname>
+        <briefdescription>
+<para>Retrieves the skeleton. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="271" column="21" bodyfile="Model/Mesh/Mesh.hpp" bodystart="271" bodyend="274"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1a09e4294663ddfe20096bc9a24bb29b6c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::Mesh::isSerialisable</definition>
+        <argsstring>() const</argsstring>
+        <name>isSerialisable</name>
+        <qualifiedname>castor3d::Mesh::isSerialisable</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The serialisable status. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="281" column="13" bodyfile="Model/Mesh/Mesh.hpp" bodystart="281" bodyend="284"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1a7989f0a908aa27346dd0fb928c213d83" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Mesh::setSerialisable</definition>
+        <argsstring>(bool value)</argsstring>
+        <name>setSerialisable</name>
+        <qualifiedname>castor3d::Mesh::setSerialisable</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Sets the serialisable status. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="293" column="13" bodyfile="Model/Mesh/Mesh.hpp" bodystart="293" bodyend="296"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03336_1a42b8cc89bafd595a5f2937f80f2a1f33" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>SceneRPtr</type>
+        <definition>SceneRPtr castor3d::Mesh::getScene</definition>
+        <argsstring>() const</argsstring>
+        <name>getScene</name>
+        <qualifiedname>castor3d::Mesh::getScene</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="298" column="11" bodyfile="Model/Mesh/Mesh.hpp" bodystart="298" bodyend="301"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d1/d24/a03336_1a073ffe191f7a7902bb2e45ef3c466bbd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::Mesh::CU_DeclareVector</definition>
+        <argsstring>(AnimationPtrStrMap, AnimationMap)</argsstring>
+        <name>CU_DeclareVector</name>
+        <qualifiedname>castor3d::Mesh::CU_DeclareVector</qualifiedname>
+        <param>
+          <type><ref refid="d8/d5f/a02216_1af6c9f4d7479c5f8a0431ffe7cc988273" kindref="member">AnimationPtrStrMap</ref></type>
+        </param>
+        <param>
+          <type>AnimationMap</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Mesh.hpp" line="305" column="1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="245" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="245" bodyend="245"/>
+    <inheritancegraph>
+      <node id="3">
+        <label>Animable</label>
+        <link refid="d8/d5f/a02216"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d8/d5f/a02216"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::Mesh</label>
+        <link refid="d1/d24/a03336"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+      </node>
+      <node id="6">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>Animable</label>
+        <link refid="d8/d5f/a02216"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>K</label>
+      </node>
+      <node id="8">
+        <label>T</label>
+      </node>
+      <node id="9">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d8/d5f/a02216"/>
+        <childnode refid="10" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::Mesh</label>
+        <link refid="d1/d24/a03336"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+      </node>
+      <node id="10">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="5">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/Mesh.hpp" line="24" column="1" bodyfile="Model/Mesh/Mesh.hpp" bodystart="27" bodyend="317"/>
     <listofallmembers>
-      <member refid="d1/d24/a03336_1ac1af3c7d010165b7bef567e257a93d62" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPipelineViewportSwizzleStateCreateInfoNV &gt;</scope><name>value</name></member>
+      <member refid="d8/d5f/a02216_1af537797cc01d440454c256b7d93134a7" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>addAnimation</name></member>
+      <member refid="d8/d5f/a02216_1acce1c5516d8c2b672521f796eca097f6" prot="protected" virt="non-virtual"><scope>castor3d::Mesh</scope><name>AnimableT</name></member>
+      <member refid="d8/d5f/a02216_1afe54e724ce1c5fd9741352a83cc15310" prot="protected" virt="non-virtual"><scope>castor3d::Mesh</scope><name>AnimableT</name></member>
+      <member refid="d8/d5f/a02216_1aa7d1ea320b354786c4d88e06999ce873" prot="protected" virt="non-virtual"><scope>castor3d::Mesh</scope><name>AnimableT</name></member>
+      <member refid="d8/d5f/a02216_1a29ec9b70c2d5c178be151157abb4caa4" prot="protected" virt="non-virtual"><scope>castor3d::Mesh</scope><name>Animation</name></member>
+      <member refid="d8/d5f/a02216_1aca88557443e107614050566026b351d2" prot="protected" virt="non-virtual"><scope>castor3d::Mesh</scope><name>AnimationPtr</name></member>
+      <member refid="d8/d5f/a02216_1af6c9f4d7479c5f8a0431ffe7cc988273" prot="protected" virt="non-virtual"><scope>castor3d::Mesh</scope><name>AnimationPtrStrMap</name></member>
+      <member refid="d1/d24/a03336_1ae5d09a82d74bbaca288bcb59b9bf0008" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>begin</name></member>
+      <member refid="d1/d24/a03336_1a2fbc3f1fff9908b981650116200a8b3b" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>begin</name></member>
+      <member refid="d1/d24/a03336_1a70663e3e4ba942d191a340d2d3fb1004" prot="private" virt="non-virtual"><scope>castor3d::Mesh</scope><name>BinaryParser&lt; Mesh &gt;</name></member>
+      <member refid="d1/d24/a03336_1a068a7801b99ff97c8903aba1b4af5c8c" prot="private" virt="non-virtual"><scope>castor3d::Mesh</scope><name>BinaryWriter&lt; Mesh &gt;</name></member>
+      <member refid="d1/d24/a03336_1a72cbfbfd3e19549c2760019890173c60" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>cleanup</name></member>
+      <member refid="d8/d5f/a02216_1a54363c138d022e02a6da2881e8cfcea2" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>cleanupAnimations</name></member>
+      <member refid="d1/d24/a03336_1ae0c03c3bf358fcd1f1d9386e06c60366" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>computeContainers</name></member>
+      <member refid="d1/d24/a03336_1a7238cc5a200c976fd43cb7e9b11bae47" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>computeNormals</name></member>
+      <member refid="d1/d24/a03336_1afa44ca9f2dd147f19ed891085af8d6ea" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>createAnimation</name></member>
+      <member refid="d1/d24/a03336_1a5ef7917e650ee2a61adea8c333858045" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>createSubmesh</name></member>
+      <member refid="d1/d24/a03336_1a073ffe191f7a7902bb2e45ef3c466bbd" prot="private" virt="non-virtual"><scope>castor3d::Mesh</scope><name>CU_DeclareVector</name></member>
+      <member refid="d1/d24/a03336_1a75edace82ba70b67b3c2253087bcb042" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>deleteSubmesh</name></member>
+      <member refid="d8/d5f/a02216_1a1bebab2a91849a6d03743a60742855d2" prot="protected" virt="non-virtual"><scope>castor3d::Mesh</scope><name>doGetAnimation</name></member>
+      <member refid="d8/d5f/a02216_1ab0befd7350748e1d432232aef30bf3af" prot="protected" virt="non-virtual"><scope>castor3d::Mesh</scope><name>doGetAnimation</name></member>
+      <member refid="d8/d5f/a02216_1a5c0a28cfebad1a69862d34d5f15f9341" prot="protected" virt="non-virtual"><scope>castor3d::Mesh</scope><name>doRemoveAnimation</name></member>
+      <member refid="d1/d24/a03336_1ad7575627b37c1a57eae5d793f94b9c95" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>end</name></member>
+      <member refid="d1/d24/a03336_1a1df001f0c165fffd13475eec3265186f" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>end</name></member>
+      <member refid="d8/d5f/a02216_1ab4eee25a3c5fa4b3ac239c9d94e41aed" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>getAnimation</name></member>
+      <member refid="d8/d5f/a02216_1a9a19c79051ae04d61170004d981d72c3" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>getAnimation</name></member>
+      <member refid="d8/d5f/a02216_1ac571ecbb144caf52d813ae3c838d8455" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>getAnimations</name></member>
+      <member refid="d1/d24/a03336_1aad932584e1e171e8801c9be66df18479" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>getBoundingBox</name></member>
+      <member refid="d1/d24/a03336_1af4cadbd5d247c9d65b5186d29e4cfb9d" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>getBoundingSphere</name></member>
+      <member refid="d1/d24/a03336_1a1a4002edf75c0cb4a8119ec9c30b73a2" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>getFaceCount</name></member>
+      <member refid="d1/d24/a03336_1a42b8cc89bafd595a5f2937f80f2a1f33" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>getScene</name></member>
+      <member refid="d1/d24/a03336_1a806210cad3cdf307cdec2f272fe4b4c2" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>getSkeleton</name></member>
+      <member refid="d1/d24/a03336_1ae54729e5699607c929d58f0cc6d3a18e" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>getSubmesh</name></member>
+      <member refid="d1/d24/a03336_1acb7edbbc07cb86605c258453b4c28944" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>getSubmeshCount</name></member>
+      <member refid="d1/d24/a03336_1a0016ea32282bf4444980483a99d93d21" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>getVertexCount</name></member>
+      <member refid="d8/d5f/a02216_1ab96f3e18b0d1e54dccfa3fa9078f773f" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>hasAnimation</name></member>
+      <member refid="d8/d5f/a02216_1ad49b8e50e5ed96d16d9c50c3854e0a22" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>hasAnimation</name></member>
+      <member refid="d1/d24/a03336_1a71f6f75dbb82c14ed1200c54a442a50e" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>initialise</name></member>
+      <member refid="d1/d24/a03336_1ac0c9924a2aa82e1c91a79983fd4ecdb7" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>isModified</name></member>
+      <member refid="d1/d24/a03336_1a09e4294663ddfe20096bc9a24bb29b6c" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>isSerialisable</name></member>
+      <member refid="d8/d5f/a02216_1a1fe2cb0e093c4e7a200531a0c6c4f09e" prot="protected" virt="non-virtual"><scope>castor3d::Mesh</scope><name>m_animations</name></member>
+      <member refid="d1/d24/a03336_1a4289f802ba2abbb5ddc2eb2f0d40d914" prot="private" virt="non-virtual"><scope>castor3d::Mesh</scope><name>m_box</name></member>
+      <member refid="d1/d24/a03336_1ae96f6f2ce11657ebd5708586435b5a27" prot="private" virt="non-virtual"><scope>castor3d::Mesh</scope><name>m_modified</name></member>
+      <member refid="d1/d24/a03336_1a97a09f41999aa9feb5d9273f1d1761a5" prot="private" virt="non-virtual"><scope>castor3d::Mesh</scope><name>m_scene</name></member>
+      <member refid="d1/d24/a03336_1a7bfbd1e4569ac0362e0e65eba5058ea6" prot="private" virt="non-virtual"><scope>castor3d::Mesh</scope><name>m_serialisable</name></member>
+      <member refid="d1/d24/a03336_1aadb8e3098664568d697d764ad535e409" prot="private" virt="non-virtual"><scope>castor3d::Mesh</scope><name>m_skeleton</name></member>
+      <member refid="d1/d24/a03336_1a07cc5e0e98a55b3385809383f7c79046" prot="private" virt="non-virtual"><scope>castor3d::Mesh</scope><name>m_sphere</name></member>
+      <member refid="d1/d24/a03336_1a5d29c9c3bad293db415a794c7c08d6fd" prot="private" virt="non-virtual"><scope>castor3d::Mesh</scope><name>m_submeshes</name></member>
+      <member refid="d1/d24/a03336_1ae6e4019ad2b5e8fc1ba8b3c30d7f4a12" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>Mesh</name></member>
+      <member refid="d1/d24/a03336_1afaa58c8bd779c55939803a6386d21768" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>Mesh</name></member>
+      <member refid="d1/d24/a03336_1a31d4bdcf1d072e93f4cdcffa2c099daa" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>Mesh</name></member>
+      <member refid="d1/d24/a03336_1a1a16ada784391cfa779128881e4ae894" prot="private" virt="non-virtual"><scope>castor3d::Mesh</scope><name>MeshGenerator</name></member>
+      <member refid="d1/d24/a03336_1a8b716f3b0cad08bc0598b5c29380cd3f" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>operator=</name></member>
+      <member refid="d1/d24/a03336_1a3afecd9cd434b61a5f162a14ae9a6b61" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>operator=</name></member>
+      <member refid="d8/d5f/a02216_1a317d10f31a3f138315e2a18a41f37b80" prot="protected" virt="non-virtual" ambiguityscope="AnimableT&lt; Engine &gt;::"><scope>castor3d::Mesh</scope><name>operator=</name></member>
+      <member refid="d8/d5f/a02216_1a207720462d3a7e48b69b6ae188e4414b" prot="protected" virt="non-virtual" ambiguityscope="AnimableT&lt; Engine &gt;::"><scope>castor3d::Mesh</scope><name>operator=</name></member>
+      <member refid="d1/d24/a03336_1adb3f3c9760670a63f3cc453d7f2bf6ef" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>removeAnimation</name></member>
+      <member refid="d1/d24/a03336_1a7989f0a908aa27346dd0fb928c213d83" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>setSerialisable</name></member>
+      <member refid="d1/d24/a03336_1aff69a0d283c7676a2359b2523c071a2c" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>setSkeleton</name></member>
+      <member refid="d1/d24/a03336_1a3845df030ada47db5721e341a8f36b8c" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>updateContainers</name></member>
+      <member refid="d8/d5f/a02216_1ad8c43c6eb51ab1fa4bff4b1ade280e71" prot="public" virt="virtual"><scope>castor3d::Mesh</scope><name>~AnimableT</name></member>
+      <member refid="d1/d24/a03336_1a493c25b31ac5c235af3122f2001421a9" prot="public" virt="non-virtual"><scope>castor3d::Mesh</scope><name>~Mesh</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

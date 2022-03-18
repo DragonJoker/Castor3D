@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_fd1ba99bf4a0b5f690afa549d5d5adac" kind="dir">
     <compoundname>Event</compoundname>
     <innerdir refid="dir_07d6c2a09270206a3b07dccb646a5319">Event/Frame</innerdir>

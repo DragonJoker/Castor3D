@@ -1,35 +1,247 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dc/d81/a02568" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::UserInputEvent</compoundname>
-    <derivedcompoundref refid="dc/d32/a02556" prot="public" virt="non-virtual">castor3d::HandlerEvent</derivedcompoundref>
-    <derivedcompoundref refid="d1/d03/a02560" prot="public" virt="non-virtual">castor3d::KeyboardEvent</derivedcompoundref>
-    <derivedcompoundref refid="db/d44/a02564" prot="public" virt="non-virtual">castor3d::MouseEvent</derivedcompoundref>
-    <includes local="no">UserInputEvent.hpp</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="dc/d81/a02568_1a5973899c9785c2dffaae34250aec448b" prot="private" static="no" mutable="no">
-        <type><ref refid="da/d1e/a01479_1abdf15c31ed466fee351daf42b2b45ad5" kindref="member">UserInputEventType</ref></type>
-        <definition>UserInputEventType castor3d::UserInputEvent::m_eventType</definition>
+    <compoundname>castor3d::ObjectBufferPool</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; RenderSystem &gt;</basecompoundref>
+    <includes local="no">ObjectBufferPool.hpp</includes>
+    <innerclass refid="d9/de7/a02572" prot="public">castor3d::ObjectBufferPool::ModelBuffers</innerclass>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dc/d81/a02568_1a046762f066fc0927b3c051c2532ea2db" prot="public" static="no">
+        <type>std::vector&lt; std::unique_ptr&lt; <ref refid="d9/de7/a02572" kindref="compound">ModelBuffers</ref> &gt; &gt;</type>
+        <definition>using castor3d::ObjectBufferPool::BufferArray =  std::vector&lt; std::unique_ptr&lt; ModelBuffers &gt; &gt;</definition>
         <argsstring></argsstring>
-        <name>m_eventType</name>
+        <name>BufferArray</name>
+        <qualifiedname>castor3d::ObjectBufferPool::BufferArray</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/UserInputEvent.hpp" line="58" column="1" bodyfile="Event/UserInput/UserInputEvent.hpp" bodystart="58" bodyend="-1"/>
+        <location file="Buffer/ObjectBufferPool.hpp" line="108" column="1" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dc/d81/a02568_1a7f4dd042933d7d07f6a795234a42440c" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::ObjectBufferPool::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::ObjectBufferPool::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="169" column="21" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="169" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d81/a02568_1a9dd36432e771973fbdaf3556396b461b" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::ObjectBufferPool::m_debugName</definition>
+        <argsstring></argsstring>
+        <name>m_debugName</name>
+        <qualifiedname>castor3d::ObjectBufferPool::m_debugName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="170" column="16" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="170" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d81/a02568_1aedc6f4a4bdd194978ae95f653a710056" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d81/a02568_1a046762f066fc0927b3c051c2532ea2db" kindref="member">BufferArray</ref></type>
+        <definition>BufferArray castor3d::ObjectBufferPool::m_buffers</definition>
+        <argsstring></argsstring>
+        <name>m_buffers</name>
+        <qualifiedname>castor3d::ObjectBufferPool::m_buffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="171" column="13" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="171" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="dc/d81/a02568_1a1d946a77fa49158379ee4e5dfb84a556" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::UserInputEvent::UserInputEvent</definition>
-        <argsstring>(UserInputEventType type)</argsstring>
-        <name>UserInputEvent</name>
+      <memberdef kind="function" id="dc/d81/a02568_1ad49f606664936bcb9908c63806ab167a" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ObjectBufferPool::ObjectBufferPool</definition>
+        <argsstring>(RenderDevice const &amp;device, castor::String debugName)</argsstring>
+        <name>ObjectBufferPool</name>
+        <qualifiedname>castor3d::ObjectBufferPool::ObjectBufferPool</qualifiedname>
         <param>
-          <type><ref refid="da/d1e/a01479_1abdf15c31ed466fee351daf42b2b45ad5" kindref="member">UserInputEventType</ref></type>
-          <declname>type</declname>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String</type>
+          <declname>debugName</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">debugName</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The debug name. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="121" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d81/a02568_1a728e7794b604c8c6deac4bd14d30d49d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ObjectBufferPool::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor3d::ObjectBufferPool::cleanup</qualifiedname>
+        <briefdescription>
+<para>Cleans up all GPU buffers. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="129" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d81/a02568_1ae3ea2efd3ead5f7e44a287746151bec2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ObjectBufferPool::upload</definition>
+        <argsstring>(ashes::CommandBuffer const &amp;cb)</argsstring>
+        <name>upload</name>
+        <qualifiedname>castor3d::ObjectBufferPool::upload</qualifiedname>
+        <param>
+          <type>ashes::CommandBuffer const &amp;</type>
+          <declname>cb</declname>
+        </param>
+        <briefdescription>
+<para>Uploads all GPU buffers to VRAM. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">cb</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The command buffer on which transfer commands are recorded. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="138" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d81/a02568_1a08d7812db72235cfb7a316fc325cc592" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dc/d32/a02556" kindref="compound">ObjectBufferOffset</ref></type>
+        <definition>C3D_API ObjectBufferOffset castor3d::ObjectBufferPool::getBuffer</definition>
+        <argsstring>(VkDeviceSize vertexCount, VkDeviceSize indexCount)</argsstring>
+        <name>getBuffer</name>
+        <qualifiedname>castor3d::ObjectBufferPool::getBuffer</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>vertexCount</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>indexCount</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves a GPU buffer with the given size. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">vertexCount</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The wanted vertex count. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">indexCount</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The wanted index count. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The GPU buffer. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="151" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d81/a02568_1acf4476836fc62daa2507e46c326c4108" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ObjectBufferPool::putBuffer</definition>
+        <argsstring>(ObjectBufferOffset const &amp;bufferOffset)</argsstring>
+        <name>putBuffer</name>
+        <qualifiedname>castor3d::ObjectBufferPool::putBuffer</qualifiedname>
+        <param>
+          <type><ref refid="dc/d32/a02556" kindref="compound">ObjectBufferOffset</ref> const &amp;</type>
+          <declname>bufferOffset</declname>
+        </param>
+        <briefdescription>
+<para>Releases a GPU buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferOffset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer offset to release. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="161" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="dc/d81/a02568_1ae5d5e0cbad2c32492b67382b3ab5adef" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> BufferArray::iterator</type>
+        <definition>C3D_API BufferArray::iterator castor3d::ObjectBufferPool::doFindBuffer</definition>
+        <argsstring>(VkDeviceSize vertexCount, VkDeviceSize indexCount, BufferArray &amp;array)</argsstring>
+        <name>doFindBuffer</name>
+        <qualifiedname>castor3d::ObjectBufferPool::doFindBuffer</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>vertexCount</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>indexCount</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d81/a02568_1a046762f066fc0927b3c051c2532ea2db" kindref="member">BufferArray</ref> &amp;</type>
+          <declname>array</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -37,82 +249,47 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/UserInputEvent.hpp" line="33" column="1" bodyfile="Event/UserInput/UserInputEvent.hpp" bodystart="33" bodyend="36"/>
-      </memberdef>
-      <memberdef kind="function" id="dc/d81/a02568_1a520eaa4deaa4a2c25ee217105e289b78" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
-        <type></type>
-        <definition>virtual castor3d::UserInputEvent::~UserInputEvent</definition>
-        <argsstring>()</argsstring>
-        <name>~UserInputEvent</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputEvent.hpp" line="43" column="1" bodyfile="Event/UserInput/UserInputEvent.hpp" bodystart="43" bodyend="45"/>
-      </memberdef>
-      <memberdef kind="function" id="dc/d81/a02568_1ab45ab37b6687ae9a35165ea5b18f0a71" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="da/d1e/a01479_1abdf15c31ed466fee351daf42b2b45ad5" kindref="member">UserInputEventType</ref></type>
-        <definition>UserInputEventType castor3d::UserInputEvent::getEventType</definition>
-        <argsstring>() const</argsstring>
-        <name>getEventType</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The user input event type. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputEvent.hpp" line="52" column="1" bodyfile="Event/UserInput/UserInputEvent.hpp" bodystart="52" bodyend="55"/>
+        <location file="Buffer/ObjectBufferPool.hpp" line="164" column="31"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Description of a user input event. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
-</simplesect>
-<simplesect kind="date"><para>17/04/2016 </para>
-</simplesect>
-<simplesect kind="version"><para>0.9.0</para>
-</simplesect>
-<simplesect kind="remark"><para>You may use this one, but prefer using <ref refid="db/d44/a02564" kindref="compound">MouseEvent</ref> or <ref refid="d1/d03/a02560" kindref="compound">KeyboardEvent</ref>. </para>
-</simplesect>
-</para>
     </detaileddescription>
     <inheritancegraph>
-      <node id="4634">
-        <label>castor3d::UserInputEvent</label>
+      <node id="1">
+        <label>castor3d::ObjectBufferPool</label>
         <link refid="dc/d81/a02568"/>
-      </node>
-      <node id="4637">
-        <label>castor3d::MouseEvent</label>
-        <link refid="db/d44/a02564"/>
-        <childnode refid="4634" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="4635">
-        <label>castor3d::HandlerEvent</label>
-        <link refid="dc/d32/a02556"/>
-        <childnode refid="4634" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4636">
-        <label>castor3d::KeyboardEvent</label>
-        <link refid="d1/d03/a02560"/>
-        <childnode refid="4634" relation="public-inheritance">
-        </childnode>
+      <node id="2">
+        <label>castor::OwnedBy&lt; RenderSystem &gt;</label>
       </node>
     </inheritancegraph>
-    <location file="Event/UserInput/UserInputEvent.hpp" line="23" column="1" bodyfile="Event/UserInput/UserInputEvent.hpp" bodystart="22" bodyend="59"/>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::ObjectBufferPool</label>
+        <link refid="dc/d81/a02568"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; RenderSystem &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Buffer/ObjectBufferPool.hpp" line="92" column="1" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="94" bodyend="172"/>
     <listofallmembers>
-      <member refid="dc/d81/a02568_1ab45ab37b6687ae9a35165ea5b18f0a71" prot="public" virt="non-virtual"><scope>castor3d::UserInputEvent</scope><name>getEventType</name></member>
-      <member refid="dc/d81/a02568_1a5973899c9785c2dffaae34250aec448b" prot="private" virt="non-virtual"><scope>castor3d::UserInputEvent</scope><name>m_eventType</name></member>
-      <member refid="dc/d81/a02568_1a1d946a77fa49158379ee4e5dfb84a556" prot="public" virt="non-virtual"><scope>castor3d::UserInputEvent</scope><name>UserInputEvent</name></member>
-      <member refid="dc/d81/a02568_1a520eaa4deaa4a2c25ee217105e289b78" prot="public" virt="virtual"><scope>castor3d::UserInputEvent</scope><name>~UserInputEvent</name></member>
+      <member refid="dc/d81/a02568_1a046762f066fc0927b3c051c2532ea2db" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferPool</scope><name>BufferArray</name></member>
+      <member refid="dc/d81/a02568_1a728e7794b604c8c6deac4bd14d30d49d" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferPool</scope><name>cleanup</name></member>
+      <member refid="dc/d81/a02568_1ae5d5e0cbad2c32492b67382b3ab5adef" prot="private" virt="non-virtual"><scope>castor3d::ObjectBufferPool</scope><name>doFindBuffer</name></member>
+      <member refid="dc/d81/a02568_1a08d7812db72235cfb7a316fc325cc592" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferPool</scope><name>getBuffer</name></member>
+      <member refid="dc/d81/a02568_1aedc6f4a4bdd194978ae95f653a710056" prot="private" virt="non-virtual"><scope>castor3d::ObjectBufferPool</scope><name>m_buffers</name></member>
+      <member refid="dc/d81/a02568_1a9dd36432e771973fbdaf3556396b461b" prot="private" virt="non-virtual"><scope>castor3d::ObjectBufferPool</scope><name>m_debugName</name></member>
+      <member refid="dc/d81/a02568_1a7f4dd042933d7d07f6a795234a42440c" prot="private" virt="non-virtual"><scope>castor3d::ObjectBufferPool</scope><name>m_device</name></member>
+      <member refid="dc/d81/a02568_1ad49f606664936bcb9908c63806ab167a" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferPool</scope><name>ObjectBufferPool</name></member>
+      <member refid="dc/d81/a02568_1acf4476836fc62daa2507e46c326c4108" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferPool</scope><name>putBuffer</name></member>
+      <member refid="dc/d81/a02568_1ae3ea2efd3ead5f7e44a287746151bec2" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferPool</scope><name>upload</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

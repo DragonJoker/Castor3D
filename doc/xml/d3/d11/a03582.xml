@@ -1,33 +1,70 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d3/d11/a03582" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPipelineViewportCoarseSampleOrderStateCreateInfoNV &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d3/d11/a03582_1a17df05f0a51b40a911a8858f56a12ffe" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPipelineViewportCoarseSampleOrderStateCreateInfoNV &gt;::value</definition>
+    <compoundname>castor3d::OverlayRenderer::OverlayRenderNode</compoundname>
+    <includes local="no">OverlayRenderer.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/d11/a03582_1ac84fd2a8829565df64ebb2918bce2e2e" prot="public" static="no" mutable="no">
+        <type>Pipeline &amp;</type>
+        <definition>Pipeline&amp; castor3d::OverlayRenderer::OverlayRenderNode::pipeline</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_COARSE_SAMPLE_ORDER_STATE_CREATE_INFO_NV</initializer>
+        <name>pipeline</name>
+        <qualifiedname>castor3d::OverlayRenderer::OverlayRenderNode::pipeline</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="308" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="308" bodyend="-1"/>
+        <location file="Overlay/OverlayRenderer.hpp" line="216" column="11" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="216" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d11/a03582_1ac9ba98f75649718e7f930014fc961a3d" prot="public" static="no" mutable="no">
+        <type><ref refid="d6/d59/a02810" kindref="compound">Pass</ref> const  &amp;</type>
+        <definition>Pass const&amp; castor3d::OverlayRenderer::OverlayRenderNode::pass</definition>
+        <argsstring></argsstring>
+        <name>pass</name>
+        <qualifiedname>castor3d::OverlayRenderer::OverlayRenderNode::pass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="217" column="13" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="217" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="308" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="308" bodyend="308"/>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::OverlayRenderer::OverlayRenderNode</label>
+        <link refid="d3/d11/a03582"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>pipeline</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>pass</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::OverlayRenderer::Pipeline</label>
+      </node>
+      <node id="3">
+        <label>castor3d::Pass</label>
+        <link refid="d6/d59/a02810"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Material &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Overlay/OverlayRenderer.hpp" line="214" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="215" bodyend="218"/>
     <listofallmembers>
-      <member refid="d3/d11/a03582_1a17df05f0a51b40a911a8858f56a12ffe" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPipelineViewportCoarseSampleOrderStateCreateInfoNV &gt;</scope><name>value</name></member>
+      <member refid="d3/d11/a03582_1ac9ba98f75649718e7f930014fc961a3d" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::OverlayRenderNode</scope><name>pass</name></member>
+      <member refid="d3/d11/a03582_1ac84fd2a8829565df64ebb2918bce2e2e" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::OverlayRenderNode</scope><name>pipeline</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,671 +1,840 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d4/d87/a03963" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::TriFaceMapping</compoundname>
-    <basecompoundref refid="d2/da4/a03927" prot="public" virt="non-virtual">castor3d::IndexMapping</basecompoundref>
-    <includes local="no">TriFaceMapping.hpp</includes>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d4/d87/a03963_1a2729e37105aa4cfa04ce6d322ed2549e" prot="public" static="yes" mutable="no">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
-        <definition>C3D_API castor::String const castor3d::TriFaceMapping::Name</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d4/d87/a03963" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::RenderDevice</compoundname>
+    <includes local="no">RenderDevice.hpp</includes>
+      <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="d4/d87/a03963_1aa8b70eccb6c4fd7471d3626d7bc1562e" prot="private" static="no">
+        <type>std::unique_ptr&lt; crg::GraphContext &gt;</type>
+        <definition>using castor3d::RenderDevice::GraphContextPtr =  std::unique_ptr&lt; crg::GraphContext &gt;</definition>
         <argsstring></argsstring>
-        <name>Name</name>
+        <name>GraphContextPtr</name>
+        <qualifiedname>castor3d::RenderDevice::GraphContextPtr</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="216" column="1" bodyfile="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="216" bodyend="-1"/>
+        <location file="Render/RenderDevice.hpp" line="436" column="1" bodyfile="Render/RenderDevice.hpp" bodystart="436" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/d87/a03963_1a1166fc7ba4d41c555cb7ad90ec82daa1" prot="private" static="no">
+        <type>std::map&lt; std::thread::id, GraphContextPtr &gt;</type>
+        <definition>using castor3d::RenderDevice::ThreadGraphContexts =  std::map&lt; std::thread::id, GraphContextPtr &gt;</definition>
+        <argsstring></argsstring>
+        <name>ThreadGraphContexts</name>
+        <qualifiedname>castor3d::RenderDevice::ThreadGraphContexts</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="437" column="1" bodyfile="Render/RenderDevice.hpp" bodystart="437" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/d87/a03963_1aeffdfd4538f7c05c8d748ce596ea9b79" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/d9a/a04075" kindref="compound">RenderSystem</ref> &amp;</type>
+        <definition>RenderSystem&amp; castor3d::RenderDevice::renderSystem</definition>
+        <argsstring></argsstring>
+        <name>renderSystem</name>
+        <qualifiedname>castor3d::RenderDevice::renderSystem</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="332" column="15" bodyfile="Render/RenderDevice.hpp" bodystart="332" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d87/a03963_1a9a0363c9533fce882cb276b2871f910e" prot="public" static="no" mutable="no">
+        <type>ashes::PhysicalDevice const  &amp;</type>
+        <definition>ashes::PhysicalDevice const&amp; castor3d::RenderDevice::gpu</definition>
+        <argsstring></argsstring>
+        <name>gpu</name>
+        <qualifiedname>castor3d::RenderDevice::gpu</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="333" column="30" bodyfile="Render/RenderDevice.hpp" bodystart="333" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d87/a03963_1a38f7618d62ba92503afaa091e8106690" prot="public" static="no" mutable="no">
+        <type>AshPluginDescription const  &amp;</type>
+        <definition>AshPluginDescription const&amp; castor3d::RenderDevice::desc</definition>
+        <argsstring></argsstring>
+        <name>desc</name>
+        <qualifiedname>castor3d::RenderDevice::desc</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="334" column="29" bodyfile="Render/RenderDevice.hpp" bodystart="334" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d87/a03963_1a5c03d840e8ddc6521b65d428b3e4db6f" prot="public" static="no" mutable="no">
+        <type>VkPhysicalDeviceMemoryProperties</type>
+        <definition>VkPhysicalDeviceMemoryProperties castor3d::RenderDevice::memoryProperties</definition>
+        <argsstring></argsstring>
+        <name>memoryProperties</name>
+        <qualifiedname>castor3d::RenderDevice::memoryProperties</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="335" column="34" bodyfile="Render/RenderDevice.hpp" bodystart="335" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d87/a03963_1aa7953f74ea89fbf370e71a1ab7b317e7" prot="public" static="no" mutable="no">
+        <type>VkPhysicalDeviceFeatures</type>
+        <definition>VkPhysicalDeviceFeatures castor3d::RenderDevice::features</definition>
+        <argsstring></argsstring>
+        <name>features</name>
+        <qualifiedname>castor3d::RenderDevice::features</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="336" column="26" bodyfile="Render/RenderDevice.hpp" bodystart="336" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d87/a03963_1a10e7a83a381442bfdf99e1a8ad23858c" prot="public" static="no" mutable="no">
+        <type>VkPhysicalDeviceProperties</type>
+        <definition>VkPhysicalDeviceProperties castor3d::RenderDevice::properties</definition>
+        <argsstring></argsstring>
+        <name>properties</name>
+        <qualifiedname>castor3d::RenderDevice::properties</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="337" column="28" bodyfile="Render/RenderDevice.hpp" bodystart="337" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d87/a03963_1ab34675434013ceee594f3d1bbb301efd" prot="public" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1ae6595d432bebe386cd8aa30b8a9ce1b9" kindref="member">QueueFamilies</ref></type>
+        <definition>QueueFamilies castor3d::RenderDevice::queueFamilies</definition>
+        <argsstring></argsstring>
+        <name>queueFamilies</name>
+        <qualifiedname>castor3d::RenderDevice::queueFamilies</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="338" column="15" bodyfile="Render/RenderDevice.hpp" bodystart="338" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d87/a03963_1a2272f008b9778c429162f54ceb1e2144" prot="public" static="no" mutable="no">
+        <type>ashes::DevicePtr</type>
+        <definition>ashes::DevicePtr castor3d::RenderDevice::device</definition>
+        <argsstring></argsstring>
+        <name>device</name>
+        <qualifiedname>castor3d::RenderDevice::device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="339" column="18" bodyfile="Render/RenderDevice.hpp" bodystart="339" bodyend="-1"/>
+        <referencedby refid="d4/d87/a03963_1a9bb44f865a392ac53cb51435f0178f0e" compoundref="df/d0e/a00800" startline="304" endline="307">operator*</referencedby>
+        <referencedby refid="d4/d87/a03963_1ab785642ba3f986bdd08be9d3145798dd" compoundref="df/d0e/a00800" startline="294" endline="297">operator-&gt;</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d87/a03963_1aaf7f2637aebfec7d50f1be4e89902e29" prot="public" static="no" mutable="no">
+        <type>ashes::CommandPool *</type>
+        <definition>ashes::CommandPool* castor3d::RenderDevice::computeCommandPool</definition>
+        <argsstring></argsstring>
+        <name>computeCommandPool</name>
+        <qualifiedname>castor3d::RenderDevice::computeCommandPool</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="340" column="21" bodyfile="Render/RenderDevice.hpp" bodystart="340" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d87/a03963_1aea009079b955b9e7bb40874c721951bf" prot="public" static="no" mutable="no">
+        <type>ashes::CommandPool *</type>
+        <definition>ashes::CommandPool* castor3d::RenderDevice::transferCommandPool</definition>
+        <argsstring></argsstring>
+        <name>transferCommandPool</name>
+        <qualifiedname>castor3d::RenderDevice::transferCommandPool</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="341" column="21" bodyfile="Render/RenderDevice.hpp" bodystart="341" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d87/a03963_1af626c7155a716f7b4fd3566846f19fa6" prot="public" static="no" mutable="no">
+        <type>ashes::Queue *</type>
+        <definition>ashes::Queue* castor3d::RenderDevice::computeQueue</definition>
+        <argsstring></argsstring>
+        <name>computeQueue</name>
+        <qualifiedname>castor3d::RenderDevice::computeQueue</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="342" column="15" bodyfile="Render/RenderDevice.hpp" bodystart="342" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d87/a03963_1a90d90905d15aeb6c8b48cd3817922d99" prot="public" static="no" mutable="no">
+        <type>ashes::Queue *</type>
+        <definition>ashes::Queue* castor3d::RenderDevice::transferQueue</definition>
+        <argsstring></argsstring>
+        <name>transferQueue</name>
+        <qualifiedname>castor3d::RenderDevice::transferQueue</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="343" column="15" bodyfile="Render/RenderDevice.hpp" bodystart="343" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d87/a03963_1a3de18ed16653ffd407bae1fae33b2b37" prot="public" static="no" mutable="no">
+        <type>GpuBufferPoolUPtr</type>
+        <definition>GpuBufferPoolUPtr castor3d::RenderDevice::bufferPool</definition>
+        <argsstring></argsstring>
+        <name>bufferPool</name>
+        <qualifiedname>castor3d::RenderDevice::bufferPool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="344" column="19" bodyfile="Render/RenderDevice.hpp" bodystart="344" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d87/a03963_1ae46926026ada2a73517af3c9e01cdb7c" prot="public" static="no" mutable="no">
+        <type>VertexBufferPoolUPtr</type>
+        <definition>VertexBufferPoolUPtr castor3d::RenderDevice::vertexPools</definition>
+        <argsstring></argsstring>
+        <name>vertexPools</name>
+        <qualifiedname>castor3d::RenderDevice::vertexPools</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="345" column="22" bodyfile="Render/RenderDevice.hpp" bodystart="345" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d87/a03963_1a0a84b3fc467ceb9fea7c18283a33617c" prot="public" static="no" mutable="no">
+        <type>ObjectBufferPoolUPtr</type>
+        <definition>ObjectBufferPoolUPtr castor3d::RenderDevice::geometryPools</definition>
+        <argsstring></argsstring>
+        <name>geometryPools</name>
+        <qualifiedname>castor3d::RenderDevice::geometryPools</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="346" column="22" bodyfile="Render/RenderDevice.hpp" bodystart="346" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d87/a03963_1a5adc1b1ce5dd761c88800b56a03254e6" prot="public" static="no" mutable="no">
+        <type>SkinnedObjectBufferPoolUPtr</type>
+        <definition>SkinnedObjectBufferPoolUPtr castor3d::RenderDevice::skinnedGeometryPools</definition>
+        <argsstring></argsstring>
+        <name>skinnedGeometryPools</name>
+        <qualifiedname>castor3d::RenderDevice::skinnedGeometryPools</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="347" column="29" bodyfile="Render/RenderDevice.hpp" bodystart="347" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d87/a03963_1a5f27b21c87d9c8732922aea89382f351" prot="public" static="no" mutable="no">
+        <type>UniformBufferPoolUPtr</type>
+        <definition>UniformBufferPoolUPtr castor3d::RenderDevice::uboPool</definition>
+        <argsstring></argsstring>
+        <name>uboPool</name>
+        <qualifiedname>castor3d::RenderDevice::uboPool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="348" column="23" bodyfile="Render/RenderDevice.hpp" bodystart="348" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d4/d87/a03963_1a69a75f6a4237224ec7ebe5abf07b7566" prot="private" static="no" mutable="no">
-        <type>FaceArray</type>
-        <definition>FaceArray castor3d::TriFaceMapping::m_faces</definition>
+      <memberdef kind="variable" id="d4/d87/a03963_1ad9953a1958ab4215dc34c126115ef917" prot="private" static="no" mutable="no">
+        <type>VkPhysicalDeviceShaderDrawParametersFeatures</type>
+        <definition>VkPhysicalDeviceShaderDrawParametersFeatures castor3d::RenderDevice::m_drawParamsFeatures</definition>
         <argsstring></argsstring>
-        <name>m_faces</name>
+        <name>m_drawParamsFeatures</name>
+        <qualifiedname>castor3d::RenderDevice::m_drawParamsFeatures</qualifiedname>
+        <initializer>{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETERS_FEATURES
+			, nullptr
+			, {} }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The faces in the submesh. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="221" column="1" bodyfile="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="221" bodyend="-1"/>
+        <location file="Render/RenderDevice.hpp" line="365" column="46" bodyfile="Render/RenderDevice.hpp" bodystart="365" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d4/d87/a03963_1a536ab89280367629495bfa2e367b9b86" prot="private" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::TriFaceMapping::m_hasNormals</definition>
+      <memberdef kind="variable" id="d4/d87/a03963_1ac59b0dfaff2adbba67fcd7ba110c2064" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/d0d/a03943" kindref="compound">Extensions</ref></type>
+        <definition>Extensions castor3d::RenderDevice::m_deviceExtensions</definition>
         <argsstring></argsstring>
-        <name>m_hasNormals</name>
-        <initializer>{ false }</initializer>
+        <name>m_deviceExtensions</name>
+        <qualifiedname>castor3d::RenderDevice::m_deviceExtensions</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>Tells if normals exist or need to be computed. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="224" column="1" bodyfile="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="224" bodyend="-1"/>
+        <location file="Render/RenderDevice.hpp" line="430" column="12" bodyfile="Render/RenderDevice.hpp" bodystart="430" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d4/d87/a03963_1ab8c25ef8ae17b8c9d21e01dcc1a5c627" prot="private" static="no" mutable="no">
-        <type>castor::Point3f</type>
-        <definition>castor::Point3f castor3d::TriFaceMapping::m_cameraPosition</definition>
+      <memberdef kind="variable" id="d4/d87/a03963_1ade700abc086f0077cdae12db634a7cb0" prot="private" static="no" mutable="no">
+        <type>ashes::VkExtensionPropertiesArray</type>
+        <definition>ashes::VkExtensionPropertiesArray castor3d::RenderDevice::m_availableExtensions</definition>
         <argsstring></argsstring>
-        <name>m_cameraPosition</name>
+        <name>m_availableExtensions</name>
+        <qualifiedname>castor3d::RenderDevice::m_availableExtensions</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The transformed camera position at last sort. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="227" column="1" bodyfile="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="227" bodyend="-1"/>
+        <location file="Render/RenderDevice.hpp" line="431" column="35" bodyfile="Render/RenderDevice.hpp" bodystart="431" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d87/a03963_1ad3987d82e902395a229e55e831fc0282" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/d04/a03955" kindref="compound">QueuesData</ref> *</type>
+        <definition>QueuesData* castor3d::RenderDevice::m_preferredGraphicsQueue</definition>
+        <argsstring></argsstring>
+        <name>m_preferredGraphicsQueue</name>
+        <qualifiedname>castor3d::RenderDevice::m_preferredGraphicsQueue</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="432" column="13" bodyfile="Render/RenderDevice.hpp" bodystart="432" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d87/a03963_1afb336d348429717e6b00aa24e9def0cf" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/d04/a03955" kindref="compound">QueuesData</ref> *</type>
+        <definition>QueuesData* castor3d::RenderDevice::m_preferredComputeQueue</definition>
+        <argsstring></argsstring>
+        <name>m_preferredComputeQueue</name>
+        <qualifiedname>castor3d::RenderDevice::m_preferredComputeQueue</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="433" column="13" bodyfile="Render/RenderDevice.hpp" bodystart="433" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d87/a03963_1aaf6a0560959be532830d8198c2df27f4" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/d04/a03955" kindref="compound">QueuesData</ref> *</type>
+        <definition>QueuesData* castor3d::RenderDevice::m_preferredTransferQueue</definition>
+        <argsstring></argsstring>
+        <name>m_preferredTransferQueue</name>
+        <qualifiedname>castor3d::RenderDevice::m_preferredTransferQueue</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="434" column="13" bodyfile="Render/RenderDevice.hpp" bodystart="434" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d87/a03963_1a8b30a100a3d5e437cb386ee2facb041e" prot="private" static="no" mutable="yes">
+        <type>std::mutex</type>
+        <definition>std::mutex castor3d::RenderDevice::m_mutex</definition>
+        <argsstring></argsstring>
+        <name>m_mutex</name>
+        <qualifiedname>castor3d::RenderDevice::m_mutex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="438" column="20" bodyfile="Render/RenderDevice.hpp" bodystart="438" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d87/a03963_1ab2291101050ed277e74093814993f22d" prot="private" static="no" mutable="yes">
+        <type>ThreadGraphContexts</type>
+        <definition>ThreadGraphContexts castor3d::RenderDevice::m_contexts</definition>
+        <argsstring></argsstring>
+        <name>m_contexts</name>
+        <qualifiedname>castor3d::RenderDevice::m_contexts</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="439" column="29" bodyfile="Render/RenderDevice.hpp" bodystart="439" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d4/d87/a03963_1aabed0dcb803ab1154d0907e116cc2668" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d4/d87/a03963_1a985f67823e773d0d4c8acdb9df81b044" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::TriFaceMapping::TriFaceMapping</definition>
-        <argsstring>(Submesh &amp;submesh)</argsstring>
-        <name>TriFaceMapping</name>
+        <definition>C3D_API castor3d::RenderDevice::RenderDevice</definition>
+        <argsstring>(RenderSystem &amp;renderSystem, ashes::PhysicalDevice const &amp;gpu, AshPluginDescription const &amp;desc, Extensions deviceExtensions)</argsstring>
+        <name>RenderDevice</name>
+        <qualifiedname>castor3d::RenderDevice::RenderDevice</qualifiedname>
         <param>
-          <type><ref refid="d0/dce/a03971" kindref="compound">Submesh</ref> &amp;</type>
-          <declname>submesh</declname>
+          <type><ref refid="d3/d9a/a04075" kindref="compound">RenderSystem</ref> &amp;</type>
+          <declname>renderSystem</declname>
+        </param>
+        <param>
+          <type>ashes::PhysicalDevice const &amp;</type>
+          <declname>gpu</declname>
+        </param>
+        <param>
+          <type>AshPluginDescription const &amp;</type>
+          <declname>desc</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d0d/a03943" kindref="compound">Extensions</ref></type>
+          <declname>deviceExtensions</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">submesh</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parent submesh. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="26" column="1"/>
+        <location file="Render/RenderDevice.hpp" line="269" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d4/d87/a03963_1aae0c3befa1e3e73872245300acc110de" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::TriFaceMapping::clearFaces</definition>
+      <memberdef kind="function" id="d4/d87/a03963_1acfa5116dc26089edcd3239c5fd157c0e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::RenderDevice::~RenderDevice</definition>
         <argsstring>()</argsstring>
-        <name>clearFaces</name>
+        <name>~RenderDevice</name>
+        <qualifiedname>castor3d::RenderDevice::~RenderDevice</qualifiedname>
         <briefdescription>
-<para>Clears this submesh&apos;s face array. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="33" column="1"/>
+        <location file="Render/RenderDevice.hpp" line="273" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d4/d87/a03963_1a614af1061e30260787d01f9032cb5920" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/da4/a03911" kindref="compound">Face</ref></type>
-        <definition>C3D_API Face castor3d::TriFaceMapping::addFace</definition>
-        <argsstring>(uint32_t a, uint32_t b, uint32_t c)</argsstring>
-        <name>addFace</name>
+      <memberdef kind="function" id="d4/d87/a03963_1a6dcd05a5fc148ea0d14d49f58002da19" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkFormat</type>
+        <definition>C3D_API VkFormat castor3d::RenderDevice::selectSuitableDepthFormat</definition>
+        <argsstring>(VkFormatFeatureFlags requiredFeatures) const</argsstring>
+        <name>selectSuitableDepthFormat</name>
+        <qualifiedname>castor3d::RenderDevice::selectSuitableDepthFormat</qualifiedname>
         <param>
-          <type>uint32_t</type>
-          <declname>a</declname>
+          <type>VkFormatFeatureFlags</type>
+          <declname>requiredFeatures</declname>
         </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>b</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>c</declname>
-        </param>
-        <briefdescription>
-<para>Creates and adds a face to the submesh. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">a</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The first face&apos;s vertex index. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">b</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The second face&apos;s vertex index. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">c</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The third face&apos;s vertex index. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The created face. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="48" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/d87/a03963_1a8458083da6c3f1f13a70378f6775a375" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::TriFaceMapping::addFaceGroup</definition>
-        <argsstring>(FaceIndices const *const begin, FaceIndices const *const end)</argsstring>
-        <name>addFaceGroup</name>
-        <param>
-          <type><ref refid="d6/dfd/a03915" kindref="compound">FaceIndices</ref> const *const</type>
-          <declname>begin</declname>
-        </param>
-        <param>
-          <type><ref refid="d6/dfd/a03915" kindref="compound">FaceIndices</ref> const *const</type>
-          <declname>end</declname>
-        </param>
-        <briefdescription>
-<para>Creates and adds faces to the submesh. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">begin</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The faces data begin. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">end</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The faces data end. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="59" column="1"/>
-        <referencedby refid="d4/d87/a03963_1a69606c982ff152ce221372b8d9a50ea0" compoundref="d4/ddf/a00488" startline="144" endline="147">addFaceGroup</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="d4/d87/a03963_1a61dc6f308e11d7d3b4fdb56506c3ee99" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::TriFaceMapping::addQuadFace</definition>
-        <argsstring>(uint32_t a, uint32_t b, uint32_t c, uint32_t d, castor::Point3f const &amp;minUV=castor::Point3f(), castor::Point3f const &amp;maxUV=castor::Point3f(1, 1, 1))</argsstring>
-        <name>addQuadFace</name>
-        <param>
-          <type>uint32_t</type>
-          <declname>a</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>b</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>c</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>d</declname>
-        </param>
-        <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>minUV</declname>
-          <defval>castor::Point3f()</defval>
-        </param>
-        <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>maxUV</declname>
-          <defval>castor::Point3f(1, 1, 1)</defval>
-        </param>
-        <briefdescription>
-<para>Creates and adds a quad face to the submesh. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">a</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The first face&apos;s vertex index. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">b</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The second face&apos;s vertex index. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">c</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The third face&apos;s vertex index. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">d</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The fourth face&apos;s vertex index. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">minUV</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The UV of the bottom left corner. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">maxUV</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The UV of the top right corner. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The created face. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="81" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/d87/a03963_1a2468296783b8a341c9d0074f2e193ee3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::TriFaceMapping::computeFacesFromPolygonVertex</definition>
-        <argsstring>()</argsstring>
-        <name>computeFacesFromPolygonVertex</name>
-        <briefdescription>
-<para>Creates faces from the points. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="remark"><para>This function assumes the points are sorted like triangles fan. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="92" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/d87/a03963_1a9c3fb39743810be7038d7ce94cf17aaf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::TriFaceMapping::computeNormals</definition>
-        <argsstring>(Face const &amp;face)</argsstring>
-        <name>computeNormals</name>
-        <param>
-          <type><ref refid="d4/da4/a03911" kindref="compound">Face</ref> const &amp;</type>
-          <declname>face</declname>
-        </param>
-        <briefdescription>
-<para>Computes normal and tangent for each vertex of the given face. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">face</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The face. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="101" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/d87/a03963_1ab00cf919f043bf88a5d7b27a7edc1b36" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::TriFaceMapping::computeTangents</definition>
-        <argsstring>(Face const &amp;face)</argsstring>
-        <name>computeTangents</name>
-        <param>
-          <type><ref refid="d4/da4/a03911" kindref="compound">Face</ref> const &amp;</type>
-          <declname>face</declname>
-        </param>
-        <briefdescription>
-<para>Computes tangent for each vertex of the given face. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">face</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The face. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="110" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/d87/a03963_1a9ea15725eebf3b74b749dda82f11d03d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::TriFaceMapping::computeTangentsFromNormals</definition>
-        <argsstring>()</argsstring>
-        <name>computeTangentsFromNormals</name>
-        <briefdescription>
-<para>Computes tangent for each vertex of the submesh. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="remark"><para>This function supposes the normals are defined. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="119" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/d87/a03963_1adfb71fd0c8a6c5526100c09c304c165d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
-        <definition>C3D_API uint32_t castor3d::TriFaceMapping::getCount</definition>
-        <argsstring>() const override</argsstring>
-        <name>getCount</name>
-        <reimplements refid="d2/da4/a03927_1a0fb15d1b3d6cea8907affb64e235b698">getCount</reimplements>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The elements count. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="123" column="1"/>
+        <location file="Render/RenderDevice.hpp" line="275" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d4/d87/a03963_1a7ade6d9d5e5b8980fb52bbc5ce1b7840" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
-        <definition>C3D_API uint32_t castor3d::TriFaceMapping::getComponentsCount</definition>
-        <argsstring>() const override</argsstring>
-        <name>getComponentsCount</name>
-        <reimplements refid="d2/da4/a03927_1a3962862bad288beb93936541cf128e88">getComponentsCount</reimplements>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The components count in an element. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="127" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/d87/a03963_1afb6706c30a0e419d9627929c189abd3b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::TriFaceMapping::sortByDistance</definition>
-        <argsstring>(castor::Point3f const &amp;cameraPosition) override</argsstring>
-        <name>sortByDistance</name>
-        <reimplements refid="d2/da4/a03927_1afe6b9b98aa785d2259f1e39d681e8f1e">sortByDistance</reimplements>
+      <memberdef kind="function" id="d4/d87/a03963_1a854a8933c434c2227f20e7a7481ae66f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkFormat</type>
+        <definition>C3D_API VkFormat castor3d::RenderDevice::selectSuitableStencilFormat</definition>
+        <argsstring>(VkFormatFeatureFlags requiredFeatures) const</argsstring>
+        <name>selectSuitableStencilFormat</name>
+        <qualifiedname>castor3d::RenderDevice::selectSuitableStencilFormat</qualifiedname>
         <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>cameraPosition</declname>
+          <type>VkFormatFeatureFlags</type>
+          <declname>requiredFeatures</declname>
         </param>
         <briefdescription>
-<para>Sorts the face from farthest to nearest from the camera. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">cameraPosition</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The camera position, relative to submesh </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="131" column="1"/>
+        <location file="Render/RenderDevice.hpp" line="276" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d4/d87/a03963_1ac9057e5d18c8e160e78d09b8da5253f3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::TriFaceMapping::computeNormals</definition>
-        <argsstring>(bool reverted=false) override</argsstring>
-        <name>computeNormals</name>
-        <reimplements refid="d2/da4/a03927_1a6f19747b6795855d0048b85952e54521">computeNormals</reimplements>
+      <memberdef kind="function" id="d4/d87/a03963_1a79058c937b7edd423fd5e4c95a3416d9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkFormat</type>
+        <definition>C3D_API VkFormat castor3d::RenderDevice::selectSuitableDepthStencilFormat</definition>
+        <argsstring>(VkFormatFeatureFlags requiredFeatures) const</argsstring>
+        <name>selectSuitableDepthStencilFormat</name>
+        <qualifiedname>castor3d::RenderDevice::selectSuitableDepthStencilFormat</qualifiedname>
         <param>
-          <type>bool</type>
-          <declname>reverted</declname>
-          <defval>false</defval>
+          <type>VkFormatFeatureFlags</type>
+          <declname>requiredFeatures</declname>
         </param>
         <briefdescription>
-<para>Generates normals and tangents. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">reverted</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if normals are inverted. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="135" column="1"/>
+        <location file="Render/RenderDevice.hpp" line="277" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d4/d87/a03963_1a69606c982ff152ce221372b8d9a50ea0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::TriFaceMapping::addFaceGroup</definition>
-        <argsstring>(std::vector&lt; FaceIndices &gt; const &amp;faces)</argsstring>
-        <name>addFaceGroup</name>
+      <memberdef kind="function" id="d4/d87/a03963_1ad78c6c61626f40f05f5795b3c8293b01" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkFormat</type>
+        <definition>C3D_API VkFormat castor3d::RenderDevice::selectSuitableFormat</definition>
+        <argsstring>(std::vector&lt; VkFormat &gt; const &amp;formats, VkFormatFeatureFlags requiredFeatures) const</argsstring>
+        <name>selectSuitableFormat</name>
+        <qualifiedname>castor3d::RenderDevice::selectSuitableFormat</qualifiedname>
         <param>
-          <type>std::vector&lt; <ref refid="d6/dfd/a03915" kindref="compound">FaceIndices</ref> &gt; const &amp;</type>
-          <declname>faces</declname>
+          <type>std::vector&lt; VkFormat &gt; const &amp;</type>
+          <declname>formats</declname>
+        </param>
+        <param>
+          <type>VkFormatFeatureFlags</type>
+          <declname>requiredFeatures</declname>
         </param>
         <briefdescription>
-<para>Creates and adds faces to the submesh. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">faces</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The faces. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="144" column="1" bodyfile="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="144" bodyend="147"/>
-        <references refid="d4/d87/a03963_1a8458083da6c3f1f13a70378f6775a375">addFaceGroup</references>
+        <location file="Render/RenderDevice.hpp" line="278" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d4/d87/a03963_1a3ba3975413f57256077cdef34f6e745c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>size_t</type>
-            <declname>Count</declname>
-            <defname>Count</defname>
-          </param>
-        </templateparamlist>
-        <type>void</type>
-        <definition>void castor3d::TriFaceMapping::addFaceGroup</definition>
-        <argsstring>(std::array&lt; FaceIndices, Count &gt; const &amp;faces)</argsstring>
-        <name>addFaceGroup</name>
-        <param>
-          <type>std::array&lt; <ref refid="d6/dfd/a03915" kindref="compound">FaceIndices</ref>, Count &gt; const &amp;</type>
-          <declname>faces</declname>
-        </param>
-        <briefdescription>
-<para>Creates and adds faces to the submesh. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">faces</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The faces. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="157" column="1" bodyfile="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="157" bodyend="160"/>
-        <references refid="d4/d87/a03963_1a8458083da6c3f1f13a70378f6775a375">addFaceGroup</references>
-      </memberdef>
-      <memberdef kind="function" id="d4/d87/a03963_1aaee34d39a1c960cd51c1aeaba30a4729" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>uint32_t</type>
-            <declname>Count</declname>
-            <defname>Count</defname>
-          </param>
-        </templateparamlist>
-        <type>void</type>
-        <definition>void castor3d::TriFaceMapping::addFaceGroup</definition>
-        <argsstring>(FaceIndices(&amp;faces)[Count])</argsstring>
-        <name>addFaceGroup</name>
-        <param>
-          <type><ref refid="d6/dfd/a03915" kindref="compound">FaceIndices</ref>(&amp;)</type>
-          <declname>faces</declname>
-          <array>[Count]</array>
-        </param>
-        <briefdescription>
-<para>Creates and adds faces to the submesh. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">faces</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The faces. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="170" column="1" bodyfile="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="170" bodyend="173"/>
-        <references refid="d4/d87/a03963_1a8458083da6c3f1f13a70378f6775a375">addFaceGroup</references>
-      </memberdef>
-      <memberdef kind="function" id="d4/d87/a03963_1a7662dbe048d3e43392938afafe4ecb72" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d4/da4/a03911" kindref="compound">Face</ref> const  &amp;</type>
-        <definition>Face const&amp; castor3d::TriFaceMapping::operator[]</definition>
-        <argsstring>(uint32_t index) const</argsstring>
-        <name>operator[]</name>
-        <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves the face at given index. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">index</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The index. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The value. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="184" column="1" bodyfile="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="184" bodyend="188"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/d87/a03963_1aa36f68e90dcc978c13fb4f7118d9b8c0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>FaceArray const  &amp;</type>
-        <definition>FaceArray const&amp; castor3d::TriFaceMapping::getFaces</definition>
+      <memberdef kind="function" id="d4/d87/a03963_1afde3055da1cd3936e2cb53ec2d571493" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="db/df9/a03951" kindref="compound">QueueDataWrapper</ref></type>
+        <definition>C3D_API QueueDataWrapper castor3d::RenderDevice::graphicsData</definition>
         <argsstring>() const</argsstring>
-        <name>getFaces</name>
+        <name>graphicsData</name>
+        <qualifiedname>castor3d::RenderDevice::graphicsData</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The faces array. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="195" column="1" bodyfile="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="195" bodyend="198"/>
+        <location file="Render/RenderDevice.hpp" line="280" column="26"/>
       </memberdef>
-      <memberdef kind="function" id="d4/d87/a03963_1aef6c9ee99ef409af6614d3bb3b3f2354" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>FaceArray &amp;</type>
-        <definition>FaceArray&amp; castor3d::TriFaceMapping::getFaces</definition>
-        <argsstring>()</argsstring>
-        <name>getFaces</name>
+      <memberdef kind="function" id="d4/d87/a03963_1a03334aff8de8cb9719c0982ac14fbb91" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="da/d1d/a03947" kindref="compound">QueueData</ref> const *</type>
+        <definition>C3D_API QueueData const  * castor3d::RenderDevice::reserveGraphicsData</definition>
+        <argsstring>() const</argsstring>
+        <name>reserveGraphicsData</name>
+        <qualifiedname>castor3d::RenderDevice::reserveGraphicsData</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The faces array. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="205" column="1" bodyfile="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="205" bodyend="208"/>
+        <location file="Render/RenderDevice.hpp" line="281" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d87/a03963_1a3e15b2641ab25727ecd82cf5071f4f94" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> crg::GraphContext &amp;</type>
+        <definition>C3D_API crg::GraphContext &amp; castor3d::RenderDevice::makeContext</definition>
+        <argsstring>() const</argsstring>
+        <name>makeContext</name>
+        <qualifiedname>castor3d::RenderDevice::makeContext</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="282" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d87/a03963_1a0c6ca7f530a006d930f2668ccc024272" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::RenderDevice::hasExtension</definition>
+        <argsstring>(std::string_view const &amp;name) const</argsstring>
+        <name>hasExtension</name>
+        <qualifiedname>castor3d::RenderDevice::hasExtension</qualifiedname>
+        <param>
+          <type>std::string_view const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="283" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d87/a03963_1a0816642bfba0314b3eaf406e69ab47f2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::RenderDevice::hasTerminateInvocation</definition>
+        <argsstring>() const</argsstring>
+        <name>hasTerminateInvocation</name>
+        <qualifiedname>castor3d::RenderDevice::hasTerminateInvocation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="284" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d87/a03963_1ad715fd6461f8154fa714617d464a4ac6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::RenderDevice::hasDemoteToHelperInvocation</definition>
+        <argsstring>() const</argsstring>
+        <name>hasDemoteToHelperInvocation</name>
+        <qualifiedname>castor3d::RenderDevice::hasDemoteToHelperInvocation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="285" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d87/a03963_1a15b8ccd0c9867d72475a552343341b2c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::RenderDevice::hasMeshAndTaskShaders</definition>
+        <argsstring>() const</argsstring>
+        <name>hasMeshAndTaskShaders</name>
+        <qualifiedname>castor3d::RenderDevice::hasMeshAndTaskShaders</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="286" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d87/a03963_1aff55b28f9389c4e1e265d0be0c71d13e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::RenderDevice::hasAtomicFloatAdd</definition>
+        <argsstring>() const</argsstring>
+        <name>hasAtomicFloatAdd</name>
+        <qualifiedname>castor3d::RenderDevice::hasAtomicFloatAdd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="287" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d87/a03963_1a5e2b6dbbea5d8efe63d00969207bea23" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::RenderDevice::hasBufferDeviceAddress</definition>
+        <argsstring>() const</argsstring>
+        <name>hasBufferDeviceAddress</name>
+        <qualifiedname>castor3d::RenderDevice::hasBufferDeviceAddress</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="288" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d87/a03963_1a53628e9bffe6083a71688b50e915724d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::RenderDevice::hasRayTracing</definition>
+        <argsstring>() const</argsstring>
+        <name>hasRayTracing</name>
+        <qualifiedname>castor3d::RenderDevice::hasRayTracing</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="289" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d87/a03963_1a04f8d65def4dbcdfeb01a86c1985687a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::RenderDevice::hasBindless</definition>
+        <argsstring>() const</argsstring>
+        <name>hasBindless</name>
+        <qualifiedname>castor3d::RenderDevice::hasBindless</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="290" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d87/a03963_1a8a8fb2d49819fc59fc2da8ace36f1a8f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::RenderDevice::getMaxBindlessSampled</definition>
+        <argsstring>() const</argsstring>
+        <name>getMaxBindlessSampled</name>
+        <qualifiedname>castor3d::RenderDevice::getMaxBindlessSampled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="291" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d87/a03963_1a39cb62a8e05a209ecae4120bc5289ba6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::RenderDevice::getMaxBindlessStorage</definition>
+        <argsstring>() const</argsstring>
+        <name>getMaxBindlessStorage</name>
+        <qualifiedname>castor3d::RenderDevice::getMaxBindlessStorage</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="292" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d87/a03963_1ab785642ba3f986bdd08be9d3145798dd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Device const *</type>
+        <definition>ashes::Device const  * castor3d::RenderDevice::operator-&gt;</definition>
+        <argsstring>() const</argsstring>
+        <name>operator-&gt;</name>
+        <qualifiedname>castor3d::RenderDevice::operator-&gt;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="294" column="22" bodyfile="Render/RenderDevice.hpp" bodystart="294" bodyend="297"/>
+        <references refid="d4/d87/a03963_1a2272f008b9778c429162f54ceb1e2144" compoundref="df/d0e/a00800" startline="339">device</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/d87/a03963_1ac5d9d1a9eeb39afdfb7b646ee176279d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Device *</type>
+        <definition>ashes::Device * castor3d::RenderDevice::operator-&gt;</definition>
+        <argsstring>()</argsstring>
+        <name>operator-&gt;</name>
+        <qualifiedname>castor3d::RenderDevice::operator-&gt;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="299" column="16" bodyfile="Render/RenderDevice.hpp" bodystart="299" bodyend="302"/>
+        <references refid="d4/d87/a03963_1a2272f008b9778c429162f54ceb1e2144" compoundref="df/d0e/a00800" startline="339">device</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/d87/a03963_1a9bb44f865a392ac53cb51435f0178f0e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Device &amp;</type>
+        <definition>ashes::Device &amp; castor3d::RenderDevice::operator*</definition>
+        <argsstring>()</argsstring>
+        <name>operator*</name>
+        <qualifiedname>castor3d::RenderDevice::operator*</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="304" column="16" bodyfile="Render/RenderDevice.hpp" bodystart="304" bodyend="307"/>
+        <references refid="d4/d87/a03963_1a2272f008b9778c429162f54ceb1e2144" compoundref="df/d0e/a00800" startline="339">device</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/d87/a03963_1a8b16bb93653425c5b22dcb5570d57771" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Device const &amp;</type>
+        <definition>ashes::Device const  &amp; castor3d::RenderDevice::operator*</definition>
+        <argsstring>() const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>castor3d::RenderDevice::operator*</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="309" column="22" bodyfile="Render/RenderDevice.hpp" bodystart="309" bodyend="312"/>
+        <references refid="d4/d87/a03963_1a2272f008b9778c429162f54ceb1e2144" compoundref="df/d0e/a00800" startline="339">device</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/d87/a03963_1ac7236dc1a57d591fe1d8c3623a070833" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderDevice::getGraphicsQueueFamilyIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>getGraphicsQueueFamilyIndex</name>
+        <qualifiedname>castor3d::RenderDevice::getGraphicsQueueFamilyIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="314" column="10" bodyfile="Render/RenderDevice.hpp" bodystart="314" bodyend="318"/>
+        <references refid="d5/d04/a03955_1a001bef0e65056e5cd1df4cf9a314be79" compoundref="df/d0e/a00800" startline="250">castor3d::QueuesData::familyIndex</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/d87/a03963_1aa99ac66d87ff1a769c64d515d1140457" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderDevice::getComputeQueueFamilyIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>getComputeQueueFamilyIndex</name>
+        <qualifiedname>castor3d::RenderDevice::getComputeQueueFamilyIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="320" column="10" bodyfile="Render/RenderDevice.hpp" bodystart="320" bodyend="324"/>
+        <references refid="d5/d04/a03955_1a001bef0e65056e5cd1df4cf9a314be79" compoundref="df/d0e/a00800" startline="250">castor3d::QueuesData::familyIndex</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/d87/a03963_1a5ed4e97ddb52bc89339d837852e83585" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderDevice::getTransferQueueFamilyIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>getTransferQueueFamilyIndex</name>
+        <qualifiedname>castor3d::RenderDevice::getTransferQueueFamilyIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="326" column="10" bodyfile="Render/RenderDevice.hpp" bodystart="326" bodyend="330"/>
+        <references refid="d5/d04/a03955_1a001bef0e65056e5cd1df4cf9a314be79" compoundref="df/d0e/a00800" startline="250">castor3d::QueuesData::familyIndex</references>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-func">
-      <memberdef kind="function" id="d4/d87/a03963_1aa6bb407bf18698981f0259c69de2e244" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::TriFaceMapping::doCleanup</definition>
-        <argsstring>() override</argsstring>
-        <name>doCleanup</name>
-        <reimplements refid="d2/da4/a03927_1a2c49cc8e20d623d7eafa9e092092ccdc">doCleanup</reimplements>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="211" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/d87/a03963_1afab81f8a0904204f1a707e1ba19272c8" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::TriFaceMapping::doFill</definition>
-        <argsstring>(RenderDevice const &amp;device) override</argsstring>
-        <name>doFill</name>
-        <reimplements refid="d1/d55/a03959_1a78f22f8994aae0890645c943e42c45c9">doFill</reimplements>
+      <memberdef kind="function" id="d4/d87/a03963_1ace8f0ea8c5d6f08f7af8c62309fac02f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::RenderDevice::doTryAddExtension</definition>
+        <argsstring>(std::string name, void *pFeature=nullptr, void *pProperty=nullptr)</argsstring>
+        <name>doTryAddExtension</name>
+        <qualifiedname>castor3d::RenderDevice::doTryAddExtension</qualifiedname>
         <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
+          <type>std::string</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>pFeature</declname>
+          <defval>nullptr</defval>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>pProperty</declname>
+          <defval>nullptr</defval>
         </param>
         <briefdescription>
         </briefdescription>
@@ -673,113 +842,112 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="212" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/d87/a03963_1a44b68a2bd1c451b534e520d761d7def3" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::TriFaceMapping::doUpload</definition>
-        <argsstring>() override</argsstring>
-        <name>doUpload</name>
-        <reimplements refid="d2/da4/a03927_1a0bae680c96d93257ac710bcebb708504">doUpload</reimplements>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="213" column="1"/>
+        <location file="Render/RenderDevice.hpp" line="351" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="4581">
-        <label>castor3d::SubmeshComponent</label>
-        <link refid="d1/d55/a03959"/>
-        <childnode refid="4582" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4582">
-        <label>castor::OwnedBy&lt; Submesh &gt;</label>
-      </node>
-      <node id="4579">
-        <label>castor3d::TriFaceMapping</label>
-        <link refid="d4/d87/a03963"/>
-        <childnode refid="4580" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4580">
-        <label>castor3d::IndexMapping</label>
-        <link refid="d2/da4/a03927"/>
-        <childnode refid="4581" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
     <collaborationgraph>
-      <node id="4585">
-        <label>castor3d::SubmeshComponent</label>
-        <link refid="d1/d55/a03959"/>
-        <childnode refid="4586" relation="public-inheritance">
-        </childnode>
+      <node id="7">
+        <label>T</label>
       </node>
-      <node id="4586">
-        <label>castor::OwnedBy&lt; Submesh &gt;</label>
+      <node id="5">
+        <label>castor3d::QueuesData</label>
+        <link refid="d5/d04/a03955"/>
       </node>
-      <node id="4583">
-        <label>castor3d::TriFaceMapping</label>
+      <node id="1">
+        <label>castor3d::RenderDevice</label>
         <link refid="d4/d87/a03963"/>
-        <childnode refid="4584" relation="public-inheritance">
+        <childnode refid="2" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>queueFamilies</edgelabel>
         </childnode>
       </node>
-      <node id="4584">
-        <label>castor3d::IndexMapping</label>
-        <link refid="d2/da4/a03927"/>
-        <childnode refid="4585" relation="public-inheritance">
+      <node id="2">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d3/d9a/a04075"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="6">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::vector&lt; QueuesData &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; QueuesData &gt;</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="16" column="1" bodyfile="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="14" bodyend="228"/>
+    <location file="Render/RenderDevice.hpp" line="267" column="1" bodyfile="Render/RenderDevice.hpp" bodystart="268" bodyend="440"/>
     <listofallmembers>
-      <member refid="d4/d87/a03963_1a614af1061e30260787d01f9032cb5920" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>addFace</name></member>
-      <member refid="d4/d87/a03963_1a8458083da6c3f1f13a70378f6775a375" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>addFaceGroup</name></member>
-      <member refid="d4/d87/a03963_1a69606c982ff152ce221372b8d9a50ea0" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>addFaceGroup</name></member>
-      <member refid="d4/d87/a03963_1a3ba3975413f57256077cdef34f6e745c" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>addFaceGroup</name></member>
-      <member refid="d4/d87/a03963_1aaee34d39a1c960cd51c1aeaba30a4729" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>addFaceGroup</name></member>
-      <member refid="d4/d87/a03963_1a61dc6f308e11d7d3b4fdb56506c3ee99" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>addQuadFace</name></member>
-      <member refid="d1/d55/a03959_1af13d08b9487f0501a06c0f7df4c89f8c" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>cleanup</name></member>
-      <member refid="d4/d87/a03963_1aae0c3befa1e3e73872245300acc110de" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>clearFaces</name></member>
-      <member refid="d4/d87/a03963_1a2468296783b8a341c9d0074f2e193ee3" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>computeFacesFromPolygonVertex</name></member>
-      <member refid="d4/d87/a03963_1a9c3fb39743810be7038d7ce94cf17aaf" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>computeNormals</name></member>
-      <member refid="d4/d87/a03963_1ac9057e5d18c8e160e78d09b8da5253f3" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping</scope><name>computeNormals</name></member>
-      <member refid="d4/d87/a03963_1ab00cf919f043bf88a5d7b27a7edc1b36" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>computeTangents</name></member>
-      <member refid="d4/d87/a03963_1a9ea15725eebf3b74b749dda82f11d03d" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>computeTangentsFromNormals</name></member>
-      <member refid="d4/d87/a03963_1aa6bb407bf18698981f0259c69de2e244" prot="private" virt="virtual"><scope>castor3d::TriFaceMapping</scope><name>doCleanup</name></member>
-      <member refid="d4/d87/a03963_1afab81f8a0904204f1a707e1ba19272c8" prot="private" virt="virtual"><scope>castor3d::TriFaceMapping</scope><name>doFill</name></member>
-      <member refid="d4/d87/a03963_1a44b68a2bd1c451b534e520d761d7def3" prot="private" virt="virtual"><scope>castor3d::TriFaceMapping</scope><name>doUpload</name></member>
-      <member refid="d1/d55/a03959_1a53837125323ab11c28a86acbb187a770" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>fill</name></member>
-      <member refid="d2/da4/a03927_1a10bebffa35ae21fc4ff5d89ae006d821" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping</scope><name>gather</name></member>
-      <member refid="d4/d87/a03963_1a7ade6d9d5e5b8980fb52bbc5ce1b7840" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping</scope><name>getComponentsCount</name></member>
-      <member refid="d4/d87/a03963_1adfb71fd0c8a6c5526100c09c304c165d" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping</scope><name>getCount</name></member>
-      <member refid="d4/d87/a03963_1aa36f68e90dcc978c13fb4f7118d9b8c0" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>getFaces</name></member>
-      <member refid="d4/d87/a03963_1aef6c9ee99ef409af6614d3bb3b3f2354" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>getFaces</name></member>
-      <member refid="d2/da4/a03927_1ad94cf3099cec538865eced8135a8d645" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping</scope><name>getProgramFlags</name></member>
-      <member refid="d1/d55/a03959_1a3782f6784f793eeccd48e637e85a9d6c" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>getType</name></member>
-      <member refid="d2/da4/a03927_1a6bd3086ce38c6a3e4f150efd9f580d38" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>IndexMapping</name></member>
-      <member refid="d1/d55/a03959_1a98c6ad3457d19448c1eaa261598103ad" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>initialise</name></member>
-      <member refid="d4/d87/a03963_1ab8c25ef8ae17b8c9d21e01dcc1a5c627" prot="private" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>m_cameraPosition</name></member>
-      <member refid="d4/d87/a03963_1a69a75f6a4237224ec7ebe5abf07b7566" prot="private" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>m_faces</name></member>
-      <member refid="d4/d87/a03963_1a536ab89280367629495bfa2e367b9b86" prot="private" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>m_hasNormals</name></member>
-      <member refid="d4/d87/a03963_1a2729e37105aa4cfa04ce6d322ed2549e" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>Name</name></member>
-      <member refid="d1/d55/a03959_1a7e21e4eda223d50b6751c40cb44f77a7" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>needsUpdate</name></member>
-      <member refid="d4/d87/a03963_1a7662dbe048d3e43392938afafe4ecb72" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>operator[]</name></member>
-      <member refid="d1/d55/a03959_1a06b2ee9400bab62f5472f8ce8a03ee27" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping</scope><name>setMaterial</name></member>
-      <member refid="d4/d87/a03963_1afb6706c30a0e419d9627929c189abd3b" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping</scope><name>sortByDistance</name></member>
-      <member refid="d1/d55/a03959_1aafbe6064005a72343870bb444e1e6a1f" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>SubmeshComponent</name></member>
-      <member refid="d4/d87/a03963_1aabed0dcb803ab1154d0907e116cc2668" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>TriFaceMapping</name></member>
-      <member refid="d1/d55/a03959_1a2dbcda2b8c26f4c9c52db78a5740a0f8" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>upload</name></member>
-      <member refid="d1/d55/a03959_1a30231a167367ba38b41f9bf5b3bcd005" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping</scope><name>~SubmeshComponent</name></member>
+      <member refid="d4/d87/a03963_1a3de18ed16653ffd407bae1fae33b2b37" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>bufferPool</name></member>
+      <member refid="d4/d87/a03963_1aaf7f2637aebfec7d50f1be4e89902e29" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>computeCommandPool</name></member>
+      <member refid="d4/d87/a03963_1af626c7155a716f7b4fd3566846f19fa6" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>computeQueue</name></member>
+      <member refid="d4/d87/a03963_1a38f7618d62ba92503afaa091e8106690" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>desc</name></member>
+      <member refid="d4/d87/a03963_1a2272f008b9778c429162f54ceb1e2144" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>device</name></member>
+      <member refid="d4/d87/a03963_1ace8f0ea8c5d6f08f7af8c62309fac02f" prot="private" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>doTryAddExtension</name></member>
+      <member refid="d4/d87/a03963_1aa7953f74ea89fbf370e71a1ab7b317e7" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>features</name></member>
+      <member refid="d4/d87/a03963_1a0a84b3fc467ceb9fea7c18283a33617c" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>geometryPools</name></member>
+      <member refid="d4/d87/a03963_1aa99ac66d87ff1a769c64d515d1140457" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>getComputeQueueFamilyIndex</name></member>
+      <member refid="d4/d87/a03963_1ac7236dc1a57d591fe1d8c3623a070833" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>getGraphicsQueueFamilyIndex</name></member>
+      <member refid="d4/d87/a03963_1a8a8fb2d49819fc59fc2da8ace36f1a8f" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>getMaxBindlessSampled</name></member>
+      <member refid="d4/d87/a03963_1a39cb62a8e05a209ecae4120bc5289ba6" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>getMaxBindlessStorage</name></member>
+      <member refid="d4/d87/a03963_1a5ed4e97ddb52bc89339d837852e83585" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>getTransferQueueFamilyIndex</name></member>
+      <member refid="d4/d87/a03963_1a9a0363c9533fce882cb276b2871f910e" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>gpu</name></member>
+      <member refid="d4/d87/a03963_1aa8b70eccb6c4fd7471d3626d7bc1562e" prot="private" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>GraphContextPtr</name></member>
+      <member refid="d4/d87/a03963_1afde3055da1cd3936e2cb53ec2d571493" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>graphicsData</name></member>
+      <member refid="d4/d87/a03963_1aff55b28f9389c4e1e265d0be0c71d13e" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>hasAtomicFloatAdd</name></member>
+      <member refid="d4/d87/a03963_1a04f8d65def4dbcdfeb01a86c1985687a" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>hasBindless</name></member>
+      <member refid="d4/d87/a03963_1a5e2b6dbbea5d8efe63d00969207bea23" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>hasBufferDeviceAddress</name></member>
+      <member refid="d4/d87/a03963_1ad715fd6461f8154fa714617d464a4ac6" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>hasDemoteToHelperInvocation</name></member>
+      <member refid="d4/d87/a03963_1a0c6ca7f530a006d930f2668ccc024272" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>hasExtension</name></member>
+      <member refid="d4/d87/a03963_1a15b8ccd0c9867d72475a552343341b2c" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>hasMeshAndTaskShaders</name></member>
+      <member refid="d4/d87/a03963_1a53628e9bffe6083a71688b50e915724d" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>hasRayTracing</name></member>
+      <member refid="d4/d87/a03963_1a0816642bfba0314b3eaf406e69ab47f2" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>hasTerminateInvocation</name></member>
+      <member refid="d4/d87/a03963_1ade700abc086f0077cdae12db634a7cb0" prot="private" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>m_availableExtensions</name></member>
+      <member refid="d4/d87/a03963_1ab2291101050ed277e74093814993f22d" prot="private" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>m_contexts</name></member>
+      <member refid="d4/d87/a03963_1ac59b0dfaff2adbba67fcd7ba110c2064" prot="private" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>m_deviceExtensions</name></member>
+      <member refid="d4/d87/a03963_1ad9953a1958ab4215dc34c126115ef917" prot="private" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>m_drawParamsFeatures</name></member>
+      <member refid="d4/d87/a03963_1a8b30a100a3d5e437cb386ee2facb041e" prot="private" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>m_mutex</name></member>
+      <member refid="d4/d87/a03963_1afb336d348429717e6b00aa24e9def0cf" prot="private" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>m_preferredComputeQueue</name></member>
+      <member refid="d4/d87/a03963_1ad3987d82e902395a229e55e831fc0282" prot="private" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>m_preferredGraphicsQueue</name></member>
+      <member refid="d4/d87/a03963_1aaf6a0560959be532830d8198c2df27f4" prot="private" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>m_preferredTransferQueue</name></member>
+      <member refid="d4/d87/a03963_1a3e15b2641ab25727ecd82cf5071f4f94" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>makeContext</name></member>
+      <member refid="d4/d87/a03963_1a5c03d840e8ddc6521b65d428b3e4db6f" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>memoryProperties</name></member>
+      <member refid="d4/d87/a03963_1a9bb44f865a392ac53cb51435f0178f0e" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>operator*</name></member>
+      <member refid="d4/d87/a03963_1a8b16bb93653425c5b22dcb5570d57771" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>operator*</name></member>
+      <member refid="d4/d87/a03963_1ab785642ba3f986bdd08be9d3145798dd" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>operator-&gt;</name></member>
+      <member refid="d4/d87/a03963_1ac5d9d1a9eeb39afdfb7b646ee176279d" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>operator-&gt;</name></member>
+      <member refid="d4/d87/a03963_1a10e7a83a381442bfdf99e1a8ad23858c" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>properties</name></member>
+      <member refid="d4/d87/a03963_1ab34675434013ceee594f3d1bbb301efd" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>queueFamilies</name></member>
+      <member refid="d4/d87/a03963_1a985f67823e773d0d4c8acdb9df81b044" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>RenderDevice</name></member>
+      <member refid="d4/d87/a03963_1aeffdfd4538f7c05c8d748ce596ea9b79" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>renderSystem</name></member>
+      <member refid="d4/d87/a03963_1a03334aff8de8cb9719c0982ac14fbb91" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>reserveGraphicsData</name></member>
+      <member refid="d4/d87/a03963_1a6dcd05a5fc148ea0d14d49f58002da19" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>selectSuitableDepthFormat</name></member>
+      <member refid="d4/d87/a03963_1a79058c937b7edd423fd5e4c95a3416d9" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>selectSuitableDepthStencilFormat</name></member>
+      <member refid="d4/d87/a03963_1ad78c6c61626f40f05f5795b3c8293b01" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>selectSuitableFormat</name></member>
+      <member refid="d4/d87/a03963_1a854a8933c434c2227f20e7a7481ae66f" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>selectSuitableStencilFormat</name></member>
+      <member refid="d4/d87/a03963_1a5adc1b1ce5dd761c88800b56a03254e6" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>skinnedGeometryPools</name></member>
+      <member refid="d4/d87/a03963_1a1166fc7ba4d41c555cb7ad90ec82daa1" prot="private" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>ThreadGraphContexts</name></member>
+      <member refid="d4/d87/a03963_1aea009079b955b9e7bb40874c721951bf" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>transferCommandPool</name></member>
+      <member refid="d4/d87/a03963_1a90d90905d15aeb6c8b48cd3817922d99" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>transferQueue</name></member>
+      <member refid="d4/d87/a03963_1a5f27b21c87d9c8732922aea89382f351" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>uboPool</name></member>
+      <member refid="d4/d87/a03963_1ae46926026ada2a73517af3c9e01cdb7c" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>vertexPools</name></member>
+      <member refid="d4/d87/a03963_1acfa5116dc26089edcd3239c5fd157c0e" prot="public" virt="non-virtual"><scope>castor3d::RenderDevice</scope><name>~RenderDevice</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

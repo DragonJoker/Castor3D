@@ -1,227 +1,106 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d0/d4c/a04422" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::RenderQuadBuilderT</compoundname>
-    <derivedcompoundref refid="d3/d74/a04418" prot="public" virt="non-virtual">castor3d::RenderGridBuilderT&lt; ConfigT, BuilderT &gt;</derivedcompoundref>
-    <includes local="no">RenderQuad.hpp</includes>
-    <templateparamlist>
-      <param>
-        <type>typename</type>
-        <declname>ConfigT</declname>
-        <defname>ConfigT</defname>
-      </param>
-      <param>
-        <type>typename</type>
-        <declname>BuilderT</declname>
-        <defname>BuilderT</defname>
-      </param>
-    </templateparamlist>
-      <sectiondef kind="protected-attrib">
-      <memberdef kind="variable" id="d0/d4c/a04422_1aa7fc146147deb53c51c646122d66eef6" prot="protected" static="no" mutable="no">
-        <type>ConfigT</type>
-        <definition>ConfigT castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::m_config</definition>
+    <compoundname>castor3d::SceneNodeAnimationKeyFrame</compoundname>
+    <basecompoundref refid="dd/d67/a02230" prot="public" virt="non-virtual">castor3d::AnimationKeyFrame</basecompoundref>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; SceneNodeAnimation &gt;</basecompoundref>
+    <includes local="no">SceneNodeAnimationKeyFrame.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/d4c/a04422_1aa1c98711acdcf3ab679e547febcc5ada" prot="private" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::SceneNodeAnimationKeyFrame::m_position</definition>
         <argsstring></argsstring>
-        <name>m_config</name>
+        <name>m_position</name>
+        <qualifiedname>castor3d::SceneNodeAnimationKeyFrame::m_position</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/RenderQuad.hpp" line="699" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="699" bodyend="-1"/>
-        <referencedby refid="d0/d4c/a04422_1a26a1231b102001a6f31e2a03a940a92b" compoundref="d0/d0a/a00743" startline="617" endline="626">castor3d::RenderQuadBuilderT&lt; CombinePassConfig, CombinePassBuilder &gt;::binding</referencedby>
-        <referencedby refid="d0/d4c/a04422_1a7f1e5bea975d79ab849dd0e1032763d2" compoundref="d0/d0a/a00743" startline="602" endline="606">castor3d::RenderQuadBuilderT&lt; CombinePassConfig, CombinePassBuilder &gt;::bindings</referencedby>
-        <referencedby refid="d0/d4c/a04422_1ab79d0233219ed09c4ab108a544cbb091" compoundref="d0/d0a/a00743" startline="589" endline="593">castor3d::RenderQuadBuilderT&lt; CombinePassConfig, CombinePassBuilder &gt;::blendMode</referencedby>
-        <referencedby refid="d3/d74/a04418_1a30474670e562376b1cf521265ad95180" compoundref="dc/dce/a00740" startline="524" endline="534">castor3d::RenderGridBuilderT&lt; rq::Config, RenderGridBuilder &gt;::build</referencedby>
-        <referencedby refid="d0/d4c/a04422_1a4a58abd503ed0bff1600be8605477258" compoundref="d0/d0a/a00743" startline="688" endline="696">castor3d::RenderQuadBuilderT&lt; CombinePassConfig, CombinePassBuilder &gt;::build</referencedby>
-        <referencedby refid="d0/d4c/a04422_1a420f77dfb83539957ebec08cdf8f59a8" compoundref="d0/d0a/a00743" startline="576" endline="580">castor3d::RenderQuadBuilderT&lt; CombinePassConfig, CombinePassBuilder &gt;::range</referencedby>
-        <referencedby refid="d0/d4c/a04422_1a12b262dcd13123f72d7468b5b0f2d4e9" compoundref="d0/d0a/a00743" startline="563" endline="567">castor3d::RenderQuadBuilderT&lt; CombinePassConfig, CombinePassBuilder &gt;::texcoordConfig</referencedby>
+        <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="79" column="17" bodyfile="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d4c/a04422_1a3926bc1ad7df35f4f6ad9843e2550776" prot="private" static="no" mutable="no">
+        <type>castor::Quaternion</type>
+        <definition>castor::Quaternion castor3d::SceneNodeAnimationKeyFrame::m_rotation</definition>
+        <argsstring></argsstring>
+        <name>m_rotation</name>
+        <qualifiedname>castor3d::SceneNodeAnimationKeyFrame::m_rotation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="80" column="20" bodyfile="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d4c/a04422_1a11df29f10297b5171c31db6f16a1fde6" prot="private" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::SceneNodeAnimationKeyFrame::m_scale</definition>
+        <argsstring></argsstring>
+        <name>m_scale</name>
+        <qualifiedname>castor3d::SceneNodeAnimationKeyFrame::m_scale</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="81" column="17" bodyfile="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="d0/d4c/a04422_1a5578000839a2146cd5b6836c7e446d7f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class BinaryParser&lt; SceneNodeAnimationKeyFrame &gt;</definition>
+        <argsstring></argsstring>
+        <name>BinaryParser&lt; SceneNodeAnimationKeyFrame &gt;</name>
+        <qualifiedname>castor3d::SceneNodeAnimationKeyFrame::BinaryParser&lt; SceneNodeAnimationKeyFrame &gt;</qualifiedname>
+        <param>
+          <type><ref refid="de/dd4/a02338" kindref="compound">BinaryParser</ref>&lt; <ref refid="d0/d4c/a04422" kindref="compound">SceneNodeAnimationKeyFrame</ref> &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="81" column="17" bodyfile="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" bodystart="83" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d0/d4c/a04422_1a13037f2937494dc1ab0f713225aeedd6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::RenderQuadBuilderT</definition>
-        <argsstring>()</argsstring>
-        <name>RenderQuadBuilderT</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/RenderQuad.hpp" line="552" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="552" bodyend="554"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d4c/a04422_1a12b262dcd13123f72d7468b5b0f2d4e9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>BuilderT &amp;</type>
-        <definition>BuilderT&amp; castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::texcoordConfig</definition>
-        <argsstring>(rq::Texcoord const &amp;config)</argsstring>
-        <name>texcoordConfig</name>
+      <memberdef kind="function" id="d0/d4c/a04422_1a10e117d88a15c13e70cfd6f009196ced" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SceneNodeAnimationKeyFrame::SceneNodeAnimationKeyFrame</definition>
+        <argsstring>(SceneNodeAnimation &amp;parent, castor::Milliseconds const &amp;timeIndex)</argsstring>
+        <name>SceneNodeAnimationKeyFrame</name>
+        <qualifiedname>castor3d::SceneNodeAnimationKeyFrame::SceneNodeAnimationKeyFrame</qualifiedname>
         <param>
-          <type><ref refid="dd/d10/a04434" kindref="compound">rq::Texcoord</ref> const &amp;</type>
-          <declname>config</declname>
+          <type><ref refid="d3/d74/a04418" kindref="compound">SceneNodeAnimation</ref> &amp;</type>
+          <declname>parent</declname>
+        </param>
+        <param>
+          <type>castor::Milliseconds const &amp;</type>
+          <declname>timeIndex</declname>
         </param>
         <briefdescription>
+<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">config</parametername>
+<parametername direction="in">parent</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The texture coordinates configuration. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/RenderQuad.hpp" line="563" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="563" bodyend="567"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d4c/a04422_1a420f77dfb83539957ebec08cdf8f59a8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>BuilderT &amp;</type>
-        <definition>BuilderT&amp; castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::range</definition>
-        <argsstring>(VkImageSubresourceRange const &amp;range)</argsstring>
-        <name>range</name>
-        <param>
-          <type>VkImageSubresourceRange const &amp;</type>
-          <declname>range</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">range</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Contains mip levels for the sampler. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/RenderQuad.hpp" line="576" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="576" bodyend="580"/>
-        <referencedby refid="d0/d4c/a04422_1a420f77dfb83539957ebec08cdf8f59a8" compoundref="d0/d0a/a00743" startline="576" endline="580">castor3d::RenderQuadBuilderT&lt; CombinePassConfig, CombinePassBuilder &gt;::range</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="d0/d4c/a04422_1ab79d0233219ed09c4ab108a544cbb091" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>BuilderT &amp;</type>
-        <definition>BuilderT&amp; castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::blendMode</definition>
-        <argsstring>(BlendMode blendMode)</argsstring>
-        <name>blendMode</name>
-        <param>
-          <type><ref refid="de/d13/a01473_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
-          <declname>blendMode</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">blendMode</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Contains blendMode to destination status. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/RenderQuad.hpp" line="589" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="589" bodyend="593"/>
-        <referencedby refid="d0/d4c/a04422_1ab79d0233219ed09c4ab108a544cbb091" compoundref="d0/d0a/a00743" startline="589" endline="593">castor3d::RenderQuadBuilderT&lt; CombinePassConfig, CombinePassBuilder &gt;::blendMode</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="d0/d4c/a04422_1a7f1e5bea975d79ab849dd0e1032763d2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>BuilderT &amp;</type>
-        <definition>BuilderT&amp; castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::bindings</definition>
-        <argsstring>(rq::BindingDescriptionArray const &amp;bindings)</argsstring>
-        <name>bindings</name>
-        <param>
-          <type><ref refid="d8/d67/a01477_1a4a9359de68c83f5e0f2d2cbe8bf5910b" kindref="member">rq::BindingDescriptionArray</ref> const &amp;</type>
-          <declname>bindings</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">bindings</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Contains the inputs bindings. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/RenderQuad.hpp" line="602" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="602" bodyend="606"/>
-        <referencedby refid="d0/d4c/a04422_1a7f1e5bea975d79ab849dd0e1032763d2" compoundref="d0/d0a/a00743" startline="602" endline="606">castor3d::RenderQuadBuilderT&lt; CombinePassConfig, CombinePassBuilder &gt;::bindings</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="d0/d4c/a04422_1a26a1231b102001a6f31e2a03a940a92b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>BuilderT &amp;</type>
-        <definition>BuilderT&amp; castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::binding</definition>
-        <argsstring>(rq::BindingDescription const &amp;binding)</argsstring>
-        <name>binding</name>
-        <param>
-          <type><ref refid="d7/dad/a04438" kindref="compound">rq::BindingDescription</ref> const &amp;</type>
-          <declname>binding</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>Adds an image. <parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">binding</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Contains the binding to add. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/RenderQuad.hpp" line="617" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="617" bodyend="626"/>
-        <referencedby refid="d0/d4c/a04422_1a26a1231b102001a6f31e2a03a940a92b" compoundref="d0/d0a/a00743" startline="617" endline="626">castor3d::RenderQuadBuilderT&lt; CombinePassConfig, CombinePassBuilder &gt;::binding</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="d0/d4c/a04422_1aac898289485433fc71343f13a96abd7d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>BuilderT &amp;</type>
-        <definition>BuilderT&amp; castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::binding</definition>
-        <argsstring>(VkDescriptorType descriptor, VkShaderStageFlags stageFlags=VK_SHADER_STAGE_FRAGMENT_BIT)</argsstring>
-        <name>binding</name>
-        <param>
-          <type>VkDescriptorType</type>
-          <declname>descriptor</declname>
-        </param>
-        <param>
-          <type>VkShaderStageFlags</type>
-          <declname>stageFlags</declname>
-          <defval>VK_SHADER_STAGE_FRAGMENT_BIT</defval>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>Adds an image. <parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">descriptor</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The descriptor type. </para>
+<para>The parent animation. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">stageFlags</parametername>
+<parametername direction="in">timeIndex</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The descriptor stage flags. </para>
+<para>When the key frame starts. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -229,201 +108,210 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/RenderQuad.hpp" line="641" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="641" bodyend="645"/>
+        <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="30" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d0/d4c/a04422_1a26cbd79ac36e4dec53ab50cf9410674e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>BuilderT &amp;</type>
-        <definition>BuilderT&amp; castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::binding</definition>
-        <argsstring>(VkDescriptorType descriptor, VkImageViewType view, VkShaderStageFlags stageFlags=VK_SHADER_STAGE_FRAGMENT_BIT)</argsstring>
-        <name>binding</name>
+      <memberdef kind="function" id="d0/d4c/a04422_1ae9173cdd28c446da7a480af9cd9686b8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point3f const &amp;</type>
+        <definition>castor::Point3f const  &amp; castor3d::SceneNodeAnimationKeyFrame::getPosition</definition>
+        <argsstring>() const</argsstring>
+        <name>getPosition</name>
+        <qualifiedname>castor3d::SceneNodeAnimationKeyFrame::getPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="33" column="24" bodyfile="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" bodystart="33" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d4c/a04422_1a1debe7fcbf9cee8ba0713b27f734970a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Quaternion const &amp;</type>
+        <definition>castor::Quaternion const  &amp; castor3d::SceneNodeAnimationKeyFrame::getRotation</definition>
+        <argsstring>() const</argsstring>
+        <name>getRotation</name>
+        <qualifiedname>castor3d::SceneNodeAnimationKeyFrame::getRotation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="38" column="27" bodyfile="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" bodystart="38" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d4c/a04422_1ab62268ce64ec8346316157d874391b98" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point3f const &amp;</type>
+        <definition>castor::Point3f const  &amp; castor3d::SceneNodeAnimationKeyFrame::getScale</definition>
+        <argsstring>() const</argsstring>
+        <name>getScale</name>
+        <qualifiedname>castor3d::SceneNodeAnimationKeyFrame::getScale</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="43" column="24" bodyfile="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" bodystart="43" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d4c/a04422_1abf807dbfa0eceda40211a965d04e717c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneNodeAnimationKeyFrame::setTransform</definition>
+        <argsstring>(castor::Point3f translate, castor::Quaternion rotate, castor::Point3f scale)</argsstring>
+        <name>setTransform</name>
+        <qualifiedname>castor3d::SceneNodeAnimationKeyFrame::setTransform</qualifiedname>
         <param>
-          <type>VkDescriptorType</type>
-          <declname>descriptor</declname>
+          <type>castor::Point3f</type>
+          <declname>translate</declname>
         </param>
         <param>
-          <type>VkImageViewType</type>
-          <declname>view</declname>
+          <type>castor::Quaternion</type>
+          <declname>rotate</declname>
         </param>
         <param>
-          <type>VkShaderStageFlags</type>
-          <declname>stageFlags</declname>
-          <defval>VK_SHADER_STAGE_FRAGMENT_BIT</defval>
+          <type>castor::Point3f</type>
+          <declname>scale</declname>
         </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>Adds an image binding. <parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">descriptor</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The descriptor type. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">view</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The image view. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">stageFlags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The descriptor stage flags. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/RenderQuad.hpp" line="664" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="664" bodyend="669"/>
+        <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="48" column="6" bodyfile="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" bodystart="48" bodyend="55"/>
       </memberdef>
-      <memberdef kind="function" id="d0/d4c/a04422_1a4a58abd503ed0bff1600be8605477258" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>RenderQuadUPtr</type>
-        <definition>RenderQuadUPtr castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;::build</definition>
-        <argsstring>(RenderDevice const &amp;device, castor::String const &amp;name, VkFilter samplerFilter)</argsstring>
-        <name>build</name>
+      <memberdef kind="function" id="d0/d4c/a04422_1a19a6ac55f72fa6c0691795a248dec7de" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneNodeAnimationKeyFrame::setPosition</definition>
+        <argsstring>(castor::Point3f value)</argsstring>
+        <name>setPosition</name>
+        <qualifiedname>castor3d::SceneNodeAnimationKeyFrame::setPosition</qualifiedname>
         <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type>VkFilter</type>
-          <declname>samplerFilter</declname>
+          <type>castor::Point3f</type>
+          <declname>value</declname>
         </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>Creates the <ref refid="d8/d1f/a04450" kindref="compound">RenderQuad</ref>. <parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The <ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref>. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pass name. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">samplerFilter</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The sampler filter for the source texture. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/RenderQuad.hpp" line="688" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="688" bodyend="696"/>
+        <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="57" column="6" bodyfile="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" bodystart="57" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d4c/a04422_1a7bfac31a42329bb6689a8b33fc663d0f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneNodeAnimationKeyFrame::setRotation</definition>
+        <argsstring>(castor::Quaternion value)</argsstring>
+        <name>setRotation</name>
+        <qualifiedname>castor3d::SceneNodeAnimationKeyFrame::setRotation</qualifiedname>
+        <param>
+          <type>castor::Quaternion</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="62" column="6" bodyfile="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" bodystart="62" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d4c/a04422_1a29c612527d2584802de828c0a0b399f8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneNodeAnimationKeyFrame::setScale</definition>
+        <argsstring>(castor::Point3f value)</argsstring>
+        <name>setScale</name>
+        <qualifiedname>castor3d::SceneNodeAnimationKeyFrame::setScale</qualifiedname>
+        <param>
+          <type>castor::Point3f</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="67" column="6" bodyfile="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" bodystart="67" bodyend="70"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d0/d4c/a04422_1abd98764b958a1b8185a20e21219f41a4" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneNodeAnimationKeyFrame::doSetTimeIndex</definition>
+        <argsstring>(castor::Milliseconds const &amp;time)</argsstring>
+        <name>doSetTimeIndex</name>
+        <qualifiedname>castor3d::SceneNodeAnimationKeyFrame::doSetTimeIndex</qualifiedname>
+        <param>
+          <type>castor::Milliseconds const &amp;</type>
+          <declname>time</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="73" column="6" bodyfile="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" bodystart="73" bodyend="76"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Used to create a <ref refid="d8/d1f/a04450" kindref="compound">RenderQuad</ref> variable. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="3042">
-        <label>castor3d::CombinePassBuilder</label>
-        <link refid="d7/dc9/a04370"/>
-        <childnode refid="3041" relation="public-inheritance">
-        </childnode>
+      <node id="2">
+        <label>castor3d::AnimationKeyFrame</label>
+        <link refid="dd/d67/a02230"/>
       </node>
-      <node id="3034">
-        <label>castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;</label>
+      <node id="1">
+        <label>castor3d::SceneNodeAnimationKeyFrame</label>
         <link refid="d0/d4c/a04422"/>
-      </node>
-      <node id="3038">
-        <label>castor3d::RenderQuadBuilderT&lt; rq::Config, RenderQuadBuilder &gt;</label>
-        <link refid="d0/d4c/a04422"/>
-        <childnode refid="3034" relation="template-instance">
-          <edgelabel>&lt; rq::Config, RenderQuadBuilder &gt;</edgelabel>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="3035">
-        <label>castor3d::RenderGridBuilderT&lt; ConfigT, BuilderT &gt;</label>
-        <link refid="d3/d74/a04418"/>
-        <childnode refid="3034" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3041">
-        <label>castor3d::RenderQuadBuilderT&lt; CombinePassConfig, CombinePassBuilder &gt;</label>
-        <link refid="d0/d4c/a04422"/>
-        <childnode refid="3034" relation="template-instance">
-          <edgelabel>&lt; CombinePassConfig, CombinePassBuilder &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3036">
-        <label>castor3d::RenderGridBuilderT&lt; rq::Config, RenderGridBuilder &gt;</label>
-        <link refid="d3/d74/a04418"/>
-        <childnode refid="3035" relation="template-instance">
-          <edgelabel>&lt; rq::Config, RenderGridBuilder &gt;</edgelabel>
-        </childnode>
-        <childnode refid="3040" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3040">
-        <label>castor3d::RenderQuadBuilderT&lt; rq::Config, RenderGridBuilder &gt;</label>
-        <link refid="d0/d4c/a04422"/>
-        <childnode refid="3034" relation="template-instance">
-          <edgelabel>&lt; rq::Config, RenderGridBuilder &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3039">
-        <label>castor3d::RenderQuadBuilder</label>
-        <link refid="de/d70/a04454"/>
-        <childnode refid="3038" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3037">
-        <label>castor3d::RenderGridBuilder</label>
-        <link refid="d9/d36/a04430"/>
-        <childnode refid="3036" relation="public-inheritance">
-        </childnode>
+      <node id="3">
+        <label>castor::OwnedBy&lt; SceneNodeAnimation &gt;</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="3043">
-        <label>castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;</label>
+      <node id="2">
+        <label>castor3d::AnimationKeyFrame</label>
+        <link refid="dd/d67/a02230"/>
+      </node>
+      <node id="1">
+        <label>castor3d::SceneNodeAnimationKeyFrame</label>
         <link refid="d0/d4c/a04422"/>
-        <childnode refid="3044" relation="usage">
-          <edgelabel>m_config</edgelabel>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="3044">
-        <label>ConfigT</label>
+      <node id="3">
+        <label>castor::OwnedBy&lt; SceneNodeAnimation &gt;</label>
       </node>
     </collaborationgraph>
-    <location file="Render/Passes/PassesModule.hpp" line="135" column="1" bodyfile="Render/Passes/PassesModule.hpp" bodystart="135" bodyend="-1"/>
+    <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="15" column="1" bodyfile="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" bodystart="18" bodyend="84"/>
     <listofallmembers>
-      <member refid="d0/d4c/a04422_1a26a1231b102001a6f31e2a03a940a92b" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilderT</scope><name>binding</name></member>
-      <member refid="d0/d4c/a04422_1aac898289485433fc71343f13a96abd7d" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilderT</scope><name>binding</name></member>
-      <member refid="d0/d4c/a04422_1a26cbd79ac36e4dec53ab50cf9410674e" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilderT</scope><name>binding</name></member>
-      <member refid="d0/d4c/a04422_1a7f1e5bea975d79ab849dd0e1032763d2" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilderT</scope><name>bindings</name></member>
-      <member refid="d0/d4c/a04422_1ab79d0233219ed09c4ab108a544cbb091" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilderT</scope><name>blendMode</name></member>
-      <member refid="d0/d4c/a04422_1a4a58abd503ed0bff1600be8605477258" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilderT</scope><name>build</name></member>
-      <member refid="d0/d4c/a04422_1aa7fc146147deb53c51c646122d66eef6" prot="protected" virt="non-virtual"><scope>castor3d::RenderQuadBuilderT</scope><name>m_config</name></member>
-      <member refid="d0/d4c/a04422_1a420f77dfb83539957ebec08cdf8f59a8" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilderT</scope><name>range</name></member>
-      <member refid="d0/d4c/a04422_1a13037f2937494dc1ab0f713225aeedd6" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilderT</scope><name>RenderQuadBuilderT</name></member>
-      <member refid="d0/d4c/a04422_1a12b262dcd13123f72d7468b5b0f2d4e9" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilderT</scope><name>texcoordConfig</name></member>
+      <member refid="dd/d67/a02230_1a4c0d4b7afbe022ee8f9dcb9dc1ea54f0" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>AnimationKeyFrame</name></member>
+      <member refid="d0/d4c/a04422_1a5578000839a2146cd5b6836c7e446d7f" prot="private" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>BinaryParser&lt; SceneNodeAnimationKeyFrame &gt;</name></member>
+      <member refid="d0/d4c/a04422_1abd98764b958a1b8185a20e21219f41a4" prot="private" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>doSetTimeIndex</name></member>
+      <member refid="d0/d4c/a04422_1ae9173cdd28c446da7a480af9cd9686b8" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>getPosition</name></member>
+      <member refid="d0/d4c/a04422_1a1debe7fcbf9cee8ba0713b27f734970a" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>getRotation</name></member>
+      <member refid="d0/d4c/a04422_1ab62268ce64ec8346316157d874391b98" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>getScale</name></member>
+      <member refid="dd/d67/a02230_1a7b65d0aeb639d12908b9d17335702a17" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>getTimeIndex</name></member>
+      <member refid="dd/d67/a02230_1a14d9b59106f5406a66f2b8af33367991" prot="public" virt="virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>initialise</name></member>
+      <member refid="dd/d67/a02230_1abc9e4e2a76ef5ec53fe3308add665082" prot="protected" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>m_boundingBox</name></member>
+      <member refid="d0/d4c/a04422_1aa1c98711acdcf3ab679e547febcc5ada" prot="private" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>m_position</name></member>
+      <member refid="d0/d4c/a04422_1a3926bc1ad7df35f4f6ad9843e2550776" prot="private" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>m_rotation</name></member>
+      <member refid="d0/d4c/a04422_1a11df29f10297b5171c31db6f16a1fde6" prot="private" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>m_scale</name></member>
+      <member refid="dd/d67/a02230_1a093b74b56f13b6376ea4a51e28893db5" prot="protected" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>m_timeIndex</name></member>
+      <member refid="d0/d4c/a04422_1a10e117d88a15c13e70cfd6f009196ced" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>SceneNodeAnimationKeyFrame</name></member>
+      <member refid="d0/d4c/a04422_1a19a6ac55f72fa6c0691795a248dec7de" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>setPosition</name></member>
+      <member refid="d0/d4c/a04422_1a7bfac31a42329bb6689a8b33fc663d0f" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>setRotation</name></member>
+      <member refid="d0/d4c/a04422_1a29c612527d2584802de828c0a0b399f8" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>setScale</name></member>
+      <member refid="d0/d4c/a04422_1abf807dbfa0eceda40211a965d04e717c" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>setTransform</name></member>
+      <member refid="dd/d67/a02230_1a0e38208bad19dd09708af045818c2f8d" prot="public" virt="virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>~AnimationKeyFrame</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,4 +1,6 @@
-<map id="castor3d::RenderPassTimer" name="castor3d::RenderPassTimer">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,188,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="65,5,128,32"/>
+<map id="castor3d::SceneFileParser" name="castor3d::SceneFileParser">
+<area shape="rect" id="node1" title=" " alt="" coords="191,241,367,268"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,192,32"/>
+<area shape="rect" id="node3" title=" " alt="" coords="216,5,341,32"/>
+<area shape="rect" id="node4" title=" " alt="" coords="365,5,467,32"/>
 </map>

@@ -1,479 +1,310 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d9/de2/a02508" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::Cache&lt; Plugin, castor::String &gt;</compoundname>
-    <basecompoundref refid="df/d46/a02376" prot="public" virt="non-virtual">castor3d::CacheBase&lt; Plugin, castor::String &gt;</basecompoundref>
-    <includes local="no">PluginCache.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d9/de2/a02508" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::UniformBufferOffsetT</compoundname>
+    <includes local="no">UniformBufferOffset.hpp</includes>
     <templateparamlist>
+      <param>
+        <type>typename DataT</type>
+      </param>
     </templateparamlist>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="d9/de2/a02508_1a837837ef5d96723f705278de0db759b9" prot="public" static="no">
-        <type><ref refid="df/d46/a02376" kindref="compound">CacheBase</ref>&lt; <ref refid="db/d33/a04192" kindref="compound">Plugin</ref>, castor::String &gt;</type>
-        <definition>using castor3d::Cache&lt; Plugin, castor::String &gt;::MyCacheType =  CacheBase&lt; Plugin, castor::String &gt;</definition>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d9/de2/a02508_1a3117ce5906b0dfad47eb07efae8a4f97" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d28/a02584" kindref="compound">PoolUniformBuffer</ref> *</type>
+        <definition>PoolUniformBuffer* castor3d::UniformBufferOffsetT&lt; DataT &gt;::buffer</definition>
         <argsstring></argsstring>
-        <name>MyCacheType</name>
+        <name>buffer</name>
+        <qualifiedname>castor3d::UniformBufferOffsetT::buffer</qualifiedname>
+        <initializer>{ nullptr }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/PluginCache.hpp" line="26" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="26" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d9/de2/a02508_1a42654f811fe9f61dcd9afaf4c391d186" prot="public" static="no">
-        <type>typename <ref refid="df/d46/a02376_1a7fda54485c8f8e708df819c7a60596ac" kindref="member">MyCacheType::Element</ref></type>
-        <definition>using castor3d::Cache&lt; Plugin, castor::String &gt;::Element =  typename MyCacheType::Element</definition>
-        <argsstring></argsstring>
-        <name>Element</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/PluginCache.hpp" line="27" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="27" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d9/de2/a02508_1ad6a0dafa097ba0ed1f8a83ac30e95729" prot="public" static="no">
-        <type>typename <ref refid="df/d46/a02376_1ac91d27606d9904c2033c6488fc65779f" kindref="member">MyCacheType::Key</ref></type>
-        <definition>using castor3d::Cache&lt; Plugin, castor::String &gt;::Key =  typename MyCacheType::Key</definition>
-        <argsstring></argsstring>
-        <name>Key</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/PluginCache.hpp" line="28" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="28" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d9/de2/a02508_1ac527fb1a2441972de7b59fe609288599" prot="public" static="no">
-        <type>typename <ref refid="df/d46/a02376_1a73f0fe787eab6e9f181c8c23f1760e45" kindref="member">MyCacheType::Collection</ref></type>
-        <definition>using castor3d::Cache&lt; Plugin, castor::String &gt;::Collection =  typename MyCacheType::Collection</definition>
-        <argsstring></argsstring>
-        <name>Collection</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/PluginCache.hpp" line="29" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="29" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d9/de2/a02508_1ac71316614223089f8ef628f6b155a563" prot="public" static="no">
-        <type>typename <ref refid="df/d46/a02376_1a11d69566e76e7970f4a4328fdc3f6025" kindref="member">MyCacheType::LockType</ref></type>
-        <definition>using castor3d::Cache&lt; Plugin, castor::String &gt;::LockType =  typename MyCacheType::LockType</definition>
-        <argsstring></argsstring>
-        <name>LockType</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/PluginCache.hpp" line="30" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="30" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d9/de2/a02508_1a56e142fd124f319407e96eb30feb5a98" prot="public" static="no">
-        <type>typename <ref refid="df/d46/a02376_1a7f322bd515ed3a1d6274b1882ad3fb4a" kindref="member">MyCacheType::ElementPtr</ref></type>
-        <definition>using castor3d::Cache&lt; Plugin, castor::String &gt;::ElementPtr =  typename MyCacheType::ElementPtr</definition>
-        <argsstring></argsstring>
-        <name>ElementPtr</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/PluginCache.hpp" line="31" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="31" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d9/de2/a02508_1a0bad79b8ecf647c916d215539e74b963" prot="public" static="no">
-        <type>typename <ref refid="df/d46/a02376_1aaad73790ec1428ae47565a5ff9640450" kindref="member">MyCacheType::Producer</ref></type>
-        <definition>using castor3d::Cache&lt; Plugin, castor::String &gt;::Producer =  typename MyCacheType::Producer</definition>
-        <argsstring></argsstring>
-        <name>Producer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/PluginCache.hpp" line="32" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="32" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d9/de2/a02508_1af01f7fd4044c7966455e4b88a876b055" prot="public" static="no">
-        <type>typename <ref refid="df/d46/a02376_1a1d9b7d10eb83df474eeb2fdff71002f5" kindref="member">MyCacheType::Initialiser</ref></type>
-        <definition>using castor3d::Cache&lt; Plugin, castor::String &gt;::Initialiser =  typename MyCacheType::Initialiser</definition>
-        <argsstring></argsstring>
-        <name>Initialiser</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/PluginCache.hpp" line="33" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="33" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d9/de2/a02508_1a09c33236506080ed751868a1a46ff082" prot="public" static="no">
-        <type>typename <ref refid="df/d46/a02376_1ac144f9ea07cb00eb2b01788678792fa4" kindref="member">MyCacheType::Cleaner</ref></type>
-        <definition>using castor3d::Cache&lt; Plugin, castor::String &gt;::Cleaner =  typename MyCacheType::Cleaner</definition>
-        <argsstring></argsstring>
-        <name>Cleaner</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/PluginCache.hpp" line="34" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="34" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d9/de2/a02508_1ae144357ed9a3b2af5947e54f7623fda0" prot="public" static="no">
-        <type>typename <ref refid="df/d46/a02376_1a1c851c8660b72f8bbc71c81c40bf1c08" kindref="member">MyCacheType::Merger</ref></type>
-        <definition>using castor3d::Cache&lt; Plugin, castor::String &gt;::Merger =  typename MyCacheType::Merger</definition>
-        <argsstring></argsstring>
-        <name>Merger</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/PluginCache.hpp" line="35" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="35" bodyend="-1"/>
+        <location file="Buffer/UniformBufferOffset.hpp" line="19" column="20" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="19" bodyend="-1"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d9/de2/a02508_1a57240597a09888e6b34983627e442ad3" prot="private" static="no" mutable="no">
-        <type>DynamicLibraryPtrPathMapArray</type>
-        <definition>DynamicLibraryPtrPathMapArray castor3d::Cache&lt; Plugin, castor::String &gt;::m_libraries</definition>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/de2/a02508_1a1d26718436319b3fbb99c18baecacf61" prot="public" static="no" mutable="no">
+        <type>VkMemoryPropertyFlags</type>
+        <definition>VkMemoryPropertyFlags castor3d::UniformBufferOffsetT&lt; DataT &gt;::flags</definition>
         <argsstring></argsstring>
-        <name>m_libraries</name>
+        <name>flags</name>
+        <qualifiedname>castor3d::UniformBufferOffsetT::flags</qualifiedname>
+        <initializer>{ 0u }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The loaded shared libraries map. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/PluginCache.hpp" line="123" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="123" bodyend="-1"/>
+        <location file="Buffer/UniformBufferOffset.hpp" line="22" column="23" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="22" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d9/de2/a02508_1a18f8ec869ca4432f0877dcd49a8bd007" prot="private" static="no" mutable="no">
-        <type>std::recursive_mutex</type>
-        <definition>std::recursive_mutex castor3d::Cache&lt; Plugin, castor::String &gt;::m_mutexLibraries</definition>
+      <memberdef kind="variable" id="d9/de2/a02508_1ab51520c7931ecdafe28653604734fb73" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::UniformBufferOffsetT&lt; DataT &gt;::offset</definition>
         <argsstring></argsstring>
-        <name>m_mutexLibraries</name>
+        <name>offset</name>
+        <qualifiedname>castor3d::UniformBufferOffsetT::offset</qualifiedname>
+        <initializer>{ 0u }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The mutex protecting the loaded shared libraries map. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/PluginCache.hpp" line="126" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="126" bodyend="-1"/>
+        <location file="Buffer/UniformBufferOffset.hpp" line="23" column="10" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="23" bodyend="-1"/>
+        <referencedby refid="d9/de2/a02508_1a2c6ad146d4910651544564c25ca7dccd" compoundref="d9/dd0/a00191" startline="96" endline="105">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</referencedby>
+        <referencedby refid="d9/de2/a02508_1af1486cfa4c196f82e0cbc2440edea70e" compoundref="d9/dd0/a00191" startline="37" endline="42">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getByteOffset</referencedby>
+        <referencedby refid="d9/de2/a02508_1a59505199eb458103512ef51fec723f12" compoundref="d9/dd0/a00191" startline="51" endline="54">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getData</referencedby>
+        <referencedby refid="d9/de2/a02508_1ad7dcad7c96a620540d10eb85f3d4586b" compoundref="d9/dd0/a00191" startline="107" endline="120">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getDescriptorWrite</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="d9/de2/a02508_1ace0bab551a17e5adc2cc616bfd64b3ab" prot="private" static="no" mutable="no">
-        <type>PluginStrMapArray</type>
-        <definition>PluginStrMapArray castor3d::Cache&lt; Plugin, castor::String &gt;::m_loadedPlugins</definition>
+      <memberdef kind="variable" id="d9/de2/a02508_1a2a86f23b4e59cbd966c463b700562f63" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::UniformBufferOffsetT&lt; DataT &gt;::range</definition>
         <argsstring></argsstring>
-        <name>m_loadedPlugins</name>
+        <name>range</name>
+        <qualifiedname>castor3d::UniformBufferOffsetT::range</qualifiedname>
+        <initializer>{ 0u }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The loaded plug-ins map. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/PluginCache.hpp" line="129" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="129" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/de2/a02508_1adb178085917e1810eb5caa727f2edbee" prot="private" static="no" mutable="no">
-        <type>std::recursive_mutex</type>
-        <definition>std::recursive_mutex castor3d::Cache&lt; Plugin, castor::String &gt;::m_mutexLoadedPlugins</definition>
-        <argsstring></argsstring>
-        <name>m_mutexLoadedPlugins</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The mutex protecting the loaded plug-ins map. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/PluginCache.hpp" line="132" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="132" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/de2/a02508_1a3f8ddd32dcd70ba51002832d0dcef8e2" prot="private" static="no" mutable="no">
-        <type>PluginTypePathMap</type>
-        <definition>PluginTypePathMap castor3d::Cache&lt; Plugin, castor::String &gt;::m_loadedPluginTypes</definition>
-        <argsstring></argsstring>
-        <name>m_loadedPluginTypes</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The loaded plug-ins map, sorted by plug-in type. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/PluginCache.hpp" line="135" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="135" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/de2/a02508_1a6e8748b874a1f5596ad3e75f211fce40" prot="private" static="no" mutable="no">
-        <type>std::recursive_mutex</type>
-        <definition>std::recursive_mutex castor3d::Cache&lt; Plugin, castor::String &gt;::m_mutexLoadedPluginTypes</definition>
-        <argsstring></argsstring>
-        <name>m_mutexLoadedPluginTypes</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The mutex protecting the loaded plug-ins map sorted by type. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/PluginCache.hpp" line="138" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="138" bodyend="-1"/>
+        <location file="Buffer/UniformBufferOffset.hpp" line="24" column="10" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="24" bodyend="-1"/>
+        <referencedby refid="d9/de2/a02508_1a2c6ad146d4910651544564c25ca7dccd" compoundref="d9/dd0/a00191" startline="96" endline="105">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</referencedby>
+        <referencedby refid="d9/de2/a02508_1a11dc3f75dd4cd054c5ee5fd4e0c1f67f" compoundref="d9/dd0/a00191" startline="44" endline="49">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getByteRange</referencedby>
+        <referencedby refid="d9/de2/a02508_1ad7dcad7c96a620540d10eb85f3d4586b" compoundref="d9/dd0/a00191" startline="107" endline="120">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getDescriptorWrite</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d9/de2/a02508_1a6b64058412123e5cf44dc7e4d444b03f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::Cache&lt; Plugin, castor::String &gt;::Cache</definition>
-        <argsstring>(Engine &amp;engine, Producer &amp;&amp;produce, Initialiser &amp;&amp;initialise=Initialiser{}, Cleaner &amp;&amp;clean=Cleaner{}, Merger &amp;&amp;merge=Merger{})</argsstring>
-        <name>Cache</name>
+      <memberdef kind="function" id="d9/de2/a02508_1a1fa7ff048545c978eb2f031a158de792" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::UniformBufferOffsetT&lt; DataT &gt;::setPool</definition>
+        <argsstring>(PoolUniformBuffer &amp;pool)</argsstring>
+        <name>setPool</name>
+        <qualifiedname>castor3d::UniformBufferOffsetT::setPool</qualifiedname>
         <param>
-          <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
-        </param>
-        <param>
-          <type><ref refid="d9/de2/a02508_1a0bad79b8ecf647c916d215539e74b963" kindref="member">Producer</ref> &amp;&amp;</type>
-          <declname>produce</declname>
-        </param>
-        <param>
-          <type><ref refid="d9/de2/a02508_1af01f7fd4044c7966455e4b88a876b055" kindref="member">Initialiser</ref> &amp;&amp;</type>
-          <declname>initialise</declname>
-          <defval><ref refid="d9/de2/a02508_1af01f7fd4044c7966455e4b88a876b055" kindref="member">Initialiser</ref>{}</defval>
-        </param>
-        <param>
-          <type><ref refid="d9/de2/a02508_1a09c33236506080ed751868a1a46ff082" kindref="member">Cleaner</ref> &amp;&amp;</type>
-          <declname>clean</declname>
-          <defval><ref refid="d9/de2/a02508_1a09c33236506080ed751868a1a46ff082" kindref="member">Cleaner</ref>{}</defval>
-        </param>
-        <param>
-          <type><ref refid="d9/de2/a02508_1ae144357ed9a3b2af5947e54f7623fda0" kindref="member">Merger</ref> &amp;&amp;</type>
-          <declname>merge</declname>
-          <defval><ref refid="d9/de2/a02508_1ae144357ed9a3b2af5947e54f7623fda0" kindref="member">Merger</ref>{}</defval>
+          <type><ref refid="dc/d28/a02584" kindref="compound">PoolUniformBuffer</ref> &amp;</type>
+          <declname>pool</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">engine</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The engine. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">produce</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element producer. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">initialise</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element initialiser. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">clean</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element cleaner. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">merge</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element collection merger. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/PluginCache.hpp" line="52" column="1"/>
+        <location file="Buffer/UniformBufferOffset.hpp" line="26" column="6" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="26" bodyend="29"/>
       </memberdef>
-      <memberdef kind="function" id="d9/de2/a02508_1a9111eab60d03cb127646664e249239eb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::Cache&lt; Plugin, castor::String &gt;::~Cache</definition>
+      <memberdef kind="function" id="d9/de2/a02508_1ad7a4b5aef7f032e598077b111714ad28" prot="public" static="no" const="yes" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::UniformBufferOffsetT&lt; DataT &gt;::operator bool</definition>
+        <argsstring>() const</argsstring>
+        <name>operator bool</name>
+        <qualifiedname>castor3d::UniformBufferOffsetT::operator bool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferOffset.hpp" line="31" column="10" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="31" bodyend="35"/>
+        <references refid="dc/d28/a02584_1a77619c448a45c14bbfcd61b22b592274" compoundref="d7/d25/a00182" startline="167" endline="170">castor3d::PoolUniformBuffer::hasBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/de2/a02508_1af1486cfa4c196f82e0cbc2440edea70e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::UniformBufferOffsetT&lt; DataT &gt;::getByteOffset</definition>
+        <argsstring>() const</argsstring>
+        <name>getByteOffset</name>
+        <qualifiedname>castor3d::UniformBufferOffsetT::getByteOffset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferOffset.hpp" line="37" column="14" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="37" bodyend="42"/>
+        <references refid="dc/d28/a02584_1a7804d82ef261e90f61fd38589881c900" compoundref="d7/d25/a00182" startline="179" endline="182">castor3d::PoolUniformBuffer::getBuffer</references>
+        <references refid="d9/de2/a02508_1ab51520c7931ecdafe28653604734fb73" compoundref="d9/dd0/a00191" startline="23">castor3d::UniformBufferOffsetT&lt; DataT &gt;::offset</references>
+        <referencedby refid="d9/de2/a02508_1ae2c055477d81767157b9832b18baa027" compoundref="d9/dd0/a00191" startline="86" endline="94">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createPassBinding</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d9/de2/a02508_1a11dc3f75dd4cd054c5ee5fd4e0c1f67f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::UniformBufferOffsetT&lt; DataT &gt;::getByteRange</definition>
+        <argsstring>() const</argsstring>
+        <name>getByteRange</name>
+        <qualifiedname>castor3d::UniformBufferOffsetT::getByteRange</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferOffset.hpp" line="44" column="14" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="44" bodyend="49"/>
+        <references refid="dc/d28/a02584_1a7804d82ef261e90f61fd38589881c900" compoundref="d7/d25/a00182" startline="179" endline="182">castor3d::PoolUniformBuffer::getBuffer</references>
+        <references refid="d9/de2/a02508_1a2a86f23b4e59cbd966c463b700562f63" compoundref="d9/dd0/a00191" startline="24">castor3d::UniformBufferOffsetT&lt; DataT &gt;::range</references>
+        <referencedby refid="d9/de2/a02508_1ae2c055477d81767157b9832b18baa027" compoundref="d9/dd0/a00191" startline="86" endline="94">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createPassBinding</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d9/de2/a02508_1a59505199eb458103512ef51fec723f12" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>DataT const &amp;</type>
+        <definition>DataT const  &amp; castor3d::UniformBufferOffsetT&lt; DataT &gt;::getData</definition>
+        <argsstring>() const</argsstring>
+        <name>getData</name>
+        <qualifiedname>castor3d::UniformBufferOffsetT::getData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferOffset.hpp" line="51" column="14" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="51" bodyend="54"/>
+        <references refid="dc/d28/a02584_1a32a13128eaf15955c1ff544751dcac6a" compoundref="d7/d25/a00182" startline="231" endline="234">castor3d::PoolUniformBuffer::getAlignedSize</references>
+        <references refid="dc/d28/a02584_1a120bb112f7be0f8f0d893a1a1bd8910e" compoundref="d7/d25/a00182" startline="114" endline="117">castor3d::PoolUniformBuffer::getData</references>
+        <references refid="d9/de2/a02508_1ab51520c7931ecdafe28653604734fb73" compoundref="d9/dd0/a00191" startline="23">castor3d::UniformBufferOffsetT&lt; DataT &gt;::offset</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/de2/a02508_1a9e0310059c87c6fc5a98d9d5b6beb238" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>DataT &amp;</type>
+        <definition>DataT &amp; castor3d::UniformBufferOffsetT&lt; DataT &gt;::getData</definition>
         <argsstring>()</argsstring>
-        <name>~Cache</name>
+        <name>getData</name>
+        <qualifiedname>castor3d::UniformBufferOffsetT::getData</qualifiedname>
         <briefdescription>
-<para>Destructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/PluginCache.hpp" line="63" column="1"/>
+        <location file="Buffer/UniformBufferOffset.hpp" line="56" column="8" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="56" bodyend="59"/>
+        <references refid="dc/d28/a02584_1a32a13128eaf15955c1ff544751dcac6a" compoundref="d7/d25/a00182" startline="231" endline="234">castor3d::PoolUniformBuffer::getAlignedSize</references>
+        <references refid="dc/d28/a02584_1a120bb112f7be0f8f0d893a1a1bd8910e" compoundref="d7/d25/a00182" startline="114" endline="117">castor3d::PoolUniformBuffer::getData</references>
+        <references refid="d9/de2/a02508_1ab51520c7931ecdafe28653604734fb73" compoundref="d9/dd0/a00191" startline="23">castor3d::UniformBufferOffsetT&lt; DataT &gt;::offset</references>
       </memberdef>
-      <memberdef kind="function" id="d9/de2/a02508_1ad21aa37f96a438cd6b7b50528f58804c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::Cache&lt; Plugin, castor::String &gt;::clear</definition>
+      <memberdef kind="function" id="d9/de2/a02508_1a3650da3bb9942bc5db2e48cb1e4cc2b8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dc/d28/a02584" kindref="compound">PoolUniformBuffer</ref> const &amp;</type>
+        <definition>PoolUniformBuffer const  &amp; castor3d::UniformBufferOffsetT&lt; DataT &gt;::getPool</definition>
+        <argsstring>() const</argsstring>
+        <name>getPool</name>
+        <qualifiedname>castor3d::UniformBufferOffsetT::getPool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferOffset.hpp" line="61" column="26" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="61" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/de2/a02508_1adf654f12c711b781f5cc7a2a4ce29c89" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dc/d28/a02584" kindref="compound">PoolUniformBuffer</ref> &amp;</type>
+        <definition>PoolUniformBuffer &amp; castor3d::UniformBufferOffsetT&lt; DataT &gt;::getPool</definition>
         <argsstring>()</argsstring>
-        <name>clear</name>
+        <name>getPool</name>
+        <qualifiedname>castor3d::UniformBufferOffsetT::getPool</qualifiedname>
         <briefdescription>
-<para>Flushes the collection. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/PluginCache.hpp" line="70" column="1"/>
+        <location file="Buffer/UniformBufferOffset.hpp" line="66" column="20" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="66" bodyend="69"/>
       </memberdef>
-      <memberdef kind="function" id="d9/de2/a02508_1aebf5991bd5af202679c563f683938aa1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> PluginSPtr</type>
-        <definition>C3D_API PluginSPtr castor3d::Cache&lt; Plugin, castor::String &gt;::loadPlugin</definition>
-        <argsstring>(castor::String const &amp;pluginName, castor::Path const &amp;pathFolder)</argsstring>
-        <name>loadPlugin</name>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>pluginName</declname>
-        </param>
-        <param>
-          <type>castor::Path const &amp;</type>
-          <declname>pathFolder</declname>
-        </param>
-        <exceptions> throw ()</exceptions>
+      <memberdef kind="function" id="d9/de2/a02508_1af6031892474c15c1ff806ca0e9842242" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::UniformBuffer const &amp;</type>
+        <definition>ashes::UniformBuffer const  &amp; castor3d::UniformBufferOffsetT&lt; DataT &gt;::getBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>getBuffer</name>
+        <qualifiedname>castor3d::UniformBufferOffsetT::getBuffer</qualifiedname>
         <briefdescription>
-<para>Loads a plug-in, given the plug-in name (ex: libGlRenderSystem.dll =&gt; GlRenderSystem) </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">pluginName</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The plug-in name </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">pathFolder</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Optional path where the plug-in may be looked for </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The loaded plug-in, <computeroutput>nullptr</computeroutput> if name was incorrect or path was not valid </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/PluginCache.hpp" line="83" column="1"/>
+        <location file="Buffer/UniformBufferOffset.hpp" line="71" column="29" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="71" bodyend="74"/>
+        <references refid="dc/d28/a02584_1a7804d82ef261e90f61fd38589881c900" compoundref="d7/d25/a00182" startline="179" endline="182">castor3d::PoolUniformBuffer::getBuffer</references>
+        <referencedby refid="d9/de2/a02508_1ae2c055477d81767157b9832b18baa027" compoundref="d9/dd0/a00191" startline="86" endline="94">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createPassBinding</referencedby>
       </memberdef>
-      <memberdef kind="function" id="d9/de2/a02508_1a59b6f0e84226fa9ea896d9c843b2625a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> PluginSPtr</type>
-        <definition>C3D_API PluginSPtr castor3d::Cache&lt; Plugin, castor::String &gt;::loadPlugin</definition>
-        <argsstring>(castor::Path const &amp;fileFullPath)</argsstring>
-        <name>loadPlugin</name>
-        <param>
-          <type>castor::Path const &amp;</type>
-          <declname>fileFullPath</declname>
-        </param>
-        <exceptions> throw ()</exceptions>
+      <memberdef kind="function" id="d9/de2/a02508_1ac43a4a6fe8de3c298f0818eb35f6e4e8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::UniformBuffer &amp;</type>
+        <definition>ashes::UniformBuffer &amp; castor3d::UniformBufferOffsetT&lt; DataT &gt;::getBuffer</definition>
+        <argsstring>()</argsstring>
+        <name>getBuffer</name>
+        <qualifiedname>castor3d::UniformBufferOffsetT::getBuffer</qualifiedname>
         <briefdescription>
-<para>Loads a plug-in, given the plug-in file&apos;s full path. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">fileFullPath</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The plug-in file path </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The loaded plug-in, <computeroutput>nullptr</computeroutput> if path was incorrect or if it wasn&apos;t a valid plug-in </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/PluginCache.hpp" line="95" column="1"/>
+        <location file="Buffer/UniformBufferOffset.hpp" line="76" column="23" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="76" bodyend="79"/>
+        <references refid="dc/d28/a02584_1a7804d82ef261e90f61fd38589881c900" compoundref="d7/d25/a00182" startline="179" endline="182">castor3d::PoolUniformBuffer::getBuffer</references>
       </memberdef>
-      <memberdef kind="function" id="d9/de2/a02508_1a31c8fa76ef04607cab214ce2026061ac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> PluginStrMap</type>
-        <definition>C3D_API PluginStrMap castor3d::Cache&lt; Plugin, castor::String &gt;::getPlugins</definition>
-        <argsstring>(PluginType type)</argsstring>
-        <name>getPlugins</name>
-        <param>
-          <type><ref refid="da/d1e/a01479_1aecf8304db7dd49c874ec216f139e5f67" kindref="member">PluginType</ref></type>
-          <declname>type</declname>
-        </param>
+      <memberdef kind="function" id="d9/de2/a02508_1a27740308743c3e5d9e0a84631b3df4b9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::UniformBufferOffsetT&lt; DataT &gt;::getAlignedSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getAlignedSize</name>
+        <qualifiedname>castor3d::UniformBufferOffsetT::getAlignedSize</qualifiedname>
         <briefdescription>
-<para>Retrieves the plug-ins of given type. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">type</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The plug-ins type </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>nullptr</computeroutput> if not found </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/PluginCache.hpp" line="106" column="1"/>
+        <location file="Buffer/UniformBufferOffset.hpp" line="81" column="10" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="81" bodyend="84"/>
+        <references refid="dc/d28/a02584_1a32a13128eaf15955c1ff544751dcac6a" compoundref="d7/d25/a00182" startline="231" endline="234">castor3d::PoolUniformBuffer::getAlignedSize</references>
       </memberdef>
-      <memberdef kind="function" id="d9/de2/a02508_1a50371fcfc434637d06e770e26a55e0c4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::Cache&lt; Plugin, castor::String &gt;::loadAllPlugins</definition>
-        <argsstring>(castor::Path const &amp;folder)</argsstring>
-        <name>loadAllPlugins</name>
+      <memberdef kind="function" id="d9/de2/a02508_1ae2c055477d81767157b9832b18baa027" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::UniformBufferOffsetT&lt; DataT &gt;::createPassBinding</definition>
+        <argsstring>(crg::FramePass &amp;pass, std::string const &amp;name, uint32_t binding) const</argsstring>
+        <name>createPassBinding</name>
+        <qualifiedname>castor3d::UniformBufferOffsetT::createPassBinding</qualifiedname>
         <param>
-          <type>castor::Path const &amp;</type>
-          <declname>folder</declname>
+          <type>crg::FramePass &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>std::string const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
         </param>
         <briefdescription>
-<para>Loads all the plug-ins located in working folder. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">folder</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The plug-ins&apos; folder </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/PluginCache.hpp" line="115" column="1"/>
+        <location file="Buffer/UniformBufferOffset.hpp" line="86" column="6" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="86" bodyend="94"/>
+        <references refid="d9/de2/a02508_1af6031892474c15c1ff806ca0e9842242" compoundref="d9/dd0/a00191" startline="71" endline="74">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getBuffer</references>
+        <references refid="d9/de2/a02508_1af1486cfa4c196f82e0cbc2440edea70e" compoundref="d9/dd0/a00191" startline="37" endline="42">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getByteOffset</references>
+        <references refid="d9/de2/a02508_1a11dc3f75dd4cd054c5ee5fd4e0c1f67f" compoundref="d9/dd0/a00191" startline="44" endline="49">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getByteRange</references>
+        <referencedby refid="dc/d32/a04884_1a4c3a0dc2043fc6bf77d896da9a3f00e8" compoundref="db/d1c/a01229" startline="78" endline="82">castor3d::GpInfoUbo::createPassBinding</referencedby>
+        <referencedby refid="da/db8/a04908_1a027e6375a7bbe908f844f97396cd8432" compoundref="d8/ddf/a01238" startline="111" endline="115">castor3d::LpvGridConfigUbo::createPassBinding</referencedby>
+        <referencedby refid="d1/d58/a04916_1a4f0ad3b1d168b107edde59d544718037" compoundref="d3/d07/a01241" startline="77" endline="81">castor3d::LpvLightConfigUbo::createPassBinding</referencedby>
+        <referencedby refid="d1/db7/a04924_1a0b734b908500ac9be255f78b8c07b2d3" compoundref="d4/dd5/a01244" startline="123" endline="127">castor3d::MatrixUbo::createPassBinding</referencedby>
+        <referencedby refid="d1/dc6/a04964_1a441a8d45274e918ec93fdc3dba4c3520" compoundref="dd/d42/a01259" startline="131" endline="135">castor3d::SceneUbo::createPassBinding</referencedby>
+        <referencedby refid="d5/d6e/a04988_1a04509506d8bf2e8b64bdc59b0006596f" compoundref="dc/dd9/a01268" startline="152" endline="156">castor3d::SsaoConfigUbo::createPassBinding</referencedby>
+        <referencedby refid="d2/d9d/a05056_1a691ef728d7970bf24d2efa9f08da1968" compoundref="de/d33/a01274" startline="108" endline="112">castor3d::VoxelizerUbo::createPassBinding</referencedby>
+        <referencedby refid="d9/d2e/a04900_1abf797b052c74d7d258377d758b0383a0" compoundref="dd/dad/a01235" startline="62" endline="66">castor3d::LayeredLpvGridConfigUbo::createPassBinding</referencedby>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d9/de2/a02508_1a8af30abdd93c0accb325acea33ef315f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>PluginSPtr</type>
-        <definition>PluginSPtr castor3d::Cache&lt; Plugin, castor::String &gt;::doloadPlugin</definition>
-        <argsstring>(castor::Path const &amp;pathFile)</argsstring>
-        <name>doloadPlugin</name>
+      <memberdef kind="function" id="d9/de2/a02508_1a2c6ad146d4910651544564c25ca7dccd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</argsstring>
+        <name>createSizedBinding</name>
+        <qualifiedname>castor3d::UniformBufferOffsetT::createSizedBinding</qualifiedname>
         <param>
-          <type>castor::Path const &amp;</type>
-          <declname>pathFile</declname>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>layoutBinding</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -481,132 +312,219 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/PluginCache.hpp" line="118" column="1"/>
+        <location file="Buffer/UniformBufferOffset.hpp" line="96" column="6" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="96" bodyend="105"/>
+        <references refid="dc/d28/a02584_1a7804d82ef261e90f61fd38589881c900" compoundref="d7/d25/a00182" startline="179" endline="182">castor3d::PoolUniformBuffer::getBuffer</references>
+        <references refid="d9/de2/a02508_1ab51520c7931ecdafe28653604734fb73" compoundref="d9/dd0/a00191" startline="23">castor3d::UniformBufferOffsetT&lt; DataT &gt;::offset</references>
+        <references refid="d9/de2/a02508_1a2a86f23b4e59cbd966c463b700562f63" compoundref="d9/dd0/a00191" startline="24">castor3d::UniformBufferOffsetT&lt; DataT &gt;::range</references>
+        <referencedby refid="dc/d32/a04884_1a5d2c9c7da7669ef53a90758a44b7619c" compoundref="db/d1c/a01229" startline="84" endline="88">castor3d::GpInfoUbo::createSizedBinding</referencedby>
+        <referencedby refid="d9/d2e/a04900_1ab75a8a861f800ea0ac6a5f95b39b3683" compoundref="dd/dad/a01235" startline="68" endline="72">castor3d::LayeredLpvGridConfigUbo::createSizedBinding</referencedby>
+        <referencedby refid="da/db8/a04908_1a25c8501fecd9349223a1b66f7a9393e7" compoundref="d8/ddf/a01238" startline="117" endline="121">castor3d::LpvGridConfigUbo::createSizedBinding</referencedby>
+        <referencedby refid="d1/d58/a04916_1a55564c6a2a416333c26436076181029c" compoundref="d3/d07/a01241" startline="83" endline="87">castor3d::LpvLightConfigUbo::createSizedBinding</referencedby>
+        <referencedby refid="d1/db7/a04924_1ac31062a614833908640fbbeed9cb92fe" compoundref="d4/dd5/a01244" startline="129" endline="133">castor3d::MatrixUbo::createSizedBinding</referencedby>
+        <referencedby refid="d7/de6/a04956_1a409d04099ce176f7ba8601720b85c9b5" compoundref="d6/d0f/a01256" startline="66" endline="70">castor3d::RsmConfigUbo::createSizedBinding</referencedby>
+        <referencedby refid="d1/dc6/a04964_1a3820ea1f3fdb87e2fe8b95009c8a55fa" compoundref="dd/d42/a01259" startline="137" endline="141">castor3d::SceneUbo::createSizedBinding</referencedby>
+        <referencedby refid="d3/d49/a04972_1a33ff803524d407253ea98caeeb038418" compoundref="d3/d53/a01262" startline="74" endline="78">castor3d::ShadowMapUbo::createSizedBinding</referencedby>
+        <referencedby refid="d5/d6e/a04988_1a073ca04d26a7b693d1bad1049ed59890" compoundref="dc/dd9/a01268" startline="158" endline="162">castor3d::SsaoConfigUbo::createSizedBinding</referencedby>
+        <referencedby refid="d2/d9d/a05056_1ac12f32dda8736e904642f50f0d6be562" compoundref="de/d33/a01274" startline="114" endline="118">castor3d::VoxelizerUbo::createSizedBinding</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d9/de2/a02508_1ad7dcad7c96a620540d10eb85f3d4586b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::WriteDescriptorSet</type>
+        <definition>ashes::WriteDescriptorSet castor3d::UniformBufferOffsetT&lt; DataT &gt;::getDescriptorWrite</definition>
+        <argsstring>(uint32_t dstBinding, uint32_t dstArrayElement=0u) const</argsstring>
+        <name>getDescriptorWrite</name>
+        <qualifiedname>castor3d::UniformBufferOffsetT::getDescriptorWrite</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstArrayElement</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/UniformBufferOffset.hpp" line="107" column="27" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="107" bodyend="120"/>
+        <references refid="dc/d28/a02584_1a7804d82ef261e90f61fd38589881c900" compoundref="d7/d25/a00182" startline="179" endline="182">castor3d::PoolUniformBuffer::getBuffer</references>
+        <references refid="d9/de2/a02508_1ab51520c7931ecdafe28653604734fb73" compoundref="d9/dd0/a00191" startline="23">castor3d::UniformBufferOffsetT&lt; DataT &gt;::offset</references>
+        <references refid="d9/de2/a02508_1a2a86f23b4e59cbd966c463b700562f63" compoundref="d9/dd0/a00191" startline="24">castor3d::UniformBufferOffsetT&lt; DataT &gt;::range</references>
+        <referencedby refid="d9/d2e/a04900_1ab52a7b1884fb67ab3d0a4513bc761f0f" compoundref="dd/dad/a01235" startline="74" endline="78">castor3d::LayeredLpvGridConfigUbo::getDescriptorWrite</referencedby>
+        <referencedby refid="da/db8/a04908_1a5062748475183244f2c4d15e7d42a3f0" compoundref="d8/ddf/a01238" startline="123" endline="127">castor3d::LpvGridConfigUbo::getDescriptorWrite</referencedby>
+        <referencedby refid="d1/db7/a04924_1a4872797ae1ca5fc2943359a8f257ef43" compoundref="d4/dd5/a01244" startline="135" endline="139">castor3d::MatrixUbo::getDescriptorWrite</referencedby>
+        <referencedby refid="d1/dc6/a04964_1ae5f71b06a038fe75dc103fe5d834e405" compoundref="dd/d42/a01259" startline="143" endline="147">castor3d::SceneUbo::getDescriptorWrite</referencedby>
+        <referencedby refid="d3/d49/a04972_1a587585de7c15fb59c8a7f3456dbae3f8" compoundref="d3/d53/a01262" startline="80" endline="84">castor3d::ShadowMapUbo::getDescriptorWrite</referencedby>
+        <referencedby refid="d2/d9d/a05056_1a7183186f335e2d45d790998b42f8c0fe" compoundref="de/d33/a01274" startline="120" endline="124">castor3d::VoxelizerUbo::getDescriptorWrite</referencedby>
+        <referencedby refid="d4/dfc/a03876_1a612d681d62631e6bb92d9601c660b48e" compoundref="d2/d4a/a00758" startline="395" endline="401">castor3d::RenderQuad::makeDescriptorWrite</referencedby>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Plug-ins cache. </para>
+<para>A UniformBuffer and an offset from the GpuBuffer. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
-</simplesect>
-<simplesect kind="date"><para>13/10/2015 </para>
-</simplesect>
-<simplesect kind="version"><para>0.8.0 </para>
-</simplesect>
-</para>
     </detaileddescription>
     <inheritancegraph>
-      <node id="594">
-        <label>castor3d::CacheBase&lt; ElementType, KeyType &gt;</label>
-        <link refid="df/d46/a02376"/>
-      </node>
-      <node id="593">
-        <label>castor3d::CacheBase&lt; Plugin, castor::String &gt;</label>
-        <link refid="df/d46/a02376"/>
-        <childnode refid="594" relation="template-instance">
-          <edgelabel>&lt; Plugin, castor::String &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="592">
-        <label>castor3d::Cache&lt; Plugin, castor::String &gt;</label>
+      <node id="13">
+        <label>castor3d::UniformBufferOffsetT&lt; Configuration &gt;</label>
         <link refid="d9/de2/a02508"/>
-        <childnode refid="593" relation="public-inheritance">
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Configuration &gt;</edgelabel>
         </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ComputeParticleSystem::Configuration &gt;</label>
+        <link refid="d9/de2/a02508"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::ComputeParticleSystem::Configuration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::GaussianBlur::Configuration &gt;</label>
+        <link refid="d9/de2/a02508"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::GaussianBlur::Configuration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::GpInfoUboConfiguration &gt;</label>
+        <link refid="d9/de2/a02508"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::GpInfoUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::HdrConfig &gt;</label>
+        <link refid="d9/de2/a02508"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::HdrConfig &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::LayeredLpvGridConfigUboConfiguration &gt;</label>
+        <link refid="d9/de2/a02508"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::LayeredLpvGridConfigUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::LpvGridConfigUboConfiguration &gt;</label>
+        <link refid="d9/de2/a02508"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::LpvGridConfigUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::LpvLightConfigUboConfiguration &gt;</label>
+        <link refid="d9/de2/a02508"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::LpvLightConfigUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::MatrixUboConfiguration &gt;</label>
+        <link refid="d9/de2/a02508"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::MatrixUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelBufferConfiguration &gt;</label>
+        <link refid="d9/de2/a02508"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::ModelBufferConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::RsmUboConfiguration &gt;</label>
+        <link refid="d9/de2/a02508"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::RsmUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::SceneUboConfiguration &gt;</label>
+        <link refid="d9/de2/a02508"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::SceneUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ShadowMapUboConfiguration &gt;</label>
+        <link refid="d9/de2/a02508"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::ShadowMapUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::SubsurfaceScatteringPass::BlurConfiguration &gt;</label>
+        <link refid="d9/de2/a02508"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::SubsurfaceScatteringPass::BlurConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::SubsurfaceScatteringPass::BlurWeights &gt;</label>
+        <link refid="d9/de2/a02508"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::SubsurfaceScatteringPass::BlurWeights &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::Texture3DTo2DData &gt;</label>
+        <link refid="d9/de2/a02508"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::Texture3DTo2DData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::VoxelizerUboConfiguration &gt;</label>
+        <link refid="d9/de2/a02508"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::VoxelizerUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::UniformBufferOffsetT&lt; castor::Point2i &gt;</label>
+        <link refid="d9/de2/a02508"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::Point2i &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::UniformBufferOffsetT&lt; castor::Point3f &gt;</label>
+        <link refid="d9/de2/a02508"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::Point3f &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::UniformBufferOffsetT&lt; DataT &gt;</label>
+        <link refid="d9/de2/a02508"/>
       </node>
     </inheritancegraph>
-    <collaborationgraph>
-      <node id="599">
-        <label>castor3d::CacheBase&lt; ElementType, KeyType &gt;</label>
-        <link refid="df/d46/a02376"/>
-        <childnode refid="597" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-      </node>
-      <node id="596">
-        <label>castor3d::CacheBase&lt; Plugin, castor::String &gt;</label>
-        <link refid="df/d46/a02376"/>
-        <childnode refid="597" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="599" relation="template-instance">
-          <edgelabel>&lt; Plugin, castor::String &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="598">
-        <label>castor::Unique&lt; Engine &gt;</label>
-      </node>
-      <node id="597">
-        <label>castor3d::Engine</label>
-        <link refid="dc/dbb/a02520"/>
-        <childnode refid="598" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="595">
-        <label>castor3d::Cache&lt; Plugin, castor::String &gt;</label>
-        <link refid="d9/de2/a02508"/>
-        <childnode refid="596" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Cache/PluginCache.hpp" line="24" column="1" bodyfile="Cache/PluginCache.hpp" bodystart="22" bodyend="139"/>
+    <location file="Buffer/UniformBufferOffset.hpp" line="16" column="1" bodyfile="Buffer/UniformBufferOffset.hpp" bodystart="17" bodyend="121"/>
     <listofallmembers>
-      <member refid="df/d46/a02376_1a9d8fa89aa1ea33853d74552cc8142343" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>add</name></member>
-      <member refid="df/d46/a02376_1a2a19e1d040d30a9d95cc7bb20c86a24d" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>add</name></member>
-      <member refid="df/d46/a02376_1a9f751edeb9359147511396227eb158a9" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>begin</name></member>
-      <member refid="df/d46/a02376_1a1ea0fbf3fb3b286964e1a6948adaa291" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>begin</name></member>
-      <member refid="d9/de2/a02508_1a6b64058412123e5cf44dc7e4d444b03f" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>Cache</name></member>
-      <member refid="df/d46/a02376_1aeda43feb65387eb303a98b1d7716c115" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>CacheBase</name></member>
-      <member refid="d9/de2/a02508_1a09c33236506080ed751868a1a46ff082" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>Cleaner</name></member>
-      <member refid="df/d46/a02376_1a5b8853e4191f80d06633e7adc80bfad6" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>cleanup</name></member>
-      <member refid="d9/de2/a02508_1ad21aa37f96a438cd6b7b50528f58804c" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>clear</name></member>
-      <member refid="d9/de2/a02508_1ac527fb1a2441972de7b59fe609288599" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>Collection</name></member>
-      <member refid="df/d46/a02376_1ab7b359e6d1bdc027bcac492bf965d02b" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>create</name></member>
-      <member refid="d9/de2/a02508_1a8af30abdd93c0accb325acea33ef315f" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>doloadPlugin</name></member>
-      <member refid="df/d46/a02376_1a40ce560883d2d3bc4e948cbd0a47b569" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>doReportCreation</name></member>
-      <member refid="df/d46/a02376_1adb2613cc9082f6d3ecb0639c0726201e" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>doReportDuplicate</name></member>
-      <member refid="df/d46/a02376_1af3cd6aabd6e0a4eda8177f0edf4ce18e" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>doReportNull</name></member>
-      <member refid="d9/de2/a02508_1a42654f811fe9f61dcd9afaf4c391d186" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>Element</name></member>
-      <member refid="d9/de2/a02508_1a56e142fd124f319407e96eb30feb5a98" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>ElementPtr</name></member>
-      <member refid="df/d46/a02376_1a6e0aa6994b70f00fb5f4d3f63859772f" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>end</name></member>
-      <member refid="df/d46/a02376_1af371833847bb6c5b5174179ffa83cbfe" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>end</name></member>
-      <member refid="df/d46/a02376_1aeafea13acfbda3f6de83daeea679c405" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>find</name></member>
-      <member refid="df/d46/a02376_1a37c3c620a716593723603fe85f7ce177" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>forEach</name></member>
-      <member refid="df/d46/a02376_1a1b49a63f062169b85d4f062a72b9aaf2" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>forEach</name></member>
-      <member refid="df/d46/a02376_1a64bb5eb01ea4f26c716188c21a7a7a7a" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>getEngine</name></member>
-      <member refid="df/d46/a02376_1a56d21fda75f9d4fe680e1038ab70a28e" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>getObjectCount</name></member>
-      <member refid="df/d46/a02376_1acb3cff2453faa98acad8f87ad503f4db" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>getObjectTypeName</name></member>
-      <member refid="d9/de2/a02508_1a31c8fa76ef04607cab214ce2026061ac" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>getPlugins</name></member>
-      <member refid="df/d46/a02376_1a3dfb82ad7180685409d58893c3ac2338" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>has</name></member>
-      <member refid="d9/de2/a02508_1af01f7fd4044c7966455e4b88a876b055" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>Initialiser</name></member>
-      <member refid="df/d46/a02376_1ae0e5acf460e942e68fd51fea02c1a77d" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>isEmpty</name></member>
-      <member refid="d9/de2/a02508_1ad6a0dafa097ba0ed1f8a83ac30e95729" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>Key</name></member>
-      <member refid="d9/de2/a02508_1a50371fcfc434637d06e770e26a55e0c4" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>loadAllPlugins</name></member>
-      <member refid="d9/de2/a02508_1aebf5991bd5af202679c563f683938aa1" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>loadPlugin</name></member>
-      <member refid="d9/de2/a02508_1a59b6f0e84226fa9ea896d9c843b2625a" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>loadPlugin</name></member>
-      <member refid="df/d46/a02376_1af7b763cc53cb034f8659f68c98a2d6dd" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>lock</name></member>
-      <member refid="d9/de2/a02508_1ac71316614223089f8ef628f6b155a563" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>LockType</name></member>
-      <member refid="df/d46/a02376_1ac5bb9606ef581093151816328cc26ff4" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>m_clean</name></member>
-      <member refid="df/d46/a02376_1a13c91c0ec52f9bcbc06cf3fb0569df0b" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>m_elements</name></member>
-      <member refid="df/d46/a02376_1a4b01de6e2c5f881abd2b1feb36beeb12" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>m_engine</name></member>
-      <member refid="df/d46/a02376_1a2a00e398eed3a486012b21a4e38cf6d3" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>m_initialise</name></member>
-      <member refid="d9/de2/a02508_1a57240597a09888e6b34983627e442ad3" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>m_libraries</name></member>
-      <member refid="d9/de2/a02508_1ace0bab551a17e5adc2cc616bfd64b3ab" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>m_loadedPlugins</name></member>
-      <member refid="d9/de2/a02508_1a3f8ddd32dcd70ba51002832d0dcef8e2" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>m_loadedPluginTypes</name></member>
-      <member refid="df/d46/a02376_1a7c494722e04665b3c2d44d10d0a1d1f3" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>m_merge</name></member>
-      <member refid="d9/de2/a02508_1a18f8ec869ca4432f0877dcd49a8bd007" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>m_mutexLibraries</name></member>
-      <member refid="d9/de2/a02508_1adb178085917e1810eb5caa727f2edbee" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>m_mutexLoadedPlugins</name></member>
-      <member refid="d9/de2/a02508_1a6e8748b874a1f5596ad3e75f211fce40" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>m_mutexLoadedPluginTypes</name></member>
-      <member refid="df/d46/a02376_1af339c470a64de4b3c9cb20f2ecd1bdbb" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>m_produce</name></member>
-      <member refid="df/d46/a02376_1aeb4864133bd71b20b4446d74ad4562ce" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>mergeInto</name></member>
-      <member refid="d9/de2/a02508_1ae144357ed9a3b2af5947e54f7623fda0" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>Merger</name></member>
-      <member refid="df/d46/a02376_1a81d75361a18a4455c9110b768de6f63e" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>MyCacheTraits</name></member>
-      <member refid="d9/de2/a02508_1a837837ef5d96723f705278de0db759b9" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>MyCacheType</name></member>
-      <member refid="d9/de2/a02508_1a0bad79b8ecf647c916d215539e74b963" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>Producer</name></member>
-      <member refid="df/d46/a02376_1af1031cfec660c870ca1b7284e1c88e25" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>remove</name></member>
-      <member refid="df/d46/a02376_1a575e8f46e806126ae4774a807bdc5c7d" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>unlock</name></member>
-      <member refid="d9/de2/a02508_1a9111eab60d03cb127646664e249239eb" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>~Cache</name></member>
-      <member refid="df/d46/a02376_1aeb5b2f55b43b39c9f03f6c9d680456ee" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Plugin, castor::String &gt;</scope><name>~CacheBase</name></member>
+      <member refid="d9/de2/a02508_1a3117ce5906b0dfad47eb07efae8a4f97" prot="private" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>buffer</name></member>
+      <member refid="d9/de2/a02508_1ae2c055477d81767157b9832b18baa027" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>createPassBinding</name></member>
+      <member refid="d9/de2/a02508_1a2c6ad146d4910651544564c25ca7dccd" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>createSizedBinding</name></member>
+      <member refid="d9/de2/a02508_1a1d26718436319b3fbb99c18baecacf61" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>flags</name></member>
+      <member refid="d9/de2/a02508_1a27740308743c3e5d9e0a84631b3df4b9" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>getAlignedSize</name></member>
+      <member refid="d9/de2/a02508_1af6031892474c15c1ff806ca0e9842242" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>getBuffer</name></member>
+      <member refid="d9/de2/a02508_1ac43a4a6fe8de3c298f0818eb35f6e4e8" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>getBuffer</name></member>
+      <member refid="d9/de2/a02508_1af1486cfa4c196f82e0cbc2440edea70e" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>getByteOffset</name></member>
+      <member refid="d9/de2/a02508_1a11dc3f75dd4cd054c5ee5fd4e0c1f67f" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>getByteRange</name></member>
+      <member refid="d9/de2/a02508_1a59505199eb458103512ef51fec723f12" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>getData</name></member>
+      <member refid="d9/de2/a02508_1a9e0310059c87c6fc5a98d9d5b6beb238" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>getData</name></member>
+      <member refid="d9/de2/a02508_1ad7dcad7c96a620540d10eb85f3d4586b" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>getDescriptorWrite</name></member>
+      <member refid="d9/de2/a02508_1a3650da3bb9942bc5db2e48cb1e4cc2b8" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>getPool</name></member>
+      <member refid="d9/de2/a02508_1adf654f12c711b781f5cc7a2a4ce29c89" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>getPool</name></member>
+      <member refid="d9/de2/a02508_1ab51520c7931ecdafe28653604734fb73" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>offset</name></member>
+      <member refid="d9/de2/a02508_1ad7a4b5aef7f032e598077b111714ad28" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>operator bool</name></member>
+      <member refid="d9/de2/a02508_1a2a86f23b4e59cbd966c463b700562f63" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>range</name></member>
+      <member refid="d9/de2/a02508_1a1fa7ff048545c978eb2f031a158de792" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferOffsetT</scope><name>setPool</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

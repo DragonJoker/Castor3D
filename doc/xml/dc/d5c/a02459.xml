@@ -1,333 +1,168 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dc/d5c/a02459" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::ObjectCache&lt; Geometry, castor::String &gt;::PoolsEntry</compoundname>
-    <includes local="no">GeometryCache.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="dc/d5c/a02459_1adbb912d42d1796899715b8d2f2079280" prot="public" static="no" mutable="no">
-        <type>size_t</type>
-        <definition>size_t castor3d::ObjectCache&lt; Geometry, castor::String &gt;::PoolsEntry::hash</definition>
-        <argsstring></argsstring>
-        <name>hash</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dc/d5c/a02459" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BinaryParser&lt; Submesh &gt;</compoundname>
+    <basecompoundref refid="d5/d1b/a02331" prot="public" virt="non-virtual">castor3d::BinaryParserBase&lt; Submesh &gt;</basecompoundref>
+    <includes local="no">BinarySubmesh.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="dc/d5c/a02459_1ab571767cc83c4f3606bced26db4173d7" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BinaryParser&lt; Submesh &gt;::doParse</definition>
+        <argsstring>(Submesh &amp;obj) override</argsstring>
+        <name>doParse</name>
+        <qualifiedname>castor3d::BinaryParser&lt; Submesh &gt;::doParse</qualifiedname>
+        <reimplements refid="d5/d1b/a02331_1a020a66d5fc1b452dc76c82702d72bbb1">doParse</reimplements>
+        <param>
+          <type><ref refid="d3/da7/a03427" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>obj</declname>
+        </param>
         <briefdescription>
+<para>Function used to retrieve specific data from the chunk. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="37" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="37" bodyend="-1"/>
+        <location file="Binary/BinarySubmesh.hpp" line="78" column="14"/>
       </memberdef>
-      <memberdef kind="variable" id="dc/d5c/a02459_1a9f0a7a4f897ebeb17f6e1f8298a87f3b" prot="public" static="no" mutable="no">
-        <type><ref refid="db/d6b/a05139" kindref="compound">Geometry</ref> const  &amp;</type>
-        <definition>Geometry const&amp; castor3d::ObjectCache&lt; Geometry, castor::String &gt;::PoolsEntry::geometry</definition>
-        <argsstring></argsstring>
-        <name>geometry</name>
+      <memberdef kind="function" id="dc/d5c/a02459_1a195f458651e1d5872824024368efc4d1" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BinaryParser&lt; Submesh &gt;::doParse_v1_3</definition>
+        <argsstring>(Submesh &amp;obj) override</argsstring>
+        <name>doParse_v1_3</name>
+        <qualifiedname>castor3d::BinaryParser&lt; Submesh &gt;::doParse_v1_3</qualifiedname>
+        <reimplements refid="d5/d1b/a02331_1aab45074c2f8ac65df7fc52ee2530ebc1">doParse_v1_3</reimplements>
+        <param>
+          <type><ref refid="d3/da7/a03427" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>obj</declname>
+        </param>
         <briefdescription>
+<para>Function used to retrieve specific data from the chunk. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="38" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="38" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dc/d5c/a02459_1a0aabc838e264aa20b49b1b1bb629bc03" prot="public" static="no" mutable="no">
-        <type><ref refid="d0/dce/a03971" kindref="compound">Submesh</ref> const  &amp;</type>
-        <definition>Submesh const&amp; castor3d::ObjectCache&lt; Geometry, castor::String &gt;::PoolsEntry::submesh</definition>
-        <argsstring></argsstring>
-        <name>submesh</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="39" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="39" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dc/d5c/a02459_1a9f3e7cc7ea633045c297099e66da1824" prot="public" static="no" mutable="no">
-        <type><ref refid="db/d39/a02575" kindref="compound">Pass</ref> const  &amp;</type>
-        <definition>Pass const&amp; castor3d::ObjectCache&lt; Geometry, castor::String &gt;::PoolsEntry::pass</definition>
-        <argsstring></argsstring>
-        <name>pass</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="40" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="40" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dc/d5c/a02459_1adde754df994895c38232218c1fe04ec8" prot="public" static="no" mutable="no">
-        <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d2/d72/a05567" kindref="compound">ModelUboConfiguration</ref> &gt;</type>
-        <definition>UniformBufferOffsetT&lt; ModelUboConfiguration &gt; castor3d::ObjectCache&lt; Geometry, castor::String &gt;::PoolsEntry::modelUbo</definition>
-        <argsstring></argsstring>
-        <name>modelUbo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="41" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="41" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dc/d5c/a02459_1a7e1a58bda022f6c1976312224670d3e6" prot="public" static="no" mutable="no">
-        <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d5/d7e/a05563" kindref="compound">ModelMatrixUboConfiguration</ref> &gt;</type>
-        <definition>UniformBufferOffsetT&lt; ModelMatrixUboConfiguration &gt; castor3d::ObjectCache&lt; Geometry, castor::String &gt;::PoolsEntry::modelMatrixUbo</definition>
-        <argsstring></argsstring>
-        <name>modelMatrixUbo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="42" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="42" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dc/d5c/a02459_1af43be104c6f81e0122d5f34ffc247a2c" prot="public" static="no" mutable="no">
-        <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="de/d98/a05579" kindref="compound">PickingUboConfiguration</ref> &gt;</type>
-        <definition>UniformBufferOffsetT&lt; PickingUboConfiguration &gt; castor3d::ObjectCache&lt; Geometry, castor::String &gt;::PoolsEntry::pickingUbo</definition>
-        <argsstring></argsstring>
-        <name>pickingUbo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="43" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="43" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dc/d5c/a02459_1a0b65dc91c1ea68573130484429e7da02" prot="public" static="no" mutable="no">
-        <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d8/d26/a05599" kindref="compound">TexturesUboConfiguration</ref> &gt;</type>
-        <definition>UniformBufferOffsetT&lt; TexturesUboConfiguration &gt; castor3d::ObjectCache&lt; Geometry, castor::String &gt;::PoolsEntry::texturesUbo</definition>
-        <argsstring></argsstring>
-        <name>texturesUbo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="44" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="44" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dc/d5c/a02459_1a26153fc0813ad5c6a1d7c6ec2461edc9" prot="public" static="no" mutable="no">
-        <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d6/d63/a05559" kindref="compound">ModelInstancesUboConfiguration</ref> &gt;</type>
-        <definition>UniformBufferOffsetT&lt; ModelInstancesUboConfiguration &gt; castor3d::ObjectCache&lt; Geometry, castor::String &gt;::PoolsEntry::modelInstancesUbo</definition>
-        <argsstring></argsstring>
-        <name>modelInstancesUbo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="45" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="45" bodyend="-1"/>
+        <location file="Binary/BinarySubmesh.hpp" line="89" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para><ref refid="df/dd3/a04527" kindref="compound">MovableObject</ref> loader. </para>
     </briefdescription>
     <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="date"><para>14/02/2010</para>
+</simplesect>
+Loader de <ref refid="df/dd3/a04527" kindref="compound">MovableObject</ref> </para>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="2288">
-        <label>castor::OwnedBy&lt; Material &gt;</label>
-      </node>
-      <node id="2272">
-        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
-        <childnode refid="2273" relation="template-instance">
-          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::BinaryParserBase&lt; Submesh &gt;</label>
+        <link refid="d5/d1b/a02331"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Submesh &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="2274">
-        <label>K</label>
-      </node>
-      <node id="2275">
-        <label>T</label>
-      </node>
-      <node id="2268">
-        <label>castor3d::Geometry</label>
-        <link refid="db/d6b/a05139"/>
-        <childnode refid="2269" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2283" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2277">
-        <label>castor3d::SceneNode</label>
-        <link refid="d8/dd0/a05235"/>
-        <childnode refid="2278" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2279" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2276" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2285">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelUboConfiguration &gt;</label>
-        <link refid="d2/dd2/a02279"/>
-        <childnode refid="2262" relation="template-instance">
-          <edgelabel>&lt; castor3d::ModelUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2263">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::PickingUboConfiguration &gt;</label>
-        <link refid="d2/dd2/a02279"/>
-        <childnode refid="2262" relation="template-instance">
-          <edgelabel>&lt; castor3d::PickingUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2279">
-        <label>castor::OwnedBy&lt; Scene &gt;</label>
-      </node>
-      <node id="2273">
-        <label>std::map&lt; K, T &gt;</label>
-        <childnode refid="2274" relation="usage">
-          <edgelabel>keys</edgelabel>
-        </childnode>
-        <childnode refid="2275" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="2262">
-        <label>castor3d::UniformBufferOffsetT&lt; DataT &gt;</label>
-        <link refid="d2/dd2/a02279"/>
-      </node>
-      <node id="2278">
-        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
-      </node>
-      <node id="2269">
-        <label>castor3d::MovableObject</label>
-        <link refid="dc/d66/a05171"/>
-        <childnode refid="2270" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2276" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2277" relation="usage">
-          <edgelabel>m_sceneNode</edgelabel>
-        </childnode>
-        <childnode refid="2280" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-      </node>
-      <node id="2276">
-        <label>Named</label>
-      </node>
-      <node id="2283">
-        <label>castor3d::RenderedObject</label>
-        <link refid="d8/d9b/a05219"/>
-        <childnode refid="2284" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2286">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelInstancesUboConfiguration &gt;</label>
-        <link refid="d2/dd2/a02279"/>
-        <childnode refid="2262" relation="template-instance">
-          <edgelabel>&lt; castor3d::ModelInstancesUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2281">
-        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
-      </node>
-      <node id="2266">
-        <label>castor::OwnedBy&lt; Mesh &gt;</label>
-      </node>
-      <node id="2270">
-        <label>Animable</label>
-        <link refid="de/d0a/a02015"/>
-        <childnode refid="2271" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2272" relation="usage">
-          <edgelabel>m_animations</edgelabel>
-        </childnode>
-      </node>
-      <node id="2261">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelMatrixUboConfiguration &gt;</label>
-        <link refid="d2/dd2/a02279"/>
-        <childnode refid="2262" relation="template-instance">
-          <edgelabel>&lt; castor3d::ModelMatrixUboConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2271">
-        <label>castor::OwnedBy&lt; AnimableHanlerT &gt;</label>
-      </node>
-      <node id="2282">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="2260">
-        <label>castor3d::ObjectCache&lt; Geometry, castor::String &gt;::PoolsEntry</label>
+      <node id="1">
+        <label>castor3d::BinaryParser&lt; Submesh &gt;</label>
         <link refid="dc/d5c/a02459"/>
-        <childnode refid="2261" relation="usage">
-          <edgelabel>modelMatrixUbo</edgelabel>
-        </childnode>
-        <childnode refid="2263" relation="usage">
-          <edgelabel>pickingUbo</edgelabel>
-        </childnode>
-        <childnode refid="2264" relation="usage">
-          <edgelabel>texturesUbo</edgelabel>
-        </childnode>
-        <childnode refid="2265" relation="usage">
-          <edgelabel>submesh</edgelabel>
-        </childnode>
-        <childnode refid="2268" relation="usage">
-          <edgelabel>geometry</edgelabel>
-        </childnode>
-        <childnode refid="2285" relation="usage">
-          <edgelabel>modelUbo</edgelabel>
-        </childnode>
-        <childnode refid="2286" relation="usage">
-          <edgelabel>modelInstancesUbo</edgelabel>
-        </childnode>
-        <childnode refid="2287" relation="usage">
-          <edgelabel>pass</edgelabel>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="2287">
-        <label>castor3d::Pass</label>
-        <link refid="db/d39/a02575"/>
-        <childnode refid="2288" relation="public-inheritance">
+      <node id="3">
+        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
+        <link refid="d5/d1b/a02331"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::BinaryParserBase&lt; Submesh &gt;</label>
+        <link refid="d5/d1b/a02331"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_fileVersion</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; Submesh &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="2265">
-        <label>castor3d::Submesh</label>
-        <link refid="d0/dce/a03971"/>
-        <childnode refid="2266" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2267" relation="public-inheritance">
+      <node id="3">
+        <label>castor3d::BinaryChunk</label>
+        <link refid="dd/d3b/a02291"/>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryParser&lt; Submesh &gt;</label>
+        <link refid="dc/d5c/a02459"/>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="2284">
-        <label>std::enable_shared_from_this&lt; RenderedObject &gt;</label>
-      </node>
-      <node id="2280">
-        <label>castor3d::Scene</label>
-        <link refid="d7/d00/a05223"/>
-        <childnode refid="2281" relation="public-inheritance">
+      <node id="5">
+        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
+        <link refid="d5/d1b/a02331"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
         </childnode>
-        <childnode refid="2282" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2276" relation="public-inheritance">
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_fileVersion</edgelabel>
         </childnode>
       </node>
-      <node id="2267">
-        <label>std::enable_shared_from_this&lt; Submesh &gt;</label>
-      </node>
-      <node id="2264">
-        <label>castor3d::UniformBufferOffsetT&lt; castor3d::TexturesUboConfiguration &gt;</label>
-        <link refid="d2/dd2/a02279"/>
-        <childnode refid="2262" relation="template-instance">
-          <edgelabel>&lt; castor3d::TexturesUboConfiguration &gt;</edgelabel>
-        </childnode>
+      <node id="4">
+        <label>castor3d::Version</label>
+        <link refid="d0/de5/a03279"/>
       </node>
     </collaborationgraph>
-    <location file="Cache/GeometryCache.hpp" line="36" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="35" bodyend="46"/>
+    <location file="Binary/BinarySubmesh.hpp" line="64" column="1" bodyfile="Binary/BinarySubmesh.hpp" bodystart="66" bodyend="90"/>
     <listofallmembers>
-      <member refid="dc/d5c/a02459_1a9f0a7a4f897ebeb17f6e1f8298a87f3b" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;::PoolsEntry</scope><name>geometry</name></member>
-      <member refid="dc/d5c/a02459_1adbb912d42d1796899715b8d2f2079280" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;::PoolsEntry</scope><name>hash</name></member>
-      <member refid="dc/d5c/a02459_1a26153fc0813ad5c6a1d7c6ec2461edc9" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;::PoolsEntry</scope><name>modelInstancesUbo</name></member>
-      <member refid="dc/d5c/a02459_1a7e1a58bda022f6c1976312224670d3e6" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;::PoolsEntry</scope><name>modelMatrixUbo</name></member>
-      <member refid="dc/d5c/a02459_1adde754df994895c38232218c1fe04ec8" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;::PoolsEntry</scope><name>modelUbo</name></member>
-      <member refid="dc/d5c/a02459_1a9f3e7cc7ea633045c297099e66da1824" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;::PoolsEntry</scope><name>pass</name></member>
-      <member refid="dc/d5c/a02459_1af43be104c6f81e0122d5f34ffc247a2c" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;::PoolsEntry</scope><name>pickingUbo</name></member>
-      <member refid="dc/d5c/a02459_1a0aabc838e264aa20b49b1b1bb629bc03" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;::PoolsEntry</scope><name>submesh</name></member>
-      <member refid="dc/d5c/a02459_1a0b65dc91c1ea68573130484429e7da02" prot="public" virt="non-virtual"><scope>castor3d::ObjectCache&lt; Geometry, castor::String &gt;::PoolsEntry</scope><name>texturesUbo</name></member>
+      <member refid="d5/d1b/a02331_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>checkError</name></member>
+      <member refid="d5/d1b/a02331_1ae6f4694ede819151fe4e30e33235ff07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>createBinaryParser</name></member>
+      <member refid="d5/d1b/a02331_1ab5f9ba53ad5865f967b41e5a27ed73a9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doGetSubChunk</name></member>
+      <member refid="dc/d5c/a02459_1ab571767cc83c4f3606bced26db4173d7" prot="private" virt="virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doParse</name></member>
+      <member refid="dc/d5c/a02459_1a195f458651e1d5872824024368efc4d1" prot="private" virt="virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doParse_v1_3</name></member>
+      <member refid="d5/d1b/a02331_1a0e1aa917e3bf897fab03a32d20890062" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d5/d1b/a02331_1a22ca62addb3ab167995e18f49267efcf" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d5/d1b/a02331_1a5a648553ce168f5bc34adeedc8d169a7" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d5/d1b/a02331_1a90df4e46072e5ef14aebebd00cbcc1f5" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d5/d1b/a02331_1a5fac84360102001f5e730be1927c024e" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d5/d1b/a02331_1a035881aba2b64571b30a5efd3faaf3d9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>doParseHeader</name></member>
+      <member refid="d5/d1b/a02331_1ab3df04f9aa2eb1f7a533ed18631f09c4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>m_chunk</name></member>
+      <member refid="d5/d1b/a02331_1a455764ca72b659dab2652baf56ce5885" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>m_fileVersion</name></member>
+      <member refid="d5/d1b/a02331_1ae4820a3ab3e4b282240e5f1b969153c1" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>Name</name></member>
+      <member refid="d5/d1b/a02331_1a5db83668684ca219f67de3a381898e64" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>parse</name></member>
+      <member refid="d5/d1b/a02331_1a6bbbb529f463085c7d259600ae1b3e99" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>parse</name></member>
+      <member refid="d5/d1b/a02331_1a61b02dbf69d89569eff5be22facd5f07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>parse_v1_1</name></member>
+      <member refid="d5/d1b/a02331_1a95788692ddd6fae91074c299b674aaab" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>parse_v1_2</name></member>
+      <member refid="d5/d1b/a02331_1a6f39b66d980e4a65660016f71115a89c" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>parse_v1_3</name></member>
+      <member refid="d5/d1b/a02331_1aabc068daf8d99718497aa35f7a17c346" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>parse_v1_4</name></member>
+      <member refid="d5/d1b/a02331_1afb9e6fdcdc58e65458de7892d2bf8025" prot="public" virt="virtual"><scope>castor3d::BinaryParser&lt; Submesh &gt;</scope><name>~BinaryParserBase</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

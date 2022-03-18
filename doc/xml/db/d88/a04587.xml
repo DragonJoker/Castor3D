@@ -1,32 +1,70 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="db/d88/a04587" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::RenderPassTimerBlock</compoundname>
-    <includes local="no">RenderPassTimer.hpp</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="db/d88/a04587_1a59e31cc6c3277990ed6d5aa804469349" prot="private" static="no" mutable="no">
-        <type><ref refid="d7/db9/a04591" kindref="compound">RenderPassTimer</ref> *</type>
-        <definition>RenderPassTimer* castor3d::RenderPassTimerBlock::m_timer</definition>
+    <compoundname>castor3d::ParticleUpdater</compoundname>
+    <includes local="no">ParticleUpdater.hpp</includes>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="db/d88/a04587_1a3f2b8c9ae3e114fcd7225b240d49a60f" prot="protected" static="no" mutable="no">
+        <type><ref refid="d0/d61/a04579" kindref="compound">ParticleSystem</ref> const  &amp;</type>
+        <definition>ParticleSystem const&amp; castor3d::ParticleUpdater::m_system</definition>
         <argsstring></argsstring>
-        <name>m_timer</name>
+        <name>m_system</name>
+        <qualifiedname>castor3d::ParticleUpdater::m_system</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="30" column="1" bodyfile="Render/RenderPassTimer.hpp" bodystart="30" bodyend="-1"/>
+        <location file="Scene/ParticleSystem/ParticleUpdater.hpp" line="32" column="23" bodyfile="Scene/ParticleSystem/ParticleUpdater.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d88/a04587_1a4450f37a4a193ea4c342a414c902961b" prot="protected" static="no" mutable="no">
+        <type><ref refid="d1/dce/a04559" kindref="compound">ParticleDeclaration</ref> const  &amp;</type>
+        <definition>ParticleDeclaration const&amp; castor3d::ParticleUpdater::m_inputs</definition>
+        <argsstring></argsstring>
+        <name>m_inputs</name>
+        <qualifiedname>castor3d::ParticleUpdater::m_inputs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleUpdater.hpp" line="33" column="28" bodyfile="Scene/ParticleSystem/ParticleUpdater.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d88/a04587_1afb3bc374b716316cbf15926a1f40a145" prot="protected" static="no" mutable="no">
+        <type>ParticleEmitterArray &amp;</type>
+        <definition>ParticleEmitterArray&amp; castor3d::ParticleUpdater::m_emitters</definition>
+        <argsstring></argsstring>
+        <name>m_emitters</name>
+        <qualifiedname>castor3d::ParticleUpdater::m_emitters</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleUpdater.hpp" line="34" column="23" bodyfile="Scene/ParticleSystem/ParticleUpdater.hpp" bodystart="34" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="db/d88/a04587_1a2922a8f2f1da73747ae6e3c23ae42b69" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="db/d88/a04587_1ad275841dad5eacaa37bf0f661ba4ee1a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::RenderPassTimerBlock::RenderPassTimerBlock</definition>
-        <argsstring>(RenderPassTimer &amp;timer)</argsstring>
-        <name>RenderPassTimerBlock</name>
+        <definition>C3D_API castor3d::ParticleUpdater::ParticleUpdater</definition>
+        <argsstring>(ParticleSystem const &amp;system, ParticleDeclaration const &amp;inputs, ParticleEmitterArray &amp;emitters)</argsstring>
+        <name>ParticleUpdater</name>
+        <qualifiedname>castor3d::ParticleUpdater::ParticleUpdater</qualifiedname>
         <param>
-          <type><ref refid="d7/db9/a04591" kindref="compound">RenderPassTimer</ref> &amp;</type>
-          <declname>timer</declname>
+          <type><ref refid="d0/d61/a04579" kindref="compound">ParticleSystem</ref> const &amp;</type>
+          <declname>system</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/dce/a04559" kindref="compound">ParticleDeclaration</ref> const &amp;</type>
+          <declname>inputs</declname>
+        </param>
+        <param>
+          <type>ParticleEmitterArray &amp;</type>
+          <declname>emitters</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -34,115 +72,189 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="17" column="1"/>
+        <location file="Scene/ParticleSystem/ParticleUpdater.hpp" line="14" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="db/d88/a04587_1a072f5e1ed513c28a7f538e77d59f800a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="db/d88/a04587_1a20eb11f3e081b9bb67ee7edad78816bd" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::RenderPassTimerBlock::RenderPassTimerBlock</definition>
-        <argsstring>(RenderPassTimerBlock &amp;&amp;rhs) noexcept</argsstring>
-        <name>RenderPassTimerBlock</name>
+        <definition>virtual C3D_API castor3d::ParticleUpdater::~ParticleUpdater</definition>
+        <argsstring>()=default</argsstring>
+        <name>~ParticleUpdater</name>
+        <qualifiedname>castor3d::ParticleUpdater::~ParticleUpdater</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleUpdater.hpp" line="17" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d88/a04587_1a15ddb7d41dddee1be052fc849709b80f" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::ParticleUpdater::update</definition>
+        <argsstring>(castor::Milliseconds const &amp;time, Particle &amp;particle)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::ParticleUpdater::update</qualifiedname>
         <param>
-          <type><ref refid="db/d88/a04587" kindref="compound">RenderPassTimerBlock</ref> &amp;&amp;</type>
-          <declname>rhs</declname>
+          <type>castor::Milliseconds const &amp;</type>
+          <declname>time</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d65/a04555" kindref="compound">Particle</ref> &amp;</type>
+          <declname>particle</declname>
         </param>
         <briefdescription>
+<para>Updates a particle. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">time</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The time elapsed since last update. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">particle</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The particle. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="18" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="db/d88/a04587_1a184c5891841ea96b68304ac4aab81f8b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="db/d88/a04587" kindref="compound">RenderPassTimerBlock</ref> &amp;</type>
-        <definition>C3D_API RenderPassTimerBlock&amp; castor3d::RenderPassTimerBlock::operator=</definition>
-        <argsstring>(RenderPassTimerBlock &amp;&amp;rhs) noexcept</argsstring>
-        <name>operator=</name>
-        <param>
-          <type><ref refid="db/d88/a04587" kindref="compound">RenderPassTimerBlock</ref> &amp;&amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="19" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="db/d88/a04587_1aefb6a2f82cbbe685c651634c6236bcfe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::RenderPassTimerBlock::RenderPassTimerBlock</definition>
-        <argsstring>(RenderPassTimerBlock const &amp;)=delete</argsstring>
-        <name>RenderPassTimerBlock</name>
-        <param>
-          <type><ref refid="db/d88/a04587" kindref="compound">RenderPassTimerBlock</ref> const &amp;</type>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="20" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="db/d88/a04587_1a107384d135b6cfba5289dee02ffee184" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="db/d88/a04587" kindref="compound">RenderPassTimerBlock</ref> &amp;</type>
-        <definition>C3D_API RenderPassTimerBlock&amp; castor3d::RenderPassTimerBlock::operator=</definition>
-        <argsstring>(RenderPassTimerBlock const &amp;)=delete</argsstring>
-        <name>operator=</name>
-        <param>
-          <type><ref refid="db/d88/a04587" kindref="compound">RenderPassTimerBlock</ref> const &amp;</type>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="21" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="db/d88/a04587_1ac68e4f839ce2b68d048bf29c82c645a3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::RenderPassTimerBlock::~RenderPassTimerBlock</definition>
-        <argsstring>()</argsstring>
-        <name>~RenderPassTimerBlock</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="22" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="db/d88/a04587_1aeb24a853b4607007c913bc789b605847" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d7/db9/a04591" kindref="compound">RenderPassTimer</ref> *</type>
-        <definition>RenderPassTimer* castor3d::RenderPassTimerBlock::operator-&gt;</definition>
-        <argsstring>() const</argsstring>
-        <name>operator-&gt;</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderPassTimer.hpp" line="24" column="1" bodyfile="Render/RenderPassTimer.hpp" bodystart="24" bodyend="27"/>
+        <location file="Scene/ParticleSystem/ParticleUpdater.hpp" line="28" column="22"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/RenderPassTimer.hpp" line="15" column="1" bodyfile="Render/RenderPassTimer.hpp" bodystart="14" bodyend="31"/>
+    <collaborationgraph>
+      <node id="8">
+        <label>Animable</label>
+        <link refid="de/d59/a02219"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>K</label>
+      </node>
+      <node id="13">
+        <label>T</label>
+      </node>
+      <node id="14">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="de/d59/a02219"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::MovableObject</label>
+        <link refid="df/dd3/a04527"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor3d::ParticleDeclaration</label>
+        <link refid="d1/dce/a04559"/>
+      </node>
+      <node id="2">
+        <label>castor3d::ParticleSystem</label>
+        <link refid="d0/d61/a04579"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="16" relation="usage">
+          <edgelabel>m_inputs</edgelabel>
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>m_impl</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::ParticleSystemImpl</label>
+        <link refid="d0/d9d/a04583"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_parent</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ParticleUpdater</label>
+        <link refid="db/d88/a04587"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_system</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="usage">
+          <edgelabel>m_inputs</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::SceneNode</label>
+        <link refid="d1/d30/a04639"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::Named</label>
+      </node>
+      <node id="15">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="9">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="10">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
+      </node>
+      <node id="11">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="12" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/ParticleSystem/ParticleUpdater.hpp" line="11" column="1" bodyfile="Scene/ParticleSystem/ParticleUpdater.hpp" bodystart="12" bodyend="35"/>
     <listofallmembers>
-      <member refid="db/d88/a04587_1a59e31cc6c3277990ed6d5aa804469349" prot="private" virt="non-virtual"><scope>castor3d::RenderPassTimerBlock</scope><name>m_timer</name></member>
-      <member refid="db/d88/a04587_1aeb24a853b4607007c913bc789b605847" prot="public" virt="non-virtual"><scope>castor3d::RenderPassTimerBlock</scope><name>operator-&gt;</name></member>
-      <member refid="db/d88/a04587_1a184c5891841ea96b68304ac4aab81f8b" prot="public" virt="non-virtual"><scope>castor3d::RenderPassTimerBlock</scope><name>operator=</name></member>
-      <member refid="db/d88/a04587_1a107384d135b6cfba5289dee02ffee184" prot="public" virt="non-virtual"><scope>castor3d::RenderPassTimerBlock</scope><name>operator=</name></member>
-      <member refid="db/d88/a04587_1a2922a8f2f1da73747ae6e3c23ae42b69" prot="public" virt="non-virtual"><scope>castor3d::RenderPassTimerBlock</scope><name>RenderPassTimerBlock</name></member>
-      <member refid="db/d88/a04587_1a072f5e1ed513c28a7f538e77d59f800a" prot="public" virt="non-virtual"><scope>castor3d::RenderPassTimerBlock</scope><name>RenderPassTimerBlock</name></member>
-      <member refid="db/d88/a04587_1aefb6a2f82cbbe685c651634c6236bcfe" prot="public" virt="non-virtual"><scope>castor3d::RenderPassTimerBlock</scope><name>RenderPassTimerBlock</name></member>
-      <member refid="db/d88/a04587_1ac68e4f839ce2b68d048bf29c82c645a3" prot="public" virt="non-virtual"><scope>castor3d::RenderPassTimerBlock</scope><name>~RenderPassTimerBlock</name></member>
+      <member refid="db/d88/a04587_1afb3bc374b716316cbf15926a1f40a145" prot="protected" virt="non-virtual"><scope>castor3d::ParticleUpdater</scope><name>m_emitters</name></member>
+      <member refid="db/d88/a04587_1a4450f37a4a193ea4c342a414c902961b" prot="protected" virt="non-virtual"><scope>castor3d::ParticleUpdater</scope><name>m_inputs</name></member>
+      <member refid="db/d88/a04587_1a3f2b8c9ae3e114fcd7225b240d49a60f" prot="protected" virt="non-virtual"><scope>castor3d::ParticleUpdater</scope><name>m_system</name></member>
+      <member refid="db/d88/a04587_1ad275841dad5eacaa37bf0f661ba4ee1a" prot="public" virt="non-virtual"><scope>castor3d::ParticleUpdater</scope><name>ParticleUpdater</name></member>
+      <member refid="db/d88/a04587_1a15ddb7d41dddee1be052fc849709b80f" prot="public" virt="virtual"><scope>castor3d::ParticleUpdater</scope><name>update</name></member>
+      <member refid="db/d88/a04587_1a20eb11f3e081b9bb67ee7edad78816bd" prot="public" virt="virtual"><scope>castor3d::ParticleUpdater</scope><name>~ParticleUpdater</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

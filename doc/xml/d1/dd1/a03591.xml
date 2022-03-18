@@ -1,33 +1,268 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d1/dd1/a03591" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkBindAccelerationStructureMemoryInfoNV &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d1/dd1/a03591_1adaac7adc3a6e6cb49993ab5f858b6e94" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkBindAccelerationStructureMemoryInfoNV &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d1/dd1/a03591" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::PanelOverlay</compoundname>
+    <basecompoundref refid="d8/d59/a03539" prot="public" virt="non-virtual">castor3d::OverlayCategory</basecompoundref>
+    <includes local="no">PanelOverlay.hpp</includes>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d1/dd1/a03591_1a5b23ee4a2393576181195e8ace617b79" prot="protected" static="no" mutable="no">
+        <type>VertexArray</type>
+        <definition>VertexArray castor3d::PanelOverlay::m_arrayVtx</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_BIND_ACCELERATION_STRUCTURE_MEMORY_INFO_NV</initializer>
+        <name>m_arrayVtx</name>
+        <qualifiedname>castor3d::PanelOverlay::m_arrayVtx</qualifiedname>
         <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The vertex buffer data. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/PanelOverlay.hpp" line="57" column="13" bodyfile="Overlay/PanelOverlay.hpp" bodystart="57" bodyend="-1"/>
+        <referencedby refid="d1/dd1/a03591_1a95a9bd8d9326bc424c1a345453e04153" compoundref="d0/d1c/a00605" startline="43" endline="46">getPanelVertex</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/dd1/a03591_1a52e11fc7925be5c3e31135c99b6e2ce1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::PanelOverlay::PanelOverlay</definition>
+        <argsstring>()</argsstring>
+        <name>PanelOverlay</name>
+        <qualifiedname>castor3d::PanelOverlay::PanelOverlay</qualifiedname>
+        <briefdescription>
+<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="314" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="314" bodyend="-1"/>
+        <location file="Overlay/PanelOverlay.hpp" line="21" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dd1/a03591_1ad3b2cdc84198e28d980986f20832f531" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PanelOverlay::accept</definition>
+        <argsstring>(OverlayVisitor &amp;visitor) const override</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::PanelOverlay::accept</qualifiedname>
+        <reimplements refid="d8/d59/a03539_1a1cfb21cc1b6e4ac7a46dc7f3e424bbd3">accept</reimplements>
+        <param>
+          <type><ref refid="df/d38/a03587" kindref="compound">OverlayVisitor</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Draws the overlay. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/PanelOverlay.hpp" line="34" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dd1/a03591_1a95a9bd8d9326bc424c1a345453e04153" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>OverlayCategory::VertexArray const &amp;</type>
+        <definition>OverlayCategory::VertexArray const  &amp; castor3d::PanelOverlay::getPanelVertex</definition>
+        <argsstring>() const</argsstring>
+        <name>getPanelVertex</name>
+        <qualifiedname>castor3d::PanelOverlay::getPanelVertex</qualifiedname>
+        <briefdescription>
+<para>Retrieves the panel vertex buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The buffer </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/PanelOverlay.hpp" line="43" column="44" bodyfile="Overlay/PanelOverlay.hpp" bodystart="43" bodyend="46"/>
+        <references refid="d1/dd1/a03591_1a5b23ee4a2393576181195e8ace617b79" compoundref="d0/d1c/a00605" startline="57">m_arrayVtx</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d1/dd1/a03591_1ad4c3de263a83ca50bc7ade68171af2f2" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> OverlayCategorySPtr</type>
+        <definition>static C3D_API OverlayCategorySPtr castor3d::PanelOverlay::create</definition>
+        <argsstring>()</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::PanelOverlay::create</qualifiedname>
+        <briefdescription>
+<para>Creation function, used by the factory. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>An overlay </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/PanelOverlay.hpp" line="30" column="36"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d1/dd1/a03591_1a74d65c90aafa9b2a4941ff34f8426871" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PanelOverlay::doUpdateBuffer</definition>
+        <argsstring>(castor::Size const &amp;size) override</argsstring>
+        <name>doUpdateBuffer</name>
+        <qualifiedname>castor3d::PanelOverlay::doUpdateBuffer</qualifiedname>
+        <reimplements refid="d8/d59/a03539_1af740ba50ac54496f3c2d48161047b89e">doUpdateBuffer</reimplements>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Updates the vertex buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render target size. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/PanelOverlay.hpp" line="52" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="314" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="314" bodyend="314"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::OverlayCategory</label>
+        <link refid="d8/d59/a03539"/>
+      </node>
+      <node id="1">
+        <label>castor3d::PanelOverlay</label>
+        <link refid="d1/dd1/a03591"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor3d::Overlay</label>
+        <link refid="d3/d52/a03535"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_scene</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>m_renderSystem</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::OverlayCategory</label>
+        <link refid="d8/d59/a03539"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_pOverlay</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::PanelOverlay</label>
+        <link refid="d1/dd1/a03591"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d3/d9a/a04075"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::Scene</label>
+        <link refid="dd/dec/a04595"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::Named</label>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="6">
+        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Overlay/PanelOverlay.hpp" line="11" column="1" bodyfile="Overlay/PanelOverlay.hpp" bodystart="13" bodyend="58"/>
     <listofallmembers>
-      <member refid="d1/dd1/a03591_1adaac7adc3a6e6cb49993ab5f858b6e94" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkBindAccelerationStructureMemoryInfoNV &gt;</scope><name>value</name></member>
+      <member refid="d1/dd1/a03591_1ad3b2cdc84198e28d980986f20832f531" prot="public" virt="virtual"><scope>castor3d::PanelOverlay</scope><name>accept</name></member>
+      <member refid="d1/dd1/a03591_1ad4c3de263a83ca50bc7ade68171af2f2" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>create</name></member>
+      <member refid="d8/d59/a03539_1af30a39d84244e6f097d7b245d75e16f4" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>CU_DeclareVector</name></member>
+      <member refid="d8/d59/a03539_1a4914ddaa1aa2755d7a4bf1d1351b0d53" prot="protected" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>doGetTotalSize</name></member>
+      <member refid="d8/d59/a03539_1a72d64442dc9b48612aa7a0a64b9104d2" prot="protected" virt="virtual"><scope>castor3d::PanelOverlay</scope><name>doUpdate</name></member>
+      <member refid="d1/dd1/a03591_1a74d65c90aafa9b2a4941ff34f8426871" prot="protected" virt="virtual"><scope>castor3d::PanelOverlay</scope><name>doUpdateBuffer</name></member>
+      <member refid="d8/d59/a03539_1a4f4b67d20428187bed69ce338e5174f5" prot="protected" virt="virtual"><scope>castor3d::PanelOverlay</scope><name>doUpdatePosition</name></member>
+      <member refid="d8/d59/a03539_1acba79349220c84700bad09bc829ed123" prot="protected" virt="virtual"><scope>castor3d::PanelOverlay</scope><name>doUpdateSize</name></member>
+      <member refid="d8/d59/a03539_1aaf4f2b38dd87a7bcdba59feff70cfe5c" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>getAbsolutePosition</name></member>
+      <member refid="d8/d59/a03539_1a0e18c7032ece1f9fabb21621f54f27c7" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>getAbsolutePosition</name></member>
+      <member refid="d8/d59/a03539_1a096401b552723c3e5527045193451b2a" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>getAbsoluteSize</name></member>
+      <member refid="d8/d59/a03539_1af5c16e73f89fa5f438bf2df8f9eb56fc" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>getAbsoluteSize</name></member>
+      <member refid="d8/d59/a03539_1ac7d35aa737a683282da3f94362f351bf" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>getIndex</name></member>
+      <member refid="d8/d59/a03539_1a46204ee81cd66a0ab948a9f83acc5bae" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>getLevel</name></member>
+      <member refid="d8/d59/a03539_1a90eaf0a04b2ec908211d77f3444bc833" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>getMaterial</name></member>
+      <member refid="d8/d59/a03539_1a8b4091426253a6de32728aaba0d8e90f" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>getOverlay</name></member>
+      <member refid="d8/d59/a03539_1a6025fb9f4f47a243022cb752245b6f62" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>getOverlay</name></member>
+      <member refid="d8/d59/a03539_1a44be8f4402ee3ce13d9cb63b1b729ea2" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>getOverlayName</name></member>
+      <member refid="d1/dd1/a03591_1a95a9bd8d9326bc424c1a345453e04153" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>getPanelVertex</name></member>
+      <member refid="d8/d59/a03539_1a96af1a918d956aad578c877164986fd8" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>getPixelPosition</name></member>
+      <member refid="d8/d59/a03539_1afada466dc2f719b05080a977bac80df1" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>getPixelPosition</name></member>
+      <member refid="d8/d59/a03539_1aa1cff949676f574c52223137b6737be4" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>getPixelSize</name></member>
+      <member refid="d8/d59/a03539_1ae09abe68d13278545daf10a37c5c1726" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>getPixelSize</name></member>
+      <member refid="d8/d59/a03539_1af06bbc73c3946980e75b983c1d661589" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>getPosition</name></member>
+      <member refid="d8/d59/a03539_1a8c47fc64b83e003d2119f763c91caec6" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>getPosition</name></member>
+      <member refid="d8/d59/a03539_1ad2268e51289922bdd13cec10ae9084ca" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>getRenderRatio</name></member>
+      <member refid="d8/d59/a03539_1a8085bf50e87dc15310026435668609b1" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>getSize</name></member>
+      <member refid="d8/d59/a03539_1acb2cc96f32d6b40da2c7502e3a4c54a3" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>getSize</name></member>
+      <member refid="d8/d59/a03539_1a70ba9b4a7ef7bc8e35de3f0af39bcf42" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>getType</name></member>
+      <member refid="d8/d59/a03539_1ac110f23c2c21fb014f512f2626ef2837" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>getUV</name></member>
+      <member refid="d8/d59/a03539_1ac99be9e485c326264a6da3108e554dba" prot="public" virt="virtual"><scope>castor3d::PanelOverlay</scope><name>isChanged</name></member>
+      <member refid="d8/d59/a03539_1a0836f09c4f8ffbd2b185863e150196b4" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>isPositionChanged</name></member>
+      <member refid="d8/d59/a03539_1a5a5577d603b35fc1dae496989669d598" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>isSizeChanged</name></member>
+      <member refid="d8/d59/a03539_1a2e9384538ff62b740d005b6442cfdf71" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>isVisible</name></member>
+      <member refid="d1/dd1/a03591_1a5b23ee4a2393576181195e8ace617b79" prot="protected" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>m_arrayVtx</name></member>
+      <member refid="d8/d59/a03539_1a3f0ea9ec842763a39d5baa2e78889b8c" prot="protected" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>m_computeSize</name></member>
+      <member refid="d8/d59/a03539_1a35662d515c8e078cfe30e66da64f8821" prot="protected" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>m_index</name></member>
+      <member refid="d8/d59/a03539_1ac02bb1ecfe695b90caa6f2f3b154cbc7" prot="protected" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>m_level</name></member>
+      <member refid="d8/d59/a03539_1abddc9ff5a550427c4e54d427289f12dc" prot="protected" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>m_pMaterial</name></member>
+      <member refid="d8/d59/a03539_1a08bb475094eee27dd84fde7a24a5fd3f" prot="protected" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>m_position</name></member>
+      <member refid="d8/d59/a03539_1aa9411ea45aa6e5eeeb85943f33f8b6f7" prot="protected" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>m_positionChanged</name></member>
+      <member refid="d8/d59/a03539_1a8a0d08cc32db67ab349e5519c6895933" prot="protected" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>m_pOverlay</name></member>
+      <member refid="d8/d59/a03539_1a2223016a130025720269632785ec2b61" prot="protected" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>m_ptSize</name></member>
+      <member refid="d8/d59/a03539_1a0ce34334ebcc12c62dfb0dc7ac5523ff" prot="protected" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>m_pxPosition</name></member>
+      <member refid="d8/d59/a03539_1a022dd93e8d5bff1d4f2a8c0b21142f75" prot="protected" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>m_size</name></member>
+      <member refid="d8/d59/a03539_1aada69d0c8319feb51d6f7f91feacceb1" prot="protected" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>m_sizeChanged</name></member>
+      <member refid="d8/d59/a03539_1ac4624a6d11471700631f394110218994" prot="protected" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>m_strMatName</name></member>
+      <member refid="d8/d59/a03539_1a4fcedc67c26ae5608270bfd6e0704549" prot="protected" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>m_type</name></member>
+      <member refid="d8/d59/a03539_1a13ff69997c85e2e77149138667bf3766" prot="protected" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>m_uv</name></member>
+      <member refid="d8/d59/a03539_1ab598ebcee12614789e36336d1253e5bb" prot="protected" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>m_visible</name></member>
+      <member refid="d8/d59/a03539_1ae996131002acbaaf6d020d250450bd33" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>OverlayCategory</name></member>
+      <member refid="d1/dd1/a03591_1a52e11fc7925be5c3e31135c99b6e2ce1" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>PanelOverlay</name></member>
+      <member refid="d8/d59/a03539_1a432724ad0feeb3c091f49a61e3715cc4" prot="public" virt="virtual"><scope>castor3d::PanelOverlay</scope><name>setMaterial</name></member>
+      <member refid="d8/d59/a03539_1a5849e6f76ba3aa922d017d0188c20e9f" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>setOrder</name></member>
+      <member refid="d8/d59/a03539_1acd4f5cb3624f5875394b9e7d0ba6f5df" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>setOverlay</name></member>
+      <member refid="d8/d59/a03539_1a3ce663c7cd0d1ca8e2b9a8f2f91866d6" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>setPixelPosition</name></member>
+      <member refid="d8/d59/a03539_1aacea36a0f353d61cfaa3f863f29299a6" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>setPixelSize</name></member>
+      <member refid="d8/d59/a03539_1ac26db7b4f23efb5882a917d2e08db61d" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>setPosition</name></member>
+      <member refid="d8/d59/a03539_1afb4352263ce6a56a31283b5d87c6c94b" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>setSize</name></member>
+      <member refid="d8/d59/a03539_1a01add917e67d90c05ce49b7f22a6832c" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>setUV</name></member>
+      <member refid="d8/d59/a03539_1a9a6dea3ee2fcbf07bff0f478795ace08" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>setVisible</name></member>
+      <member refid="d8/d59/a03539_1aa45f9642c8fd544e189c4427efc43fe8" prot="public" virt="non-virtual"><scope>castor3d::PanelOverlay</scope><name>update</name></member>
+      <member refid="d8/d59/a03539_1aff0ea758ff18dd648a7e1c9aa6cf8689" prot="public" virt="virtual"><scope>castor3d::PanelOverlay</scope><name>~OverlayCategory</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

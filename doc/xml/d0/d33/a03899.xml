@@ -1,920 +1,266 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d0/d33/a03899" kind="class" language="C++" prot="public" abstract="yes">
-    <compoundname>castor3d::MeshSubdivider</compoundname>
-    <includes local="no">Subdivider.hpp</includes>
-      <sectiondef kind="protected-type">
-      <memberdef kind="typedef" id="d0/d33/a03899_1adefd6354397dff737424c96f0d420b39" prot="protected" static="no">
-        <type>std::function&lt; void(<ref refid="d0/d33/a03899" kindref="compound">MeshSubdivider</ref> &amp;) &gt;</type>
-        <definition>typedef std::function&lt; void( MeshSubdivider &amp; ) &gt; castor3d::MeshSubdivider::MeshSubdivisionEndFunction</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d0/d33/a03899" kind="class" language="C++" prot="private">
+    <compoundname>castor3d::EnvironmentPrefilter::MipRenderCube</compoundname>
+    <basecompoundref refid="df/d59/a04343" prot="public" virt="non-virtual">castor3d::RenderCube</basecompoundref>
+    <innerclass refid="d6/db7/a03903" prot="private">castor3d::EnvironmentPrefilter::MipRenderCube::FrameBuffer</innerclass>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/d33/a03899_1a72d6d400ab15b103925ad3da5af65fe5" prot="private" static="no" mutable="no">
+        <type>ashes::RenderPass const  &amp;</type>
+        <definition>ashes::RenderPass const&amp; castor3d::EnvironmentPrefilter::MipRenderCube::m_renderPass</definition>
         <argsstring></argsstring>
-        <name>MeshSubdivisionEndFunction</name>
+        <name>m_renderPass</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::MipRenderCube::m_renderPass</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="16" column="1" bodyfile="Model/Mesh/Subdivider.hpp" bodystart="16" bodyend="-1"/>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="50" column="26" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="50" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="protected-attrib">
-      <memberdef kind="variable" id="d0/d33/a03899_1a53f47fe0129dd8b467c32da302376978" prot="protected" static="no" mutable="no">
-        <type>SubmeshSPtr</type>
-        <definition>SubmeshSPtr castor3d::MeshSubdivider::m_submesh</definition>
+      <memberdef kind="variable" id="d0/d33/a03899_1ac79327589ada662a9898be8021a0a311" prot="private" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1a723c56c48a833a5992bd2a5a9a366e45" kindref="member">SamplerResPtr</ref></type>
+        <definition>SamplerResPtr castor3d::EnvironmentPrefilter::MipRenderCube::m_sampler</definition>
         <argsstring></argsstring>
-        <name>m_submesh</name>
+        <name>m_sampler</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::MipRenderCube::m_sampler</qualifiedname>
         <briefdescription>
-<para>The submesh being subdivided. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="255" column="1" bodyfile="Model/Mesh/Subdivider.hpp" bodystart="255" bodyend="-1"/>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="51" column="15" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="51" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d0/d33/a03899_1aa2168caaf51e2c7cdeb46c6310e6d610" prot="protected" static="no" mutable="no">
-        <type>std::vector&lt; std::unique_ptr&lt; <ref refid="d1/ded/a04035" kindref="compound">SubmeshVertex</ref> &gt; &gt;</type>
-        <definition>std::vector&lt; std::unique_ptr&lt; SubmeshVertex &gt; &gt; castor3d::MeshSubdivider::m_points</definition>
+      <memberdef kind="variable" id="d0/d33/a03899_1acbd9e755f8a9e92f57b03ec9070f2d9c" prot="private" static="no" mutable="no">
+        <type>std::array&lt; FrameBuffer, 6u &gt;</type>
+        <definition>std::array&lt; FrameBuffer, 6u &gt; castor3d::EnvironmentPrefilter::MipRenderCube::m_frameBuffers</definition>
         <argsstring></argsstring>
-        <name>m_points</name>
+        <name>m_frameBuffers</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::MipRenderCube::m_frameBuffers</qualifiedname>
         <briefdescription>
-<para>The points. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="258" column="1" bodyfile="Model/Mesh/Subdivider.hpp" bodystart="258" bodyend="-1"/>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="52" column="12" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="52" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d0/d33/a03899_1af0ce18ee76282b9e528643ec10a2df5e" prot="protected" static="no" mutable="no">
-        <type>FaceArray</type>
-        <definition>FaceArray castor3d::MeshSubdivider::m_arrayFaces</definition>
+      <memberdef kind="variable" id="d0/d33/a03899_1a5ca2088e8c75f2955703459f5a1f506d" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/dab/a03815" kindref="compound">CommandsSemaphore</ref></type>
+        <definition>CommandsSemaphore castor3d::EnvironmentPrefilter::MipRenderCube::m_commands</definition>
         <argsstring></argsstring>
-        <name>m_arrayFaces</name>
+        <name>m_commands</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::MipRenderCube::m_commands</qualifiedname>
         <briefdescription>
-<para>The faces. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="261" column="1" bodyfile="Model/Mesh/Subdivider.hpp" bodystart="261" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/d33/a03899_1a4b33bbadfe1ceecb095dda2f5ca5700b" prot="protected" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::MeshSubdivider::m_generateBuffers</definition>
-        <argsstring></argsstring>
-        <name>m_generateBuffers</name>
-        <briefdescription>
-<para>Tells if the buffers must be generated. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="264" column="1" bodyfile="Model/Mesh/Subdivider.hpp" bodystart="264" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/d33/a03899_1ae7ba292bbcdb3a5da6caa3d228b996df" prot="protected" static="no" mutable="no">
-        <type><ref refid="d0/d33/a03899_1adefd6354397dff737424c96f0d420b39" kindref="member">MeshSubdivisionEndFunction</ref></type>
-        <definition>MeshSubdivisionEndFunction castor3d::MeshSubdivider::m_onSubdivisionEnd</definition>
-        <argsstring></argsstring>
-        <name>m_onSubdivisionEnd</name>
-        <briefdescription>
-<para>The subdivision end callback. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="267" column="1" bodyfile="Model/Mesh/Subdivider.hpp" bodystart="267" bodyend="-1"/>
-        <referencedby refid="d0/d33/a03899_1a02be7e1dfe81941d3471e6f1f3a3126f" compoundref="d3/def/a00446" startline="156" endline="159">setSubdivisionEndCallback</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="d0/d33/a03899_1a87867682b4c957da0c43494da5c181aa" prot="protected" static="no" mutable="no">
-        <type>std::shared_ptr&lt; std::thread &gt;</type>
-        <definition>std::shared_ptr&lt; std::thread &gt; castor3d::MeshSubdivider::m_thread</definition>
-        <argsstring></argsstring>
-        <name>m_thread</name>
-        <briefdescription>
-<para>The subdivision thread. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="270" column="1" bodyfile="Model/Mesh/Subdivider.hpp" bodystart="270" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/d33/a03899_1ad75749fd44b709d8e79c8852fbc9e115" prot="protected" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::MeshSubdivider::m_threaded</definition>
-        <argsstring></argsstring>
-        <name>m_threaded</name>
-        <briefdescription>
-<para>Tells that the subdivision is threaded. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="273" column="1" bodyfile="Model/Mesh/Subdivider.hpp" bodystart="273" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/d33/a03899_1a36ae28ac7ea31f0bfd53aea5bc74a93d" prot="protected" static="no" mutable="no">
-        <type>std::recursive_mutex</type>
-        <definition>std::recursive_mutex castor3d::MeshSubdivider::m_mutex</definition>
-        <argsstring></argsstring>
-        <name>m_mutex</name>
-        <briefdescription>
-<para>The subdivision thread mutex. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="276" column="1" bodyfile="Model/Mesh/Subdivider.hpp" bodystart="276" bodyend="-1"/>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="53" column="19" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="53" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d0/d33/a03899_1ab7c7d86c5e9a903347d01764534ef094" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::MeshSubdivider::MeshSubdivider</definition>
-        <argsstring>()</argsstring>
-        <name>MeshSubdivider</name>
-        <briefdescription>
-<para>Default constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="25" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d33/a03899_1ad7a6e3660e28837a7e9a0c3fcc05d9b5" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>virtual C3D_API castor3d::MeshSubdivider::~MeshSubdivider</definition>
-        <argsstring>()</argsstring>
-        <name>~MeshSubdivider</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="32" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d33/a03899_1a08ad83f7ae2c0cf315b231d05723b102" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>virtual C3D_API void castor3d::MeshSubdivider::subdivide</definition>
-        <argsstring>(SubmeshSPtr submesh, int occurences, bool generateBuffers=true, bool threaded=false)</argsstring>
-        <name>subdivide</name>
+      <memberdef kind="function" id="d0/d33/a03899_1abd44f495b438e2d2d22bba3c7d2bc5f7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::EnvironmentPrefilter::MipRenderCube::MipRenderCube</definition>
+        <argsstring>(RenderDevice const &amp;device, QueueData const &amp;queueData, crg::ResourceHandler &amp;handler, ashes::RenderPass const &amp;renderPass, uint32_t mipLevel, VkExtent2D const &amp;originalSize, VkExtent2D const &amp;size, ashes::ImageView const &amp;srcView, Texture const &amp;dstTexture, SamplerResPtr sampler)</argsstring>
+        <name>MipRenderCube</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::MipRenderCube::MipRenderCube</qualifiedname>
         <param>
-          <type>SubmeshSPtr</type>
-          <declname>submesh</declname>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
         </param>
         <param>
-          <type>int</type>
-          <declname>occurences</declname>
+          <type><ref refid="da/d1d/a03947" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
         </param>
         <param>
-          <type>bool</type>
-          <declname>generateBuffers</declname>
-          <defval>true</defval>
+          <type>crg::ResourceHandler &amp;</type>
+          <declname>handler</declname>
         </param>
         <param>
-          <type>bool</type>
-          <declname>threaded</declname>
-          <defval>false</defval>
-        </param>
-        <briefdescription>
-<para>Main subdivision function. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">submesh</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The submesh to subdivide </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">occurences</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The subdivisions occurences </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">generateBuffers</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if the buffers must be generated after subdivision </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">threaded</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if subdivision must be threaded </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="47" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d33/a03899_1af78d4a588425c361a9417787bceed71e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>virtual C3D_API void castor3d::MeshSubdivider::cleanup</definition>
-        <argsstring>()</argsstring>
-        <name>cleanup</name>
-        <briefdescription>
-<para>Cleans all member variables. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="57" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d33/a03899_1a0106255344889dc05ea90657fa9d319b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/ded/a04035" kindref="compound">SubmeshVertex</ref> &amp;</type>
-        <definition>C3D_API SubmeshVertex&amp; castor3d::MeshSubdivider::addPoint</definition>
-        <argsstring>(float x, float y, float z)</argsstring>
-        <name>addPoint</name>
-        <param>
-          <type>float</type>
-          <declname>x</declname>
-        </param>
-        <param>
-          <type>float</type>
-          <declname>y</declname>
-        </param>
-        <param>
-          <type>float</type>
-          <declname>z</declname>
-        </param>
-        <briefdescription>
-<para>Creates and adds a vertex to my list. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">x</parametername>
-<parametername direction="in">y</parametername>
-<parametername direction="in">z</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The vertex coordinates </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The created vertex </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="68" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d33/a03899_1a8c48fc84c0fcb71e2ff1e74d8d8386c0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/ded/a04035" kindref="compound">SubmeshVertex</ref> &amp;</type>
-        <definition>C3D_API SubmeshVertex&amp; castor3d::MeshSubdivider::addPoint</definition>
-        <argsstring>(castor::Point3f const &amp;position)</argsstring>
-        <name>addPoint</name>
-        <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>position</declname>
-        </param>
-        <briefdescription>
-<para>adds a vertex to my list </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">position</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The vertex to add </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The created vertex </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="79" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d33/a03899_1a1164d7a250513c10e2c909fde7002c43" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/ded/a04035" kindref="compound">SubmeshVertex</ref> &amp;</type>
-        <definition>C3D_API SubmeshVertex&amp; castor3d::MeshSubdivider::addPoint</definition>
-        <argsstring>(float *position)</argsstring>
-        <name>addPoint</name>
-        <param>
-          <type>float *</type>
-          <declname>position</declname>
-        </param>
-        <briefdescription>
-<para>Creates and adds a vertex to my list. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">position</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The vertex coordinates </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The created vertex </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="90" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d33/a03899_1afff385e3b7eef44c6ddf75b1d895de9e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/da4/a03911" kindref="compound">Face</ref></type>
-        <definition>virtual C3D_API Face castor3d::MeshSubdivider::addFace</definition>
-        <argsstring>(uint32_t a, uint32_t b, uint32_t c)</argsstring>
-        <name>addFace</name>
-        <param>
-          <type>uint32_t</type>
-          <declname>a</declname>
+          <type>ashes::RenderPass const &amp;</type>
+          <declname>renderPass</declname>
         </param>
         <param>
           <type>uint32_t</type>
-          <declname>b</declname>
+          <declname>mipLevel</declname>
         </param>
         <param>
-          <type>uint32_t</type>
-          <declname>c</declname>
-        </param>
-        <briefdescription>
-<para>Creates and adds a face. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">a</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The first face&apos;s vertex index </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">b</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The second face&apos;s vertex index </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">c</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The third face&apos;s vertex index </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The created face </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="105" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d33/a03899_1a19e115a1d7b95278d73eb86952a85719" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> int</type>
-        <definition>virtual C3D_API int castor3d::MeshSubdivider::isInMyPoints</definition>
-        <argsstring>(castor::Point3f const &amp;vertex, double precision)</argsstring>
-        <name>isInMyPoints</name>
-        <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>vertex</declname>
+          <type>VkExtent2D const &amp;</type>
+          <declname>originalSize</declname>
         </param>
         <param>
-          <type>double</type>
-          <declname>precision</declname>
+          <type>VkExtent2D const &amp;</type>
+          <declname>size</declname>
         </param>
-        <briefdescription>
-<para>Tests if the given Point3f is in mine. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">vertex</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The vertex to test </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">precision</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The comparison precision </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The index of the vertex equal to parameter, -1 if not found </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="118" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d33/a03899_1adc8105f756dae499a54dcb7b62ebe915" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
-        <definition>C3D_API uint32_t castor3d::MeshSubdivider::getPointsCount</definition>
-        <argsstring>() const</argsstring>
-        <name>getPointsCount</name>
-        <briefdescription>
-<para>Retrieves the points count. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The value </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="127" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d33/a03899_1ab18c65f8b5751a34ae4e0566493e9bc6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/ded/a04035" kindref="compound">SubmeshVertex</ref> &amp;</type>
-        <definition>C3D_API SubmeshVertex&amp; castor3d::MeshSubdivider::getPoint</definition>
-        <argsstring>(uint32_t i) const</argsstring>
-        <name>getPoint</name>
         <param>
-          <type>uint32_t</type>
-          <declname>i</declname>
+          <type>ashes::ImageView const &amp;</type>
+          <declname>srcView</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d84/a04315" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>dstTexture</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a723c56c48a833a5992bd2a5a9a366e45" kindref="member">SamplerResPtr</ref></type>
+          <declname>sampler</declname>
         </param>
         <briefdescription>
-<para>Retrieves the wanted position. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">i</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The position index </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The value </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="138" column="1"/>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="29" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="d0/d33/a03899_1a37c64f67b1db7eb647aefc4274e87265" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/dd1/a01458_1acc83a5f6efdad2c69d185e0595e52b4d" kindref="member">InterleavedVertexArray</ref> const  &amp;</type>
-        <definition>C3D_API InterleavedVertexArray const&amp; castor3d::MeshSubdivider::getPoints</definition>
-        <argsstring>() const</argsstring>
-        <name>getPoints</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>Retrieves the points array </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="145" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d33/a03899_1a02be7e1dfe81941d3471e6f1f3a3126f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="d0/d33/a03899_1af304382f5f40f4884ea144a07000846f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::MeshSubdivider::setSubdivisionEndCallback</definition>
-        <argsstring>(MeshSubdivisionEndFunction subdivisionEndFunc)</argsstring>
-        <name>setSubdivisionEndCallback</name>
-        <param>
-          <type><ref refid="d0/d33/a03899_1adefd6354397dff737424c96f0d420b39" kindref="member">MeshSubdivisionEndFunction</ref></type>
-          <declname>subdivisionEndFunc</declname>
-        </param>
-        <briefdescription>
-<para>Defines a function to execute when the threaded subdivision ends. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="remark"><para>That function <emphasis>MUST NEITHER</emphasis> destroy the thread <emphasis>NOR</emphasis> the subdivider </para>
-</simplesect>
-<parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">subdivisionEndFunc</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Pointer over the function to execute </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="156" column="1" bodyfile="Model/Mesh/Subdivider.hpp" bodystart="156" bodyend="159"/>
-        <references refid="d0/d33/a03899_1ae7ba292bbcdb3a5da6caa3d228b996df" compoundref="d3/def/a00446" startline="267">m_onSubdivisionEnd</references>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="protected-func">
-      <memberdef kind="function" id="d0/d33/a03899_1af721ad8d184c1a0c0eb0319b23a8aeab" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
-        <definition>C3D_API uint32_t castor3d::MeshSubdivider::doSubdivideThreaded</definition>
+        <definition>void castor3d::EnvironmentPrefilter::MipRenderCube::registerFrames</definition>
         <argsstring>()</argsstring>
-        <name>doSubdivideThreaded</name>
+        <name>registerFrames</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::MipRenderCube::registerFrames</qualifiedname>
         <briefdescription>
-<para>Threaded subdivision function. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="168" column="1"/>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="39" column="6"/>
       </memberdef>
-      <memberdef kind="function" id="d0/d33/a03899_1a88af43f7755159ddb505e7496e44dfc6" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/ded/a04035" kindref="compound">SubmeshVertex</ref> &amp;</type>
-        <definition>C3D_API SubmeshVertex&amp; castor3d::MeshSubdivider::doTryAddPoint</definition>
-        <argsstring>(castor::Point3f const &amp;position)</argsstring>
-        <name>doTryAddPoint</name>
+      <memberdef kind="function" id="d0/d33/a03899_1a4b5050976aa8064a351331ac157379b0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EnvironmentPrefilter::MipRenderCube::render</definition>
+        <argsstring>(QueueData const &amp;queueData)</argsstring>
+        <name>render</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::MipRenderCube::render</qualifiedname>
         <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>position</declname>
+          <type><ref refid="da/d1d/a03947" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
         </param>
         <briefdescription>
-<para>Checks if the given position is in my list and if not creates and adds it. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">position</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The vertex coordinates </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The created vertex </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="179" column="1"/>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="40" column="6"/>
       </memberdef>
-      <memberdef kind="function" id="d0/d33/a03899_1aa0b985ad19469c7194d536ff879629b5" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>virtual C3D_API void castor3d::MeshSubdivider::doSubdivide</definition>
-        <argsstring>(SubmeshSPtr submesh, bool generateBuffers, bool threaded)</argsstring>
-        <name>doSubdivide</name>
+      <memberdef kind="function" id="d0/d33/a03899_1a4d166c9e555315495415b85f2efbbd27" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ashes::Semaphore const &amp;</type>
+        <definition>ashes::Semaphore const  &amp; castor3d::EnvironmentPrefilter::MipRenderCube::render</definition>
+        <argsstring>(QueueData const &amp;queueData, ashes::Semaphore const &amp;toWait)</argsstring>
+        <name>render</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::MipRenderCube::render</qualifiedname>
         <param>
-          <type>SubmeshSPtr</type>
-          <declname>submesh</declname>
+          <type><ref refid="da/d1d/a03947" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
         </param>
         <param>
-          <type>bool</type>
-          <declname>generateBuffers</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>threaded</declname>
+          <type>ashes::Semaphore const &amp;</type>
+          <declname>toWait</declname>
         </param>
         <briefdescription>
-<para>Main subdivision function. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">submesh</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The submesh to subdivide </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">generateBuffers</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if the buffers must be generated after subdivision </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">threaded</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if subdivision must be threaded </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="192" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d33/a03899_1aef18701962f464697b6d4f4bd74ae134" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>virtual C3D_API void castor3d::MeshSubdivider::doInitialise</definition>
-        <argsstring>()</argsstring>
-        <name>doInitialise</name>
-        <briefdescription>
-<para>Initialisation function. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="199" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d33/a03899_1ac000776a46f18a38e191f73af4abaeed" prot="protected" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>virtual C3D_API void castor3d::MeshSubdivider::doAddGeneratedFaces</definition>
-        <argsstring>()=0</argsstring>
-        <name>doAddGeneratedFaces</name>
-        <briefdescription>
-<para>Adds generated faces to the submesh. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="206" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d33/a03899_1af0174e7c198aea47ae95708b307c8bac" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::MeshSubdivider::doSwapBuffers</definition>
-        <argsstring>()</argsstring>
-        <name>doSwapBuffers</name>
-        <briefdescription>
-<para>Swaps the internal faces with the submeshes ones. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="213" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d33/a03899_1a4d56ffdcdc3e39f838e903c59537d48f" prot="protected" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>virtual C3D_API void castor3d::MeshSubdivider::doSubdivide</definition>
-        <argsstring>()=0</argsstring>
-        <name>doSubdivide</name>
-        <briefdescription>
-<para>Effectively subdivides the submesh. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="220" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d33/a03899_1ae9171b4f10c0672ed8cc0385910e612d" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::MeshSubdivider::doSetTextCoords</definition>
-        <argsstring>(SubmeshVertex const &amp;a, SubmeshVertex const &amp;b, SubmeshVertex const &amp;c, SubmeshVertex &amp;d, SubmeshVertex &amp;e, SubmeshVertex &amp;f)</argsstring>
-        <name>doSetTextCoords</name>
-        <param>
-          <type><ref refid="d1/ded/a04035" kindref="compound">SubmeshVertex</ref> const &amp;</type>
-          <declname>a</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/ded/a04035" kindref="compound">SubmeshVertex</ref> const &amp;</type>
-          <declname>b</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/ded/a04035" kindref="compound">SubmeshVertex</ref> const &amp;</type>
-          <declname>c</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/ded/a04035" kindref="compound">SubmeshVertex</ref> &amp;</type>
-          <declname>d</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/ded/a04035" kindref="compound">SubmeshVertex</ref> &amp;</type>
-          <declname>e</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/ded/a04035" kindref="compound">SubmeshVertex</ref> &amp;</type>
-          <declname>f</declname>
-        </param>
-        <briefdescription>
-<para>Computes the texture coordinates for given vertices, creates the faces. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">a</parametername>
-<parametername direction="in">b</parametername>
-<parametername direction="in">c</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The source vertices </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="out">d</parametername>
-<parametername direction="out">e</parametername>
-<parametername direction="out">f</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The new vertices </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="231" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d33/a03899_1a4bc835604d8c4739e5199945e56e4623" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::MeshSubdivider::doSetTextCoords</definition>
-        <argsstring>(SubmeshVertex const &amp;a, SubmeshVertex const &amp;b, SubmeshVertex const &amp;c, SubmeshVertex &amp;p)</argsstring>
-        <name>doSetTextCoords</name>
-        <param>
-          <type><ref refid="d1/ded/a04035" kindref="compound">SubmeshVertex</ref> const &amp;</type>
-          <declname>a</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/ded/a04035" kindref="compound">SubmeshVertex</ref> const &amp;</type>
-          <declname>b</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/ded/a04035" kindref="compound">SubmeshVertex</ref> const &amp;</type>
-          <declname>c</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/ded/a04035" kindref="compound">SubmeshVertex</ref> &amp;</type>
-          <declname>p</declname>
-        </param>
-        <briefdescription>
-<para>Computes the texture coordinates for the new vertex, creates the faces. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">a</parametername>
-<parametername direction="in">b</parametername>
-<parametername direction="in">c</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The source vertices </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="out">p</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The new vertex </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Subdivider.hpp" line="247" column="1"/>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="41" column="25"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::EnvironmentPrefilter::MipRenderCube</label>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::RenderCube</label>
+        <link refid="df/d59/a04343"/>
+      </node>
+    </inheritancegraph>
     <collaborationgraph>
-      <node id="2042">
+      <node id="9">
         <label>T</label>
       </node>
-      <node id="2046">
-        <label>std::shared_ptr&lt; T &gt;</label>
-        <childnode refid="2042" relation="usage">
-          <edgelabel>ptr</edgelabel>
+      <node id="1">
+        <label>castor3d::EnvironmentPrefilter::MipRenderCube</label>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="2043">
+      <node id="7">
+        <label>castor3d::QueuesData</label>
+        <link refid="d5/d04/a03955"/>
+      </node>
+      <node id="2">
+        <label>castor3d::RenderCube</label>
+        <link refid="df/d59/a04343"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::RenderDevice</label>
+        <link refid="d4/d87/a03963"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>queueFamilies</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d3/d9a/a04075"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="8">
         <label>std::vector&lt; T &gt;</label>
-        <childnode refid="2042" relation="usage">
+        <childnode refid="9" relation="usage">
           <edgelabel>elements</edgelabel>
         </childnode>
       </node>
-      <node id="2037">
-        <label>std::unique_ptr&lt; castor3d::SubmeshVertex &gt;</label>
-        <childnode refid="2038" relation="usage">
-          <edgelabel>ptr</edgelabel>
-        </childnode>
-        <childnode refid="2041" relation="template-instance">
-          <edgelabel>&lt; castor3d::SubmeshVertex &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2041">
-        <label>std::unique_ptr&lt; T &gt;</label>
-        <childnode refid="2042" relation="usage">
-          <edgelabel>ptr</edgelabel>
-        </childnode>
-      </node>
-      <node id="2044">
-        <label>std::shared_ptr&lt; std::thread &gt;</label>
-        <childnode refid="2045" relation="usage">
-          <edgelabel>ptr</edgelabel>
-        </childnode>
-        <childnode refid="2046" relation="template-instance">
-          <edgelabel>&lt; std::thread &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2040">
-        <label>castor3d::InterleavedVertexT&lt; T &gt;</label>
-        <link refid="d1/de2/a03983"/>
-      </node>
-      <node id="2036">
-        <label>std::vector&lt; std::unique_ptr&lt; castor3d::SubmeshVertex &gt; &gt;</label>
-        <childnode refid="2037" relation="usage">
+      <node id="6">
+        <label>std::vector&lt; QueuesData &gt;</label>
+        <childnode refid="7" relation="usage">
           <edgelabel>elements</edgelabel>
         </childnode>
-        <childnode refid="2043" relation="template-instance">
-          <edgelabel>&lt; std::unique_ptr&lt; castor3d::SubmeshVertex &gt; &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2039">
-        <label>castor3d::InterleavedVertexT&lt; float &gt;</label>
-        <link refid="d1/de2/a03983"/>
-        <childnode refid="2040" relation="template-instance">
-          <edgelabel>&lt; float &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2045">
-        <label>std::thread</label>
-      </node>
-      <node id="2035">
-        <label>castor3d::MeshSubdivider</label>
-        <link refid="d0/d33/a03899"/>
-        <childnode refid="2036" relation="usage">
-          <edgelabel>m_points</edgelabel>
-        </childnode>
-        <childnode refid="2044" relation="usage">
-          <edgelabel>m_thread</edgelabel>
-        </childnode>
-      </node>
-      <node id="2038">
-        <label>castor3d::SubmeshVertex</label>
-        <link refid="d1/ded/a04035"/>
-        <childnode refid="2039" relation="usage">
-          <edgelabel>m_vertex</edgelabel>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; QueuesData &gt;</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Model/Mesh/Subdivider.hpp" line="14" column="1" bodyfile="Model/Mesh/Subdivider.hpp" bodystart="13" bodyend="277"/>
+    <location file="Render/PBR/EnvironmentPrefilter.hpp" line="25" column="1" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="27" bodyend="54"/>
     <listofallmembers>
-      <member refid="d0/d33/a03899_1afff385e3b7eef44c6ddf75b1d895de9e" prot="public" virt="virtual"><scope>castor3d::MeshSubdivider</scope><name>addFace</name></member>
-      <member refid="d0/d33/a03899_1a0106255344889dc05ea90657fa9d319b" prot="public" virt="non-virtual"><scope>castor3d::MeshSubdivider</scope><name>addPoint</name></member>
-      <member refid="d0/d33/a03899_1a8c48fc84c0fcb71e2ff1e74d8d8386c0" prot="public" virt="non-virtual"><scope>castor3d::MeshSubdivider</scope><name>addPoint</name></member>
-      <member refid="d0/d33/a03899_1a1164d7a250513c10e2c909fde7002c43" prot="public" virt="non-virtual"><scope>castor3d::MeshSubdivider</scope><name>addPoint</name></member>
-      <member refid="d0/d33/a03899_1af78d4a588425c361a9417787bceed71e" prot="public" virt="virtual"><scope>castor3d::MeshSubdivider</scope><name>cleanup</name></member>
-      <member refid="d0/d33/a03899_1ac000776a46f18a38e191f73af4abaeed" prot="protected" virt="pure-virtual"><scope>castor3d::MeshSubdivider</scope><name>doAddGeneratedFaces</name></member>
-      <member refid="d0/d33/a03899_1aef18701962f464697b6d4f4bd74ae134" prot="protected" virt="virtual"><scope>castor3d::MeshSubdivider</scope><name>doInitialise</name></member>
-      <member refid="d0/d33/a03899_1ae9171b4f10c0672ed8cc0385910e612d" prot="protected" virt="non-virtual"><scope>castor3d::MeshSubdivider</scope><name>doSetTextCoords</name></member>
-      <member refid="d0/d33/a03899_1a4bc835604d8c4739e5199945e56e4623" prot="protected" virt="non-virtual"><scope>castor3d::MeshSubdivider</scope><name>doSetTextCoords</name></member>
-      <member refid="d0/d33/a03899_1aa0b985ad19469c7194d536ff879629b5" prot="protected" virt="virtual"><scope>castor3d::MeshSubdivider</scope><name>doSubdivide</name></member>
-      <member refid="d0/d33/a03899_1a4d56ffdcdc3e39f838e903c59537d48f" prot="protected" virt="pure-virtual"><scope>castor3d::MeshSubdivider</scope><name>doSubdivide</name></member>
-      <member refid="d0/d33/a03899_1af721ad8d184c1a0c0eb0319b23a8aeab" prot="protected" virt="non-virtual"><scope>castor3d::MeshSubdivider</scope><name>doSubdivideThreaded</name></member>
-      <member refid="d0/d33/a03899_1af0174e7c198aea47ae95708b307c8bac" prot="protected" virt="non-virtual"><scope>castor3d::MeshSubdivider</scope><name>doSwapBuffers</name></member>
-      <member refid="d0/d33/a03899_1a88af43f7755159ddb505e7496e44dfc6" prot="protected" virt="non-virtual"><scope>castor3d::MeshSubdivider</scope><name>doTryAddPoint</name></member>
-      <member refid="d0/d33/a03899_1ab18c65f8b5751a34ae4e0566493e9bc6" prot="public" virt="non-virtual"><scope>castor3d::MeshSubdivider</scope><name>getPoint</name></member>
-      <member refid="d0/d33/a03899_1a37c64f67b1db7eb647aefc4274e87265" prot="public" virt="non-virtual"><scope>castor3d::MeshSubdivider</scope><name>getPoints</name></member>
-      <member refid="d0/d33/a03899_1adc8105f756dae499a54dcb7b62ebe915" prot="public" virt="non-virtual"><scope>castor3d::MeshSubdivider</scope><name>getPointsCount</name></member>
-      <member refid="d0/d33/a03899_1a19e115a1d7b95278d73eb86952a85719" prot="public" virt="virtual"><scope>castor3d::MeshSubdivider</scope><name>isInMyPoints</name></member>
-      <member refid="d0/d33/a03899_1af0ce18ee76282b9e528643ec10a2df5e" prot="protected" virt="non-virtual"><scope>castor3d::MeshSubdivider</scope><name>m_arrayFaces</name></member>
-      <member refid="d0/d33/a03899_1a4b33bbadfe1ceecb095dda2f5ca5700b" prot="protected" virt="non-virtual"><scope>castor3d::MeshSubdivider</scope><name>m_generateBuffers</name></member>
-      <member refid="d0/d33/a03899_1a36ae28ac7ea31f0bfd53aea5bc74a93d" prot="protected" virt="non-virtual"><scope>castor3d::MeshSubdivider</scope><name>m_mutex</name></member>
-      <member refid="d0/d33/a03899_1ae7ba292bbcdb3a5da6caa3d228b996df" prot="protected" virt="non-virtual"><scope>castor3d::MeshSubdivider</scope><name>m_onSubdivisionEnd</name></member>
-      <member refid="d0/d33/a03899_1aa2168caaf51e2c7cdeb46c6310e6d610" prot="protected" virt="non-virtual"><scope>castor3d::MeshSubdivider</scope><name>m_points</name></member>
-      <member refid="d0/d33/a03899_1a53f47fe0129dd8b467c32da302376978" prot="protected" virt="non-virtual"><scope>castor3d::MeshSubdivider</scope><name>m_submesh</name></member>
-      <member refid="d0/d33/a03899_1a87867682b4c957da0c43494da5c181aa" prot="protected" virt="non-virtual"><scope>castor3d::MeshSubdivider</scope><name>m_thread</name></member>
-      <member refid="d0/d33/a03899_1ad75749fd44b709d8e79c8852fbc9e115" prot="protected" virt="non-virtual"><scope>castor3d::MeshSubdivider</scope><name>m_threaded</name></member>
-      <member refid="d0/d33/a03899_1ab7c7d86c5e9a903347d01764534ef094" prot="public" virt="non-virtual"><scope>castor3d::MeshSubdivider</scope><name>MeshSubdivider</name></member>
-      <member refid="d0/d33/a03899_1adefd6354397dff737424c96f0d420b39" prot="protected" virt="non-virtual"><scope>castor3d::MeshSubdivider</scope><name>MeshSubdivisionEndFunction</name></member>
-      <member refid="d0/d33/a03899_1a02be7e1dfe81941d3471e6f1f3a3126f" prot="public" virt="non-virtual"><scope>castor3d::MeshSubdivider</scope><name>setSubdivisionEndCallback</name></member>
-      <member refid="d0/d33/a03899_1a08ad83f7ae2c0cf315b231d05723b102" prot="public" virt="virtual"><scope>castor3d::MeshSubdivider</scope><name>subdivide</name></member>
-      <member refid="d0/d33/a03899_1ad7a6e3660e28837a7e9a0c3fcc05d9b5" prot="public" virt="virtual"><scope>castor3d::MeshSubdivider</scope><name>~MeshSubdivider</name></member>
+      <member refid="df/d59/a04343_1a3f0330fd2cd0b556433e50c505c2cfd0" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>cleanup</name></member>
+      <member refid="df/d59/a04343_1ae58f4e4abbd017b821ad1ce07bd1898c" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>createPipelines</name></member>
+      <member refid="df/d59/a04343_1a03e099cd27fb31640352a9925effa710" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>createPipelines</name></member>
+      <member refid="d0/d33/a03899_1a5ca2088e8c75f2955703459f5a1f506d" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>m_commands</name></member>
+      <member refid="df/d59/a04343_1af9d5218505481d37eec6dc49f638039a" prot="protected" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>m_device</name></member>
+      <member refid="d0/d33/a03899_1acbd9e755f8a9e92f57b03ec9070f2d9c" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>m_frameBuffers</name></member>
+      <member refid="df/d59/a04343_1a84414b79673d6fe5e891f6078bc8b782" prot="protected" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>m_pipelineLayout</name></member>
+      <member refid="d0/d33/a03899_1a72d6d400ab15b103925ad3da5af65fe5" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>m_renderPass</name></member>
+      <member refid="d0/d33/a03899_1ac79327589ada662a9898be8021a0a311" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>m_sampler</name></member>
+      <member refid="d0/d33/a03899_1abd44f495b438e2d2d22bba3c7d2bc5f7" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>MipRenderCube</name></member>
+      <member refid="df/d59/a04343_1a83fae0b06a6d865e7b3a9a12bf6ee6ff" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>prepareFrame</name></member>
+      <member refid="df/d59/a04343_1a4b8c2a6e867159e5545c6ae52e6ed246" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>registerFrame</name></member>
+      <member refid="d0/d33/a03899_1af304382f5f40f4884ea144a07000846f" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>registerFrames</name></member>
+      <member refid="d0/d33/a03899_1a4b5050976aa8064a351331ac157379b0" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>render</name></member>
+      <member refid="d0/d33/a03899_1a4d166c9e555315495415b85f2efbbd27" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>render</name></member>
+      <member refid="df/d59/a04343_1a60adc150ee325694e30b24bbe12c016b" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>RenderCube</name></member>
+      <member refid="df/d59/a04343_1a442e2372083596ae51f50d6aa8709e60" prot="public" virt="virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>~RenderCube</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

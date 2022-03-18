@@ -1,104 +1,72 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="de/dce/a03932" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::Face</compoundname>
-    <includes local="no">Face.hpp</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="de/dce/a03932_1a93076f16a364cd85357482fedf153375" prot="private" static="no" mutable="no">
-        <type><ref refid="d0/d60/a03936" kindref="compound">FaceIndices</ref></type>
-        <definition>FaceIndices castor3d::Face::m_face</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="de/dce/a03932" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::VkStructure</compoundname>
+    <includes local="no">RenderDevice.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/dce/a03932_1acf8f57a16b643a808dbeca0acf8523fb" prot="public" static="no" mutable="no">
+        <type>VkStructureType</type>
+        <definition>VkStructureType castor3d::VkStructure::sType</definition>
         <argsstring></argsstring>
-        <name>m_face</name>
+        <name>sType</name>
+        <qualifiedname>castor3d::VkStructure::sType</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The face vertex indices. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/Face.hpp" line="42" column="1" bodyfile="Model/Mesh/Submesh/Component/Face.hpp" bodystart="42" bodyend="-1"/>
+        <location file="Render/RenderDevice.hpp" line="29" column="17" bodyfile="Render/RenderDevice.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dce/a03932_1ac9f55a1f3121add5683fba08e1714611" prot="public" static="no" mutable="no">
+        <type><ref refid="de/dce/a03932" kindref="compound">VkStructure</ref> *</type>
+        <definition>VkStructure* castor3d::VkStructure::pNext</definition>
+        <argsstring></argsstring>
+        <name>pNext</name>
+        <qualifiedname>castor3d::VkStructure::pNext</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="30" column="14" bodyfile="Render/RenderDevice.hpp" bodystart="30" bodyend="-1"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="de/dce/a03932_1a3b55f392c1b27456bbe20ecafeb45020" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::Face::Face</definition>
-        <argsstring>(uint32_t a, uint32_t b, uint32_t c)</argsstring>
-        <name>Face</name>
-        <param>
-          <type>uint32_t</type>
-          <declname>a</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>b</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>c</declname>
-        </param>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="de/dce/a03932_1ac9d58b7f72555c2e04de78493b4ac4f2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::VkStructure::VkStructure</definition>
+        <argsstring>()</argsstring>
+        <name>VkStructure</name>
+        <qualifiedname>castor3d::VkStructure::VkStructure</qualifiedname>
         <briefdescription>
-<para>Specified constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">a</parametername>
-<parametername direction="in">b</parametername>
-<parametername direction="in">c</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The three vertices indices </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/Face.hpp" line="22" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="de/dce/a03932_1a9eabd49da77fe21c77805a5047bc0753" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::Face::operator[]</definition>
-        <argsstring>(uint32_t index) const</argsstring>
-        <name>operator[]</name>
-        <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves the vertex index. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">index</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The index of the concerned vertex </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The vertex index </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/Face.hpp" line="33" column="1" bodyfile="Model/Mesh/Submesh/Component/Face.hpp" bodystart="33" bodyend="37"/>
-        <references refid="d0/d60/a03936_1adf8426df8bab8f2e89269aad090a1d01" compoundref="db/d8e/a00482" startline="17">castor3d::FaceIndices::m_index</references>
+        <location file="Render/RenderDevice.hpp" line="26" column="1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Model/Mesh/Submesh/Component/Face.hpp" line="12" column="1" bodyfile="Model/Mesh/Submesh/Component/Face.hpp" bodystart="11" bodyend="43"/>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::VkStructure</label>
+        <link refid="de/dce/a03932"/>
+        <childnode refid="1" relation="usage">
+          <edgelabel>pNext</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/RenderDevice.hpp" line="23" column="1" bodyfile="Render/RenderDevice.hpp" bodystart="24" bodyend="31"/>
     <listofallmembers>
-      <member refid="de/dce/a03932_1a3b55f392c1b27456bbe20ecafeb45020" prot="public" virt="non-virtual"><scope>castor3d::Face</scope><name>Face</name></member>
-      <member refid="de/dce/a03932_1a93076f16a364cd85357482fedf153375" prot="private" virt="non-virtual"><scope>castor3d::Face</scope><name>m_face</name></member>
-      <member refid="de/dce/a03932_1a9eabd49da77fe21c77805a5047bc0753" prot="public" virt="non-virtual"><scope>castor3d::Face</scope><name>operator[]</name></member>
+      <member refid="de/dce/a03932_1ac9f55a1f3121add5683fba08e1714611" prot="public" virt="non-virtual"><scope>castor3d::VkStructure</scope><name>pNext</name></member>
+      <member refid="de/dce/a03932_1acf8f57a16b643a808dbeca0acf8523fb" prot="public" virt="non-virtual"><scope>castor3d::VkStructure</scope><name>sType</name></member>
+      <member refid="de/dce/a03932_1ac9d58b7f72555c2e04de78493b4ac4f2" prot="private" virt="non-virtual"><scope>castor3d::VkStructure</scope><name>VkStructure</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

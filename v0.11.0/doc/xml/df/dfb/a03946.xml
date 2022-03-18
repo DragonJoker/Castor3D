@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="df/dfb/a03946" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::InstantiationData</compoundname>
+    <includes local="no">InstantiationComponent.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/dfb/a03946_1abfbb2ce1f73fd985161f1161cd56563c" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::InstantiationData::m_matrix</definition>
+        <argsstring></argsstring>
+        <name>m_matrix</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="17" column="1" bodyfile="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/dfb/a03946_1ac8a4e5e2eeb314b67cc000cd227daf32" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int castor3d::InstantiationData::m_material</definition>
+        <argsstring></argsstring>
+        <name>m_material</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="18" column="1" bodyfile="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="16" column="1" bodyfile="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="15" bodyend="19"/>
+    <listofallmembers>
+      <member refid="df/dfb/a03946_1ac8a4e5e2eeb314b67cc000cd227daf32" prot="public" virt="non-virtual"><scope>castor3d::InstantiationData</scope><name>m_material</name></member>
+      <member refid="df/dfb/a03946_1abfbb2ce1f73fd985161f1161cd56563c" prot="public" virt="non-virtual"><scope>castor3d::InstantiationData</scope><name>m_matrix</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

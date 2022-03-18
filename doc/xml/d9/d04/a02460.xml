@@ -1,69 +1,104 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d9/d04/a02460" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::ObjectCacheTraits&lt; SceneNode, KeyType &gt;</compoundname>
-    <includes local="no">CacheModule.hpp</includes>
-    <templateparamlist>
-      <param>
-        <type>typename KeyType</type>
-      </param>
-    </templateparamlist>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="d9/d04/a02460_1a5fc06ab255c3776673cd51bb8bbce479" prot="public" static="no">
-        <type>std::function&lt; std::shared_ptr&lt; <ref refid="da/d44/a05256" kindref="compound">SceneNode</ref> &gt;(KeyType const &amp;, <ref refid="da/d44/a05256" kindref="compound">SceneNode</ref> &amp;) &gt;</type>
-        <definition>using castor3d::ObjectCacheTraits&lt; SceneNode, KeyType &gt;::Producer =  std::function&lt; std::shared_ptr&lt; SceneNode &gt;( KeyType const &amp;, SceneNode &amp; ) &gt;</definition>
-        <argsstring></argsstring>
-        <name>Producer</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d9/d04/a02460" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ChunkParserBase</compoundname>
+    <derivedcompoundref refid="d3/d19/a02464" prot="public" virt="non-virtual">castor3d::ChunkParser&lt; T &gt;</derivedcompoundref>
+    <derivedcompoundref refid="d9/ded/a02472" prot="public" virt="non-virtual">castor3d::ChunkParser&lt; castor::Path &gt;</derivedcompoundref>
+    <derivedcompoundref refid="d2/d35/a02468" prot="public" virt="non-virtual">castor3d::ChunkParser&lt; castor::String &gt;</derivedcompoundref>
+    <includes local="no">ChunkParser.hpp</includes>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d9/d04/a02460_1a062463121032ba679336be2382c508d0" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool castor3d::ChunkParserBase::parse</definition>
+        <argsstring>(uint8_t *values, size_t size, BinaryChunk &amp;chunk)</argsstring>
+        <name>parse</name>
+        <qualifiedname>castor3d::ChunkParserBase::parse</qualifiedname>
+        <param>
+          <type>uint8_t *</type>
+          <declname>values</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d1a/a02288" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
         <briefdescription>
+<para>Retrieves a value array from a chunk. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the parsed values </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The values size </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk containing the values </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/CacheModule.hpp" line="484" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="484" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d9/d04/a02460_1a16da34fc32eaefea5a3b840894e298f0" prot="public" static="no">
-        <type>std::function&lt; void(<ref refid="d5/d04/a02428" kindref="compound">ObjectCacheBase</ref>&lt; <ref refid="da/d44/a05256" kindref="compound">SceneNode</ref>, KeyType &gt; const &amp;, castor::Collection&lt; <ref refid="da/d44/a05256" kindref="compound">SceneNode</ref>, KeyType &gt; &amp;, std::shared_ptr&lt; <ref refid="da/d44/a05256" kindref="compound">SceneNode</ref> &gt;, SceneNodeSPtr, SceneNodeSPtr) &gt;</type>
-        <definition>using castor3d::ObjectCacheTraits&lt; SceneNode, KeyType &gt;::Merger =  std::function&lt; void( ObjectCacheBase&lt; SceneNode, KeyType &gt; const &amp; , castor::Collection&lt; SceneNode, KeyType &gt; &amp; , std::shared_ptr&lt; SceneNode &gt; , SceneNodeSPtr , SceneNodeSPtr ) &gt;</definition>
-        <argsstring></argsstring>
-        <name>Merger</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/CacheModule.hpp" line="485" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="489" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d9/d04/a02460_1a537ff7845ecff3df821f84cf299fae28" prot="public" static="yes" mutable="no">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
-        <definition>C3D_API const castor::String castor3d::ObjectCacheTraits&lt; SceneNode, KeyType &gt;::Name</definition>
-        <argsstring></argsstring>
-        <name>Name</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/CacheModule.hpp" line="483" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="483" bodyend="-1"/>
+        <location file="Binary/ChunkParser.hpp" line="30" column="20" bodyfile="Binary/ChunkParser.hpp" bodystart="30" bodyend="42"/>
+        <references refid="dc/d1a/a02288_1af711032d94753cb2d482fe2bcf3afb17">castor3d::BinaryChunk::checkAvailable</references>
+        <references refid="dc/d1a/a02288_1a7c1bb3cf53d6b4a6856c9964c54fac11">castor3d::BinaryChunk::get</references>
+        <referencedby refid="d9/ded/a02472_1ab3e16eea9051bc679aff2782279aafea" compoundref="d7/dce/a00143" startline="183" endline="203">castor3d::ChunkParser&lt; castor::Path &gt;::parse</referencedby>
+        <referencedby refid="d2/d35/a02468_1acf5c3a4513e23e175339295361d35119" compoundref="d7/dce/a00143" startline="135" endline="155">castor3d::ChunkParser&lt; castor::String &gt;::parse</referencedby>
+        <referencedby refid="d3/d19/a02464_1a51aa9cc211a27e96cdfbdb431808cc8f" compoundref="d7/dce/a00143" startline="72" endline="86">castor3d::ChunkParser&lt; T &gt;::parse</referencedby>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Helper structure to specialise a scene objects cache behaviour. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="remark"><para>Specialisation for <ref refid="da/d44/a05256" kindref="compound">SceneNode</ref>. </para>
-</simplesect>
-</para>
     </detaileddescription>
-    <location file="Cache/CacheModule.hpp" line="482" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="481" bodyend="490"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::ChunkParser&lt; T &gt;</label>
+        <link refid="d3/d19/a02464"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::ChunkParser&lt; castor::Path &gt;</label>
+        <link refid="d9/ded/a02472"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::ChunkParser&lt; castor::String &gt;</label>
+        <link refid="d2/d35/a02468"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ChunkParserBase</label>
+        <link refid="d9/d04/a02460"/>
+      </node>
+    </inheritancegraph>
+    <location file="Binary/ChunkParser.hpp" line="13" column="1" bodyfile="Binary/ChunkParser.hpp" bodystart="14" bodyend="43"/>
     <listofallmembers>
-      <member refid="d9/d04/a02460_1a16da34fc32eaefea5a3b840894e298f0" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraits&lt; SceneNode, KeyType &gt;</scope><name>Merger</name></member>
-      <member refid="d9/d04/a02460_1a537ff7845ecff3df821f84cf299fae28" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraits&lt; SceneNode, KeyType &gt;</scope><name>Name</name></member>
-      <member refid="d9/d04/a02460_1a5fc06ab255c3776673cd51bb8bbce479" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraits&lt; SceneNode, KeyType &gt;</scope><name>Producer</name></member>
+      <member refid="d9/d04/a02460_1a062463121032ba679336be2382c508d0" prot="public" virt="non-virtual"><scope>castor3d::ChunkParserBase</scope><name>parse</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

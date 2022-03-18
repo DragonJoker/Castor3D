@@ -1,33 +1,369 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d7/d35/a02880" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkMemoryBarrier &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d7/d35/a02880_1a5ef7afb1da07eb297284bd50d9c4dc8c" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkMemoryBarrier &gt;::value</definition>
+    <compoundname>castor3d::shader::PhongLightMaterial</compoundname>
+    <basecompoundref refid="d2/d5c/a04788" prot="public" virt="non-virtual">castor3d::shader::LightMaterial</basecompoundref>
+    <includes local="no">GlslPhongMaterial.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/d35/a02880_1afbe4cd392751f27ea0fc865cb9d7b362" prot="public" static="no" mutable="no">
+        <type>sdw::Float &amp;</type>
+        <definition>sdw::Float&amp; castor3d::shader::PhongLightMaterial::ambient</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_MEMORY_BARRIER</initializer>
+        <name>ambient</name>
+        <qualifiedname>castor3d::shader::PhongLightMaterial::ambient</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="60" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="60" bodyend="-1"/>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongMaterial.hpp" line="41" column="13" bodyfile="Material/Pass/Phong/Shaders/GlslPhongMaterial.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d35/a02880_1a793f8adbb1c20c17537f10540f4056bb" prot="public" static="no" mutable="no">
+        <type>sdw::Float &amp;</type>
+        <definition>sdw::Float&amp; castor3d::shader::PhongLightMaterial::shininess</definition>
+        <argsstring></argsstring>
+        <name>shininess</name>
+        <qualifiedname>castor3d::shader::PhongLightMaterial::shininess</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongMaterial.hpp" line="42" column="13" bodyfile="Material/Pass/Phong/Shaders/GlslPhongMaterial.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/d35/a02880_1ab3bdac6f21b6b178f6d0a9a188d882fe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::PhongLightMaterial::PhongLightMaterial</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>PhongLightMaterial</name>
+        <qualifiedname>castor3d::shader::PhongLightMaterial::PhongLightMaterial</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongMaterial.hpp" line="18" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d35/a02880_1ae78aa8b0c3d3d60c3c2745b6365733a3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::PhongLightMaterial::create</definition>
+        <argsstring>(sdw::Vec3 const &amp;albedo, sdw::Vec4 const &amp;data3, sdw::Vec4 const &amp;data2, Material const &amp;material) override</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::shader::PhongLightMaterial::create</qualifiedname>
+        <reimplements refid="d2/d5c/a04788_1a3866732a6e2362a3086777745191ba12">create</reimplements>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>albedo</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>data3</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>data2</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/dc6/a04796" kindref="compound">Material</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongMaterial.hpp" line="22" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d35/a02880_1ad42bbe013946f39dd4b6dccea6561536" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::PhongLightMaterial::create</definition>
+        <argsstring>(sdw::Vec3 const &amp;albedo, sdw::Vec4 const &amp;data3, sdw::Vec4 const &amp;data2, sdw::Float const &amp;ambient) override</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::shader::PhongLightMaterial::create</qualifiedname>
+        <reimplements refid="d2/d5c/a04788_1a965c87258183a6d130e86ed809b80412">create</reimplements>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>albedo</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>data3</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>data2</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>ambient</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongMaterial.hpp" line="26" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d35/a02880_1aaa2b89bab9ad70bc45be641b6b54d329" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::PhongLightMaterial::create</definition>
+        <argsstring>(Material const &amp;material) override</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::shader::PhongLightMaterial::create</qualifiedname>
+        <reimplements refid="d2/d5c/a04788_1aeae94c2c8b411017c864a60af60462c3">create</reimplements>
+        <param>
+          <type><ref refid="d8/dc6/a04796" kindref="compound">Material</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongMaterial.hpp" line="30" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d35/a02880_1aee2e01b1eeaade22c3c1c98141991388" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::PhongLightMaterial::output</definition>
+        <argsstring>(sdw::Vec4 &amp;outData2, sdw::Vec4 &amp;outData3) const override</argsstring>
+        <name>output</name>
+        <qualifiedname>castor3d::shader::PhongLightMaterial::output</qualifiedname>
+        <reimplements refid="d2/d5c/a04788_1af30ae527eed46a2d0ea60780a1c7f1d7">output</reimplements>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>outData2</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>outData3</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongMaterial.hpp" line="31" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d35/a02880_1a3205aa5be90ac6d26acd3d9008dde93a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::PhongLightMaterial::getAmbient</definition>
+        <argsstring>(sdw::Vec3 const &amp;ambientLight) const override</argsstring>
+        <name>getAmbient</name>
+        <qualifiedname>castor3d::shader::PhongLightMaterial::getAmbient</qualifiedname>
+        <reimplements refid="d2/d5c/a04788_1ac841313afa1e0dc74681b628e142f307">getAmbient</reimplements>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>ambientLight</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongMaterial.hpp" line="32" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d35/a02880_1a0010e550f10b5fd5d97e6ede6f135de4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::PhongLightMaterial::adjustDirectSpecular</definition>
+        <argsstring>(sdw::Vec3 &amp;directSpecular) const override</argsstring>
+        <name>adjustDirectSpecular</name>
+        <qualifiedname>castor3d::shader::PhongLightMaterial::adjustDirectSpecular</qualifiedname>
+        <reimplements refid="d2/d5c/a04788_1a57e4a5aa7cf210edb61e35f8e1df7351">adjustDirectSpecular</reimplements>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>directSpecular</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongMaterial.hpp" line="33" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d35/a02880_1a1a1bdeaab85b09b3df6c6f9fb8484f39" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::PhongLightMaterial::getIndirectAmbient</definition>
+        <argsstring>(sdw::Vec3 const &amp;indirectAmbient) const override</argsstring>
+        <name>getIndirectAmbient</name>
+        <qualifiedname>castor3d::shader::PhongLightMaterial::getIndirectAmbient</qualifiedname>
+        <reimplements refid="d2/d5c/a04788_1a00db46aa7ebdb3192f2d7055c0c5dcf2">getIndirectAmbient</reimplements>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>indirectAmbient</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongMaterial.hpp" line="34" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d35/a02880_1acc5b242b2bb288b28debbd3e635cffd7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>C3D_API sdw::Float castor3d::shader::PhongLightMaterial::getMetalness</definition>
+        <argsstring>() const override</argsstring>
+        <name>getMetalness</name>
+        <qualifiedname>castor3d::shader::PhongLightMaterial::getMetalness</qualifiedname>
+        <reimplements refid="d2/d5c/a04788_1a79098e0d131efbd5962e1cb8a8d36173">getMetalness</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongMaterial.hpp" line="35" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d35/a02880_1a9550f3aa0ba430dbeff4b7d3a58560a0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>C3D_API sdw::Float castor3d::shader::PhongLightMaterial::getRoughness</definition>
+        <argsstring>() const override</argsstring>
+        <name>getRoughness</name>
+        <qualifiedname>castor3d::shader::PhongLightMaterial::getRoughness</qualifiedname>
+        <reimplements refid="d2/d5c/a04788_1aed8e4ced1b9892e56c5f41becf49b2ec">getRoughness</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongMaterial.hpp" line="36" column="20"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d7/d35/a02880_1a2ea7f7eba14614ad73894a8b7d2802ed" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>static C3D_API sdw::Float castor3d::shader::PhongLightMaterial::computeGlossiness</definition>
+        <argsstring>(sdw::Float const &amp;shininess)</argsstring>
+        <name>computeGlossiness</name>
+        <qualifiedname>castor3d::shader::PhongLightMaterial::computeGlossiness</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>shininess</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongMaterial.hpp" line="38" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d35/a02880_1a7c19d877162027beca06c9a928f01dbf" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>static C3D_API sdw::Float castor3d::shader::PhongLightMaterial::computeShininess</definition>
+        <argsstring>(sdw::Float const &amp;glossiness)</argsstring>
+        <name>computeShininess</name>
+        <qualifiedname>castor3d::shader::PhongLightMaterial::computeShininess</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>glossiness</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongMaterial.hpp" line="39" column="27"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="60" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="60" bodyend="60"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::shader::LightMaterial</label>
+        <link refid="d2/d5c/a04788"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::PhongLightMaterial</label>
+        <link refid="d7/d35/a02880"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::shader::LightMaterial</label>
+        <link refid="d2/d5c/a04788"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::PhongLightMaterial</label>
+        <link refid="d7/d35/a02880"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>sdw::StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/Phong/Shaders/GlslPhongMaterial.hpp" line="15" column="1" bodyfile="Material/Pass/Phong/Shaders/GlslPhongMaterial.hpp" bodystart="17" bodyend="43"/>
     <listofallmembers>
-      <member refid="d7/d35/a02880_1a5ef7afb1da07eb297284bd50d9c4dc8c" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkMemoryBarrier &gt;</scope><name>value</name></member>
+      <member refid="d7/d35/a02880_1a0010e550f10b5fd5d97e6ede6f135de4" prot="public" virt="virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>adjustDirectSpecular</name></member>
+      <member refid="d2/d5c/a04788_1a982ed6b2c97b9e27a1a392cf9860eb73" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>albDiv</name></member>
+      <member refid="d2/d5c/a04788_1ab0628508aeb40fa591094532292373cd" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>albedo</name></member>
+      <member refid="d7/d35/a02880_1afbe4cd392751f27ea0fc865cb9d7b362" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>ambient</name></member>
+      <member refid="d2/d5c/a04788_1a37e65565fa7244c4f2dfdb85e9e0f28d" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>computeF0</name></member>
+      <member refid="d7/d35/a02880_1a2ea7f7eba14614ad73894a8b7d2802ed" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>computeGlossiness</name></member>
+      <member refid="d2/d5c/a04788_1a4266b7f9549002e4232c31f969e7fc22" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>computeMetalness</name></member>
+      <member refid="d2/d5c/a04788_1a72fe17e6111e0205b650052008a1685e" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>computeRoughness</name></member>
+      <member refid="d7/d35/a02880_1a7c19d877162027beca06c9a928f01dbf" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>computeShininess</name></member>
+      <member refid="d7/d35/a02880_1ae78aa8b0c3d3d60c3c2745b6365733a3" prot="public" virt="virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>create</name></member>
+      <member refid="d7/d35/a02880_1ad42bbe013946f39dd4b6dccea6561536" prot="public" virt="virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>create</name></member>
+      <member refid="d7/d35/a02880_1aaa2b89bab9ad70bc45be641b6b54d329" prot="public" virt="virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>create</name></member>
+      <member refid="d2/d5c/a04788_1a58a9a49f4ad1457da7ed77d83121d04f" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>depthFactor</name></member>
+      <member refid="d2/d5c/a04788_1aa1164a70c5a5c2f117fac78413726344" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>edgeColour</name></member>
+      <member refid="d2/d5c/a04788_1a9ab1383d0a559b82da536f53a6c15cf2" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>edgeFactors</name></member>
+      <member refid="d2/d5c/a04788_1abc7d101ada57095169fdc71c9b3bb4ac" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>edgeWidth</name></member>
+      <member refid="d7/d35/a02880_1a3205aa5be90ac6d26acd3d9008dde93a" prot="public" virt="virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>getAmbient</name></member>
+      <member refid="d7/d35/a02880_1a1a1bdeaab85b09b3df6c6f9fb8484f39" prot="public" virt="virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>getIndirectAmbient</name></member>
+      <member refid="d7/d35/a02880_1acc5b242b2bb288b28debbd3e635cffd7" prot="public" virt="virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>getMetalness</name></member>
+      <member refid="d7/d35/a02880_1a9550f3aa0ba430dbeff4b7d3a58560a0" prot="public" virt="virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>getRoughness</name></member>
+      <member refid="d2/d5c/a04788_1a75114746bc2685b50cb93da7005dbb02" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>LightMaterial</name></member>
+      <member refid="d2/d5c/a04788_1af17d7ff936ab4089326d040955e6a3e9" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>makeType</name></member>
+      <member refid="d2/d5c/a04788_1a017f87c56d41b70c44170dd0ac22e76d" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>normalFactor</name></member>
+      <member refid="d2/d5c/a04788_1ada9c443a2f21464282ae1e6a581c6aad" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>objectFactor</name></member>
+      <member refid="d7/d35/a02880_1aee2e01b1eeaade22c3c1c98141991388" prot="public" virt="virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>output</name></member>
+      <member refid="d7/d35/a02880_1ab3bdac6f21b6b178f6d0a9a188d882fe" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>PhongLightMaterial</name></member>
+      <member refid="d2/d5c/a04788_1a0d5fb6417f4043618222377a83818dea" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="d7/d35/a02880_1a793f8adbb1c20c17537f10540f4056bb" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>shininess</name></member>
+      <member refid="d2/d5c/a04788_1ac63a186f37b9f956d00f322b90274493" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>spcDiv</name></member>
+      <member refid="d2/d5c/a04788_1a77a47550f680d30636c630de94327891" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>specific</name></member>
+      <member refid="d2/d5c/a04788_1a0a22e22ff9e0ce7414f4b04f5f64e0fa" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>specular</name></member>
+      <member refid="d2/d5c/a04788_1a09fe3e2d61feb0944df3317032dbc417" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>sssProfileIndex</name></member>
+      <member refid="d2/d5c/a04788_1a70872e7bf6b3cb3d0e792ef65f19321f" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightMaterial</scope><name>sssTransmittance</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

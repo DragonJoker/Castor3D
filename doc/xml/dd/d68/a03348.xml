@@ -1,33 +1,151 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dd/d68/a03348" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPhysicalDeviceConservativeRasterizationPropertiesEXT &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
+    <compoundname>castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::ResourceCacheTraitsBaseT&lt; Mesh, castor::String, ResourceCacheTraitsT&lt; Mesh, castor::String &gt; &gt;</basecompoundref>
+    <includes local="no">MeshModule.hpp</includes>
     <templateparamlist>
     </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="dd/d68/a03348_1a23d4cc2f4440ee38ef2919b8cc3c4c3e" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPhysicalDeviceConservativeRasterizationPropertiesEXT &gt;::value</definition>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dd/d68/a03348_1ad587efb133d7036a780a5ea4f2d89840" prot="public" static="no">
+        <type><ref refid="d1/d24/a03336" kindref="compound">Mesh</ref></type>
+        <definition>using castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;::ResT =  Mesh</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_CONSERVATIVE_RASTERIZATION_PROPERTIES_EXT</initializer>
+        <name>ResT</name>
+        <qualifiedname>castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;::ResT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="248" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="248" bodyend="-1"/>
+        <location file="Model/Mesh/MeshModule.hpp" line="113" column="1" bodyfile="Model/Mesh/MeshModule.hpp" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d68/a03348_1ada49f01973e1ee519711f773354e3105" prot="public" static="no">
+        <type>castor::String</type>
+        <definition>using castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;::KeyT =  castor::String</definition>
+        <argsstring></argsstring>
+        <name>KeyT</name>
+        <qualifiedname>castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;::KeyT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/MeshModule.hpp" line="114" column="1" bodyfile="Model/Mesh/MeshModule.hpp" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d68/a03348_1a030dbb0aaf86dc055b01103be73f9c35" prot="public" static="no">
+        <type><ref refid="d4/d9d/a02704" kindref="compound">ResourceCacheTraitsT</ref>&lt; <ref refid="dd/d68/a03348_1ad587efb133d7036a780a5ea4f2d89840" kindref="member">ResT</ref>, <ref refid="dd/d68/a03348_1ada49f01973e1ee519711f773354e3105" kindref="member">KeyT</ref> &gt;</type>
+        <definition>using castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;::TraitsT =  ResourceCacheTraitsT&lt; ResT, KeyT &gt;</definition>
+        <argsstring></argsstring>
+        <name>TraitsT</name>
+        <qualifiedname>castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;::TraitsT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/MeshModule.hpp" line="115" column="1" bodyfile="Model/Mesh/MeshModule.hpp" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d68/a03348_1acb3f37f719a907db40648cb4fc37c1b6" prot="public" static="no">
+        <type>castor::ResourceCacheTraitsBaseT&lt; <ref refid="dd/d68/a03348_1ad587efb133d7036a780a5ea4f2d89840" kindref="member">ResT</ref>, <ref refid="dd/d68/a03348_1ada49f01973e1ee519711f773354e3105" kindref="member">KeyT</ref>, <ref refid="dd/d68/a03348_1a030dbb0aaf86dc055b01103be73f9c35" kindref="member">TraitsT</ref> &gt;</type>
+        <definition>using castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;::Base =  castor::ResourceCacheTraitsBaseT&lt; ResT, KeyT, TraitsT &gt;</definition>
+        <argsstring></argsstring>
+        <name>Base</name>
+        <qualifiedname>castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;::Base</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/MeshModule.hpp" line="116" column="1" bodyfile="Model/Mesh/MeshModule.hpp" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d68/a03348_1a752d482245252baf78a04f33516b730f" prot="public" static="no">
+        <type>typename Base::ElementT</type>
+        <definition>using castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;::ElementT =  typename Base::ElementT</definition>
+        <argsstring></argsstring>
+        <name>ElementT</name>
+        <qualifiedname>castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;::ElementT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/MeshModule.hpp" line="117" column="1" bodyfile="Model/Mesh/MeshModule.hpp" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d68/a03348_1a8805c7fdcffab0cc1e7726f6a25ca0db" prot="public" static="no">
+        <type>typename Base::ElementPtrT</type>
+        <definition>using castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;::ElementPtrT =  typename Base::ElementPtrT</definition>
+        <argsstring></argsstring>
+        <name>ElementPtrT</name>
+        <qualifiedname>castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;::ElementPtrT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/MeshModule.hpp" line="118" column="1" bodyfile="Model/Mesh/MeshModule.hpp" bodystart="118" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="dd/d68/a03348_1a82aeecb97a351d17456ecbc06d53f360" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <definition>C3D_API const castor::String castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;::Name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/MeshModule.hpp" line="120" column="37" bodyfile="Model/Mesh/MeshModule.hpp" bodystart="120" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
+<para>Helper structure to specialise a cache behaviour. <simplesect kind="remark"><para>Specialisation for <ref refid="d1/d24/a03336" kindref="compound">Mesh</ref>. </para>
+</simplesect>
+</para>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="248" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="248" bodyend="248"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;</label>
+        <link refid="dd/d68/a03348"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::ResourceCacheTraitsBaseT&lt; Mesh, castor::String, ResourceCacheTraitsT&lt; Mesh, castor::String &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;</label>
+        <link refid="dd/d68/a03348"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::ResourceCacheTraitsBaseT&lt; Mesh, castor::String, ResourceCacheTraitsT&lt; Mesh, castor::String &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/MeshModule.hpp" line="110" column="1" bodyfile="Model/Mesh/MeshModule.hpp" bodystart="112" bodyend="121"/>
     <listofallmembers>
-      <member refid="dd/d68/a03348_1a23d4cc2f4440ee38ef2919b8cc3c4c3e" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPhysicalDeviceConservativeRasterizationPropertiesEXT &gt;</scope><name>value</name></member>
+      <member refid="dd/d68/a03348_1acb3f37f719a907db40648cb4fc37c1b6" prot="public" virt="non-virtual"><scope>castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;</scope><name>Base</name></member>
+      <member refid="dd/d68/a03348_1a8805c7fdcffab0cc1e7726f6a25ca0db" prot="public" virt="non-virtual"><scope>castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;</scope><name>ElementPtrT</name></member>
+      <member refid="dd/d68/a03348_1a752d482245252baf78a04f33516b730f" prot="public" virt="non-virtual"><scope>castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;</scope><name>ElementT</name></member>
+      <member refid="dd/d68/a03348_1ada49f01973e1ee519711f773354e3105" prot="public" virt="non-virtual"><scope>castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;</scope><name>KeyT</name></member>
+      <member refid="dd/d68/a03348_1a82aeecb97a351d17456ecbc06d53f360" prot="public" virt="non-virtual"><scope>castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;</scope><name>Name</name></member>
+      <member refid="dd/d68/a03348_1ad587efb133d7036a780a5ea4f2d89840" prot="public" virt="non-virtual"><scope>castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;</scope><name>ResT</name></member>
+      <member refid="dd/d68/a03348_1a030dbb0aaf86dc055b01103be73f9c35" prot="public" virt="non-virtual"><scope>castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;</scope><name>TraitsT</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

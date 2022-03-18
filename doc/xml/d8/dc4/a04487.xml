@@ -1,70 +1,228 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d8/dc4/a04487" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::Ray</compoundname>
-    <includes local="no">Ray.hpp</includes>
+    <compoundname>castor3d::Geometry</compoundname>
+    <basecompoundref refid="df/dd3/a04527" prot="public" virt="non-virtual">castor3d::MovableObject</basecompoundref>
+    <basecompoundref refid="d7/db9/a04591" prot="public" virt="non-virtual">castor3d::RenderedObject</basecompoundref>
+    <includes local="no">Geometry.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d8/dc4/a04487_1aeb4bdceba330a4f6be5e252c3dfe94a2" prot="public" static="no" mutable="no">
-        <type>castor::Point3f</type>
-        <definition>castor::Point3f castor3d::Ray::m_origin</definition>
+      <memberdef kind="variable" id="d8/dc4/a04487_1acaec2f1849bad9f6ae8c91f6e2f72c26" prot="public" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1a5e1933c5222153048a973fda3517e72d" kindref="member">OnSubmeshMaterialChanged</ref></type>
+        <definition>OnSubmeshMaterialChanged castor3d::Geometry::onMaterialChanged</definition>
         <argsstring></argsstring>
-        <name>m_origin</name>
+        <name>onMaterialChanged</name>
+        <qualifiedname>castor3d::Geometry::onMaterialChanged</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The ray origin. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ray.hpp" line="167" column="1" bodyfile="Render/Ray.hpp" bodystart="167" bodyend="-1"/>
+        <location file="Scene/Geometry.hpp" line="166" column="26" bodyfile="Scene/Geometry.hpp" bodystart="166" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d8/dc4/a04487_1af507dcb336d7c19af6a8ae7f15b4f0ae" prot="public" static="no" mutable="no">
-        <type>castor::Point3f</type>
-        <definition>castor::Point3f castor3d::Ray::m_direction</definition>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d8/dc4/a04487_1ac033d9c416ceea39bb00b9272a4857e4" prot="private" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1a788a36216ccbb048af69a0b240aef244" kindref="member">MeshResPtr</ref></type>
+        <definition>MeshResPtr castor3d::Geometry::m_mesh</definition>
         <argsstring></argsstring>
-        <name>m_direction</name>
+        <name>m_mesh</name>
+        <qualifiedname>castor3d::Geometry::m_mesh</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The ray direction. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ray.hpp" line="170" column="1" bodyfile="Render/Ray.hpp" bodystart="170" bodyend="-1"/>
+        <location file="Scene/Geometry.hpp" line="173" column="12" bodyfile="Scene/Geometry.hpp" bodystart="173" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/dc4/a04487_1a4eca92c3f7d2e55c28742d7639959ff6" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::Geometry::m_meshName</definition>
+        <argsstring></argsstring>
+        <name>m_meshName</name>
+        <qualifiedname>castor3d::Geometry::m_meshName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="174" column="16" bodyfile="Scene/Geometry.hpp" bodystart="174" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/dc4/a04487_1a5ae481a597837e2ff8d619170d42eb5b" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::Geometry::m_listCreated</definition>
+        <argsstring></argsstring>
+        <name>m_listCreated</name>
+        <qualifiedname>castor3d::Geometry::m_listCreated</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="175" column="6" bodyfile="Scene/Geometry.hpp" bodystart="175" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/dc4/a04487_1ae5e04fc7896bd4116a8f8892caff2a47" prot="private" static="no" mutable="yes">
+        <type>castor::SpinMutex</type>
+        <definition>castor::SpinMutex castor3d::Geometry::m_mutex</definition>
+        <argsstring></argsstring>
+        <name>m_mutex</name>
+        <qualifiedname>castor3d::Geometry::m_mutex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="176" column="27" bodyfile="Scene/Geometry.hpp" bodystart="176" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/dc4/a04487_1a87407a0e713213b243fd325989e1da42" prot="private" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1a7955e4f37b721c387f00f04fe355c3b1" kindref="member">SubmeshMaterialMap</ref></type>
+        <definition>SubmeshMaterialMap castor3d::Geometry::m_submeshesMaterials</definition>
+        <argsstring></argsstring>
+        <name>m_submeshesMaterials</name>
+        <qualifiedname>castor3d::Geometry::m_submeshesMaterials</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="177" column="20" bodyfile="Scene/Geometry.hpp" bodystart="177" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/dc4/a04487_1ae483f7f8b06a215fb1440f17fdb7a119" prot="private" static="no" mutable="no">
+        <type>SubmeshBoundingBoxMap</type>
+        <definition>SubmeshBoundingBoxMap castor3d::Geometry::m_submeshesBoxes</definition>
+        <argsstring></argsstring>
+        <name>m_submeshesBoxes</name>
+        <qualifiedname>castor3d::Geometry::m_submeshesBoxes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="178" column="23" bodyfile="Scene/Geometry.hpp" bodystart="178" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/dc4/a04487_1addb364d4efb330a32de68dff8f177964" prot="private" static="no" mutable="no">
+        <type>SubmeshBoundingSphereMap</type>
+        <definition>SubmeshBoundingSphereMap castor3d::Geometry::m_submeshesSpheres</definition>
+        <argsstring></argsstring>
+        <name>m_submeshesSpheres</name>
+        <qualifiedname>castor3d::Geometry::m_submeshesSpheres</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="179" column="26" bodyfile="Scene/Geometry.hpp" bodystart="179" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/dc4/a04487_1a0c5f3f21bf755ba8f5f8331705673cc3" prot="private" static="no" mutable="no">
+        <type>castor::BoundingBox</type>
+        <definition>castor::BoundingBox castor3d::Geometry::m_box</definition>
+        <argsstring></argsstring>
+        <name>m_box</name>
+        <qualifiedname>castor3d::Geometry::m_box</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="180" column="21" bodyfile="Scene/Geometry.hpp" bodystart="180" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/dc4/a04487_1a1cd243563b7c605c0f0fbb0955cde897" prot="private" static="no" mutable="no">
+        <type>castor::BoundingSphere</type>
+        <definition>castor::BoundingSphere castor3d::Geometry::m_sphere</definition>
+        <argsstring></argsstring>
+        <name>m_sphere</name>
+        <qualifiedname>castor3d::Geometry::m_sphere</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="181" column="24" bodyfile="Scene/Geometry.hpp" bodystart="181" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/dc4/a04487_1a36ba45ca884c2c25b660b7a76ab0e319" prot="private" static="no" mutable="no">
+        <type>std::unordered_map&lt; <ref refid="d9/daf/a02807" kindref="compound">Pass</ref> const *, std::unordered_map&lt; uint32_t, uint32_t &gt; &gt;</type>
+        <definition>std::unordered_map&lt; Pass const *, std::unordered_map&lt; uint32_t, uint32_t &gt; &gt; castor3d::Geometry::m_ids</definition>
+        <argsstring></argsstring>
+        <name>m_ids</name>
+        <qualifiedname>castor3d::Geometry::m_ids</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="182" column="20" bodyfile="Scene/Geometry.hpp" bodystart="182" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d8/dc4/a04487_1aa97b60404e050d524652e1447f5605c7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d8/dc4/a04487_1a1e732a00568688732d0c23ab3108b014" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::Ray::Ray</definition>
-        <argsstring>(castor::Position const &amp;point, Camera const &amp;camera)</argsstring>
-        <name>Ray</name>
+        <definition>C3D_API castor3d::Geometry::Geometry</definition>
+        <argsstring>(castor::String const &amp;name, Scene &amp;scene, SceneNode &amp;node, MeshResPtr mesh={})</argsstring>
+        <name>Geometry</name>
+        <qualifiedname>castor3d::Geometry::Geometry</qualifiedname>
         <param>
-          <type>castor::Position const &amp;</type>
-          <declname>point</declname>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
         </param>
         <param>
-          <type><ref refid="d0/dcf/a05131" kindref="compound">Camera</ref> const &amp;</type>
-          <declname>camera</declname>
+          <type><ref refid="dd/dec/a04595" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d30/a04639" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>node</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a788a36216ccbb048af69a0b240aef244" kindref="member">MeshResPtr</ref></type>
+          <declname>mesh</declname>
+          <defval>{}</defval>
         </param>
         <briefdescription>
-<para>Constructor from mouse coordinates and a camera. </para>
+<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">point</parametername>
+<parametername direction="in">name</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The mouse coordinates. </para>
+<para>The geometry name. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">camera</parametername>
+<parametername direction="in">scene</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The camera from which to retrieve the ray. </para>
+<para>The parent scene. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">node</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene node to which the geometry is attached. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mesh. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -72,44 +230,53 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ray.hpp" line="26" column="1"/>
+        <location file="Scene/Geometry.hpp" line="42" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d8/dc4/a04487_1a2d61a856b9dacab355cdf6157e2d4108" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d8/dc4/a04487_1a8b0243a48eaa874d2b97649c5e673281" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::Ray::Ray</definition>
-        <argsstring>(int x, int y, Camera const &amp;camera)</argsstring>
-        <name>Ray</name>
+        <definition>C3D_API castor3d::Geometry::Geometry</definition>
+        <argsstring>(castor::String const &amp;name, Scene &amp;scene, MeshResPtr mesh={})</argsstring>
+        <name>Geometry</name>
+        <qualifiedname>castor3d::Geometry::Geometry</qualifiedname>
         <param>
-          <type>int</type>
-          <declname>x</declname>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
         </param>
         <param>
-          <type>int</type>
-          <declname>y</declname>
+          <type><ref refid="dd/dec/a04595" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
         </param>
         <param>
-          <type><ref refid="d0/dcf/a05131" kindref="compound">Camera</ref> const &amp;</type>
-          <declname>camera</declname>
+          <type><ref refid="da/de3/a01398_1a788a36216ccbb048af69a0b240aef244" kindref="member">MeshResPtr</ref></type>
+          <declname>mesh</declname>
+          <defval>{}</defval>
         </param>
         <briefdescription>
-<para>Constructor from mouse coordinates and a camera. </para>
+<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">x</parametername>
-<parametername direction="in">y</parametername>
+<parametername direction="in">name</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The mouse coordinates. </para>
+<para>The geometry name. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">camera</parametername>
+<parametername direction="in">scene</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The camera from which to retrieve the ray. </para>
+<para>The parent scene. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mesh. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -117,39 +284,39 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ray.hpp" line="38" column="1"/>
+        <location file="Scene/Geometry.hpp" line="58" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d8/dc4/a04487_1afebebeb4e598a187857e72771a0325cc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::Ray::Ray</definition>
-        <argsstring>(castor::Point3f const &amp;origin, castor::Point3f const &amp;direction)</argsstring>
-        <name>Ray</name>
+      <memberdef kind="function" id="d8/dc4/a04487_1a1edb8a6926be6c9e7bd62c74c8846b88" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Geometry::prepare</definition>
+        <argsstring>(uint32_t &amp;nbFaces, uint32_t &amp;nbVertex)</argsstring>
+        <name>prepare</name>
+        <qualifiedname>castor3d::Geometry::prepare</qualifiedname>
         <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>origin</declname>
+          <type>uint32_t &amp;</type>
+          <declname>nbFaces</declname>
         </param>
         <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>direction</declname>
+          <type>uint32_t &amp;</type>
+          <declname>nbVertex</declname>
         </param>
         <briefdescription>
-<para>Constructor from origin and direction. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
+<para>brief Creates the mesh buffers <parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">origin</parametername>
+<parametername direction="out">nbFaces</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The origin of the ray. </para>
+<para>Used to retrieve the faces number </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">direction</parametername>
+<parametername direction="out">nbVertex</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The direction of the ray. </para>
+<para>Used to retrieve the vertexes number </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -157,393 +324,547 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ray.hpp" line="50" column="1"/>
+        <location file="Scene/Geometry.hpp" line="71" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d8/dc4/a04487_1a7ff1586714576f930e0d10d326d5eecc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Intersection</type>
-        <definition>C3D_API castor::Intersection castor3d::Ray::intersects</definition>
-        <argsstring>(castor::Point3f const &amp;pt1, castor::Point3f const &amp;pt2, castor::Point3f const &amp;pt3, float &amp;distance) const</argsstring>
-        <name>intersects</name>
+      <memberdef kind="function" id="d8/dc4/a04487_1a61c105feac66d1986d5b2039c0a92da7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Geometry::setMesh</definition>
+        <argsstring>(MeshResPtr mesh)</argsstring>
+        <name>setMesh</name>
+        <qualifiedname>castor3d::Geometry::setMesh</qualifiedname>
         <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>pt1</declname>
-        </param>
-        <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>pt2</declname>
-        </param>
-        <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>pt3</declname>
-        </param>
-        <param>
-          <type>float &amp;</type>
-          <declname>distance</declname>
+          <type><ref refid="da/de3/a01398_1a788a36216ccbb048af69a0b240aef244" kindref="member">MeshResPtr</ref></type>
+          <declname>mesh</declname>
         </param>
         <briefdescription>
-<para>Tells if the ray intersects the given triangle of vertices. </para>
+<para>Defines this geometry&apos;s mesh. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">pt1</parametername>
+<parametername direction="in">mesh</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The first triangle vertex. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">pt2</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The second triangle vertex. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">pt3</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The third triangle vertex. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="out">distance</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Receives the distance. </para>
+<para>The mesh. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para><computeroutput>castor::Intersection::eIn</computeroutput> or <computeroutput>castor::Intersection::eOut</computeroutput>. </para>
-</simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ray.hpp" line="68" column="1"/>
+        <location file="Scene/Geometry.hpp" line="80" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d8/dc4/a04487_1a5a760c3967c7c347468c616e315cdfa5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Intersection</type>
-        <definition>C3D_API castor::Intersection castor3d::Ray::intersects</definition>
-        <argsstring>(Face const &amp;face, castor::Matrix4x4f const &amp;transform, Submesh const &amp;submesh, float &amp;distance) const</argsstring>
-        <name>intersects</name>
+      <memberdef kind="function" id="d8/dc4/a04487_1a9576d94311af6daaaa652e4e04058c34" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> MaterialRPtr</type>
+        <definition>C3D_API MaterialRPtr castor3d::Geometry::getMaterial</definition>
+        <argsstring>(Submesh const &amp;submesh) const</argsstring>
+        <name>getMaterial</name>
+        <qualifiedname>castor3d::Geometry::getMaterial</qualifiedname>
         <param>
-          <type><ref refid="d4/da4/a03911" kindref="compound">Face</ref> const &amp;</type>
-          <declname>face</declname>
-        </param>
-        <param>
-          <type>castor::Matrix4x4f const &amp;</type>
-          <declname>transform</declname>
-        </param>
-        <param>
-          <type><ref refid="d0/dce/a03971" kindref="compound">Submesh</ref> const &amp;</type>
+          <type><ref refid="d3/da7/a03427" kindref="compound">Submesh</ref> const &amp;</type>
           <declname>submesh</declname>
         </param>
-        <param>
-          <type>float &amp;</type>
-          <declname>distance</declname>
-        </param>
         <briefdescription>
-<para>Tells if the ray intersects the given face. </para>
+<para>Retrieves the submesh material. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">face</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The face to test. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">transform</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The face&apos;s vertex transformation matrix. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
 <parameternamelist>
 <parametername direction="in">submesh</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The submesh holding the face. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="out">distance</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Receives the distance. </para>
+<para>The submesh. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para><computeroutput>castor::Intersection::eIn</computeroutput> or <computeroutput>castor::Intersection::eOut</computeroutput>. </para>
+<simplesect kind="return"><para>The material. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ray.hpp" line="88" column="1"/>
+        <location file="Scene/Geometry.hpp" line="91" column="22"/>
       </memberdef>
-      <memberdef kind="function" id="d8/dc4/a04487_1a2a85a27a8bbd074b0523fb774c040c57" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Intersection</type>
-        <definition>C3D_API castor::Intersection castor3d::Ray::intersects</definition>
-        <argsstring>(castor::Point3f const &amp;point, float &amp;distance) const</argsstring>
-        <name>intersects</name>
+      <memberdef kind="function" id="d8/dc4/a04487_1a8ba378a16c2aa99a06754973aeaaab7d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Geometry::setMaterial</definition>
+        <argsstring>(Submesh &amp;submesh, MaterialRPtr material, bool updateSubmesh=true)</argsstring>
+        <name>setMaterial</name>
+        <qualifiedname>castor3d::Geometry::setMaterial</qualifiedname>
         <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>point</declname>
+          <type><ref refid="d3/da7/a03427" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>submesh</declname>
         </param>
         <param>
-          <type>float &amp;</type>
-          <declname>distance</declname>
+          <type>MaterialRPtr</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>updateSubmesh</declname>
+          <defval>true</defval>
         </param>
         <briefdescription>
-<para>Tells if the vertex is on the ray. </para>
+<para>Defines a submesh material. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">point</parametername>
+<parametername direction="in">submesh</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The vertex to test. </para>
+<para>The submesh. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="out">distance</parametername>
+<parametername direction="in">material</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>Receives the distance. </para>
+<para>The material. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">updateSubmesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tells if the submesh&apos;s buffers need to be updated. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para><computeroutput>castor::Intersection::eIn</computeroutput> or <computeroutput>castor::Intersection::eOut</computeroutput>. </para>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="104" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dc4/a04487_1a5560136582e1fadb948fa0b7a7bb1fd9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Geometry::updateContainers</definition>
+        <argsstring>(SubmeshBoundingBoxList const &amp;boxes)</argsstring>
+        <name>updateContainers</name>
+        <qualifiedname>castor3d::Geometry::updateContainers</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1ac45304de9c80b94acff3cef7b03302ba" kindref="member">SubmeshBoundingBoxList</ref> const &amp;</type>
+          <declname>boxes</declname>
+        </param>
+        <briefdescription>
+<para>Computes the bounding box from the given submeshes boxes. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="113" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dc4/a04487_1a2045792a2c1e0de09afc8e406a2a3481" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::BoundingBox const &amp;</type>
+        <definition>C3D_API castor::BoundingBox const  &amp; castor3d::Geometry::getBoundingBox</definition>
+        <argsstring>(Submesh const &amp;submesh) const</argsstring>
+        <name>getBoundingBox</name>
+        <qualifiedname>castor3d::Geometry::getBoundingBox</qualifiedname>
+        <param>
+          <type><ref refid="d3/da7/a03427" kindref="compound">Submesh</ref> const &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The submesh. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The collision box for given submesh. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ray.hpp" line="104" column="1"/>
+        <location file="Scene/Geometry.hpp" line="122" column="36"/>
       </memberdef>
-      <memberdef kind="function" id="d8/dc4/a04487_1aa87cfc0a8fe488d17cecf6c1747bc813" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Intersection</type>
-        <definition>C3D_API castor::Intersection castor3d::Ray::intersects</definition>
-        <argsstring>(castor::BoundingBox const &amp;box, float &amp;distance) const</argsstring>
-        <name>intersects</name>
+      <memberdef kind="function" id="d8/dc4/a04487_1adfb482d1a3b7be4fe6e812edf41bc30c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::BoundingSphere const &amp;</type>
+        <definition>C3D_API castor::BoundingSphere const  &amp; castor3d::Geometry::getBoundingSphere</definition>
+        <argsstring>(Submesh const &amp;submesh) const</argsstring>
+        <name>getBoundingSphere</name>
+        <qualifiedname>castor3d::Geometry::getBoundingSphere</qualifiedname>
+        <param>
+          <type><ref refid="d3/da7/a03427" kindref="compound">Submesh</ref> const &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The submesh. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The collision sphere for given submesh. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="131" column="39"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dc4/a04487_1afb3ad561f4d82c22a6c41103b45857ef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Geometry::setBoundingBox</definition>
+        <argsstring>(Submesh const &amp;submesh, castor::BoundingBox const &amp;box)</argsstring>
+        <name>setBoundingBox</name>
+        <qualifiedname>castor3d::Geometry::setBoundingBox</qualifiedname>
+        <param>
+          <type><ref refid="d3/da7/a03427" kindref="compound">Submesh</ref> const &amp;</type>
+          <declname>submesh</declname>
+        </param>
         <param>
           <type>castor::BoundingBox const &amp;</type>
           <declname>box</declname>
         </param>
-        <param>
-          <type>float &amp;</type>
-          <declname>distance</declname>
-        </param>
         <briefdescription>
-<para>Tells if the ray intersects the given Combo box. </para>
+<para>Sets the bounding box for given submesh. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The submesh. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
 <parameternamelist>
 <parametername direction="in">box</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The box to test. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="out">distance</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Receives the distance. </para>
+<para>The bounding box. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para><computeroutput>castor::Intersection::eIn</computeroutput> or <computeroutput>castor::Intersection::eOut</computeroutput>. </para>
-</simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ray.hpp" line="118" column="1"/>
+        <location file="Scene/Geometry.hpp" line="142" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d8/dc4/a04487_1a89ed1a615cc9828269fa44e6b0748049" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Intersection</type>
-        <definition>C3D_API castor::Intersection castor3d::Ray::intersects</definition>
-        <argsstring>(castor::BoundingSphere const &amp;sphere, float &amp;distance) const</argsstring>
-        <name>intersects</name>
+      <memberdef kind="function" id="d8/dc4/a04487_1a62f297fb24f40d687f1ace0bb1df1e45" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::Geometry::getId</definition>
+        <argsstring>(Pass const &amp;pass, Submesh const &amp;submesh) const</argsstring>
+        <name>getId</name>
+        <qualifiedname>castor3d::Geometry::getId</qualifiedname>
         <param>
-          <type>castor::BoundingSphere const &amp;</type>
-          <declname>sphere</declname>
+          <type><ref refid="d9/daf/a02807" kindref="compound">Pass</ref> const &amp;</type>
+          <declname>pass</declname>
         </param>
         <param>
-          <type>float &amp;</type>
-          <declname>distance</declname>
+          <type><ref refid="d3/da7/a03427" kindref="compound">Submesh</ref> const &amp;</type>
+          <declname>submesh</declname>
         </param>
         <briefdescription>
-<para>Tells if the ray intersects the given <ref refid="d8/d03/a03871" kindref="compound">Sphere</ref>. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">sphere</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The sphere to test. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="out">distance</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Receives the distance. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>castor::Intersection::eIn</computeroutput> or <computeroutput>castor::Intersection::eOut</computeroutput>. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ray.hpp" line="132" column="1"/>
+        <location file="Scene/Geometry.hpp" line="145" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d8/dc4/a04487_1a3662d907e547240fb4ff1a7833a31df9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Intersection</type>
-        <definition>C3D_API castor::Intersection castor3d::Ray::intersects</definition>
-        <argsstring>(GeometrySPtr geometry, Face &amp;nearestFace, SubmeshSPtr &amp;nearestSubmesh, float &amp;distance) const</argsstring>
-        <name>intersects</name>
+      <memberdef kind="function" id="d8/dc4/a04487_1abcbc4577a3dc370ec74f8f374da8473c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Geometry::setId</definition>
+        <argsstring>(Pass const &amp;pass, Submesh const &amp;submesh, uint32_t id)</argsstring>
+        <name>setId</name>
+        <qualifiedname>castor3d::Geometry::setId</qualifiedname>
         <param>
-          <type>GeometrySPtr</type>
-          <declname>geometry</declname>
+          <type><ref refid="d9/daf/a02807" kindref="compound">Pass</ref> const &amp;</type>
+          <declname>pass</declname>
         </param>
         <param>
-          <type><ref refid="d4/da4/a03911" kindref="compound">Face</ref> &amp;</type>
-          <declname>nearestFace</declname>
+          <type><ref refid="d3/da7/a03427" kindref="compound">Submesh</ref> const &amp;</type>
+          <declname>submesh</declname>
         </param>
         <param>
-          <type>SubmeshSPtr &amp;</type>
-          <declname>nearestSubmesh</declname>
-        </param>
-        <param>
-          <type>float &amp;</type>
-          <declname>distance</declname>
+          <type>uint32_t</type>
+          <declname>id</declname>
         </param>
         <briefdescription>
-<para>Tells if the ray intersects the given <ref refid="db/d6b/a05139" kindref="compound">Geometry</ref>. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">geometry</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The geometry to test. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="out">nearestFace</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Receives the intersected face. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="out">nearestSubmesh</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Receives the intersected submesh. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="out">distance</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Receives the distance. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>castor::Intersection::eIn</computeroutput> or <computeroutput>castor::Intersection::eOut</computeroutput>. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ray.hpp" line="150" column="1"/>
+        <location file="Scene/Geometry.hpp" line="147" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d8/dc4/a04487_1af50a25a795bb6ad8d4dda231e7a418a9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::Ray::projectVertex</definition>
-        <argsstring>(castor::Point3f const &amp;point, castor::Point3f &amp;result) const</argsstring>
-        <name>projectVertex</name>
-        <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>point</declname>
-        </param>
-        <param>
-          <type>castor::Point3f &amp;</type>
-          <declname>result</declname>
-        </param>
+      <memberdef kind="function" id="d8/dc4/a04487_1a2bede69a064873ffc7b786e28602a8ed" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/de3/a01398_1a788a36216ccbb048af69a0b240aef244" kindref="member">MeshResPtr</ref></type>
+        <definition>MeshResPtr castor3d::Geometry::getMesh</definition>
+        <argsstring>() const</argsstring>
+        <name>getMesh</name>
+        <qualifiedname>castor3d::Geometry::getMesh</qualifiedname>
         <briefdescription>
-<para>Projects the given vertex on the ray. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">point</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The vertex we want to project. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="out">result</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The projecion result. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>true</computeroutput> if the vertex can be projected on the ray, false if not. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ray.hpp" line="161" column="1"/>
+        <location file="Scene/Geometry.hpp" line="151" column="12" bodyfile="Scene/Geometry.hpp" bodystart="151" bodyend="154"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dc4/a04487_1a0274bffd4e42efc9cad6db961b575af1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::BoundingBox const &amp;</type>
+        <definition>castor::BoundingBox const  &amp; castor3d::Geometry::getBoundingBox</definition>
+        <argsstring>() const</argsstring>
+        <name>getBoundingBox</name>
+        <qualifiedname>castor3d::Geometry::getBoundingBox</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="156" column="28" bodyfile="Scene/Geometry.hpp" bodystart="156" bodyend="159"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dc4/a04487_1a60e2bfbeefa3ab2206cde3737781c4ff" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::BoundingSphere const &amp;</type>
+        <definition>castor::BoundingSphere const  &amp; castor3d::Geometry::getBoundingSphere</definition>
+        <argsstring>() const</argsstring>
+        <name>getBoundingSphere</name>
+        <qualifiedname>castor3d::Geometry::getBoundingSphere</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="161" column="31" bodyfile="Scene/Geometry.hpp" bodystart="161" bodyend="164"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d8/dc4/a04487_1a8fc03d7b7b3f0b2b4dabc75cf032126a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Geometry::doUpdateMesh</definition>
+        <argsstring>()</argsstring>
+        <name>doUpdateMesh</name>
+        <qualifiedname>castor3d::Geometry::doUpdateMesh</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="169" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dc4/a04487_1ab7d9f6547f65a44291c9d8c2be902fea" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Geometry::doUpdateContainers</definition>
+        <argsstring>()</argsstring>
+        <name>doUpdateContainers</name>
+        <qualifiedname>castor3d::Geometry::doUpdateContainers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Geometry.hpp" line="170" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Ray.hpp" line="14" column="1" bodyfile="Render/Ray.hpp" bodystart="13" bodyend="171"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::Geometry</label>
+        <link refid="d8/dc4/a04487"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::MovableObject</label>
+        <link refid="df/dd3/a04527"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::RenderedObject</label>
+        <link refid="d7/db9/a04591"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="6">
+        <label>std::enable_shared_from_this&lt; RenderedObject &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="7">
+        <label>Animable</label>
+        <link refid="de/d59/a02219"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>K</label>
+      </node>
+      <node id="12">
+        <label>T</label>
+      </node>
+      <node id="13">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="de/d59/a02219"/>
+        <childnode refid="14" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::Geometry</label>
+        <link refid="d8/dc4/a04487"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::MovableObject</label>
+        <link refid="df/dd3/a04527"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::RenderedObject</label>
+        <link refid="d7/db9/a04591"/>
+        <childnode refid="16" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::SceneNode</label>
+        <link refid="d1/d30/a04639"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
+      </node>
+      <node id="14">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="8">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="9">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>std::enable_shared_from_this&lt; RenderedObject &gt;</label>
+      </node>
+      <node id="6">
+        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
+      </node>
+      <node id="10">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="11" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/Geometry.hpp" line="23" column="1" bodyfile="Scene/Geometry.hpp" bodystart="26" bodyend="183"/>
     <listofallmembers>
-      <member refid="d8/dc4/a04487_1a7ff1586714576f930e0d10d326d5eecc" prot="public" virt="non-virtual"><scope>castor3d::Ray</scope><name>intersects</name></member>
-      <member refid="d8/dc4/a04487_1a5a760c3967c7c347468c616e315cdfa5" prot="public" virt="non-virtual"><scope>castor3d::Ray</scope><name>intersects</name></member>
-      <member refid="d8/dc4/a04487_1a2a85a27a8bbd074b0523fb774c040c57" prot="public" virt="non-virtual"><scope>castor3d::Ray</scope><name>intersects</name></member>
-      <member refid="d8/dc4/a04487_1aa87cfc0a8fe488d17cecf6c1747bc813" prot="public" virt="non-virtual"><scope>castor3d::Ray</scope><name>intersects</name></member>
-      <member refid="d8/dc4/a04487_1a89ed1a615cc9828269fa44e6b0748049" prot="public" virt="non-virtual"><scope>castor3d::Ray</scope><name>intersects</name></member>
-      <member refid="d8/dc4/a04487_1a3662d907e547240fb4ff1a7833a31df9" prot="public" virt="non-virtual"><scope>castor3d::Ray</scope><name>intersects</name></member>
-      <member refid="d8/dc4/a04487_1af507dcb336d7c19af6a8ae7f15b4f0ae" prot="public" virt="non-virtual"><scope>castor3d::Ray</scope><name>m_direction</name></member>
-      <member refid="d8/dc4/a04487_1aeb4bdceba330a4f6be5e252c3dfe94a2" prot="public" virt="non-virtual"><scope>castor3d::Ray</scope><name>m_origin</name></member>
-      <member refid="d8/dc4/a04487_1af50a25a795bb6ad8d4dda231e7a418a9" prot="public" virt="non-virtual"><scope>castor3d::Ray</scope><name>projectVertex</name></member>
-      <member refid="d8/dc4/a04487_1aa97b60404e050d524652e1447f5605c7" prot="public" virt="non-virtual"><scope>castor3d::Ray</scope><name>Ray</name></member>
-      <member refid="d8/dc4/a04487_1a2d61a856b9dacab355cdf6157e2d4108" prot="public" virt="non-virtual"><scope>castor3d::Ray</scope><name>Ray</name></member>
-      <member refid="d8/dc4/a04487_1afebebeb4e598a187857e72771a0325cc" prot="public" virt="non-virtual"><scope>castor3d::Ray</scope><name>Ray</name></member>
+      <member refid="df/dd3/a04527_1ab2169299d3e08b4e50066e400d1d86dc" prot="public" virt="virtual"><scope>castor3d::Geometry</scope><name>attachTo</name></member>
+      <member refid="df/dd3/a04527_1afbef8194f2a0b9e15c9cc483221a08ee" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>detach</name></member>
+      <member refid="d8/dc4/a04487_1ab7d9f6547f65a44291c9d8c2be902fea" prot="private" virt="non-virtual"><scope>castor3d::Geometry</scope><name>doUpdateContainers</name></member>
+      <member refid="d8/dc4/a04487_1a8fc03d7b7b3f0b2b4dabc75cf032126a" prot="private" virt="non-virtual"><scope>castor3d::Geometry</scope><name>doUpdateMesh</name></member>
+      <member refid="d8/dc4/a04487_1a1e732a00568688732d0c23ab3108b014" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>Geometry</name></member>
+      <member refid="d8/dc4/a04487_1a8b0243a48eaa874d2b97649c5e673281" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>Geometry</name></member>
+      <member refid="d8/dc4/a04487_1a2045792a2c1e0de09afc8e406a2a3481" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>getBoundingBox</name></member>
+      <member refid="d8/dc4/a04487_1a0274bffd4e42efc9cad6db961b575af1" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>getBoundingBox</name></member>
+      <member refid="d8/dc4/a04487_1adfb482d1a3b7be4fe6e812edf41bc30c" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>getBoundingSphere</name></member>
+      <member refid="d8/dc4/a04487_1a60e2bfbeefa3ab2206cde3737781c4ff" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>getBoundingSphere</name></member>
+      <member refid="df/dd3/a04527_1aa6c7b745273530f44b2fe2b2a2603e8d" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>getEngine</name></member>
+      <member refid="d8/dc4/a04487_1a62f297fb24f40d687f1ace0bb1df1e45" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>getId</name></member>
+      <member refid="d8/dc4/a04487_1a9576d94311af6daaaa652e4e04058c34" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>getMaterial</name></member>
+      <member refid="d8/dc4/a04487_1a2bede69a064873ffc7b786e28602a8ed" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>getMesh</name></member>
+      <member refid="df/dd3/a04527_1a19af4c363050397777f59c30b451be05" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>getParent</name></member>
+      <member refid="df/dd3/a04527_1acf2dafd94427b63121981ac18ac652a7" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>getType</name></member>
+      <member refid="d7/db9/a04591_1a29922953eee8cbc43aae4b710f08c29a" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>isCulled</name></member>
+      <member refid="d7/db9/a04591_1ab40947f3ec91820fc5e70a85f1cc160a" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>isShadowCaster</name></member>
+      <member refid="d7/db9/a04591_1a3e73e7500445cfd605cf4b6f2414277b" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>isShadowReceiver</name></member>
+      <member refid="d7/db9/a04591_1a5ce1326805379a47d42dec81b6b41d62" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>isVisible</name></member>
+      <member refid="d8/dc4/a04487_1a0c5f3f21bf755ba8f5f8331705673cc3" prot="private" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_box</name></member>
+      <member refid="d8/dc4/a04487_1a36ba45ca884c2c25b660b7a76ab0e319" prot="private" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_ids</name></member>
+      <member refid="d8/dc4/a04487_1a5ae481a597837e2ff8d619170d42eb5b" prot="private" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_listCreated</name></member>
+      <member refid="d8/dc4/a04487_1ac033d9c416ceea39bb00b9272a4857e4" prot="private" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_mesh</name></member>
+      <member refid="d8/dc4/a04487_1a4eca92c3f7d2e55c28742d7639959ff6" prot="private" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_meshName</name></member>
+      <member refid="d8/dc4/a04487_1ae5e04fc7896bd4116a8f8892caff2a47" prot="private" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_mutex</name></member>
+      <member refid="df/dd3/a04527_1a8385c7c8fd9aee20a3c6de804cb09514" prot="protected" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_notifyIndex</name></member>
+      <member refid="df/dd3/a04527_1aa058c86365c45c7d4b85a04ce56a9d22" prot="protected" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_sceneNode</name></member>
+      <member refid="d8/dc4/a04487_1a1cd243563b7c605c0f0fbb0955cde897" prot="private" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_sphere</name></member>
+      <member refid="df/dd3/a04527_1ab9493ad12e9af9b47db11e76d372a156" prot="protected" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_strNodeName</name></member>
+      <member refid="d8/dc4/a04487_1ae483f7f8b06a215fb1440f17fdb7a119" prot="private" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_submeshesBoxes</name></member>
+      <member refid="d8/dc4/a04487_1a87407a0e713213b243fd325989e1da42" prot="private" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_submeshesMaterials</name></member>
+      <member refid="d8/dc4/a04487_1addb364d4efb330a32de68dff8f177964" prot="private" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_submeshesSpheres</name></member>
+      <member refid="df/dd3/a04527_1acf6726e80bb3098468fe1fcd5a1f720e" prot="protected" virt="non-virtual"><scope>castor3d::Geometry</scope><name>m_type</name></member>
+      <member refid="df/dd3/a04527_1a40b0fe7602fb945cb5b89de71a8cf4d8" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>MovableObject</name></member>
+      <member refid="df/dd3/a04527_1acf7517058566afbb2290a7856fc9dfee" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>MovableObject</name></member>
+      <member refid="d8/dc4/a04487_1acaec2f1849bad9f6ae8c91f6e2f72c26" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>onMaterialChanged</name></member>
+      <member refid="d8/dc4/a04487_1a1edb8a6926be6c9e7bd62c74c8846b88" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>prepare</name></member>
+      <member refid="d8/dc4/a04487_1afb3ad561f4d82c22a6c41103b45857ef" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>setBoundingBox</name></member>
+      <member refid="d7/db9/a04591_1a4e32f37027d761824f754df07c6703ae" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>setCulled</name></member>
+      <member refid="d8/dc4/a04487_1abcbc4577a3dc370ec74f8f374da8473c" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>setId</name></member>
+      <member refid="d8/dc4/a04487_1a8ba378a16c2aa99a06754973aeaaab7d" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>setMaterial</name></member>
+      <member refid="d8/dc4/a04487_1a61c105feac66d1986d5b2039c0a92da7" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>setMesh</name></member>
+      <member refid="d7/db9/a04591_1a5b052f28d3f247a7231c34b1c9520997" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>setShadowCaster</name></member>
+      <member refid="d7/db9/a04591_1a17b0b8487b724ca7492f2e08ce8706f6" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>setShadowReceiver</name></member>
+      <member refid="d7/db9/a04591_1ac78739036c5c66a41cb2f960e532627e" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>setVisible</name></member>
+      <member refid="d8/dc4/a04487_1a5560136582e1fadb948fa0b7a7bb1fd9" prot="public" virt="non-virtual"><scope>castor3d::Geometry</scope><name>updateContainers</name></member>
+      <member refid="df/dd3/a04527_1a05bd8e8940d26cb4361fccfa67733b03" prot="public" virt="virtual"><scope>castor3d::Geometry</scope><name>~MovableObject</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

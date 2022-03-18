@@ -1,33 +1,673 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="de/dde/a02695" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkMemoryAllocateInfo &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="de/dde/a02695_1a12ae3c95460e5a4fd8d6e051f87b1347" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkMemoryAllocateInfo &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="de/dde/a02695" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::TextureUnitCache</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <includes local="no">TextureCache.hpp</includes>
+    <innerclass refid="dd/d9a/a02699" prot="public">castor3d::TextureUnitCache::ThreadData</innerclass>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="de/dde/a02695_1a1a5c4746f5ff3ae4ad514db3e79d86e9" prot="private" static="no" mutable="no">
+        <type>castor::CheckedMutex</type>
+        <definition>castor::CheckedMutex castor3d::TextureUnitCache::m_dirtyMtx</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO</initializer>
+        <name>m_dirtyMtx</name>
+        <qualifiedname>castor3d::TextureUnitCache::m_dirtyMtx</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="19" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="19" bodyend="-1"/>
+        <location file="Cache/TextureCache.hpp" line="123" column="22" bodyfile="Cache/TextureCache.hpp" bodystart="123" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dde/a02695_1ad8ca85622d77c8eabd22e7542b53edff" prot="private" static="no" mutable="no">
+        <type>std::unordered_set&lt; <ref refid="d9/daf/a02807" kindref="compound">Pass</ref> * &gt;</type>
+        <definition>std::unordered_set&lt; Pass * &gt; castor3d::TextureUnitCache::m_dirty</definition>
+        <argsstring></argsstring>
+        <name>m_dirty</name>
+        <qualifiedname>castor3d::TextureUnitCache::m_dirty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="124" column="20" bodyfile="Cache/TextureCache.hpp" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dde/a02695_1a4fd0b8679c2fda94ea6fe0fad9a7be55" prot="private" static="no" mutable="no">
+        <type>castor::CheckedMutex</type>
+        <definition>castor::CheckedMutex castor3d::TextureUnitCache::m_loadMtx</definition>
+        <argsstring></argsstring>
+        <name>m_loadMtx</name>
+        <qualifiedname>castor3d::TextureUnitCache::m_loadMtx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="125" column="22" bodyfile="Cache/TextureCache.hpp" bodystart="125" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dde/a02695_1a38b4281501b1bc9994ae95de4652bc6f" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::unique_ptr&lt; <ref refid="dd/d9a/a02699" kindref="compound">ThreadData</ref> &gt; &gt;</type>
+        <definition>std::vector&lt; std::unique_ptr&lt; ThreadData &gt; &gt; castor3d::TextureUnitCache::m_loading</definition>
+        <argsstring></argsstring>
+        <name>m_loading</name>
+        <qualifiedname>castor3d::TextureUnitCache::m_loading</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="126" column="13" bodyfile="Cache/TextureCache.hpp" bodystart="126" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dde/a02695_1aefba4754690c385d81f5bdb811599d7c" prot="private" static="no" mutable="no">
+        <type>std::unordered_map&lt; size_t, TextureUnitSPtr &gt;</type>
+        <definition>std::unordered_map&lt; size_t, TextureUnitSPtr &gt; castor3d::TextureUnitCache::m_loaded</definition>
+        <argsstring></argsstring>
+        <name>m_loaded</name>
+        <qualifiedname>castor3d::TextureUnitCache::m_loaded</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="127" column="20" bodyfile="Cache/TextureCache.hpp" bodystart="127" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dde/a02695_1a11dcebcfe5c91b34f9f1907a0d997d41" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetLayoutPtr</type>
+        <definition>ashes::DescriptorSetLayoutPtr castor3d::TextureUnitCache::m_bindlessTexLayout</definition>
+        <argsstring></argsstring>
+        <name>m_bindlessTexLayout</name>
+        <qualifiedname>castor3d::TextureUnitCache::m_bindlessTexLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="128" column="31" bodyfile="Cache/TextureCache.hpp" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dde/a02695_1a9aab095efafe12c5d50b987bce2e9b8b" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorPoolPtr</type>
+        <definition>ashes::DescriptorPoolPtr castor3d::TextureUnitCache::m_bindlessTexPool</definition>
+        <argsstring></argsstring>
+        <name>m_bindlessTexPool</name>
+        <qualifiedname>castor3d::TextureUnitCache::m_bindlessTexPool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="129" column="26" bodyfile="Cache/TextureCache.hpp" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dde/a02695_1abf9de103e54f3d291fcea3ae04cb400a" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::TextureUnitCache::m_bindlessTexSet</definition>
+        <argsstring></argsstring>
+        <name>m_bindlessTexSet</name>
+        <qualifiedname>castor3d::TextureUnitCache::m_bindlessTexSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="130" column="25" bodyfile="Cache/TextureCache.hpp" bodystart="130" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dde/a02695_1a65ee0fdafd226915d794a9699bc4a492" prot="private" static="no" mutable="no">
+        <type>std::mutex</type>
+        <definition>std::mutex castor3d::TextureUnitCache::m_dirtyWritesMtx</definition>
+        <argsstring></argsstring>
+        <name>m_dirtyWritesMtx</name>
+        <qualifiedname>castor3d::TextureUnitCache::m_dirtyWritesMtx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="131" column="12" bodyfile="Cache/TextureCache.hpp" bodystart="131" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dde/a02695_1a4faba38db8c335233e8223c81fd51738" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; ashes::WriteDescriptorSet &gt;</type>
+        <definition>std::vector&lt; ashes::WriteDescriptorSet &gt; castor3d::TextureUnitCache::m_dirtyWrites</definition>
+        <argsstring></argsstring>
+        <name>m_dirtyWrites</name>
+        <qualifiedname>castor3d::TextureUnitCache::m_dirtyWrites</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="132" column="13" bodyfile="Cache/TextureCache.hpp" bodystart="132" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/dde/a02695_1aeb4316c74cd48a07f8a9663da309f08a" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::TextureUnitCache::TextureUnitCache</definition>
+        <argsstring>(Engine &amp;engine)</argsstring>
+        <name>TextureUnitCache</name>
+        <qualifiedname>castor3d::TextureUnitCache::TextureUnitCache</qualifiedname>
+        <param>
+          <type><ref refid="d8/dd0/a02711" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="50" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dde/a02695_1aa87115aca2306f42694c429bc0c56976" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::TextureUnitCache::~TextureUnitCache</definition>
+        <argsstring>()</argsstring>
+        <name>~TextureUnitCache</name>
+        <qualifiedname>castor3d::TextureUnitCache::~TextureUnitCache</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="51" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dde/a02695_1a49edc71412c6860db9b90aaf349491bd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureUnitCache::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::TextureUnitCache::initialise</qualifiedname>
+        <param>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="53" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dde/a02695_1a9d2fd28b7631fe6fdac9753204abbc32" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureUnitCache::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor3d::TextureUnitCache::cleanup</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="54" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dde/a02695_1ab5493ec65fce7a165a8d3b1ca4d26040" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureUnitCache::update</definition>
+        <argsstring>(GpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::TextureUnitCache::update</qualifiedname>
+        <param>
+          <type><ref refid="d1/d46/a04047" kindref="compound">GpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="56" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dde/a02695_1a1f3673b0c132b9da3bb1629c1ba1256d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureUnitCache::notifyPassChange</definition>
+        <argsstring>(Pass &amp;pass)</argsstring>
+        <name>notifyPassChange</name>
+        <qualifiedname>castor3d::TextureUnitCache::notifyPassChange</qualifiedname>
+        <param>
+          <type><ref refid="d9/daf/a02807" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="58" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dde/a02695_1a02052c027afbd44bde30bec5baee6a3e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureUnitCache::preparePass</definition>
+        <argsstring>(Pass &amp;pass)</argsstring>
+        <name>preparePass</name>
+        <qualifiedname>castor3d::TextureUnitCache::preparePass</qualifiedname>
+        <param>
+          <type><ref refid="d9/daf/a02807" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="59" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dde/a02695_1ad0f0c855f6e610c88ec29d4fcabb1b19" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureUnitCache::clear</definition>
+        <argsstring>()</argsstring>
+        <name>clear</name>
+        <qualifiedname>castor3d::TextureUnitCache::clear</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="61" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dde/a02695_1a490866108c65d10263e990177c99b187" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> TextureUnitSPtr</type>
+        <definition>C3D_API TextureUnitSPtr castor3d::TextureUnitCache::getTexture</definition>
+        <argsstring>(TextureSourceInfo const &amp;sourceInfo, PassTextureConfig const &amp;config)</argsstring>
+        <name>getTexture</name>
+        <qualifiedname>castor3d::TextureUnitCache::getTexture</qualifiedname>
+        <param>
+          <type><ref refid="da/d0d/a02955" kindref="compound">TextureSourceInfo</ref> const &amp;</type>
+          <declname>sourceInfo</declname>
+        </param>
+        <param>
+          <type><ref refid="db/da5/a02919" kindref="compound">PassTextureConfig</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="63" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dde/a02695_1a1af3df2172ce035df07025481cff23de" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> TextureUnitSPtr</type>
+        <definition>C3D_API TextureUnitSPtr castor3d::TextureUnitCache::mergeImages</definition>
+        <argsstring>(TextureSourceInfo const &amp;lhsSourceInfo, TextureConfiguration const &amp;lhsConfig, uint32_t lhsSrcMask, uint32_t lhsDstMask, TextureSourceInfo const &amp;rhsSourceInfo, TextureConfiguration const &amp;rhsConfig, uint32_t rhsSrcMask, uint32_t rhsDstMask, castor::String const &amp;name, TextureSourceInfo resultSourceInfo, TextureConfiguration resultConfig)</argsstring>
+        <name>mergeImages</name>
+        <qualifiedname>castor3d::TextureUnitCache::mergeImages</qualifiedname>
+        <param>
+          <type><ref refid="da/d0d/a02955" kindref="compound">TextureSourceInfo</ref> const &amp;</type>
+          <declname>lhsSourceInfo</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/deb/a02915" kindref="compound">TextureConfiguration</ref> const &amp;</type>
+          <declname>lhsConfig</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>lhsSrcMask</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>lhsDstMask</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d0d/a02955" kindref="compound">TextureSourceInfo</ref> const &amp;</type>
+          <declname>rhsSourceInfo</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/deb/a02915" kindref="compound">TextureConfiguration</ref> const &amp;</type>
+          <declname>rhsConfig</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>rhsSrcMask</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>rhsDstMask</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d0d/a02955" kindref="compound">TextureSourceInfo</ref></type>
+          <declname>resultSourceInfo</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/deb/a02915" kindref="compound">TextureConfiguration</ref></type>
+          <declname>resultConfig</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="65" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dde/a02695_1ac7bd14aeba1f334d1f962ae18cfd837a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::TextureUnitCache::hasBindless</definition>
+        <argsstring>() const</argsstring>
+        <name>hasBindless</name>
+        <qualifiedname>castor3d::TextureUnitCache::hasBindless</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="77" column="6" bodyfile="Cache/TextureCache.hpp" bodystart="77" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dde/a02695_1a404e86682c7775aa0869f14c6ab97305" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::DescriptorSetLayout *</type>
+        <definition>ashes::DescriptorSetLayout * castor3d::TextureUnitCache::getDescriptorLayout</definition>
+        <argsstring>() const</argsstring>
+        <name>getDescriptorLayout</name>
+        <qualifiedname>castor3d::TextureUnitCache::getDescriptorLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="82" column="29" bodyfile="Cache/TextureCache.hpp" bodystart="82" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dde/a02695_1adb08ab69f93d9a876f7f6072b29c89b1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::DescriptorPool *</type>
+        <definition>ashes::DescriptorPool * castor3d::TextureUnitCache::getDescriptorPool</definition>
+        <argsstring>() const</argsstring>
+        <name>getDescriptorPool</name>
+        <qualifiedname>castor3d::TextureUnitCache::getDescriptorPool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="87" column="24" bodyfile="Cache/TextureCache.hpp" bodystart="87" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dde/a02695_1a93605991e9fd0c97a1a22f1e4006f9c7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::DescriptorSet *</type>
+        <definition>ashes::DescriptorSet * castor3d::TextureUnitCache::getDescriptorSet</definition>
+        <argsstring>() const</argsstring>
+        <name>getDescriptorSet</name>
+        <qualifiedname>castor3d::TextureUnitCache::getDescriptorSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="92" column="23" bodyfile="Cache/TextureCache.hpp" bodystart="92" bodyend="95"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="de/dde/a02695_1ab78ceb319d61ee4fa65252b0224c2698" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextureUnitCache::doCreateLayout</definition>
+        <argsstring>(ThreadData &amp;data, castor::String const &amp;name)</argsstring>
+        <name>doCreateLayout</name>
+        <qualifiedname>castor3d::TextureUnitCache::doCreateLayout</qualifiedname>
+        <param>
+          <type><ref refid="dd/d9a/a02699" kindref="compound">ThreadData</ref> &amp;</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="98" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dde/a02695_1a3640e2cc9672dfaa2e4013a59ec4bb07" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextureUnitCache::doLoadSource</definition>
+        <argsstring>(TextureSourceInfo const &amp;sourceInfo, PassTextureConfig const &amp;config, TextureUnit &amp;unit)</argsstring>
+        <name>doLoadSource</name>
+        <qualifiedname>castor3d::TextureUnitCache::doLoadSource</qualifiedname>
+        <param>
+          <type><ref refid="da/d0d/a02955" kindref="compound">TextureSourceInfo</ref> const &amp;</type>
+          <declname>sourceInfo</declname>
+        </param>
+        <param>
+          <type><ref refid="db/da5/a02919" kindref="compound">PassTextureConfig</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/de2/a02959" kindref="compound">TextureUnit</ref> &amp;</type>
+          <declname>unit</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="100" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dde/a02695_1aafeef3fbc3076e307862fb642f45c93a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextureUnitCache::doMergeSources</definition>
+        <argsstring>(TextureSourceInfo const &amp;lhsSourceInfo, TextureConfiguration const &amp;lhsConfig, uint32_t lhsSrcMask, uint32_t lhsDstMask, TextureSourceInfo const &amp;rhsSourceInfo, TextureConfiguration const &amp;rhsConfig, uint32_t rhsSrcMask, uint32_t rhsDstMask, TextureSourceInfo const &amp;resultSourceInfo, PassTextureConfig const &amp;resultConfig, castor::String const &amp;name, TextureUnit &amp;unit)</argsstring>
+        <name>doMergeSources</name>
+        <qualifiedname>castor3d::TextureUnitCache::doMergeSources</qualifiedname>
+        <param>
+          <type><ref refid="da/d0d/a02955" kindref="compound">TextureSourceInfo</ref> const &amp;</type>
+          <declname>lhsSourceInfo</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/deb/a02915" kindref="compound">TextureConfiguration</ref> const &amp;</type>
+          <declname>lhsConfig</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>lhsSrcMask</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>lhsDstMask</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d0d/a02955" kindref="compound">TextureSourceInfo</ref> const &amp;</type>
+          <declname>rhsSourceInfo</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/deb/a02915" kindref="compound">TextureConfiguration</ref> const &amp;</type>
+          <declname>rhsConfig</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>rhsSrcMask</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>rhsDstMask</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d0d/a02955" kindref="compound">TextureSourceInfo</ref> const &amp;</type>
+          <declname>resultSourceInfo</declname>
+        </param>
+        <param>
+          <type><ref refid="db/da5/a02919" kindref="compound">PassTextureConfig</ref> const &amp;</type>
+          <declname>resultConfig</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/de2/a02959" kindref="compound">TextureUnit</ref> &amp;</type>
+          <declname>unit</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="103" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dde/a02695_1ab1ceebca5aec8da292dad4fbd7d5d029" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextureUnitCache::doUpload</definition>
+        <argsstring>(ThreadData &amp;data)</argsstring>
+        <name>doUpload</name>
+        <qualifiedname>castor3d::TextureUnitCache::doUpload</qualifiedname>
+        <param>
+          <type><ref refid="dd/d9a/a02699" kindref="compound">ThreadData</ref> &amp;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="115" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dde/a02695_1a91099bcad253265ee4fe5a14ff21589f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextureUnitCache::doUpdateWrite</definition>
+        <argsstring>(TextureUnit &amp;unit)</argsstring>
+        <name>doUpdateWrite</name>
+        <qualifiedname>castor3d::TextureUnitCache::doUpdateWrite</qualifiedname>
+        <param>
+          <type><ref refid="d3/de2/a02959" kindref="compound">TextureUnit</ref> &amp;</type>
+          <declname>unit</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="116" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dde/a02695_1a584af867ba7f01d3ffe4c86fd329122e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/d9a/a02699" kindref="compound">ThreadData</ref> &amp;</type>
+        <definition>ThreadData &amp; castor3d::TextureUnitCache::doCreateThreadData</definition>
+        <argsstring>(TextureSourceInfo const &amp;sourceInfo, PassTextureConfig const &amp;config, TextureUnit &amp;unit)</argsstring>
+        <name>doCreateThreadData</name>
+        <qualifiedname>castor3d::TextureUnitCache::doCreateThreadData</qualifiedname>
+        <param>
+          <type><ref refid="da/d0d/a02955" kindref="compound">TextureSourceInfo</ref> const &amp;</type>
+          <declname>sourceInfo</declname>
+        </param>
+        <param>
+          <type><ref refid="db/da5/a02919" kindref="compound">PassTextureConfig</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/de2/a02959" kindref="compound">TextureUnit</ref> &amp;</type>
+          <declname>unit</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="117" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dde/a02695_1a3d0dc3dd85aa36df8f4b266149009b0d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextureUnitCache::doDestroyThreadData</definition>
+        <argsstring>(ThreadData &amp;data)</argsstring>
+        <name>doDestroyThreadData</name>
+        <qualifiedname>castor3d::TextureUnitCache::doDestroyThreadData</qualifiedname>
+        <param>
+          <type><ref refid="dd/d9a/a02699" kindref="compound">ThreadData</ref> &amp;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="120" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="19" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="19" bodyend="19"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::TextureUnitCache</label>
+        <link refid="de/dde/a02695"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::TextureUnitCache</label>
+        <link refid="de/dde/a02695"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Cache/TextureCache.hpp" line="26" column="1" bodyfile="Cache/TextureCache.hpp" bodystart="28" bodyend="133"/>
     <listofallmembers>
-      <member refid="de/dde/a02695_1a12ae3c95460e5a4fd8d6e051f87b1347" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkMemoryAllocateInfo &gt;</scope><name>value</name></member>
+      <member refid="de/dde/a02695_1a9d2fd28b7631fe6fdac9753204abbc32" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>cleanup</name></member>
+      <member refid="de/dde/a02695_1ad0f0c855f6e610c88ec29d4fcabb1b19" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>clear</name></member>
+      <member refid="de/dde/a02695_1ab78ceb319d61ee4fa65252b0224c2698" prot="private" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>doCreateLayout</name></member>
+      <member refid="de/dde/a02695_1a584af867ba7f01d3ffe4c86fd329122e" prot="private" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>doCreateThreadData</name></member>
+      <member refid="de/dde/a02695_1a3d0dc3dd85aa36df8f4b266149009b0d" prot="private" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>doDestroyThreadData</name></member>
+      <member refid="de/dde/a02695_1a3640e2cc9672dfaa2e4013a59ec4bb07" prot="private" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>doLoadSource</name></member>
+      <member refid="de/dde/a02695_1aafeef3fbc3076e307862fb642f45c93a" prot="private" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>doMergeSources</name></member>
+      <member refid="de/dde/a02695_1a91099bcad253265ee4fe5a14ff21589f" prot="private" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>doUpdateWrite</name></member>
+      <member refid="de/dde/a02695_1ab1ceebca5aec8da292dad4fbd7d5d029" prot="private" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>doUpload</name></member>
+      <member refid="de/dde/a02695_1a404e86682c7775aa0869f14c6ab97305" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>getDescriptorLayout</name></member>
+      <member refid="de/dde/a02695_1adb08ab69f93d9a876f7f6072b29c89b1" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>getDescriptorPool</name></member>
+      <member refid="de/dde/a02695_1a93605991e9fd0c97a1a22f1e4006f9c7" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>getDescriptorSet</name></member>
+      <member refid="de/dde/a02695_1a490866108c65d10263e990177c99b187" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>getTexture</name></member>
+      <member refid="de/dde/a02695_1ac7bd14aeba1f334d1f962ae18cfd837a" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>hasBindless</name></member>
+      <member refid="de/dde/a02695_1a49edc71412c6860db9b90aaf349491bd" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>initialise</name></member>
+      <member refid="de/dde/a02695_1a11dcebcfe5c91b34f9f1907a0d997d41" prot="private" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>m_bindlessTexLayout</name></member>
+      <member refid="de/dde/a02695_1a9aab095efafe12c5d50b987bce2e9b8b" prot="private" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>m_bindlessTexPool</name></member>
+      <member refid="de/dde/a02695_1abf9de103e54f3d291fcea3ae04cb400a" prot="private" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>m_bindlessTexSet</name></member>
+      <member refid="de/dde/a02695_1ad8ca85622d77c8eabd22e7542b53edff" prot="private" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>m_dirty</name></member>
+      <member refid="de/dde/a02695_1a1a5c4746f5ff3ae4ad514db3e79d86e9" prot="private" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>m_dirtyMtx</name></member>
+      <member refid="de/dde/a02695_1a4faba38db8c335233e8223c81fd51738" prot="private" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>m_dirtyWrites</name></member>
+      <member refid="de/dde/a02695_1a65ee0fdafd226915d794a9699bc4a492" prot="private" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>m_dirtyWritesMtx</name></member>
+      <member refid="de/dde/a02695_1aefba4754690c385d81f5bdb811599d7c" prot="private" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>m_loaded</name></member>
+      <member refid="de/dde/a02695_1a38b4281501b1bc9994ae95de4652bc6f" prot="private" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>m_loading</name></member>
+      <member refid="de/dde/a02695_1a4fd0b8679c2fda94ea6fe0fad9a7be55" prot="private" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>m_loadMtx</name></member>
+      <member refid="de/dde/a02695_1a1af3df2172ce035df07025481cff23de" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>mergeImages</name></member>
+      <member refid="de/dde/a02695_1a1f3673b0c132b9da3bb1629c1ba1256d" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>notifyPassChange</name></member>
+      <member refid="de/dde/a02695_1a02052c027afbd44bde30bec5baee6a3e" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>preparePass</name></member>
+      <member refid="de/dde/a02695_1aeb4316c74cd48a07f8a9663da309f08a" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>TextureUnitCache</name></member>
+      <member refid="de/dde/a02695_1ab5493ec65fce7a165a8d3b1ca4d26040" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>update</name></member>
+      <member refid="de/dde/a02695_1aa87115aca2306f42694c429bc0c56976" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitCache</scope><name>~TextureUnitCache</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

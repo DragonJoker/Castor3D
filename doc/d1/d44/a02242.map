@@ -1,4 +1,4 @@
-<map id="castor3d::ChunkParser&lt; castor::String &gt;" name="castor3d::ChunkParser&lt; castor::String &gt;">
-<area shape="rect" id="node1" title="ChunkParser specialisation for castor::String." alt="" coords="21,80,175,121"/>
-<area shape="rect" id="node2" href="$d5/d5b/a02235.html" title=" " alt="" coords="5,5,191,32"/>
+<map id="castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;" name="castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;">
+<area shape="rect" id="node1" title="Partial specialisation of InterpolatorT, for InterpolatorType::eNearest." alt="" coords="5,95,173,151"/>
+<area shape="rect" id="node2" href="$d7/da1/a02231.html" title="Template class which handles the interpolations, would it be quaternion, point, real,..." alt="" coords="17,5,161,47"/>
 </map>

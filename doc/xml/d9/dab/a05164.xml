@@ -1,72 +1,106 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d9/dab/a05164" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::DirectionalLightCascade</compoundname>
-    <includes local="no">DirectionalLight.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d9/dab/a05164_1a95fa7a197a677e582d2eef1d65d64679" prot="public" static="no" mutable="no">
-        <type>castor::Matrix4x4f</type>
-        <definition>castor::Matrix4x4f castor3d::DirectionalLightCascade::viewMatrix</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d9/dab/a05164" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::Scene &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::Scene &gt;</basecompoundref>
+    <includes local="no">TextScene.hpp</includes>
+    <innerclass refid="df/d18/a05168" prot="public">castor::TextWriter&lt; castor3d::Scene &gt;::Options</innerclass>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d9/dab/a05164_1a92eb7491165fe775b12c92637e76b5ec" prot="private" static="no" mutable="no">
+        <type>Options</type>
+        <definition>Options castor::TextWriter&lt; castor3d::Scene &gt;::m_options</definition>
         <argsstring></argsstring>
-        <name>viewMatrix</name>
+        <name>m_options</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::Scene &gt;::m_options</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Light/DirectionalLight.hpp" line="15" column="1" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="15" bodyend="-1"/>
+        <location file="Text/TextScene.hpp" line="55" column="9" bodyfile="Text/TextScene.hpp" bodystart="55" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d9/dab/a05164_1a4adba86dae97c6cd1782cf9effc2a8e8" prot="public" static="no" mutable="no">
-        <type>castor::Matrix4x4f</type>
-        <definition>castor::Matrix4x4f castor3d::DirectionalLightCascade::projMatrix</definition>
-        <argsstring></argsstring>
-        <name>projMatrix</name>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/dab/a05164_1ada69043e955a3c52667616f6e18dd09a" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::Scene &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs, Options options={})</argsstring>
+        <name>TextWriter</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::Scene &gt;::TextWriter</qualifiedname>
+        <param>
+          <type>String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <param>
+          <type>Options</type>
+          <declname>options</declname>
+          <defval>{}</defval>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Light/DirectionalLight.hpp" line="16" column="1" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="16" bodyend="-1"/>
+        <location file="Text/TextScene.hpp" line="49" column="18"/>
       </memberdef>
-      <memberdef kind="variable" id="d9/dab/a05164_1af32a8d94125b4825be06641d80eda4d2" prot="public" static="no" mutable="no">
-        <type>castor::Matrix4x4f</type>
-        <definition>castor::Matrix4x4f castor3d::DirectionalLightCascade::viewProjMatrix</definition>
-        <argsstring></argsstring>
-        <name>viewProjMatrix</name>
+      <memberdef kind="function" id="d9/dab/a05164_1a65c33f2747c6437ffb49940ff70e80d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::Scene &gt;::operator()</definition>
+        <argsstring>(castor3d::Scene const &amp;scene, castor::StringStream &amp;file) override</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::Scene &gt;::operator()</qualifiedname>
+        <param>
+          <type><ref refid="da/d34/a04592" kindref="compound">castor3d::Scene</ref> const &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Light/DirectionalLight.hpp" line="17" column="1" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="17" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/dab/a05164_1ad4001ac58e529c42799e6985db2dce31" prot="public" static="no" mutable="no">
-        <type>castor::Point2f</type>
-        <definition>castor::Point2f castor3d::DirectionalLightCascade::splitDepthScale</definition>
-        <argsstring></argsstring>
-        <name>splitDepthScale</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Light/DirectionalLight.hpp" line="18" column="1" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="18" bodyend="-1"/>
+        <location file="Text/TextScene.hpp" line="51" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Scene/Light/DirectionalLight.hpp" line="14" column="1" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="13" bodyend="19"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::Scene &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::Scene &gt;</label>
+        <link refid="d9/dab/a05164"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::Scene &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::Scene &gt;</label>
+        <link refid="d9/dab/a05164"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextScene.hpp" line="14" column="1" bodyfile="Text/TextScene.hpp" bodystart="16" bodyend="56"/>
     <listofallmembers>
-      <member refid="d9/dab/a05164_1a4adba86dae97c6cd1782cf9effc2a8e8" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLightCascade</scope><name>projMatrix</name></member>
-      <member refid="d9/dab/a05164_1ad4001ac58e529c42799e6985db2dce31" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLightCascade</scope><name>splitDepthScale</name></member>
-      <member refid="d9/dab/a05164_1a95fa7a197a677e582d2eef1d65d64679" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLightCascade</scope><name>viewMatrix</name></member>
-      <member refid="d9/dab/a05164_1af32a8d94125b4825be06641d80eda4d2" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLightCascade</scope><name>viewProjMatrix</name></member>
+      <member refid="d9/dab/a05164_1a92eb7491165fe775b12c92637e76b5ec" prot="private" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;</scope><name>m_options</name></member>
+      <member refid="d9/dab/a05164_1a65c33f2747c6437ffb49940ff70e80d7" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;</scope><name>operator()</name></member>
+      <member refid="d9/dab/a05164_1ada69043e955a3c52667616f6e18dd09a" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;</scope><name>TextWriter</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

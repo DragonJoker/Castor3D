@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_73b4ff1c0d48677e07219a6e5cbe5dfd" kind="dir">
+    <compoundname>Shader</compoundname>
+    <innerdir refid="dir_2c17d7a09bff4403778161616b12575a">Shader/PassBuffer</innerdir>
+    <innerdir refid="dir_2b63c8c8a8bc0f17541f0115e68db690">Shader/Shaders</innerdir>
+    <innerdir refid="dir_2c1232949df14105e75d0a5e634ec7a5">Shader/TextureConfigurationBuffer</innerdir>
+    <innerdir refid="dir_7cb5e4c64a1bf58db52aef2025a37836">Shader/Ubos</innerdir>
+    <innerfile refid="dc/d19/a01190">GlslToSpv.hpp</innerfile>
+    <innerfile refid="d9/d31/a01208">Program.hpp</innerfile>
+    <innerfile refid="d1/d34/a01211">ShaderBuffer.hpp</innerfile>
+    <innerfile refid="d5/d32/a01214">ShaderModule.hpp</innerfile>
+    <innerfile refid="d2/d1d/a01277">StructuredShaderBuffer.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/"/>
+  </compounddef>
+</doxygen>

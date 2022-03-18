@@ -1,86 +1,36 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dc/d6b/a04731" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::LightPassConfig</compoundname>
-    <includes local="no">LightingModule.hpp</includes>
+    <compoundname>castor3d::SssProfileBuffer::SssProfileDataPtr</compoundname>
+    <includes local="no">SssProfileBuffer.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="dc/d6b/a04731_1ad5e3ccefa9799287321c57d513245a12" prot="public" static="no" mutable="no">
-        <type><ref refid="df/d9b/a04755" kindref="compound">LightPassResult</ref> const  &amp;</type>
-        <definition>LightPassResult const&amp; castor3d::LightPassConfig::lpResult</definition>
+      <memberdef kind="variable" id="dc/d6b/a04731_1adb626454d387c63291614191d33efa8b" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/d12/a04723" kindref="compound">Data</ref> *</type>
+        <definition>Data* castor3d::SssProfileBuffer::SssProfileDataPtr::sssInfo</definition>
         <argsstring></argsstring>
-        <name>lpResult</name>
+        <name>sssInfo</name>
+        <qualifiedname>castor3d::SssProfileBuffer::SssProfileDataPtr::sssInfo</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightingModule.hpp" line="202" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightingModule.hpp" bodystart="202" bodyend="-1"/>
-        <referencedby refid="db/db4/a04835_1a65b48f1398964b1bd666a838222b401c" compoundref="d7/d46/a00890" startline="56" endline="68">castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;::LightPassLayeredVolumePropagationShadowT</referencedby>
-        <referencedby refid="da/dbb/a04871_1aec682c16bf1f28ec46627a6a18825c0c" compoundref="d3/dd1/a00914" startline="43" endline="53">castor3d::LightPassReflectiveShadow&lt; LtType &gt;::LightPassReflectiveShadow</referencedby>
-        <referencedby refid="dc/d43/a04727_1afbf1abefd9c154581a1f308df55dfcdc" compoundref="d3/db2/a00869" startline="165" endline="178">castor3d::LightPassShadow&lt; LightType::eDirectional &gt;::LightPassShadow</referencedby>
-        <referencedby refid="d4/d10/a04839_1a3cc321c9e48683bfef24686a3ff09586" compoundref="dc/d2c/a00893" startline="52" endline="64">castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;::LightPassVolumePropagationShadowT</referencedby>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="43" column="7" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="43" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dc/d6b/a04731_1ad1b519a143e49a165eee407645b29fa4" prot="public" static="no" mutable="no">
-        <type><ref refid="dd/d83/a05443" kindref="compound">GpInfoUbo</ref> const  &amp;</type>
-        <definition>GpInfoUbo const&amp; castor3d::LightPassConfig::gpInfoUbo</definition>
+      <memberdef kind="variable" id="dc/d6b/a04731_1a6cc38f085b0fac9df12dfebbee758a88" prot="public" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="dc/d12/a04723" kindref="compound">Data</ref>, 10u &gt; *</type>
+        <definition>std::array&lt; Data, 10u &gt;* castor3d::SssProfileBuffer::SssProfileDataPtr::transmittanceProfile</definition>
         <argsstring></argsstring>
-        <name>gpInfoUbo</name>
+        <name>transmittanceProfile</name>
+        <qualifiedname>castor3d::SssProfileBuffer::SssProfileDataPtr::transmittanceProfile</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightingModule.hpp" line="203" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightingModule.hpp" bodystart="203" bodyend="-1"/>
-        <referencedby refid="db/db4/a04835_1a65b48f1398964b1bd666a838222b401c" compoundref="d7/d46/a00890" startline="56" endline="68">castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;::LightPassLayeredVolumePropagationShadowT</referencedby>
-        <referencedby refid="da/dbb/a04871_1aec682c16bf1f28ec46627a6a18825c0c" compoundref="d3/dd1/a00914" startline="43" endline="53">castor3d::LightPassReflectiveShadow&lt; LtType &gt;::LightPassReflectiveShadow</referencedby>
-        <referencedby refid="dc/d43/a04727_1afbf1abefd9c154581a1f308df55dfcdc" compoundref="d3/db2/a00869" startline="165" endline="178">castor3d::LightPassShadow&lt; LightType::eDirectional &gt;::LightPassShadow</referencedby>
-        <referencedby refid="d4/d10/a04839_1a3cc321c9e48683bfef24686a3ff09586" compoundref="dc/d2c/a00893" startline="52" endline="64">castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;::LightPassVolumePropagationShadowT</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="dc/d6b/a04731_1ad52964888102e8e0c8686990540d5e8d" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::LightPassConfig::hasShadows</definition>
-        <argsstring></argsstring>
-        <name>hasShadows</name>
-        <initializer>{ false }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightingModule.hpp" line="204" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightingModule.hpp" bodystart="204" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dc/d6b/a04731_1a1e9f400909f39b243a0139533fb080c7" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::LightPassConfig::hasVoxels</definition>
-        <argsstring></argsstring>
-        <name>hasVoxels</name>
-        <initializer>{ false }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightingModule.hpp" line="205" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightingModule.hpp" bodystart="205" bodyend="-1"/>
-        <referencedby refid="dc/d43/a04727_1afbf1abefd9c154581a1f308df55dfcdc" compoundref="d3/db2/a00869" startline="165" endline="178">castor3d::LightPassShadow&lt; LightType::eDirectional &gt;::LightPassShadow</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="dc/d6b/a04731_1aedb7c3d3e5ea1095e18a9111bb7bd622" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::LightPassConfig::generatesIndirect</definition>
-        <argsstring></argsstring>
-        <name>generatesIndirect</name>
-        <initializer>{ false }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightingModule.hpp" line="206" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightingModule.hpp" bodystart="206" bodyend="-1"/>
-        <referencedby refid="dc/d43/a04727_1afbf1abefd9c154581a1f308df55dfcdc" compoundref="d3/db2/a00869" startline="165" endline="178">castor3d::LightPassShadow&lt; LightType::eDirectional &gt;::LightPassShadow</referencedby>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="44" column="13" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="44" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -88,73 +38,43 @@
     <detaileddescription>
     </detaileddescription>
     <collaborationgraph>
-      <node id="1658">
-        <label>castor3d::GBufferT&lt; LpTexture &gt;</label>
-        <link refid="de/d93/a04235"/>
-        <childnode refid="1659" relation="private-inheritance">
-        </childnode>
-        <childnode refid="1661" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="1663" relation="template-instance">
-          <edgelabel>&lt; LpTexture &gt;</edgelabel>
-        </childnode>
+      <node id="5">
+        <label>T</label>
       </node>
-      <node id="1657">
-        <label>castor3d::LightPassResult</label>
-        <link refid="df/d9b/a04755"/>
-        <childnode refid="1658" relation="public-inheritance">
+      <node id="3">
+        <label>std::array&lt; castor3d::SssProfileBuffer::Data, 10u &gt;</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; castor3d::SssProfileBuffer::Data, 10u &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="1660">
-        <label>Named</label>
+      <node id="2">
+        <label>castor3d::SssProfileBuffer::Data</label>
+        <link refid="dc/d12/a04723"/>
       </node>
-      <node id="1662">
-        <label>castor::Unique&lt; Engine &gt;</label>
-      </node>
-      <node id="1661">
-        <label>castor3d::Engine</label>
-        <link refid="d0/d7c/a02499"/>
-        <childnode refid="1662" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1656">
-        <label>castor3d::GpInfoUbo</label>
-        <link refid="dd/d83/a05443"/>
-      </node>
-      <node id="1663">
-        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
-        <link refid="de/d93/a04235"/>
-        <childnode refid="1659" relation="private-inheritance">
-        </childnode>
-        <childnode refid="1661" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-      </node>
-      <node id="1655">
-        <label>castor3d::LightPassConfig</label>
+      <node id="1">
+        <label>castor3d::SssProfileBuffer::SssProfileDataPtr</label>
         <link refid="dc/d6b/a04731"/>
-        <childnode refid="1656" relation="usage">
-          <edgelabel>gpInfoUbo</edgelabel>
+        <childnode refid="2" relation="usage">
+          <edgelabel>sssInfo</edgelabel>
         </childnode>
-        <childnode refid="1657" relation="usage">
-          <edgelabel>lpResult</edgelabel>
+        <childnode refid="3" relation="usage">
+          <edgelabel>transmittanceProfile</edgelabel>
         </childnode>
       </node>
-      <node id="1659">
-        <label>castor3d::GBufferBase</label>
-        <link refid="d7/da1/a04231"/>
-        <childnode refid="1660" relation="public-inheritance">
+      <node id="4">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>elements</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Render/Technique/Opaque/Lighting/LightingModule.hpp" line="201" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightingModule.hpp" bodystart="200" bodyend="207"/>
+    <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="41" column="1" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="42" bodyend="45"/>
     <listofallmembers>
-      <member refid="dc/d6b/a04731_1aedb7c3d3e5ea1095e18a9111bb7bd622" prot="public" virt="non-virtual"><scope>castor3d::LightPassConfig</scope><name>generatesIndirect</name></member>
-      <member refid="dc/d6b/a04731_1ad1b519a143e49a165eee407645b29fa4" prot="public" virt="non-virtual"><scope>castor3d::LightPassConfig</scope><name>gpInfoUbo</name></member>
-      <member refid="dc/d6b/a04731_1ad52964888102e8e0c8686990540d5e8d" prot="public" virt="non-virtual"><scope>castor3d::LightPassConfig</scope><name>hasShadows</name></member>
-      <member refid="dc/d6b/a04731_1a1e9f400909f39b243a0139533fb080c7" prot="public" virt="non-virtual"><scope>castor3d::LightPassConfig</scope><name>hasVoxels</name></member>
-      <member refid="dc/d6b/a04731_1ad5e3ccefa9799287321c57d513245a12" prot="public" virt="non-virtual"><scope>castor3d::LightPassConfig</scope><name>lpResult</name></member>
+      <member refid="dc/d6b/a04731_1adb626454d387c63291614191d33efa8b" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer::SssProfileDataPtr</scope><name>sssInfo</name></member>
+      <member refid="dc/d6b/a04731_1a6cc38f085b0fac9df12dfebbee758a88" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer::SssProfileDataPtr</scope><name>transmittanceProfile</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

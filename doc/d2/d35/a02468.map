@@ -1,11 +1,4 @@
-<map id="castor3d::ObjectCache&lt; Geometry, castor::String &gt;" name="castor3d::ObjectCache&lt; Geometry, castor::String &gt;">
-<area shape="rect" id="node1" title="Geometry cache." alt="" coords="1060,125,1249,167"/>
-<area shape="rect" id="node2" href="$d4/dde/a02422.html" title=" " alt="" coords="821,125,1011,167"/>
-<area shape="rect" id="node3" href="$df/d9b/a02514.html" title=" " alt="" coords="241,186,361,213"/>
-<area shape="rect" id="node9" href="$d4/dde/a02422.html" title="Base class for a scene element cache." alt="" coords="471,125,656,167"/>
-<area shape="rect" id="node4" title=" " alt="" coords="13,186,184,213"/>
-<area shape="rect" id="node5" href="$d6/d66/a05238.html" title=" " alt="" coords="243,71,360,98"/>
-<area shape="rect" id="node6" title=" " alt="" coords="27,5,170,47"/>
-<area shape="rect" id="node7" title=" " alt="" coords="5,71,192,98"/>
-<area shape="rect" id="node8" title=" " alt="" coords="67,122,130,149"/>
+<map id="castor3d::ChunkParser&lt; T &gt;" name="castor3d::ChunkParser&lt; T &gt;">
+<area shape="rect" id="node1" title="Chunk parser." alt="" coords="5,80,192,107"/>
+<area shape="rect" id="node2" href="$dc/dd2/a02466.html" title=" " alt="" coords="6,5,191,32"/>
 </map>

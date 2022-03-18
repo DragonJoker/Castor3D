@@ -1,0 +1,39 @@
+<map id="castor3d::PoolUniformBuffer::getBuffer" name="castor3d::PoolUniformBuffer::getBuffer">
+<area shape="rect" id="node1" title=" " alt="" coords="979,691,1161,732"/>
+<area shape="rect" id="node2" href="$db/d09/a02502.html#a2c6ad146d4910651544564c25ca7dccd" title=" " alt="" coords="740,332,931,373"/>
+<area shape="rect" id="node13" href="$d9/dfb/a02578.html#a32a13128eaf15955c1ff544751dcac6a" title="Retrieves the aligned size for an element." alt="" coords="252,1093,435,1135"/>
+<area shape="rect" id="node16" href="$db/d09/a02502.html#af6031892474c15c1ff806ca0e9842242" title=" " alt="" coords="740,560,931,601"/>
+<area shape="rect" id="node26" href="$db/d09/a02502.html#af1486cfa4c196f82e0cbc2440edea70e" title=" " alt="" coords="740,625,931,667"/>
+<area shape="rect" id="node27" href="$db/d09/a02502.html#a11dc3f75dd4cd054c5ee5fd4e0c1f67f" title=" " alt="" coords="740,691,931,732"/>
+<area shape="rect" id="node28" href="$db/d09/a02502.html#ad7dcad7c96a620540d10eb85f3d4586b" title=" " alt="" coords="740,971,931,1012"/>
+<area shape="rect" id="node36" href="$d9/dfb/a02578.html#ad3de3f47551cdd4bd91f2372e504bd4d" title=" " alt="" coords="744,1163,927,1204"/>
+<area shape="rect" id="node3" href="$dd/d60/a04878.html#a5d2c9c7da7669ef53a90758a44b7619c" title=" " alt="" coords="520,5,663,47"/>
+<area shape="rect" id="node4" href="$d8/dd4/a04894.html#ab75a8a861f800ea0ac6a5f95b39b3683" title=" " alt="" coords="491,71,692,112"/>
+<area shape="rect" id="node5" href="$d8/de5/a04902.html#a25c8501fecd9349223a1b66f7a9393e7" title=" " alt="" coords="500,136,683,177"/>
+<area shape="rect" id="node6" href="$d5/de6/a04910.html#a55564c6a2a416333c26436076181029c" title=" " alt="" coords="509,201,674,243"/>
+<area shape="rect" id="node7" href="$d6/d54/a04918.html#ac31062a614833908640fbbeed9cb92fe" title=" " alt="" coords="520,267,663,308"/>
+<area shape="rect" id="node8" href="$df/d1b/a04950.html#a409d04099ce176f7ba8601720b85c9b5" title=" " alt="" coords="508,332,675,373"/>
+<area shape="rect" id="node9" href="$d1/dd4/a04958.html#a3820ea1f3fdb87e2fe8b95009c8a55fa" title=" " alt="" coords="520,397,663,439"/>
+<area shape="rect" id="node10" href="$d6/d5a/a04966.html#a33ff803524d407253ea98caeeb038418" title=" " alt="" coords="504,463,679,504"/>
+<area shape="rect" id="node11" href="$df/d5e/a04982.html#a073ca04d26a7b693d1bad1049ed59890" title=" " alt="" coords="507,528,676,569"/>
+<area shape="rect" id="node12" href="$da/df4/a05050.html#ac12f32dda8736e904642f50f0d6be562" title=" " alt="" coords="513,593,670,635"/>
+<area shape="rect" id="node14" href="$db/d09/a02502.html#a27740308743c3e5d9e0a84631b3df4b9" title=" " alt="" coords="5,1060,196,1101"/>
+<area shape="rect" id="node15" href="$db/d09/a02502.html#a59505199eb458103512ef51fec723f12" title=" " alt="" coords="5,1125,196,1167"/>
+<area shape="rect" id="node17" href="$db/d09/a02502.html#ae2c055477d81767157b9832b18baa027" title=" " alt="" coords="496,659,687,700"/>
+<area shape="rect" id="node18" href="$dd/d60/a04878.html#a4c3a0dc2043fc6bf77d896da9a3f00e8" title=" " alt="" coords="273,496,413,537"/>
+<area shape="rect" id="node19" href="$d8/de5/a04902.html#a027e6375a7bbe908f844f97396cd8432" title=" " alt="" coords="252,561,435,603"/>
+<area shape="rect" id="node20" href="$d5/de6/a04910.html#a4f0ad3b1d168b107edde59d544718037" title=" " alt="" coords="262,627,425,668"/>
+<area shape="rect" id="node21" href="$d6/d54/a04918.html#a0b734b908500ac9be255f78b8c07b2d3" title=" " alt="" coords="274,692,413,733"/>
+<area shape="rect" id="node22" href="$d1/dd4/a04958.html#a441a8d45274e918ec93fdc3dba4c3520" title=" " alt="" coords="273,757,413,799"/>
+<area shape="rect" id="node23" href="$df/d5e/a04982.html#a04509506d8bf2e8b64bdc59b0006596f" title=" " alt="" coords="259,823,428,864"/>
+<area shape="rect" id="node24" href="$da/df4/a05050.html#a691ef728d7970bf24d2efa9f08da1968" title=" " alt="" coords="265,888,422,929"/>
+<area shape="rect" id="node25" href="$d8/dd4/a04894.html#abf797b052c74d7d258377d758b0383a0" title=" " alt="" coords="244,431,443,472"/>
+<area shape="rect" id="node29" href="$d8/dd4/a04894.html#ab52a7b1884fb67ab3d0a4513bc761f0f" title=" " alt="" coords="493,1200,690,1241"/>
+<area shape="rect" id="node30" href="$d8/de5/a04902.html#a5062748475183244f2c4d15e7d42a3f0" title=" " alt="" coords="500,808,683,849"/>
+<area shape="rect" id="node31" href="$d6/d54/a04918.html#a4872797ae1ca5fc2943359a8f257ef43" title=" " alt="" coords="522,873,661,915"/>
+<area shape="rect" id="node32" href="$d1/dd4/a04958.html#ae5f71b06a038fe75dc103fe5d834e405" title=" " alt="" coords="521,939,661,980"/>
+<area shape="rect" id="node33" href="$d6/d5a/a04966.html#a587585de7c15fb59c8a7f3456dbae3f8" title=" " alt="" coords="504,1004,679,1045"/>
+<area shape="rect" id="node34" href="$da/df4/a05050.html#a7183186f335e2d45d790998b42f8c0fe" title=" " alt="" coords="513,1069,670,1111"/>
+<area shape="rect" id="node35" href="$dc/db8/a03870.html#a612d681d62631e6bb92d9601c660b48e" title="Creates a descriptor write for uniform buffer range." alt="" coords="515,1135,667,1176"/>
+<area shape="rect" id="node37" href="$d9/dfb/a02578.html#ab9520ff65055aeb19c8b5bfca02ae4a3" title=" " alt="" coords="500,1265,683,1307"/>
+</map>

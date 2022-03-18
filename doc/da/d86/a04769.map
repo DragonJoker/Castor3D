@@ -1,7 +1,4 @@
-<map id="castor3d::LightPassResult" name="castor3d::LightPassResult">
-<area shape="rect" id="node1" title=" " alt="" coords="15,352,189,379"/>
-<area shape="rect" id="node2" href="$d1/dcc/a04250.html" title=" " alt="" coords="37,261,167,303"/>
-<area shape="rect" id="node3" href="$d1/d5a/a04246.html" title=" " alt="" coords="5,81,159,108"/>
-<area shape="rect" id="node5" href="$d1/dcc/a04250.html" title=" " alt="" coords="103,157,234,199"/>
-<area shape="rect" id="node4" title=" " alt="" coords="51,5,113,32"/>
+<map id="castor3d::shader::LightData" name="castor3d::shader::LightData">
+<area shape="rect" id="node1" title=" " alt="" coords="5,80,188,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="28,5,165,32"/>
 </map>

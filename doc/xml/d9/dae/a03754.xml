@@ -1,33 +1,46 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d9/dae/a03754" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPhysicalDeviceFragmentDensityMapFeaturesEXT &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d9/dae/a03754_1aeaae275d549ba92d35cfe54a8884781c" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPhysicalDeviceFragmentDensityMapFeaturesEXT &gt;::value</definition>
+    <compoundname>castor3d::Voxel</compoundname>
+    <includes local="no">VoxelizeModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/dae/a03754_1a500e862acbbc63ac0d82aecf2d8c6070" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Voxel::colorMask</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_DENSITY_MAP_FEATURES_EXT</initializer>
+        <name>colorMask</name>
+        <qualifiedname>castor3d::Voxel::colorMask</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="351" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="351" bodyend="-1"/>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizeModule.hpp" line="72" column="10" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelizeModule.hpp" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dae/a03754_1a11d74878f633a4332b99aeea8810ad51" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Voxel::normalMask</definition>
+        <argsstring></argsstring>
+        <name>normalMask</name>
+        <qualifiedname>castor3d::Voxel::normalMask</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizeModule.hpp" line="73" column="10" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelizeModule.hpp" bodystart="73" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="351" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="351" bodyend="351"/>
+    <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizeModule.hpp" line="70" column="1" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelizeModule.hpp" bodystart="71" bodyend="74"/>
     <listofallmembers>
-      <member refid="d9/dae/a03754_1aeaae275d549ba92d35cfe54a8884781c" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPhysicalDeviceFragmentDensityMapFeaturesEXT &gt;</scope><name>value</name></member>
+      <member refid="d9/dae/a03754_1a500e862acbbc63ac0d82aecf2d8c6070" prot="public" virt="non-virtual"><scope>castor3d::Voxel</scope><name>colorMask</name></member>
+      <member refid="d9/dae/a03754_1a11d74878f633a4332b99aeea8810ad51" prot="public" virt="non-virtual"><scope>castor3d::Voxel</scope><name>normalMask</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

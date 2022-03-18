@@ -1,867 +1,170 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d1/da3/a02327" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</compoundname>
-    <basecompoundref refid="d9/d5e/a02355" prot="public" virt="non-virtual">castor3d::CacheBase&lt; AnimatedObjectGroup, castor::String &gt;</basecompoundref>
-    <includes local="no">AnimatedObjectGroupCache.hpp</includes>
-    <innerclass refid="d4/d30/a02335" prot="public">castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::MeshPoolsEntry</innerclass>
-    <innerclass refid="d5/d1b/a02331" prot="public">castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::SkeletonPoolsEntry</innerclass>
+    <compoundname>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;</compoundname>
+    <basecompoundref refid="d5/d1b/a02331" prot="public" virt="non-virtual">castor3d::BinaryParserBase&lt; MeshAnimationKeyFrame &gt;</basecompoundref>
+    <includes local="no">BinaryMeshAnimationKeyFrame.hpp</includes>
     <templateparamlist>
     </templateparamlist>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="d1/da3/a02327_1a13e4ce40f653ff20cc1edd691237634f" prot="public" static="no">
-        <type><ref refid="d9/d5e/a02355" kindref="compound">CacheBase</ref>&lt; <ref refid="de/ddd/a05031" kindref="compound">AnimatedObjectGroup</ref>, castor::String &gt;</type>
-        <definition>using castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::MyCache =  CacheBase&lt; AnimatedObjectGroup, castor::String &gt;</definition>
-        <argsstring></argsstring>
-        <name>MyCache</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="42" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="42" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d1/da3/a02327_1ad1eadf98584fc018dfcc8e8240d80b6f" prot="public" static="no">
-        <type>typename <ref refid="d9/d5e/a02355_1a81d75361a18a4455c9110b768de6f63e" kindref="member">MyCacheType::MyCacheTraits</ref></type>
-        <definition>using castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::MyCacheTraits =  typename MyCacheType::MyCacheTraits</definition>
-        <argsstring></argsstring>
-        <name>MyCacheTraits</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="43" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="43" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d1/da3/a02327_1af05098927487ca16200bed89f9f7e55e" prot="public" static="no">
-        <type>typename <ref refid="d9/d5e/a02355_1a7fda54485c8f8e708df819c7a60596ac" kindref="member">MyCacheType::Element</ref></type>
-        <definition>using castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::Element =  typename MyCacheType::Element</definition>
-        <argsstring></argsstring>
-        <name>Element</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="44" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="44" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d1/da3/a02327_1a56909f9d4596d4cb4f3b3ee6195c15c5" prot="public" static="no">
-        <type>typename <ref refid="d9/d5e/a02355_1ac91d27606d9904c2033c6488fc65779f" kindref="member">MyCacheType::Key</ref></type>
-        <definition>using castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::Key =  typename MyCacheType::Key</definition>
-        <argsstring></argsstring>
-        <name>Key</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="45" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="45" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d1/da3/a02327_1abe86bab10ef4b028e4274edc0c811191" prot="public" static="no">
-        <type>typename <ref refid="d9/d5e/a02355_1a73f0fe787eab6e9f181c8c23f1760e45" kindref="member">MyCacheType::Collection</ref></type>
-        <definition>using castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::Collection =  typename MyCacheType::Collection</definition>
-        <argsstring></argsstring>
-        <name>Collection</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="46" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="46" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d1/da3/a02327_1a12f39f8a6271c430ece5269d0c49b40a" prot="public" static="no">
-        <type>typename <ref refid="d9/d5e/a02355_1a11d69566e76e7970f4a4328fdc3f6025" kindref="member">MyCacheType::LockType</ref></type>
-        <definition>using castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::LockType =  typename MyCacheType::LockType</definition>
-        <argsstring></argsstring>
-        <name>LockType</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="47" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="47" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d1/da3/a02327_1ab5433bc866cb7fa33d10a043e7407073" prot="public" static="no">
-        <type>typename <ref refid="d9/d5e/a02355_1a7f322bd515ed3a1d6274b1882ad3fb4a" kindref="member">MyCacheType::ElementPtr</ref></type>
-        <definition>using castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::ElementPtr =  typename MyCacheType::ElementPtr</definition>
-        <argsstring></argsstring>
-        <name>ElementPtr</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="48" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="48" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d1/da3/a02327_1ae1b3ccec9922f1a9ccf19b176fec78cf" prot="public" static="no">
-        <type>typename <ref refid="d9/d5e/a02355_1aaad73790ec1428ae47565a5ff9640450" kindref="member">MyCacheType::Producer</ref></type>
-        <definition>using castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::Producer =  typename MyCacheType::Producer</definition>
-        <argsstring></argsstring>
-        <name>Producer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="49" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="49" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d1/da3/a02327_1a42f237bc06b44799eaacfd3196562206" prot="public" static="no">
-        <type>typename <ref refid="d9/d5e/a02355_1a1d9b7d10eb83df474eeb2fdff71002f5" kindref="member">MyCacheType::Initialiser</ref></type>
-        <definition>using castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::Initialiser =  typename MyCacheType::Initialiser</definition>
-        <argsstring></argsstring>
-        <name>Initialiser</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="50" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="50" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d1/da3/a02327_1a33f7ff502696fab8e0e112a11d82b49c" prot="public" static="no">
-        <type>typename <ref refid="d9/d5e/a02355_1ac144f9ea07cb00eb2b01788678792fa4" kindref="member">MyCacheType::Cleaner</ref></type>
-        <definition>using castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::Cleaner =  typename MyCacheType::Cleaner</definition>
-        <argsstring></argsstring>
-        <name>Cleaner</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="51" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="51" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d1/da3/a02327_1afd0eeff9cf5b8d90969f3ee1125033f7" prot="public" static="no">
-        <type>typename <ref refid="d9/d5e/a02355_1a1c851c8660b72f8bbc71c81c40bf1c08" kindref="member">MyCacheType::Merger</ref></type>
-        <definition>using castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::Merger =  typename MyCacheType::Merger</definition>
-        <argsstring></argsstring>
-        <name>Merger</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="52" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="52" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d1/da3/a02327_1a67671827b72386a7a903235a5833a452" prot="private" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::m_faceCount</definition>
-        <argsstring></argsstring>
-        <name>m_faceCount</name>
-        <initializer>{ 0 }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="181" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="181" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/da3/a02327_1a5b7442d5ee9a48e1cd210fb038517329" prot="private" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::m_vertexCount</definition>
-        <argsstring></argsstring>
-        <name>m_vertexCount</name>
-        <initializer>{ 0 }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="182" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="182" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/da3/a02327_1a57871f3529d37847583967b99217b066" prot="private" static="no" mutable="no">
-        <type>std::map&lt; <ref refid="d1/d9f/a05035" kindref="compound">AnimatedSkeleton</ref> const *, SkeletonPoolsEntry &gt;</type>
-        <definition>std::map&lt; AnimatedSkeleton const *, SkeletonPoolsEntry &gt; castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::m_skeletonEntries</definition>
-        <argsstring></argsstring>
-        <name>m_skeletonEntries</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="183" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="183" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/da3/a02327_1a27475378e619e3d98497420fccf9854f" prot="private" static="no" mutable="no">
-        <type>std::map&lt; <ref refid="db/d39/a05023" kindref="compound">AnimatedMesh</ref> const *, MeshPoolsEntry &gt;</type>
-        <definition>std::map&lt; AnimatedMesh const *, MeshPoolsEntry &gt; castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::m_meshEntries</definition>
-        <argsstring></argsstring>
-        <name>m_meshEntries</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="184" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="184" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/da3/a02327_1aeab4ad3b448b8de032379f4d6f2f113f" prot="private" static="no" mutable="no">
-        <type>std::map&lt; <ref refid="de/ddd/a05031" kindref="compound">AnimatedObjectGroup</ref> *, <ref refid="d7/dd1/a01458_1aebaefc320e5cf87d5c39f25f9a374375" kindref="member">OnAnimatedSkeletonChangeConnection</ref> &gt;</type>
-        <definition>std::map&lt; AnimatedObjectGroup *, OnAnimatedSkeletonChangeConnection &gt; castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::m_skeletonAddedConnections</definition>
-        <argsstring></argsstring>
-        <name>m_skeletonAddedConnections</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="185" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="185" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/da3/a02327_1a5675e5b7213a23ac02a05647c5cf6f94" prot="private" static="no" mutable="no">
-        <type>std::map&lt; <ref refid="de/ddd/a05031" kindref="compound">AnimatedObjectGroup</ref> *, <ref refid="d7/dd1/a01458_1aebaefc320e5cf87d5c39f25f9a374375" kindref="member">OnAnimatedSkeletonChangeConnection</ref> &gt;</type>
-        <definition>std::map&lt; AnimatedObjectGroup *, OnAnimatedSkeletonChangeConnection &gt; castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::m_skeletonRemovedConnections</definition>
-        <argsstring></argsstring>
-        <name>m_skeletonRemovedConnections</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="186" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="186" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/da3/a02327_1a6711d79514bfdb1dcbd1913e609cc9db" prot="private" static="no" mutable="no">
-        <type>std::map&lt; <ref refid="de/ddd/a05031" kindref="compound">AnimatedObjectGroup</ref> *, <ref refid="d7/dd1/a01458_1ad1f98fead9156ea44ede80dc6238725c" kindref="member">OnAnimatedMeshChangeConnection</ref> &gt;</type>
-        <definition>std::map&lt; AnimatedObjectGroup *, OnAnimatedMeshChangeConnection &gt; castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::m_meshAddedConnections</definition>
-        <argsstring></argsstring>
-        <name>m_meshAddedConnections</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="187" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="187" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/da3/a02327_1a74ca4e10c3514f56c4a9c830ffca598b" prot="private" static="no" mutable="no">
-        <type>std::map&lt; <ref refid="de/ddd/a05031" kindref="compound">AnimatedObjectGroup</ref> *, <ref refid="d7/dd1/a01458_1ad1f98fead9156ea44ede80dc6238725c" kindref="member">OnAnimatedMeshChangeConnection</ref> &gt;</type>
-        <definition>std::map&lt; AnimatedObjectGroup *, OnAnimatedMeshChangeConnection &gt; castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::m_meshRemovedConnections</definition>
-        <argsstring></argsstring>
-        <name>m_meshRemovedConnections</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="188" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="188" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d1/da3/a02327_1a3945ce1e5ac552fc020ebf832c791810" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::Cache</definition>
-        <argsstring>(Engine &amp;engine, Producer &amp;&amp;produce, Initialiser &amp;&amp;initialise=Initialiser{}, Cleaner &amp;&amp;clean=Cleaner{}, Merger &amp;&amp;merge=Merger{})</argsstring>
-        <name>Cache</name>
-        <param>
-          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/da3/a02327_1ae1b3ccec9922f1a9ccf19b176fec78cf" kindref="member">Producer</ref> &amp;&amp;</type>
-          <declname>produce</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/da3/a02327_1a42f237bc06b44799eaacfd3196562206" kindref="member">Initialiser</ref> &amp;&amp;</type>
-          <declname>initialise</declname>
-          <defval><ref refid="d1/da3/a02327_1a42f237bc06b44799eaacfd3196562206" kindref="member">Initialiser</ref>{}</defval>
-        </param>
-        <param>
-          <type><ref refid="d1/da3/a02327_1a33f7ff502696fab8e0e112a11d82b49c" kindref="member">Cleaner</ref> &amp;&amp;</type>
-          <declname>clean</declname>
-          <defval><ref refid="d1/da3/a02327_1a33f7ff502696fab8e0e112a11d82b49c" kindref="member">Cleaner</ref>{}</defval>
-        </param>
-        <param>
-          <type><ref refid="d1/da3/a02327_1afd0eeff9cf5b8d90969f3ee1125033f7" kindref="member">Merger</ref> &amp;&amp;</type>
-          <declname>merge</declname>
-          <defval><ref refid="d1/da3/a02327_1afd0eeff9cf5b8d90969f3ee1125033f7" kindref="member">Merger</ref>{}</defval>
-        </param>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">engine</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The engine. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">produce</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element producer. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">initialise</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element initialiser. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">clean</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element cleaner. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">merge</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element collection merger. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="69" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/da3/a02327_1add9ba29918028040c95a79c779a6b9df" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::~Cache</definition>
-        <argsstring>()</argsstring>
-        <name>~Cache</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="80" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/da3/a02327_1a84f7badf9f4aaa04e86ac42ea4677c47" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::update</definition>
-        <argsstring>(CpuUpdater &amp;updater)</argsstring>
-        <name>update</name>
-        <param>
-          <type><ref refid="db/d82/a04567" kindref="compound">CpuUpdater</ref> &amp;</type>
-          <declname>updater</declname>
-        </param>
-        <briefdescription>
-<para>Updates the render pass, CPU wise. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="inout">updater</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The update data. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="89" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/da3/a02327_1a9f8a8e0eb09bd54d0128e4bc8b3cc3b8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::uploadUbos</definition>
-        <argsstring>(ashes::CommandBuffer const &amp;commandBuffer)</argsstring>
-        <name>uploadUbos</name>
-        <param>
-          <type>ashes::CommandBuffer const &amp;</type>
-          <declname>commandBuffer</declname>
-        </param>
-        <briefdescription>
-<para>Updates the UBO pools in VRAM. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">commandBuffer</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The command buffer on which transfer commands are recorded. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="98" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/da3/a02327_1a13a4f1b592d1310847ccdd83352bbe9d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::cleanupUbos</definition>
-        <argsstring>()</argsstring>
-        <name>cleanupUbos</name>
-        <briefdescription>
-<para>Cleans up the UBO pools. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="105" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/da3/a02327_1aae90fc4ddc2e792b4056f5872ab82c24" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> MeshPoolsEntry</type>
-        <definition>C3D_API MeshPoolsEntry castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::getUbos</definition>
-        <argsstring>(AnimatedMesh const &amp;mesh) const</argsstring>
-        <name>getUbos</name>
-        <param>
-          <type><ref refid="db/d39/a05023" kindref="compound">AnimatedMesh</ref> const &amp;</type>
-          <declname>mesh</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The entry related to given <ref refid="db/d39/a05023" kindref="compound">AnimatedMesh</ref>. </para>
-</simplesect>
-<parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">mesh</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The mexh. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="114" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/da3/a02327_1a5538dc4edebf80572cab8e4b9dbd3cdb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> SkeletonPoolsEntry</type>
-        <definition>C3D_API SkeletonPoolsEntry castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::getUbos</definition>
-        <argsstring>(AnimatedSkeleton const &amp;skeleton) const</argsstring>
-        <name>getUbos</name>
-        <param>
-          <type><ref refid="d1/d9f/a05035" kindref="compound">AnimatedSkeleton</ref> const &amp;</type>
-          <declname>skeleton</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The entry related to given <ref refid="d1/d9f/a05035" kindref="compound">AnimatedSkeleton</ref>. </para>
-</simplesect>
-<parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">skeleton</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The skeleton. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="123" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/da3/a02327_1a92335222813cde31be50bc98a1298ba7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::clear</definition>
-        <argsstring>(RenderDevice const &amp;device)</argsstring>
-        <name>clear</name>
-        <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-<para>Flushes the collection. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="132" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/da3/a02327_1aed045e3f22dd3359dcaeb67ea5d9bdb4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::add</definition>
-        <argsstring>(ElementPtr element)</argsstring>
-        <name>add</name>
-        <param>
-          <type><ref refid="d1/da3/a02327_1ab5433bc866cb7fa33d10a043e7407073" kindref="member">ElementPtr</ref></type>
-          <declname>element</declname>
-        </param>
-        <briefdescription>
-<para>Adds an object. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">element</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The object. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="141" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/da3/a02327_1af904546b0953ff5fbc0a6a4c485cf980" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/da3/a02327_1ab5433bc866cb7fa33d10a043e7407073" kindref="member">ElementPtr</ref></type>
-        <definition>C3D_API ElementPtr castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::add</definition>
-        <argsstring>(Key const &amp;name)</argsstring>
-        <name>add</name>
-        <param>
-          <type><ref refid="d1/da3/a02327_1a56909f9d4596d4cb4f3b3ee6195c15c5" kindref="member">Key</ref> const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <briefdescription>
-<para>Creates an object. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The object name. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The created object. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="152" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/da3/a02327_1a83f9a2d445707f395ec89f501021d5e3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::remove</definition>
-        <argsstring>(Key const &amp;name)</argsstring>
-        <name>remove</name>
-        <param>
-          <type><ref refid="d1/da3/a02327_1a56909f9d4596d4cb4f3b3ee6195c15c5" kindref="member">Key</ref> const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <briefdescription>
-<para>Removes an object, given a name. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The object name. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="161" column="1"/>
-      </memberdef>
-      </sectiondef>
       <sectiondef kind="private-func">
-      <memberdef kind="function" id="d1/da3/a02327_1aa4cc8dffc1d237839745862406c4efb4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>SkeletonPoolsEntry</type>
-        <definition>SkeletonPoolsEntry castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::doCreateEntry</definition>
-        <argsstring>(RenderDevice const &amp;device, AnimatedObjectGroup const &amp;group, AnimatedSkeleton const &amp;skeleton)</argsstring>
-        <name>doCreateEntry</name>
+      <memberdef kind="function" id="d1/da3/a02327_1ae8788e102fb675cc6beb55fb8249df54" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;::doParse</definition>
+        <argsstring>(MeshAnimationKeyFrame &amp;obj) override</argsstring>
+        <name>doParse</name>
+        <qualifiedname>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;::doParse</qualifiedname>
+        <reimplements refid="d5/d1b/a02331_1a020a66d5fc1b452dc76c82702d72bbb1">doParse</reimplements>
         <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type><ref refid="de/ddd/a05031" kindref="compound">AnimatedObjectGroup</ref> const &amp;</type>
-          <declname>group</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/d9f/a05035" kindref="compound">AnimatedSkeleton</ref> const &amp;</type>
-          <declname>skeleton</declname>
+          <type><ref refid="da/dbb/a03291" kindref="compound">MeshAnimationKeyFrame</ref> &amp;</type>
+          <declname>obj</declname>
         </param>
         <briefdescription>
+<para>Function used to retrieve specific data from the chunk. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="167" column="1"/>
+        <location file="Binary/BinaryMeshAnimationKeyFrame.hpp" line="80" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d1/da3/a02327_1acf3851f2577cf7dee56fb1e364416907" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>MeshPoolsEntry</type>
-        <definition>MeshPoolsEntry castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::doCreateEntry</definition>
-        <argsstring>(RenderDevice const &amp;device, AnimatedObjectGroup const &amp;group, AnimatedMesh const &amp;mesh)</argsstring>
-        <name>doCreateEntry</name>
+      <memberdef kind="function" id="d1/da3/a02327_1a1f0c8a30f09a14b4ec1171e63affe2fd" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;::doParse_v1_3</definition>
+        <argsstring>(MeshAnimationKeyFrame &amp;obj) override</argsstring>
+        <name>doParse_v1_3</name>
+        <qualifiedname>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;::doParse_v1_3</qualifiedname>
+        <reimplements refid="d5/d1b/a02331_1aab45074c2f8ac65df7fc52ee2530ebc1">doParse_v1_3</reimplements>
         <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type><ref refid="de/ddd/a05031" kindref="compound">AnimatedObjectGroup</ref> const &amp;</type>
-          <declname>group</declname>
-        </param>
-        <param>
-          <type><ref refid="db/d39/a05023" kindref="compound">AnimatedMesh</ref> const &amp;</type>
-          <declname>mesh</declname>
+          <type><ref refid="da/dbb/a03291" kindref="compound">MeshAnimationKeyFrame</ref> &amp;</type>
+          <declname>obj</declname>
         </param>
         <briefdescription>
+<para>Function used to retrieve specific data from the chunk. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="170" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/da3/a02327_1ad5cc789afe3bf84e840490fccce3070a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::doRemoveEntry</definition>
-        <argsstring>(RenderDevice const &amp;device, AnimatedSkeleton const &amp;skeleton)</argsstring>
-        <name>doRemoveEntry</name>
-        <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/d9f/a05035" kindref="compound">AnimatedSkeleton</ref> const &amp;</type>
-          <declname>skeleton</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="173" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/da3/a02327_1ab719c4ec73cbfa2526f9966c39ce87d6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::doRemoveEntry</definition>
-        <argsstring>(RenderDevice const &amp;device, AnimatedMesh const &amp;mesh)</argsstring>
-        <name>doRemoveEntry</name>
-        <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type><ref refid="db/d39/a05023" kindref="compound">AnimatedMesh</ref> const &amp;</type>
-          <declname>mesh</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="175" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/da3/a02327_1a44edfdf732fc1212b8ed1e6923f06538" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::doRegister</definition>
-        <argsstring>(AnimatedObjectGroup &amp;group)</argsstring>
-        <name>doRegister</name>
-        <param>
-          <type><ref refid="de/ddd/a05031" kindref="compound">AnimatedObjectGroup</ref> &amp;</type>
-          <declname>group</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="177" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/da3/a02327_1aa4c23d25c9741804272ae060383f6965" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;::doUnregister</definition>
-        <argsstring>(AnimatedObjectGroup &amp;group)</argsstring>
-        <name>doUnregister</name>
-        <param>
-          <type><ref refid="de/ddd/a05031" kindref="compound">AnimatedObjectGroup</ref> &amp;</type>
-          <declname>group</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/AnimatedObjectGroupCache.hpp" line="178" column="1"/>
+        <location file="Binary/BinaryMeshAnimationKeyFrame.hpp" line="91" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para><ref refid="de/ddd/a05031" kindref="compound">AnimatedObjectGroup</ref> cache. </para>
+<para><ref refid="da/dbb/a03291" kindref="compound">MeshAnimationKeyFrame</ref> binary loader. </para>
     </briefdescription>
     <detaileddescription>
 <para><simplesect kind="author"><para>Sylvain DOREMUS </para>
 </simplesect>
-<simplesect kind="date"><para>29/01/2016 </para>
+<simplesect kind="version"><para>0.10.0 </para>
 </simplesect>
-<simplesect kind="version"><para>0.8.0 </para>
+<simplesect kind="date"><para>07/12/2017</para>
 </simplesect>
-</para>
+Loader binaire de <ref refid="da/dbb/a03291" kindref="compound">MeshAnimationKeyFrame</ref>. </para>
     </detaileddescription>
     <inheritancegraph>
-      <node id="519">
-        <label>castor3d::CacheBase&lt; ElementType, KeyType &gt;</label>
-        <link refid="d9/d5e/a02355"/>
+      <node id="2">
+        <label>castor3d::BinaryParserBase&lt; MeshAnimationKeyFrame &gt;</label>
+        <link refid="d5/d1b/a02331"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; MeshAnimationKeyFrame &gt;</edgelabel>
+        </childnode>
       </node>
-      <node id="517">
-        <label>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</label>
+      <node id="1">
+        <label>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;</label>
         <link refid="d1/da3/a02327"/>
-        <childnode refid="518" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="518">
-        <label>castor3d::CacheBase&lt; AnimatedObjectGroup, castor::String &gt;</label>
-        <link refid="d9/d5e/a02355"/>
-        <childnode refid="519" relation="template-instance">
-          <edgelabel>&lt; AnimatedObjectGroup, castor::String &gt;</edgelabel>
-        </childnode>
+      <node id="3">
+        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
+        <link refid="d5/d1b/a02331"/>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="524">
-        <label>castor3d::CacheBase&lt; ElementType, KeyType &gt;</label>
-        <link refid="d9/d5e/a02355"/>
-        <childnode refid="522" relation="usage">
-          <edgelabel>m_engine</edgelabel>
+      <node id="2">
+        <label>castor3d::BinaryParserBase&lt; MeshAnimationKeyFrame &gt;</label>
+        <link refid="d5/d1b/a02331"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_fileVersion</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; MeshAnimationKeyFrame &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="520">
-        <label>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</label>
+      <node id="3">
+        <label>castor3d::BinaryChunk</label>
+        <link refid="dd/d3b/a02291"/>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;</label>
         <link refid="d1/da3/a02327"/>
-        <childnode refid="521" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="521">
-        <label>castor3d::CacheBase&lt; AnimatedObjectGroup, castor::String &gt;</label>
-        <link refid="d9/d5e/a02355"/>
-        <childnode refid="522" relation="usage">
-          <edgelabel>m_engine</edgelabel>
+      <node id="5">
+        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
+        <link refid="d5/d1b/a02331"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
         </childnode>
-        <childnode refid="524" relation="template-instance">
-          <edgelabel>&lt; AnimatedObjectGroup, castor::String &gt;</edgelabel>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_fileVersion</edgelabel>
         </childnode>
       </node>
-      <node id="523">
-        <label>castor::Unique&lt; Engine &gt;</label>
-      </node>
-      <node id="522">
-        <label>castor3d::Engine</label>
-        <link refid="d0/d7c/a02499"/>
-        <childnode refid="523" relation="public-inheritance">
-        </childnode>
+      <node id="4">
+        <label>castor3d::Version</label>
+        <link refid="d0/de5/a03279"/>
       </node>
     </collaborationgraph>
-    <location file="Cache/AnimatedObjectGroupCache.hpp" line="28" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="26" bodyend="189"/>
+    <location file="Binary/BinaryMeshAnimationKeyFrame.hpp" line="66" column="1" bodyfile="Binary/BinaryMeshAnimationKeyFrame.hpp" bodystart="68" bodyend="92"/>
     <listofallmembers>
-      <member refid="d1/da3/a02327_1aed045e3f22dd3359dcaeb67ea5d9bdb4" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>add</name></member>
-      <member refid="d1/da3/a02327_1af904546b0953ff5fbc0a6a4c485cf980" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>add</name></member>
-      <member refid="d9/d5e/a02355_1a9d8fa89aa1ea33853d74552cc8142343" prot="public" virt="non-virtual" ambiguityscope="CacheBase&lt; AnimatedObjectGroup, castor::String &gt;::"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>add</name></member>
-      <member refid="d9/d5e/a02355_1a2a19e1d040d30a9d95cc7bb20c86a24d" prot="public" virt="non-virtual" ambiguityscope="CacheBase&lt; AnimatedObjectGroup, castor::String &gt;::"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>add</name></member>
-      <member refid="d9/d5e/a02355_1a9f751edeb9359147511396227eb158a9" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>begin</name></member>
-      <member refid="d9/d5e/a02355_1a1ea0fbf3fb3b286964e1a6948adaa291" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>begin</name></member>
-      <member refid="d1/da3/a02327_1a3945ce1e5ac552fc020ebf832c791810" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>Cache</name></member>
-      <member refid="d9/d5e/a02355_1aeda43feb65387eb303a98b1d7716c115" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>CacheBase</name></member>
-      <member refid="d1/da3/a02327_1a33f7ff502696fab8e0e112a11d82b49c" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>Cleaner</name></member>
-      <member refid="d9/d5e/a02355_1a5b8853e4191f80d06633e7adc80bfad6" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>cleanup</name></member>
-      <member refid="d1/da3/a02327_1a13a4f1b592d1310847ccdd83352bbe9d" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>cleanupUbos</name></member>
-      <member refid="d1/da3/a02327_1a92335222813cde31be50bc98a1298ba7" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>clear</name></member>
-      <member refid="d9/d5e/a02355_1adb6be8b05884ebde0c91e11e0e289054" prot="public" virt="non-virtual" ambiguityscope="CacheBase&lt; AnimatedObjectGroup, castor::String &gt;::"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>clear</name></member>
-      <member refid="d1/da3/a02327_1abe86bab10ef4b028e4274edc0c811191" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>Collection</name></member>
-      <member refid="d9/d5e/a02355_1ab7b359e6d1bdc027bcac492bf965d02b" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>create</name></member>
-      <member refid="d1/da3/a02327_1aa4cc8dffc1d237839745862406c4efb4" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>doCreateEntry</name></member>
-      <member refid="d1/da3/a02327_1acf3851f2577cf7dee56fb1e364416907" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>doCreateEntry</name></member>
-      <member refid="d1/da3/a02327_1a44edfdf732fc1212b8ed1e6923f06538" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>doRegister</name></member>
-      <member refid="d1/da3/a02327_1ad5cc789afe3bf84e840490fccce3070a" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>doRemoveEntry</name></member>
-      <member refid="d1/da3/a02327_1ab719c4ec73cbfa2526f9966c39ce87d6" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>doRemoveEntry</name></member>
-      <member refid="d9/d5e/a02355_1a40ce560883d2d3bc4e948cbd0a47b569" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>doReportCreation</name></member>
-      <member refid="d9/d5e/a02355_1adb2613cc9082f6d3ecb0639c0726201e" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>doReportDuplicate</name></member>
-      <member refid="d9/d5e/a02355_1af3cd6aabd6e0a4eda8177f0edf4ce18e" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>doReportNull</name></member>
-      <member refid="d1/da3/a02327_1aa4c23d25c9741804272ae060383f6965" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>doUnregister</name></member>
-      <member refid="d1/da3/a02327_1af05098927487ca16200bed89f9f7e55e" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>Element</name></member>
-      <member refid="d1/da3/a02327_1ab5433bc866cb7fa33d10a043e7407073" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>ElementPtr</name></member>
-      <member refid="d9/d5e/a02355_1a6e0aa6994b70f00fb5f4d3f63859772f" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>end</name></member>
-      <member refid="d9/d5e/a02355_1af371833847bb6c5b5174179ffa83cbfe" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>end</name></member>
-      <member refid="d9/d5e/a02355_1aeafea13acfbda3f6de83daeea679c405" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>find</name></member>
-      <member refid="d9/d5e/a02355_1a37c3c620a716593723603fe85f7ce177" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>forEach</name></member>
-      <member refid="d9/d5e/a02355_1a1b49a63f062169b85d4f062a72b9aaf2" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>forEach</name></member>
-      <member refid="d9/d5e/a02355_1a64bb5eb01ea4f26c716188c21a7a7a7a" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>getEngine</name></member>
-      <member refid="d9/d5e/a02355_1a56d21fda75f9d4fe680e1038ab70a28e" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>getObjectCount</name></member>
-      <member refid="d9/d5e/a02355_1acb3cff2453faa98acad8f87ad503f4db" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>getObjectTypeName</name></member>
-      <member refid="d1/da3/a02327_1aae90fc4ddc2e792b4056f5872ab82c24" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>getUbos</name></member>
-      <member refid="d1/da3/a02327_1a5538dc4edebf80572cab8e4b9dbd3cdb" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>getUbos</name></member>
-      <member refid="d9/d5e/a02355_1a3dfb82ad7180685409d58893c3ac2338" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>has</name></member>
-      <member refid="d1/da3/a02327_1a42f237bc06b44799eaacfd3196562206" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>Initialiser</name></member>
-      <member refid="d9/d5e/a02355_1ae0e5acf460e942e68fd51fea02c1a77d" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>isEmpty</name></member>
-      <member refid="d1/da3/a02327_1a56909f9d4596d4cb4f3b3ee6195c15c5" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>Key</name></member>
-      <member refid="d9/d5e/a02355_1af7b763cc53cb034f8659f68c98a2d6dd" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>lock</name></member>
-      <member refid="d1/da3/a02327_1a12f39f8a6271c430ece5269d0c49b40a" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>LockType</name></member>
-      <member refid="d9/d5e/a02355_1ac5bb9606ef581093151816328cc26ff4" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>m_clean</name></member>
-      <member refid="d9/d5e/a02355_1a13c91c0ec52f9bcbc06cf3fb0569df0b" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>m_elements</name></member>
-      <member refid="d9/d5e/a02355_1a4b01de6e2c5f881abd2b1feb36beeb12" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>m_engine</name></member>
-      <member refid="d1/da3/a02327_1a67671827b72386a7a903235a5833a452" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>m_faceCount</name></member>
-      <member refid="d9/d5e/a02355_1a2a00e398eed3a486012b21a4e38cf6d3" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>m_initialise</name></member>
-      <member refid="d9/d5e/a02355_1a7c494722e04665b3c2d44d10d0a1d1f3" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>m_merge</name></member>
-      <member refid="d1/da3/a02327_1a6711d79514bfdb1dcbd1913e609cc9db" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>m_meshAddedConnections</name></member>
-      <member refid="d1/da3/a02327_1a27475378e619e3d98497420fccf9854f" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>m_meshEntries</name></member>
-      <member refid="d1/da3/a02327_1a74ca4e10c3514f56c4a9c830ffca598b" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>m_meshRemovedConnections</name></member>
-      <member refid="d9/d5e/a02355_1af339c470a64de4b3c9cb20f2ecd1bdbb" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>m_produce</name></member>
-      <member refid="d1/da3/a02327_1aeab4ad3b448b8de032379f4d6f2f113f" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>m_skeletonAddedConnections</name></member>
-      <member refid="d1/da3/a02327_1a57871f3529d37847583967b99217b066" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>m_skeletonEntries</name></member>
-      <member refid="d1/da3/a02327_1a5675e5b7213a23ac02a05647c5cf6f94" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>m_skeletonRemovedConnections</name></member>
-      <member refid="d1/da3/a02327_1a5b7442d5ee9a48e1cd210fb038517329" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>m_vertexCount</name></member>
-      <member refid="d9/d5e/a02355_1aeb4864133bd71b20b4446d74ad4562ce" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>mergeInto</name></member>
-      <member refid="d1/da3/a02327_1afd0eeff9cf5b8d90969f3ee1125033f7" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>Merger</name></member>
-      <member refid="d1/da3/a02327_1a13e4ce40f653ff20cc1edd691237634f" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>MyCache</name></member>
-      <member refid="d1/da3/a02327_1ad1eadf98584fc018dfcc8e8240d80b6f" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>MyCacheTraits</name></member>
-      <member refid="d9/d5e/a02355_1a3e429289384ffb96321d844f3ae002e9" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>MyCacheType</name></member>
-      <member refid="d1/da3/a02327_1ae1b3ccec9922f1a9ccf19b176fec78cf" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>Producer</name></member>
-      <member refid="d1/da3/a02327_1a83f9a2d445707f395ec89f501021d5e3" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>remove</name></member>
-      <member refid="d9/d5e/a02355_1af1031cfec660c870ca1b7284e1c88e25" prot="public" virt="non-virtual" ambiguityscope="CacheBase&lt; AnimatedObjectGroup, castor::String &gt;::"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>remove</name></member>
-      <member refid="d9/d5e/a02355_1a575e8f46e806126ae4774a807bdc5c7d" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>unlock</name></member>
-      <member refid="d1/da3/a02327_1a84f7badf9f4aaa04e86ac42ea4677c47" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>update</name></member>
-      <member refid="d1/da3/a02327_1a9f8a8e0eb09bd54d0128e4bc8b3cc3b8" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>uploadUbos</name></member>
-      <member refid="d1/da3/a02327_1add9ba29918028040c95a79c779a6b9df" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>~Cache</name></member>
-      <member refid="d9/d5e/a02355_1aeb5b2f55b43b39c9f03f6c9d680456ee" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</scope><name>~CacheBase</name></member>
+      <member refid="d5/d1b/a02331_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;</scope><name>checkError</name></member>
+      <member refid="d5/d1b/a02331_1ae6f4694ede819151fe4e30e33235ff07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;</scope><name>createBinaryParser</name></member>
+      <member refid="d5/d1b/a02331_1ab5f9ba53ad5865f967b41e5a27ed73a9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;</scope><name>doGetSubChunk</name></member>
+      <member refid="d1/da3/a02327_1ae8788e102fb675cc6beb55fb8249df54" prot="private" virt="virtual"><scope>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;</scope><name>doParse</name></member>
+      <member refid="d1/da3/a02327_1a1f0c8a30f09a14b4ec1171e63affe2fd" prot="private" virt="virtual"><scope>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;</scope><name>doParse_v1_3</name></member>
+      <member refid="d5/d1b/a02331_1a0e1aa917e3bf897fab03a32d20890062" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d5/d1b/a02331_1a22ca62addb3ab167995e18f49267efcf" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d5/d1b/a02331_1a5a648553ce168f5bc34adeedc8d169a7" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d5/d1b/a02331_1a90df4e46072e5ef14aebebd00cbcc1f5" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d5/d1b/a02331_1a5fac84360102001f5e730be1927c024e" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d5/d1b/a02331_1a035881aba2b64571b30a5efd3faaf3d9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;</scope><name>doParseHeader</name></member>
+      <member refid="d5/d1b/a02331_1ab3df04f9aa2eb1f7a533ed18631f09c4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;</scope><name>m_chunk</name></member>
+      <member refid="d5/d1b/a02331_1a455764ca72b659dab2652baf56ce5885" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;</scope><name>m_fileVersion</name></member>
+      <member refid="d5/d1b/a02331_1ae4820a3ab3e4b282240e5f1b969153c1" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;</scope><name>Name</name></member>
+      <member refid="d5/d1b/a02331_1a5db83668684ca219f67de3a381898e64" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;</scope><name>parse</name></member>
+      <member refid="d5/d1b/a02331_1a6bbbb529f463085c7d259600ae1b3e99" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;</scope><name>parse</name></member>
+      <member refid="d5/d1b/a02331_1a61b02dbf69d89569eff5be22facd5f07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;</scope><name>parse_v1_1</name></member>
+      <member refid="d5/d1b/a02331_1a95788692ddd6fae91074c299b674aaab" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;</scope><name>parse_v1_2</name></member>
+      <member refid="d5/d1b/a02331_1a6f39b66d980e4a65660016f71115a89c" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;</scope><name>parse_v1_3</name></member>
+      <member refid="d5/d1b/a02331_1aabc068daf8d99718497aa35f7a17c346" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;</scope><name>parse_v1_4</name></member>
+      <member refid="d5/d1b/a02331_1afb9e6fdcdc58e65458de7892d2bf8025" prot="public" virt="virtual"><scope>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;</scope><name>~BinaryParserBase</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

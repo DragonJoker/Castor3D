@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dd/daf/a04050" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SubmeshVertex</compoundname>
+    <includes local="no">Vertex.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dd/daf/a04050_1aecb7a282637d441abc194a877d32ce43" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::SubmeshVertex::m_index</definition>
+        <argsstring></argsstring>
+        <name>m_index</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Vertex.hpp" line="15" column="1" bodyfile="Model/Vertex.hpp" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/daf/a04050_1a2c7f953e4f93312e5eedbc6d3fdfc539" prot="public" static="no" mutable="no">
+        <type><ref refid="de/d13/a01473_1abe36058ac642536d26cfcc7f2931e62c" kindref="member">InterleavedVertex</ref></type>
+        <definition>InterleavedVertex castor3d::SubmeshVertex::m_vertex</definition>
+        <argsstring></argsstring>
+        <name>m_vertex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Vertex.hpp" line="16" column="1" bodyfile="Model/Vertex.hpp" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4307">
+        <label>castor3d::InterleavedVertexT&lt; T &gt;</label>
+        <link refid="df/d58/a03998"/>
+      </node>
+      <node id="4306">
+        <label>castor3d::InterleavedVertexT&lt; float &gt;</label>
+        <link refid="df/d58/a03998"/>
+        <childnode refid="4307" relation="template-instance">
+          <edgelabel>&lt; float &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4305">
+        <label>castor3d::SubmeshVertex</label>
+        <link refid="dd/daf/a04050"/>
+        <childnode refid="4306" relation="usage">
+          <edgelabel>m_vertex</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Vertex.hpp" line="14" column="1" bodyfile="Model/Vertex.hpp" bodystart="13" bodyend="17"/>
+    <listofallmembers>
+      <member refid="dd/daf/a04050_1aecb7a282637d441abc194a877d32ce43" prot="public" virt="non-virtual"><scope>castor3d::SubmeshVertex</scope><name>m_index</name></member>
+      <member refid="dd/daf/a04050_1a2c7f953e4f93312e5eedbc6d3fdfc539" prot="public" virt="non-virtual"><scope>castor3d::SubmeshVertex</scope><name>m_vertex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

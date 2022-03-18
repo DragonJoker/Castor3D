@@ -1,570 +1,94 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="de/d6f/a03972" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::LinesMapping</compoundname>
-    <basecompoundref refid="d3/d4a/a03948" prot="public" virt="non-virtual">castor3d::IndexMapping</basecompoundref>
-    <includes local="no">LinesMapping.hpp</includes>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="de/d6f/a03972_1a55d84d8062035324847aaa32608bb033" prot="public" static="yes" mutable="no">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
-        <definition>C3D_API castor::String const castor3d::LinesMapping::Name</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="de/d6f/a03972" kind="struct" language="C++" prot="protected">
+    <compoundname>castor3d::RenderLoop::UploadResources</compoundname>
+    <includes local="no">RenderLoop.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/d6f/a03972_1a3256790fc4ca73c472ea54741399c8f1" prot="public" static="no" mutable="no">
+        <type><ref refid="d0/dd4/a03812" kindref="compound">CommandsSemaphore</ref></type>
+        <definition>CommandsSemaphore castor3d::RenderLoop::UploadResources::commands</definition>
         <argsstring></argsstring>
-        <name>Name</name>
+        <name>commands</name>
+        <qualifiedname>castor3d::RenderLoop::UploadResources::commands</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The command buffer and semaphore used for UBO uploads. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="153" column="1" bodyfile="Model/Mesh/Submesh/Component/LinesMapping.hpp" bodystart="153" bodyend="-1"/>
+        <location file="Render/RenderLoop.hpp" line="252" column="19" bodyfile="Render/RenderLoop.hpp" bodystart="252" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="de/d6f/a03972_1a8fb021ac4daf6b40141e247bda411a45" prot="private" static="no" mutable="no">
-        <type><ref refid="da/d1e/a01479_1ac410f72e00a2bf73b63cc8d803fe4ebc" kindref="member">LineArray</ref></type>
-        <definition>LineArray castor3d::LinesMapping::m_lines</definition>
+      <memberdef kind="variable" id="de/d6f/a03972_1a393a05e19e5313dc0158a20344363ee6" prot="public" static="no" mutable="no">
+        <type>ashes::FencePtr</type>
+        <definition>ashes::FencePtr castor3d::RenderLoop::UploadResources::fence</definition>
         <argsstring></argsstring>
-        <name>m_lines</name>
+        <name>fence</name>
+        <qualifiedname>castor3d::RenderLoop::UploadResources::fence</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The lines in the submesh. </para>
+<para>The fence and semaphore used for UBO uploads. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="158" column="1" bodyfile="Model/Mesh/Submesh/Component/LinesMapping.hpp" bodystart="158" bodyend="-1"/>
+        <location file="Render/RenderLoop.hpp" line="255" column="17" bodyfile="Render/RenderLoop.hpp" bodystart="255" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="de/d6f/a03972_1ac80e99c9db81c7fb1a3e222111f212d3" prot="private" static="no" mutable="no">
-        <type>castor::Point3f</type>
-        <definition>castor::Point3f castor3d::LinesMapping::m_cameraPosition</definition>
+      <memberdef kind="variable" id="de/d6f/a03972_1a2a1639d9bfa8d7307c95fb3fa691bff3" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderLoop::UploadResources::used</definition>
         <argsstring></argsstring>
-        <name>m_cameraPosition</name>
+        <name>used</name>
+        <qualifiedname>castor3d::RenderLoop::UploadResources::used</qualifiedname>
+        <initializer>{ true }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The transformed camera position at last sort. </para>
+<para>Tells if the smaphore has been used in previous frame. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="161" column="1" bodyfile="Model/Mesh/Submesh/Component/LinesMapping.hpp" bodystart="161" bodyend="-1"/>
+        <location file="Render/RenderLoop.hpp" line="258" column="6" bodyfile="Render/RenderLoop.hpp" bodystart="258" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="de/d6f/a03972_1ab003dd4140664795cefc3684fe26beb5" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::LinesMapping::LinesMapping</definition>
-        <argsstring>(Submesh &amp;submesh)</argsstring>
-        <name>LinesMapping</name>
-        <param>
-          <type><ref refid="d9/d0c/a03992" kindref="compound">Submesh</ref> &amp;</type>
-          <declname>submesh</declname>
-        </param>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">submesh</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parent submesh. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="24" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d6f/a03972_1aebfb6c9cdfe0cdd3ed77487990e9e601" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::LinesMapping::clearLines</definition>
-        <argsstring>()</argsstring>
-        <name>clearLines</name>
-        <briefdescription>
-<para>Clears the lines array. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="31" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d6f/a03972_1a4f3bb5400fd492281ddccbcdf45715ee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="db/dc8/a03964" kindref="compound">Line</ref></type>
-        <definition>C3D_API Line castor3d::LinesMapping::addLine</definition>
-        <argsstring>(uint32_t a, uint32_t b)</argsstring>
-        <name>addLine</name>
-        <param>
-          <type>uint32_t</type>
-          <declname>a</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>b</declname>
-        </param>
-        <briefdescription>
-<para>Creates and adds a line to the submesh. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">a</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The first vertex index. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">b</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The second vertex index. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The created face. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="44" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d6f/a03972_1ae5de71283d379cbe0914a2a51a9864a8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::LinesMapping::addLineGroup</definition>
-        <argsstring>(LineIndices const *const begin, LineIndices const *const end)</argsstring>
-        <name>addLineGroup</name>
-        <param>
-          <type><ref refid="db/de8/a03968" kindref="compound">LineIndices</ref> const *const</type>
-          <declname>begin</declname>
-        </param>
-        <param>
-          <type><ref refid="db/de8/a03968" kindref="compound">LineIndices</ref> const *const</type>
-          <declname>end</declname>
-        </param>
-        <briefdescription>
-<para>Creates and adds lines to the submesh. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">begin</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The faces data begin. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">end</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The faces data end. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="55" column="1"/>
-        <referencedby refid="de/d6f/a03972_1a748533947f3c7fef833705b83da3c39f" compoundref="de/d4e/a00500" startline="81" endline="84">addLineGroup</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="de/d6f/a03972_1a3ecc8f95dbc715da28b4d5848671c3bd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
-        <definition>C3D_API uint32_t castor3d::LinesMapping::getCount</definition>
-        <argsstring>() const override</argsstring>
-        <name>getCount</name>
-        <reimplements refid="d3/d4a/a03948_1a0fb15d1b3d6cea8907affb64e235b698">getCount</reimplements>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The elements count. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="60" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d6f/a03972_1a4d3ebec1a1fc007bb98a819ef98a1edd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
-        <definition>C3D_API uint32_t castor3d::LinesMapping::getComponentsCount</definition>
-        <argsstring>() const override</argsstring>
-        <name>getComponentsCount</name>
-        <reimplements refid="d3/d4a/a03948_1a3962862bad288beb93936541cf128e88">getComponentsCount</reimplements>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The components count in an element. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="64" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d6f/a03972_1a5b3145c05388d2aecf5d63197ca1a616" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::LinesMapping::sortByDistance</definition>
-        <argsstring>(castor::Point3f const &amp;cameraPosition) override</argsstring>
-        <name>sortByDistance</name>
-        <reimplements refid="d3/d4a/a03948_1afe6b9b98aa785d2259f1e39d681e8f1e">sortByDistance</reimplements>
-        <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>cameraPosition</declname>
-        </param>
-        <briefdescription>
-<para>Sorts the face from farthest to nearest from the camera. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">cameraPosition</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The camera position, relative to submesh </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="68" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d6f/a03972_1a30d5ab7ad31c300da3d08dc7b36fdb73" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::LinesMapping::computeNormals</definition>
-        <argsstring>(bool reverted=false) override</argsstring>
-        <name>computeNormals</name>
-        <reimplements refid="d3/d4a/a03948_1a6f19747b6795855d0048b85952e54521">computeNormals</reimplements>
-        <param>
-          <type>bool</type>
-          <declname>reverted</declname>
-          <defval>false</defval>
-        </param>
-        <briefdescription>
-<para>Generates normals and tangents. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">reverted</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if normals are inverted. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="72" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d6f/a03972_1a748533947f3c7fef833705b83da3c39f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::LinesMapping::addLineGroup</definition>
-        <argsstring>(std::vector&lt; LineIndices &gt; const &amp;lines)</argsstring>
-        <name>addLineGroup</name>
-        <param>
-          <type>std::vector&lt; <ref refid="db/de8/a03968" kindref="compound">LineIndices</ref> &gt; const &amp;</type>
-          <declname>lines</declname>
-        </param>
-        <briefdescription>
-<para>Creates and adds lines to the submesh. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">lines</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The lines. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="81" column="1" bodyfile="Model/Mesh/Submesh/Component/LinesMapping.hpp" bodystart="81" bodyend="84"/>
-        <references refid="de/d6f/a03972_1ae5de71283d379cbe0914a2a51a9864a8">addLineGroup</references>
-      </memberdef>
-      <memberdef kind="function" id="de/d6f/a03972_1a4e103ba98b8385e83fe7fb9659bf0d58" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>size_t</type>
-            <declname>Count</declname>
-            <defname>Count</defname>
-          </param>
-        </templateparamlist>
-        <type>void</type>
-        <definition>void castor3d::LinesMapping::addLineGroup</definition>
-        <argsstring>(std::array&lt; LineIndices, Count &gt; const &amp;lines)</argsstring>
-        <name>addLineGroup</name>
-        <param>
-          <type>std::array&lt; <ref refid="db/de8/a03968" kindref="compound">LineIndices</ref>, Count &gt; const &amp;</type>
-          <declname>lines</declname>
-        </param>
-        <briefdescription>
-<para>Creates and adds lines to the submesh. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">lines</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The lines. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="94" column="1" bodyfile="Model/Mesh/Submesh/Component/LinesMapping.hpp" bodystart="94" bodyend="97"/>
-        <references refid="de/d6f/a03972_1ae5de71283d379cbe0914a2a51a9864a8">addLineGroup</references>
-      </memberdef>
-      <memberdef kind="function" id="de/d6f/a03972_1a6d3c35f1728a96254004476963d25157" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>uint32_t</type>
-            <declname>Count</declname>
-            <defname>Count</defname>
-          </param>
-        </templateparamlist>
-        <type>void</type>
-        <definition>void castor3d::LinesMapping::addLineGroup</definition>
-        <argsstring>(LineIndices(&amp;lines)[Count])</argsstring>
-        <name>addLineGroup</name>
-        <param>
-          <type><ref refid="db/de8/a03968" kindref="compound">LineIndices</ref>(&amp;)</type>
-          <declname>lines</declname>
-          <array>[Count]</array>
-        </param>
-        <briefdescription>
-<para>Creates and adds lines to the submesh. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">lines</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The lines. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="107" column="1" bodyfile="Model/Mesh/Submesh/Component/LinesMapping.hpp" bodystart="107" bodyend="110"/>
-        <references refid="de/d6f/a03972_1ae5de71283d379cbe0914a2a51a9864a8">addLineGroup</references>
-      </memberdef>
-      <memberdef kind="function" id="de/d6f/a03972_1a42f9f64028fce8e44171e5d3d551e963" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="db/dc8/a03964" kindref="compound">Line</ref> const  &amp;</type>
-        <definition>Line const&amp; castor3d::LinesMapping::operator[]</definition>
-        <argsstring>(uint32_t index) const</argsstring>
-        <name>operator[]</name>
-        <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
-        </param>
-        <briefdescription>
-<para>Retrieves the line at given index. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">index</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The index. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The value. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="121" column="1" bodyfile="Model/Mesh/Submesh/Component/LinesMapping.hpp" bodystart="121" bodyend="125"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d6f/a03972_1a2a66c01286ce54f5b00967fd065968ad" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="da/d1e/a01479_1ac410f72e00a2bf73b63cc8d803fe4ebc" kindref="member">LineArray</ref> const  &amp;</type>
-        <definition>LineArray const&amp; castor3d::LinesMapping::getFaces</definition>
-        <argsstring>() const</argsstring>
-        <name>getFaces</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The lines array. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="132" column="1" bodyfile="Model/Mesh/Submesh/Component/LinesMapping.hpp" bodystart="132" bodyend="135"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d6f/a03972_1a1a380c412ca9f2d0cd2fe129a26bb13e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="da/d1e/a01479_1ac410f72e00a2bf73b63cc8d803fe4ebc" kindref="member">LineArray</ref> &amp;</type>
-        <definition>LineArray&amp; castor3d::LinesMapping::getFaces</definition>
-        <argsstring>()</argsstring>
-        <name>getFaces</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The lines array. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="142" column="1" bodyfile="Model/Mesh/Submesh/Component/LinesMapping.hpp" bodystart="142" bodyend="145"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="de/d6f/a03972_1a0c6f6f0f33effdb8f883ec0d7bec17d8" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::LinesMapping::doCleanup</definition>
-        <argsstring>() override</argsstring>
-        <name>doCleanup</name>
-        <reimplements refid="d3/d4a/a03948_1a2c49cc8e20d623d7eafa9e092092ccdc">doCleanup</reimplements>
+      <memberdef kind="variable" id="de/d6f/a03972_1a9936e1d854fc3579b90def92d4b58405" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderLoop::UploadResources::waitCount</definition>
+        <argsstring></argsstring>
+        <name>waitCount</name>
+        <qualifiedname>castor3d::RenderLoop::UploadResources::waitCount</qualifiedname>
+        <initializer>{ 1u }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="148" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d6f/a03972_1ac2c0834c8b7e13a7a53868bb22d0961b" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::LinesMapping::doFill</definition>
-        <argsstring>(RenderDevice const &amp;device) override</argsstring>
-        <name>doFill</name>
-        <reimplements refid="dd/d78/a03980_1a78f22f8994aae0890645c943e42c45c9">doFill</reimplements>
-        <param>
-          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="149" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d6f/a03972_1ae42fec4e72e0087789ca0e9112ab92b1" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::LinesMapping::doUpload</definition>
-        <argsstring>() override</argsstring>
-        <name>doUpload</name>
-        <reimplements refid="d3/d4a/a03948_1a0bae680c96d93257ac710bcebb708504">doUpload</reimplements>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="150" column="1"/>
+        <location file="Render/RenderLoop.hpp" line="259" column="10" bodyfile="Render/RenderLoop.hpp" bodystart="259" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="1793">
-        <label>castor3d::SubmeshComponent</label>
-        <link refid="dd/d78/a03980"/>
-        <childnode refid="1794" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1794">
-        <label>castor::OwnedBy&lt; Submesh &gt;</label>
-      </node>
-      <node id="1791">
-        <label>castor3d::LinesMapping</label>
-        <link refid="de/d6f/a03972"/>
-        <childnode refid="1792" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1792">
-        <label>castor3d::IndexMapping</label>
-        <link refid="d3/d4a/a03948"/>
-        <childnode refid="1793" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
     <collaborationgraph>
-      <node id="1797">
-        <label>castor3d::SubmeshComponent</label>
-        <link refid="dd/d78/a03980"/>
-        <childnode refid="1798" relation="public-inheritance">
-        </childnode>
+      <node id="2">
+        <label>castor3d::CommandsSemaphore</label>
+        <link refid="d0/dd4/a03812"/>
       </node>
-      <node id="1798">
-        <label>castor::OwnedBy&lt; Submesh &gt;</label>
-      </node>
-      <node id="1795">
-        <label>castor3d::LinesMapping</label>
+      <node id="1">
+        <label>castor3d::RenderLoop::UploadResources</label>
         <link refid="de/d6f/a03972"/>
-        <childnode refid="1796" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1796">
-        <label>castor3d::IndexMapping</label>
-        <link refid="d3/d4a/a03948"/>
-        <childnode refid="1797" relation="public-inheritance">
+        <childnode refid="2" relation="usage">
+          <edgelabel>commands</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Model/Mesh/Submesh/Component/LinesMapping.hpp" line="14" column="1" bodyfile="Model/Mesh/Submesh/Component/LinesMapping.hpp" bodystart="12" bodyend="162"/>
+    <location file="Render/RenderLoop.hpp" line="248" column="1" bodyfile="Render/RenderLoop.hpp" bodystart="249" bodyend="260"/>
     <listofallmembers>
-      <member refid="de/d6f/a03972_1a4f3bb5400fd492281ddccbcdf45715ee" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>addLine</name></member>
-      <member refid="de/d6f/a03972_1ae5de71283d379cbe0914a2a51a9864a8" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>addLineGroup</name></member>
-      <member refid="de/d6f/a03972_1a748533947f3c7fef833705b83da3c39f" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>addLineGroup</name></member>
-      <member refid="de/d6f/a03972_1a4e103ba98b8385e83fe7fb9659bf0d58" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>addLineGroup</name></member>
-      <member refid="de/d6f/a03972_1a6d3c35f1728a96254004476963d25157" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>addLineGroup</name></member>
-      <member refid="dd/d78/a03980_1af13d08b9487f0501a06c0f7df4c89f8c" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>cleanup</name></member>
-      <member refid="de/d6f/a03972_1aebfb6c9cdfe0cdd3ed77487990e9e601" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>clearLines</name></member>
-      <member refid="de/d6f/a03972_1a30d5ab7ad31c300da3d08dc7b36fdb73" prot="public" virt="virtual"><scope>castor3d::LinesMapping</scope><name>computeNormals</name></member>
-      <member refid="de/d6f/a03972_1a0c6f6f0f33effdb8f883ec0d7bec17d8" prot="private" virt="virtual"><scope>castor3d::LinesMapping</scope><name>doCleanup</name></member>
-      <member refid="de/d6f/a03972_1ac2c0834c8b7e13a7a53868bb22d0961b" prot="private" virt="virtual"><scope>castor3d::LinesMapping</scope><name>doFill</name></member>
-      <member refid="de/d6f/a03972_1ae42fec4e72e0087789ca0e9112ab92b1" prot="private" virt="virtual"><scope>castor3d::LinesMapping</scope><name>doUpload</name></member>
-      <member refid="dd/d78/a03980_1a53837125323ab11c28a86acbb187a770" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>fill</name></member>
-      <member refid="d3/d4a/a03948_1a10bebffa35ae21fc4ff5d89ae006d821" prot="public" virt="virtual"><scope>castor3d::LinesMapping</scope><name>gather</name></member>
-      <member refid="de/d6f/a03972_1a4d3ebec1a1fc007bb98a819ef98a1edd" prot="public" virt="virtual"><scope>castor3d::LinesMapping</scope><name>getComponentsCount</name></member>
-      <member refid="de/d6f/a03972_1a3ecc8f95dbc715da28b4d5848671c3bd" prot="public" virt="virtual"><scope>castor3d::LinesMapping</scope><name>getCount</name></member>
-      <member refid="de/d6f/a03972_1a2a66c01286ce54f5b00967fd065968ad" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>getFaces</name></member>
-      <member refid="de/d6f/a03972_1a1a380c412ca9f2d0cd2fe129a26bb13e" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>getFaces</name></member>
-      <member refid="d3/d4a/a03948_1ad94cf3099cec538865eced8135a8d645" prot="public" virt="virtual"><scope>castor3d::LinesMapping</scope><name>getProgramFlags</name></member>
-      <member refid="dd/d78/a03980_1a3782f6784f793eeccd48e637e85a9d6c" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>getType</name></member>
-      <member refid="d3/d4a/a03948_1a6bd3086ce38c6a3e4f150efd9f580d38" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>IndexMapping</name></member>
-      <member refid="dd/d78/a03980_1a98c6ad3457d19448c1eaa261598103ad" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>initialise</name></member>
-      <member refid="de/d6f/a03972_1ab003dd4140664795cefc3684fe26beb5" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>LinesMapping</name></member>
-      <member refid="de/d6f/a03972_1ac80e99c9db81c7fb1a3e222111f212d3" prot="private" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>m_cameraPosition</name></member>
-      <member refid="de/d6f/a03972_1a8fb021ac4daf6b40141e247bda411a45" prot="private" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>m_lines</name></member>
-      <member refid="de/d6f/a03972_1a55d84d8062035324847aaa32608bb033" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>Name</name></member>
-      <member refid="dd/d78/a03980_1a7e21e4eda223d50b6751c40cb44f77a7" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>needsUpdate</name></member>
-      <member refid="de/d6f/a03972_1a42f9f64028fce8e44171e5d3d551e963" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>operator[]</name></member>
-      <member refid="dd/d78/a03980_1a06b2ee9400bab62f5472f8ce8a03ee27" prot="public" virt="virtual"><scope>castor3d::LinesMapping</scope><name>setMaterial</name></member>
-      <member refid="de/d6f/a03972_1a5b3145c05388d2aecf5d63197ca1a616" prot="public" virt="virtual"><scope>castor3d::LinesMapping</scope><name>sortByDistance</name></member>
-      <member refid="dd/d78/a03980_1aafbe6064005a72343870bb444e1e6a1f" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>SubmeshComponent</name></member>
-      <member refid="dd/d78/a03980_1a2dbcda2b8c26f4c9c52db78a5740a0f8" prot="public" virt="non-virtual"><scope>castor3d::LinesMapping</scope><name>upload</name></member>
-      <member refid="dd/d78/a03980_1a30231a167367ba38b41f9bf5b3bcd005" prot="public" virt="virtual"><scope>castor3d::LinesMapping</scope><name>~SubmeshComponent</name></member>
+      <member refid="de/d6f/a03972_1a3256790fc4ca73c472ea54741399c8f1" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop::UploadResources</scope><name>commands</name></member>
+      <member refid="de/d6f/a03972_1a393a05e19e5313dc0158a20344363ee6" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop::UploadResources</scope><name>fence</name></member>
+      <member refid="de/d6f/a03972_1a2a1639d9bfa8d7307c95fb3fa691bff3" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop::UploadResources</scope><name>used</name></member>
+      <member refid="de/d6f/a03972_1a9936e1d854fc3579b90def92d4b58405" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop::UploadResources</scope><name>waitCount</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

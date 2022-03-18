@@ -1,0 +1,4 @@
+<map id="castor3d::RenderQuad::makeDescriptorWrite" name="castor3d::RenderQuad::makeDescriptorWrite">
+<area shape="rect" id="node1" title="Creates a descriptor write for storage buffer." alt="" coords="5,5,157,47"/>
+<area shape="rect" id="node2" href="$d9/d45/a03879.html#a8902e4b73b2519639afa5310aa49ab4b" title="Creates a descriptor write for combined image sampler." alt="" coords="205,5,357,47"/>
+</map>

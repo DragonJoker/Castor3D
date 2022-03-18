@@ -1,9 +1,10 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_f6c92a291074146be370fc7e944c054f" kind="dir">
     <compoundname>Render/GlobalIllumination</compoundname>
     <innerdir refid="dir_7108b733bb1fee5c7687037800af29fb">Render/GlobalIllumination/LightPropagationVolumes</innerdir>
-    <innerfile refid="dc/d91/a00659">GlobalIlluminationModule.hpp</innerfile>
+    <innerdir refid="dir_b70b22b959ecebdb1f17b0f917c94768">Render/GlobalIllumination/VoxelConeTracing</innerdir>
+    <innerfile refid="d0/d5c/a00668">GlobalIlluminationModule.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

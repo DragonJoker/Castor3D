@@ -1,21 +1,83 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dc/d72/a05218" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::ElementTyper</compoundname>
-    <includes local="no">ParticleModule.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dc/d72/a05218" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::Viewport &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::Viewport &gt;</basecompoundref>
+    <includes local="no">TextViewport.hpp</includes>
     <templateparamlist>
-      <param>
-        <type><ref refid="de/d13/a01473_1a4fdd8bd8042f3a3ae81042067e1ac250" kindref="member">ParticleFormat</ref></type>
-        <declname>Type</declname>
-        <defname>Type</defname>
-      </param>
     </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d72/a05218_1a843bacde74153b3a1f25b8a579fce0db" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::Viewport &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs)</argsstring>
+        <name>TextWriter</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::Viewport &gt;::TextWriter</qualifiedname>
+        <param>
+          <type>String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextViewport.hpp" line="18" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d72/a05218_1a43b3b495edeea78c80e2773a0216a5cd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::Viewport &gt;::operator()</definition>
+        <argsstring>(castor3d::Viewport const &amp;viewport, StringStream &amp;file) override</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::Viewport &gt;::operator()</qualifiedname>
+        <param>
+          <type><ref refid="da/dee/a04366" kindref="compound">castor3d::Viewport</ref> const &amp;</type>
+          <declname>viewport</declname>
+        </param>
+        <param>
+          <type>StringStream &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextViewport.hpp" line="19" column="14"/>
+      </memberdef>
+      </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Scene/ParticleSystem/ParticleModule.hpp" line="186" column="1" bodyfile="Scene/ParticleSystem/ParticleModule.hpp" bodystart="186" bodyend="-1"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::Viewport &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::Viewport &gt;</label>
+        <link refid="dc/d72/a05218"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::Viewport &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::Viewport &gt;</label>
+        <link refid="dc/d72/a05218"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextViewport.hpp" line="14" column="1" bodyfile="Text/TextViewport.hpp" bodystart="16" bodyend="21"/>
     <listofallmembers>
+      <member refid="dc/d72/a05218_1a43b3b495edeea78c80e2773a0216a5cd" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Viewport &gt;</scope><name>operator()</name></member>
+      <member refid="dc/d72/a05218_1a843bacde74153b3a1f25b8a579fce0db" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Viewport &gt;</scope><name>TextWriter</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

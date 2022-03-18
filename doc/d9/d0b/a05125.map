@@ -1,6 +1,4 @@
-<map id="castor3d::SkyboxBackground" name="castor3d::SkyboxBackground">
-<area shape="rect" id="node1" title=" " alt="" coords="77,155,270,181"/>
-<area shape="rect" id="node2" href="$d8/dc2/a05098.html" title=" " alt="" coords="80,80,267,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,192,32"/>
-<area shape="rect" id="node4" title=" " alt="" coords="217,5,279,32"/>
+<map id="castor::TextWriter&lt; castor3d::OverlayCategory &gt;" name="castor::TextWriter&lt; castor3d::OverlayCategory &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="5,95,204,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="29,5,180,47"/>
 </map>

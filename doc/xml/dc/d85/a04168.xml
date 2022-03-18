@@ -1,110 +1,416 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dc/d85/a04168" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::TextOverlay::DisplayableLine</compoundname>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="dc/d85/a04168_1a9f2ac2751fca1115467d7854ace59109" prot="public" static="no" mutable="no">
-        <type>castor::Point2d</type>
-        <definition>castor::Point2d castor3d::TextOverlay::DisplayableLine::m_position</definition>
-        <argsstring></argsstring>
-        <name>m_position</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dc/d85/a04168" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::SsaoRawAOPass</compoundname>
+    <includes local="no">SsaoRawAOPass.hpp</includes>
+    <innerclass refid="d2/d38/a04176" prot="private">castor3d::SsaoRawAOPass::Program</innerclass>
+    <innerclass refid="dc/d72/a04172" prot="private">castor3d::SsaoRawAOPass::RenderQuad</innerclass>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="dc/d85/a04168_1a9c2a1e0dbb63ad643d1803b3493e34b4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/d46/a04312" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::SsaoRawAOPass::getResult</definition>
+        <argsstring>() const</argsstring>
+        <name>getResult</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::getResult</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The line position. </para>
+<para>name Getters. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/TextOverlay.hpp" line="356" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="356" bodyend="-1"/>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="79" column="16" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="79" bodyend="82"/>
       </memberdef>
-      <memberdef kind="variable" id="dc/d85/a04168_1a52c971fa4e1dedc9e59f1f5fbc9d7732" prot="public" static="no" mutable="no">
-        <type>double</type>
-        <definition>double castor3d::TextOverlay::DisplayableLine::m_width</definition>
-        <argsstring></argsstring>
-        <name>m_width</name>
+      <memberdef kind="function" id="dc/d85/a04168_1a3a08aa98339dde2b7ab4f47605fe45bf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/d46/a04312" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::SsaoRawAOPass::getBentResult</definition>
+        <argsstring>() const</argsstring>
+        <name>getBentResult</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::getBentResult</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The line width. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/TextOverlay.hpp" line="359" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="359" bodyend="-1"/>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="84" column="16" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="84" bodyend="87"/>
       </memberdef>
-      <memberdef kind="variable" id="dc/d85/a04168_1a585cac610b44ac128b9615b98e774e83" prot="public" static="no" mutable="no">
-        <type>double</type>
-        <definition>double castor3d::TextOverlay::DisplayableLine::m_height</definition>
-        <argsstring></argsstring>
-        <name>m_height</name>
+      <memberdef kind="function" id="dc/d85/a04168_1a8e629838dc57e1736ae9dc9c2d82ddf7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>crg::FramePass const &amp;</type>
+        <definition>crg::FramePass const  &amp; castor3d::SsaoRawAOPass::getLastPass</definition>
+        <argsstring>() const</argsstring>
+        <name>getLastPass</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::getLastPass</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The line height. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/TextOverlay.hpp" line="362" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="362" bodyend="-1"/>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="89" column="23" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="89" bodyend="92"/>
       </memberdef>
-      <memberdef kind="variable" id="dc/d85/a04168_1ab266c8d211aa41fabf8e11af0b17f348" prot="public" static="no" mutable="no">
-        <type>std::vector&lt; DisplayableChar &gt;</type>
-        <definition>std::vector&lt; DisplayableChar &gt; castor3d::TextOverlay::DisplayableLine::m_characters</definition>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="dc/d85/a04168_1ae137b1d9ea13d46bf0c90fed7e04969b" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>VkFormat constexpr</type>
+        <definition>VkFormat constexpr castor3d::SsaoRawAOPass::ResultFormat</definition>
         <argsstring></argsstring>
-        <name>m_characters</name>
+        <name>ResultFormat</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::ResultFormat</qualifiedname>
+        <initializer>= VK_FORMAT_R32G32B32A32_SFLOAT</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The displayable characters. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/TextOverlay.hpp" line="365" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="365" bodyend="-1"/>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="96" column="27" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dc/d85/a04168_1a4cb260c9b492455e8fd22ae35c6ec6f0" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::SsaoRawAOPass::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="127" column="21" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="127" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d85/a04168_1ac09224221f0535d74aeebf5916419dda" prot="private" static="no" mutable="no">
+        <type>crg::FramePassGroup &amp;</type>
+        <definition>crg::FramePassGroup&amp; castor3d::SsaoRawAOPass::m_graph</definition>
+        <argsstring></argsstring>
+        <name>m_graph</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::m_graph</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="128" column="22" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d85/a04168_1a276f177dc0e84cc3e2fb42c72c813eb9" prot="private" static="no" mutable="no">
+        <type><ref refid="dd/d00/a04164" kindref="compound">SsaoConfig</ref> const  &amp;</type>
+        <definition>SsaoConfig const&amp; castor3d::SsaoRawAOPass::m_ssaoConfig</definition>
+        <argsstring></argsstring>
+        <name>m_ssaoConfig</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::m_ssaoConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="129" column="19" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d85/a04168_1a50b19e6c276599cced6e2d6579d16bd8" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/d6e/a04988" kindref="compound">SsaoConfigUbo</ref> &amp;</type>
+        <definition>SsaoConfigUbo&amp; castor3d::SsaoRawAOPass::m_ssaoConfigUbo</definition>
+        <argsstring></argsstring>
+        <name>m_ssaoConfigUbo</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::m_ssaoConfigUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="130" column="16" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="130" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d85/a04168_1a1e4fe2de170561413ecf88495ef4141a" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d32/a04884" kindref="compound">GpInfoUbo</ref> const  &amp;</type>
+        <definition>GpInfoUbo const&amp; castor3d::SsaoRawAOPass::m_gpInfoUbo</definition>
+        <argsstring></argsstring>
+        <name>m_gpInfoUbo</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::m_gpInfoUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="131" column="18" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="131" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d85/a04168_1ad97360edb8e2cad50dccbbd1542be339" prot="private" static="no" mutable="no">
+        <type>VkExtent2D</type>
+        <definition>VkExtent2D castor3d::SsaoRawAOPass::m_size</definition>
+        <argsstring></argsstring>
+        <name>m_size</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::m_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="132" column="12" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="132" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d85/a04168_1a241d943bc9b029adbe04469fd01316e1" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d46/a04312" kindref="compound">Texture</ref></type>
+        <definition>Texture castor3d::SsaoRawAOPass::m_result</definition>
+        <argsstring></argsstring>
+        <name>m_result</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::m_result</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="133" column="9" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="133" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d85/a04168_1a8d71e9a7d786ff1a9b21b8c6a81d92ae" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d46/a04312" kindref="compound">Texture</ref></type>
+        <definition>Texture castor3d::SsaoRawAOPass::m_bentNormals</definition>
+        <argsstring></argsstring>
+        <name>m_bentNormals</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::m_bentNormals</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="134" column="9" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="134" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d85/a04168_1aa8e6dad374ba4eb5da82d571366ca93f" prot="private" static="no" mutable="no">
+        <type>std::array&lt; Program, 2u &gt;</type>
+        <definition>std::array&lt; Program, 2u &gt; castor3d::SsaoRawAOPass::m_programs</definition>
+        <argsstring></argsstring>
+        <name>m_programs</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::m_programs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="135" column="12" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d85/a04168_1a4881d7bf119b29366ea697b44a2a81b0" prot="private" static="no" mutable="no">
+        <type>crg::FramePass const  *</type>
+        <definition>crg::FramePass const* castor3d::SsaoRawAOPass::m_lastPass</definition>
+        <argsstring></argsstring>
+        <name>m_lastPass</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::m_lastPass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="136" column="23" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d85/a04168_1a3d1e45efcf884fb3647e285a5d42abd0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SsaoRawAOPass::SsaoRawAOPass</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, RenderDevice const &amp;device, ProgressBar *progress, crg::FramePass const &amp;previousPass, VkExtent2D const &amp;size, SsaoConfig const &amp;config, SsaoConfigUbo &amp;ssaoConfigUbo, GpInfoUbo const &amp;gpInfoUbo, Texture const &amp;linearisedDepthBuffer, Texture const &amp;normals)</argsstring>
+        <name>SsaoRawAOPass</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::SsaoRawAOPass</qualifiedname>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/dcb/a03268" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type>VkExtent2D const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d00/a04164" kindref="compound">SsaoConfig</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d6e/a04988" kindref="compound">SsaoConfigUbo</ref> &amp;</type>
+          <declname>ssaoConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d32/a04884" kindref="compound">GpInfoUbo</ref> const &amp;</type>
+          <declname>gpInfoUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d46/a04312" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>linearisedDepthBuffer</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d46/a04312" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>normals</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render area dimensions. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The SSAO configuration. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ssaoConfigUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The SSAO configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">gpInfoUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GBuffer configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">linearisedDepthBuffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The linearised depth buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">normals</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The normals buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="47" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d85/a04168_1af6153dccdcc84ff4c438d267f93b0c10" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SsaoRawAOPass::~SsaoRawAOPass</definition>
+        <argsstring>()</argsstring>
+        <name>~SsaoRawAOPass</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::~SsaoRawAOPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="57" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d85/a04168_1a9678f811408a3410bc35b975c8fd759f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SsaoRawAOPass::accept</definition>
+        <argsstring>(SsaoConfig &amp;config, PipelineVisitorBase &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::accept</qualifiedname>
+        <param>
+          <type><ref refid="dd/d00/a04164" kindref="compound">SsaoConfig</ref> &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d55/a03256" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Accepts a visitor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The SSAO config. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="68" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>A text line, along with its size and position. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
-</simplesect>
-<simplesect kind="date"><para>28/01/2016 </para>
-</simplesect>
-</para>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="4361">
-        <label>T</label>
-      </node>
-      <node id="4360">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="4361" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="4358">
-        <label>std::vector&lt; DisplayableChar &gt;</label>
-        <childnode refid="4359" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-        <childnode refid="4360" relation="template-instance">
-          <edgelabel>&lt; DisplayableChar &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4357">
-        <label>castor3d::TextOverlay::DisplayableLine</label>
-        <childnode refid="4358" relation="usage">
-          <edgelabel>m_characters</edgelabel>
-        </childnode>
-      </node>
-      <node id="4359">
-        <label>castor3d::TextOverlay::DisplayableChar</label>
-      </node>
-    </collaborationgraph>
-    <location file="Overlay/TextOverlay.hpp" line="353" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="352" bodyend="366"/>
+    <location file="Render/Ssao/SsaoRawAOPass.hpp" line="22" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="23" bodyend="137"/>
     <listofallmembers>
-      <member refid="dc/d85/a04168_1ab266c8d211aa41fabf8e11af0b17f348" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableLine</scope><name>m_characters</name></member>
-      <member refid="dc/d85/a04168_1a585cac610b44ac128b9615b98e774e83" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableLine</scope><name>m_height</name></member>
-      <member refid="dc/d85/a04168_1a9f2ac2751fca1115467d7854ace59109" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableLine</scope><name>m_position</name></member>
-      <member refid="dc/d85/a04168_1a52c971fa4e1dedc9e59f1f5fbc9d7732" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableLine</scope><name>m_width</name></member>
+      <member refid="dc/d85/a04168_1a9678f811408a3410bc35b975c8fd759f" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>accept</name></member>
+      <member refid="dc/d85/a04168_1a3a08aa98339dde2b7ab4f47605fe45bf" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>getBentResult</name></member>
+      <member refid="dc/d85/a04168_1a8e629838dc57e1736ae9dc9c2d82ddf7" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>getLastPass</name></member>
+      <member refid="dc/d85/a04168_1a9c2a1e0dbb63ad643d1803b3493e34b4" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>getResult</name></member>
+      <member refid="dc/d85/a04168_1a8d71e9a7d786ff1a9b21b8c6a81d92ae" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_bentNormals</name></member>
+      <member refid="dc/d85/a04168_1a4cb260c9b492455e8fd22ae35c6ec6f0" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_device</name></member>
+      <member refid="dc/d85/a04168_1a1e4fe2de170561413ecf88495ef4141a" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_gpInfoUbo</name></member>
+      <member refid="dc/d85/a04168_1ac09224221f0535d74aeebf5916419dda" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_graph</name></member>
+      <member refid="dc/d85/a04168_1a4881d7bf119b29366ea697b44a2a81b0" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_lastPass</name></member>
+      <member refid="dc/d85/a04168_1aa8e6dad374ba4eb5da82d571366ca93f" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_programs</name></member>
+      <member refid="dc/d85/a04168_1a241d943bc9b029adbe04469fd01316e1" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_result</name></member>
+      <member refid="dc/d85/a04168_1ad97360edb8e2cad50dccbbd1542be339" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_size</name></member>
+      <member refid="dc/d85/a04168_1a276f177dc0e84cc3e2fb42c72c813eb9" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_ssaoConfig</name></member>
+      <member refid="dc/d85/a04168_1a50b19e6c276599cced6e2d6579d16bd8" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>m_ssaoConfigUbo</name></member>
+      <member refid="dc/d85/a04168_1ae137b1d9ea13d46bf0c90fed7e04969b" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>ResultFormat</name></member>
+      <member refid="dc/d85/a04168_1a3d1e45efcf884fb3647e285a5d42abd0" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>SsaoRawAOPass</name></member>
+      <member refid="dc/d85/a04168_1af6153dccdcc84ff4c438d267f93b0c10" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass</scope><name>~SsaoRawAOPass</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

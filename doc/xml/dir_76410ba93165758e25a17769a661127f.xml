@@ -1,14 +1,15 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_76410ba93165758e25a17769a661127f" kind="dir">
     <compoundname>Render/Technique</compoundname>
     <innerdir refid="dir_b2e7b976d4c5d2a40d21a3ed19987c6c">Render/Technique/Opaque</innerdir>
     <innerdir refid="dir_4b06696aca9ab953f1fac01c09fce614">Render/Technique/Transparent</innerdir>
-    <innerfile refid="dc/d17/a00872">ForwardRenderTechniquePass.hpp</innerfile>
-    <innerfile refid="d3/de5/a00956">RenderTechnique.hpp</innerfile>
-    <innerfile refid="db/d40/a00959">RenderTechniquePass.hpp</innerfile>
-    <innerfile refid="df/d88/a00962">RenderTechniqueVisitor.hpp</innerfile>
-    <innerfile refid="d3/dcd/a00965">TechniqueModule.hpp</innerfile>
+    <innerfile refid="df/d41/a00881">ForwardRenderTechniquePass.hpp</innerfile>
+    <innerfile refid="df/de9/a00923">RenderTechnique.hpp</innerfile>
+    <innerfile refid="d8/d38/a00926">RenderTechniquePass.hpp</innerfile>
+    <innerfile refid="dc/d92/a00929">RenderTechniqueVisitor.hpp</innerfile>
+    <innerfile refid="d8/dbb/a00932">SsaoPass.hpp</innerfile>
+    <innerfile refid="d8/d19/a00935">TechniqueModule.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

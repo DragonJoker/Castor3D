@@ -1,19 +1,103 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d5/d25/a04322" kind="struct" language="C++" prot="public">
-    <compoundname>castor::Deleter&lt; castor3d::SceneRenderNodes &gt;</compoundname>
-    <includes local="no">RenderNodeModule.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
+    <compoundname>castor3d::IntermediateView</compoundname>
+    <includes local="no">Texture.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d5/d25/a04322_1a1141a95460931ea697dc733f6928c6fe" prot="public" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::IntermediateView::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>castor3d::IntermediateView::name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="162" column="16" bodyfile="Render/Texture.hpp" bodystart="162" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d25/a04322_1a82548b0352344689ea050e3aa95333e6" prot="public" static="no" mutable="no">
+        <type>crg::ImageViewId</type>
+        <definition>crg::ImageViewId castor3d::IntermediateView::viewId</definition>
+        <argsstring></argsstring>
+        <name>viewId</name>
+        <qualifiedname>castor3d::IntermediateView::viewId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="163" column="18" bodyfile="Render/Texture.hpp" bodystart="163" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d25/a04322_1a712670fad3512b89d8e3b405e0efa185" prot="public" static="no" mutable="no">
+        <type>VkImageLayout</type>
+        <definition>VkImageLayout castor3d::IntermediateView::layout</definition>
+        <argsstring></argsstring>
+        <name>layout</name>
+        <qualifiedname>castor3d::IntermediateView::layout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="164" column="15" bodyfile="Render/Texture.hpp" bodystart="164" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d25/a04322_1add453463fc060b27897b33a3545bc006" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/d45/a03250" kindref="compound">TextureFactors</ref></type>
+        <definition>TextureFactors castor3d::IntermediateView::factors</definition>
+        <argsstring></argsstring>
+        <name>factors</name>
+        <qualifiedname>castor3d::IntermediateView::factors</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="165" column="16" bodyfile="Render/Texture.hpp" bodystart="165" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d5/d25/a04322_1a9299a89628e884aca230dd696bc519ba" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor::Deleter&lt; castor3d::SceneRenderNodes &gt;::operator()</definition>
-        <argsstring>(castor3d::SceneRenderNodes *ptr) noexcept</argsstring>
-        <name>operator()</name>
+      <memberdef kind="function" id="d5/d25/a04322_1add9c2b42308712ce4b0127f1773c4edb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::IntermediateView::IntermediateView</definition>
+        <argsstring>()=default</argsstring>
+        <name>IntermediateView</name>
+        <qualifiedname>castor3d::IntermediateView::IntermediateView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="138" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d25/a04322_1acbe56936e136f1e5c2f48fc55c6acf2a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::IntermediateView::IntermediateView</definition>
+        <argsstring>(castor::String name, crg::ImageViewId const &amp;viewId, VkImageLayout layout, TextureFactors factors={})</argsstring>
+        <name>IntermediateView</name>
+        <qualifiedname>castor3d::IntermediateView::IntermediateView</qualifiedname>
         <param>
-          <type><ref refid="d4/dcb/a04342" kindref="compound">castor3d::SceneRenderNodes</ref> *</type>
-          <declname>ptr</declname>
+          <type>castor::String</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>viewId</declname>
+        </param>
+        <param>
+          <type>VkImageLayout</type>
+          <declname>layout</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d45/a03250" kindref="compound">TextureFactors</ref></type>
+          <declname>factors</declname>
+          <defval>{}</defval>
         </param>
         <briefdescription>
         </briefdescription>
@@ -21,20 +105,66 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Node/RenderNodeModule.hpp" line="141" column="1"/>
+        <location file="Render/Texture.hpp" line="140" column="1" bodyfile="Render/Texture.hpp" bodystart="140" bodyend="149"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d25/a04322_1a1849f7686d722ea76bd3cddabcdb7893" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::IntermediateView::IntermediateView</definition>
+        <argsstring>(castor::String name, Texture const &amp;texture, VkImageLayout layout, TextureFactors factors={})</argsstring>
+        <name>IntermediateView</name>
+        <qualifiedname>castor3d::IntermediateView::IntermediateView</qualifiedname>
+        <param>
+          <type>castor::String</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d8c/a04318" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>texture</declname>
+        </param>
+        <param>
+          <type>VkImageLayout</type>
+          <declname>layout</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d45/a03250" kindref="compound">TextureFactors</ref></type>
+          <declname>factors</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Texture.hpp" line="151" column="1" bodyfile="Render/Texture.hpp" bodystart="151" bodyend="160"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Deleter structure. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="remark"><para>Specialisation to hide implementation in .cpp (to reduce includes dependencies). </para>
-</simplesect>
-</para>
     </detaileddescription>
-    <location file="Render/Node/RenderNodeModule.hpp" line="140" column="1" bodyfile="Render/Node/RenderNodeModule.hpp" bodystart="139" bodyend="142"/>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::IntermediateView</label>
+        <link refid="d5/d25/a04322"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>factors</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::TextureFactors</label>
+        <link refid="dc/d45/a03250"/>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Texture.hpp" line="136" column="1" bodyfile="Render/Texture.hpp" bodystart="137" bodyend="166"/>
     <listofallmembers>
-      <member refid="d5/d25/a04322_1a9299a89628e884aca230dd696bc519ba" prot="public" virt="non-virtual"><scope>castor::Deleter&lt; castor3d::SceneRenderNodes &gt;</scope><name>operator()</name></member>
+      <member refid="d5/d25/a04322_1add453463fc060b27897b33a3545bc006" prot="public" virt="non-virtual"><scope>castor3d::IntermediateView</scope><name>factors</name></member>
+      <member refid="d5/d25/a04322_1add9c2b42308712ce4b0127f1773c4edb" prot="public" virt="non-virtual"><scope>castor3d::IntermediateView</scope><name>IntermediateView</name></member>
+      <member refid="d5/d25/a04322_1acbe56936e136f1e5c2f48fc55c6acf2a" prot="public" virt="non-virtual"><scope>castor3d::IntermediateView</scope><name>IntermediateView</name></member>
+      <member refid="d5/d25/a04322_1a1849f7686d722ea76bd3cddabcdb7893" prot="public" virt="non-virtual"><scope>castor3d::IntermediateView</scope><name>IntermediateView</name></member>
+      <member refid="d5/d25/a04322_1a712670fad3512b89d8e3b405e0efa185" prot="public" virt="non-virtual"><scope>castor3d::IntermediateView</scope><name>layout</name></member>
+      <member refid="d5/d25/a04322_1a1141a95460931ea697dc733f6928c6fe" prot="public" virt="non-virtual"><scope>castor3d::IntermediateView</scope><name>name</name></member>
+      <member refid="d5/d25/a04322_1a82548b0352344689ea050e3aa95333e6" prot="public" virt="non-virtual"><scope>castor3d::IntermediateView</scope><name>viewId</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

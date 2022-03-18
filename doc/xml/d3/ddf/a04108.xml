@@ -1,52 +1,942 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d3/ddf/a04108" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::OverlayCategory::Vertex</compoundname>
-    <includes local="no">OverlayCategory.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d3/ddf/a04108_1ae8cb56953aef04c695e0900e49c64727" prot="public" static="no" mutable="no">
-        <type>castor::Point2f</type>
-        <definition>castor::Point2f castor3d::OverlayCategory::Vertex::coords</definition>
-        <argsstring></argsstring>
-        <name>coords</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d3/ddf/a04108" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::ShadowMap</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <derivedcompoundref refid="db/da3/a04116" prot="public" virt="non-virtual">castor3d::ShadowMapDirectional</derivedcompoundref>
+    <derivedcompoundref refid="df/d74/a04136" prot="public" virt="non-virtual">castor3d::ShadowMapPoint</derivedcompoundref>
+    <derivedcompoundref refid="d1/d4c/a04144" prot="public" virt="non-virtual">castor3d::ShadowMapSpot</derivedcompoundref>
+    <includes local="no">ShadowMap.hpp</includes>
+    <innerclass refid="d5/d8b/a04112" prot="public">castor3d::ShadowMap::PassData</innerclass>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d3/ddf/a04108_1a97532a0d6a8055fe2c1111e17ac31db0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::VkClearValueArray const &amp;</type>
+        <definition>C3D_API ashes::VkClearValueArray const  &amp; castor3d::ShadowMap::getClearValues</definition>
+        <argsstring>() const</argsstring>
+        <name>getClearValues</name>
+        <qualifiedname>castor3d::ShadowMap::getClearValues</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>name Getters. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/OverlayCategory.hpp" line="30" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="30" bodyend="-1"/>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="131" column="41"/>
       </memberdef>
-      <memberdef kind="variable" id="d3/ddf/a04108_1a7721675ac35a3dc95552813297f9705f" prot="public" static="no" mutable="no">
-        <type>castor::Point2f</type>
-        <definition>castor::Point2f castor3d::OverlayCategory::Vertex::texture</definition>
-        <argsstring></argsstring>
-        <name>texture</name>
+      <memberdef kind="function" id="d3/ddf/a04108_1ac2c0235a4c998b748c2f7976e59a857d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Sampler const &amp;</type>
+        <definition>C3D_API ashes::Sampler const  &amp; castor3d::ShadowMap::getSampler</definition>
+        <argsstring>(SmTexture texture, uint32_t index=0u) const</argsstring>
+        <name>getSampler</name>
+        <qualifiedname>castor3d::ShadowMap::getSampler</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1afd8c72a6b5ba8d1f784bec682765751c" kindref="member">SmTexture</ref></type>
+          <declname>texture</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+          <defval>0u</defval>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/OverlayCategory.hpp" line="31" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="31" bodyend="-1"/>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="132" column="31"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/ddf/a04108_1ad9dd96938ee421ca34bfa6d0cb0fc5a3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> crg::ImageViewId</type>
+        <definition>virtual C3D_API crg::ImageViewId castor3d::ShadowMap::getView</definition>
+        <argsstring>(SmTexture texture, uint32_t index=0u) const</argsstring>
+        <name>getView</name>
+        <qualifiedname>castor3d::ShadowMap::getView</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1afd8c72a6b5ba8d1f784bec682765751c" kindref="member">SmTexture</ref></type>
+          <declname>texture</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="134" column="34"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/ddf/a04108_1aaf169f1a9990fd4d63df9a2886c9b85d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> crg::ImageViewIdArray</type>
+        <definition>virtual C3D_API crg::ImageViewIdArray castor3d::ShadowMap::getViews</definition>
+        <argsstring>(SmTexture texture, uint32_t index=0u) const</argsstring>
+        <name>getViews</name>
+        <qualifiedname>castor3d::ShadowMap::getViews</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1afd8c72a6b5ba8d1f784bec682765751c" kindref="member">SmTexture</ref></type>
+          <declname>texture</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="136" column="39"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/ddf/a04108_1ac642d4fd81eee2997dd75329a083b331" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d1/d2d/a04140" kindref="compound">ShadowMapResult</ref> const &amp;</type>
+        <definition>ShadowMapResult const  &amp; castor3d::ShadowMap::getShadowPassResult</definition>
+        <argsstring>() const</argsstring>
+        <name>getShadowPassResult</name>
+        <qualifiedname>castor3d::ShadowMap::getShadowPassResult</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="139" column="24" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="139" bodyend="142"/>
+        <references refid="d3/ddf/a04108_1a96628a8e618fc25c6656e53613d247cd" compoundref="d3/d13/a00836" startline="185">m_result</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/ddf/a04108_1a9bcba4fdeac895f327113b1f744f25a7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d1/d2d/a04140" kindref="compound">ShadowMapResult</ref> &amp;</type>
+        <definition>ShadowMapResult &amp; castor3d::ShadowMap::getShadowPassResult</definition>
+        <argsstring>()</argsstring>
+        <name>getShadowPassResult</name>
+        <qualifiedname>castor3d::ShadowMap::getShadowPassResult</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="144" column="18" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="144" bodyend="147"/>
+        <references refid="d3/ddf/a04108_1a96628a8e618fc25c6656e53613d247cd" compoundref="d3/d13/a00836" startline="185">m_result</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/ddf/a04108_1a67307651db741d32aa34ad4d8547100f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d34/a04592" kindref="compound">Scene</ref> &amp;</type>
+        <definition>Scene &amp; castor3d::ShadowMap::getScene</definition>
+        <argsstring>() const</argsstring>
+        <name>getScene</name>
+        <qualifiedname>castor3d::ShadowMap::getScene</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="149" column="8" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="149" bodyend="152"/>
+        <references refid="d3/ddf/a04108_1a48fc5d5186c99acf90ebe8ae857888a5" compoundref="d3/d13/a00836" startline="182">m_scene</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/ddf/a04108_1a628345d684f5d83c1abd45ef14ef92b4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ShadowMap::getCount</definition>
+        <argsstring>() const</argsstring>
+        <name>getCount</name>
+        <qualifiedname>castor3d::ShadowMap::getCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="154" column="10" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="154" bodyend="157"/>
+        <references refid="d3/ddf/a04108_1a7f00a0e5f14bc465161695856b16948e" compoundref="d3/d13/a00836" startline="186">m_count</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d3/ddf/a04108_1a8ee65c9a8fd7125d6648971035b5c264" prot="public" static="no">
+        <type>std::unique_ptr&lt; <ref refid="d5/d8b/a04112" kindref="compound">PassData</ref> &gt;</type>
+        <definition>using castor3d::ShadowMap::PassDataPtr =  std::unique_ptr&lt; PassData &gt;</definition>
+        <argsstring></argsstring>
+        <name>PassDataPtr</name>
+        <qualifiedname>castor3d::ShadowMap::PassDataPtr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="54" column="1" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d3/ddf/a04108_1a6bd1f0b1d9ff1228daa1364bf8aafdd6" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr <ref refid="d2/df5/a01395_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref></type>
+        <definition>constexpr TextureFlags castor3d::ShadowMap::textureFlags</definition>
+        <argsstring></argsstring>
+        <name>textureFlags</name>
+        <qualifiedname>castor3d::ShadowMap::textureFlags</qualifiedname>
+        <initializer>{ <ref refid="d2/df5/a01395_1ae3a32e32f3eaa63d0b9886aa3e942742aa3a957357b758bcbb55d221bf975b545" kindref="member">TextureFlag::eOpacity</ref>
+			| <ref refid="d2/df5/a01395_1ae3a32e32f3eaa63d0b9886aa3e942742ab4f88a7e09f780f6246448ebb0f6a44b" kindref="member">TextureFlag::eNormal</ref>
+			| <ref refid="d2/df5/a01395_1ae3a32e32f3eaa63d0b9886aa3e942742ab217ed1793a407e18f52c4491f20b4c1" kindref="member">TextureFlag::eAlbedo</ref>
+			| <ref refid="d2/df5/a01395_1ae3a32e32f3eaa63d0b9886aa3e942742aff5c79b4447f084037c3a309bb0154a7" kindref="member">TextureFlag::eSpecular</ref>
+			| <ref refid="d2/df5/a01395_1ae3a32e32f3eaa63d0b9886aa3e942742af42928970588685c2c66854a6dc3e8e0" kindref="member">TextureFlag::eMetalness</ref>
+			| <ref refid="d2/df5/a01395_1ae3a32e32f3eaa63d0b9886aa3e942742aa98371b1fb1b8c716974b4541c8dd516" kindref="member">TextureFlag::eGlossiness</ref>
+			| <ref refid="d2/df5/a01395_1ae3a32e32f3eaa63d0b9886aa3e942742afaf5e1c1cc0d3d1e6e89f86d82847a00" kindref="member">TextureFlag::eShininess</ref>
+			| <ref refid="d2/df5/a01395_1ae3a32e32f3eaa63d0b9886aa3e942742a34ff1b4954999035b0b1999d42ad8a7a" kindref="member">TextureFlag::eRoughness</ref>
+			| <ref refid="d2/df5/a01395_1ae3a32e32f3eaa63d0b9886aa3e942742affa860c82cbc36d9b98677787f8b250c" kindref="member">TextureFlag::eEmissive</ref>
+			| <ref refid="d2/df5/a01395_1ae3a32e32f3eaa63d0b9886aa3e942742a3d90465aca21d547a7640dc26592f050" kindref="member">TextureFlag::eTransmittance</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="161" column="31" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="161" bodyend="-1"/>
+        <referencedby refid="d5/dd1/a04120_1a641044a6e337993464b57845b52e1cec" compoundref="d7/dcf/a00845" startline="61" endline="64">castor3d::ShadowMapPass::getTexturesMask</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d3/ddf/a04108_1a668039e910e96aa5e90bb2a59f3aee78" prot="protected" static="no" mutable="no">
+        <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::ShadowMap::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::ShadowMap::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="180" column="21" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="180" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/ddf/a04108_1aa573115868bdb8fb6f4a7ec9619b9ac2" prot="protected" static="no" mutable="no">
+        <type>crg::ResourceHandler &amp;</type>
+        <definition>crg::ResourceHandler&amp; castor3d::ShadowMap::m_handler</definition>
+        <argsstring></argsstring>
+        <name>m_handler</name>
+        <qualifiedname>castor3d::ShadowMap::m_handler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="181" column="23" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="181" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/ddf/a04108_1a48fc5d5186c99acf90ebe8ae857888a5" prot="protected" static="no" mutable="no">
+        <type><ref refid="da/d34/a04592" kindref="compound">Scene</ref> &amp;</type>
+        <definition>Scene&amp; castor3d::ShadowMap::m_scene</definition>
+        <argsstring></argsstring>
+        <name>m_scene</name>
+        <qualifiedname>castor3d::ShadowMap::m_scene</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="182" column="8" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="182" bodyend="-1"/>
+        <referencedby refid="d3/ddf/a04108_1a67307651db741d32aa34ad4d8547100f" compoundref="d3/d13/a00836" startline="149" endline="152">getScene</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d3/ddf/a04108_1a9f394df666a358ba03fe245e0e74d236" prot="protected" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::ShadowMap::m_name</definition>
+        <argsstring></argsstring>
+        <name>m_name</name>
+        <qualifiedname>castor3d::ShadowMap::m_name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="183" column="16" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="183" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/ddf/a04108_1a1782400ff03d33592ad6c25c25c9b228" prot="protected" static="no" mutable="no">
+        <type><ref refid="d2/df5/a01395_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+        <definition>LightType castor3d::ShadowMap::m_lightType</definition>
+        <argsstring></argsstring>
+        <name>m_lightType</name>
+        <qualifiedname>castor3d::ShadowMap::m_lightType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="184" column="11" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="184" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/ddf/a04108_1a96628a8e618fc25c6656e53613d247cd" prot="protected" static="no" mutable="no">
+        <type><ref refid="d1/d2d/a04140" kindref="compound">ShadowMapResult</ref></type>
+        <definition>ShadowMapResult castor3d::ShadowMap::m_result</definition>
+        <argsstring></argsstring>
+        <name>m_result</name>
+        <qualifiedname>castor3d::ShadowMap::m_result</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="185" column="17" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="185" bodyend="-1"/>
+        <referencedby refid="d3/ddf/a04108_1ac642d4fd81eee2997dd75329a083b331" compoundref="d3/d13/a00836" startline="139" endline="142">getShadowPassResult</referencedby>
+        <referencedby refid="df/d74/a04136_1a00790d556308d320b0e52b5fdf988538" compoundref="d0/d82/a00857" startline="49" endline="52">castor3d::ShadowMapPoint::getTexture</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d3/ddf/a04108_1a7f00a0e5f14bc465161695856b16948e" prot="protected" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ShadowMap::m_count</definition>
+        <argsstring></argsstring>
+        <name>m_count</name>
+        <qualifiedname>castor3d::ShadowMap::m_count</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="186" column="10" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="186" bodyend="-1"/>
+        <referencedby refid="d3/ddf/a04108_1a628345d684f5d83c1abd45ef14ef92b4" compoundref="d3/d13/a00836" startline="154" endline="157">getCount</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d3/ddf/a04108_1ac61987ecf84c837a3f8d7c4b11a90cca" prot="protected" static="no" mutable="no">
+        <type>std::set&lt; std::reference_wrapper&lt; <ref refid="dc/dbb/a02520" kindref="compound">GeometryBuffers</ref> &gt; &gt;</type>
+        <definition>std::set&lt; std::reference_wrapper&lt; GeometryBuffers &gt; &gt; castor3d::ShadowMap::m_geometryBuffers</definition>
+        <argsstring></argsstring>
+        <name>m_geometryBuffers</name>
+        <qualifiedname>castor3d::ShadowMap::m_geometryBuffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="187" column="10" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="187" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/ddf/a04108_1a278107fc45c7b57594b2054decc1ead1" prot="protected" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d3/ddf/a04108_1a8ee65c9a8fd7125d6648971035b5c264" kindref="member">PassDataPtr</ref> &gt;</type>
+        <definition>std::vector&lt; PassDataPtr &gt; castor3d::ShadowMap::m_passes</definition>
+        <argsstring></argsstring>
+        <name>m_passes</name>
+        <qualifiedname>castor3d::ShadowMap::m_passes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="188" column="13" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="188" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/ddf/a04108_1ac11ad300e274e7d5b67d85ad30c5fe0d" prot="protected" static="no" mutable="no">
+        <type>std::vector&lt; std::unique_ptr&lt; crg::FrameGraph &gt; &gt;</type>
+        <definition>std::vector&lt; std::unique_ptr&lt; crg::FrameGraph &gt; &gt; castor3d::ShadowMap::m_graphs</definition>
+        <argsstring></argsstring>
+        <name>m_graphs</name>
+        <qualifiedname>castor3d::ShadowMap::m_graphs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="189" column="13" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="189" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/ddf/a04108_1a99413df0376d382120ce66ddada39821" prot="protected" static="no" mutable="no">
+        <type>std::vector&lt; crg::RunnableGraphPtr &gt;</type>
+        <definition>std::vector&lt; crg::RunnableGraphPtr &gt; castor3d::ShadowMap::m_runnables</definition>
+        <argsstring></argsstring>
+        <name>m_runnables</name>
+        <qualifiedname>castor3d::ShadowMap::m_runnables</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="190" column="13" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="190" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/ddf/a04108_1aa98425df702e19da6205671d56b8a5c1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ShadowMap::ShadowMap</definition>
+        <argsstring>(crg::ResourceHandler &amp;handler, RenderDevice const &amp;device, Scene &amp;scene, LightType lightType, VkImageCreateFlags createFlags, castor::Size const &amp;size, uint32_t layerCount, uint32_t count)</argsstring>
+        <name>ShadowMap</name>
+        <qualifiedname>castor3d::ShadowMap::ShadowMap</qualifiedname>
+        <param>
+          <type>crg::ResourceHandler &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d34/a04592" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>lightType</declname>
+        </param>
+        <param>
+          <type>VkImageCreateFlags</type>
+          <declname>createFlags</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>layerCount</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lightType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The light source type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">result</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The shadow map pass result. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">passes</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The passes used to render map. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The passes count. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="73" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/ddf/a04108_1ac9e7c75e731020cd90623d47a06644f3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::ShadowMap::~ShadowMap</definition>
+        <argsstring>()=default</argsstring>
+        <name>~ShadowMap</name>
+        <qualifiedname>castor3d::ShadowMap::~ShadowMap</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="87" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/ddf/a04108_1a26e954636e821e196c97ac79356e3cd8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ShadowMap::accept</definition>
+        <argsstring>(PipelineVisitorBase &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::ShadowMap::accept</qualifiedname>
+        <param>
+          <type><ref refid="d3/d55/a03256" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Visitor acceptance function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="100" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/ddf/a04108_1ab0783b7c6a6037f2432a69015e814855" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ShadowMap::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::ShadowMap::update</qualifiedname>
+        <param>
+          <type><ref refid="db/d69/a04040" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, CPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="109" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/ddf/a04108_1ad0cc2fec0d75db225d37bfb42bc22619" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::ShadowMap::update</definition>
+        <argsstring>(GpuUpdater &amp;updater)=0</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::ShadowMap::update</qualifiedname>
+        <reimplementedby refid="db/da3/a04116_1abd3c9cfece1038c87be0bad738eae541">update</reimplementedby>
+        <reimplementedby refid="df/d74/a04136_1af0793013f38785f2fb78bb3c6ccd03ef">update</reimplementedby>
+        <reimplementedby refid="d1/d4c/a04144_1a45675d3de814a08c42741979143b2b41">update</reimplementedby>
+        <param>
+          <type><ref refid="d1/dc7/a04044" kindref="compound">GpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, GPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="118" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/ddf/a04108_1a36b93ea4deac78e3dacff63544874486" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> crg::SemaphoreWaitArray</type>
+        <definition>C3D_API crg::SemaphoreWaitArray castor3d::ShadowMap::render</definition>
+        <argsstring>(crg::SemaphoreWaitArray const &amp;toWait, ashes::Queue const &amp;queue, uint32_t index)</argsstring>
+        <name>render</name>
+        <qualifiedname>castor3d::ShadowMap::render</qualifiedname>
+        <param>
+          <type>crg::SemaphoreWaitArray const &amp;</type>
+          <declname>toWait</declname>
+        </param>
+        <param>
+          <type>ashes::Queue const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="119" column="33"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d3/ddf/a04108_1a5fd6b3d9744b5b046394918ef7631052" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::vector&lt; <ref refid="d3/ddf/a04108_1a8ee65c9a8fd7125d6648971035b5c264" kindref="member">ShadowMap::PassDataPtr</ref> &gt;</type>
+        <definition>virtual C3D_API std::vector&lt; ShadowMap::PassDataPtr &gt; castor3d::ShadowMap::doCreatePass</definition>
+        <argsstring>(uint32_t index)=0</argsstring>
+        <name>doCreatePass</name>
+        <qualifiedname>castor3d::ShadowMap::doCreatePass</qualifiedname>
+        <reimplementedby refid="db/da3/a04116_1a18b4c2c5b69cd7f57dbf03385e81660c">doCreatePass</reimplementedby>
+        <reimplementedby refid="df/d74/a04136_1a446e97c008e42af39fdc8584b4848b1d">doCreatePass</reimplementedby>
+        <reimplementedby refid="d1/d4c/a04144_1ad5b15d6452aba71ec773f3f0139d8613">doCreatePass</reimplementedby>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="173" column="29"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/ddf/a04108_1a92d64ddc46fc4525000ddf53d4584b7f" prot="private" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::ShadowMap::doIsUpToDate</definition>
+        <argsstring>(uint32_t index) const =0</argsstring>
+        <name>doIsUpToDate</name>
+        <qualifiedname>castor3d::ShadowMap::doIsUpToDate</qualifiedname>
+        <reimplementedby refid="db/da3/a04116_1abe1ad529a0cbbc46e3f502f26e31b3aa">doIsUpToDate</reimplementedby>
+        <reimplementedby refid="df/d74/a04136_1a297c4001e7baf6189efdb05df04790cc">doIsUpToDate</reimplementedby>
+        <reimplementedby refid="d1/d4c/a04144_1af63fef145da589e455b4bb9cea4f92f1">doIsUpToDate</reimplementedby>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="174" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/ddf/a04108_1ac6bcc5cc8d789b08dfd54d8b37837e6f" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::ShadowMap::doSetUpToDate</definition>
+        <argsstring>(uint32_t index)=0</argsstring>
+        <name>doSetUpToDate</name>
+        <qualifiedname>castor3d::ShadowMap::doSetUpToDate</qualifiedname>
+        <reimplementedby refid="db/da3/a04116_1a4e647a6d7bce6e0c35f6c75abec07d93">doSetUpToDate</reimplementedby>
+        <reimplementedby refid="df/d74/a04136_1abb31747da2fcd9889cb84c8b7bdf16e3">doSetUpToDate</reimplementedby>
+        <reimplementedby refid="d1/d4c/a04144_1a0c987a8e0a0d0493f4bd57a5e6405544">doSetUpToDate</reimplementedby>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="175" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/ddf/a04108_1aa5d29b89f9f28ca137d081875ebee1c3" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::ShadowMap::doUpdate</definition>
+        <argsstring>(CpuUpdater &amp;updater)=0</argsstring>
+        <name>doUpdate</name>
+        <qualifiedname>castor3d::ShadowMap::doUpdate</qualifiedname>
+        <reimplementedby refid="db/da3/a04116_1a9343dcf4c700612072f36094ea9b2e15">doUpdate</reimplementedby>
+        <reimplementedby refid="df/d74/a04136_1ade6b72acf68edcca4d121ac95f3fe13f">doUpdate</reimplementedby>
+        <reimplementedby refid="d1/d4c/a04144_1a679ed5eedbe7408610da27592071da2c">doUpdate</reimplementedby>
+        <param>
+          <type><ref refid="db/d69/a04040" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="176" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/ddf/a04108_1afc2744286ac8226793e12184239cac3e" prot="private" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>virtual C3D_API uint32_t castor3d::ShadowMap::doGetMaxCount</definition>
+        <argsstring>() const =0</argsstring>
+        <name>doGetMaxCount</name>
+        <qualifiedname>castor3d::ShadowMap::doGetMaxCount</qualifiedname>
+        <reimplementedby refid="db/da3/a04116_1afa0e6eede026d9a0146a03bb5c0697d5">doGetMaxCount</reimplementedby>
+        <reimplementedby refid="df/d74/a04136_1a92c408d08265ff2b4f92216f708e1af2">doGetMaxCount</reimplementedby>
+        <reimplementedby refid="d1/d4c/a04144_1a5f93d9d381ebb83eb2ce321c3639f1ee">doGetMaxCount</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="177" column="26"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Holds specific vertex data for an <ref refid="d1/da3/a04100" kindref="compound">Overlay</ref>. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
-</simplesect>
-<simplesect kind="date"><para>28/11/2014 </para>
-</simplesect>
-<simplesect kind="version"><para>0.7.0 </para>
-</simplesect>
-</para>
     </detaileddescription>
-    <location file="Overlay/OverlayCategory.hpp" line="29" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="28" bodyend="32"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::ShadowMap</label>
+        <link refid="d3/ddf/a04108"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::ShadowMapDirectional</label>
+        <link refid="db/da3/a04116"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::ShadowMapPoint</label>
+        <link refid="df/d74/a04136"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::ShadowMapSpot</label>
+        <link refid="d1/d4c/a04144"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="13">
+        <label>castor3d::GBufferT&lt; SmTexture &gt;</label>
+        <link refid="df/d98/a03680"/>
+        <childnode refid="14" relation="private-inheritance">
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>m_result</edgelabel>
+        </childnode>
+        <childnode refid="17" relation="template-instance">
+          <edgelabel>&lt; SmTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>K</label>
+      </node>
+      <node id="8">
+        <label>T</label>
+      </node>
+      <node id="14">
+        <label>castor3d::GBufferBase</label>
+        <link refid="d9/d94/a03676"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="df/d98/a03680"/>
+        <childnode refid="14" relation="private-inheritance">
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>m_result</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::QueuesData</label>
+        <link refid="d3/d70/a03952"/>
+      </node>
+      <node id="3">
+        <label>castor3d::RenderDevice</label>
+        <link refid="d2/df2/a03960"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>queueFamilies</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d2/dbb/a04072"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::Scene</label>
+        <link refid="da/d34/a04592"/>
+        <childnode refid="10" relation="public-inheritance">
+        </childnode>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ShadowMap</label>
+        <link refid="d3/ddf/a04108"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_scene</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_result</edgelabel>
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>m_geometryBuffers</edgelabel>
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>m_passes</edgelabel>
+        </childnode>
+        <childnode refid="23" relation="usage">
+          <edgelabel>m_graphs</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="usage">
+          <edgelabel>m_runnables</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::ShadowMapResult</label>
+        <link refid="d1/d2d/a04140"/>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor::Named</label>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="18">
+        <label>std::set&lt; std::reference_wrapper&lt; castor3d::GeometryBuffers &gt; &gt;</label>
+        <childnode refid="19" relation="template-instance">
+          <edgelabel>&lt; std::reference_wrapper&lt; castor3d::GeometryBuffers &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
+      </node>
+      <node id="19">
+        <label>std::set&lt; K &gt;</label>
+        <childnode refid="20" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>std::shared_ptr&lt; T &gt;</label>
+        <childnode refid="8" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="8" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="8" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="24">
+        <label>std::unique_ptr&lt; crg::FrameGraph &gt;</label>
+        <childnode refid="22" relation="template-instance">
+          <edgelabel>&lt; crg::FrameGraph &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>std::vector&lt; PassDataPtr &gt;</label>
+        <childnode refid="22" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; PassDataPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::vector&lt; QueuesData &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; QueuesData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>std::vector&lt; TexturePtr &gt;</label>
+        <childnode refid="16" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; TexturePtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="25">
+        <label>std::vector&lt; crg::RunnableGraphPtr &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; crg::RunnableGraphPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>std::vector&lt; std::unique_ptr&lt; crg::FrameGraph &gt; &gt;</label>
+        <childnode refid="24" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::unique_ptr&lt; crg::FrameGraph &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/ShadowMap/ShadowMap.hpp" line="21" column="1" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="23" bodyend="191"/>
     <listofallmembers>
-      <member refid="d3/ddf/a04108_1ae8cb56953aef04c695e0900e49c64727" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory::Vertex</scope><name>coords</name></member>
-      <member refid="d3/ddf/a04108_1a7721675ac35a3dc95552813297f9705f" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory::Vertex</scope><name>texture</name></member>
+      <member refid="d3/ddf/a04108_1a26e954636e821e196c97ac79356e3cd8" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap</scope><name>accept</name></member>
+      <member refid="d3/ddf/a04108_1a5fd6b3d9744b5b046394918ef7631052" prot="private" virt="pure-virtual"><scope>castor3d::ShadowMap</scope><name>doCreatePass</name></member>
+      <member refid="d3/ddf/a04108_1afc2744286ac8226793e12184239cac3e" prot="private" virt="pure-virtual"><scope>castor3d::ShadowMap</scope><name>doGetMaxCount</name></member>
+      <member refid="d3/ddf/a04108_1a92d64ddc46fc4525000ddf53d4584b7f" prot="private" virt="pure-virtual"><scope>castor3d::ShadowMap</scope><name>doIsUpToDate</name></member>
+      <member refid="d3/ddf/a04108_1ac6bcc5cc8d789b08dfd54d8b37837e6f" prot="private" virt="pure-virtual"><scope>castor3d::ShadowMap</scope><name>doSetUpToDate</name></member>
+      <member refid="d3/ddf/a04108_1aa5d29b89f9f28ca137d081875ebee1c3" prot="private" virt="pure-virtual"><scope>castor3d::ShadowMap</scope><name>doUpdate</name></member>
+      <member refid="d3/ddf/a04108_1a97532a0d6a8055fe2c1111e17ac31db0" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap</scope><name>getClearValues</name></member>
+      <member refid="d3/ddf/a04108_1a628345d684f5d83c1abd45ef14ef92b4" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap</scope><name>getCount</name></member>
+      <member refid="d3/ddf/a04108_1ac2c0235a4c998b748c2f7976e59a857d" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap</scope><name>getSampler</name></member>
+      <member refid="d3/ddf/a04108_1a67307651db741d32aa34ad4d8547100f" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap</scope><name>getScene</name></member>
+      <member refid="d3/ddf/a04108_1ac642d4fd81eee2997dd75329a083b331" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap</scope><name>getShadowPassResult</name></member>
+      <member refid="d3/ddf/a04108_1a9bcba4fdeac895f327113b1f744f25a7" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap</scope><name>getShadowPassResult</name></member>
+      <member refid="d3/ddf/a04108_1ad9dd96938ee421ca34bfa6d0cb0fc5a3" prot="public" virt="virtual"><scope>castor3d::ShadowMap</scope><name>getView</name></member>
+      <member refid="d3/ddf/a04108_1aaf169f1a9990fd4d63df9a2886c9b85d" prot="public" virt="virtual"><scope>castor3d::ShadowMap</scope><name>getViews</name></member>
+      <member refid="d3/ddf/a04108_1a7f00a0e5f14bc465161695856b16948e" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMap</scope><name>m_count</name></member>
+      <member refid="d3/ddf/a04108_1a668039e910e96aa5e90bb2a59f3aee78" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMap</scope><name>m_device</name></member>
+      <member refid="d3/ddf/a04108_1ac61987ecf84c837a3f8d7c4b11a90cca" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMap</scope><name>m_geometryBuffers</name></member>
+      <member refid="d3/ddf/a04108_1ac11ad300e274e7d5b67d85ad30c5fe0d" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMap</scope><name>m_graphs</name></member>
+      <member refid="d3/ddf/a04108_1aa573115868bdb8fb6f4a7ec9619b9ac2" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMap</scope><name>m_handler</name></member>
+      <member refid="d3/ddf/a04108_1a1782400ff03d33592ad6c25c25c9b228" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMap</scope><name>m_lightType</name></member>
+      <member refid="d3/ddf/a04108_1a9f394df666a358ba03fe245e0e74d236" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMap</scope><name>m_name</name></member>
+      <member refid="d3/ddf/a04108_1a278107fc45c7b57594b2054decc1ead1" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMap</scope><name>m_passes</name></member>
+      <member refid="d3/ddf/a04108_1a96628a8e618fc25c6656e53613d247cd" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMap</scope><name>m_result</name></member>
+      <member refid="d3/ddf/a04108_1a99413df0376d382120ce66ddada39821" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMap</scope><name>m_runnables</name></member>
+      <member refid="d3/ddf/a04108_1a48fc5d5186c99acf90ebe8ae857888a5" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMap</scope><name>m_scene</name></member>
+      <member refid="d3/ddf/a04108_1a8ee65c9a8fd7125d6648971035b5c264" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap</scope><name>PassDataPtr</name></member>
+      <member refid="d3/ddf/a04108_1a36b93ea4deac78e3dacff63544874486" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap</scope><name>render</name></member>
+      <member refid="d3/ddf/a04108_1aa98425df702e19da6205671d56b8a5c1" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap</scope><name>ShadowMap</name></member>
+      <member refid="d3/ddf/a04108_1a6bd1f0b1d9ff1228daa1364bf8aafdd6" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap</scope><name>textureFlags</name></member>
+      <member refid="d3/ddf/a04108_1ab0783b7c6a6037f2432a69015e814855" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap</scope><name>update</name></member>
+      <member refid="d3/ddf/a04108_1ad0cc2fec0d75db225d37bfb42bc22619" prot="public" virt="pure-virtual"><scope>castor3d::ShadowMap</scope><name>update</name></member>
+      <member refid="d3/ddf/a04108_1ac9e7c75e731020cd90623d47a06644f3" prot="public" virt="virtual"><scope>castor3d::ShadowMap</scope><name>~ShadowMap</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

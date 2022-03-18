@@ -1,297 +1,175 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="de/df1/a04758" kind="struct" language="C++" prot="protected" abstract="yes">
-    <compoundname>castor3d::LightPass::Program</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">Named</basecompoundref>
-    <derivedcompoundref refid="db/d62/a04730" prot="public" virt="non-virtual">castor3d::DirectionalLightPass::Program</derivedcompoundref>
-    <derivedcompoundref refid="de/d4c/a04794" prot="public" virt="non-virtual">castor3d::MeshLightPass::Program</derivedcompoundref>
-    <includes local="no">LightPass.hpp</includes>
-      <sectiondef kind="user-defined">
-      <memberdef kind="function" id="de/df1/a04758_1abc2748c3e65cfc9e4c431e908c561dd0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::DescriptorSetLayout const  &amp;</type>
-        <definition>ashes::DescriptorSetLayout const&amp; castor3d::LightPass::Program::getUboDescriptorLayout</definition>
-        <argsstring>() const</argsstring>
-        <name>getUboDescriptorLayout</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>name Getters. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="165" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="165" bodyend="169"/>
-        <references refid="de/df1/a04758_1aee516c4a94abe87058cfc9f4248a6ef8" compoundref="d5/d69/a00878" startline="226">m_uboDescriptorLayout</references>
-      </memberdef>
-      <memberdef kind="function" id="de/df1/a04758_1a4750cb3a226efed78fc75d73b1e1d66a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::DescriptorSetLayout const  &amp;</type>
-        <definition>ashes::DescriptorSetLayout const&amp; castor3d::LightPass::Program::getTextureDescriptorLayout</definition>
-        <argsstring>() const</argsstring>
-        <name>getTextureDescriptorLayout</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="de/df1/a04758" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::StructuredShaderBuffer</compoundname>
+    <includes local="no">StructuredShaderBuffer.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ElementTypeTraits</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="de/df1/a04758_1ac871c6867fd96e3f487cc1eff2fb8f2b" prot="public" static="no">
+        <type>typename ElementTypeTraits::ElementType</type>
+        <definition>using castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::ElementType =  typename ElementTypeTraits::ElementType</definition>
+        <argsstring></argsstring>
+        <name>ElementType</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::ElementType</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="171" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="171" bodyend="175"/>
-        <references refid="de/df1/a04758_1af9fef7d04765b65116ef087761c8584c" compoundref="d5/d69/a00878" startline="228">m_textureDescriptorLayout</references>
-      </memberdef>
-      <memberdef kind="function" id="de/df1/a04758_1a8316aee9157855bdf8893f1554aff8bf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::DescriptorSetPool const  &amp;</type>
-        <definition>ashes::DescriptorSetPool const&amp; castor3d::LightPass::Program::getUboDescriptorPool</definition>
-        <argsstring>() const</argsstring>
-        <name>getUboDescriptorPool</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="177" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="177" bodyend="181"/>
-        <references refid="de/df1/a04758_1a1d562428e80aec816dad9255fb988568" compoundref="d5/d69/a00878" startline="227">m_uboDescriptorPool</references>
-      </memberdef>
-      <memberdef kind="function" id="de/df1/a04758_1adc6a0d70291a75c8685b58f74c1d051d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::DescriptorSetPool const  &amp;</type>
-        <definition>ashes::DescriptorSetPool const&amp; castor3d::LightPass::Program::getTextureDescriptorPool</definition>
-        <argsstring>() const</argsstring>
-        <name>getTextureDescriptorPool</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="183" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="183" bodyend="187"/>
-        <references refid="de/df1/a04758_1a00d14bb14ae6bc413c9b29f42f5cb40f" compoundref="d5/d69/a00878" startline="229">m_textureDescriptorPool</references>
-      </memberdef>
-      <memberdef kind="function" id="de/df1/a04758_1aee4b36aedabffd104d41e37c53f5a941" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::PipelineLayout const  &amp;</type>
-        <definition>ashes::PipelineLayout const&amp; castor3d::LightPass::Program::getPipelineLayout</definition>
-        <argsstring>() const</argsstring>
-        <name>getPipelineLayout</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="189" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="189" bodyend="193"/>
-        <references refid="de/df1/a04758_1a112df3e757b429a123f4935a339fa4b6" compoundref="d5/d69/a00878" startline="230">m_pipelineLayout</references>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="15" column="1" bodyfile="Shader/StructuredShaderBuffer.hpp" bodystart="15" bodyend="-1"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="de/df1/a04758_1a62a9586b46c1be6ffbd51cb7775953f0" prot="public" static="no" mutable="no">
-        <type><ref refid="df/d9b/a02514" kindref="compound">Engine</ref> &amp;</type>
-        <definition>Engine&amp; castor3d::LightPass::Program::m_engine</definition>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="de/df1/a04758_1aa510b563154634f8dd1984847dcf71ff" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::ElementSize</definition>
         <argsstring></argsstring>
-        <name>m_engine</name>
+        <name>ElementSize</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::ElementSize</qualifiedname>
+        <initializer>= ElementTypeTraits::ElementSize</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="223" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="223" bodyend="-1"/>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="16" column="27" bodyfile="Shader/StructuredShaderBuffer.hpp" bodystart="16" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="de/df1/a04758_1a37c0b2cded3354383db9d9cd359c99fc" prot="public" static="no" mutable="no">
-        <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const  &amp;</type>
-        <definition>RenderDevice const&amp; castor3d::LightPass::Program::m_device</definition>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="de/df1/a04758_1a8ebe3a55079bc65e52f62b141ed26256" prot="protected" static="no" mutable="no">
+        <type><ref refid="d7/d54/a04666" kindref="compound">ShaderBuffer</ref> &amp;</type>
+        <definition>ShaderBuffer&amp; castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::m_buffer</definition>
         <argsstring></argsstring>
-        <name>m_device</name>
+        <name>m_buffer</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::m_buffer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The <ref refid="d7/d54/a04666" kindref="compound">ShaderBuffer</ref>. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="224" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="224" bodyend="-1"/>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="84" column="15" bodyfile="Shader/StructuredShaderBuffer.hpp" bodystart="84" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="de/df1/a04758_1a315224ba3f2ea81ccf95774e5bc39b2f" prot="public" static="no" mutable="no">
-        <type>ashes::PipelineShaderStageCreateInfoArray</type>
-        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::LightPass::Program::m_program</definition>
+      <memberdef kind="variable" id="de/df1/a04758_1a8f31a1099d315c0b3e0990b534b78e8b" prot="protected" static="no" mutable="no">
+        <type>uint32_t &amp;</type>
+        <definition>uint32_t&amp; castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::m_elementID</definition>
         <argsstring></argsstring>
-        <name>m_program</name>
+        <name>m_elementID</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::m_elementID</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The next element ID. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="225" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="225" bodyend="-1"/>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="87" column="11" bodyfile="Shader/StructuredShaderBuffer.hpp" bodystart="87" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="de/df1/a04758_1aee516c4a94abe87058cfc9f4248a6ef8" prot="public" static="no" mutable="no">
-        <type>ashes::DescriptorSetLayoutPtr</type>
-        <definition>ashes::DescriptorSetLayoutPtr castor3d::LightPass::Program::m_uboDescriptorLayout</definition>
+      <memberdef kind="variable" id="de/df1/a04758_1a3b987f796fa562ac0727b2664e7bb778" prot="protected" static="no" mutable="no">
+        <type>ElementTypeTraits</type>
+        <definition>ElementTypeTraits castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::m_traits</definition>
         <argsstring></argsstring>
-        <name>m_uboDescriptorLayout</name>
+        <name>m_traits</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::m_traits</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The traits. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="226" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="226" bodyend="-1"/>
-        <referencedby refid="de/df1/a04758_1abc2748c3e65cfc9e4c431e908c561dd0" compoundref="d5/d69/a00878" startline="165" endline="169">getUboDescriptorLayout</referencedby>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="90" column="19" bodyfile="Shader/StructuredShaderBuffer.hpp" bodystart="90" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="de/df1/a04758_1a1d562428e80aec816dad9255fb988568" prot="public" static="no" mutable="no">
-        <type>ashes::DescriptorSetPoolPtr</type>
-        <definition>ashes::DescriptorSetPoolPtr castor3d::LightPass::Program::m_uboDescriptorPool</definition>
+      <memberdef kind="variable" id="de/df1/a04758_1afee9a32e875f5af80427d9da131f82c2" prot="protected" static="no" mutable="no">
+        <type>std::vector&lt; ashes::AttributeFormat * &gt;</type>
+        <definition>std::vector&lt; ashes::AttributeFormat * &gt; castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::m_elements</definition>
         <argsstring></argsstring>
-        <name>m_uboDescriptorPool</name>
+        <name>m_elements</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::m_elements</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The current elements. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="227" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="227" bodyend="-1"/>
-        <referencedby refid="de/df1/a04758_1a8316aee9157855bdf8893f1554aff8bf" compoundref="d5/d69/a00878" startline="177" endline="181">getUboDescriptorPool</referencedby>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="93" column="13" bodyfile="Shader/StructuredShaderBuffer.hpp" bodystart="93" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="de/df1/a04758_1af9fef7d04765b65116ef087761c8584c" prot="public" static="no" mutable="no">
-        <type>ashes::DescriptorSetLayoutPtr</type>
-        <definition>ashes::DescriptorSetLayoutPtr castor3d::LightPass::Program::m_textureDescriptorLayout</definition>
+      <memberdef kind="variable" id="de/df1/a04758_1ad0752449f8db8a0b7b95676375f51b84" prot="protected" static="no" mutable="no">
+        <type>std::vector&lt; ashes::AttributeFormat const * &gt;</type>
+        <definition>std::vector&lt; ashes::AttributeFormat const * &gt; castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::m_dirty</definition>
         <argsstring></argsstring>
-        <name>m_textureDescriptorLayout</name>
+        <name>m_dirty</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::m_dirty</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The modified elements. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="228" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="228" bodyend="-1"/>
-        <referencedby refid="de/df1/a04758_1a4750cb3a226efed78fc75d73b1e1d66a" compoundref="d5/d69/a00878" startline="171" endline="175">getTextureDescriptorLayout</referencedby>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="96" column="13" bodyfile="Shader/StructuredShaderBuffer.hpp" bodystart="96" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="de/df1/a04758_1a00d14bb14ae6bc413c9b29f42f5cb40f" prot="public" static="no" mutable="no">
-        <type>ashes::DescriptorSetPoolPtr</type>
-        <definition>ashes::DescriptorSetPoolPtr castor3d::LightPass::Program::m_textureDescriptorPool</definition>
+      <memberdef kind="variable" id="de/df1/a04758_1acdf85146cab98dbf6e4cc2515877f56b" prot="protected" static="no" mutable="no">
+        <type>uint32_t const</type>
+        <definition>uint32_t const castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::m_maxElemCount</definition>
         <argsstring></argsstring>
-        <name>m_textureDescriptorPool</name>
+        <name>m_maxElemCount</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::m_maxElemCount</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The maximum element count. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="229" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="229" bodyend="-1"/>
-        <referencedby refid="de/df1/a04758_1adc6a0d70291a75c8685b58f74c1d051d" compoundref="d5/d69/a00878" startline="183" endline="187">getTextureDescriptorPool</referencedby>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="99" column="16" bodyfile="Shader/StructuredShaderBuffer.hpp" bodystart="99" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="de/df1/a04758_1a112df3e757b429a123f4935a339fa4b6" prot="public" static="no" mutable="no">
-        <type>ashes::PipelineLayoutPtr</type>
-        <definition>ashes::PipelineLayoutPtr castor3d::LightPass::Program::m_pipelineLayout</definition>
+      <memberdef kind="variable" id="de/df1/a04758_1a1d50f88adb5ccde3879b034852f6f83d" prot="protected" static="no" mutable="no">
+        <type>std::vector&lt; typename ElementType::OnChangedConnection &gt;</type>
+        <definition>std::vector&lt; typename ElementType::OnChangedConnection &gt; castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::m_connections</definition>
         <argsstring></argsstring>
-        <name>m_pipelineLayout</name>
+        <name>m_connections</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::m_connections</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The connections to change signal for current elements. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="230" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="230" bodyend="-1"/>
-        <referencedby refid="de/df1/a04758_1aee4b36aedabffd104d41e37c53f5a941" compoundref="d5/d69/a00878" startline="189" endline="193">getPipelineLayout</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="de/df1/a04758_1a54eaf135f9b1b974d00a93dea2db533c" prot="public" static="no" mutable="no">
-        <type>ashes::GraphicsPipelinePtr</type>
-        <definition>ashes::GraphicsPipelinePtr castor3d::LightPass::Program::m_blendPipeline</definition>
-        <argsstring></argsstring>
-        <name>m_blendPipeline</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="231" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="231" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/df1/a04758_1af3308b8669402be33760c617119aa3f8" prot="public" static="no" mutable="no">
-        <type>ashes::GraphicsPipelinePtr</type>
-        <definition>ashes::GraphicsPipelinePtr castor3d::LightPass::Program::m_firstPipeline</definition>
-        <argsstring></argsstring>
-        <name>m_firstPipeline</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="232" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="232" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/df1/a04758_1a56c94264c585da624967063f72a1ae8a" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::LightPass::Program::m_shadows</definition>
-        <argsstring></argsstring>
-        <name>m_shadows</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="233" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="233" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/df1/a04758_1afdde2c7c935db702388ce72f4e87422f" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::LightPass::Program::m_voxels</definition>
-        <argsstring></argsstring>
-        <name>m_voxels</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="234" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="234" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/df1/a04758_1a0e77f08bb3f9f9e1bc13b7d60ea50d29" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::LightPass::Program::m_generatesIndirect</definition>
-        <argsstring></argsstring>
-        <name>m_generatesIndirect</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="235" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="235" bodyend="-1"/>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="102" column="13" bodyfile="Shader/StructuredShaderBuffer.hpp" bodystart="102" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="de/df1/a04758_1a3be7b2be27994df5fd6b028558b43768" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::LightPass::Program::Program</definition>
-        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, castor::String const &amp;name, ShaderModule const &amp;vtx, ShaderModule const &amp;pxl, bool hasShadows, bool hasVoxels, bool generatesIndirect)</argsstring>
-        <name>Program</name>
+      <memberdef kind="function" id="de/df1/a04758_1a5c294ad3bfb643ce7cfd15596ef6998f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::StructuredShaderBuffer</definition>
+        <argsstring>(Engine &amp;engine, ShaderBuffer &amp;buffer, uint32_t &amp;elementID, uint32_t count)</argsstring>
+        <name>StructuredShaderBuffer</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::StructuredShaderBuffer</qualifiedname>
         <param>
-          <type><ref refid="df/d9b/a02514" kindref="compound">Engine</ref> &amp;</type>
+          <type><ref refid="d1/d3c/a02714" kindref="compound">Engine</ref> &amp;</type>
           <declname>engine</declname>
         </param>
         <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
+          <type><ref refid="d7/d54/a04666" kindref="compound">ShaderBuffer</ref> &amp;</type>
+          <declname>buffer</declname>
         </param>
         <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
+          <type>uint32_t &amp;</type>
+          <declname>elementID</declname>
         </param>
         <param>
-          <type><ref refid="d2/d63/a05306" kindref="compound">ShaderModule</ref> const &amp;</type>
-          <declname>vtx</declname>
-        </param>
-        <param>
-          <type><ref refid="d2/d63/a05306" kindref="compound">ShaderModule</ref> const &amp;</type>
-          <declname>pxl</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>hasShadows</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>hasVoxels</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>generatesIndirect</declname>
+          <type>uint32_t</type>
+          <declname>count</declname>
         </param>
         <briefdescription>
 <para>Constructor. </para>
@@ -307,58 +185,26 @@
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">device</parametername>
+<parametername direction="in">buffer</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The GPU device. </para>
+<para>The shader buffer. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">name</parametername>
+<parametername direction="in">elementID</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The pass name. </para>
+<para>The ID for the next element to add. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">vtx</parametername>
+<parametername direction="in">count</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The vertex shader source. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">pxl</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The fragment shader source. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">hasShadows</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if this program uses shadow map. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">hasVoxels</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if this program uses voxellisation result. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">generatesIndirect</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if this program generates indirect lighting. </para>
+<para>The maximum number of elements. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -366,17 +212,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="74" column="1"/>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="33" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="de/df1/a04758_1a137ed405f0d7cff07186418eb6005103" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type></type>
-        <definition>virtual castor3d::LightPass::Program::~Program</definition>
-        <argsstring>()=default</argsstring>
-        <name>~Program</name>
-        <reimplementedby refid="d0/de6/a04814_1acaca8fd5bdb9e0f55fd425113b6959c9">~Program</reimplementedby>
-        <reimplementedby refid="dc/d6d/a04802_1a35e6e30c5f24b9d8f6d9cb6781f36b07">~Program</reimplementedby>
-        <reimplementedby refid="db/d62/a04730_1a19711935ab5cee80a9bf058d5db1d103">~Program</reimplementedby>
-        <reimplementedby refid="de/d4c/a04794_1a133ea9bcedef3fabee18a11d638f591a">~Program</reimplementedby>
+      <memberdef kind="function" id="de/df1/a04758_1a3981425391c0d81cf4fd023b09c46764" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::~StructuredShaderBuffer</definition>
+        <argsstring>()</argsstring>
+        <name>~StructuredShaderBuffer</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::~StructuredShaderBuffer</qualifiedname>
         <briefdescription>
 <para>Destructor. </para>
         </briefdescription>
@@ -384,123 +227,30 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="88" column="1"/>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="43" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="de/df1/a04758_1a132d6370f071a2cb266aac2881f7ecf7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::LightPass::Program::initialise</definition>
-        <argsstring>(ashes::VertexBufferBase &amp;vbo, ashes::PipelineVertexInputStateCreateInfo const &amp;vertexLayout, ashes::RenderPass const &amp;firstRenderPass, ashes::RenderPass const &amp;blendRenderPass, MatrixUbo &amp;matrixUbo, SceneUbo &amp;sceneUbo, GpInfoUbo const &amp;gpInfoUbo, UniformBufferT&lt; ModelMatrixUboConfiguration &gt; const *modelMatrixUbo, VoxelizerUbo const *voxelUbo)</argsstring>
-        <name>initialise</name>
+      <memberdef kind="function" id="de/df1/a04758_1a2028872542be80a393caaf05c7747534" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::add</definition>
+        <argsstring>(ElementType &amp;element)</argsstring>
+        <name>add</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::add</qualifiedname>
         <param>
-          <type>ashes::VertexBufferBase &amp;</type>
-          <declname>vbo</declname>
-        </param>
-        <param>
-          <type>ashes::PipelineVertexInputStateCreateInfo const &amp;</type>
-          <declname>vertexLayout</declname>
-        </param>
-        <param>
-          <type>ashes::RenderPass const &amp;</type>
-          <declname>firstRenderPass</declname>
-        </param>
-        <param>
-          <type>ashes::RenderPass const &amp;</type>
-          <declname>blendRenderPass</declname>
-        </param>
-        <param>
-          <type><ref refid="d2/d30/a05490" kindref="compound">MatrixUbo</ref> &amp;</type>
-          <declname>matrixUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="dc/d79/a05522" kindref="compound">SceneUbo</ref> &amp;</type>
-          <declname>sceneUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="de/d5f/a05458" kindref="compound">GpInfoUbo</ref> const &amp;</type>
-          <declname>gpInfoUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/da1/a02290" kindref="compound">UniformBufferT</ref>&lt; <ref refid="d4/de2/a05578" kindref="compound">ModelMatrixUboConfiguration</ref> &gt; const *</type>
-          <declname>modelMatrixUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="df/d05/a05626" kindref="compound">VoxelizerUbo</ref> const *</type>
-          <declname>voxelUbo</declname>
+          <type><ref refid="de/df1/a04758_1ac871c6867fd96e3f487cc1eff2fb8f2b" kindref="member">ElementType</ref> &amp;</type>
+          <declname>element</declname>
         </param>
         <briefdescription>
-<para>Initialises the program and its pipeline. </para>
+<para>Adds an element to the buffer. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
+<para><simplesect kind="remark"><para>Sets the element&apos;s ID. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">vbo</parametername>
+<parametername direction="in">element</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The vertex buffer containing the object to render. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">vertexLayout</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The vertex buffer layout. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">firstRenderPass</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render pass for a first light source. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">blendRenderPass</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render pass for other light sources. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">matrixUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The matrix UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">sceneUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The scene UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">gpInfoUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The geometry pass UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">modelMatrixUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The optional model matrix UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">voxelUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The optional voxelizer UBO. </para>
+<para>The element. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -508,41 +258,72 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="113" column="1"/>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="54" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="de/df1/a04758_1ab598c54b90bcd66c546c754af0851d90" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::LightPass::Program::cleanup</definition>
+      <memberdef kind="function" id="de/df1/a04758_1a340cff2cf011c5e204f9cbc9b87dea31" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::remove</definition>
+        <argsstring>(ElementType &amp;element)</argsstring>
+        <name>remove</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::remove</qualifiedname>
+        <param>
+          <type><ref refid="de/df1/a04758_1ac871c6867fd96e3f487cc1eff2fb8f2b" kindref="member">ElementType</ref> &amp;</type>
+          <declname>element</declname>
+        </param>
+        <briefdescription>
+<para>Removes an element from the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">element</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="63" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/df1/a04758_1ae2f3e575377a788a0496787e9b91324c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::update</definition>
         <argsstring>()</argsstring>
-        <name>cleanup</name>
+        <name>update</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::update</qualifiedname>
         <briefdescription>
-<para>Cleans up the program and its pipeline. </para>
+<para>Updates the buffer. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="128" column="1"/>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="70" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="de/df1/a04758_1a56ae01d65b01883f5ce0118daf64690c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::LightPass::Program::bind</definition>
-        <argsstring>(Light const &amp;light)</argsstring>
+      <memberdef kind="function" id="de/df1/a04758_1af9182a5585487cf0c837561822919bcf" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::bind</definition>
+        <argsstring>(uint32_t index) const</argsstring>
         <name>bind</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::bind</qualifiedname>
         <param>
-          <type><ref refid="d4/d69/a05166" kindref="compound">Light</ref> const &amp;</type>
-          <declname>light</declname>
+          <type>uint32_t</type>
+          <declname>index</declname>
         </param>
         <briefdescription>
-<para>Binds a light. </para>
+<para>Binds the buffer. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">light</parametername>
+<parametername direction="in">index</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The light. </para>
+<para>The binding point. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -550,332 +331,83 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="137" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="de/df1/a04758_1a8a4da088de05ee41c00ba7cb17bc5178" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::LightPass::Program::render</definition>
-        <argsstring>(ashes::CommandBuffer &amp;commandBuffer, uint32_t count, bool first, uint32_t offset) const</argsstring>
-        <name>render</name>
-        <param>
-          <type>ashes::CommandBuffer &amp;</type>
-          <declname>commandBuffer</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>count</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>first</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>offset</declname>
-        </param>
-        <briefdescription>
-<para>Renders the light pass. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">commandBuffer</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The command buffer. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">count</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The number of primitives to draw. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">first</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if this is the first light pass (<computeroutput>true</computeroutput>) or not (<computeroutput>false</computeroutput>). </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">offset</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The VBO offset. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="152" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="protected-func">
-      <memberdef kind="function" id="de/df1/a04758_1aaa746a9a99bcd0198ee554c3ab69659e" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>virtual void castor3d::LightPass::Program::doRender</definition>
-        <argsstring>(ashes::CommandBuffer &amp;commandBuffer, uint32_t count, bool first, uint32_t offset) const</argsstring>
-        <name>doRender</name>
-        <param>
-          <type>ashes::CommandBuffer &amp;</type>
-          <declname>commandBuffer</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>count</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>first</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>offset</declname>
-        </param>
-        <briefdescription>
-<para>Renders the light pass. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">commandBuffer</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The command buffer. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">count</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The number of primitives to draw. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">first</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if this is the first light pass (<computeroutput>true</computeroutput>) or not (<computeroutput>false</computeroutput>). </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">offset</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The VBO offset. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="211" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="de/df1/a04758_1a2b3c4fcf2e87ff2e1913174d3cbf02ba" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
-        <type>ashes::GraphicsPipelinePtr</type>
-        <definition>virtual ashes::GraphicsPipelinePtr castor3d::LightPass::Program::doCreatePipeline</definition>
-        <argsstring>(ashes::PipelineVertexInputStateCreateInfo const &amp;vertexLayout, ashes::RenderPass const &amp;renderPass, bool blend)=0</argsstring>
-        <name>doCreatePipeline</name>
-        <reimplementedby refid="db/d62/a04730_1a405f2a2e822c3d1e2ee0b6dc3c2fdeb3">doCreatePipeline</reimplementedby>
-        <reimplementedby refid="de/d4c/a04794_1a8f2cb0bf09cd4df1a131f17983bce23f">doCreatePipeline</reimplementedby>
-        <param>
-          <type>ashes::PipelineVertexInputStateCreateInfo const &amp;</type>
-          <declname>vertexLayout</declname>
-        </param>
-        <param>
-          <type>ashes::RenderPass const &amp;</type>
-          <declname>renderPass</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>blend</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="217" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="de/df1/a04758_1a8490c1cfa85a383de04fb235f22ea40e" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
-        <type>void</type>
-        <definition>virtual void castor3d::LightPass::Program::doBind</definition>
-        <argsstring>(Light const &amp;light)=0</argsstring>
-        <name>doBind</name>
-        <reimplementedby refid="d0/de6/a04814_1a6b85bc2409d590aa9a5c5c464ef158b0">doBind</reimplementedby>
-        <reimplementedby refid="dc/d6d/a04802_1abde200b3c16eda10f9e0698088da15f7">doBind</reimplementedby>
-        <reimplementedby refid="db/d62/a04730_1a599dd7c9ada1d6800a1ccfc5d79b9f18">doBind</reimplementedby>
-        <param>
-          <type><ref refid="d4/d69/a05166" kindref="compound">Light</ref> const &amp;</type>
-          <declname>light</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="220" column="1"/>
+        <location file="Shader/StructuredShaderBuffer.hpp" line="79" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Base class for all light pass programs. </para>
+<para>Wrapper class to select between SSBO or TBO. </para>
     </briefdescription>
     <detaileddescription>
+<para><simplesect kind="remark"><para>Allows to user either one or the other in the same way. </para>
+</simplesect>
+</para>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="1636">
-        <label>castor3d::DirectionalLightPass::Program</label>
-        <link refid="db/d62/a04730"/>
-        <childnode refid="1634" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1637">
-        <label>castor3d::MeshLightPass::Program</label>
-        <link refid="de/d4c/a04794"/>
-        <childnode refid="1634" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1635">
-        <label>Named</label>
-      </node>
-      <node id="1634">
-        <label>castor3d::LightPass::Program</label>
-        <link refid="de/df1/a04758"/>
-        <childnode refid="1635" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1638">
-        <label>castor3d::PointLightPass::Program</label>
-        <link refid="dc/d6d/a04802"/>
-        <childnode refid="1637" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1639">
-        <label>castor3d::SpotLightPass::Program</label>
-        <link refid="d0/de6/a04814"/>
-        <childnode refid="1637" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
     <collaborationgraph>
-      <node id="1648">
-        <label>castor3d::RenderSystem</label>
-        <link refid="d1/d9a/a04618"/>
-        <childnode refid="1649" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1647">
+      <node id="5">
         <label>T</label>
       </node>
-      <node id="1651">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="1647" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
+      <node id="2">
+        <label>castor3d::ShaderBuffer</label>
+        <link refid="d7/d54/a04666"/>
       </node>
-      <node id="1646">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="1647" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="1650">
-        <label>std::vector&lt; ashes::CommandPoolPtr &gt;</label>
-        <childnode refid="1651" relation="template-instance">
-          <edgelabel>&lt; ashes::CommandPoolPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1645">
-        <label>std::array&lt; uint32_t, 4u &gt;</label>
-        <childnode refid="1646" relation="template-instance">
-          <edgelabel>&lt; uint32_t, 4u &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1641">
-        <label>Named</label>
-      </node>
-      <node id="1643">
-        <label>castor::Unique&lt; Engine &gt;</label>
-      </node>
-      <node id="1649">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="1640">
-        <label>castor3d::LightPass::Program</label>
+      <node id="1">
+        <label>castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;</label>
         <link refid="de/df1/a04758"/>
-        <childnode refid="1641" relation="public-inheritance">
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_buffer</edgelabel>
         </childnode>
-        <childnode refid="1642" relation="usage">
-          <edgelabel>m_engine</edgelabel>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_elements</edgelabel>
         </childnode>
-        <childnode refid="1644" relation="usage">
-          <edgelabel>m_device</edgelabel>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_dirty</edgelabel>
         </childnode>
-      </node>
-      <node id="1642">
-        <label>castor3d::Engine</label>
-        <link refid="df/d9b/a02514"/>
-        <childnode refid="1643" relation="public-inheritance">
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_connections</edgelabel>
         </childnode>
       </node>
-      <node id="1644">
-        <label>castor3d::RenderDevice</label>
-        <link refid="d8/d4c/a04506"/>
-        <childnode refid="1645" relation="usage">
-          <edgelabel>queueFamiliesIndex</edgelabel>
+      <node id="4">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>elements</edgelabel>
         </childnode>
-        <childnode refid="1648" relation="usage">
-          <edgelabel>renderSystem</edgelabel>
+      </node>
+      <node id="3">
+        <label>std::vector&lt; ashes::AttributeFormat * &gt;</label>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; ashes::AttributeFormat * &gt;</edgelabel>
         </childnode>
-        <childnode refid="1650" relation="usage">
-          <edgelabel>commandPools</edgelabel>
+      </node>
+      <node id="6">
+        <label>std::vector&lt; ashes::AttributeFormat const * &gt;</label>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; ashes::AttributeFormat const * &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::vector&lt; typename ElementType::OnChangedConnection &gt;</label>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; typename ElementType::OnChangedConnection &gt;</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="50" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="48" bodyend="236"/>
+    <location file="Shader/StructuredShaderBuffer.hpp" line="12" column="1" bodyfile="Shader/StructuredShaderBuffer.hpp" bodystart="13" bodyend="103"/>
     <listofallmembers>
-      <member refid="de/df1/a04758_1a56ae01d65b01883f5ce0118daf64690c" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Program</scope><name>bind</name></member>
-      <member refid="de/df1/a04758_1ab598c54b90bcd66c546c754af0851d90" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Program</scope><name>cleanup</name></member>
-      <member refid="de/df1/a04758_1a8490c1cfa85a383de04fb235f22ea40e" prot="private" virt="pure-virtual"><scope>castor3d::LightPass::Program</scope><name>doBind</name></member>
-      <member refid="de/df1/a04758_1a2b3c4fcf2e87ff2e1913174d3cbf02ba" prot="private" virt="pure-virtual"><scope>castor3d::LightPass::Program</scope><name>doCreatePipeline</name></member>
-      <member refid="de/df1/a04758_1aaa746a9a99bcd0198ee554c3ab69659e" prot="protected" virt="virtual"><scope>castor3d::LightPass::Program</scope><name>doRender</name></member>
-      <member refid="de/df1/a04758_1aee4b36aedabffd104d41e37c53f5a941" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Program</scope><name>getPipelineLayout</name></member>
-      <member refid="de/df1/a04758_1a4750cb3a226efed78fc75d73b1e1d66a" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Program</scope><name>getTextureDescriptorLayout</name></member>
-      <member refid="de/df1/a04758_1adc6a0d70291a75c8685b58f74c1d051d" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Program</scope><name>getTextureDescriptorPool</name></member>
-      <member refid="de/df1/a04758_1abc2748c3e65cfc9e4c431e908c561dd0" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Program</scope><name>getUboDescriptorLayout</name></member>
-      <member refid="de/df1/a04758_1a8316aee9157855bdf8893f1554aff8bf" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Program</scope><name>getUboDescriptorPool</name></member>
-      <member refid="de/df1/a04758_1a132d6370f071a2cb266aac2881f7ecf7" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Program</scope><name>initialise</name></member>
-      <member refid="de/df1/a04758_1a54eaf135f9b1b974d00a93dea2db533c" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Program</scope><name>m_blendPipeline</name></member>
-      <member refid="de/df1/a04758_1a37c0b2cded3354383db9d9cd359c99fc" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Program</scope><name>m_device</name></member>
-      <member refid="de/df1/a04758_1a62a9586b46c1be6ffbd51cb7775953f0" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Program</scope><name>m_engine</name></member>
-      <member refid="de/df1/a04758_1af3308b8669402be33760c617119aa3f8" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Program</scope><name>m_firstPipeline</name></member>
-      <member refid="de/df1/a04758_1a0e77f08bb3f9f9e1bc13b7d60ea50d29" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Program</scope><name>m_generatesIndirect</name></member>
-      <member refid="de/df1/a04758_1a112df3e757b429a123f4935a339fa4b6" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Program</scope><name>m_pipelineLayout</name></member>
-      <member refid="de/df1/a04758_1a315224ba3f2ea81ccf95774e5bc39b2f" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Program</scope><name>m_program</name></member>
-      <member refid="de/df1/a04758_1a56c94264c585da624967063f72a1ae8a" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Program</scope><name>m_shadows</name></member>
-      <member refid="de/df1/a04758_1af9fef7d04765b65116ef087761c8584c" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Program</scope><name>m_textureDescriptorLayout</name></member>
-      <member refid="de/df1/a04758_1a00d14bb14ae6bc413c9b29f42f5cb40f" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Program</scope><name>m_textureDescriptorPool</name></member>
-      <member refid="de/df1/a04758_1aee516c4a94abe87058cfc9f4248a6ef8" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Program</scope><name>m_uboDescriptorLayout</name></member>
-      <member refid="de/df1/a04758_1a1d562428e80aec816dad9255fb988568" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Program</scope><name>m_uboDescriptorPool</name></member>
-      <member refid="de/df1/a04758_1afdde2c7c935db702388ce72f4e87422f" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Program</scope><name>m_voxels</name></member>
-      <member refid="de/df1/a04758_1a3be7b2be27994df5fd6b028558b43768" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Program</scope><name>Program</name></member>
-      <member refid="de/df1/a04758_1a8a4da088de05ee41c00ba7cb17bc5178" prot="public" virt="non-virtual"><scope>castor3d::LightPass::Program</scope><name>render</name></member>
-      <member refid="de/df1/a04758_1a137ed405f0d7cff07186418eb6005103" prot="public" virt="virtual"><scope>castor3d::LightPass::Program</scope><name>~Program</name></member>
+      <member refid="de/df1/a04758_1a2028872542be80a393caaf05c7747534" prot="public" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>add</name></member>
+      <member refid="de/df1/a04758_1af9182a5585487cf0c837561822919bcf" prot="public" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>bind</name></member>
+      <member refid="de/df1/a04758_1aa510b563154634f8dd1984847dcf71ff" prot="public" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>ElementSize</name></member>
+      <member refid="de/df1/a04758_1ac871c6867fd96e3f487cc1eff2fb8f2b" prot="public" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>ElementType</name></member>
+      <member refid="de/df1/a04758_1a8ebe3a55079bc65e52f62b141ed26256" prot="protected" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>m_buffer</name></member>
+      <member refid="de/df1/a04758_1a1d50f88adb5ccde3879b034852f6f83d" prot="protected" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>m_connections</name></member>
+      <member refid="de/df1/a04758_1ad0752449f8db8a0b7b95676375f51b84" prot="protected" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>m_dirty</name></member>
+      <member refid="de/df1/a04758_1a8f31a1099d315c0b3e0990b534b78e8b" prot="protected" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>m_elementID</name></member>
+      <member refid="de/df1/a04758_1afee9a32e875f5af80427d9da131f82c2" prot="protected" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>m_elements</name></member>
+      <member refid="de/df1/a04758_1acdf85146cab98dbf6e4cc2515877f56b" prot="protected" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>m_maxElemCount</name></member>
+      <member refid="de/df1/a04758_1a3b987f796fa562ac0727b2664e7bb778" prot="protected" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>m_traits</name></member>
+      <member refid="de/df1/a04758_1a340cff2cf011c5e204f9cbc9b87dea31" prot="public" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>remove</name></member>
+      <member refid="de/df1/a04758_1a5c294ad3bfb643ce7cfd15596ef6998f" prot="public" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>StructuredShaderBuffer</name></member>
+      <member refid="de/df1/a04758_1ae2f3e575377a788a0496787e9b91324c" prot="public" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>update</name></member>
+      <member refid="de/df1/a04758_1a3981425391c0d81cf4fd023b09c46764" prot="public" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>~StructuredShaderBuffer</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

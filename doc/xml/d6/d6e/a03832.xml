@@ -1,364 +1,100 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d6/d6e/a03832" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::Pattern</compoundname>
-    <includes local="no">Pattern.hpp</includes>
-    <templateparamlist>
-      <param>
-        <type>typename</type>
-        <declname>T</declname>
-        <defname>T</defname>
-      </param>
-    </templateparamlist>
-      <sectiondef kind="private-type">
-      <memberdef kind="typedef" id="d6/d6e/a03832_1a3096c5e1c11c09eeba02d406bcd32f6c" prot="private" static="no">
-        <type>T</type>
-        <definition>typedef T castor3d::Pattern&lt; T &gt;::TObj</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d6/d6e/a03832" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::GaussianBlur::Configuration</compoundname>
+    <includes local="no">GaussianBlur.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/d6e/a03832_1ac9c17b03167cc405fa7142669239b6c4" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::GaussianBlur::Configuration::textureSize</definition>
         <argsstring></argsstring>
-        <name>TObj</name>
+        <name>textureSize</name>
+        <qualifiedname>castor3d::GaussianBlur::Configuration::textureSize</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/Pattern.hpp" line="17" column="1" bodyfile="Miscellaneous/Pattern.hpp" bodystart="17" bodyend="-1"/>
+        <location file="Render/Passes/GaussianBlur.hpp" line="103" column="17" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="103" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="typedef" id="d6/d6e/a03832_1aadb28b2c383371140c061014e4aed578" prot="private" static="no">
-        <type>T &amp;</type>
-        <definition>typedef T&amp; castor3d::Pattern&lt; T &gt;::TObjRef</definition>
-        <argsstring></argsstring>
-        <name>TObjRef</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Pattern.hpp" line="18" column="1" bodyfile="Miscellaneous/Pattern.hpp" bodystart="18" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d6/d6e/a03832_1ada9b2d5b5151c4b9ccc160c5838012b9" prot="private" static="no">
-        <type>T const  &amp;</type>
-        <definition>typedef T const&amp; castor3d::Pattern&lt; T &gt;::TObjConstRef</definition>
-        <argsstring></argsstring>
-        <name>TObjConstRef</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Pattern.hpp" line="19" column="1" bodyfile="Miscellaneous/Pattern.hpp" bodystart="19" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d6/d6e/a03832_1a8dbd33fe36e3b69feddc818b6aa3a0a1" prot="private" static="no">
-        <type>std::list&lt; TObj &gt;</type>
-        <definition>typedef std::list&lt; TObj &gt; castor3d::Pattern&lt; T &gt;::TObjList</definition>
-        <argsstring></argsstring>
-        <name>TObjList</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Pattern.hpp" line="20" column="1" bodyfile="Miscellaneous/Pattern.hpp" bodystart="20" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d6/d6e/a03832_1abfe55b113992613799e75769feb7996b" prot="private" static="no" mutable="no">
-        <type>TObjList</type>
-        <definition>TObjList castor3d::Pattern&lt; T &gt;::m_elements</definition>
-        <argsstring></argsstring>
-        <name>m_elements</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The elements. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Pattern.hpp" line="206" column="1" bodyfile="Miscellaneous/Pattern.hpp" bodystart="206" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d6/d6e/a03832_1af24b4755623a9a4a7093e2586a9df2b1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::Pattern&lt; T &gt;::Pattern</definition>
-        <argsstring>()</argsstring>
-        <name>Pattern</name>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Pattern.hpp" line="29" column="1" bodyfile="Miscellaneous/Pattern.hpp" bodystart="29" bodyend="31"/>
-      </memberdef>
-      <memberdef kind="function" id="d6/d6e/a03832_1a9bc1238a0bf468fd32fc6c731c62cce9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::Pattern&lt; T &gt;::~Pattern</definition>
-        <argsstring>()</argsstring>
-        <name>~Pattern</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Pattern.hpp" line="38" column="1" bodyfile="Miscellaneous/Pattern.hpp" bodystart="38" bodyend="41"/>
-      </memberdef>
-      <memberdef kind="function" id="d6/d6e/a03832_1a9eaf02d46d6dc568fd90bdc979cef64d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d6/d6e/a03832" kindref="compound">Pattern</ref>&lt; T &gt;</type>
-        <definition>Pattern&lt; T &gt; castor3d::Pattern&lt; T &gt;::getReversed</definition>
-        <argsstring>() const</argsstring>
-        <name>getReversed</name>
-        <briefdescription>
-<para>Builds the mirror pattern. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The built pattern </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Pattern.hpp" line="50" column="1" bodyfile="Miscellaneous/Pattern.hpp" bodystart="50" bodyend="60"/>
-      </memberdef>
-      <memberdef kind="function" id="d6/d6e/a03832_1ad04782d02b5c4cbd1c26ce13c7bfffa9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::Pattern&lt; T &gt;::isClosed</definition>
-        <argsstring>() const</argsstring>
-        <name>isClosed</name>
-        <briefdescription>
-<para>Tells if the pattern is closed (first element is also the last) </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if closed, <computeroutput>false</computeroutput> if not </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Pattern.hpp" line="69" column="1" bodyfile="Miscellaneous/Pattern.hpp" bodystart="69" bodyend="74"/>
-      </memberdef>
-      <memberdef kind="function" id="d6/d6e/a03832_1a63227f8d655f6aaaa3f559688ba39282" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::Pattern&lt; T &gt;::addElement</definition>
-        <argsstring>(TObjConstRef element, uint32_t index=0xFFFFFFFF)</argsstring>
-        <name>addElement</name>
-        <param>
-          <type>TObjConstRef</type>
-          <declname>element</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
-          <defval>0xFFFFFFFF</defval>
-        </param>
-        <briefdescription>
-<para>adds an element to the list, at a given index </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">element</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element to add </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">index</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The index at which the insertion must be done </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Pattern.hpp" line="85" column="1" bodyfile="Miscellaneous/Pattern.hpp" bodystart="85" bodyend="103"/>
-      </memberdef>
-      <memberdef kind="function" id="d6/d6e/a03832_1a08266789654d039b702c3fe4c60a59d5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="variable" id="d6/d6e/a03832_1a50c8573932f8195cfdea8163aafcf041" prot="public" static="no" mutable="no">
         <type>uint32_t</type>
-        <definition>uint32_t castor3d::Pattern&lt; T &gt;::getSize</definition>
-        <argsstring>() const</argsstring>
-        <name>getSize</name>
+        <definition>uint32_t castor3d::GaussianBlur::Configuration::blurCoeffsCount</definition>
+        <argsstring></argsstring>
+        <name>blurCoeffsCount</name>
+        <qualifiedname>castor3d::GaussianBlur::Configuration::blurCoeffsCount</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The number of elements constituting the pattern </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/Pattern.hpp" line="110" column="1" bodyfile="Miscellaneous/Pattern.hpp" bodystart="110" bodyend="113"/>
+        <location file="Render/Passes/GaussianBlur.hpp" line="104" column="10" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="104" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="d6/d6e/a03832_1afb4d1a5791c80e5fd914b1f84451a571" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>TObjRef</type>
-        <definition>TObjRef castor3d::Pattern&lt; T &gt;::operator[]</definition>
-        <argsstring>(uint32_t index)</argsstring>
-        <name>operator[]</name>
-        <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
-        </param>
+      <memberdef kind="variable" id="d6/d6e/a03832_1aa675748b11ce22d505c09ac77a9e0200" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::GaussianBlur::Configuration::dump</definition>
+        <argsstring></argsstring>
+        <name>dump</name>
+        <qualifiedname>castor3d::GaussianBlur::Configuration::dump</qualifiedname>
         <briefdescription>
-<para>Accessor to an element. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">index</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>the index of the wanted element </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>Modifiable element reference </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/Pattern.hpp" line="124" column="1" bodyfile="Miscellaneous/Pattern.hpp" bodystart="124" bodyend="135"/>
+        <location file="Render/Passes/GaussianBlur.hpp" line="105" column="10" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="105" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="d6/d6e/a03832_1a939bca231138a17ebf5bc05b19512a74" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>TObjConstRef</type>
-        <definition>TObjConstRef castor3d::Pattern&lt; T &gt;::operator[]</definition>
-        <argsstring>(uint32_t index) const</argsstring>
-        <name>operator[]</name>
-        <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
-        </param>
+      <memberdef kind="variable" id="d6/d6e/a03832_1a0229b8b3c8457af2659f43bfcee26663" prot="public" static="no" mutable="no">
+        <type>std::array&lt; castor::Point4f, <ref refid="d0/d8e/a03828_1af2348a695a12bfe432775545bf4838d3" kindref="member">GaussianBlur::MaxCoefficients</ref>/4u &gt;</type>
+        <definition>std::array&lt; castor::Point4f, GaussianBlur::MaxCoefficients / 4u &gt; castor3d::GaussianBlur::Configuration::blurCoeffs</definition>
+        <argsstring></argsstring>
+        <name>blurCoeffs</name>
+        <qualifiedname>castor3d::GaussianBlur::Configuration::blurCoeffs</qualifiedname>
         <briefdescription>
-<para>Constant accessor to an element. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">index</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>the index of the wanted element </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>Constant element reference </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/Pattern.hpp" line="146" column="1" bodyfile="Miscellaneous/Pattern.hpp" bodystart="146" bodyend="157"/>
-      </memberdef>
-      <memberdef kind="function" id="d6/d6e/a03832_1a1a23877b40c72fa0d3843679e64dd515" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>TObjRef</type>
-        <definition>TObjRef castor3d::Pattern&lt; T &gt;::getElement</definition>
-        <argsstring>(uint32_t index)</argsstring>
-        <name>getElement</name>
-        <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
-        </param>
-        <briefdescription>
-<para>Accessor to an element. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">index</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>the index of the wanted element </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>Modifiable element </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Pattern.hpp" line="168" column="1" bodyfile="Miscellaneous/Pattern.hpp" bodystart="168" bodyend="179"/>
-      </memberdef>
-      <memberdef kind="function" id="d6/d6e/a03832_1afa8e83de38e07161d77a284d48399910" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>TObjConstRef</type>
-        <definition>TObjConstRef castor3d::Pattern&lt; T &gt;::getElement</definition>
-        <argsstring>(uint32_t index) const</argsstring>
-        <name>getElement</name>
-        <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
-        </param>
-        <briefdescription>
-<para>Constant accessor to an element. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">index</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>the index of the wanted element </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>Constant element </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Miscellaneous/Pattern.hpp" line="190" column="1" bodyfile="Miscellaneous/Pattern.hpp" bodystart="190" bodyend="201"/>
+        <location file="Render/Passes/GaussianBlur.hpp" line="106" column="12" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="106" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para><ref refid="d6/d6e/a03832" kindref="compound">Pattern</ref> handler class. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="remark"><para>A pattern is a collection of consecutive points. </para>
-</simplesect>
-</para>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="2638">
-        <label>castor3d::Pattern&lt; T &gt;</label>
-        <link refid="d6/d6e/a03832"/>
+    <collaborationgraph>
+      <node id="4">
+        <label>T</label>
       </node>
-      <node id="2639">
-        <label>castor3d::Pattern&lt; castor::Point3f &gt;</label>
-        <link refid="d6/d6e/a03832"/>
-        <childnode refid="2638" relation="template-instance">
-          <edgelabel>&lt; castor::Point3f &gt;</edgelabel>
+      <node id="2">
+        <label>std::array&lt; castor::Point4f, GaussianBlur::MaxCoefficients/4u &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; castor::Point4f, GaussianBlur::MaxCoefficients/4u &gt;</edgelabel>
         </childnode>
       </node>
-    </inheritancegraph>
-    <location file="Miscellaneous/MiscellaneousModule.hpp" line="147" column="1" bodyfile="Miscellaneous/MiscellaneousModule.hpp" bodystart="147" bodyend="-1"/>
+      <node id="1">
+        <label>castor3d::GaussianBlur::Configuration</label>
+        <link refid="d6/d6e/a03832"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>blurCoeffs</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Passes/GaussianBlur.hpp" line="101" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="102" bodyend="107"/>
     <listofallmembers>
-      <member refid="d6/d6e/a03832_1a63227f8d655f6aaaa3f559688ba39282" prot="public" virt="non-virtual"><scope>castor3d::Pattern</scope><name>addElement</name></member>
-      <member refid="d6/d6e/a03832_1a1a23877b40c72fa0d3843679e64dd515" prot="public" virt="non-virtual"><scope>castor3d::Pattern</scope><name>getElement</name></member>
-      <member refid="d6/d6e/a03832_1afa8e83de38e07161d77a284d48399910" prot="public" virt="non-virtual"><scope>castor3d::Pattern</scope><name>getElement</name></member>
-      <member refid="d6/d6e/a03832_1a9eaf02d46d6dc568fd90bdc979cef64d" prot="public" virt="non-virtual"><scope>castor3d::Pattern</scope><name>getReversed</name></member>
-      <member refid="d6/d6e/a03832_1a08266789654d039b702c3fe4c60a59d5" prot="public" virt="non-virtual"><scope>castor3d::Pattern</scope><name>getSize</name></member>
-      <member refid="d6/d6e/a03832_1ad04782d02b5c4cbd1c26ce13c7bfffa9" prot="public" virt="non-virtual"><scope>castor3d::Pattern</scope><name>isClosed</name></member>
-      <member refid="d6/d6e/a03832_1abfe55b113992613799e75769feb7996b" prot="private" virt="non-virtual"><scope>castor3d::Pattern</scope><name>m_elements</name></member>
-      <member refid="d6/d6e/a03832_1afb4d1a5791c80e5fd914b1f84451a571" prot="public" virt="non-virtual"><scope>castor3d::Pattern</scope><name>operator[]</name></member>
-      <member refid="d6/d6e/a03832_1a939bca231138a17ebf5bc05b19512a74" prot="public" virt="non-virtual"><scope>castor3d::Pattern</scope><name>operator[]</name></member>
-      <member refid="d6/d6e/a03832_1af24b4755623a9a4a7093e2586a9df2b1" prot="public" virt="non-virtual"><scope>castor3d::Pattern</scope><name>Pattern</name></member>
-      <member refid="d6/d6e/a03832_1a3096c5e1c11c09eeba02d406bcd32f6c" prot="private" virt="non-virtual"><scope>castor3d::Pattern</scope><name>TObj</name></member>
-      <member refid="d6/d6e/a03832_1ada9b2d5b5151c4b9ccc160c5838012b9" prot="private" virt="non-virtual"><scope>castor3d::Pattern</scope><name>TObjConstRef</name></member>
-      <member refid="d6/d6e/a03832_1a8dbd33fe36e3b69feddc818b6aa3a0a1" prot="private" virt="non-virtual"><scope>castor3d::Pattern</scope><name>TObjList</name></member>
-      <member refid="d6/d6e/a03832_1aadb28b2c383371140c061014e4aed578" prot="private" virt="non-virtual"><scope>castor3d::Pattern</scope><name>TObjRef</name></member>
-      <member refid="d6/d6e/a03832_1a9bc1238a0bf468fd32fc6c731c62cce9" prot="public" virt="non-virtual"><scope>castor3d::Pattern</scope><name>~Pattern</name></member>
+      <member refid="d6/d6e/a03832_1a0229b8b3c8457af2659f43bfcee26663" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::Configuration</scope><name>blurCoeffs</name></member>
+      <member refid="d6/d6e/a03832_1a50c8573932f8195cfdea8163aafcf041" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::Configuration</scope><name>blurCoeffsCount</name></member>
+      <member refid="d6/d6e/a03832_1aa675748b11ce22d505c09ac77a9e0200" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::Configuration</scope><name>dump</name></member>
+      <member refid="d6/d6e/a03832_1ac9c17b03167cc405fa7142669239b6c4" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::Configuration</scope><name>textureSize</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

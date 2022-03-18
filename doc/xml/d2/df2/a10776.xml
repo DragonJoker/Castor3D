@@ -1,0 +1,989 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d2/df2/a10776" kind="page">
+    <compoundname>md_Z__Projets_C___Castor3D_doc_Castor3D_SceneFile_English</compoundname>
+    <title>CSCN File Format</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>CSCN files are easily editable text files (since the syntax is understood).</para>
+<para>The data types used in scene files are these ones :<itemizedlist>
+<listitem><para><emphasis>boolean</emphasis> : a boolean (<emphasis>true</emphasis> or <emphasis>false</emphasis>).</para>
+</listitem><listitem><para><emphasis>int</emphasis> : a simple integer.</para>
+</listitem><listitem><para><emphasis>mask_1</emphasis> : an hexadecimal integer defining a mask for one component from a colour (<emphasis>0x000000FF</emphasis>, for instance).</para>
+</listitem><listitem><para><emphasis>mask_3</emphasis> : an hexadecimal integer defining a mask for three components from a colour (<emphasis>0x00FFFFFF</emphasis>, for instance).</para>
+</listitem><listitem><para><emphasis>real</emphasis> : a floating point number, using dot ( . ) as the decimals separator.</para>
+</listitem><listitem><para><emphasis>2, 3, 4 ints</emphasis> : 2, 3 or 4 integers, separated by commas ( , ) or spaces ( ).</para>
+</listitem><listitem><para><emphasis>2, 3, 4 reals</emphasis> : 2, 3 or 4 floating point numbers, separated by commas ( , ) or spaces ( ).</para>
+</listitem><listitem><para><emphasis>size</emphasis> : 2 integers greater than or equal to 0.</para>
+</listitem><listitem><para><emphasis>2x2, 3x3, 4x4 reals matrix</emphasis> : 2, 3 or 4 groups separated by semi colons ( ; ) of 2, 3 or 4 floating point numbers separated by commas ( *,* ) or spaces ( ).</para>
+</listitem><listitem><para><emphasis>rgb_colour</emphasis> : the RGB components of colour, expressed in floating point numbers between 0.0 and 1.0.</para>
+</listitem><listitem><para><emphasis>rgba_colour</emphasis> : the RGBA components of colour, expressed in floating point numbers between 0.0 and 1.0.</para>
+</listitem><listitem><para><emphasis>rgb_hdr_colour</emphasis> : the RGB components of colour, expressed in floating point numbers greater than or equal to 0.0.</para>
+</listitem><listitem><para><emphasis>rgba_hdr_colour</emphasis> : the RGBA components of colour, expressed in floating point numbers greater than or equal to 0.0.</para>
+</listitem><listitem><para><emphasis>value</emphasis> : a string corresponding to a predefined value.</para>
+</listitem><listitem><para><emphasis>name</emphasis> : a string, wrapped into double quotes ( " ).</para>
+</listitem><listitem><para><emphasis>file</emphasis> : a string, wrapped into double quotes ( " ), containing a file name and path.</para>
+</listitem><listitem><para><emphasis>folder</emphasis> : a string, wrapped into double quotes ( " ), containing a folder path.</para>
+</listitem></itemizedlist>
+</para>
+<sect1 id="d2/df2/a10776_1autotoc_md230">
+<title>Description</title>
+<para>The file is split into sections, defined as follows : <verbatim>[section-type] &quot;[section-name]&quot;
+{
+    // Section description
+}
+</verbatim> Example: <verbatim>light &quot;Light0&quot;
+{
+    type directional
+    colour 1.0 1.0 1.0
+    intensity 0.8 1.0
+}
+</verbatim> Some sections can have child subsections : <verbatim>material &quot;Bronze&quot;
+{
+    pass
+    {
+        ambient 0.2125 0.1275 0.054
+        diffuse 0.714 0.4284 0.12144
+        emissive 0.0
+        specular 0.393548 0.271906 0.166721
+        shininess 25.6
+    }
+}
+</verbatim> </para>
+</sect1>
+<sect1 id="d2/df2/a10776_1autotoc_md231">
+<title>Sections list</title>
+<para>The possible sections are the following:<itemizedlist>
+<listitem><para><bold>sampler</bold> <linebreak/>
+ Defines a texture sampler object.</para>
+</listitem><listitem><para><bold>material</bold> <linebreak/>
+ Defines a material.</para>
+</listitem><listitem><para><bold>mesh</bold> <linebreak/>
+ Defines a mesh.</para>
+</listitem><listitem><para><bold>font</bold> <linebreak/>
+ Defines a font used in text overlays.</para>
+</listitem><listitem><para><bold>window</bold> <linebreak/>
+ Defines a render window.</para>
+</listitem><listitem><para><bold>panel_overlay</bold> <linebreak/>
+ Defines a simple panel overlay.</para>
+</listitem><listitem><para><bold>border_panel_overlay</bold> <linebreak/>
+ Defines a panel overlay with a border.</para>
+</listitem><listitem><para><bold>text_overlay</bold> <linebreak/>
+ Defines a panel overlay with a text.</para>
+</listitem><listitem><para><bold>scene</bold> <linebreak/>
+ Defines a whole scene.</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="d2/df2/a10776_1autotoc_md232">
+<title>Section sampler</title>
+<para><itemizedlist>
+<listitem><para><bold>min_filter</bold> : <emphasis>value</emphasis> <linebreak/>
+ Value used for minification function. The possible values are :<itemizedlist>
+<listitem><para><emphasis>linear</emphasis> : linear interpolation.</para>
+</listitem><listitem><para><emphasis>nearest</emphasis> : no interpolation.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>mag_filter</bold> : <emphasis>value</emphasis> <linebreak/>
+ Value used for magnification function. The possible values are :<itemizedlist>
+<listitem><para><emphasis>linear</emphasis> : linear interpolation.</para>
+</listitem><listitem><para><emphasis>nearest</emphasis> : no interpolation.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>mip_filter</bold> : <emphasis>value</emphasis> <linebreak/>
+ Value used for mipmapping function. The possible values are :<itemizedlist>
+<listitem><para><emphasis>linear</emphasis> : linear interpolation.</para>
+</listitem><listitem><para><emphasis>nearest</emphasis> : no interpolation.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>min_lod</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines minimum level of detail value.</para>
+</listitem><listitem><para><bold>max_lod</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines maximum level of detail value.</para>
+</listitem><listitem><para><bold>lod_bias</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the base MIP-Level.</para>
+</listitem><listitem><para><bold>u_wrap_mode</bold> : <emphasis>value</emphasis> <linebreak/>
+ Defines the wrapping mode of the texture, for the U component. The possible values are :<itemizedlist>
+<listitem><para><emphasis>repeat</emphasis> : The texture is repeated.</para>
+</listitem><listitem><para><emphasis>mirrored_repeat</emphasis> : The texture is repeated, each instance of 2 being the mirror of the other one.</para>
+</listitem><listitem><para><emphasis>clamp_to_border</emphasis> : The texture is stretched, the object edge colour is defined as the texture edge colour.</para>
+</listitem><listitem><para><emphasis>clamp_to_edge</emphasis> : The texture is stretched, the object edge colour is defined as the average of the texture edge colour and the border colour.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>v_wrap_mode</bold> : <emphasis>value</emphasis> <linebreak/>
+ Defines the wrapping mode of the texture, for the V component. The possible values are :<itemizedlist>
+<listitem><para><emphasis>repeat</emphasis> : The texture is repeated.</para>
+</listitem><listitem><para><emphasis>mirrored_repeat</emphasis> : The texture is repeated, each instance of 2 being the mirror of the other one.</para>
+</listitem><listitem><para><emphasis>clamp_to_border</emphasis> : The texture is stretched, the object edge colour is defined as the texture edge colour.</para>
+</listitem><listitem><para><emphasis>clamp_to_edge</emphasis> : The texture is stretched, the object edge colour is defined as the average of the texture edge colour and the border colour.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>w_wrap_mode</bold> : <emphasis>value</emphasis> <linebreak/>
+ Defines the wrapping mode of the texture, for the W component. The possible values are :<itemizedlist>
+<listitem><para><emphasis>repeat</emphasis> : The texture is repeated.</para>
+</listitem><listitem><para><emphasis>mirrored_repeat</emphasis> : The texture is repeated, each instance of 2 being the mirror of the other one.</para>
+</listitem><listitem><para><emphasis>clamp_to_border</emphasis> : The texture is stretched, the object edge colour is defined as the texture edge colour.</para>
+</listitem><listitem><para><emphasis>clamp_to_edge</emphasis> : The texture is stretched, the object edge colour is defined as the average of the texture edge colour and the border colour.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>border_colour</bold> : <emphasis>rgba_colour</emphasis> <linebreak/>
+ Defines the non textured border colour.<itemizedlist>
+<listitem><para><emphasis>float_transparent_black</emphasis> : Transparent black.</para>
+</listitem><listitem><para><emphasis>int_transparent_black</emphasis> : Transparent black.</para>
+</listitem><listitem><para><emphasis>float_opaque_black</emphasis> : Opaque black.</para>
+</listitem><listitem><para><emphasis>int_opaque_black</emphasis> : Opaque black.</para>
+</listitem><listitem><para><emphasis>float_opaque_white</emphasis> : Opaque white.</para>
+</listitem><listitem><para><emphasis>int_opaque_white</emphasis> : Opaque white.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>max_anisotropy</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the maximum degree of anisotropy.</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="d2/df2/a10776_1autotoc_md233">
+<title>material section</title>
+<para>Materials can be multi-pass, so you can declare more than one pass subsection.<itemizedlist>
+<listitem><para><bold>pass</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a texture.</para>
+</listitem></itemizedlist>
+</para>
+<sect2 id="d2/df2/a10776_1autotoc_md234">
+<title>pass section</title>
+<para><itemizedlist>
+<listitem><para><bold>diffuse</bold> : <emphasis>rgb_colour</emphasis> <linebreak/>
+ Defines diffuse colour of the pass (phong materials only).</para>
+</listitem><listitem><para><bold>albedo</bold> : <emphasis>rgb_colour</emphasis> <linebreak/>
+ Defines albedo colour of the pass (not available with phong materials).</para>
+</listitem><listitem><para><bold>specular</bold> : <emphasis>rgb_colour</emphasis> <linebreak/>
+ Defines specular colour of the pass (not available with metallic/roughness materials).</para>
+</listitem><listitem><para><bold>metallic</bold> : <emphasis>real (between 0 and 1)</emphasis> <linebreak/>
+ Defines the metallness of the pass (metallic/roughness materials only).</para>
+</listitem><listitem><para><bold>shininess</bold> : <emphasis>real (between 0 and 128)</emphasis> <linebreak/>
+ Defines the specular exponent of the pass (phong materials only).</para>
+</listitem><listitem><para><bold>glossiness</bold> : <emphasis>real (between 0 and 1)</emphasis> <linebreak/>
+ Defines the glossiness of the pass (specular/glossiness materials only).</para>
+</listitem><listitem><para><bold>roughness</bold> : <emphasis>real (between 0 and 1)</emphasis> <linebreak/>
+ Defines the roughness of the pass (metallic/roughness materials only).</para>
+</listitem><listitem><para><bold>ambient</bold> : <emphasis>real (between 0 and 1)</emphasis> <linebreak/>
+ Defines ambient factor of the pass (phong materials only).</para>
+</listitem><listitem><para><bold>emissive</bold> : <emphasis>real (between 0 and 1)</emphasis> <linebreak/>
+ Defines emissive factor of the pass.</para>
+</listitem><listitem><para><bold>alpha</bold> : <emphasis>real (between 0 and 1)</emphasis> <linebreak/>
+ Defines the global alpha value for the pass.</para>
+</listitem><listitem><para><bold>two_sided</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Tells the pass is two sided (true) or not (false).</para>
+</listitem><listitem><para><bold>texture_unit</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a texture unit.</para>
+</listitem><listitem><para><bold>alpha_blend_mode</bold> : <emphasis>value</emphasis> <linebreak/>
+ Alpha blending mode name, can be one of:<itemizedlist>
+<listitem><para><emphasis>none</emphasis> : No alpha blending.</para>
+</listitem><listitem><para><emphasis>additive</emphasis> : Source and destination alpha values are added.</para>
+</listitem><listitem><para><emphasis>multiplicative</emphasis> : Source and destination alpha values are multiplied.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>colour_blend_mode</bold> : <emphasis>value</emphasis> <linebreak/>
+ Colour blending mode name, can be one of:<itemizedlist>
+<listitem><para><emphasis>none</emphasis> : No colour blending.</para>
+</listitem><listitem><para><emphasis>additive</emphasis> : Source and destination colour values are added.</para>
+</listitem><listitem><para><emphasis>multiplicative</emphasis> : Source and destination colour values are multiplied.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>alpha_func</bold> : func : <emphasis>value</emphasis> ref-val: <emphasis>real</emphasis> <linebreak/>
+ Defines the way alpha rejection is applied to the texture. The second parameter is the reference value used in alpha rejection function. The first parameter values can be :<itemizedlist>
+<listitem><para><emphasis>always</emphasis> : The sample colour is always applied.</para>
+</listitem><listitem><para><emphasis>less</emphasis> : The sample colour is applied if its alpha component is less than the second parameter.</para>
+</listitem><listitem><para><emphasis>less_or_equal</emphasis> : The sample colour is applied if its alpha component is less than or equal to the second parameter.</para>
+</listitem><listitem><para><emphasis>equal</emphasis> : The sample colour is applied if its alpha component is equal to the second parameter.</para>
+</listitem><listitem><para><emphasis>not_equal</emphasis> : The sample colour is applied if its alpha component is different from the second parameter.</para>
+</listitem><listitem><para><emphasis>greater_or_equal</emphasis> : The sample colour is applied if its alpha component is greater than or equal to the second parameter.</para>
+</listitem><listitem><para><emphasis>greater</emphasis> : The sample colour is applied if its alpha component is greater than the second parameter.</para>
+</listitem><listitem><para><emphasis>never</emphasis> : The sample colour is never applied.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>refraction_ratio</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the refraction ratio of the pass. Note that if there is no refraction map, the refraction is still applied, using only the skybox.</para>
+</listitem><listitem><para><bold>subsurface_scattering</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing subsurface scattering for the pass.</para>
+</listitem><listitem><para><bold>parallax_occlusion</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Enables or disables parallax occlusion mapping (needs a normal map and a height map).</para>
+</listitem><listitem><para><bold>bw_accumulation</bold> : <emphasis>int between 0 and 5</emphasis> <linebreak/>
+ Defines the accumulation function, for blended weighted rendering.</para>
+</listitem><listitem><para><bold>reflections</bold> : Enables reflections. <linebreak/>
+</para>
+</listitem><listitem><para><bold>refractions</bold> : Enables refraction.</para>
+</listitem></itemizedlist>
+</para>
+<sect3 id="d2/df2/a10776_1autotoc_md235">
+<title>texture_unit section</title>
+<para><itemizedlist>
+<listitem><para><bold>image</bold> : <emphasis>file</emphasis> <linebreak/>
+ Defines the image file name.</para>
+</listitem><listitem><para><bold>render_target</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a render target.</para>
+</listitem><listitem><para><bold>channel</bold> : <emphasis>value {| value}</emphasis> <linebreak/>
+ The channels to which the texture is bound. Can be one of the following :<itemizedlist>
+<listitem><para><emphasis>diffuse</emphasis> : Diffuse lighting colour (Phong only).</para>
+</listitem><listitem><para><emphasis>albedo</emphasis> : Base colour (PBR only).</para>
+</listitem><listitem><para><emphasis>specular</emphasis> : Specular colour (Phong and PBR Specular/Glossiness).</para>
+</listitem><listitem><para><emphasis>metallic</emphasis> : Metallic factor (PBR Metallic/Roughness only).</para>
+</listitem><listitem><para><emphasis>shininess</emphasis> : Specular exponent (Phong only).</para>
+</listitem><listitem><para><emphasis>glossiness</emphasis> : Glossiness factor (PBR Specular/Glossiness only).</para>
+</listitem><listitem><para><emphasis>roughness</emphasis> : Roughness factor (PBR Metallic/Roughness only).</para>
+</listitem><listitem><para><emphasis>opacity</emphasis> : Opacity factor.</para>
+</listitem><listitem><para><emphasis>emissive</emphasis> : Emissive colour.</para>
+</listitem><listitem><para><emphasis>transmittance</emphasis> : Transmittance factor (for subsurface scattering).</para>
+</listitem><listitem><para><emphasis>occlusion</emphasis> : Occlusion factor.</para>
+</listitem><listitem><para><emphasis>normal</emphasis> : Normals.</para>
+</listitem><listitem><para><emphasis>height</emphasis> : Height.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>sampler</bold> : <emphasis>name</emphasis> <linebreak/>
+ Defines the sampler object used by the texture.</para>
+</listitem><listitem><para><bold>diffuse_mask</bold> : <emphasis>mask_3</emphasis> <linebreak/>
+ Defines the components from the texture used for the diffuse colour (Phong only).</para>
+</listitem><listitem><para><bold>albedo_mask</bold> : <emphasis>mask_3</emphasis> <linebreak/>
+ Defines the components from the texture used for the base colour (PBR only).</para>
+</listitem><listitem><para><bold>specular_mask</bold> : <emphasis>mask_3</emphasis> <linebreak/>
+ Defines the components from the texture used for the specular colour (Phong or PBR Specular/Glossiness).</para>
+</listitem><listitem><para><bold>metalness_mask</bold> : <emphasis>mask_1</emphasis> <linebreak/>
+ Defines the component from the texture used for the metallic factor (PBR Metallic/Roughness only).</para>
+</listitem><listitem><para><bold>shininess_mask</bold> : <emphasis>mask_1</emphasis> <linebreak/>
+ Defines the component from the texture used for the specular exponent (Phong only).</para>
+</listitem><listitem><para><bold>glossiness_mask</bold> : <emphasis>mask_1</emphasis> <linebreak/>
+ Defines the component from the texture used for the glossiness factor (PBR Specular/Glossiness only).</para>
+</listitem><listitem><para><bold>roughness_mask</bold> : <emphasis>mask_1</emphasis> <linebreak/>
+ Defines the component from the texture used for the roughness factor (PBR Metallic/Roughness only).</para>
+</listitem><listitem><para><bold>opacity</bold> : <emphasis>mask_1</emphasis> <linebreak/>
+ Defines the component from the texture used for the opacity factor.</para>
+</listitem><listitem><para><bold>emissive</bold> : <emphasis>mask_3</emphasis> <linebreak/>
+ Defines the components from the texture used for the emissive colour.</para>
+</listitem><listitem><para><bold>transmittance</bold> : <emphasis>mask_1</emphasis> <linebreak/>
+ Defines the component from the texture used for the transmittance factor (for subsurface scattering.</para>
+</listitem><listitem><para><bold>occlusion</bold> : <emphasis>mask_1</emphasis> <linebreak/>
+ Defines the component from the texture used for the occlusion factor.</para>
+</listitem><listitem><para><bold>normal</bold> : <emphasis>mask_3</emphasis> <linebreak/>
+ Defines the components from the texture used for the normals.</para>
+</listitem><listitem><para><bold>height</bold> : <emphasis>mask_1</emphasis> <linebreak/>
+ Defines the component from the texture used for the height.</para>
+</listitem><listitem><para><bold>height_factor</bold> : <emphasis>real</emphasis> <linebreak/>
+ The height factor multiplier.</para>
+</listitem><listitem><para><bold>normal_directx</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Tells if the texture normals are expressed for DirectX (green component will then be inverted).</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d2/df2/a10776_1autotoc_md236">
+<title>shader_program section</title>
+<para><itemizedlist>
+<listitem><para><bold>vertex_program</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing the vertex program.</para>
+</listitem><listitem><para><bold>pixel_program</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing the pixel program.</para>
+</listitem><listitem><para><bold>geometry_program</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing the geometry program.</para>
+</listitem><listitem><para><bold>hull_program</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing the hull (tessellation control) program.</para>
+</listitem><listitem><para><bold>domain_program</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing the domain (tessellation evaluation) program.</para>
+</listitem><listitem><para><bold>constants_buffer</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section dexcribing a constants buffer (uniform buffer).</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d2/df2/a10776_1autotoc_md237">
+<title>vertex/pixel/geometry/hull/domain_program section</title>
+<para><itemizedlist>
+<listitem><para><bold>file</bold> : <emphasis>file</emphasis> <linebreak/>
+ Shader file name</para>
+</listitem><listitem><para><bold>sampler</bold> : <emphasis>name</emphasis> <linebreak/>
+ Creates a new variable of sample (1D, 2D, …) type, for the pixel shader.</para>
+</listitem><listitem><para><bold>input_type</bold> : <emphasis>value</emphasis> <linebreak/>
+ Defines the input faces data type, for geometry shader. Can be one of the following :<itemizedlist>
+<listitem><para><emphasis>points</emphasis> : Points.</para>
+</listitem><listitem><para><emphasis>lines</emphasis> : Disjoint lines.</para>
+</listitem><listitem><para><emphasis>line_loop</emphasis> : Joint lines loop.</para>
+</listitem><listitem><para><emphasis>line_strip</emphasis> : Joint lines.</para>
+</listitem><listitem><para><emphasis>triangles</emphasis> : Disjoint triangles.</para>
+</listitem><listitem><para><emphasis>triangle_strip</emphasis> : Joint triangles.</para>
+</listitem><listitem><para><emphasis>triangle_fan</emphasis> : Triangles joint using the first point.</para>
+</listitem><listitem><para><emphasis>quads</emphasis> : Disjoint quads.</para>
+</listitem><listitem><para><emphasis>quad_strip</emphasis> : Joint quads.</para>
+</listitem><listitem><para><emphasis>polygon</emphasis> : Polygons.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>output_type</bold> : <emphasis>value</emphasis> <linebreak/>
+ Defines the geometry chader output data type. Can be one of the following :<itemizedlist>
+<listitem><para><emphasis>points</emphasis> : Points.</para>
+</listitem><listitem><para><emphasis>line_strip</emphasis> : Joint lines.</para>
+</listitem><listitem><para><emphasis>triangle_strip</emphasis> : Joint triangles.</para>
+</listitem><listitem><para><emphasis>quad_strip</emphasis> : Joint quads.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>output_vtx_count</bold> : <emphasis>int</emphasis> <linebreak/>
+ Defines the geometry shader output vertices.</para>
+</listitem><listitem><para><bold>constants_buffer</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a constants buffer.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d2/df2/a10776_1autotoc_md238">
+<title>constants_buffer section</title>
+<para><itemizedlist>
+<listitem><para><bold>shaders</bold> : <emphasis>bitwise ORed values</emphasis> <linebreak/>
+ Shader types to which this buffer applies, can be one of:<itemizedlist>
+<listitem><para><emphasis>vertex</emphasis></para>
+</listitem><listitem><para><emphasis>hull</emphasis></para>
+</listitem><listitem><para><emphasis>domain</emphasis></para>
+</listitem><listitem><para><emphasis>geometry</emphasis></para>
+</listitem><listitem><para><emphasis>pixel</emphasis></para>
+</listitem><listitem><para><emphasis>compute</emphasis></para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>variable</bold> : <emphasis>name</emphasis>, <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a variable for this buffer.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d2/df2/a10776_1autotoc_md239">
+<title>variable section</title>
+<para><itemizedlist>
+<listitem><para><bold>type</bold> : <emphasis>value</emphasis> <linebreak/>
+ Variable type name, can be :<itemizedlist>
+<listitem><para><emphasis>int</emphasis> : 1 signed integer.</para>
+</listitem><listitem><para><emphasis>uint</emphasis> : 1 unsigned integer.</para>
+</listitem><listitem><para><emphasis>float</emphasis> : 1 simple precision floating point number.</para>
+</listitem><listitem><para><emphasis>double</emphasis> : 1 double precision floating point number.</para>
+</listitem><listitem><para><emphasis>vec2i</emphasis> : 2 signed integers.</para>
+</listitem><listitem><para><emphasis>vec3i</emphasis> : 3 signed integers.</para>
+</listitem><listitem><para><emphasis>vec4i</emphasis> : 4 signed integers.</para>
+</listitem><listitem><para><emphasis>vec2f</emphasis> : 2 simple precision floating point numbers.</para>
+</listitem><listitem><para><emphasis>vec3f</emphasis> : 3 simple precision floating point numbers.</para>
+</listitem><listitem><para><emphasis>vec4f</emphasis> : 4 simple precision floating point numbers.</para>
+</listitem><listitem><para><emphasis>vec2d</emphasis> : 2 double precision floating point numbers.</para>
+</listitem><listitem><para><emphasis>vec3d</emphasis> : 3 double precision floating point numbers.</para>
+</listitem><listitem><para><emphasis>vec4d</emphasis> : 4 double precision floating point numbers.</para>
+</listitem><listitem><para><emphasis>mat2x2i</emphasis> : 2x2 signed integers matrix.</para>
+</listitem><listitem><para><emphasis>mat2x3i</emphasis> : 2x3 signed integers matrix.</para>
+</listitem><listitem><para><emphasis>mat2x4i</emphasis> : 2x4 signed integers matrix.</para>
+</listitem><listitem><para><emphasis>mat3x2i</emphasis> : 3x2 signed integers matrix.</para>
+</listitem><listitem><para><emphasis>mat3x3i</emphasis> : 3x3 signed integers matrix.</para>
+</listitem><listitem><para><emphasis>mat3x4i</emphasis> : 3x4 signed integers matrix.</para>
+</listitem><listitem><para><emphasis>mat4x2i</emphasis> : 4x2 signed integers matrix.</para>
+</listitem><listitem><para><emphasis>mat4x3i</emphasis> : 4x3 signed integers matrix.</para>
+</listitem><listitem><para><emphasis>mat4x4i</emphasis> : 4x4 signed integers matrix.</para>
+</listitem><listitem><para><emphasis>mat2x2f</emphasis> : 2x2 simple precision floating point numbers matrix.</para>
+</listitem><listitem><para><emphasis>mat2x3f</emphasis> : 2x3 simple precision floating point numbers matrix.</para>
+</listitem><listitem><para><emphasis>mat2x4f</emphasis> : 2x4 simple precision floating point numbers matrix.</para>
+</listitem><listitem><para><emphasis>mat3x2f</emphasis> : 3x2 simple precision floating point numbers matrix.</para>
+</listitem><listitem><para><emphasis>mat3x3f</emphasis> : 3x3 simple precision floating point numbers matrix.</para>
+</listitem><listitem><para><emphasis>mat3x4f</emphasis> : 3x4 simple precision floating point numbers matrix.</para>
+</listitem><listitem><para><emphasis>mat4x2f</emphasis> : 4x2 simple precision floating point numbers matrix.</para>
+</listitem><listitem><para><emphasis>mat4x3f</emphasis> : 4x3 simple precision floating point numbers matrix.</para>
+</listitem><listitem><para><emphasis>mat4x4f</emphasis> : 4x4 simple precision floating point numbers matrix.</para>
+</listitem><listitem><para><emphasis>mat2x2d</emphasis> : 2x2 double precision floating point numbers matrix.</para>
+</listitem><listitem><para><emphasis>mat2x3d</emphasis> : 2x3 double precision floating point numbers matrix.</para>
+</listitem><listitem><para><emphasis>mat2x4d</emphasis> : 2x4 double precision floating point numbers matrix.</para>
+</listitem><listitem><para><emphasis>mat3x2d</emphasis> : 3x2 double precision floating point numbers matrix.</para>
+</listitem><listitem><para><emphasis>mat3x3d</emphasis> : 3x3 double precision floating point numbers matrix.</para>
+</listitem><listitem><para><emphasis>mat3x4d</emphasis> : 3x4 double precision floating point numbers matrix.</para>
+</listitem><listitem><para><emphasis>mat4x2d</emphasis> : 4x2 double precision floating point numbers matrix.</para>
+</listitem><listitem><para><emphasis>mat4x3d</emphasis> : 4x3 double precision floating point numbers matrix.</para>
+</listitem><listitem><para><emphasis>mat4x4d</emphasis> : 4x4 double precision floating point numbers matrix.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>count</bold> : <emphasis>int</emphasis> <linebreak/>
+ Variable occurences count (array size).</para>
+</listitem><listitem><para><bold>value</bold> : <linebreak/>
+ Variable value, depends on the chosen type.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d2/df2/a10776_1autotoc_md240">
+<title>subsurface_scattering section</title>
+<para><itemizedlist>
+<listitem><para><bold>strength</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the strength of the effect.</para>
+</listitem><listitem><para><bold>gaussian_width</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the width of the Gaussian blur.</para>
+</listitem><listitem><para><bold>transmittance_profile</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing the transmittance profile.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d2/df2/a10776_1autotoc_md241">
+<title>transmittance_profile section</title>
+<para><itemizedlist>
+<listitem><para><bold>factor</bold> : <emphasis>vec4f</emphasis> <linebreak/>
+ Defines the three RGB components of the colour, and the fourth component is used for the exponent of that colour.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+</sect2>
+</sect1>
+<sect1 id="d2/df2/a10776_1autotoc_md242">
+<title>font section</title>
+<para><itemizedlist>
+<listitem><para><bold>file</bold> : <emphasis>file</emphasis> <linebreak/>
+ Defines the file holding the font.</para>
+</listitem><listitem><para><bold>height</bold> : <emphasis>int</emphasis> <linebreak/>
+ Defines the height (precision) of the font.</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="d2/df2/a10776_1autotoc_md243">
+<title>scene section</title>
+<para><itemizedlist>
+<listitem><para><bold>ambient_light</bold> : <emphasis>colour</emphasis> <linebreak/>
+ Defines the ambient lighting colour. For PBR materials, defines the influence of the IBL on the scene.</para>
+</listitem><listitem><para><bold>background_colour</bold> : <emphasis>colour</emphasis> <linebreak/>
+ Defines the background colour.</para>
+</listitem><listitem><para><bold>background_image</bold> : <emphasis>file</emphasis> <linebreak/>
+ Defines the background image.</para>
+</listitem><listitem><para><bold>import</bold> : <emphasis>file</emphasis> <linebreak/>
+ Allows scene import from a CSCN file or another file format supported by Castor3D importer plug-ins.</para>
+</listitem><listitem><para><bold>scene_node</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a scene node for objects, lights or billboards.</para>
+</listitem><listitem><para><bold>camera_node</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a scene node for cameras.</para>
+</listitem><listitem><para><bold>light</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a light source.</para>
+</listitem><listitem><para><bold>object</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing an object.</para>
+</listitem><listitem><para><bold>billboard</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a billboards list.</para>
+</listitem><listitem><para><bold>camera</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a camera.</para>
+</listitem><listitem><para><bold>panel_overlay</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a simple panel overlay.</para>
+</listitem><listitem><para><bold>border_panel_overlay</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a simple panel overlay with a border.</para>
+</listitem><listitem><para><bold>text_overlay</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a simple panel overlay with text.</para>
+</listitem><listitem><para><bold>animated_object_group</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing an animated object group, with common animations.</para>
+</listitem><listitem><para><bold>mesh</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a mesh, that can be used with one or more objects.</para>
+</listitem><listitem><para><bold>particle_system</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a particle system.</para>
+</listitem><listitem><para><bold>skybox</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing the skybox.</para>
+</listitem><listitem><para><bold>include</bold> : <emphasis>file</emphasis> <linebreak/>
+ Includes a scene file, allowing you to split your scene in multiple files.</para>
+</listitem><listitem><para><bold>sampler</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a sampler.</para>
+</listitem><listitem><para><bold>fog_type</bold> : <emphasis>value</emphasis> <linebreak/>
+ Defines the fog type for the scene. Possible values are:<itemizedlist>
+<listitem><para><emphasis>linear</emphasis>: Fog intensity increases linearly with distance to camera.</para>
+</listitem><listitem><para><emphasis>exponential</emphasis>: Fog intensity increases exponentially with distance to camera.</para>
+</listitem><listitem><para><emphasis>squared_exponential</emphasis>: Fog intensity increases even more with distance to camera.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>fog_density</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the fog density, which is multiplied by the distance, according to chosen fog type.</para>
+</listitem><listitem><para><bold>hdr_config</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing the HDR configuration.</para>
+</listitem></itemizedlist>
+</para>
+<sect2 id="d2/df2/a10776_1autotoc_md244">
+<title>hdr_config section</title>
+<para><itemizedlist>
+<listitem><para><bold>exposure</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the scene’s exposure.</para>
+</listitem><listitem><para><bold>gamma</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the gamma correction.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d2/df2/a10776_1autotoc_md245">
+<title>scene_node and camera_node sections</title>
+<para><itemizedlist>
+<listitem><para><bold>parent</bold> : <emphasis>name</emphasis> <linebreak/>
+ Defines this node’s parent. The default parent node is the root node.</para>
+</listitem><listitem><para><bold>position</bold> : <emphasis>3 reals</emphasis> <linebreak/>
+ Node position relative to its parent.</para>
+</listitem><listitem><para><bold>orientation</bold> : <emphasis>4 reals</emphasis> <linebreak/>
+ A quaternion holding node orientation relative to its parent.</para>
+</listitem><listitem><para><bold>scale</bold> : <emphasis>3 reals</emphasis> <linebreak/>
+ Node scale relative to its parent.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d2/df2/a10776_1autotoc_md246">
+<title>light section</title>
+<para><itemizedlist>
+<listitem><para><bold>type</bold> : <emphasis>value</emphasis> <linebreak/>
+ Three light source types exist in Castor3D :<itemizedlist>
+<listitem><para><emphasis>directional</emphasis> : directional light (like the sun).</para>
+</listitem><listitem><para><emphasis>point_light</emphasis> : a positioned source which emits in all directions.</para>
+</listitem><listitem><para><emphasis>spot_light</emphasis> : a positioned source which emits in an oriented cone.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>colour</bold> : <emphasis>rgb_colour</emphasis> <linebreak/>
+ Defines the colour for this source.</para>
+</listitem><listitem><para><bold>intensity</bold> : <emphasis>2 reals</emphasis> <linebreak/>
+ Defines the diffuse and specular intensities for this source.</para>
+</listitem><listitem><para><bold>attenuation</bold> : <emphasis>3 reals</emphasis> <linebreak/>
+ Defines the three attenuation components : constant, linear and quadratic. This attenuation is computed from the distance to the light source. <linebreak/>
+ Only for spot_light and point_light.</para>
+</listitem><listitem><para><bold>cut_off</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the angle of the emission cone. <linebreak/>
+ Only for spot_light.</para>
+</listitem><listitem><para><bold>exponent</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the attenuation computed with the distance from the emission cone centre. <linebreak/>
+ Only for spot_light.</para>
+</listitem><listitem><para><bold>parent</bold> : <emphasis>name</emphasis> <linebreak/>
+ Defines the node which this light source is attached to.</para>
+</listitem><listitem><para><bold>shadow_producer</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing the shadows for the light source.</para>
+</listitem></itemizedlist>
+</para>
+<sect3 id="d2/df2/a10776_1autotoc_md247">
+<title>shadows section</title>
+<para><itemizedlist>
+<listitem><para><bold>producer</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Tells if the light source produces shadows (<emphasis>true</emphasis>) or not (<emphasis>false</emphasis>).</para>
+</listitem><listitem><para><bold>filter</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ Defines the type of shadows to use. Can be one of the following:<itemizedlist>
+<listitem><para><emphasis>raw</emphasis> : No filter.</para>
+</listitem><listitem><para><emphasis>pcf</emphasis> : PCF filter.</para>
+</listitem><listitem><para><emphasis>variance</emphasis> : Variance Shadow Map.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>min_offset</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the minimal offset to apply to the shadow value.</para>
+</listitem><listitem><para><bold>max_slope_offset</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the mawimal offset, slope wise, to apply to the shadow value.</para>
+</listitem><listitem><para><bold>variance_max</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the minimal variance factor to apply to the shadow value.</para>
+</listitem><listitem><para><bold>variance_bias</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the variance bias to apply to the shadow value.</para>
+</listitem><listitem><para><bold>volumetric_steps</bold> : <emphasis>int</emphasis> <linebreak/>
+ Defines the number of steps performed by the ray to compute the volumetric light scattering.</para>
+</listitem><listitem><para><bold>volumetric_scattering</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the volumetric light scattering factor.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+</sect2>
+<sect2 id="d2/df2/a10776_1autotoc_md248">
+<title>object section</title>
+<para><itemizedlist>
+<listitem><para><bold>parent</bold> : <emphasis>name</emphasis> <linebreak/>
+ Defines the node which this object is attached to.</para>
+</listitem><listitem><para><bold>mesh</bold> : <emphasis>name</emphasis> <linebreak/>
+ Defines the mesh this object uses.</para>
+</listitem><listitem><para><bold>mesh</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a mesh with the given name.</para>
+</listitem><listitem><para><bold>material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Name of a material, defined in a .cmtl file or in this file. Applies this material too all the submeshes.</para>
+</listitem><listitem><para><bold>materials</bold> : <emphasis>section</emphasis> <linebreak/>
+ New section used to specify each submesh’s material.</para>
+</listitem><listitem><para><bold>cast_shadows</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Defines if the object casts shadows (<emphasis>true</emphasis>, default value) or not (<emphasis>false</emphasis>).</para>
+</listitem><listitem><para><bold>receive_shadows</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Defines if the object receives shadows (<emphasis>true</emphasis>, default value) or not (<emphasis>false</emphasis>).</para>
+</listitem></itemizedlist>
+</para>
+<sect3 id="d2/df2/a10776_1autotoc_md249">
+<title>materials section</title>
+<para><itemizedlist>
+<listitem><para><bold>material</bold> : <emphasis>int</emphasis>, <emphasis>name</emphasis> <linebreak/>
+ Submesh index, and material name for this submesh.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+</sect2>
+<sect2 id="d2/df2/a10776_1autotoc_md250">
+<title>billboard section</title>
+<para>Allows the definition of billboards that share the same material and dimensions.</para>
+<para><itemizedlist>
+<listitem><para><bold>parent</bold> : <emphasis>name</emphasis> <linebreak/>
+ Defines the parent scene node.</para>
+</listitem><listitem><para><bold>positions</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing each billboard position.</para>
+</listitem><listitem><para><bold>material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Defines the material used by every billboard of this list.</para>
+</listitem><listitem><para><bold>dimensions</bold> : <emphasis>size</emphasis> <linebreak/>
+ Defines billboards dimensions.</para>
+</listitem><listitem><para><bold>type</bold> : <emphasis>value</emphasis> <linebreak/>
+ Defines the type of billboard. Possible values are:<itemizedlist>
+<listitem><para><emphasis>cylindrical</emphasis>: The billboard faces the camera, except for their Y axis, which remains still.</para>
+</listitem><listitem><para><emphasis>spherical</emphasis>: The billboard faces the camera on all axes.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>size</bold> : <emphasis>value</emphasis> <linebreak/>
+ Defines the billboards sizing. Possible values are:<itemizedlist>
+<listitem><para><emphasis>dynamic</emphasis>: The size varies, depending on the distance to camera.</para>
+</listitem><listitem><para><emphasis>fixed</emphasis>: The size is fixed, where the camera is.</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+<sect3 id="d2/df2/a10776_1autotoc_md251">
+<title>positions section</title>
+<para><itemizedlist>
+<listitem><para><bold>pos</bold> : <emphasis>3 reals</emphasis> <linebreak/>
+ Defines the relative position of a billboard.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+</sect2>
+<sect2 id="d2/df2/a10776_1autotoc_md252">
+<title>camera section</title>
+<para><itemizedlist>
+<listitem><para><bold>parent</bold> : <emphasis>name</emphasis> <linebreak/>
+ Defines the parent CameraNode.</para>
+</listitem><listitem><para><bold>primitive</bold> : <emphasis>value</emphasis> <linebreak/>
+ Defines the display type. Can be one of :<itemizedlist>
+<listitem><para><emphasis>points</emphasis> : Points.</para>
+</listitem><listitem><para><emphasis>lines</emphasis> : Disjointed lines.</para>
+</listitem><listitem><para><emphasis>line_loop</emphasis> : Jointed lines loop.</para>
+</listitem><listitem><para><emphasis>line_strip</emphasis> : Joined lines.</para>
+</listitem><listitem><para><emphasis>triangles</emphasis> : Disjointed triangles.</para>
+</listitem><listitem><para><emphasis>triangle_strip</emphasis> : Jointed triangles.</para>
+</listitem><listitem><para><emphasis>triangle_fan</emphasis> : Triangles jointed using the first point.</para>
+</listitem><listitem><para><emphasis>quads</emphasis> : Disjointed quads.</para>
+</listitem><listitem><para><emphasis>quad_strip</emphasis> : Jointed quads.</para>
+</listitem><listitem><para><emphasis>polygon</emphasis> : Polygons.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>viewport</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines the camera view port.</para>
+</listitem></itemizedlist>
+</para>
+<sect3 id="d2/df2/a10776_1autotoc_md253">
+<title>viewport section</title>
+<para><itemizedlist>
+<listitem><para><bold>type</bold> : <emphasis>value</emphasis> <linebreak/>
+ Window display type, 2d or 3d.</para>
+</listitem><listitem><para><bold>left</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the minimum displayed X coordinate.</para>
+</listitem><listitem><para><bold>right</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the maximum displayed X coordinate.</para>
+</listitem><listitem><para><bold>top</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the minimum displayed Y coordinate.</para>
+</listitem><listitem><para><bold>bottom</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the maximum displayed Y coordinate.</para>
+</listitem><listitem><para><bold>near</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the minimum displayed Z coordinate.</para>
+</listitem><listitem><para><bold>far</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the maximum displayed Z coordinate.</para>
+</listitem><listitem><para><bold>size</bold> : <emphasis>size</emphasis> <linebreak/>
+ Defines the window display size (in pixels).</para>
+</listitem><listitem><para><bold>fov_y</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the vertical field of view angle, in radians.</para>
+</listitem><listitem><para><bold>aspect_ratio</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the global window aspect ratio (1.33333 for 4/3, 1.77777 for 16/9 … ).</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+</sect2>
+<sect2 id="d2/df2/a10776_1autotoc_md254">
+<title>animated_object_group section</title>
+<para><itemizedlist>
+<listitem><para><bold>animated_object</bold> : <emphasis>name</emphasis> <linebreak/>
+ Adds the object with the given name to the group.</para>
+</listitem><listitem><para><bold>animation</bold> : <emphasis>name</emphasis> <linebreak/>
+ Adds the animation with the given name to the group’s common animations list.</para>
+</listitem><listitem><para><bold>start_animation</bold> : <emphasis>name</emphasis> <linebreak/>
+ Starts the given animation.</para>
+</listitem><listitem><para><bold>pause_animation</bold> : <emphasis>name</emphasis> <linebreak/>
+ Pauses the given animation (which must have been started first).</para>
+</listitem></itemizedlist>
+</para>
+<sect3 id="d2/df2/a10776_1autotoc_md255">
+<title>animation section</title>
+<para><itemizedlist>
+<listitem><para><bold>looped</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Defines if the animation is looped (<emphasis>true</emphasis>) or not (<emphasis>false</emphasis>, default value).</para>
+</listitem><listitem><para><bold>scale</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the time scale of the animation (can be negative, the animation will then be played backwards).</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+</sect2>
+</sect1>
+<sect1 id="d2/df2/a10776_1autotoc_md256">
+<title>mesh section</title>
+<para><itemizedlist>
+<listitem><para><bold>type</bold> : <emphasis>name</emphasis> <linebreak/>
+ Mesh type name, one of :<itemizedlist>
+<listitem><para><emphasis>custom</emphasis> : manually defined mesh or imported mesh.</para>
+</listitem><listitem><para><emphasis>cube</emphasis> : a cube, user must then define its three dimensions.</para>
+</listitem><listitem><para><emphasis>cone</emphasis> : a cone, user must then define its radius and height.</para>
+</listitem><listitem><para><emphasis>cylinder</emphasis> : a cylinder, user must then define its radius and height.</para>
+</listitem><listitem><para><emphasis>sphere</emphasis> : a sphere with quad faces, user must then define the subdivisions count and the radius.</para>
+</listitem><listitem><para><emphasis>icosahedron</emphasis> : a sphere with triangular faces, user must then define the subdivisions count and the radius.</para>
+</listitem><listitem><para><emphasis>torus</emphasis> : a torus, user must then define the internal and external subdivisions count and the internal and external radius.</para>
+</listitem><listitem><para><emphasis>plane</emphasis> : a plane, user must then define the width and depth subdivisions count and the width and depth.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>submesh</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a submesh. Only if the mesh type is custom.</para>
+</listitem><listitem><para><bold>import</bold> : <emphasis>file</emphasis> <emphasis>&lt;options&gt;</emphasis> <linebreak/>
+ Allows import of mesh data from a file, in CMSH file format or any format supported by Castor3D import plug-ins. Only if the mesh type is custom. This directive can accept few optional parameters :<itemizedlist>
+<listitem><para><emphasis>smooth_normals</emphasis> : Computes normals per vertex during import.</para>
+</listitem><listitem><para><emphasis>flat_normals</emphasis> : Computes normals per face during the import.</para>
+</listitem><listitem><para><emphasis>tangent_space</emphasis> : Computes tangent space informations (tangent and bi-tangent) during import.</para>
+</listitem><listitem><para><emphasis>rescale</emphasis>=*real* : Rescales the resulting mesh by given factor, on three axes.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>morph_import</bold> : <emphasis>file</emphasis> <emphasis>&lt;options</emphasis>&gt; <linebreak/>
+ Allows import of mesh data from a file, to add mophing animation. <linebreak/>
+ This directive must happen after a first import directive. <linebreak/>
+ Available only if the mesh type is <emphasis>custom</emphasis>. <linebreak/>
+ This directive can accept few optional parameters :<itemizedlist>
+<listitem><para><emphasis>smooth_normals</emphasis> : Computes normals per vertex during import.</para>
+</listitem><listitem><para><emphasis>flat_normals</emphasis> : Computes normals per face during the import.</para>
+</listitem><listitem><para><emphasis>tangent_space</emphasis> : Computes tangent space informations (tangent and bi-tangent) during import.</para>
+</listitem><listitem><para><emphasis>rescale</emphasis>=*real* : Rescales the resulting mesh by given factor, on three axes.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>division</bold> : <emphasis>name</emphasis> <emphasis>int</emphasis> <linebreak/>
+ Allows the mesh subdivision, using a supported Castor3D divider plug-in algorithm. The second parameter is the application count of the algorithm (its applied recursively).</para>
+</listitem></itemizedlist>
+</para>
+<sect2 id="d2/df2/a10776_1autotoc_md257">
+<title>submesh section</title>
+<para><itemizedlist>
+<listitem><para><bold>vertex</bold> : <emphasis>3 reals</emphasis> <linebreak/>
+ Defines a vertex position.</para>
+</listitem><listitem><para><bold>uv</bold> : <emphasis>2 reals</emphasis> <linebreak/>
+ Defines the UV texture coordinates for the previously declared vertex.</para>
+</listitem><listitem><para><bold>uvw</bold> : <emphasis>3 reals</emphasis> <linebreak/>
+ Defines the UVW texture coordinates for the previously declared vertex.</para>
+</listitem><listitem><para><bold>normal</bold> : <emphasis>3 reals</emphasis> <linebreak/>
+ Defines the normal coordinates for the previously declared vertex.</para>
+</listitem><listitem><para><bold>tangent</bold> : <emphasis>3 reals</emphasis> <linebreak/>
+ Defines the tangent coordinates for the previously declared vertex.</para>
+</listitem><listitem><para><bold>face</bold> : <emphasis>3 or 4 integers</emphasis> <linebreak/>
+ Defines a face using the three or four vertices whose indices are given. If more than three indices are given, creates the appropriate count of triangular faces.</para>
+</listitem><listitem><para><bold>face_uv</bold> : <emphasis>as much uv as the face indices</emphasis> <linebreak/>
+ Defines the UV coordinates for each vertex of the previously declared face.</para>
+</listitem><listitem><para><bold>face_uvw</bold> : <emphasis>as much uvw as the face indices</emphasis> <linebreak/>
+ Defines the UVW coordinates for each vertex of the previously declared face.</para>
+</listitem><listitem><para><bold>face_normals</bold> : <emphasis>as much 3 reals groups as the face indices</emphasis> <linebreak/>
+ Defines the normals coordinates for each vertex of the previously declared face.</para>
+</listitem><listitem><para><bold>face_tangents</bold> : <emphasis>as much 3 reals groups as the face indices</emphasis> <linebreak/>
+ Defines the tangents coordinates for each vertex of the previously declared face.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+</sect1>
+<sect1 id="d2/df2/a10776_1autotoc_md258">
+<title>panel_overlay section</title>
+<para><itemizedlist>
+<listitem><para><bold>material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Defines the material used by the panel.</para>
+</listitem><listitem><para><bold>position</bold> : <emphasis>2 reals</emphasis> <linebreak/>
+ Defines the overlay position, relative to its parent (or to screen, if no parent).</para>
+</listitem><listitem><para><bold>size</bold> : <emphasis>2 reals</emphasis> <linebreak/>
+ Defines the overlay size, relative to its parent (or to screen, if no parent).</para>
+</listitem><listitem><para><bold>pxl_position</bold> : <emphasis>2 ints</emphasis> <linebreak/>
+ Defines the absolute position for the overlay, in pixels.</para>
+</listitem><listitem><para><bold>pxl_size</bold> : <emphasis>2 ints</emphasis> <linebreak/>
+ Defines the absolute size for the overlay, in pixels.</para>
+</listitem><listitem><para><bold>uv</bold> : <emphasis>4 reals</emphasis> <linebreak/>
+ Defines the UV for the overlay (left, top, right, bottom).</para>
+</listitem><listitem><para><bold>panel_overlay</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a simple panel children overlay.</para>
+</listitem><listitem><para><bold>border_panel_overlay</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a border panel children overlay.</para>
+</listitem><listitem><para><bold>text_overlay</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a text panel children overlay.</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="d2/df2/a10776_1autotoc_md259">
+<title>border_panel_overlay section</title>
+<para><itemizedlist>
+<listitem><para><bold>material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Defines the material used by the panel.</para>
+</listitem><listitem><para><bold>position</bold> : <emphasis>2 reals</emphasis> <linebreak/>
+ Defines the overlay position, relative to its parent (or to screen, if no parent).</para>
+</listitem><listitem><para><bold>size</bold> : <emphasis>2 reals</emphasis> <linebreak/>
+ Defines the overlay size, relative to its parent (or to screen, if no parent).</para>
+</listitem><listitem><para><bold>pxl_position</bold> : <emphasis>2 ints</emphasis> <linebreak/>
+ Defines the absolute position for the overlay, in pixels.</para>
+</listitem><listitem><para><bold>pxl_size</bold> : <emphasis>2 ints</emphasis> <linebreak/>
+ Defines the absolute size for the overlay, in pixels.</para>
+</listitem><listitem><para><bold>center_uv</bold> : <emphasis>4 reals</emphasis> <linebreak/>
+ Defines the UV for the center of the overlay (left, top, right, bottom).</para>
+</listitem><listitem><para><bold>border_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Defines the material used for the panel’s border.</para>
+</listitem><listitem><para><bold>border_position</bold> : <emphasis>value</emphasis> <linebreak/>
+ Defines the border’s position, can be one of:<itemizedlist>
+<listitem><para><emphasis>internal</emphasis> : The border is inside the overlay.</para>
+</listitem><listitem><para><emphasis>middle</emphasis> : The border is half inside, half outside the overlay.</para>
+</listitem><listitem><para><emphasis>external</emphasis> : The border is outside the overlay.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>border_size</bold> : <emphasis>4 reals</emphasis> <linebreak/>
+ Defines the borders sizes (left right, top, bottom).</para>
+</listitem><listitem><para><bold>pxl_border_size</bold> : <emphasis>2 ints</emphasis> <linebreak/>
+ Defines the absolute border size, in pixels.</para>
+</listitem><listitem><para><bold>border_inner_uv</bold> : <emphasis>4 reals</emphasis> <linebreak/>
+ Defines the UV for the border of the overlay, inner side (left, top, right, bottom).</para>
+</listitem><listitem><para><bold>border_outer_uv</bold> : <emphasis>4 reals</emphasis> <linebreak/>
+ Defines the UV for the border of the overlay, outer side (left, top, right, bottom).</para>
+</listitem><listitem><para><bold>panel_overlay</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a simple panel children overlay.</para>
+</listitem><listitem><para><bold>border_panel_overlay</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a border panel children overlay.</para>
+</listitem><listitem><para><bold>text_overlay</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a text panel children overlay.</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="d2/df2/a10776_1autotoc_md260">
+<title>text_overlay section</title>
+<para><itemizedlist>
+<listitem><para><bold>material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Defines the material used by the panel.</para>
+</listitem><listitem><para><bold>position</bold> : <emphasis>2 reals</emphasis> <linebreak/>
+ Defines the overlay position, relative to its parent (or to screen, if no parent).</para>
+</listitem><listitem><para><bold>size</bold> : <emphasis>2 reals</emphasis> <linebreak/>
+ Defines the overlay size, relative to its parent (or to screen, if no parent).</para>
+</listitem><listitem><para><bold>pxl_position</bold> : <emphasis>2 ints</emphasis> <linebreak/>
+ Defines the absolute position for the overlay, in pixels.</para>
+</listitem><listitem><para><bold>pxl_size</bold> : <emphasis>2 ints</emphasis> <linebreak/>
+ Defines the absolute size for the overlay, in pixels.</para>
+</listitem><listitem><para><bold>font</bold> : <emphasis>name</emphasis> <linebreak/>
+ Defines the font used to display the text.</para>
+</listitem><listitem><para><bold>text</bold> : <emphasis>texte</emphasis> <linebreak/>
+ Defines the displayed text.</para>
+</listitem><listitem><para><bold>text_wrapping</bold> : <emphasis>value</emphasis> <linebreak/>
+ Defines the way the text is cut when a line overflows the overlay dimensions. Can be one of:<itemizedlist>
+<listitem><para><emphasis>none</emphasis> : The text is not cut (the part that overflows won’t be displayed, though).</para>
+</listitem><listitem><para><emphasis>break</emphasis> : The text is cut at the letter (the words will be cut).</para>
+</listitem><listitem><para><emphasis>break_words</emphasis> : The text is cut at the word (the words remain uncut).</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>vertical_align</bold> : <emphasis>value</emphasis> <linebreak/>
+ Defines the text vertical alignment:<itemizedlist>
+<listitem><para><emphasis>top</emphasis> : Align on top.</para>
+</listitem><listitem><para><emphasis>center</emphasis> : Vertically center.</para>
+</listitem><listitem><para><emphasis>bottom</emphasis> : Align on bottom.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>horizontal_align</bold> : <emphasis>value</emphasis> <linebreak/>
+ Defines the text horizontal alignment:<itemizedlist>
+<listitem><para><emphasis>left</emphasis> : Align on left.</para>
+</listitem><listitem><para><emphasis>center</emphasis> : Horizontally center.</para>
+</listitem><listitem><para><emphasis>right</emphasis> : Align on right.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>texturing_mode</bold> : <emphasis>value</emphasis> <linebreak/>
+ Defines the way the texture is applied:<itemizedlist>
+<listitem><para><emphasis>letter</emphasis> : The texture is applied on each letter.</para>
+</listitem><listitem><para><emphasis>text</emphasis> : The texture is applied on the whole text.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>line_spacing_mode</bold> : <emphasis>value</emphasis> <linebreak/>
+ Defines the height of the lines:<itemizedlist>
+<listitem><para><emphasis>own_height</emphasis> : Each line has its own height.</para>
+</listitem><listitem><para><emphasis>max_lines_height</emphasis> : Each line has the height of the line with the maximum height.</para>
+</listitem><listitem><para><emphasis>max_font_height</emphasis> : Each line has the height of the character with the maximum height in the font.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>panel_overlay</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a simple panel children overlay.</para>
+</listitem><listitem><para><bold>border_panel_overlay</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a border panel children overlay.</para>
+</listitem><listitem><para><bold>text_overlay</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing a text panel children overlay.</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="d2/df2/a10776_1autotoc_md261">
+<title>window section</title>
+<para><itemizedlist>
+<listitem><para><bold>render_target</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing the render target.</para>
+</listitem><listitem><para><bold>vsync</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Defines the activation or deactivation of vertical synchronisation.</para>
+</listitem><listitem><para><bold>fullscreen</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Defines the activation or deactivation of full-screen display.</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="d2/df2/a10776_1autotoc_md262">
+<title>render_target section</title>
+<para><itemizedlist>
+<listitem><para><bold>scene</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Defines the scene rendered in this target.</para>
+</listitem><listitem><para><bold>camera</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Defines the camera used to render the scene.</para>
+</listitem><listitem><para><bold>size</bold> : <emphasis>size</emphasis> <linebreak/>
+ Defines the internal buffer dimensions.</para>
+</listitem><listitem><para><bold>format</bold> : <emphasis>value</emphasis> <linebreak/>
+ Defines the colour buffer pixel format. Can be one of :<itemizedlist>
+<listitem><para><emphasis>l8</emphasis> : Luminance 8 bits, one 8 bits integral number.</para>
+</listitem><listitem><para><emphasis>l16f</emphasis> : Luminance 16 bits, one 16 bits floating point number (half float).</para>
+</listitem><listitem><para><emphasis>l32f</emphasis> : Luminance 32 bits, one 32 bits floating point number(float).</para>
+</listitem><listitem><para><emphasis>al16</emphasis> : Alpha + Luminance, two 8 bits integral number.</para>
+</listitem><listitem><para><emphasis>al16f</emphasis> : Alpha + Luminance, two 16 bits floating point number (half float).</para>
+</listitem><listitem><para><emphasis>al32f</emphasis> : Alpha + Luminance, two 32 bits floating point number (float).</para>
+</listitem><listitem><para><emphasis>argb1555</emphasis> : ARGB 16 bits, 1 bit for alpha and each other component on a 5 bits integer.</para>
+</listitem><listitem><para><emphasis>rgb565</emphasis> : RGB 16 bits, R and B on a 5 bits integer, G on a 6 bits integer.</para>
+</listitem><listitem><para><emphasis>argb16</emphasis> : ARGB 16 bits, each component on a 4 bits integer.</para>
+</listitem><listitem><para><emphasis>rgb24</emphasis> : RGB 24 bits, each component on a 8 bits integer.</para>
+</listitem><listitem><para><emphasis>argb32</emphasis> : ARGB 32 bits, each component on a 8 bits integer.</para>
+</listitem><listitem><para><emphasis>argb16f</emphasis> : ARGB 64 bits, each component on a 16 bits floating point number (half float).</para>
+</listitem><listitem><para><emphasis>rgb32f</emphasis> : RGB 96 bits, each component on a 32 bits floating point number (half float).</para>
+</listitem><listitem><para><emphasis>argb32f</emphasis> : ARGB 128 bits, each component on a 32 bits floating point number (half float).</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>depth</bold> : <emphasis>value</emphasis> <linebreak/>
+ Defines the depth/stencil buffer pixel format. Can be one of :<itemizedlist>
+<listitem><para><emphasis>depth16</emphasis> : Depth on a 16 bits integer.</para>
+</listitem><listitem><para><emphasis>depth24</emphasis> : Depth on a 24 bits integer.</para>
+</listitem><listitem><para><emphasis>depth24s8</emphasis> : Depth on a 24 bits integer, Stencil on a 8 bits integer.</para>
+</listitem><listitem><para><emphasis>depth32fs8</emphasis> : Depth on a 32 bits floating point, Stencil on a 8 bits integer.</para>
+</listitem><listitem><para><emphasis>depth32</emphasis> : Depth on a 32 bits integer.</para>
+</listitem><listitem><para><emphasis>depth32f</emphasis> : Depth on a 32 bits floating point.</para>
+</listitem><listitem><para><emphasis>stencil1</emphasis> : Stencil on 1 bit.</para>
+</listitem><listitem><para><emphasis>stencil8</emphasis> : Stencil on a 8 bits integer.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>postfx</bold> : <emphasis>value</emphasis> <linebreak/>
+ Defines a post render effect to use. The parameters depend on the chosen effect.</para>
+</listitem><listitem><para><bold>stereo</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Tells if we use stereoscopic display mode.</para>
+</listitem><listitem><para><bold>tone_mapping</bold> : <emphasis>name</emphasis> <linebreak/>
+ Defines the tone mapping operator to use with the render target.</para>
+</listitem><listitem><para><bold>ssao</bold> : <emphasis>section</emphasis> <linebreak/>
+ Defines a new section describing the Screen Space Ambient Occlusion.</para>
+</listitem></itemizedlist>
+</para>
+<sect2 id="d2/df2/a10776_1autotoc_md263">
+<title>ssao section</title>
+<para><itemizedlist>
+<listitem><para><bold>enabled</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Defines the activation status of SSAO.</para>
+</listitem><listitem><para><bold>high_quality</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Defines the quality of the effect.</para>
+</listitem><listitem><para><bold>radius</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the radius of the effect (expressesd in meters).</para>
+</listitem><listitem><para><bold>bias</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the bias of the effect.</para>
+</listitem><listitem><para><bold>intensity</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the intensity of the effect.</para>
+</listitem><listitem><para><bold>num_samples</bold> : <emphasis>int</emphasis> <linebreak/>
+ Defines the number of samples per pixel.</para>
+</listitem><listitem><para><bold>edge_sharpness</bold> : <emphasis>real</emphasis> <linebreak/>
+ Defines the edge sharpness, in the blur pass.</para>
+</listitem><listitem><para><bold>blur_step_size</bold> : <emphasis>int</emphasis> <linebreak/>
+ Defines the size of a step in the blur pass.</para>
+</listitem><listitem><para><bold>blur_radius</bold> : <emphasis>int</emphasis> <linebreak/>
+ Defines the blur radius. </para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+</sect1>
+    </detaileddescription>
+    <location file="Z:/Projets/C++/Castor3D/doc/Castor3D/SceneFile-English.md"/>
+  </compounddef>
+</doxygen>

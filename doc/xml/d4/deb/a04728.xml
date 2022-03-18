@@ -1,650 +1,80 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d4/deb/a04728" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::DeferredRendering</compoundname>
-    <includes local="no">DeferredRendering.hpp</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d4/deb/a04728_1a6bdbc7e1eab234130015f1139111462d" prot="private" static="no" mutable="no">
-        <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> &amp;</type>
-        <definition>Engine&amp; castor3d::DeferredRendering::m_engine</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d4/deb/a04728" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SssProfileBuffer::SssProfileDataPtr</compoundname>
+    <includes local="no">SssProfileBuffer.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/deb/a04728_1adb626454d387c63291614191d33efa8b" prot="public" static="no" mutable="no">
+        <type><ref refid="d6/d5a/a04720" kindref="compound">Data</ref> *</type>
+        <definition>Data* castor3d::SssProfileBuffer::SssProfileDataPtr::sssInfo</definition>
         <argsstring></argsstring>
-        <name>m_engine</name>
+        <name>sssInfo</name>
+        <qualifiedname>castor3d::SssProfileBuffer::SssProfileDataPtr::sssInfo</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="147" column="1" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="147" bodyend="-1"/>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="43" column="7" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="43" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d4/deb/a04728_1af0f55975d6f7167b0f0289a383bff101" prot="private" static="no" mutable="no">
-        <type><ref refid="d5/d76/a05244" kindref="compound">Scene</ref> const  &amp;</type>
-        <definition>Scene const&amp; castor3d::DeferredRendering::m_scene</definition>
+      <memberdef kind="variable" id="d4/deb/a04728_1a6cc38f085b0fac9df12dfebbee758a88" prot="public" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="d6/d5a/a04720" kindref="compound">Data</ref>, 10u &gt; *</type>
+        <definition>std::array&lt; Data, 10u &gt;* castor3d::SssProfileBuffer::SssProfileDataPtr::transmittanceProfile</definition>
         <argsstring></argsstring>
-        <name>m_scene</name>
+        <name>transmittanceProfile</name>
+        <qualifiedname>castor3d::SssProfileBuffer::SssProfileDataPtr::transmittanceProfile</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="148" column="1" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="148" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/deb/a04728_1ad0f3cf107241c26366185bab90694f54" prot="private" static="no" mutable="no">
-        <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const  &amp;</type>
-        <definition>RenderDevice const&amp; castor3d::DeferredRendering::m_device</definition>
-        <argsstring></argsstring>
-        <name>m_device</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="149" column="1" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="149" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/deb/a04728_1a07fe877b83e45feefafe59df3ac24d4c" prot="private" static="no" mutable="no">
-        <type><ref refid="db/dcc/a04712" kindref="compound">SsaoConfig</ref> &amp;</type>
-        <definition>SsaoConfig&amp; castor3d::DeferredRendering::m_ssaoConfig</definition>
-        <argsstring></argsstring>
-        <name>m_ssaoConfig</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="150" column="1" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="150" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/deb/a04728_1a601e305a8fb81dc85bd3536c08a07eb4" prot="private" static="no" mutable="no">
-        <type><ref refid="d9/d27/a04876" kindref="compound">OpaquePass</ref> &amp;</type>
-        <definition>OpaquePass&amp; castor3d::DeferredRendering::m_opaquePass</definition>
-        <argsstring></argsstring>
-        <name>m_opaquePass</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="151" column="1" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="151" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/deb/a04728_1a41ae2ad0fa3465d4576ad6b3eff5a918" prot="private" static="no" mutable="no">
-        <type><ref refid="d1/d22/a05464" kindref="compound">GpInfoUbo</ref> const  &amp;</type>
-        <definition>GpInfoUbo const&amp; castor3d::DeferredRendering::m_gpInfoUbo</definition>
-        <argsstring></argsstring>
-        <name>m_gpInfoUbo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="152" column="1" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="152" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/deb/a04728_1a7cae6e79b6203cf6790e4bca8d091b37" prot="private" static="no" mutable="no">
-        <type>castor::Size</type>
-        <definition>castor::Size castor3d::DeferredRendering::m_size</definition>
-        <argsstring></argsstring>
-        <name>m_size</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="153" column="1" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="153" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/deb/a04728_1a9a745acbf2cef83065741d280f4ffc9e" prot="private" static="no" mutable="no">
-        <type><ref refid="d1/dcd/a04880" kindref="compound">OpaquePassResult</ref></type>
-        <definition>OpaquePassResult castor3d::DeferredRendering::m_opaquePassResult</definition>
-        <argsstring></argsstring>
-        <name>m_opaquePassResult</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="154" column="1" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="154" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/deb/a04728_1ab4f1883588dfc4727889e05d4d7d9e66" prot="private" static="no" mutable="no">
-        <type>LineariseDepthPassUPtr</type>
-        <definition>LineariseDepthPassUPtr castor3d::DeferredRendering::m_linearisePass</definition>
-        <argsstring></argsstring>
-        <name>m_linearisePass</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="155" column="1" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="155" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/deb/a04728_1aa77652255ec6e5988b837126e94be4a0" prot="private" static="no" mutable="no">
-        <type>SsaoPassUPtr</type>
-        <definition>SsaoPassUPtr castor3d::DeferredRendering::m_ssao</definition>
-        <argsstring></argsstring>
-        <name>m_ssao</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="156" column="1" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="156" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/deb/a04728_1a4d32d858987ce64c2300f9a6a2be368f" prot="private" static="no" mutable="no">
-        <type>std::unique_ptr&lt; <ref refid="db/d08/a04848" kindref="compound">LightingPass</ref> &gt;</type>
-        <definition>std::unique_ptr&lt; LightingPass &gt; castor3d::DeferredRendering::m_lightingPass</definition>
-        <argsstring></argsstring>
-        <name>m_lightingPass</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="157" column="1" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="157" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/deb/a04728_1afbe553fb05f48bd150db759210e1d695" prot="private" static="no" mutable="no">
-        <type>SubsurfaceScatteringPassUPtr</type>
-        <definition>SubsurfaceScatteringPassUPtr castor3d::DeferredRendering::m_subsurfaceScattering</definition>
-        <argsstring></argsstring>
-        <name>m_subsurfaceScattering</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="158" column="1" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="158" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/deb/a04728_1a9954ed8e4450ce158133213925aa7fab" prot="private" static="no" mutable="no">
-        <type>OpaqueResolvePassUPtr</type>
-        <definition>OpaqueResolvePassUPtr castor3d::DeferredRendering::m_resolve</definition>
-        <argsstring></argsstring>
-        <name>m_resolve</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="159" column="1" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="159" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/deb/a04728_1a4e0e8615dec8ddee9460abf6c519aea6" prot="private" static="no" mutable="no">
-        <type>std::vector&lt; ashes::ImagePtr &gt;</type>
-        <definition>std::vector&lt; ashes::ImagePtr &gt; castor3d::DeferredRendering::m_results</definition>
-        <argsstring></argsstring>
-        <name>m_results</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="160" column="1" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="160" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d4/deb/a04728_1aa4476a95cb6dd2e26de7b10f852d6b0b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::DeferredRendering::DeferredRendering</definition>
-        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, OpaquePass &amp;opaquePass, TextureUnit const &amp;depthTexture, TextureUnit const &amp;velocityTexture, TextureUnit const &amp;resultTexture, ShadowMapResult const &amp;smDirectionalResult, ShadowMapResult const &amp;smPointResult, ShadowMapResult const &amp;smSpotResult, LightVolumePassResult const &amp;lpvResult, LightVolumePassResultArray const &amp;llpvResult, TextureUnit const &amp;vctFirstBounce, TextureUnit const &amp;vctSecondaryBounce, castor::Size const &amp;size, Scene &amp;scene, HdrConfigUbo const &amp;hdrConfigUbo, GpInfoUbo const &amp;gpInfoUbo, LpvGridConfigUbo const &amp;lpvConfigUbo, LayeredLpvGridConfigUbo const &amp;llpvConfigUbo, VoxelizerUbo const &amp;vctConfigUbo, SsaoConfig &amp;ssaoConfig)</argsstring>
-        <name>DeferredRendering</name>
-        <param>
-          <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type><ref refid="d9/d27/a04876" kindref="compound">OpaquePass</ref> &amp;</type>
-          <declname>opaquePass</declname>
-        </param>
-        <param>
-          <type><ref refid="d6/d18/a02664" kindref="compound">TextureUnit</ref> const &amp;</type>
-          <declname>depthTexture</declname>
-        </param>
-        <param>
-          <type><ref refid="d6/d18/a02664" kindref="compound">TextureUnit</ref> const &amp;</type>
-          <declname>velocityTexture</declname>
-        </param>
-        <param>
-          <type><ref refid="d6/d18/a02664" kindref="compound">TextureUnit</ref> const &amp;</type>
-          <declname>resultTexture</declname>
-        </param>
-        <param>
-          <type><ref refid="d9/dcf/a04692" kindref="compound">ShadowMapResult</ref> const &amp;</type>
-          <declname>smDirectionalResult</declname>
-        </param>
-        <param>
-          <type><ref refid="d9/dcf/a04692" kindref="compound">ShadowMapResult</ref> const &amp;</type>
-          <declname>smPointResult</declname>
-        </param>
-        <param>
-          <type><ref refid="d9/dcf/a04692" kindref="compound">ShadowMapResult</ref> const &amp;</type>
-          <declname>smSpotResult</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/de4/a04296" kindref="compound">LightVolumePassResult</ref> const &amp;</type>
-          <declname>lpvResult</declname>
-        </param>
-        <param>
-          <type>LightVolumePassResultArray const &amp;</type>
-          <declname>llpvResult</declname>
-        </param>
-        <param>
-          <type><ref refid="d6/d18/a02664" kindref="compound">TextureUnit</ref> const &amp;</type>
-          <declname>vctFirstBounce</declname>
-        </param>
-        <param>
-          <type><ref refid="d6/d18/a02664" kindref="compound">TextureUnit</ref> const &amp;</type>
-          <declname>vctSecondaryBounce</declname>
-        </param>
-        <param>
-          <type>castor::Size const &amp;</type>
-          <declname>size</declname>
-        </param>
-        <param>
-          <type><ref refid="d5/d76/a05244" kindref="compound">Scene</ref> &amp;</type>
-          <declname>scene</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/d06/a05468" kindref="compound">HdrConfigUbo</ref> const &amp;</type>
-          <declname>hdrConfigUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/d22/a05464" kindref="compound">GpInfoUbo</ref> const &amp;</type>
-          <declname>gpInfoUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="db/d15/a05484" kindref="compound">LpvGridConfigUbo</ref> const &amp;</type>
-          <declname>lpvConfigUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="d4/db7/a05476" kindref="compound">LayeredLpvGridConfigUbo</ref> const &amp;</type>
-          <declname>llpvConfigUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="dd/da7/a05632" kindref="compound">VoxelizerUbo</ref> const &amp;</type>
-          <declname>vctConfigUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="db/dcc/a04712" kindref="compound">SsaoConfig</ref> &amp;</type>
-          <declname>ssaoConfig</declname>
-        </param>
-        <briefdescription>
-<para>Initialises deferred rendering related stuff. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">engine</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The engine. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">opaquePass</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The opaque nodes render pass. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">depthTexture</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render target depth texture. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">velocityTexture</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render target velocity texture. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">resultTexture</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render technique texture. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">smDirectionalResult</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The directional lights shadow map. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">smPointResult</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The point lights shadow map. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">smSpotResult</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The spot lights shadow map. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">lpvResult</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The LPV result. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">llpvResult</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The Layered LPV result. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">vctFirstBounce</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The VCT first bounce result. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">vctSecondaryBounce</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The VCT secondary bounce result. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">size</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render dimensions. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">scene</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The rendered scene. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">hdrConfigUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The HDR configuration UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">gpInfoUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GBuffer configuration UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">lpvConfigUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The LPV configuration UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">llpvConfigUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The Layered LPV configuration UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">vctConfigUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The VCT configuration UBO. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">ssaoConfig</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The SSAO configuration. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="72" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/deb/a04728_1acfefc8f62ca8c99b5cbffbcd57e50824" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::DeferredRendering::~DeferredRendering</definition>
-        <argsstring>()</argsstring>
-        <name>~DeferredRendering</name>
-        <briefdescription>
-<para>Destroys deferred rendering related stuff. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="99" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/deb/a04728_1a1e8725087e3b646631c3a07dbda159a5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::DeferredRendering::update</definition>
-        <argsstring>(CpuUpdater &amp;updater)</argsstring>
-        <name>update</name>
-        <param>
-          <type><ref refid="dc/d0d/a04588" kindref="compound">CpuUpdater</ref> &amp;</type>
-          <declname>updater</declname>
-        </param>
-        <briefdescription>
-<para>Updates the render pass, CPU wise. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="inout">updater</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The update data. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="108" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/deb/a04728_1afe8bedf3872469758cb42aa7d9a55508" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::DeferredRendering::update</definition>
-        <argsstring>(GpuUpdater &amp;updater)</argsstring>
-        <name>update</name>
-        <param>
-          <type><ref refid="da/d34/a04592" kindref="compound">GpuUpdater</ref> &amp;</type>
-          <declname>updater</declname>
-        </param>
-        <briefdescription>
-<para>Updates the render pass, GPU wise. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="inout">updater</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The update data. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="117" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/deb/a04728_1a6dec7de32f0dba7f4230ae4d6c7643bf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>ashes::Semaphore const  &amp;</type>
-        <definition>ashes::Semaphore const&amp; castor3d::DeferredRendering::render</definition>
-        <argsstring>(RenderDevice const &amp;device, Scene const &amp;scene, Camera const &amp;camera, ashes::Semaphore const &amp;toWait)</argsstring>
-        <name>render</name>
-        <param>
-          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type><ref refid="d5/d76/a05244" kindref="compound">Scene</ref> const &amp;</type>
-          <declname>scene</declname>
-        </param>
-        <param>
-          <type><ref refid="d5/d9c/a05152" kindref="compound">Camera</ref> const &amp;</type>
-          <declname>camera</declname>
-        </param>
-        <param>
-          <type>ashes::Semaphore const &amp;</type>
-          <declname>toWait</declname>
-        </param>
-        <briefdescription>
-<para>Renders the light passes on currently bound framebuffer. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">scene</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The scene. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">camera</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The viewing camera. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="out">toWait</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The semaphore from previous render pass. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="132" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/deb/a04728_1ad8bd77504387ff6d70487b7a1937ce7f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::DeferredRendering::accept</definition>
-        <argsstring>(RenderTechniqueVisitor &amp;visitor)</argsstring>
-        <name>accept</name>
-        <param>
-          <type><ref refid="db/d15/a04928" kindref="compound">RenderTechniqueVisitor</ref> &amp;</type>
-          <declname>visitor</declname>
-        </param>
-        <briefdescription>
-<para>Visitor acceptance function. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername>visitor</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The ... visitor. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="144" column="1"/>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="44" column="13" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="44" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Technique/Opaque/DeferredRendering.hpp" line="22" column="1" bodyfile="Render/Technique/Opaque/DeferredRendering.hpp" bodystart="21" bodyend="161"/>
+    <collaborationgraph>
+      <node id="5">
+        <label>T</label>
+      </node>
+      <node id="3">
+        <label>std::array&lt; castor3d::SssProfileBuffer::Data, 10u &gt;</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; castor3d::SssProfileBuffer::Data, 10u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SssProfileBuffer::Data</label>
+        <link refid="d6/d5a/a04720"/>
+      </node>
+      <node id="1">
+        <label>castor3d::SssProfileBuffer::SssProfileDataPtr</label>
+        <link refid="d4/deb/a04728"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>sssInfo</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>transmittanceProfile</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="41" column="1" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="42" bodyend="45"/>
     <listofallmembers>
-      <member refid="d4/deb/a04728_1ad8bd77504387ff6d70487b7a1937ce7f" prot="public" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>accept</name></member>
-      <member refid="d4/deb/a04728_1aa4476a95cb6dd2e26de7b10f852d6b0b" prot="public" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>DeferredRendering</name></member>
-      <member refid="d4/deb/a04728_1ad0f3cf107241c26366185bab90694f54" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_device</name></member>
-      <member refid="d4/deb/a04728_1a6bdbc7e1eab234130015f1139111462d" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_engine</name></member>
-      <member refid="d4/deb/a04728_1a41ae2ad0fa3465d4576ad6b3eff5a918" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_gpInfoUbo</name></member>
-      <member refid="d4/deb/a04728_1a4d32d858987ce64c2300f9a6a2be368f" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_lightingPass</name></member>
-      <member refid="d4/deb/a04728_1ab4f1883588dfc4727889e05d4d7d9e66" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_linearisePass</name></member>
-      <member refid="d4/deb/a04728_1a601e305a8fb81dc85bd3536c08a07eb4" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_opaquePass</name></member>
-      <member refid="d4/deb/a04728_1a9a745acbf2cef83065741d280f4ffc9e" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_opaquePassResult</name></member>
-      <member refid="d4/deb/a04728_1a9954ed8e4450ce158133213925aa7fab" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_resolve</name></member>
-      <member refid="d4/deb/a04728_1a4e0e8615dec8ddee9460abf6c519aea6" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_results</name></member>
-      <member refid="d4/deb/a04728_1af0f55975d6f7167b0f0289a383bff101" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_scene</name></member>
-      <member refid="d4/deb/a04728_1a7cae6e79b6203cf6790e4bca8d091b37" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_size</name></member>
-      <member refid="d4/deb/a04728_1aa77652255ec6e5988b837126e94be4a0" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_ssao</name></member>
-      <member refid="d4/deb/a04728_1a07fe877b83e45feefafe59df3ac24d4c" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_ssaoConfig</name></member>
-      <member refid="d4/deb/a04728_1afbe553fb05f48bd150db759210e1d695" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_subsurfaceScattering</name></member>
-      <member refid="d4/deb/a04728_1a6dec7de32f0dba7f4230ae4d6c7643bf" prot="public" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>render</name></member>
-      <member refid="d4/deb/a04728_1a1e8725087e3b646631c3a07dbda159a5" prot="public" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>update</name></member>
-      <member refid="d4/deb/a04728_1afe8bedf3872469758cb42aa7d9a55508" prot="public" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>update</name></member>
-      <member refid="d4/deb/a04728_1acfefc8f62ca8c99b5cbffbcd57e50824" prot="public" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>~DeferredRendering</name></member>
+      <member refid="d4/deb/a04728_1adb626454d387c63291614191d33efa8b" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer::SssProfileDataPtr</scope><name>sssInfo</name></member>
+      <member refid="d4/deb/a04728_1a6cc38f085b0fac9df12dfebbee758a88" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer::SssProfileDataPtr</scope><name>transmittanceProfile</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

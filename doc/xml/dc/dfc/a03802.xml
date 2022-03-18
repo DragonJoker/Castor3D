@@ -1,33 +1,50 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dc/dfc/a03802" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkValidationFeaturesEXT &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="dc/dfc/a03802_1adb9508cb448cf4e1fd80acbe21a8bf36" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkValidationFeaturesEXT &gt;::value</definition>
-        <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_VALIDATION_FEATURES_EXT</initializer>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dc/dfc/a03802" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::BackgroundPass::Cube</compoundname>
+    <innerclass refid="dc/d19/a03806" prot="public">castor3d::BackgroundPass::Cube::Quad</innerclass>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/dfc/a03802_1a2027fe353377ee385a883615e4e11ff3" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/d19/a03806" kindref="compound">Quad</ref></type>
+        <definition>Quad castor3d::BackgroundPass::Cube::faces[6]</definition>
+        <argsstring>[6]</argsstring>
+        <name>faces</name>
+        <qualifiedname>castor3d::BackgroundPass::Cube::faces</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="363" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="363" bodyend="-1"/>
+        <location file="Render/Passes/BackgroundPass.hpp" line="97" column="6" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="97" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="363" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="363" bodyend="363"/>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::BackgroundPass::Cube</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>faces</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::BackgroundPass::Cube::Quad</label>
+        <link refid="dc/d19/a03806"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>vertex</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::BackgroundPass::Cube::Quad::Vertex</label>
+        <link refid="d2/d29/a03810"/>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Passes/BackgroundPass.hpp" line="85" column="1" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="86" bodyend="98"/>
     <listofallmembers>
-      <member refid="dc/dfc/a03802_1adb9508cb448cf4e1fd80acbe21a8bf36" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkValidationFeaturesEXT &gt;</scope><name>value</name></member>
+      <member refid="dc/dfc/a03802_1a2027fe353377ee385a883615e4e11ff3" prot="public" virt="non-virtual"><scope>castor3d::BackgroundPass::Cube</scope><name>faces</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

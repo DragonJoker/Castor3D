@@ -1,6 +1,4 @@
-<map id="castor3d::RenderCube" name="castor3d::RenderCube">
-<area shape="rect" id="node1" title=" " alt="" coords="5,71,156,98"/>
-<area shape="rect" id="node2" href="$d5/dc1/a04943.html" title=" " alt="" coords="214,5,385,47"/>
-<area shape="rect" id="node3" href="$d2/de7/a04467.html" title=" " alt="" coords="204,71,395,98"/>
-<area shape="rect" id="node4" href="$d4/d34/a04979.html" title=" " alt="" coords="209,123,390,164"/>
+<map id="castor3d::shader::RsmConfigData" name="castor3d::shader::RsmConfigData">
+<area shape="rect" id="node1" title=" " alt="" coords="5,80,223,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="45,5,183,32"/>
 </map>

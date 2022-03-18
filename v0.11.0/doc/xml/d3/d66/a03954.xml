@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d3/d66/a03954" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::InstantiationComponent::Data</compoundname>
+    <includes local="no">InstantiationComponent.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/d66/a03954_1a2283bed474f3f6c91a4d976d55fbb44c" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::InstantiationComponent::Data::count</definition>
+        <argsstring></argsstring>
+        <name>count</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="35" column="1" bodyfile="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d66/a03954_1a7fdf29c3bd7d326a2cd8361fd5cb855c" prot="public" static="no" mutable="no">
+        <type>ashes::VertexBufferPtr&lt; <ref refid="df/dfb/a03946" kindref="compound">InstantiationData</ref> &gt;</type>
+        <definition>ashes::VertexBufferPtr&lt; InstantiationData &gt; castor3d::InstantiationComponent::Data::buffer</definition>
+        <argsstring></argsstring>
+        <name>buffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="36" column="1" bodyfile="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d66/a03954_1a6fbc5bbf46c17fc6916de11d0b0e20c5" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="df/dfb/a03946" kindref="compound">InstantiationData</ref> &gt;</type>
+        <definition>std::vector&lt; InstantiationData &gt; castor3d::InstantiationComponent::Data::data</definition>
+        <argsstring></argsstring>
+        <name>data</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="37" column="1" bodyfile="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d66/a03954_1ae81f75fb5ef58475f1fbbe5be7c02701" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::InstantiationComponent::Data::Data</definition>
+        <argsstring>(uint32_t count, ashes::VertexBufferPtr&lt; InstantiationData &gt; buffer, std::vector&lt; InstantiationData &gt; data={})</argsstring>
+        <name>Data</name>
+        <param>
+          <type>uint32_t</type>
+          <declname>count</declname>
+        </param>
+        <param>
+          <type>ashes::VertexBufferPtr&lt; <ref refid="df/dfb/a03946" kindref="compound">InstantiationData</ref> &gt;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; <ref refid="df/dfb/a03946" kindref="compound">InstantiationData</ref> &gt;</type>
+          <declname>data</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="27" column="1" bodyfile="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="27" bodyend="34"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1454">
+        <label>T</label>
+      </node>
+      <node id="1453">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="1454" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="1450">
+        <label>castor3d::InstantiationComponent::Data</label>
+        <link refid="d3/d66/a03954"/>
+        <childnode refid="1451" relation="usage">
+          <edgelabel>data</edgelabel>
+        </childnode>
+      </node>
+      <node id="1451">
+        <label>std::vector&lt; castor3d::InstantiationData &gt;</label>
+        <childnode refid="1452" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="1453" relation="template-instance">
+          <edgelabel>&lt; castor3d::InstantiationData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1452">
+        <label>castor3d::InstantiationData</label>
+        <link refid="df/dfb/a03946"/>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="26" column="1" bodyfile="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="25" bodyend="38"/>
+    <listofallmembers>
+      <member refid="d3/d66/a03954_1a7fdf29c3bd7d326a2cd8361fd5cb855c" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent::Data</scope><name>buffer</name></member>
+      <member refid="d3/d66/a03954_1a2283bed474f3f6c91a4d976d55fbb44c" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent::Data</scope><name>count</name></member>
+      <member refid="d3/d66/a03954_1a6fbc5bbf46c17fc6916de11d0b0e20c5" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent::Data</scope><name>data</name></member>
+      <member refid="d3/d66/a03954_1ae81f75fb5ef58475f1fbbe5be7c02701" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent::Data</scope><name>Data</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

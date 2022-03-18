@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="de/d34/a04302" kind="struct" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::DistanceRenderNodeBase</compoundname>
+    <derivedcompoundref refid="da/db5/a04306" prot="public" virt="non-virtual">castor3d::DistanceRenderNode&lt; NodeType &gt;</derivedcompoundref>
+    <includes local="no">DistanceRenderNode.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/d34/a04302_1a8bdfa5487838338721c7a64845da1874" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual castor3d::DistanceRenderNodeBase::~DistanceRenderNodeBase</definition>
+        <argsstring>()=default</argsstring>
+        <name>~DistanceRenderNodeBase</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/DistanceRenderNode.hpp" line="26" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d34/a04302_1a2a5592ae38bf3de4741b6190c579c44c" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/d98/a04610" kindref="compound">RenderPipeline</ref> &amp;</type>
+        <definition>virtual C3D_API RenderPipeline&amp; castor3d::DistanceRenderNodeBase::getPipeline</definition>
+        <argsstring>()=0</argsstring>
+        <name>getPipeline</name>
+        <reimplementedby refid="da/db5/a04306_1ab35962e74b10993ac36d7a1eb0556997">getPipeline</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The render pipeline. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/DistanceRenderNode.hpp" line="33" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d34/a04302_1a4091f677cfac746e65bcff51f31e7a6b" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/d8c/a04318" kindref="compound">PassRenderNode</ref> &amp;</type>
+        <definition>virtual C3D_API PassRenderNode&amp; castor3d::DistanceRenderNodeBase::getPassNode</definition>
+        <argsstring>()=0</argsstring>
+        <name>getPassNode</name>
+        <reimplementedby refid="da/db5/a04306_1a78f7b1dce04653a60a0797245c419b26">getPassNode</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The pass render node. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/DistanceRenderNode.hpp" line="40" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d34/a04302_1a4cd4499db3f4c70e047b6945d0fad2c0" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d8/de7/a05250" kindref="compound">SceneNode</ref> &amp;</type>
+        <definition>virtual C3D_API SceneNode&amp; castor3d::DistanceRenderNodeBase::getSceneNode</definition>
+        <argsstring>()=0</argsstring>
+        <name>getSceneNode</name>
+        <reimplementedby refid="da/db5/a04306_1a0c4a7aeceff6d42bb195aa96a096cd0c">getSceneNode</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The instance&apos;s scene node. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/DistanceRenderNode.hpp" line="47" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d34/a04302_1a0ec7f04cc9c2953bf7cdc246075d5b4e" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/dc0/a05502" kindref="compound">ModelUbo</ref> &amp;</type>
+        <definition>virtual C3D_API ModelUbo&amp; castor3d::DistanceRenderNodeBase::getModelUbo</definition>
+        <argsstring>()=0</argsstring>
+        <name>getModelUbo</name>
+        <reimplementedby refid="da/db5/a04306_1a2ef81bbc0f1fb8ac8aced4d600491ae3">getModelUbo</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The instance&apos;s model UBO. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/DistanceRenderNode.hpp" line="54" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d34/a04302_1afc07902eafe9ea8f5bd6593785e76289" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::DistanceRenderNodeBase::render</definition>
+        <argsstring>()=0</argsstring>
+        <name>render</name>
+        <reimplementedby refid="da/db5/a04306_1a3f4da1718ee7bf49df70a3fb554f1a44">render</reimplementedby>
+        <briefdescription>
+<para>Renders the node. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/DistanceRenderNode.hpp" line="61" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1052">
+        <label>castor3d::DistanceRenderNode&lt; NodeType &gt;</label>
+        <link refid="da/db5/a04306"/>
+        <childnode refid="1051" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1051">
+        <label>castor3d::DistanceRenderNodeBase</label>
+        <link refid="de/d34/a04302"/>
+      </node>
+    </inheritancegraph>
+    <location file="Render/Node/DistanceRenderNode.hpp" line="25" column="1" bodyfile="Render/Node/DistanceRenderNode.hpp" bodystart="24" bodyend="62"/>
+    <listofallmembers>
+      <member refid="de/d34/a04302_1a0ec7f04cc9c2953bf7cdc246075d5b4e" prot="public" virt="pure-virtual"><scope>castor3d::DistanceRenderNodeBase</scope><name>getModelUbo</name></member>
+      <member refid="de/d34/a04302_1a4091f677cfac746e65bcff51f31e7a6b" prot="public" virt="pure-virtual"><scope>castor3d::DistanceRenderNodeBase</scope><name>getPassNode</name></member>
+      <member refid="de/d34/a04302_1a2a5592ae38bf3de4741b6190c579c44c" prot="public" virt="pure-virtual"><scope>castor3d::DistanceRenderNodeBase</scope><name>getPipeline</name></member>
+      <member refid="de/d34/a04302_1a4cd4499db3f4c70e047b6945d0fad2c0" prot="public" virt="pure-virtual"><scope>castor3d::DistanceRenderNodeBase</scope><name>getSceneNode</name></member>
+      <member refid="de/d34/a04302_1afc07902eafe9ea8f5bd6593785e76289" prot="public" virt="pure-virtual"><scope>castor3d::DistanceRenderNodeBase</scope><name>render</name></member>
+      <member refid="de/d34/a04302_1a8bdfa5487838338721c7a64845da1874" prot="public" virt="virtual"><scope>castor3d::DistanceRenderNodeBase</scope><name>~DistanceRenderNodeBase</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

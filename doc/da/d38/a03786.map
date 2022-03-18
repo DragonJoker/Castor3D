@@ -1,5 +1,4 @@
-<map id="castor3d::MeshAnimationKeyFrame" name="castor3d::MeshAnimationKeyFrame">
-<area shape="rect" id="node1" title=" " alt="" coords="128,80,321,121"/>
-<area shape="rect" id="node2" href="$db/d9d/a01972.html" title=" " alt="" coords="5,5,204,32"/>
-<area shape="rect" id="node3" title=" " alt="" coords="228,5,464,32"/>
+<map id="castor3d::SceneRenderNodes" name="castor3d::SceneRenderNodes">
+<area shape="rect" id="node1" title=" " alt="" coords="5,95,200,121"/>
+<area shape="rect" id="node2" title=" " alt="" coords="17,5,188,47"/>
 </map>

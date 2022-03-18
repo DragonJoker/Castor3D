@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_7c37f15c4f52caabe2725945716123e2" kind="dir">
     <compoundname>Scene/Background</compoundname>
-    <innerfile refid="dd/df1/a01082">Background.hpp</innerfile>
-    <innerfile refid="d2/df3/a01085">BackgroundModule.hpp</innerfile>
-    <innerfile refid="da/db7/a01088">BackgroundTextWriter.hpp</innerfile>
-    <innerfile refid="d6/d0d/a01091">Colour.hpp</innerfile>
-    <innerfile refid="d6/dea/a01094">Image.hpp</innerfile>
-    <innerfile refid="d1/dfa/a01097">Skybox.hpp</innerfile>
-    <innerfile refid="d3/dbd/a01100">Visitor.hpp</innerfile>
+    <innerfile refid="db/d14/a01040">Background.hpp</innerfile>
+    <innerfile refid="d8/d27/a01043">BackgroundModule.hpp</innerfile>
+    <innerfile refid="da/d17/a01046">BackgroundTextWriter.hpp</innerfile>
+    <innerfile refid="d0/d22/a01049">Colour.hpp</innerfile>
+    <innerfile refid="d9/dce/a01052">Image.hpp</innerfile>
+    <innerfile refid="d2/d71/a01055">Skybox.hpp</innerfile>
+    <innerfile refid="d5/d4c/a01058">Visitor.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

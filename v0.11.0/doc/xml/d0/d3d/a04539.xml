@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d0/d3d/a04539" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::NonTexturedCube::Quad</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+    <innerclass refid="d5/dd2/a04543" prot="public">castor3d::NonTexturedCube::Quad::Vertex</innerclass>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/d3d/a04539_1a17607e11f60ddbee68e73512dfcd8d3f" prot="public" static="no" mutable="no">
+        <type><ref refid="d5/dd2/a04543" kindref="compound">Vertex</ref></type>
+        <definition>Vertex castor3d::NonTexturedCube::Quad::vertex[6]</definition>
+        <argsstring>[6]</argsstring>
+        <name>vertex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="53" column="1" bodyfile="Render/RenderModule.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2217">
+        <label>castor3d::NonTexturedCube::Quad::Vertex</label>
+        <link refid="d5/dd2/a04543"/>
+      </node>
+      <node id="2216">
+        <label>castor3d::NonTexturedCube::Quad</label>
+        <link refid="d0/d3d/a04539"/>
+        <childnode refid="2217" relation="usage">
+          <edgelabel>vertex</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/RenderModule.hpp" line="47" column="1" bodyfile="Render/RenderModule.hpp" bodystart="46" bodyend="54"/>
+    <listofallmembers>
+      <member refid="d0/d3d/a04539_1a17607e11f60ddbee68e73512dfcd8d3f" prot="public" virt="non-virtual"><scope>castor3d::NonTexturedCube::Quad</scope><name>vertex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

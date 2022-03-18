@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dc/d12/a04723" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::LightPassShadowTraits</compoundname>
+    <includes local="no">LightingModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type><ref refid="d7/dd1/a01458_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+        <declname>LtType</declname>
+        <defname>LtType</defname>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>Traits structure to specialise light passes with shadows. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Technique/Opaque/Lighting/LightingModule.hpp" line="91" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightingModule.hpp" bodystart="91" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

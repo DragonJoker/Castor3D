@@ -1,5 +1,5 @@
-<map id="castor3d::RenderTarget" name="castor3d::RenderTarget">
-<area shape="rect" id="node1" title=" " alt="" coords="122,95,279,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,188,47"/>
-<area shape="rect" id="node3" title=" " alt="" coords="213,13,399,39"/>
+<map id="castor3d::SceneFileParser" name="castor3d::SceneFileParser">
+<area shape="rect" id="node1" title=" " alt="" coords="100,80,276,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,192,32"/>
+<area shape="rect" id="node3" title=" " alt="" coords="216,5,341,32"/>
 </map>

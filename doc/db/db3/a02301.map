@@ -1,4 +1,7 @@
-<map id="castor3d::GpuBufferPool" name="castor3d::GpuBufferPool">
-<area shape="rect" id="node1" title=" " alt="" coords="40,80,203,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,237,32"/>
+<map id="castor3d::BinaryParser&lt; Mesh &gt;" name="castor3d::BinaryParser&lt; Mesh &gt;">
+<area shape="rect" id="node1" title="MovableObject loader." alt="" coords="147,289,301,331"/>
+<area shape="rect" id="node2" href="$d5/d1b/a02331.html" title=" " alt="" coords="131,199,317,240"/>
+<area shape="rect" id="node3" href="$dd/d3b/a02291.html" title=" " alt="" coords="5,5,160,32"/>
+<area shape="rect" id="node5" href="$d5/d1b/a02331.html" title="Binary data chunk reader base class." alt="" coords="131,95,317,136"/>
+<area shape="rect" id="node4" href="$d0/de5/a03279.html" title=" " alt="" coords="218,5,342,32"/>
 </map>

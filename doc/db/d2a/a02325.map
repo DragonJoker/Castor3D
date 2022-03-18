@@ -1,5 +1,7 @@
-<map id="castor3d::UniformBufferBase" name="castor3d::UniformBufferBase">
-<area shape="rect" id="node1" title=" " alt="" coords="5,49,192,75"/>
-<area shape="rect" id="node2" href="$d7/da1/a02290.html" title="A uniform typed buffer, than can contain multiple sub&#45;buffers." alt="" coords="241,5,405,47"/>
-<area shape="rect" id="node3" href="$d7/da1/a02290.html" title=" " alt="" coords="623,39,896,80"/>
+<map id="castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;" name="castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;">
+<area shape="rect" id="node1" title="MeshAnimationKeyFrame binary loader." alt="" coords="69,289,265,331"/>
+<area shape="rect" id="node2" href="$d5/d1b/a02331.html" title=" " alt="" coords="69,199,265,240"/>
+<area shape="rect" id="node3" href="$dd/d3b/a02291.html" title=" " alt="" coords="5,5,160,32"/>
+<area shape="rect" id="node5" href="$d5/d1b/a02331.html" title="Binary data chunk reader base class." alt="" coords="131,95,317,136"/>
+<area shape="rect" id="node4" href="$d0/de5/a03279.html" title=" " alt="" coords="218,5,342,32"/>
 </map>

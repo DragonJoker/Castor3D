@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dc/d25/a00596" kind="file" language="C++">
+    <compoundname>DividerPlugin.hpp</compoundname>
+    <includes refid="dd/dc0/a00611" local="yes">Castor3D/Plugin/Plugin.hpp</includes>
+    <incdepgraph>
+      <node id="11405">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="11398">
+        <label>Castor3D/Plugin/Plugin.hpp</label>
+        <link refid="dd/dc0/a00611"/>
+        <childnode refid="11399" relation="include">
+        </childnode>
+        <childnode refid="11414" relation="include">
+        </childnode>
+      </node>
+      <node id="11408">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="11409">
+        <label>cstdint</label>
+      </node>
+      <node id="11407">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="11400">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="11401" relation="include">
+        </childnode>
+        <childnode refid="11402" relation="include">
+        </childnode>
+        <childnode refid="11403" relation="include">
+        </childnode>
+        <childnode refid="11404" relation="include">
+        </childnode>
+        <childnode refid="11405" relation="include">
+        </childnode>
+        <childnode refid="11406" relation="include">
+        </childnode>
+        <childnode refid="11407" relation="include">
+        </childnode>
+        <childnode refid="11408" relation="include">
+        </childnode>
+        <childnode refid="11409" relation="include">
+        </childnode>
+        <childnode refid="11410" relation="include">
+        </childnode>
+        <childnode refid="11411" relation="include">
+        </childnode>
+        <childnode refid="11412" relation="include">
+        </childnode>
+      </node>
+      <node id="11411">
+        <label>string</label>
+      </node>
+      <node id="11404">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="11401">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="11403">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="11414">
+        <label>Castor3D/Miscellaneous/MiscellaneousModule.hpp</label>
+        <link refid="d4/d27/a00392"/>
+        <childnode refid="11400" relation="include">
+        </childnode>
+      </node>
+      <node id="11399">
+        <label>PluginModule.hpp</label>
+        <link refid="d4/dc4/a00617"/>
+        <childnode refid="11400" relation="include">
+        </childnode>
+        <childnode refid="11413" relation="include">
+        </childnode>
+      </node>
+      <node id="11402">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="11412">
+        <label>vector</label>
+      </node>
+      <node id="11406">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="11397">
+        <label>Plugin/DividerPlugin.hpp</label>
+        <link refid="dc/d25/a00596"/>
+        <childnode refid="11398" relation="include">
+        </childnode>
+      </node>
+      <node id="11413">
+        <label>CastorUtils/Data/Path.hpp</label>
+      </node>
+      <node id="11410">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="dc/d72/a04172" prot="public">castor3d::DividerPlugin</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Plugin/DividerPlugin.hpp"/>
+  </compounddef>
+</doxygen>

@@ -1,6 +1,4 @@
-<map id="castor3d::LightCategory" name="castor3d::LightCategory">
-<area shape="rect" id="node1" title=" " alt="" coords="189,5,349,32"/>
-<area shape="rect" id="node2" href="$df/d18/a05168.html" title=" " alt="" coords="5,80,175,107"/>
-<area shape="rect" id="node3" href="$dc/ded/a05184.html" title=" " alt="" coords="199,80,338,107"/>
-<area shape="rect" id="node4" href="$d6/d8c/a05188.html" title=" " alt="" coords="363,80,497,107"/>
+<map id="castor::TextWriter&lt; castor3d::ShadowConfig &gt;" name="castor::TextWriter&lt; castor3d::ShadowConfig &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="5,95,192,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="23,5,174,47"/>
 </map>

@@ -1,0 +1,816 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d9/d35/a10771" kind="page">
+    <compoundname>changelog</compoundname>
+    <title>Change log</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><anchor id="d9/d35/a10771_1md_Z__Projets_C___Castor3D_doc_Castor3D_ChangeLog_English"/> This page is here to inform about the changes since the earliest versions of the engine.</para>
+<sect1 id="d9/d35/a10771_1autotoc_md6">
+<title>Version 0.11.0</title>
+<sect2 id="d9/d35/a10771_1autotoc_md7">
+<title>Features</title>
+<sect3 id="d9/d35/a10771_1autotoc_md8">
+<title>General</title>
+<para><itemizedlist>
+<listitem><para>Added support of vcpkg for external dependencies.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md9">
+<title>CastorUtils</title>
+<para><itemizedlist>
+<listitem><para>Reworked castor::Matrix and castor::Point to make them hold static data, and reduce memory footprint of Matrix.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md10">
+<title>Castor3D</title>
+<para><itemizedlist>
+<listitem><para>Castor3D now relies on <ulink url="https://github.com/DragonJoker/Ashes">Ashes</ulink>, allowing support for OpenGL, Direct3D11 and Vulkan renderers.</para>
+</listitem><listitem><para>GlslWriter has been completely removed and replaced by <ulink url="https://github.com/DragonJoker/ShaderWriter">ShaderWriter</ulink>, allowing the generation of shaders in the appropriate rendering API shader language.</para>
+</listitem><listitem><para>Textures now have a TextureConfiguration instead of a TextureChannel.</para>
+</listitem><listitem><para>Added support for cross skyboxes.</para>
+</listitem><listitem><para>Enabled anisotropic filtering control from scene file.</para>
+</listitem><listitem><para>Added Raw and PCF shadow maps choices.</para>
+</listitem><listitem><para>Added sendEvent function to Engine, to be able to execute an event directly if there is an enabled device.</para>
+</listitem><listitem><para>Extracted binary write/parse classes to new files, to reduce includes dependencies.</para>
+</listitem><listitem><para>Reworked mip level management for textures loaded from files.</para>
+</listitem><listitem><para>Added volumetric light scattering.</para>
+</listitem><listitem><para>MatrixUbo is now a reference, in RenderPass, hence is owned by owner classes.</para>
+</listitem><listitem><para>Upgraded scene files, meshes can now hold a default material.</para>
+</listitem><listitem><para>Render queue now uses SceneCuller from its render pass, and this culler is used for frustum culling.</para>
+</listitem><listitem><para>Cascaded shadow maps are implemented and functional.</para>
+</listitem><listitem><para>Overlays are now rendered them in their own framebuffer, and then combined with the 3D rendering.</para>
+</listitem><listitem><para>Shadow maps now use texture arrays (2D or Cube).</para>
+</listitem><listitem><para>Added Light Propagation Volumes global illumination implementation.</para>
+</listitem><listitem><para>Added Voxel Cone Tracing global illumination implementation.</para>
+</listitem><listitem><para>Implemented texture animations (UV rotate and translate).</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md11">
+<title>RenderSystems</title>
+<para><itemizedlist>
+<listitem><para>They have been completely removed, thanks to Ashes.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md12">
+<title>PostEffects</title>
+<para><itemizedlist>
+<listitem><para>Created LinearMotionBlur post effect.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md13">
+<title>Samples</title>
+<para><itemizedlist>
+<listitem><para>Rehabilitated ShaderDialog, it now can be used to display tone mapping and post effect shaders.</para>
+</listitem><listitem><para>ShaderDialog now displays all the shaders for the pipeline used to display a pass.</para>
+</listitem><listitem><para>Selected submesh&apos;s bounding box now appears in yellow.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md14">
+<title>Tools</title>
+<para><itemizedlist>
+<listitem><para>Added CastorTestLauncher, which allows to run rendering tests through the wanted rendering API.</para>
+</listitem><listitem><para>Added Aria, which monitors rendering tests.</para>
+</listitem><listitem><para>CastorMeshUpgrader tool has been added, allowing to update cmsh files with a cl tool.</para>
+</listitem><listitem><para>CastorMeshConverter tool has been added, allowing to convert &quot;any&quot; mesh file to cmsh mesh with a cl tool.</para>
+</listitem><listitem><para>Added DiffImage, which allows image comparison between a reference image and another one (generated through CastorTestLauncher), to automatise rendering tests.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+</sect2>
+<sect2 id="d9/d35/a10771_1autotoc_md15">
+<title>Fixed Bugs</title>
+<sect3 id="d9/d35/a10771_1autotoc_md16">
+<title>CastorUtils</title>
+<para><itemizedlist>
+<listitem><para>Fixed matrix initialisation from another different size matrix.</para>
+</listitem><listitem><para>Fixed pixel buffer flip.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md17">
+<title>OBJImporter</title>
+<para><itemizedlist>
+<listitem><para>Few fixes in face group management.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+</sect2>
+</sect1>
+<sect1 id="d9/d35/a10771_1autotoc_md18">
+<title>Version 0.10.0</title>
+<sect2 id="d9/d35/a10771_1autotoc_md19">
+<title>Features</title>
+<sect3 id="d9/d35/a10771_1autotoc_md20">
+<title>CastorUtils</title>
+<para><itemizedlist>
+<listitem><para>Renamed namespace Castor to castor.</para>
+</listitem><listitem><para>Added ChangeTracked and GroupChangeTracked classes, allowing to track changes to a member variable.</para>
+</listitem><listitem><para>Renamed CubeBox and SphereBox to BoundingBox and BoundingSphere.</para>
+</listitem><listitem><para>Splitted Colour in two classes: RgbColour and RgbaColour.</para>
+</listitem><listitem><para>PlaneEquation is no more a template class.</para>
+</listitem><listitem><para>Created a buddy allocator class: BuddyAllocator.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md21">
+<title>Castor3D</title>
+<para><itemizedlist>
+<listitem><para>Renamed namespace Castor3D to <ref refid="d2/df5/a01395" kindref="compound">castor3d</ref>.</para>
+</listitem><listitem><para>Emissive in a material is now stored on a single floating point (emissive maps still hold a colour though).</para>
+</listitem><listitem><para>Implemented Physical Based Rendering, using both metallic/roughness and specular/glossiness workflows.</para>
+</listitem><listitem><para>RenderPipeline now also holds the shader program.</para>
+</listitem><listitem><para>Implemented Screen Space Subsurface Scattering.</para>
+</listitem><listitem><para>The light pass result is now stored in two render targets: diffuse and specular.</para>
+</listitem><listitem><para>Vertex buffers now use a buddy allocated pool.</para>
+</listitem><listitem><para>Shadow mapping now uses variance shadow maps.</para>
+</listitem><listitem><para>Transparent meshes are now rendered using Weighted Blended rendering.</para>
+</listitem><listitem><para>Screen Space Ambiant Occlusion has been improved, using Scalable Ambiant Obscurance implementation.</para>
+</listitem><listitem><para>Parallax Occlusion mapping is implemented.</para>
+</listitem><listitem><para>Reflection and refraction mapping have been implemented.</para>
+</listitem><listitem><para>Deferred rendering has been fully integrated, for opaque objects rendering.</para>
+</listitem><listitem><para>Created components for submeshes, to move functionalities out of Submesh.</para>
+</listitem><listitem><para>Rendering now uses a depth prepass.</para>
+</listitem><listitem><para>Created ColourSkybox, to handle background colour and skyboxes in the same way.</para>
+</listitem><listitem><para>Created ShaderBuffer class, to be able to handle SSBOs or TBOs in a similar way, choosing the most appropriate one, depending on running machine.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md22">
+<title>Generators</title>
+<para><itemizedlist>
+<listitem><para>Created DiamondSquareTerrain plugin.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md23">
+<title>Generic</title>
+<para><itemizedlist>
+<listitem><para>Events from CastorGUI are now forwarded to the user.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md24">
+<title>Importers</title>
+<para><itemizedlist>
+<listitem><para>Removed almost every importer plugin, keeping only Assimp, OBJ, and PLY importers.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md25">
+<title>RenderSystems</title>
+<para><itemizedlist>
+<listitem><para>Updated to support the features provided by Castor3D.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md26">
+<title>PostEffects</title>
+<para><itemizedlist>
+<listitem><para>Created SMAA post effect.</para>
+</listitem><listitem><para>Created Kawase Light Streaks post effect.</para>
+</listitem><listitem><para>Created Film Grain post effect.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md27">
+<title>Techniques</title>
+<para><itemizedlist>
+<listitem><para>Technique plugins have been completely removed.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md28">
+<title>Tone mappings</title>
+<para><itemizedlist>
+<listitem><para>Created Uncharted 2 tone mappings.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+</sect2>
+</sect1>
+<sect1 id="d9/d35/a10771_1autotoc_md29">
+<title>Fixed Bugs</title>
+<sect3 id="d9/d35/a10771_1autotoc_md30">
+<title>Castor3D</title>
+<para><itemizedlist>
+<listitem><para>Fixed bounding boxes for animated meshes and skinned meshes.</para>
+</listitem><listitem><para>Repaired an reenabled frustum culling.</para>
+</listitem><listitem><para>Fixed alpha rejection.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+</sect1>
+<sect1 id="d9/d35/a10771_1autotoc_md31">
+<title>Version 0.9.0</title>
+<sect2 id="d9/d35/a10771_1autotoc_md32">
+<title>Features</title>
+<sect3 id="d9/d35/a10771_1autotoc_md33">
+<title>CastorUtils</title>
+<para><itemizedlist>
+<listitem><para>Dropped libzip, and added minizip to the source tree.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md34">
+<title>Castor3D</title>
+<para><itemizedlist>
+<listitem><para>Entire review of the render loop: RenderPipeline is no more a unique instance, but it actually contains the states, the program, and uniform buffer bindings. It has been done to prepare the arrival of Vulkan, in which the pipeline can&apos;t be modified once it has been created, and that is now the case in Castor3D too.</para>
+</listitem><listitem><para>The rendering has been splitted in RenderPasses, that each have one or more RenderQueues, that are updated asynchronously on CPU. This allows the GPU loop to be cleaned of most CPU computations.</para>
+</listitem><listitem><para>Skybox have been added.</para>
+</listitem><listitem><para>Binary export has been completely reviewed, it now uses a chunk data format (like LWO or 3DS). It is used for meshes, and skeletons.</para>
+</listitem><listitem><para>Plug-ins interface&apos;s consistency has been improved.</para>
+</listitem><listitem><para>Fog basic implementations (linear, exponential, and squared exponential) have been added.</para>
+</listitem><listitem><para>Morphing (per-vertex) animations are now supported by Castor3D.</para>
+</listitem><listitem><para>Frustum culling has been implemented.</para>
+</listitem><listitem><para>Colour picking has been implemented.</para>
+</listitem><listitem><para>Shadow mapping is implemented, lights can produce shadows, and objects can cast shadows.</para>
+</listitem><listitem><para>Particle system has been implemented, giving to the user the implementation choice (CPU through class override, GPU through Transform Feedback or Compute shaders).</para>
+</listitem><listitem><para>Fixed the lighting in GLSL, to make it behave properly without dirty hacks.</para>
+</listitem><listitem><para>Compute shaders have been integrated to Castor3D, along with Shader Storage Buffers and Atomic Counter Buffers.</para>
+</listitem><listitem><para>Textures implementation have been completely reviewed, we now have TextureLayout, which holds the TextureView(s), and the TextureStorage per image. It has allowed the creation of cube textures.</para>
+</listitem><listitem><para>Textures transfer to RAM has been fixed.</para>
+</listitem><listitem><para>Billboard rendering no more uses a geometry shader, it now relies on hardware instantiation of a quad, and the positions are given as side attributes.</para>
+</listitem><listitem><para>UniformBuffer (formerly FrameVariableBuffer) no longer depends on ShaderProgram.</para>
+</listitem><listitem><para>A new class, UniformBufferBinding has been created which depends on both UniformBuffer and ShaderProgram. Instances of this class are held by RenderPipeline.</para>
+</listitem><listitem><para>FrameVariable class has been split in two classes: Uniform (for uniform variables contained in a UniformBuffer) and PushUniform (for uniform variables out of a UniformBuffer).</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md35">
+<title>GlRenderSystem</title>
+<para><itemizedlist>
+<listitem><para>Updated to support the features provided by Castor3D.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md36">
+<title>Techniques</title>
+<para><itemizedlist>
+<listitem><para>DeferredRenderTechnique and DeferredMsaaRenderTechnique are now real deferred rendering techniques, with a light pass per light, taking care of it&apos;s impact area.</para>
+</listitem><listitem><para>DeferredRenderTechnique is now the default render technique, when none is specified.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md37">
+<title>PostEffects</title>
+<para><itemizedlist>
+<listitem><para>Added GrayScale post effect.</para>
+</listitem><listitem><para>Added FXAA post effect.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+</sect2>
+</sect1>
+<sect1 id="d9/d35/a10771_1autotoc_md38">
+<title>Version 0.8.0</title>
+<sect2 id="d9/d35/a10771_1autotoc_md39">
+<title>Features</title>
+<sect3 id="d9/d35/a10771_1autotoc_md40">
+<title>General</title>
+<para><itemizedlist>
+<listitem><para>Compiles now with VS &gt;= 2013 and GCC &gt;= 4.9.</para>
+</listitem><listitem><para>Direct3D support has eventually been dropped, I don&apos;t have time for it.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md41">
+<title>CastorUtils</title>
+<para><itemizedlist>
+<listitem><para>Point4f and Matrix4x4f can now use SSE2 instructions for computations.</para>
+</listitem><listitem><para>All Castor projects are now using UTF-8 texts, using std::string.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md42">
+<title>Castor3D</title>
+<para><itemizedlist>
+<listitem><para>The skeleton animation system is now finished and working.</para>
+</listitem><listitem><para>Removed every XxxRenderer class, except for OverlayRenderer.</para>
+</listitem><listitem><para>The topology type is no longer in Camera, but in GeometryBuffers.</para>
+</listitem><listitem><para>Engine has been splitted, creating a RenderLoop class, and Managers to create elements, collect them, and retrieve them.</para>
+</listitem><listitem><para>SceneFileParser has been extended, to be able to use parsers from external plug-ins.</para>
+</listitem><listitem><para>The back frame buffers are retrieved and bindable like other FrameBuffers though you can&apos;t create or add attachments to it.</para>
+</listitem><listitem><para>Added a debug GPU objects tracking system, to ensure their destruction is made before context destruction.</para>
+</listitem><listitem><para>Can now read scenes from zip archive files.</para>
+</listitem><listitem><para>The text overlays now can have a horizontal and a vertical alignment.</para>
+</listitem><listitem><para>Added an initial zip data folder, Core.zip, which contains basic materials and debug overlays.</para>
+</listitem><listitem><para>The shader lighting has been reviewed and fixed.</para>
+</listitem><listitem><para>The Scene class has been reworked, to use ObjectManager classes, and ResourceManager views.</para>
+</listitem><listitem><para>Now, the ShaderProgram retrieves the vertex inputs layout. This layout is used in Submesh, to create the appropriate GeometryBuffers.</para>
+</listitem><listitem><para>Castor3D now renders the scenes using HDR and tone mapping. The default tone mapping configuration will make the render look like there were no HDR enabled.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md43">
+<title>GlRenderSystem</title>
+<para><itemizedlist>
+<listitem><para>Lights texture now uses Texture Buffer Objects.</para>
+</listitem><listitem><para>Removed every GlXxxRenderer class, except for GlOverlayRenderer.</para>
+</listitem><listitem><para>Support for OpenGL 1.x has been removed.</para>
+</listitem><listitem><para>Support for OpenGL 3.x has been enforced, forcing UBOs, for example.</para>
+</listitem><listitem><para>Implemented a ShaderWriter, to write GLSL code from C++ source.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md44">
+<title>Subdividers</title>
+<para><itemizedlist>
+<listitem><para>Implemented a Phong tessellation subdivider.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md45">
+<title>Importers</title>
+<para><itemizedlist>
+<listitem><para>Implemented a FBX importer plug-in.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md46">
+<title>Techniques</title>
+<para><itemizedlist>
+<listitem><para>Each render technique is now implemented in its own plug-in.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md47">
+<title>PostEffects</title>
+<para><itemizedlist>
+<listitem><para>The first post effect plug-in has been implemented: Bloom.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md48">
+<title>CastorGUI</title>
+<para><itemizedlist>
+<listitem><para>New plug-in, allowing creation of GUIs inside Castor3D scenes.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md49">
+<title>GuiCommon</title>
+<para><itemizedlist>
+<listitem><para>The whole look and feel has been reworked, using wxAuiManager.</para>
+</listitem><listitem><para>Properties are displayed through wxTreeCtrl and wxPropertyGrid, to list objects and view their properties.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+</sect2>
+<sect2 id="d9/d35/a10771_1autotoc_md50">
+<title>Fixed Bugs</title>
+<sect3 id="d9/d35/a10771_1autotoc_md51">
+<title>CastorUtils</title>
+<para><itemizedlist>
+<listitem><para>Fixed transformation matrices.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md52">
+<title>Castor3D</title>
+<para><itemizedlist>
+<listitem><para>Fixed hardware instantiation, and instantiation, for meshes with different materials.</para>
+</listitem><listitem><para>Fixed a bug in border panel overlays material management.</para>
+</listitem><listitem><para>Fixed an overlays bug, on Intel GPU (was due to a real bug in AMD driver that hid the bug).</para>
+</listitem><listitem><para>The billboards are now fixed.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md53">
+<title>Subdividers</title>
+<para><itemizedlist>
+<listitem><para>Fixed PN Triangles subdivider, to use Bezier patches.</para>
+</listitem><listitem><para>Updated Loop subdivider.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md54">
+<title>GlRenderSystem</title>
+<para><itemizedlist>
+<listitem><para>Fixed a crash on Linux, with Intel GPUs.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+</sect2>
+</sect1>
+<sect1 id="d9/d35/a10771_1autotoc_md55">
+<title>Version 0.7.0</title>
+<sect2 id="d9/d35/a10771_1autotoc_md56">
+<title>Features</title>
+<sect3 id="d9/d35/a10771_1autotoc_md57">
+<title>General</title>
+<para><itemizedlist>
+<listitem><para>Supports x64 compilation</para>
+</listitem><listitem><para>Cleaned up a FrameBuffer, GlFrameBuffer and Dx11FrameBuffer.</para>
+</listitem><listitem><para>Linux and wxWidgets 2.8 compatibility improved.</para>
+</listitem><listitem><para>Added AStyle support.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md58">
+<title>CastorUtils</title>
+<para><itemizedlist>
+<listitem><para>Modified DynamicLibrary::getFunction, added a template parameter that is the function type, and a method parameter that is the pointer to the function to retrieve so no more casts when using DynamicLibrary::getFunction.</para>
+</listitem><listitem><para>Added log level support for Logger.</para>
+</listitem><listitem><para>Implemented intersection function in Line3D.<itemizedlist>
+<listitem><para>That class now has to named constructors : fromPointAndSlope and fromPoints, to avoid confusion between them.</para>
+</listitem><listitem><para>Created two classes Size and Position instead of just having a typedef for these.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>Improved FileParser, now functions have parameters and not only parameters types, and parameters parse themselves.</para>
+</listitem><listitem><para>castor::Point now holds a static array as it&apos;s members instead of a dynamic one.</para>
+</listitem><listitem><para>Removed Unicode file encoding.</para>
+</listitem><listitem><para>Added stream indentation support.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md59">
+<title>Castor3D</title>
+<para><itemizedlist>
+<listitem><para>Modified shaders, they now take care of the shader model, they hold all defined files and sources for each model. The choice of the source is made at compile time, taking the source with the highest supported model.</para>
+</listitem><listitem><para>Improved memory occupation, limited overhead of Vertex (152 to 24 bytes) and Face (140 to 16 bytes).</para>
+</listitem><listitem><para>Modified Subdivision, now only in Subdivider, no more in Geometry, mesh or Submesh.</para>
+</listitem><listitem><para>Implemented Implemented Lights in texture.</para>
+</listitem><listitem><para>Added hasParameter and setParameter functions in ShaderObject, to apply matrices from RenderPipeline.</para>
+</listitem><listitem><para>Removed ApplyXXXMatrix from IPipelineImpl, now the RenderPipeline applies matrices itself.</para>
+</listitem><listitem><para>Added channel for textures (colour, ambient, diffuse, specular, normal, height).</para>
+</listitem><listitem><para>Implemented MSAA.</para>
+</listitem><listitem><para>Implemented Alpha to Coverage when MSAA is activated.</para>
+</listitem><listitem><para>Modified default sources in GlShaderProgram and Dx9ShaderProgram, they are now computed and no more external shader file is needed.</para>
+</listitem><listitem><para>Implemented Frame buffers.</para>
+</listitem><listitem><para>Submeshes are sorted by Material&apos;s alpha in order to render submeshes without alpha before others.</para>
+</listitem><listitem><para>Added functions Begin and End in Mesh class to be able to iterate through submeshes without using getSubmesh and getSubmeshCount.</para>
+</listitem><listitem><para>Added Material functions Begin and End to retrieve passes in standard way.</para>
+</listitem><listitem><para>Added possibility to activate or deactivate deferred rendering, this is also possible from cscn files.</para>
+</listitem><listitem><para>Created TechniqueParameters class to be able to pass generic parameters instead of, for example, the samples count.</para>
+</listitem><listitem><para>Introducing SamplerState class to group calls to setSamplerState and all relative stuff.</para>
+</listitem><listitem><para>Reviewed sizes a bit : Viewport holds the internal size, RenderTarget and RenderWindow hold external size. Modified SceneFileParser, added &lt;size&gt; directive for viewport.</para>
+</listitem><listitem><para>Splitted eBUFFER_MODE in BufferAccessType and BufferAccessNature.</para>
+</listitem><listitem><para>Modified a bit Uniform in order to take care of eFRAME_VARIABLE_TYPE previously defined for SceneFileParser.</para>
+</listitem><listitem><para>Modified Submesh::AddUniforms so it takes a stVERTEX_GROUP structure as a parameter.</para>
+</listitem><listitem><para>Introducing Buffer to manage frame variables with OpenGl UBO or DirectX 11 Constants buffer.</para>
+</listitem><listitem><para>Implemented initialisation and cleanup of GPU side objects in two events : InitialiseEvent and CleanupEvent.</para>
+</listitem><listitem><para>Merged GpuBuffer::Initialise and GpuBuffer::SetShaderProgram functions to ease their use.</para>
+</listitem><listitem><para>Removed auto mipmap generation, now if user wants it, he does it with TextureLayout::GenerateMipmaps function.</para>
+</listitem><listitem><para>Added DepthStencilState class to manage those buffers states like Direct3D 11 (who does it well).</para>
+</listitem><listitem><para>Added blend state, implemented raster state.</para>
+</listitem><listitem><para>Put a BlendState instance in Pass and removed rgb/alpha blending from the pass.</para>
+</listitem><listitem><para>Removed Context::Enable and Context::Disable, removed RenderState class.</para>
+</listitem><listitem><para>Removed setPolygonMode from Context.</para>
+</listitem><listitem><para>Moved Render to buffer common code (from FrameBuffer and RenderWindow) into Context::BtoBRender.</para>
+</listitem><listitem><para>Implemented mesh instantiation on hardware.</para>
+</listitem><listitem><para>Modified Submesh normals generation.</para>
+</listitem><listitem><para>Moved materials from Submesh to Geometry.</para>
+</listitem><listitem><para>Modified submeshes instance count, to make it specific to the materials used by the submesh instances.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md60">
+<title>GuiCommon</title>
+<para><itemizedlist>
+<listitem><para>Now ShaderDialog uses wxSizers.</para>
+</listitem><listitem><para>Using wxStcEditor to view and edit shaders.</para>
+</listitem><listitem><para>Materials windows now use wxSizer classes to place and resize elements.</para>
+</listitem><listitem><para>Added possibility to change the material used by a submesh in wxGeometriesListFrame.</para>
+</listitem><listitem><para>Corrected few bugs in images loading.</para>
+</listitem><listitem><para>Improved StcTextEditor in order to have a better syntactic coloration.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md61">
+<title>CastorViewer</title>
+<para><itemizedlist>
+<listitem><para>Now MainFrame uses wxSizers.</para>
+</listitem><listitem><para>Added command line options :<itemizedlist>
+<listitem><para>-f/<ndash/>file to load a scene on startup</para>
+</listitem><listitem><para>-h/<ndash/>help to display help</para>
+</listitem><listitem><para>-l/<ndash/>level to define log level :<itemizedlist>
+<listitem><para>0 for debug to errors</para>
+</listitem><listitem><para>1 for release to errors</para>
+</listitem><listitem><para>2 for warnings to errors</para>
+</listitem><listitem><para>3 for errors only.</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>Now loads plug-ins in a thread.</para>
+</listitem><listitem><para>Added an &quot;Export&quot; button.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md62">
+<title>GlRenderSystem</title>
+<para><itemizedlist>
+<listitem><para>Removed GLEW dependency.</para>
+</listitem><listitem><para>Implemented OpenGL debug output so I have more verbose debug outputs for OpenGL too.</para>
+</listitem><listitem><para>Added GL_MIRRORED_REPEAT.</para>
+</listitem><listitem><para>Added GL_TEXTURE_MAX_ANISOTROPY.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+</sect2>
+<sect2 id="d9/d35/a10771_1autotoc_md63">
+<title>misc_0_7_0_gen General</title>
+<para><itemizedlist>
+<listitem><para>Splitted file to have one class per file.</para>
+</listitem></itemizedlist>
+</para>
+<sect3 id="d9/d35/a10771_1autotoc_md64">
+<title>CMake</title>
+<para><itemizedlist>
+<listitem><para>Updated UnitTest integration, Enabled CTest.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md65">
+<title>CastorUtils</title>
+<para><itemizedlist>
+<listitem><para>Removed all static members and globals.</para>
+</listitem><listitem><para>Removed String class, added string.</para>
+</listitem><listitem><para>Removed all dependencies to boost, except for thread, for non C++11 compilers.</para>
+</listitem><listitem><para>Modified Point, moved functions that shouldn&apos;t be in that class in a small helper class : point. It holds normalise, getNormalised, dot, all distance functions, cosTheta, negate.</para>
+</listitem><listitem><para>Modified FileParser in order to be able to ignore complete sections without commenting it (such as HLSL shader blocks in GlRenderSystem...).</para>
+</listitem><listitem><para>Modified FileParser to take care of parsers parameters.</para>
+</listitem><listitem><para>Reduced images memory occupation.</para>
+</listitem><listitem><para>Removed Point::link, Point::copy/clopy/clone functions.</para>
+</listitem><listitem><para>Replaced macros for cstrnlen, cstrftime, cstrncpy, cfopen, cfopen64, cfseek and cftell by functions in namespace castor.</para>
+</listitem><listitem><para>Modified Colour class, it doesn&apos;t extend Point4f anymore.</para>
+</listitem><listitem><para>Removed macro DECLARE_SHARED_PTR, now using CU_DeclareSmartPtr, so I replaced each XXxPtr by it&apos;s equivalent XxxSPtr.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md66">
+<title>Castor3D</title>
+<para><itemizedlist>
+<listitem><para>Merged Submesh and SmoothingGroup classes.</para>
+</listitem><listitem><para>Reduced memory size of vertex buffers.</para>
+</listitem><listitem><para>Modified Submesh::computeTangents to take care of each vertex normal.</para>
+</listitem><listitem><para>Modified BufferElementGroup so it can&apos;t hold anymore its buffer.</para>
+</listitem><listitem><para>When initialising Pass, the texture units are re-ordered so the ones with a defined channel come first.</para>
+</listitem><listitem><para>Passes now initialise their shaders in Pass::Initialiser instead of trying to do it at each frame.</para>
+</listitem><listitem><para>Changed RenderTarget : now it only holds frame buffer and all needed for that. It is now a Renderable so TargetRenderer has been created.</para>
+</listitem><listitem><para>RenderWindow no longer extends RenderTarget, but now it has a RenderTarget as a private class member.</para>
+</listitem><listitem><para>Created Texture class, StaticTexture and TextureLayout to help implementing render targets.</para>
+</listitem><listitem><para>RenderTarget now uses RenderTechnique to make its rendering.</para>
+</listitem><listitem><para>Created GeometryBuffers class which holds a Vertex buffer and an Index buffer, they are created by the RenderSystem.</para>
+</listitem><listitem><para>Moved RenderTechnique basic frame buffer, texture and depth buffer into RenderTarget.</para>
+</listitem><listitem><para>Moved TargetRenderer::PostRender code into RenderWindow.</para>
+</listitem><listitem><para>Created WindowRenderer::EndScene function to prepare the render of the RenderTarget&apos;s frame buffer into the window.</para>
+</listitem><listitem><para>Removed calls to ShaderObject in order to make it more internal to Castor3D.</para>
+</listitem><listitem><para>Overlays are no more Renderable, there is one instance of OverlayRenderer class in the OverlayCache. All overlays will be rendered through this instance by the OverlayCache.</para>
+</listitem><listitem><para>Modified Scene, added template functions to add, remove or get an object whatever it&apos;s type may be (Light, Geometry, Camera, SceneNode).</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md67">
+<title>GlRenderSystem</title>
+<para><itemizedlist>
+<listitem><para>Reviewed Vertex Array Objects, they now hold their buffers so the choice of using it or not is wrapped into it.</para>
+</listitem><listitem><para>Geometry shader work in OpenGL, created a shader to show wireframe models with Normals, Tangents and Bitangents.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+</sect2>
+<sect2 id="d9/d35/a10771_1autotoc_md68">
+<title>Fixed bugs</title>
+<sect3 id="d9/d35/a10771_1autotoc_md69">
+<title>General</title>
+<para><itemizedlist>
+<listitem><para>Added Destroy functions for each create function in plug-ins, so creation and deletion is made in DLL memory space (for Windows).</para>
+</listitem><listitem><para>Added ASSIMP importer plug-in to import actually unsupported file types, modified ImporterPlugin::getExtensions to be able to retrieve an array of pairs &lt;extension, file=&quot;&quot; type=&quot;&quot;&gt;.</para>
+</listitem><listitem><para>Modified Importers so no more memory leaks are detected with Visual Studio.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md70">
+<title>CMake</title>
+<para><itemizedlist>
+<listitem><para>Added possibility to change binaries directory and also MSVC temporary binaries directory, through PROJECTS_BINARIES_OUTPUT_PATH and PROJECTS_BINTEMP_OUTPUT_PATH.</para>
+</listitem><listitem><para>Added possibility to activate code profiling with MSVC through PROJECTS_PROFILING boolean value.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md71">
+<title>CastorUtils</title>
+<para><itemizedlist>
+<listitem><para>Modified Image to make FreeImage load images by path and no more by handle (caused trouble with some formats).</para>
+</listitem><listitem><para>Repaired a matrix trouble when rendering overlays.</para>
+</listitem><listitem><para>Corrected recursive transformations.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md72">
+<title>Castor3D</title>
+<para><itemizedlist>
+<listitem><para>Repaired alpha submeshes that were not displayed.</para>
+</listitem><listitem><para>Corrected mipmaps generation.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md73">
+<title>CastorViewer</title>
+<para><itemizedlist>
+<listitem><para>Moved m_pCastor3D destruction and ImageLoader::Cleanup in the OnDestroy event handler.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md74">
+<title>GlRenderSystem</title>
+<para><itemizedlist>
+<listitem><para>Corrected a bug in doGetDeferredShaderSource.</para>
+</listitem><listitem><para>Corrected mipmaps generation in GlStaticTexture and GlDynamicTexture.</para>
+</listitem><listitem><para>Corrected the gloss map in GLSL computed programs.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d9/d35/a10771_1autotoc_md75">
+<title>ObjImporter</title>
+<para><itemizedlist>
+<listitem><para>Corrected materials and textures import.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+</sect2>
+</sect1>
+<sect1 id="d9/d35/a10771_1autotoc_md76">
+<title>Version 0.6.1.2</title>
+<sect2 id="d9/d35/a10771_1autotoc_md77">
+<title>adds</title>
+<para><itemizedlist>
+<listitem><para>Created Dx9Renderer to render with Direct3D 9. Stills things to correct, in shaders and matrices, but it&apos;s almost done.</para>
+</listitem><listitem><para>Created different files for OpenGL contexts (X11, Gtk, Msw), X11 and Gtk still untested.</para>
+</listitem><listitem><para>Created a splash screen for CastorViewer and CastorShape, created a dialog box in order to choose the renderer at startup.</para>
+</listitem><listitem><para>Added a small app to converet from an image to a XPM.</para>
+</listitem><listitem><para>Added new features to scene files (alpha_rejection, rgb_blend, alpha_blend, hl_shader_program, ...)</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d9/d35/a10771_1autotoc_md78">
+<title>Modifications</title>
+<para><itemizedlist>
+<listitem><para>Optimised CMakeLists file and &apos;cmake_modules&apos; files in order to take care of various configurations in a better way.</para>
+</listitem><listitem><para>Revised VertexBuffers and IndexBuffers, introducing VertexDeclaration and BufferElementGroup, so we can create VertexBuffersof customisable types.</para>
+</listitem><listitem><para>Vertex class now derives from BufferElementGroup.</para>
+</listitem><listitem><para>TextureEnvironment are going to disappear in the next version, now multitexturing management is done with passes and texture units.</para>
+</listitem><listitem><para>Suppressed GLU dependencies.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d9/d35/a10771_1autotoc_md79">
+<title>Bugs</title>
+<para><itemizedlist>
+<listitem><para>Trouble with Direct3D matrices (maybe differences between right-handed / left-handed).</para>
+</listitem><listitem><para>Trouble with HLSL shaders, surely linked to previous trouble.</para>
+</listitem><listitem><para>Still troubles with Cg shaders (not worked on it).</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+</sect1>
+<sect1 id="d9/d35/a10771_1autotoc_md80">
+<title>Version 0.6.1.1</title>
+<sect2 id="d9/d35/a10771_1autotoc_md81">
+<title>Features</title>
+<para><itemizedlist>
+<listitem><para>Created a CMakeLists file to generate the solution from CMake.</para>
+</listitem><listitem><para>Reorganised folders to make them more compliant with CMake.</para>
+</listitem><listitem><para>Splitted Plugin class in 3 parts : Renderer, Divider et Importer.</para>
+</listitem><listitem><para>Created one project per importer (OBJ, PLY, MD2, MD3, 3DS, ...)</para>
+</listitem><listitem><para>PNTrianglesDivider is left in Castor3D because it is sstill used by Icosahedron, LoopDivider is exported in a plug-in.</para>
+</listitem><listitem><para>Began Cg shaders implementation. This implies a scene file modification because in Cg, uniform variables are are linked to a shader instead of being linked to the whole program. Still buggy.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d9/d35/a10771_1autotoc_md82">
+<title>Modifications</title>
+<para><itemizedlist>
+<listitem><para>Suppressed FreeImagePlus dependencies.</para>
+</listitem><listitem><para>Vertex, Attribute and Index buffers are now created by RenderSystem so they can be created out of the renderers.</para>
+</listitem><listitem><para>Suppressed Singletons for the Managers (Image, Font, Scene, Material, Animation and Mesh).</para>
+</listitem><listitem><para>Remerged SceneNode classes.</para>
+</listitem><listitem><para>Created IdPoint class, it is a point with just an index. Submes::addPoint creates now IdPoints and Submesh::addFace uses them to create the vertex.</para>
+</listitem><listitem><para>Subdividers can subdivide in a thread in order not to freeze the main thread. It is possible to define a function to use at the end of the subdivision (cf. CastorShape).</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d9/d35/a10771_1autotoc_md83">
+<title>Corrections</title>
+<para><itemizedlist>
+<listitem><para>Corrected LoopDivider which didn&apos;t reposition the Vertex</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+</sect1>
+<sect1 id="d9/d35/a10771_1autotoc_md84">
+<title>Version 0.6.1.0</title>
+<sect2 id="d9/d35/a10771_1autotoc_md85">
+<title>Features</title>
+<para><itemizedlist>
+<listitem><para>Using std or tr1 or boost smart pointers.</para>
+</listitem><listitem><para>Created OpenGlCommon for common treatments between GL2RenderSystem and GL3RenderSystem</para>
+</listitem><listitem><para>Created class RenderPipeline which performs the matrix computings and other functions (frustum, perspective, ortho, ...)</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d9/d35/a10771_1autotoc_md86">
+<title>Modifications</title>
+<para><itemizedlist>
+<listitem><para>Modified MemoryManager, added a template class MemoryTraced which overload new, delete new [] et delete [] operators in order to have better trace of allocations and deallocations. Each Castor class derive from this one and 3 files are created in root folder to log allocations, deallocations : memoryleaks.log, memoryalloc.log and memorydealloc.log</para>
+</listitem><listitem><para>TransformationUniform no longer exists, it is now a collection of functions which computes 4x4 matrix operations</para>
+</listitem><listitem><para>Modification SceneNode management : base class NodeBase holds the informations that were in SceneNode, 3 derived classes (GeometryMaterial, CameraMaterial et LightMaterial) take care of each category specificities.</para>
+</listitem><listitem><para>MovableObject class now has less features (name and NodeBase), Light and Camera now derive from it</para>
+</listitem><listitem><para>Renamed UniformVariable to .</para>
+</listitem><listitem><para>OpenGL 3.x/4.x now fully supported.</para>
+</listitem><listitem><para>Modified Vertex class in order to make them include texture coordinates and normals in order to have only 1 vertex buffer instead of 3 in a mesh.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d9/d35/a10771_1autotoc_md87">
+<title>Corrections</title>
+<para><itemizedlist>
+<listitem><para>Corrected the shutdown crash.</para>
+</listitem><listitem><para>Corrected the black render with OpenGL 3.x</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+</sect1>
+<sect1 id="d9/d35/a10771_1autotoc_md88">
+<title>Version 0.6.0.0</title>
+<sect2 id="d9/d35/a10771_1autotoc_md89">
+<title>Features</title>
+<para><itemizedlist>
+<listitem><para>Added a projection/normal and view matrices management class, in order to suppress the fixed pipeline support in OpenGl renderers.</para>
+</listitem><listitem><para>Added personnal smart pointers.</para>
+</listitem><listitem><para>Added an agle management class in order not to take care of degrees or radians.</para>
+</listitem><listitem><para>Added a path class, to manage slashes or backslashes according to OS.</para>
+</listitem><listitem><para>Created thread safe containers derived from STL ones (vector, list, map, multimap, set).</para>
+</listitem><listitem><para>Splitted GLRenderer in two parts : one compatible OpenGL 2.x and before (GL2RenderSystem), one compatible OpenGL3.x et after (GL3RenderSystem).</para>
+</listitem><listitem><para>GL2RenderSystem : according to client configuration, the fixed pipe is suppressed or keeped</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d9/d35/a10771_1autotoc_md90">
+<title>Modifications</title>
+<para><itemizedlist>
+<listitem><para>Modified thread management, leaving the user choosing between Win32, MFC or boost.</para>
+</listitem><listitem><para>Modified point and matrices classes.</para>
+</listitem><listitem><para>Modified String class which now is independant from MBCS or Unicode.</para>
+</listitem><listitem><para>Modified File class which now only uses streams.</para>
+</listitem><listitem><para>Modified the render system, added a class Renderable used to create associated renderer in order to ease the creation of derived classes (submesh, scene node, light, camera...)</para>
+</listitem><listitem><para>Changed scenes/materials/meshes files name (respectively cscn/cmtl/cmsh)</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d9/d35/a10771_1autotoc_md91">
+<title>Corrections</title>
+<para><itemizedlist>
+<listitem><para>Protected managers with recursive mutexes to avoid random crashes.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d9/d35/a10771_1autotoc_md92">
+<title>Bugs</title>
+<para><itemizedlist>
+<listitem><para>Still a crash at shutdown, supposedly due to shaders.</para>
+</listitem><listitem><para>In GL3RenderSystem, I&apos;ve got a black screen (?!?) but transformations seem to be correct.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+</sect1>
+<sect1 id="d9/d35/a10771_1autotoc_md93">
+<title>Version 0.5.0.1</title>
+<sect2 id="d9/d35/a10771_1autotoc_md94">
+<title>Features</title>
+<para><itemizedlist>
+<listitem><para>Tangent space is computed and available in GLSL shaders.</para>
+</listitem><listitem><para>Only tangent is computed, bitangent can be in the shader with a cross product.</para>
+</listitem><listitem><para>To access to the tangent you must declare the following attribute in the vertex shader :</para>
+</listitem><listitem><para>attribute vec3 tangent;</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d9/d35/a10771_1autotoc_md95">
+<title>Modifications</title>
+<para><itemizedlist>
+<listitem><para>The points classes have their members in a union so you can call it as you wish (xyz, rgb, left right top bottom)</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d9/d35/a10771_1autotoc_md96">
+<title>Corrections</title>
+<para><itemizedlist>
+<listitem><para>Corrected the crash on shutdown. It was due to VBOs which are now destroyed in a final render loop. </para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+</sect1>
+    </detaileddescription>
+    <location file="Z:/Projets/C++/Castor3D/doc/Castor3D/ChangeLog-English.md"/>
+  </compounddef>
+</doxygen>

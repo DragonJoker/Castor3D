@@ -1,67 +1,125 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="de/d04/a04774" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::LightPassShadowTraits&lt; LightType::eDirectional &gt;</compoundname>
-    <includes local="no">LightPassShadow.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="de/d04/a04774_1a7f9d9558a63b272cadf67971800878ca" prot="public" static="no">
-        <type><ref refid="d1/dab/a05162" kindref="compound">DirectionalLight</ref></type>
-        <definition>using castor3d::LightPassShadowTraits&lt; LightType::eDirectional &gt;::light_type =  DirectionalLight</definition>
+    <compoundname>castor3d::shader::LightData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">GlslLight.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/d04/a04774_1a6ca28d819af31d38632d606cc7e8c211" prot="public" static="no" mutable="no">
+        <type>sdw::Array&lt; sdw::Vec4 &gt;</type>
+        <definition>sdw::Array&lt; sdw::Vec4 &gt; castor3d::shader::LightData::data</definition>
         <argsstring></argsstring>
-        <name>light_type</name>
+        <name>data</name>
+        <qualifiedname>castor3d::shader::LightData::data</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The light source type. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="36" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="36" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslLight.hpp" line="26" column="12" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="26" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="typedef" id="de/d04/a04774_1a0d244934d4b78bbaeda354845ff51c0b" prot="public" static="no">
-        <type><ref refid="d4/dea/a04726" kindref="compound">DirectionalLightPass</ref></type>
-        <definition>using castor3d::LightPassShadowTraits&lt; LightType::eDirectional &gt;::light_pass_type =  DirectionalLightPass</definition>
-        <argsstring></argsstring>
-        <name>light_pass_type</name>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/d04/a04774_1ad2a30c4ee119236d8886536e7878b215" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::LightData::LightData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>LightData</name>
+        <qualifiedname>castor3d::shader::LightData::LightData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The light pass type. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="39" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="39" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslLight.hpp" line="19" column="9"/>
       </memberdef>
-      <memberdef kind="typedef" id="de/d04/a04774_1a866c07c0c54aa479160db99fc725edde" prot="public" static="no">
-        <type><ref refid="db/de2/a04650" kindref="compound">ShadowMapDirectional</ref></type>
-        <definition>using castor3d::LightPassShadowTraits&lt; LightType::eDirectional &gt;::shadow_pass_type =  ShadowMapDirectional</definition>
-        <argsstring></argsstring>
-        <name>shadow_pass_type</name>
+      <memberdef kind="function" id="de/d04/a04774_1a2e9c1a29c5f0a9c80ebdb3317fa2c281" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::LightData::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, LightData)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::LightData::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        </param>
+        <param>
+          <type><ref refid="de/d04/a04774" kindref="compound">LightData</ref></type>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The shadow map type. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="42" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="42" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslLight.hpp" line="22" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="de/d04/a04774_1a9d7361fd1c81e5b18ce300dd74d21fe3" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
+        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::LightData::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::LightData::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="24" column="41"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Traits structure to specialise light passes with shadows. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="remark"><para>Specialisation for <ref refid="de/d13/a01473_1a381718aa9accc88c20afd97d76c30ed8a0ddd5baafa15f79528b19dd012e1dce3" kindref="member">LightType::eDirectional</ref>. </para>
-</simplesect>
-</para>
     </detaileddescription>
-    <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="33" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="32" bodyend="43"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::LightData</label>
+        <link refid="de/d04/a04774"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::LightData</label>
+        <link refid="de/d04/a04774"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslLight.hpp" line="16" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="18" bodyend="27"/>
     <listofallmembers>
-      <member refid="de/d04/a04774_1a0d244934d4b78bbaeda354845ff51c0b" prot="public" virt="non-virtual"><scope>castor3d::LightPassShadowTraits&lt; LightType::eDirectional &gt;</scope><name>light_pass_type</name></member>
-      <member refid="de/d04/a04774_1a7f9d9558a63b272cadf67971800878ca" prot="public" virt="non-virtual"><scope>castor3d::LightPassShadowTraits&lt; LightType::eDirectional &gt;</scope><name>light_type</name></member>
-      <member refid="de/d04/a04774_1a866c07c0c54aa479160db99fc725edde" prot="public" virt="non-virtual"><scope>castor3d::LightPassShadowTraits&lt; LightType::eDirectional &gt;</scope><name>shadow_pass_type</name></member>
+      <member refid="de/d04/a04774_1a6ca28d819af31d38632d606cc7e8c211" prot="public" virt="non-virtual"><scope>castor3d::shader::LightData</scope><name>data</name></member>
+      <member refid="de/d04/a04774_1ad2a30c4ee119236d8886536e7878b215" prot="public" virt="non-virtual"><scope>castor3d::shader::LightData</scope><name>LightData</name></member>
+      <member refid="de/d04/a04774_1a9d7361fd1c81e5b18ce300dd74d21fe3" prot="public" virt="non-virtual"><scope>castor3d::shader::LightData</scope><name>makeType</name></member>
+      <member refid="de/d04/a04774_1a2e9c1a29c5f0a9c80ebdb3317fa2c281" prot="public" virt="non-virtual"><scope>castor3d::shader::LightData</scope><name>SDW_DeclStructInstance</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

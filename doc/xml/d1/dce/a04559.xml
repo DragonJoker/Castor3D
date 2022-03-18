@@ -1,198 +1,80 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d1/dce/a04559" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::PipelineFlags</compoundname>
-    <includes local="no">RenderModule.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d1/dce/a04559_1aab051b1ee46ace763681dfea200198d2" prot="public" static="no" mutable="no">
-        <type><ref refid="d7/dd1/a01458_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
-        <definition>BlendMode castor3d::PipelineFlags::colourBlendMode</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d1/dce/a04559" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ParticleDeclaration</compoundname>
+    <includes local="no">ParticleDeclaration.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d1/dce/a04559_1ac3605c9497d42815f814501886deff89" prot="public" static="no">
+        <type>ParticleElementDeclarationArrayIt</type>
+        <definition>using castor3d::ParticleDeclaration::iterator =  ParticleElementDeclarationArrayIt</definition>
         <argsstring></argsstring>
-        <name>colourBlendMode</name>
-        <initializer>{ <ref refid="d7/dd1/a01458_1a840ab6fd50c1a08fcc1b6dc3f98d90faa12c10e6e0388d587340cfbe98b5045ae" kindref="member">BlendMode::eNoBlend</ref> }</initializer>
+        <name>iterator</name>
+        <qualifiedname>castor3d::ParticleDeclaration::iterator</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="249" column="1" bodyfile="Render/RenderModule.hpp" bodystart="249" bodyend="-1"/>
+        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="64" column="1" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="64" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/dce/a04559_1a0831b5262611024fcac18f42f7a29f92" prot="public" static="no" mutable="no">
-        <type><ref refid="d7/dd1/a01458_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
-        <definition>BlendMode castor3d::PipelineFlags::alphaBlendMode</definition>
+      <memberdef kind="typedef" id="d1/dce/a04559_1a4218788ea671d00ca5f5b0b6f56db038" prot="public" static="no">
+        <type>ParticleElementDeclarationArrayConstIt</type>
+        <definition>using castor3d::ParticleDeclaration::const_iterator =  ParticleElementDeclarationArrayConstIt</definition>
         <argsstring></argsstring>
-        <name>alphaBlendMode</name>
-        <initializer>{ <ref refid="d7/dd1/a01458_1a840ab6fd50c1a08fcc1b6dc3f98d90faa12c10e6e0388d587340cfbe98b5045ae" kindref="member">BlendMode::eNoBlend</ref> }</initializer>
+        <name>const_iterator</name>
+        <qualifiedname>castor3d::ParticleDeclaration::const_iterator</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="250" column="1" bodyfile="Render/RenderModule.hpp" bodystart="250" bodyend="-1"/>
+        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="65" column="1" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="65" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/dce/a04559_1add12a9fda8077540029ee2482cb3dd31" prot="public" static="no" mutable="no">
-        <type><ref refid="d7/dd1/a01458_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref></type>
-        <definition>PassFlags castor3d::PipelineFlags::passFlags</definition>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/dce/a04559_1aa661b1b54c3f511c20ea4a7cd640b55f" prot="private" static="no" mutable="no">
+        <type>ParticleElementDeclarationArray</type>
+        <definition>ParticleElementDeclarationArray castor3d::ParticleDeclaration::m_elements</definition>
         <argsstring></argsstring>
-        <name>passFlags</name>
-        <initializer>{ <ref refid="d7/dd1/a01458_1ad372dd0cc65f28ad7f558f07c78becb7abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">PassFlag::eNone</ref> }</initializer>
+        <name>m_elements</name>
+        <qualifiedname>castor3d::ParticleDeclaration::m_elements</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="251" column="1" bodyfile="Render/RenderModule.hpp" bodystart="251" bodyend="-1"/>
+        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="208" column="33" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="208" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/dce/a04559_1a84af70d15122942aac813f3e8aecddaa" prot="public" static="no" mutable="no">
+      <memberdef kind="variable" id="d1/dce/a04559_1ac74a37e700e61a021dd3f98366c5fb5a" prot="private" static="no" mutable="no">
         <type>uint32_t</type>
-        <definition>uint32_t castor3d::PipelineFlags::heightMapIndex</definition>
+        <definition>uint32_t castor3d::ParticleDeclaration::m_stride</definition>
         <argsstring></argsstring>
-        <name>heightMapIndex</name>
-        <initializer>{ <ref refid="d7/dd1/a01458_1a2533c48f44e5f343ab52f930f7fec110" kindref="member">InvalidIndex</ref> }</initializer>
+        <name>m_stride</name>
+        <qualifiedname>castor3d::ParticleDeclaration::m_stride</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="252" column="1" bodyfile="Render/RenderModule.hpp" bodystart="252" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/dce/a04559_1aa3db54fd73e1d41fa2e66989fea924c1" prot="public" static="no" mutable="no">
-        <type><ref refid="d7/dd1/a01458_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
-        <definition>ProgramFlags castor3d::PipelineFlags::programFlags</definition>
-        <argsstring></argsstring>
-        <name>programFlags</name>
-        <initializer>{ <ref refid="d7/dd1/a01458_1ad372dd0cc65f28ad7f558f07c78becb7abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">ProgramFlag::eNone</ref> }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="253" column="1" bodyfile="Render/RenderModule.hpp" bodystart="253" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/dce/a04559_1a8572e6b81c50a0a8a39d0104ecdad193" prot="public" static="no" mutable="no">
-        <type><ref refid="d7/dd1/a01458_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref></type>
-        <definition>SceneFlags castor3d::PipelineFlags::sceneFlags</definition>
-        <argsstring></argsstring>
-        <name>sceneFlags</name>
-        <initializer>{ <ref refid="d7/dd1/a01458_1ad372dd0cc65f28ad7f558f07c78becb7abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">SceneFlag::eNone</ref> }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="254" column="1" bodyfile="Render/RenderModule.hpp" bodystart="254" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/dce/a04559_1a82e267d99f0d0f3103eb76e4ab1a22b2" prot="public" static="no" mutable="no">
-        <type>VkPrimitiveTopology</type>
-        <definition>VkPrimitiveTopology castor3d::PipelineFlags::topology</definition>
-        <argsstring></argsstring>
-        <name>topology</name>
-        <initializer>{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="255" column="1" bodyfile="Render/RenderModule.hpp" bodystart="255" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/dce/a04559_1a8eaf995825164170240006c2402e4997" prot="public" static="no" mutable="no">
-        <type>VkCompareOp</type>
-        <definition>VkCompareOp castor3d::PipelineFlags::alphaFunc</definition>
-        <argsstring></argsstring>
-        <name>alphaFunc</name>
-        <initializer>{ VK_COMPARE_OP_ALWAYS }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="256" column="1" bodyfile="Render/RenderModule.hpp" bodystart="256" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/dce/a04559_1a62246d4d0ff4e40f9c38229b202af418" prot="public" static="no" mutable="no">
-        <type><ref refid="d7/dd1/a01458_1afa51b269ca00eaeff4f95f361bf2208f" kindref="member">TextureFlagsArray</ref></type>
-        <definition>TextureFlagsArray castor3d::PipelineFlags::textures</definition>
-        <argsstring></argsstring>
-        <name>textures</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="257" column="1" bodyfile="Render/RenderModule.hpp" bodystart="257" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/dce/a04559_1a6b531356772b3895871068b0b1d292c4" prot="public" static="no" mutable="no">
-        <type><ref refid="d7/dd1/a01458_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref></type>
-        <definition>TextureFlags castor3d::PipelineFlags::texturesFlags</definition>
-        <argsstring></argsstring>
-        <name>texturesFlags</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="258" column="1" bodyfile="Render/RenderModule.hpp" bodystart="258" bodyend="-1"/>
+        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="209" column="10" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="209" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d1/dce/a04559_1a7d17e8872319b5b4fd0f862a545669ba" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="d1/dce/a04559_1a94906dc420ab54fe789e78978b9afb11" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
-        <definition>castor3d::PipelineFlags::PipelineFlags</definition>
-        <argsstring>(BlendMode colourBlendMode=BlendMode::eNoBlend, BlendMode alphaBlendMode=BlendMode::eNoBlend, PassFlags passFlags=PassFlag::eNone, uint32_t heightMapIndex=InvalidIndex, ProgramFlags programFlags=ProgramFlag::eNone, SceneFlags sceneFlags=SceneFlag::eNone, VkPrimitiveTopology topology=VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VkCompareOp alphaFunc=VK_COMPARE_OP_ALWAYS, TextureFlagsArray textures={})</argsstring>
-        <name>PipelineFlags</name>
+        <definition>castor3d::ParticleDeclaration::CU_DeclareVector</definition>
+        <argsstring>(ParticleElementDeclaration, ParticleElementDeclaration)</argsstring>
+        <name>CU_DeclareVector</name>
+        <qualifiedname>castor3d::ParticleDeclaration::CU_DeclareVector</qualifiedname>
         <param>
-          <type><ref refid="d7/dd1/a01458_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
-          <declname>colourBlendMode</declname>
-          <defval><ref refid="d7/dd1/a01458_1a840ab6fd50c1a08fcc1b6dc3f98d90faa12c10e6e0388d587340cfbe98b5045ae" kindref="member">BlendMode::eNoBlend</ref></defval>
+          <type><ref refid="d9/d0c/a04563" kindref="compound">ParticleElementDeclaration</ref></type>
         </param>
         <param>
-          <type><ref refid="d7/dd1/a01458_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
-          <declname>alphaBlendMode</declname>
-          <defval><ref refid="d7/dd1/a01458_1a840ab6fd50c1a08fcc1b6dc3f98d90faa12c10e6e0388d587340cfbe98b5045ae" kindref="member">BlendMode::eNoBlend</ref></defval>
-        </param>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref></type>
-          <declname>passFlags</declname>
-          <defval><ref refid="d7/dd1/a01458_1ad372dd0cc65f28ad7f558f07c78becb7abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">PassFlag::eNone</ref></defval>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>heightMapIndex</declname>
-          <defval><ref refid="d7/dd1/a01458_1a2533c48f44e5f343ab52f930f7fec110" kindref="member">InvalidIndex</ref></defval>
-        </param>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
-          <declname>programFlags</declname>
-          <defval><ref refid="d7/dd1/a01458_1ad372dd0cc65f28ad7f558f07c78becb7abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">ProgramFlag::eNone</ref></defval>
-        </param>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref></type>
-          <declname>sceneFlags</declname>
-          <defval><ref refid="d7/dd1/a01458_1ad372dd0cc65f28ad7f558f07c78becb7abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">SceneFlag::eNone</ref></defval>
-        </param>
-        <param>
-          <type>VkPrimitiveTopology</type>
-          <declname>topology</declname>
-          <defval>VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST</defval>
-        </param>
-        <param>
-          <type>VkCompareOp</type>
-          <declname>alphaFunc</declname>
-          <defval>VK_COMPARE_OP_ALWAYS</defval>
-        </param>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1afa51b269ca00eaeff4f95f361bf2208f" kindref="member">TextureFlagsArray</ref></type>
-          <declname>textures</declname>
-          <defval>{}</defval>
+          <type><ref refid="d9/d0c/a04563" kindref="compound">ParticleElementDeclaration</ref></type>
         </param>
         <briefdescription>
         </briefdescription>
@@ -200,58 +82,339 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="227" column="1" bodyfile="Render/RenderModule.hpp" bodystart="227" bodyend="247"/>
+        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="63" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dce/a04559_1a8ec38ae51302b43f610e7c25ea18a871" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ParticleDeclaration::ParticleDeclaration</definition>
+        <argsstring>()</argsstring>
+        <name>ParticleDeclaration</name>
+        <qualifiedname>castor3d::ParticleDeclaration::ParticleDeclaration</qualifiedname>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="74" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dce/a04559_1aa4f5720619218210cc6489768d196dc0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ParticleDeclaration::ParticleDeclaration</definition>
+        <argsstring>(ParticleElementDeclaration const *elements, uint32_t count)</argsstring>
+        <name>ParticleDeclaration</name>
+        <qualifiedname>castor3d::ParticleDeclaration::ParticleDeclaration</qualifiedname>
+        <param>
+          <type><ref refid="d9/d0c/a04563" kindref="compound">ParticleElementDeclaration</ref> const *</type>
+          <declname>elements</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">elements</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The elements array </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Elements array size </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="85" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dce/a04559_1a0514f25eaec348b564a1b4db6774532d" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>N</declname>
+            <defname>N</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor3d::ParticleDeclaration::ParticleDeclaration</definition>
+        <argsstring>(ParticleElementDeclaration const(&amp;elements)[N])</argsstring>
+        <name>ParticleDeclaration</name>
+        <qualifiedname>castor3d::ParticleDeclaration::ParticleDeclaration</qualifiedname>
+        <param>
+          <type><ref refid="d9/d0c/a04563" kindref="compound">ParticleElementDeclaration</ref> const(&amp;)</type>
+          <declname>elements</declname>
+          <array>[N]</array>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">elements</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The elements array </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="96" column="17" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="96" bodyend="99"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dce/a04559_1aa730f3f47157eb4929349ce651695d15" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ParticleDeclaration::ParticleDeclaration</definition>
+        <argsstring>(std::vector&lt; ParticleElementDeclaration &gt; const &amp;elements)</argsstring>
+        <name>ParticleDeclaration</name>
+        <qualifiedname>castor3d::ParticleDeclaration::ParticleDeclaration</qualifiedname>
+        <param>
+          <type>std::vector&lt; <ref refid="d9/d0c/a04563" kindref="compound">ParticleElementDeclaration</ref> &gt; const &amp;</type>
+          <declname>elements</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">elements</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The elements array </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="108" column="17" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="108" bodyend="111"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dce/a04559_1a79f52eef30d7309b4306e332a1f61407" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ParticleDeclaration::~ParticleDeclaration</definition>
+        <argsstring>()</argsstring>
+        <name>~ParticleDeclaration</name>
+        <qualifiedname>castor3d::ParticleDeclaration::~ParticleDeclaration</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="118" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dce/a04559_1a2801ab754c2996e43bf6acf5681aa9d1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor3d::ParticleDeclaration::count</definition>
+        <argsstring>() const</argsstring>
+        <name>count</name>
+        <qualifiedname>castor3d::ParticleDeclaration::count</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The elements count. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="125" column="15" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="125" bodyend="128"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dce/a04559_1a94c23e4abf0b8bc8e7a4d2804cb66e01" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ParticleDeclaration::stride</definition>
+        <argsstring>() const</argsstring>
+        <name>stride</name>
+        <qualifiedname>castor3d::ParticleDeclaration::stride</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The byte size of the declaration. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="135" column="17" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="135" bodyend="138"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dce/a04559_1a9d90b77b2728db722108628e703c43f7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d1/dce/a04559_1ac3605c9497d42815f814501886deff89" kindref="member">iterator</ref></type>
+        <definition>iterator castor3d::ParticleDeclaration::begin</definition>
+        <argsstring>()</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor3d::ParticleDeclaration::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>An iterator to the beginning of the elements. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="145" column="17" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="145" bodyend="148"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dce/a04559_1a3e1896a96f323d94c4779f9093304c97" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d1/dce/a04559_1a4218788ea671d00ca5f5b0b6f56db038" kindref="member">const_iterator</ref></type>
+        <definition>const_iterator castor3d::ParticleDeclaration::begin</definition>
+        <argsstring>() const</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor3d::ParticleDeclaration::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>An iterator to the beginning of the elements. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="155" column="23" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="155" bodyend="158"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dce/a04559_1ad535a512a6834f843fce3a8cfc553ba8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d1/dce/a04559_1ac3605c9497d42815f814501886deff89" kindref="member">iterator</ref></type>
+        <definition>iterator castor3d::ParticleDeclaration::end</definition>
+        <argsstring>()</argsstring>
+        <name>end</name>
+        <qualifiedname>castor3d::ParticleDeclaration::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>An iterator to the end of the elements. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="165" column="17" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="165" bodyend="168"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dce/a04559_1a3a08259686ff389f5e3630736a997b37" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d1/dce/a04559_1a4218788ea671d00ca5f5b0b6f56db038" kindref="member">const_iterator</ref></type>
+        <definition>const_iterator castor3d::ParticleDeclaration::end</definition>
+        <argsstring>() const</argsstring>
+        <name>end</name>
+        <qualifiedname>castor3d::ParticleDeclaration::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>An iterator to the end of the elements. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="175" column="23" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="175" bodyend="178"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dce/a04559_1aa0b424404ccc18558bcbd1983dc9810c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ParticleDeclaration::push_back</definition>
+        <argsstring>(ParticleElementDeclaration const &amp;element)</argsstring>
+        <name>push_back</name>
+        <qualifiedname>castor3d::ParticleDeclaration::push_back</qualifiedname>
+        <param>
+          <type><ref refid="d9/d0c/a04563" kindref="compound">ParticleElementDeclaration</ref> const &amp;</type>
+          <declname>element</declname>
+        </param>
+        <briefdescription>
+<para>Adds an element to the end of the list. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">element</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="187" column="13" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="187" bodyend="191"/>
+        <references refid="da/de3/a01398_1af145720a0b2c8ccbcc74c2a00c0c8f31" compoundref="da/d4e/a01106" startline="23" endline="58">castor3d::getSize</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/dce/a04559_1ae9fa2c33110f50fdd3c3875d87508624" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>Params</declname>
+            <defname>Params</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::ParticleDeclaration::emplace_back</definition>
+        <argsstring>(Params const &amp;... params)</argsstring>
+        <name>emplace_back</name>
+        <qualifiedname>castor3d::ParticleDeclaration::emplace_back</qualifiedname>
+        <param>
+          <type>Params const &amp;...</type>
+          <declname>params</declname>
+        </param>
+        <briefdescription>
+<para>Adds an element to the end of the list. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">params</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element construction parameters. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="201" column="13" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="201" bodyend="205"/>
+        <references refid="da/de3/a01398_1af145720a0b2c8ccbcc74c2a00c0c8f31" compoundref="da/d4e/a01106" startline="23" endline="58">castor3d::getSize</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Pipeline flags. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="2691">
-        <label>T</label>
-      </node>
-      <node id="2690">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="2691" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="2689">
-        <label>castor3d::TextureFlagsId</label>
-        <link refid="db/dab/a02567"/>
-      </node>
-      <node id="2687">
-        <label>castor3d::PipelineFlags</label>
-        <link refid="d1/dce/a04559"/>
-        <childnode refid="2688" relation="usage">
-          <edgelabel>textures</edgelabel>
-        </childnode>
-      </node>
-      <node id="2688">
-        <label>std::vector&lt; TextureFlagsId &gt;</label>
-        <childnode refid="2689" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-        <childnode refid="2690" relation="template-instance">
-          <edgelabel>&lt; TextureFlagsId &gt;</edgelabel>
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Render/RenderModule.hpp" line="226" column="1" bodyfile="Render/RenderModule.hpp" bodystart="225" bodyend="259"/>
+    <location file="Scene/ParticleSystem/ParticleDeclaration.hpp" line="60" column="1" bodyfile="Scene/ParticleSystem/ParticleDeclaration.hpp" bodystart="61" bodyend="210"/>
     <listofallmembers>
-      <member refid="d1/dce/a04559_1a0831b5262611024fcac18f42f7a29f92" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>alphaBlendMode</name></member>
-      <member refid="d1/dce/a04559_1a8eaf995825164170240006c2402e4997" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>alphaFunc</name></member>
-      <member refid="d1/dce/a04559_1aab051b1ee46ace763681dfea200198d2" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>colourBlendMode</name></member>
-      <member refid="d1/dce/a04559_1a84af70d15122942aac813f3e8aecddaa" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>heightMapIndex</name></member>
-      <member refid="d1/dce/a04559_1add12a9fda8077540029ee2482cb3dd31" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>passFlags</name></member>
-      <member refid="d1/dce/a04559_1a7d17e8872319b5b4fd0f862a545669ba" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>PipelineFlags</name></member>
-      <member refid="d1/dce/a04559_1aa3db54fd73e1d41fa2e66989fea924c1" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>programFlags</name></member>
-      <member refid="d1/dce/a04559_1a8572e6b81c50a0a8a39d0104ecdad193" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>sceneFlags</name></member>
-      <member refid="d1/dce/a04559_1a62246d4d0ff4e40f9c38229b202af418" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>textures</name></member>
-      <member refid="d1/dce/a04559_1a6b531356772b3895871068b0b1d292c4" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>texturesFlags</name></member>
-      <member refid="d1/dce/a04559_1a82e267d99f0d0f3103eb76e4ab1a22b2" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>topology</name></member>
+      <member refid="d1/dce/a04559_1a9d90b77b2728db722108628e703c43f7" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>begin</name></member>
+      <member refid="d1/dce/a04559_1a3e1896a96f323d94c4779f9093304c97" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>begin</name></member>
+      <member refid="d1/dce/a04559_1a4218788ea671d00ca5f5b0b6f56db038" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>const_iterator</name></member>
+      <member refid="d1/dce/a04559_1a2801ab754c2996e43bf6acf5681aa9d1" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>count</name></member>
+      <member refid="d1/dce/a04559_1a94906dc420ab54fe789e78978b9afb11" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>CU_DeclareVector</name></member>
+      <member refid="d1/dce/a04559_1ae9fa2c33110f50fdd3c3875d87508624" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>emplace_back</name></member>
+      <member refid="d1/dce/a04559_1ad535a512a6834f843fce3a8cfc553ba8" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>end</name></member>
+      <member refid="d1/dce/a04559_1a3a08259686ff389f5e3630736a997b37" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>end</name></member>
+      <member refid="d1/dce/a04559_1ac3605c9497d42815f814501886deff89" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>iterator</name></member>
+      <member refid="d1/dce/a04559_1aa661b1b54c3f511c20ea4a7cd640b55f" prot="private" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>m_elements</name></member>
+      <member refid="d1/dce/a04559_1ac74a37e700e61a021dd3f98366c5fb5a" prot="private" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>m_stride</name></member>
+      <member refid="d1/dce/a04559_1a8ec38ae51302b43f610e7c25ea18a871" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>ParticleDeclaration</name></member>
+      <member refid="d1/dce/a04559_1aa4f5720619218210cc6489768d196dc0" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>ParticleDeclaration</name></member>
+      <member refid="d1/dce/a04559_1a0514f25eaec348b564a1b4db6774532d" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>ParticleDeclaration</name></member>
+      <member refid="d1/dce/a04559_1aa730f3f47157eb4929349ce651695d15" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>ParticleDeclaration</name></member>
+      <member refid="d1/dce/a04559_1aa0b424404ccc18558bcbd1983dc9810c" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>push_back</name></member>
+      <member refid="d1/dce/a04559_1a94c23e4abf0b8bc8e7a4d2804cb66e01" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>stride</name></member>
+      <member refid="d1/dce/a04559_1a79f52eef30d7309b4306e332a1f61407" prot="public" virt="non-virtual"><scope>castor3d::ParticleDeclaration</scope><name>~ParticleDeclaration</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

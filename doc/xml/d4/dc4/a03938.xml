@@ -1,135 +1,72 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d4/dc4/a03938" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::FaceInfos::Vertex</compoundname>
-    <includes local="no">FaceInfos.hpp</includes>
+    <compoundname>castor3d::VkStructure</compoundname>
+    <includes local="no">RenderDevice.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d4/dc4/a03938_1aa7ab302b9fa37265ddbc2917d203596c" prot="public" static="no" mutable="no">
-        <type>int</type>
-        <definition>int castor3d::FaceInfos::Vertex::m_index</definition>
+      <memberdef kind="variable" id="d4/dc4/a03938_1acf8f57a16b643a808dbeca0acf8523fb" prot="public" static="no" mutable="no">
+        <type>VkStructureType</type>
+        <definition>VkStructureType castor3d::VkStructure::sType</definition>
         <argsstring></argsstring>
-        <name>m_index</name>
-        <initializer>{ -1 }</initializer>
+        <name>sType</name>
+        <qualifiedname>castor3d::VkStructure::sType</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><ref refid="d4/dc4/a03938" kindref="compound">Vertex</ref> index. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/FaceInfos.hpp" line="26" column="1" bodyfile="Model/Mesh/Submesh/Component/FaceInfos.hpp" bodystart="26" bodyend="-1"/>
+        <location file="Render/RenderDevice.hpp" line="29" column="17" bodyfile="Render/RenderDevice.hpp" bodystart="29" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d4/dc4/a03938_1a21601dcb31b36ab864c59e361f2b6c66" prot="public" static="no" mutable="no">
-        <type>std::array&lt; float, 3 &gt;</type>
-        <definition>std::array&lt; float, 3 &gt; castor3d::FaceInfos::Vertex::m_fNormal</definition>
+      <memberdef kind="variable" id="d4/dc4/a03938_1ac9f55a1f3121add5683fba08e1714611" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/dc4/a03938" kindref="compound">VkStructure</ref> *</type>
+        <definition>VkStructure* castor3d::VkStructure::pNext</definition>
         <argsstring></argsstring>
-        <name>m_fNormal</name>
-        <initializer>{ { 0.0f, 0.0f, 0.0f } }</initializer>
+        <name>pNext</name>
+        <qualifiedname>castor3d::VkStructure::pNext</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><ref refid="d4/dc4/a03938" kindref="compound">Vertex</ref> normal. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/FaceInfos.hpp" line="29" column="1" bodyfile="Model/Mesh/Submesh/Component/FaceInfos.hpp" bodystart="29" bodyend="-1"/>
+        <location file="Render/RenderDevice.hpp" line="30" column="14" bodyfile="Render/RenderDevice.hpp" bodystart="30" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d4/dc4/a03938_1a470fb07e7bcba0f2e3b798fb8ac055c4" prot="public" static="no" mutable="no">
-        <type>std::array&lt; float, 2 &gt;</type>
-        <definition>std::array&lt; float, 2 &gt; castor3d::FaceInfos::Vertex::m_fTexCoords</definition>
-        <argsstring></argsstring>
-        <name>m_fTexCoords</name>
-        <initializer>{ { 0.0f, 0.0f } }</initializer>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d4/dc4/a03938_1ac9d58b7f72555c2e04de78493b4ac4f2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::VkStructure::VkStructure</definition>
+        <argsstring>()</argsstring>
+        <name>VkStructure</name>
+        <qualifiedname>castor3d::VkStructure::VkStructure</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><ref refid="d4/dc4/a03938" kindref="compound">Vertex</ref> UV. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/FaceInfos.hpp" line="32" column="1" bodyfile="Model/Mesh/Submesh/Component/FaceInfos.hpp" bodystart="32" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/dc4/a03938_1a8862ec8be04ba68301685367e0d207d4" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::FaceInfos::Vertex::m_bHasNormal</definition>
-        <argsstring></argsstring>
-        <name>m_bHasNormal</name>
-        <initializer>{ false }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>Tells the vertex has a normal. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/FaceInfos.hpp" line="35" column="1" bodyfile="Model/Mesh/Submesh/Component/FaceInfos.hpp" bodystart="35" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/dc4/a03938_1a77301de9b2aca3b08642b1a5bc84f7d4" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::FaceInfos::Vertex::m_bHasTexCoords</definition>
-        <argsstring></argsstring>
-        <name>m_bHasTexCoords</name>
-        <initializer>{ false }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>Tells the vertex has UV. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/FaceInfos.hpp" line="38" column="1" bodyfile="Model/Mesh/Submesh/Component/FaceInfos.hpp" bodystart="38" bodyend="-1"/>
+        <location file="Render/RenderDevice.hpp" line="26" column="1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Holds vertex informations. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
-</simplesect>
-<simplesect kind="date"><para>20/07/2012 </para>
-</simplesect>
-</para>
     </detaileddescription>
     <collaborationgraph>
-      <node id="1152">
-        <label>T</label>
-      </node>
-      <node id="1151">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="1152" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="1153">
-        <label>std::array&lt; float, 3 &gt;</label>
-        <childnode refid="1151" relation="template-instance">
-          <edgelabel>&lt; float, 3 &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1149">
-        <label>castor3d::FaceInfos::Vertex</label>
+      <node id="1">
+        <label>castor3d::VkStructure</label>
         <link refid="d4/dc4/a03938"/>
-        <childnode refid="1150" relation="usage">
-          <edgelabel>m_fTexCoords</edgelabel>
-        </childnode>
-        <childnode refid="1153" relation="usage">
-          <edgelabel>m_fNormal</edgelabel>
-        </childnode>
-      </node>
-      <node id="1150">
-        <label>std::array&lt; float, 2 &gt;</label>
-        <childnode refid="1151" relation="template-instance">
-          <edgelabel>&lt; float, 2 &gt;</edgelabel>
+        <childnode refid="1" relation="usage">
+          <edgelabel>pNext</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Model/Mesh/Submesh/Component/FaceInfos.hpp" line="23" column="1" bodyfile="Model/Mesh/Submesh/Component/FaceInfos.hpp" bodystart="22" bodyend="39"/>
+    <location file="Render/RenderDevice.hpp" line="23" column="1" bodyfile="Render/RenderDevice.hpp" bodystart="24" bodyend="31"/>
     <listofallmembers>
-      <member refid="d4/dc4/a03938_1a8862ec8be04ba68301685367e0d207d4" prot="public" virt="non-virtual"><scope>castor3d::FaceInfos::Vertex</scope><name>m_bHasNormal</name></member>
-      <member refid="d4/dc4/a03938_1a77301de9b2aca3b08642b1a5bc84f7d4" prot="public" virt="non-virtual"><scope>castor3d::FaceInfos::Vertex</scope><name>m_bHasTexCoords</name></member>
-      <member refid="d4/dc4/a03938_1a21601dcb31b36ab864c59e361f2b6c66" prot="public" virt="non-virtual"><scope>castor3d::FaceInfos::Vertex</scope><name>m_fNormal</name></member>
-      <member refid="d4/dc4/a03938_1a470fb07e7bcba0f2e3b798fb8ac055c4" prot="public" virt="non-virtual"><scope>castor3d::FaceInfos::Vertex</scope><name>m_fTexCoords</name></member>
-      <member refid="d4/dc4/a03938_1aa7ab302b9fa37265ddbc2917d203596c" prot="public" virt="non-virtual"><scope>castor3d::FaceInfos::Vertex</scope><name>m_index</name></member>
+      <member refid="d4/dc4/a03938_1ac9f55a1f3121add5683fba08e1714611" prot="public" virt="non-virtual"><scope>castor3d::VkStructure</scope><name>pNext</name></member>
+      <member refid="d4/dc4/a03938_1acf8f57a16b643a808dbeca0acf8523fb" prot="public" virt="non-virtual"><scope>castor3d::VkStructure</scope><name>sType</name></member>
+      <member refid="d4/dc4/a03938_1ac9d58b7f72555c2e04de78493b4ac4f2" prot="private" virt="non-virtual"><scope>castor3d::VkStructure</scope><name>VkStructure</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

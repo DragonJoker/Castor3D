@@ -1,433 +1,45 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d9/d97/a04016" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::SkeletonAnimationKeyFrame</compoundname>
-    <basecompoundref refid="d8/d22/a02044" prot="public" virt="non-virtual">castor3d::AnimationKeyFrame</basecompoundref>
-    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; SkeletonAnimation &gt;</basecompoundref>
-    <includes local="no">SkeletonAnimationKeyFrame.hpp</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d9/d97/a04016_1a8cc14adc8db486e33e412a2df8530ee4" prot="private" static="no" mutable="no">
-        <type><ref refid="da/d1e/a01479_1a0d57085ee198493b9c2d11fff22b1892" kindref="member">TransformArray</ref></type>
-        <definition>TransformArray castor3d::SkeletonAnimationKeyFrame::m_transforms</definition>
-        <argsstring></argsstring>
-        <name>m_transforms</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The transformations, per animation object. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" line="139" column="1" bodyfile="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" bodystart="139" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/d97/a04016_1a7cad7a21de7f1fdc9b5129b1efda2099" prot="private" static="no" mutable="no">
-        <type><ref refid="da/d1e/a01479_1a0d57085ee198493b9c2d11fff22b1892" kindref="member">TransformArray</ref></type>
-        <definition>TransformArray castor3d::SkeletonAnimationKeyFrame::m_cumulative</definition>
-        <argsstring></argsstring>
-        <name>m_cumulative</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The cumulative transformations, per animation object. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" line="142" column="1" bodyfile="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" bodystart="142" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="friend">
-      <memberdef kind="friend" id="d9/d97/a04016_1ada3b0f30e3ed39e8474e7e3241499df4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>friend class</type>
-        <definition>friend class BinaryParser&lt; SkeletonAnimationKeyFrame &gt;</definition>
-        <argsstring></argsstring>
-        <name>BinaryParser&lt; SkeletonAnimationKeyFrame &gt;</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d9/d97/a04016" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TexturedCube::Quad</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+    <innerclass refid="df/d49/a04020" prot="public">castor3d::TexturedCube::Quad::Vertex</innerclass>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/d97/a04016_1ab6642102bef3951fc82eb7d81004795d" prot="public" static="no" mutable="no">
+        <type><ref refid="df/d49/a04020" kindref="compound">Vertex</ref></type>
+        <definition>Vertex castor3d::TexturedCube::Quad::vertex[6]</definition>
+        <argsstring>[6]</argsstring>
+        <name>vertex</name>
+        <qualifiedname>castor3d::TexturedCube::Quad::vertex</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" line="142" column="1" bodyfile="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" bodystart="144" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="friend" id="d9/d97/a04016_1ab11820789e03a605cee387b2f4fec88f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>friend class</type>
-        <definition>friend class BinaryWriter&lt; SkeletonAnimationKeyFrame &gt;</definition>
-        <argsstring></argsstring>
-        <name>BinaryWriter&lt; SkeletonAnimationKeyFrame &gt;</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" line="142" column="1" bodyfile="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" bodystart="145" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d9/d97/a04016_1a5d7bdc3e891f43b92b24ee4096b6f9c2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::SkeletonAnimationKeyFrame::SkeletonAnimationKeyFrame</definition>
-        <argsstring>(SkeletonAnimation &amp;skeletonAnimation, castor::Milliseconds const &amp;timeIndex)</argsstring>
-        <name>SkeletonAnimationKeyFrame</name>
-        <param>
-          <type><ref refid="d0/d36/a04008" kindref="compound">SkeletonAnimation</ref> &amp;</type>
-          <declname>skeletonAnimation</declname>
-        </param>
-        <param>
-          <type>castor::Milliseconds const &amp;</type>
-          <declname>timeIndex</declname>
-        </param>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">skeletonAnimation</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parent animation. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">timeIndex</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>When the key frame starts. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" line="29" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d97/a04016_1aa4b0df278b84e3c698a1d27bb6186978" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SkeletonAnimationKeyFrame::addAnimationObject</definition>
-        <argsstring>(SkeletonAnimationObject &amp;object, castor::Point3f const &amp;translate, castor::Quaternion const &amp;rotate, castor::Point3f const &amp;scale)</argsstring>
-        <name>addAnimationObject</name>
-        <param>
-          <type><ref refid="d4/d9a/a04024" kindref="compound">SkeletonAnimationObject</ref> &amp;</type>
-          <declname>object</declname>
-        </param>
-        <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>translate</declname>
-        </param>
-        <param>
-          <type>castor::Quaternion const &amp;</type>
-          <declname>rotate</declname>
-        </param>
-        <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>scale</declname>
-        </param>
-        <briefdescription>
-<para>Adds an animation object. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">object</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The animation object. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">translate</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The translation at start time. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">rotate</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The rotation at start time. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">scale</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The scaling at start time. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" line="45" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d97/a04016_1a5ee4dbe0c4db29727df67ee34ccc3b85" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SkeletonAnimationKeyFrame::addAnimationObject</definition>
-        <argsstring>(SkeletonAnimationObject &amp;object, castor::Matrix4x4f const &amp;transform)</argsstring>
-        <name>addAnimationObject</name>
-        <param>
-          <type><ref refid="d4/d9a/a04024" kindref="compound">SkeletonAnimationObject</ref> &amp;</type>
-          <declname>object</declname>
-        </param>
-        <param>
-          <type>castor::Matrix4x4f const &amp;</type>
-          <declname>transform</declname>
-        </param>
-        <briefdescription>
-<para>Adds an animation object. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">object</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The animation object. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">transform</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The transformation at start time. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" line="59" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d97/a04016_1a9108c9a2a39617f386a4bfb658ab75df" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::SkeletonAnimationKeyFrame::hasObject</definition>
-        <argsstring>(SkeletonAnimationObject const &amp;object) const</argsstring>
-        <name>hasObject</name>
-        <param>
-          <type><ref refid="d4/d9a/a04024" kindref="compound">SkeletonAnimationObject</ref> const &amp;</type>
-          <declname>object</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if the given object is into the transforms map (not the cumulative one). </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" line="67" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d97/a04016_1a723f857740526d0e96db284566c61111" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> TransformArray::const_iterator</type>
-        <definition>C3D_API TransformArray::const_iterator castor3d::SkeletonAnimationKeyFrame::find</definition>
-        <argsstring>(SkeletonAnimationObject const &amp;object) const</argsstring>
-        <name>find</name>
-        <param>
-          <type><ref refid="d4/d9a/a04024" kindref="compound">SkeletonAnimationObject</ref> const &amp;</type>
-          <declname>object</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The iterator matching given animation object, into cumulative transforms map. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" line="74" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d97/a04016_1aa0fea56afc33d9330607d2519f767aa0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> TransformArray::const_iterator</type>
-        <definition>C3D_API TransformArray::const_iterator castor3d::SkeletonAnimationKeyFrame::find</definition>
-        <argsstring>(Bone const &amp;bone) const</argsstring>
-        <name>find</name>
-        <param>
-          <type><ref refid="d7/dcb/a04028" kindref="compound">Bone</ref> const &amp;</type>
-          <declname>bone</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The iterator matching given bone, into cumulative transforms map. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" line="81" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d97/a04016_1a6a7d31f9aedb17d0b8c29177e5a14918" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SkeletonAnimationKeyFrame::initialise</definition>
-        <argsstring>() override</argsstring>
-        <name>initialise</name>
-        <reimplements refid="d8/d22/a02044_1a14d9b59106f5406a66f2b8af33367991">initialise</reimplements>
-        <briefdescription>
-<para>Initialises the keyframe. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" line="88" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d97/a04016_1aaab8fcaa8ae7a86b41aeac67053d660f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>TransformArray::const_iterator</type>
-        <definition>TransformArray::const_iterator castor3d::SkeletonAnimationKeyFrame::begin</definition>
-        <argsstring>() const</argsstring>
-        <name>begin</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The beginning of the cumulative transforms map. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" line="95" column="1" bodyfile="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" bodystart="95" bodyend="98"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d97/a04016_1a4b3dedeecc44a8181725d3977118f087" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>TransformArray::iterator</type>
-        <definition>TransformArray::iterator castor3d::SkeletonAnimationKeyFrame::begin</definition>
-        <argsstring>()</argsstring>
-        <name>begin</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The beginning of the cumulative transforms map. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" line="105" column="1" bodyfile="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" bodystart="105" bodyend="108"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d97/a04016_1a90caf403cf6b2b7d20e6edb9866abd9f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>TransformArray::const_iterator</type>
-        <definition>TransformArray::const_iterator castor3d::SkeletonAnimationKeyFrame::end</definition>
-        <argsstring>() const</argsstring>
-        <name>end</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The end of the cumulative transforms map. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" line="115" column="1" bodyfile="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" bodystart="115" bodyend="118"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d97/a04016_1a6b7c70b6539b7cb21871d1ca67593717" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>TransformArray::iterator</type>
-        <definition>TransformArray::iterator castor3d::SkeletonAnimationKeyFrame::end</definition>
-        <argsstring>()</argsstring>
-        <name>end</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The end of the cumulative transforms map. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" line="125" column="1" bodyfile="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" bodystart="125" bodyend="128"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d9/d97/a04016_1a5fff706453b607581a5b5fcaabf50c37" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::SkeletonAnimationKeyFrame::doSetTimeIndex</definition>
-        <argsstring>(castor::Milliseconds const &amp;time)</argsstring>
-        <name>doSetTimeIndex</name>
-        <param>
-          <type>castor::Milliseconds const &amp;</type>
-          <declname>time</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" line="131" column="1" bodyfile="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" bodystart="131" bodyend="134"/>
+        <location file="Render/RenderModule.hpp" line="102" column="8" bodyfile="Render/RenderModule.hpp" bodystart="102" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="4005">
-        <label>castor::OwnedBy&lt; SkeletonAnimation &gt;</label>
-      </node>
-      <node id="4003">
-        <label>castor3d::SkeletonAnimationKeyFrame</label>
-        <link refid="d9/d97/a04016"/>
-        <childnode refid="4004" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4005" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4004">
-        <label>castor3d::AnimationKeyFrame</label>
-        <link refid="d8/d22/a02044"/>
-      </node>
-    </inheritancegraph>
     <collaborationgraph>
-      <node id="4008">
-        <label>castor::OwnedBy&lt; SkeletonAnimation &gt;</label>
-      </node>
-      <node id="4006">
-        <label>castor3d::SkeletonAnimationKeyFrame</label>
+      <node id="1">
+        <label>castor3d::TexturedCube::Quad</label>
         <link refid="d9/d97/a04016"/>
-        <childnode refid="4007" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4008" relation="public-inheritance">
+        <childnode refid="2" relation="usage">
+          <edgelabel>vertex</edgelabel>
         </childnode>
       </node>
-      <node id="4007">
-        <label>castor3d::AnimationKeyFrame</label>
-        <link refid="d8/d22/a02044"/>
+      <node id="2">
+        <label>castor3d::TexturedCube::Quad::Vertex</label>
+        <link refid="df/d49/a04020"/>
       </node>
     </collaborationgraph>
-    <location file="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" line="17" column="1" bodyfile="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp" bodystart="14" bodyend="146"/>
+    <location file="Render/RenderModule.hpp" line="94" column="1" bodyfile="Render/RenderModule.hpp" bodystart="95" bodyend="103"/>
     <listofallmembers>
-      <member refid="d9/d97/a04016_1aa4b0df278b84e3c698a1d27bb6186978" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationKeyFrame</scope><name>addAnimationObject</name></member>
-      <member refid="d9/d97/a04016_1a5ee4dbe0c4db29727df67ee34ccc3b85" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationKeyFrame</scope><name>addAnimationObject</name></member>
-      <member refid="d8/d22/a02044_1a4c0d4b7afbe022ee8f9dcb9dc1ea54f0" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationKeyFrame</scope><name>AnimationKeyFrame</name></member>
-      <member refid="d9/d97/a04016_1aaab8fcaa8ae7a86b41aeac67053d660f" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationKeyFrame</scope><name>begin</name></member>
-      <member refid="d9/d97/a04016_1a4b3dedeecc44a8181725d3977118f087" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationKeyFrame</scope><name>begin</name></member>
-      <member refid="d9/d97/a04016_1ada3b0f30e3ed39e8474e7e3241499df4" prot="private" virt="non-virtual"><scope>castor3d::SkeletonAnimationKeyFrame</scope><name>BinaryParser&lt; SkeletonAnimationKeyFrame &gt;</name></member>
-      <member refid="d9/d97/a04016_1ab11820789e03a605cee387b2f4fec88f" prot="private" virt="non-virtual"><scope>castor3d::SkeletonAnimationKeyFrame</scope><name>BinaryWriter&lt; SkeletonAnimationKeyFrame &gt;</name></member>
-      <member refid="d9/d97/a04016_1a5fff706453b607581a5b5fcaabf50c37" prot="private" virt="non-virtual"><scope>castor3d::SkeletonAnimationKeyFrame</scope><name>doSetTimeIndex</name></member>
-      <member refid="d9/d97/a04016_1a90caf403cf6b2b7d20e6edb9866abd9f" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationKeyFrame</scope><name>end</name></member>
-      <member refid="d9/d97/a04016_1a6b7c70b6539b7cb21871d1ca67593717" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationKeyFrame</scope><name>end</name></member>
-      <member refid="d9/d97/a04016_1a723f857740526d0e96db284566c61111" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationKeyFrame</scope><name>find</name></member>
-      <member refid="d9/d97/a04016_1aa0fea56afc33d9330607d2519f767aa0" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationKeyFrame</scope><name>find</name></member>
-      <member refid="d8/d22/a02044_1af7d64b424ad5d12f2a9970e134365a81" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationKeyFrame</scope><name>getTimeIndex</name></member>
-      <member refid="d9/d97/a04016_1a9108c9a2a39617f386a4bfb658ab75df" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationKeyFrame</scope><name>hasObject</name></member>
-      <member refid="d9/d97/a04016_1a6a7d31f9aedb17d0b8c29177e5a14918" prot="public" virt="virtual"><scope>castor3d::SkeletonAnimationKeyFrame</scope><name>initialise</name></member>
-      <member refid="d8/d22/a02044_1abc9e4e2a76ef5ec53fe3308add665082" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationKeyFrame</scope><name>m_boundingBox</name></member>
-      <member refid="d9/d97/a04016_1a7cad7a21de7f1fdc9b5129b1efda2099" prot="private" virt="non-virtual"><scope>castor3d::SkeletonAnimationKeyFrame</scope><name>m_cumulative</name></member>
-      <member refid="d8/d22/a02044_1a093b74b56f13b6376ea4a51e28893db5" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationKeyFrame</scope><name>m_timeIndex</name></member>
-      <member refid="d9/d97/a04016_1a8cc14adc8db486e33e412a2df8530ee4" prot="private" virt="non-virtual"><scope>castor3d::SkeletonAnimationKeyFrame</scope><name>m_transforms</name></member>
-      <member refid="d9/d97/a04016_1a5d7bdc3e891f43b92b24ee4096b6f9c2" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationKeyFrame</scope><name>SkeletonAnimationKeyFrame</name></member>
-      <member refid="d8/d22/a02044_1a0e38208bad19dd09708af045818c2f8d" prot="public" virt="virtual"><scope>castor3d::SkeletonAnimationKeyFrame</scope><name>~AnimationKeyFrame</name></member>
+      <member refid="d9/d97/a04016_1ab6642102bef3951fc82eb7d81004795d" prot="public" virt="non-virtual"><scope>castor3d::TexturedCube::Quad</scope><name>vertex</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

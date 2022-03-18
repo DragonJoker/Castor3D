@@ -1,7 +1,4 @@
-<map id="castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;" name="castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="865,23,1053,79"/>
-<area shape="rect" id="node2" href="$d5/def/a04676.html" title=" " alt="" coords="632,31,816,72"/>
-<area shape="rect" id="node3" title=" " alt="" coords="239,5,423,47"/>
-<area shape="rect" id="node4" href="$d5/def/a04676.html" title="Base class for all light passes with shadow." alt="" coords="239,71,423,112"/>
-<area shape="rect" id="node5" title=" " alt="" coords="5,71,189,112"/>
+<map id="castor3d::shader::SpotLight" name="castor3d::shader::SpotLight">
+<area shape="rect" id="node1" title=" " alt="" coords="5,80,188,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="28,5,165,32"/>
 </map>

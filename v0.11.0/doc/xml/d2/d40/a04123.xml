@@ -1,0 +1,313 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d2/d40/a04123" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::OverlayRenderer::VertexBufferPool</compoundname>
+    <templateparamlist>
+      <param>
+        <type>typename VertexT</type>
+      </param>
+      <param>
+        <type>uint32_t</type>
+        <declname>CountT</declname>
+        <defname>CountT</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d2/d40/a04123_1a1f7f76d117180f23a8a5f4ce86d9f23c" prot="public" static="no">
+        <type>VertexBufferIndex&lt; VertexT, CountT &gt;</type>
+        <definition>using castor3d::OverlayRenderer::VertexBufferPool&lt; VertexT, CountT &gt;::MyBufferIndex =  VertexBufferIndex&lt; VertexT, CountT &gt;</definition>
+        <argsstring></argsstring>
+        <name>MyBufferIndex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="214" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="214" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/d40/a04123_1aec3ea3e3e3226b8c81021bbc3035dce7" prot="public" static="no">
+        <type>std::array&lt; VertexT, CountT &gt;</type>
+        <definition>using castor3d::OverlayRenderer::VertexBufferPool&lt; VertexT, CountT &gt;::Quad =  std::array&lt; VertexT, CountT &gt;</definition>
+        <argsstring></argsstring>
+        <name>Quad</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="215" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="215" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/d40/a04123_1aa4a4b2eeaffe8eab5c8f09015211eced" prot="public" static="no" mutable="no">
+        <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
+        <definition>Engine&amp; castor3d::OverlayRenderer::VertexBufferPool&lt; VertexT, CountT &gt;::engine</definition>
+        <argsstring></argsstring>
+        <name>engine</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="226" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="226" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d40/a04123_1a1c62c668f39966ed08720c0efa4db01e" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/d67/a02323" kindref="compound">UniformBufferPools</ref> &amp;</type>
+        <definition>UniformBufferPools&amp; castor3d::OverlayRenderer::VertexBufferPool&lt; VertexT, CountT &gt;::uboPools</definition>
+        <argsstring></argsstring>
+        <name>uboPools</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="227" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="227" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d40/a04123_1aa809ae13a343e29eddb8d9b43ef15ce7" prot="public" static="no" mutable="no">
+        <type>uint32_t const</type>
+        <definition>uint32_t const castor3d::OverlayRenderer::VertexBufferPool&lt; VertexT, CountT &gt;::maxCount</definition>
+        <argsstring></argsstring>
+        <name>maxCount</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="228" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="228" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d40/a04123_1a725b8b2332ff70212d37770b8815f170" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; Quad &gt;</type>
+        <definition>std::vector&lt; Quad &gt; castor3d::OverlayRenderer::VertexBufferPool&lt; VertexT, CountT &gt;::data</definition>
+        <argsstring></argsstring>
+        <name>data</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="229" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="229" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d40/a04123_1af1021472db1b612406bff1a4459c921c" prot="public" static="no" mutable="no">
+        <type>ashes::PipelineVertexInputStateCreateInfo const  &amp;</type>
+        <definition>ashes::PipelineVertexInputStateCreateInfo const&amp; castor3d::OverlayRenderer::VertexBufferPool&lt; VertexT, CountT &gt;::declaration</definition>
+        <argsstring></argsstring>
+        <name>declaration</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="230" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="230" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d40/a04123_1a7d26932ab1d5159de6f429a85d9c49cf" prot="public" static="no" mutable="no">
+        <type>ashes::VertexBufferPtr&lt; Quad &gt;</type>
+        <definition>ashes::VertexBufferPtr&lt; Quad &gt; castor3d::OverlayRenderer::VertexBufferPool&lt; VertexT, CountT &gt;::buffer</definition>
+        <argsstring></argsstring>
+        <name>buffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="231" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="231" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d40/a04123_1a79a907aeda19c51500a5f778f7443eb6" prot="public" static="no" mutable="no">
+        <type>std::set&lt; uint32_t &gt;</type>
+        <definition>std::set&lt; uint32_t &gt; castor3d::OverlayRenderer::VertexBufferPool&lt; VertexT, CountT &gt;::free</definition>
+        <argsstring></argsstring>
+        <name>free</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="232" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="232" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/d40/a04123_1af18df24b5f71c669bd5ee7d01abb7da3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::OverlayRenderer::VertexBufferPool&lt; VertexT, CountT &gt;::VertexBufferPool</definition>
+        <argsstring>(Engine &amp;engine, UniformBufferPools &amp;uboPools, RenderDevice const &amp;device, ashes::PipelineVertexInputStateCreateInfo const &amp;declaration, uint32_t count)</argsstring>
+        <name>VertexBufferPool</name>
+        <param>
+          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d67/a02323" kindref="compound">UniformBufferPools</ref> &amp;</type>
+          <declname>uboPools</declname>
+        </param>
+        <param>
+          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>ashes::PipelineVertexInputStateCreateInfo const &amp;</type>
+          <declname>declaration</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="217" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d40/a04123_1a5c78bc785047edc39c39b1e7bce62610" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>VertexBufferIndex&lt; VertexT, CountT &gt;</type>
+        <definition>VertexBufferIndex&lt; VertexT, CountT &gt; castor3d::OverlayRenderer::VertexBufferPool&lt; VertexT, CountT &gt;::allocate</definition>
+        <argsstring>(OverlayRenderNode &amp;node)</argsstring>
+        <name>allocate</name>
+        <param>
+          <type><ref refid="da/d53/a04111" kindref="compound">OverlayRenderNode</ref> &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="222" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d40/a04123_1a3d65133cc335c625a020b4e5229f074b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::OverlayRenderer::VertexBufferPool&lt; VertexT, CountT &gt;::deallocate</definition>
+        <argsstring>(VertexBufferIndex&lt; VertexT, CountT &gt; const &amp;index)</argsstring>
+        <name>deallocate</name>
+        <param>
+          <type>VertexBufferIndex&lt; VertexT, CountT &gt; const &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="223" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d40/a04123_1ae9d7e1f9dc3fed6aaa1f500022ccee03" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::OverlayRenderer::VertexBufferPool&lt; VertexT, CountT &gt;::upload</definition>
+        <argsstring>()</argsstring>
+        <name>upload</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="224" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2494">
+        <label>std::set&lt; uint32_t &gt;</label>
+        <childnode refid="2495" relation="template-instance">
+          <edgelabel>&lt; uint32_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2496">
+        <label>K</label>
+      </node>
+      <node id="2501">
+        <label>T</label>
+      </node>
+      <node id="2502">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="2501" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="2500">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="2501" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="2491">
+        <label>castor3d::OverlayRenderer::VertexBufferPool&lt; VertexT, CountT &gt;</label>
+        <childnode refid="2492" relation="usage">
+          <edgelabel>uboPools</edgelabel>
+        </childnode>
+        <childnode refid="2494" relation="usage">
+          <edgelabel>free</edgelabel>
+        </childnode>
+        <childnode refid="2497" relation="usage">
+          <edgelabel>engine</edgelabel>
+        </childnode>
+        <childnode refid="2499" relation="usage">
+          <edgelabel>data</edgelabel>
+        </childnode>
+      </node>
+      <node id="2499">
+        <label>std::vector&lt; Quad &gt;</label>
+        <childnode refid="2500" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="2502" relation="template-instance">
+          <edgelabel>&lt; Quad &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2493">
+        <label>castor::OwnedBy&lt; RenderSystem &gt;</label>
+      </node>
+      <node id="2498">
+        <label>castor::Unique&lt; Engine &gt;</label>
+      </node>
+      <node id="2497">
+        <label>castor3d::Engine</label>
+        <link refid="d0/d7c/a02499"/>
+        <childnode refid="2498" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2495">
+        <label>std::set&lt; K &gt;</label>
+        <childnode refid="2496" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+      </node>
+      <node id="2492">
+        <label>castor3d::UniformBufferPools</label>
+        <link refid="d7/d67/a02323"/>
+        <childnode refid="2493" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Overlay/OverlayRenderer.hpp" line="213" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="212" bodyend="233"/>
+    <listofallmembers>
+      <member refid="d2/d40/a04123_1a5c78bc785047edc39c39b1e7bce62610" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::VertexBufferPool</scope><name>allocate</name></member>
+      <member refid="d2/d40/a04123_1a7d26932ab1d5159de6f429a85d9c49cf" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::VertexBufferPool</scope><name>buffer</name></member>
+      <member refid="d2/d40/a04123_1a725b8b2332ff70212d37770b8815f170" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::VertexBufferPool</scope><name>data</name></member>
+      <member refid="d2/d40/a04123_1a3d65133cc335c625a020b4e5229f074b" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::VertexBufferPool</scope><name>deallocate</name></member>
+      <member refid="d2/d40/a04123_1af1021472db1b612406bff1a4459c921c" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::VertexBufferPool</scope><name>declaration</name></member>
+      <member refid="d2/d40/a04123_1aa4a4b2eeaffe8eab5c8f09015211eced" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::VertexBufferPool</scope><name>engine</name></member>
+      <member refid="d2/d40/a04123_1a79a907aeda19c51500a5f778f7443eb6" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::VertexBufferPool</scope><name>free</name></member>
+      <member refid="d2/d40/a04123_1aa809ae13a343e29eddb8d9b43ef15ce7" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::VertexBufferPool</scope><name>maxCount</name></member>
+      <member refid="d2/d40/a04123_1a1f7f76d117180f23a8a5f4ce86d9f23c" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::VertexBufferPool</scope><name>MyBufferIndex</name></member>
+      <member refid="d2/d40/a04123_1aec3ea3e3e3226b8c81021bbc3035dce7" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::VertexBufferPool</scope><name>Quad</name></member>
+      <member refid="d2/d40/a04123_1a1c62c668f39966ed08720c0efa4db01e" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::VertexBufferPool</scope><name>uboPools</name></member>
+      <member refid="d2/d40/a04123_1ae9d7e1f9dc3fed6aaa1f500022ccee03" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::VertexBufferPool</scope><name>upload</name></member>
+      <member refid="d2/d40/a04123_1af18df24b5f71c669bd5ee7d01abb7da3" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::VertexBufferPool</scope><name>VertexBufferPool</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

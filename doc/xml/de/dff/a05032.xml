@@ -1,169 +1,77 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="de/dff/a05032" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::VoxelSceneData</compoundname>
-    <includes local="no">VoxelSceneData.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="de/dff/a05032" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::RsmUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="de/dff/a05032_1a0b20d89f2c6b87e7a8057f00825f491f" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::VoxelSceneData::enabled</definition>
-        <argsstring></argsstring>
-        <name>enabled</name>
-        <initializer>{ false }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Voxelize/VoxelSceneData.hpp" line="17" column="1" bodyfile="Render/Voxelize/VoxelSceneData.hpp" bodystart="17" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/dff/a05032_1aff5fc8a4f3f4d697033013c0109cdf3e" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::VoxelSceneData::enableConservativeRasterization</definition>
-        <argsstring></argsstring>
-        <name>enableConservativeRasterization</name>
-        <initializer>{ false }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Voxelize/VoxelSceneData.hpp" line="18" column="1" bodyfile="Render/Voxelize/VoxelSceneData.hpp" bodystart="18" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/dff/a05032_1a484c70a12e4eb42d4bec2b6868534efc" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::VoxelSceneData::enableOcclusion</definition>
-        <argsstring></argsstring>
-        <name>enableOcclusion</name>
-        <initializer>{ false }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Voxelize/VoxelSceneData.hpp" line="19" column="1" bodyfile="Render/Voxelize/VoxelSceneData.hpp" bodystart="19" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/dff/a05032_1a2749869ecde5d0632c39d6c0b0efcbf5" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::VoxelSceneData::enableSecondaryBounce</definition>
-        <argsstring></argsstring>
-        <name>enableSecondaryBounce</name>
-        <initializer>{ false }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Voxelize/VoxelSceneData.hpp" line="20" column="1" bodyfile="Render/Voxelize/VoxelSceneData.hpp" bodystart="20" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/dff/a05032_1aa55c1d6b4eedfb63a13349b771426e3d" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::VoxelSceneData::enableTemporalSmoothing</definition>
-        <argsstring></argsstring>
-        <name>enableTemporalSmoothing</name>
-        <initializer>{ false }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Voxelize/VoxelSceneData.hpp" line="21" column="1" bodyfile="Render/Voxelize/VoxelSceneData.hpp" bodystart="21" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/dff/a05032_1ac473970ac68ec5d60c16af1624bd82c9" prot="public" static="no" mutable="no">
-        <type>castor::RangedValue&lt; uint32_t &gt;</type>
-        <definition>castor::RangedValue&lt; uint32_t &gt; castor3d::VoxelSceneData::gridSize</definition>
-        <argsstring></argsstring>
-        <name>gridSize</name>
-        <initializer>{ 256u, castor::makeRange( 2u, 512u ) }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Voxelize/VoxelSceneData.hpp" line="22" column="1" bodyfile="Render/Voxelize/VoxelSceneData.hpp" bodystart="22" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/dff/a05032_1a6eda8f037d7f18bdd3f7786e1d3ca20a" prot="public" static="no" mutable="no">
+      <memberdef kind="variable" id="de/dff/a05032_1ae1fc06af9ab928828582d30fb26826f0" prot="public" static="no" mutable="no">
         <type>float</type>
-        <definition>float castor3d::VoxelSceneData::maxDistance</definition>
+        <definition>float castor3d::RsmUboConfiguration::intensity</definition>
         <argsstring></argsstring>
-        <name>maxDistance</name>
-        <initializer>{ 20.0f }</initializer>
+        <name>intensity</name>
+        <qualifiedname>castor3d::RsmUboConfiguration::intensity</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The maximum distance for cones. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Voxelize/VoxelSceneData.hpp" line="25" column="1" bodyfile="Render/Voxelize/VoxelSceneData.hpp" bodystart="25" bodyend="-1"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="313" column="7" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="313" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="de/dff/a05032_1aeedf2562d43d77fc07d85f5c5c6ac6ea" prot="public" static="no" mutable="no">
-        <type>castor::RangedValue&lt; uint32_t &gt;</type>
-        <definition>castor::RangedValue&lt; uint32_t &gt; castor3d::VoxelSceneData::numCones</definition>
-        <argsstring></argsstring>
-        <name>numCones</name>
-        <initializer>{ 2u, castor::makeRange( 1u, 16u ) }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The number of radiance cones used in voxel cone tracing. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Voxelize/VoxelSceneData.hpp" line="28" column="1" bodyfile="Render/Voxelize/VoxelSceneData.hpp" bodystart="28" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="de/dff/a05032_1affe14e59738063b4a550d0ea55d89b36" prot="public" static="no" mutable="no">
+      <memberdef kind="variable" id="de/dff/a05032_1af7b40cc7ac2e28819b1172af12de9919" prot="public" static="no" mutable="no">
         <type>float</type>
-        <definition>float castor3d::VoxelSceneData::rayStepSize</definition>
+        <definition>float castor3d::RsmUboConfiguration::maxRadius</definition>
         <argsstring></argsstring>
-        <name>rayStepSize</name>
-        <initializer>{ 0.75f }</initializer>
+        <name>maxRadius</name>
+        <qualifiedname>castor3d::RsmUboConfiguration::maxRadius</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The size of a ray step in voxel cone tracint. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Voxelize/VoxelSceneData.hpp" line="31" column="1" bodyfile="Render/Voxelize/VoxelSceneData.hpp" bodystart="31" bodyend="-1"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="314" column="7" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="314" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="de/dff/a05032_1af16e814d06099f0ba5e02a26558eec0a" prot="public" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::VoxelSceneData::voxelSizeFactor</definition>
+      <memberdef kind="variable" id="de/dff/a05032_1a62a2b767edc4777a823fb85f605ad364" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RsmUboConfiguration::sampleCount</definition>
         <argsstring></argsstring>
-        <name>voxelSizeFactor</name>
-        <initializer>{ 1.0f }</initializer>
+        <name>sampleCount</name>
+        <qualifiedname>castor3d::RsmUboConfiguration::sampleCount</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Voxelize/VoxelSceneData.hpp" line="32" column="1" bodyfile="Render/Voxelize/VoxelSceneData.hpp" bodystart="32" bodyend="-1"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="315" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="315" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dff/a05032_1ae9976fb60e81cb8fdd60d87b5c7e8784" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RsmUboConfiguration::index</definition>
+        <argsstring></argsstring>
+        <name>index</name>
+        <qualifiedname>castor3d::RsmUboConfiguration::index</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="316" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="316" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>Reflective Shadow Maps based GI UBO configuration. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Voxelize/VoxelSceneData.hpp" line="15" column="1" bodyfile="Render/Voxelize/VoxelSceneData.hpp" bodystart="14" bodyend="33"/>
+    <location file="Shader/Ubos/UbosModule.hpp" line="311" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="312" bodyend="317"/>
     <listofallmembers>
-      <member refid="de/dff/a05032_1aff5fc8a4f3f4d697033013c0109cdf3e" prot="public" virt="non-virtual"><scope>castor3d::VoxelSceneData</scope><name>enableConservativeRasterization</name></member>
-      <member refid="de/dff/a05032_1a0b20d89f2c6b87e7a8057f00825f491f" prot="public" virt="non-virtual"><scope>castor3d::VoxelSceneData</scope><name>enabled</name></member>
-      <member refid="de/dff/a05032_1a484c70a12e4eb42d4bec2b6868534efc" prot="public" virt="non-virtual"><scope>castor3d::VoxelSceneData</scope><name>enableOcclusion</name></member>
-      <member refid="de/dff/a05032_1a2749869ecde5d0632c39d6c0b0efcbf5" prot="public" virt="non-virtual"><scope>castor3d::VoxelSceneData</scope><name>enableSecondaryBounce</name></member>
-      <member refid="de/dff/a05032_1aa55c1d6b4eedfb63a13349b771426e3d" prot="public" virt="non-virtual"><scope>castor3d::VoxelSceneData</scope><name>enableTemporalSmoothing</name></member>
-      <member refid="de/dff/a05032_1ac473970ac68ec5d60c16af1624bd82c9" prot="public" virt="non-virtual"><scope>castor3d::VoxelSceneData</scope><name>gridSize</name></member>
-      <member refid="de/dff/a05032_1a6eda8f037d7f18bdd3f7786e1d3ca20a" prot="public" virt="non-virtual"><scope>castor3d::VoxelSceneData</scope><name>maxDistance</name></member>
-      <member refid="de/dff/a05032_1aeedf2562d43d77fc07d85f5c5c6ac6ea" prot="public" virt="non-virtual"><scope>castor3d::VoxelSceneData</scope><name>numCones</name></member>
-      <member refid="de/dff/a05032_1affe14e59738063b4a550d0ea55d89b36" prot="public" virt="non-virtual"><scope>castor3d::VoxelSceneData</scope><name>rayStepSize</name></member>
-      <member refid="de/dff/a05032_1af16e814d06099f0ba5e02a26558eec0a" prot="public" virt="non-virtual"><scope>castor3d::VoxelSceneData</scope><name>voxelSizeFactor</name></member>
+      <member refid="de/dff/a05032_1ae9976fb60e81cb8fdd60d87b5c7e8784" prot="public" virt="non-virtual"><scope>castor3d::RsmUboConfiguration</scope><name>index</name></member>
+      <member refid="de/dff/a05032_1ae1fc06af9ab928828582d30fb26826f0" prot="public" virt="non-virtual"><scope>castor3d::RsmUboConfiguration</scope><name>intensity</name></member>
+      <member refid="de/dff/a05032_1af7b40cc7ac2e28819b1172af12de9919" prot="public" virt="non-virtual"><scope>castor3d::RsmUboConfiguration</scope><name>maxRadius</name></member>
+      <member refid="de/dff/a05032_1a62a2b767edc4777a823fb85f605ad364" prot="public" virt="non-virtual"><scope>castor3d::RsmUboConfiguration</scope><name>sampleCount</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

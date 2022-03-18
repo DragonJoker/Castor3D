@@ -1,33 +1,492 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d6/d8b/a03791" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPhysicalDeviceCooperativeMatrixFeaturesNV &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d6/d8b/a03791_1a233ea868f5aff25ac706751f13db0bc5" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPhysicalDeviceCooperativeMatrixFeaturesNV &gt;::value</definition>
+    <compoundname>castor3d::SubmeshRenderNode</compoundname>
+    <includes local="no">SubmeshRenderNode.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d6/d8b/a03791_1ac536174c7cb95b2a33a211d5b67e3bbd" prot="public" static="no">
+        <type><ref refid="d3/da7/a03427" kindref="compound">Submesh</ref></type>
+        <definition>using castor3d::SubmeshRenderNode::DataType =  Submesh</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_COOPERATIVE_MATRIX_FEATURES_NV</initializer>
+        <name>DataType</name>
+        <qualifiedname>castor3d::SubmeshRenderNode::DataType</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="364" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="364" bodyend="-1"/>
+        <location file="Render/Node/SubmeshRenderNode.hpp" line="22" column="1" bodyfile="Render/Node/SubmeshRenderNode.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d6/d8b/a03791_1af28fe3ef24a09ee8b03a726e56228e97" prot="public" static="no">
+        <type><ref refid="d8/dc4/a04487" kindref="compound">Geometry</ref></type>
+        <definition>using castor3d::SubmeshRenderNode::InstanceType =  Geometry</definition>
+        <argsstring></argsstring>
+        <name>InstanceType</name>
+        <qualifiedname>castor3d::SubmeshRenderNode::InstanceType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SubmeshRenderNode.hpp" line="23" column="1" bodyfile="Render/Node/SubmeshRenderNode.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d6/d8b/a03791_1a55530eccd978a897203b2f875c48e6d6" prot="public" static="no">
+        <type><ref refid="d0/d17/a03491" kindref="compound">InterleavedVertex</ref></type>
+        <definition>using castor3d::SubmeshRenderNode::VertexType =  InterleavedVertex</definition>
+        <argsstring></argsstring>
+        <name>VertexType</name>
+        <qualifiedname>castor3d::SubmeshRenderNode::VertexType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SubmeshRenderNode.hpp" line="24" column="1" bodyfile="Render/Node/SubmeshRenderNode.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/d8b/a03791_1ae60f373283494547a0f183510219b6fd" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/daf/a02807" kindref="compound">Pass</ref> &amp;</type>
+        <definition>Pass&amp; castor3d::SubmeshRenderNode::pass</definition>
+        <argsstring></argsstring>
+        <name>pass</name>
+        <qualifiedname>castor3d::SubmeshRenderNode::pass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SubmeshRenderNode.hpp" line="43" column="7" bodyfile="Render/Node/SubmeshRenderNode.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d8b/a03791_1a13e1befb59fe29f88fe02be4c5437a46" prot="public" static="no" mutable="no">
+        <type><ref refid="d6/d8b/a03791_1ac536174c7cb95b2a33a211d5b67e3bbd" kindref="member">DataType</ref> &amp;</type>
+        <definition>DataType&amp; castor3d::SubmeshRenderNode::data</definition>
+        <argsstring></argsstring>
+        <name>data</name>
+        <qualifiedname>castor3d::SubmeshRenderNode::data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SubmeshRenderNode.hpp" line="44" column="11" bodyfile="Render/Node/SubmeshRenderNode.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d8b/a03791_1a475ecaaccb5b67851d98b0f4f1f0f401" prot="public" static="no" mutable="no">
+        <type><ref refid="d6/d8b/a03791_1af28fe3ef24a09ee8b03a726e56228e97" kindref="member">InstanceType</ref> &amp;</type>
+        <definition>InstanceType&amp; castor3d::SubmeshRenderNode::instance</definition>
+        <argsstring></argsstring>
+        <name>instance</name>
+        <qualifiedname>castor3d::SubmeshRenderNode::instance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SubmeshRenderNode.hpp" line="45" column="15" bodyfile="Render/Node/SubmeshRenderNode.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d8b/a03791_1a9fd23ccaa2fc0b5261bb6020ae3ba946" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/db4/a04367" kindref="compound">AnimatedMesh</ref> *</type>
+        <definition>AnimatedMesh* castor3d::SubmeshRenderNode::mesh</definition>
+        <argsstring></argsstring>
+        <name>mesh</name>
+        <qualifiedname>castor3d::SubmeshRenderNode::mesh</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SubmeshRenderNode.hpp" line="47" column="15" bodyfile="Render/Node/SubmeshRenderNode.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d8b/a03791_1a7c8d75ceac9d1fe57322d5e5983aa92c" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/dd0/a04383" kindref="compound">AnimatedSkeleton</ref> *</type>
+        <definition>AnimatedSkeleton* castor3d::SubmeshRenderNode::skeleton</definition>
+        <argsstring></argsstring>
+        <name>skeleton</name>
+        <qualifiedname>castor3d::SubmeshRenderNode::skeleton</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SubmeshRenderNode.hpp" line="49" column="19" bodyfile="Render/Node/SubmeshRenderNode.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d8b/a03791_1a1c1ade1b09c8035bd017a3e64ea43416" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SubmeshRenderNode::SubmeshRenderNode</definition>
+        <argsstring>(SubmeshRenderNode const &amp;)=delete</argsstring>
+        <name>SubmeshRenderNode</name>
+        <qualifiedname>castor3d::SubmeshRenderNode::SubmeshRenderNode</qualifiedname>
+        <param>
+          <type><ref refid="d6/d8b/a03791" kindref="compound">SubmeshRenderNode</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SubmeshRenderNode.hpp" line="26" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8b/a03791_1a6678a6332c519f9f00ae5f013e0ee4d5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SubmeshRenderNode::SubmeshRenderNode</definition>
+        <argsstring>(SubmeshRenderNode &amp;&amp;)=default</argsstring>
+        <name>SubmeshRenderNode</name>
+        <qualifiedname>castor3d::SubmeshRenderNode::SubmeshRenderNode</qualifiedname>
+        <param>
+          <type><ref refid="d6/d8b/a03791" kindref="compound">SubmeshRenderNode</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SubmeshRenderNode.hpp" line="27" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8b/a03791_1a35c4460259cc6a3d8333d63618e50925" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/d8b/a03791" kindref="compound">SubmeshRenderNode</ref> &amp;</type>
+        <definition>C3D_API SubmeshRenderNode &amp; castor3d::SubmeshRenderNode::operator=</definition>
+        <argsstring>(SubmeshRenderNode const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::SubmeshRenderNode::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d6/d8b/a03791" kindref="compound">SubmeshRenderNode</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SubmeshRenderNode.hpp" line="28" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8b/a03791_1aa8964cf33e924b09988a624dbbb29245" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/d8b/a03791" kindref="compound">SubmeshRenderNode</ref> &amp;</type>
+        <definition>C3D_API SubmeshRenderNode &amp; castor3d::SubmeshRenderNode::operator=</definition>
+        <argsstring>(SubmeshRenderNode &amp;&amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::SubmeshRenderNode::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d6/d8b/a03791" kindref="compound">SubmeshRenderNode</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SubmeshRenderNode.hpp" line="29" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8b/a03791_1acb5b1749622c18a6e182e5c83d5f7c36" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SubmeshRenderNode::SubmeshRenderNode</definition>
+        <argsstring>(Pass &amp;pass, DataType &amp;data, InstanceType &amp;instance)</argsstring>
+        <name>SubmeshRenderNode</name>
+        <qualifiedname>castor3d::SubmeshRenderNode::SubmeshRenderNode</qualifiedname>
+        <param>
+          <type><ref refid="d9/daf/a02807" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d8b/a03791_1ac536174c7cb95b2a33a211d5b67e3bbd" kindref="member">DataType</ref> &amp;</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d8b/a03791_1af28fe3ef24a09ee8b03a726e56228e97" kindref="member">InstanceType</ref> &amp;</type>
+          <declname>instance</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SubmeshRenderNode.hpp" line="31" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8b/a03791_1a0d2b9f02f7b456214e60c39dea9022e5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::SubmeshRenderNode::getId</definition>
+        <argsstring>() const</argsstring>
+        <name>getId</name>
+        <qualifiedname>castor3d::SubmeshRenderNode::getId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SubmeshRenderNode.hpp" line="35" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8b/a03791_1a71ed508f477f1e8aaacaa8cb51ddebdd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::SubmeshRenderNode::getInstanceCount</definition>
+        <argsstring>() const</argsstring>
+        <name>getInstanceCount</name>
+        <qualifiedname>castor3d::SubmeshRenderNode::getInstanceCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SubmeshRenderNode.hpp" line="36" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8b/a03791_1a0535430bdeeb38bc717539690f393ae3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/d8d/a02523" kindref="compound">GeometryBuffers</ref> const &amp;</type>
+        <definition>C3D_API GeometryBuffers const  &amp; castor3d::SubmeshRenderNode::getGeometryBuffers</definition>
+        <argsstring>(ShaderFlags const &amp;shaderFlags, ProgramFlags const &amp;programFlags, Material &amp;material, TextureFlagsArray const &amp;texturesMask, bool forceTexCoords) const</argsstring>
+        <name>getGeometryBuffers</name>
+        <qualifiedname>castor3d::SubmeshRenderNode::getGeometryBuffers</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1af8308e78be327186fc4533308ee5cd19" kindref="member">ShaderFlags</ref> const &amp;</type>
+          <declname>shaderFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref> const &amp;</type>
+          <declname>programFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d05/a02795" kindref="compound">Material</ref> &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1afa51b269ca00eaeff4f95f361bf2208f" kindref="member">TextureFlagsArray</ref> const &amp;</type>
+          <declname>texturesMask</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>forceTexCoords</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SubmeshRenderNode.hpp" line="37" column="32"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="364" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="364" bodyend="364"/>
+    <collaborationgraph>
+      <node id="13">
+        <label>Animable</label>
+        <link refid="de/d59/a02219"/>
+        <childnode refid="14" relation="public-inheritance">
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="19" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>K</label>
+      </node>
+      <node id="18">
+        <label>T</label>
+      </node>
+      <node id="19">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="de/d59/a02219"/>
+        <childnode refid="20" relation="public-inheritance">
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>castor3d::AnimatedMesh</label>
+        <link refid="dd/db4/a04367"/>
+        <childnode refid="24" relation="public-inheritance">
+        </childnode>
+        <childnode refid="25" relation="usage">
+          <edgelabel>m_mesh</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_geometry</edgelabel>
+        </childnode>
+      </node>
+      <node id="24">
+        <label>castor3d::AnimatedObject</label>
+        <link refid="dd/d06/a04371"/>
+        <childnode refid="10" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="26">
+        <label>castor3d::AnimatedSkeleton</label>
+        <link refid="d3/dd0/a04383"/>
+        <childnode refid="24" relation="public-inheritance">
+        </childnode>
+        <childnode refid="27" relation="usage">
+          <edgelabel>m_skeleton</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="usage">
+          <edgelabel>m_mesh</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_geometry</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::Geometry</label>
+        <link refid="d8/dc4/a04487"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+        <childnode refid="21" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="25">
+        <label>castor3d::Mesh</label>
+        <link refid="d1/d13/a03339"/>
+        <childnode refid="10" relation="public-inheritance">
+        </childnode>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::MovableObject</label>
+        <link refid="df/dd3/a04527"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="public-inheritance">
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::Pass</label>
+        <link refid="d9/daf/a02807"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor3d::RenderedObject</label>
+        <link refid="d7/db9/a04591"/>
+        <childnode refid="22" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor3d::SceneNode</label>
+        <link refid="d1/d30/a04639"/>
+        <childnode refid="12" relation="public-inheritance">
+        </childnode>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>castor3d::Skeleton</label>
+        <link refid="d4/d60/a03463"/>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::Submesh</label>
+        <link refid="d3/da7/a03427"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SubmeshRenderNode</label>
+        <link refid="d6/d8b/a03791"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>pass</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>data</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>instance</edgelabel>
+        </childnode>
+        <childnode refid="23" relation="usage">
+          <edgelabel>mesh</edgelabel>
+        </childnode>
+        <childnode refid="26" relation="usage">
+          <edgelabel>skeleton</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor::Named</label>
+      </node>
+      <node id="20">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="14">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Material &gt;</label>
+      </node>
+      <node id="5">
+        <label>castor::OwnedBy&lt; Mesh &gt;</label>
+      </node>
+      <node id="9">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="15">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="16" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>std::enable_shared_from_this&lt; RenderedObject &gt;</label>
+      </node>
+      <node id="12">
+        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
+      </node>
+      <node id="6">
+        <label>std::enable_shared_from_this&lt; Submesh &gt;</label>
+      </node>
+      <node id="16">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="17" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Node/SubmeshRenderNode.hpp" line="20" column="1" bodyfile="Render/Node/SubmeshRenderNode.hpp" bodystart="21" bodyend="50"/>
     <listofallmembers>
-      <member refid="d6/d8b/a03791_1a233ea868f5aff25ac706751f13db0bc5" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPhysicalDeviceCooperativeMatrixFeaturesNV &gt;</scope><name>value</name></member>
+      <member refid="d6/d8b/a03791_1a13e1befb59fe29f88fe02be4c5437a46" prot="public" virt="non-virtual"><scope>castor3d::SubmeshRenderNode</scope><name>data</name></member>
+      <member refid="d6/d8b/a03791_1ac536174c7cb95b2a33a211d5b67e3bbd" prot="public" virt="non-virtual"><scope>castor3d::SubmeshRenderNode</scope><name>DataType</name></member>
+      <member refid="d6/d8b/a03791_1a0535430bdeeb38bc717539690f393ae3" prot="public" virt="non-virtual"><scope>castor3d::SubmeshRenderNode</scope><name>getGeometryBuffers</name></member>
+      <member refid="d6/d8b/a03791_1a0d2b9f02f7b456214e60c39dea9022e5" prot="public" virt="non-virtual"><scope>castor3d::SubmeshRenderNode</scope><name>getId</name></member>
+      <member refid="d6/d8b/a03791_1a71ed508f477f1e8aaacaa8cb51ddebdd" prot="public" virt="non-virtual"><scope>castor3d::SubmeshRenderNode</scope><name>getInstanceCount</name></member>
+      <member refid="d6/d8b/a03791_1a475ecaaccb5b67851d98b0f4f1f0f401" prot="public" virt="non-virtual"><scope>castor3d::SubmeshRenderNode</scope><name>instance</name></member>
+      <member refid="d6/d8b/a03791_1af28fe3ef24a09ee8b03a726e56228e97" prot="public" virt="non-virtual"><scope>castor3d::SubmeshRenderNode</scope><name>InstanceType</name></member>
+      <member refid="d6/d8b/a03791_1a9fd23ccaa2fc0b5261bb6020ae3ba946" prot="public" virt="non-virtual"><scope>castor3d::SubmeshRenderNode</scope><name>mesh</name></member>
+      <member refid="d6/d8b/a03791_1a35c4460259cc6a3d8333d63618e50925" prot="public" virt="non-virtual"><scope>castor3d::SubmeshRenderNode</scope><name>operator=</name></member>
+      <member refid="d6/d8b/a03791_1aa8964cf33e924b09988a624dbbb29245" prot="public" virt="non-virtual"><scope>castor3d::SubmeshRenderNode</scope><name>operator=</name></member>
+      <member refid="d6/d8b/a03791_1ae60f373283494547a0f183510219b6fd" prot="public" virt="non-virtual"><scope>castor3d::SubmeshRenderNode</scope><name>pass</name></member>
+      <member refid="d6/d8b/a03791_1a7c8d75ceac9d1fe57322d5e5983aa92c" prot="public" virt="non-virtual"><scope>castor3d::SubmeshRenderNode</scope><name>skeleton</name></member>
+      <member refid="d6/d8b/a03791_1a1c1ade1b09c8035bd017a3e64ea43416" prot="public" virt="non-virtual"><scope>castor3d::SubmeshRenderNode</scope><name>SubmeshRenderNode</name></member>
+      <member refid="d6/d8b/a03791_1a6678a6332c519f9f00ae5f013e0ee4d5" prot="public" virt="non-virtual"><scope>castor3d::SubmeshRenderNode</scope><name>SubmeshRenderNode</name></member>
+      <member refid="d6/d8b/a03791_1acb5b1749622c18a6e182e5c83d5f7c36" prot="public" virt="non-virtual"><scope>castor3d::SubmeshRenderNode</scope><name>SubmeshRenderNode</name></member>
+      <member refid="d6/d8b/a03791_1a55530eccd978a897203b2f875c48e6d6" prot="public" virt="non-virtual"><scope>castor3d::SubmeshRenderNode</scope><name>VertexType</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

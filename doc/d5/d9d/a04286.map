@@ -1,4 +1,11 @@
-<map id="castor3d::DistanceRenderNodeBase" name="castor3d::DistanceRenderNodeBase">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,177,47"/>
-<area shape="rect" id="node2" href="$d6/d9f/a04291.html" title="Helper structure used to render distance sorted typed nodes." alt="" coords="5,95,177,136"/>
+<map id="castor3d::RenderTechniquePass" name="castor3d::RenderTechniquePass">
+<area shape="rect" id="node1" title=" " alt="" coords="476,81,687,108"/>
+<area shape="rect" id="node6" href="$d9/dc9/a03823.html" title=" " alt="" coords="791,5,935,32"/>
+<area shape="rect" id="node7" href="$db/d64/a04183.html" title=" " alt="" coords="735,56,991,83"/>
+<area shape="rect" id="node8" href="$d2/d4d/a04263.html" title=" " alt="" coords="785,107,940,133"/>
+<area shape="rect" id="node9" href="$d2/dc7/a04303.html" title=" " alt="" coords="773,157,952,184"/>
+<area shape="rect" id="node2" href="$d4/d54/a04055.html" title=" " alt="" coords="240,81,428,108"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,31,192,57"/>
+<area shape="rect" id="node4" title=" " alt="" coords="45,81,152,108"/>
+<area shape="rect" id="node5" title=" " alt="" coords="39,132,158,159"/>
 </map>

@@ -1,126 +1,552 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d0/d18/a04070" kind="class" language="C++" prot="private">
-    <compoundname>castor3d::DebugOverlays::MainDebugPanel</compoundname>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d0/d18/a04070" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::RenderQueue</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; RenderNodesPass &gt;</basecompoundref>
+    <includes local="no">RenderQueue.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d0/d18/a04070_1af07889a285e79d73e7a88767d3771906" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::RenderQueue::hasNodes</definition>
+        <argsstring>() const</argsstring>
+        <name>hasNodes</name>
+        <qualifiedname>castor3d::RenderQueue::hasNodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderQueue.hpp" line="114" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d18/a04070_1a378fdb8c411e19b75af3bcd6f112318a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dc/df4/a01401_1a908786422cb850b8f90f8992963734d5" kindref="member">RenderMode</ref></type>
+        <definition>C3D_API RenderMode castor3d::RenderQueue::getMode</definition>
+        <argsstring>() const</argsstring>
+        <name>getMode</name>
+        <qualifiedname>castor3d::RenderQueue::getMode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderQueue.hpp" line="115" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d18/a04070_1aaf4e1d436ce966badd694c26d3e4b490" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::CommandBuffer const &amp;</type>
+        <definition>C3D_API ashes::CommandBuffer const  &amp; castor3d::RenderQueue::initCommandBuffer</definition>
+        <argsstring>()</argsstring>
+        <name>initCommandBuffer</name>
+        <qualifiedname>castor3d::RenderQueue::initCommandBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderQueue.hpp" line="116" column="37"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d18/a04070_1a710be731288f4f3ad8c141e8c7aad541" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::RenderQueue::hasCommandBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>hasCommandBuffer</name>
+        <qualifiedname>castor3d::RenderQueue::hasCommandBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderQueue.hpp" line="118" column="6" bodyfile="Render/RenderQueue.hpp" bodystart="118" bodyend="121"/>
+        <referencedby refid="d0/d18/a04070_1aa20f9773fe8380e0d1f15aa8e5b7f0af" compoundref="dc/d1b/a00827" startline="123" endline="127">getCommandBuffer</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d0/d18/a04070_1aa20f9773fe8380e0d1f15aa8e5b7f0af" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::CommandBuffer const &amp;</type>
+        <definition>ashes::CommandBuffer const  &amp; castor3d::RenderQueue::getCommandBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>getCommandBuffer</name>
+        <qualifiedname>castor3d::RenderQueue::getCommandBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderQueue.hpp" line="123" column="29" bodyfile="Render/RenderQueue.hpp" bodystart="123" bodyend="127"/>
+        <references refid="d0/d18/a04070_1a710be731288f4f3ad8c141e8c7aad541" compoundref="dc/d1b/a00827" startline="118" endline="121">hasCommandBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d18/a04070_1ab1b80f578fa33d6d359aa09fd775243a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/d5f/a03778" kindref="compound">QueueRenderNodes</ref> &amp;</type>
+        <definition>QueueRenderNodes &amp; castor3d::RenderQueue::getRenderNodes</definition>
+        <argsstring>() const</argsstring>
+        <name>getRenderNodes</name>
+        <qualifiedname>castor3d::RenderQueue::getRenderNodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderQueue.hpp" line="129" column="19" bodyfile="Render/RenderQueue.hpp" bodystart="129" bodyend="133"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d18/a04070_1abcc5ce78f38374e4f31930f904b1ed95" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/d2b/a03662" kindref="compound">SceneCuller</ref> const &amp;</type>
+        <definition>SceneCuller const  &amp; castor3d::RenderQueue::getCuller</definition>
+        <argsstring>() const</argsstring>
+        <name>getCuller</name>
+        <qualifiedname>castor3d::RenderQueue::getCuller</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderQueue.hpp" line="135" column="20" bodyfile="Render/RenderQueue.hpp" bodystart="135" bodyend="138"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d18/a04070_1ae2ac2a82ea96be4e78c5ed9d8335daaa" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/d6a/a04642" kindref="compound">SceneNode</ref> const *</type>
+        <definition>SceneNode const  * castor3d::RenderQueue::getIgnoredNode</definition>
+        <argsstring>() const</argsstring>
+        <name>getIgnoredNode</name>
+        <qualifiedname>castor3d::RenderQueue::getIgnoredNode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderQueue.hpp" line="140" column="18" bodyfile="Render/RenderQueue.hpp" bodystart="140" bodyend="143"/>
+      </memberdef>
+      </sectiondef>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d0/d18/a04070_1a268f84d2a3d3dc5c8d146404c34377bc" prot="private" static="no" mutable="no">
-        <type><ref refid="de/d13/a01473_1ad78a6a1185b47fc82bf9bfc3c4c18319" kindref="member">OverlayCache</ref> &amp;</type>
-        <definition>OverlayCache&amp; castor3d::DebugOverlays::MainDebugPanel::m_cache</definition>
+      <memberdef kind="variable" id="d0/d18/a04070_1a778ae174e8fed22a4422bf81d22a67a5" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d2b/a03662" kindref="compound">SceneCuller</ref> const  &amp;</type>
+        <definition>SceneCuller const&amp; castor3d::RenderQueue::m_culler</definition>
         <argsstring></argsstring>
-        <name>m_cache</name>
+        <name>m_culler</name>
+        <qualifiedname>castor3d::RenderQueue::m_culler</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="202" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="202" bodyend="-1"/>
+        <location file="Render/RenderQueue.hpp" line="153" column="20" bodyfile="Render/RenderQueue.hpp" bodystart="153" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d0/d18/a04070_1a4ff47eb06509d7a0176c50b8d7371dfc" prot="private" static="no" mutable="no">
-        <type>PanelOverlaySPtr</type>
-        <definition>PanelOverlaySPtr castor3d::DebugOverlays::MainDebugPanel::m_panel</definition>
+      <memberdef kind="variable" id="d0/d18/a04070_1a525f98b502f06c8acbc78462c4ec4e53" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a090fde570a32f1dea93408fc444db64c" kindref="member">SceneCullerSignalConnection</ref></type>
+        <definition>SceneCullerSignalConnection castor3d::RenderQueue::m_onCullerCompute</definition>
         <argsstring></argsstring>
-        <name>m_panel</name>
+        <name>m_onCullerCompute</name>
+        <qualifiedname>castor3d::RenderQueue::m_onCullerCompute</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="203" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="203" bodyend="-1"/>
+        <location file="Render/RenderQueue.hpp" line="154" column="29" bodyfile="Render/RenderQueue.hpp" bodystart="154" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d0/d18/a04070_1a768db1be1a91f3e75b3e66d912d46175" prot="private" static="no" mutable="no">
-        <type>DebugPanelsPtrT&lt; castor::Nanoseconds &gt;</type>
-        <definition>DebugPanelsPtrT&lt; castor::Nanoseconds &gt; castor3d::DebugOverlays::MainDebugPanel::m_times</definition>
+      <memberdef kind="variable" id="d0/d18/a04070_1a47cc6b760de6a73200ee7b829ed71c1c" prot="private" static="no" mutable="no">
+        <type><ref refid="dd/d6a/a04642" kindref="compound">SceneNode</ref> const  *</type>
+        <definition>SceneNode const* castor3d::RenderQueue::m_ignoredNode</definition>
         <argsstring></argsstring>
-        <name>m_times</name>
+        <name>m_ignoredNode</name>
+        <qualifiedname>castor3d::RenderQueue::m_ignoredNode</qualifiedname>
+        <initializer>{ nullptr }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="204" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="204" bodyend="-1"/>
+        <location file="Render/RenderQueue.hpp" line="155" column="18" bodyfile="Render/RenderQueue.hpp" bodystart="155" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d0/d18/a04070_1ac129855fef55f38d99389ef5732cd0aa" prot="private" static="no" mutable="no">
-        <type>DebugPanelsPtrT&lt; float &gt;</type>
-        <definition>DebugPanelsPtrT&lt; float &gt; castor3d::DebugOverlays::MainDebugPanel::m_fps</definition>
+      <memberdef kind="variable" id="d0/d18/a04070_1a42a3cc09d840fbacf56fce621885e08b" prot="private" static="no" mutable="no">
+        <type>QueueRenderNodesUPtr</type>
+        <definition>QueueRenderNodesUPtr castor3d::RenderQueue::m_renderNodes</definition>
         <argsstring></argsstring>
-        <name>m_fps</name>
+        <name>m_renderNodes</name>
+        <qualifiedname>castor3d::RenderQueue::m_renderNodes</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="205" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="205" bodyend="-1"/>
+        <location file="Render/RenderQueue.hpp" line="156" column="22" bodyfile="Render/RenderQueue.hpp" bodystart="156" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d0/d18/a04070_1aab9fba8e6a512773729d34425df1b1aa" prot="private" static="no" mutable="no">
-        <type>DebugPanelsPtrT&lt; uint32_t &gt;</type>
-        <definition>DebugPanelsPtrT&lt; uint32_t &gt; castor3d::DebugOverlays::MainDebugPanel::m_counts</definition>
+      <memberdef kind="variable" id="d0/d18/a04070_1a8d66130a453587b64ab9f9ace4a199be" prot="private" static="no" mutable="no">
+        <type>castor::SpinMutex</type>
+        <definition>castor::SpinMutex castor3d::RenderQueue::m_eventMutex</definition>
         <argsstring></argsstring>
-        <name>m_counts</name>
+        <name>m_eventMutex</name>
+        <qualifiedname>castor3d::RenderQueue::m_eventMutex</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="206" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="206" bodyend="-1"/>
+        <location file="Render/RenderQueue.hpp" line="157" column="19" bodyfile="Render/RenderQueue.hpp" bodystart="157" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d18/a04070_1ae65c47650479a6c5355048f8af1a1526" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/d14/a02750" kindref="compound">GpuFrameEvent</ref> *</type>
+        <definition>GpuFrameEvent* castor3d::RenderQueue::m_initEvent</definition>
+        <argsstring></argsstring>
+        <name>m_initEvent</name>
+        <qualifiedname>castor3d::RenderQueue::m_initEvent</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderQueue.hpp" line="158" column="16" bodyfile="Render/RenderQueue.hpp" bodystart="158" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d18/a04070_1af9fa5331ebfce6618035b9b63f456e7d" prot="private" static="no" mutable="no">
+        <type>ashes::CommandBufferPtr</type>
+        <definition>ashes::CommandBufferPtr castor3d::RenderQueue::m_commandBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_commandBuffer</name>
+        <qualifiedname>castor3d::RenderQueue::m_commandBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderQueue.hpp" line="159" column="25" bodyfile="Render/RenderQueue.hpp" bodystart="159" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d18/a04070_1ae09081842c78fd41d6348d271fb7f579" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderQueue::m_culledChanged</definition>
+        <argsstring></argsstring>
+        <name>m_culledChanged</name>
+        <qualifiedname>castor3d::RenderQueue::m_culledChanged</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderQueue.hpp" line="160" column="6" bodyfile="Render/RenderQueue.hpp" bodystart="160" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d18/a04070_1a021055d71a6649e7c0d47c6c8c5ab634" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderQueue::m_commandsChanged</definition>
+        <argsstring></argsstring>
+        <name>m_commandsChanged</name>
+        <qualifiedname>castor3d::RenderQueue::m_commandsChanged</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderQueue.hpp" line="161" column="6" bodyfile="Render/RenderQueue.hpp" bodystart="161" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d18/a04070_1a7fa37d99a36ddd00bb5f48706b9aaa88" prot="private" static="no" mutable="no">
+        <type>castor::GroupChangeTracked&lt; ashes::Optional&lt; VkViewport &gt; &gt;</type>
+        <definition>castor::GroupChangeTracked&lt; ashes::Optional&lt; VkViewport &gt; &gt; castor3d::RenderQueue::m_viewport</definition>
+        <argsstring></argsstring>
+        <name>m_viewport</name>
+        <qualifiedname>castor3d::RenderQueue::m_viewport</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderQueue.hpp" line="162" column="28" bodyfile="Render/RenderQueue.hpp" bodystart="162" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d18/a04070_1aab71575c233d1780c507110928c82a95" prot="private" static="no" mutable="no">
+        <type>castor::GroupChangeTracked&lt; ashes::Optional&lt; VkRect2D &gt; &gt;</type>
+        <definition>castor::GroupChangeTracked&lt; ashes::Optional&lt; VkRect2D &gt; &gt; castor3d::RenderQueue::m_scissor</definition>
+        <argsstring></argsstring>
+        <name>m_scissor</name>
+        <qualifiedname>castor3d::RenderQueue::m_scissor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderQueue.hpp" line="163" column="28" bodyfile="Render/RenderQueue.hpp" bodystart="163" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d18/a04070_1a5d59e85152fcfa6011ecc9f6327d8adf" prot="private" static="no" mutable="no">
+        <type>VkRenderPass</type>
+        <definition>VkRenderPass castor3d::RenderQueue::m_renderPassAtInit</definition>
+        <argsstring></argsstring>
+        <name>m_renderPassAtInit</name>
+        <qualifiedname>castor3d::RenderQueue::m_renderPassAtInit</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderQueue.hpp" line="164" column="14" bodyfile="Render/RenderQueue.hpp" bodystart="164" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d0/d18/a04070_1a1566b147adea5e320accf06abb282491" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::DebugOverlays::MainDebugPanel::MainDebugPanel</definition>
-        <argsstring>(OverlayCache &amp;cache)</argsstring>
-        <name>MainDebugPanel</name>
+      <memberdef kind="function" id="d0/d18/a04070_1a3a35a4ac1b20abbab118ee5445598d05" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::RenderQueue::RenderQueue</definition>
+        <argsstring>(RenderNodesPass &amp;renderPass, RenderMode mode, SceneNode const *ignored)</argsstring>
+        <name>RenderQueue</name>
+        <qualifiedname>castor3d::RenderQueue::RenderQueue</qualifiedname>
         <param>
-          <type><ref refid="de/d13/a01473_1ad78a6a1185b47fc82bf9bfc3c4c18319" kindref="member">OverlayCache</ref> &amp;</type>
-          <declname>cache</declname>
+          <type><ref refid="dc/d64/a04058" kindref="compound">RenderNodesPass</ref> &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a908786422cb850b8f90f8992963734d5" kindref="member">RenderMode</ref></type>
+          <declname>mode</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d6a/a04642" kindref="compound">SceneNode</ref> const *</type>
+          <declname>ignored</declname>
         </param>
         <briefdescription>
+<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">renderPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent render pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">mode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render mode for this render queue. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ignored</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The geometries attached to this node will be ignored in the render. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="186" column="1"/>
+        <location file="Render/RenderQueue.hpp" line="42" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d0/d18/a04070_1a7ae7fefd8c15a81ed64887c97b10a785" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::DebugOverlays::MainDebugPanel::~MainDebugPanel</definition>
+      <memberdef kind="function" id="d0/d18/a04070_1a19afa751d64cf0e8cf5717e78bbdc0b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::RenderQueue::~RenderQueue</definition>
         <argsstring>()</argsstring>
-        <name>~MainDebugPanel</name>
+        <name>~RenderQueue</name>
+        <qualifiedname>castor3d::RenderQueue::~RenderQueue</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="187" column="1"/>
+        <location file="Render/RenderQueue.hpp" line="45" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d0/d18/a04070_1aefdceb26f428defe05585997298b6824" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::DebugOverlays::MainDebugPanel::update</definition>
+      <memberdef kind="function" id="d0/d18/a04070_1a078f49e988eafb8231c40fb80d59ce41" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderQueue::initialise</definition>
         <argsstring>()</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::RenderQueue::initialise</qualifiedname>
+        <briefdescription>
+<para>Initialises the queue. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderQueue.hpp" line="52" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d18/a04070_1a2ee30e7e9ce414eb215432659d919f3c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderQueue::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor3d::RenderQueue::cleanup</qualifiedname>
+        <briefdescription>
+<para>Cleans the queue up. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderQueue.hpp" line="59" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d18/a04070_1a0b6d1a683aabed9fff7fda7a9836c0cf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderQueue::update</definition>
+        <argsstring>(ShadowMapLightTypeArray &amp;shadowMaps)</argsstring>
         <name>update</name>
+        <qualifiedname>castor3d::RenderQueue::update</qualifiedname>
+        <param>
+          <type><ref refid="dc/df4/a01401_1ad3137fb4b01f8deea8b1e20522ec8e6c" kindref="member">ShadowMapLightTypeArray</ref> &amp;</type>
+          <declname>shadowMaps</declname>
+        </param>
         <briefdescription>
+<para>Updates the render nodes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">shadowMaps</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the shadow maps used in the render pass. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderQueue.hpp" line="68" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d18/a04070_1abb286497d5b347a90ff658b1552f5c46" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderQueue::update</definition>
+        <argsstring>(ShadowMapLightTypeArray &amp;shadowMaps, VkViewport const &amp;viewport, VkRect2D const &amp;scissor)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::RenderQueue::update</qualifiedname>
+        <param>
+          <type><ref refid="dc/df4/a01401_1ad3137fb4b01f8deea8b1e20522ec8e6c" kindref="member">ShadowMapLightTypeArray</ref> &amp;</type>
+          <declname>shadowMaps</declname>
+        </param>
+        <param>
+          <type>VkViewport const &amp;</type>
+          <declname>viewport</declname>
+        </param>
+        <param>
+          <type>VkRect2D const &amp;</type>
+          <declname>scissor</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render nodes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">shadowMaps</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the shadow maps used in the render pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">viewport</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The viewport restraining the render pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scissor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scissors restraining the render pass. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderQueue.hpp" line="81" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d18/a04070_1a8b580aa852bd23ffcf5601db9ffb16d2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderQueue::update</definition>
+        <argsstring>(ShadowMapLightTypeArray &amp;shadowMaps, VkRect2D const &amp;scissor)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::RenderQueue::update</qualifiedname>
+        <param>
+          <type><ref refid="dc/df4/a01401_1ad3137fb4b01f8deea8b1e20522ec8e6c" kindref="member">ShadowMapLightTypeArray</ref> &amp;</type>
+          <declname>shadowMaps</declname>
+        </param>
+        <param>
+          <type>VkRect2D const &amp;</type>
+          <declname>scissor</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render nodes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">shadowMaps</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the shadow maps used in the render pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scissor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scissors restraining the render pass. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderQueue.hpp" line="94" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d18/a04070_1a909bb8df6b36b6e3c18aa36b72e3cb6c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderQueue::setIgnoredNode</definition>
+        <argsstring>(SceneNode const &amp;node)</argsstring>
+        <name>setIgnoredNode</name>
+        <qualifiedname>castor3d::RenderQueue::setIgnoredNode</qualifiedname>
+        <param>
+          <type><ref refid="dd/d6a/a04642" kindref="compound">SceneNode</ref> const &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+<para>Sets the node to be ignored in rendering. remarks All objects attached to this node will be ignored. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="188" column="1"/>
+        <location file="Render/RenderQueue.hpp" line="104" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d0/d18/a04070_1a89084025799a35aa860425d97dbf61a6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d0/d18/a04070_1a9d8df299280c607ec5d9bfeb866ea904" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::DebugOverlays::MainDebugPanel::setVisible</definition>
-        <argsstring>(bool visible)</argsstring>
-        <name>setVisible</name>
+        <definition>void castor3d::RenderQueue::doInitialise</definition>
+        <argsstring>(QueueData const &amp;queueData)</argsstring>
+        <name>doInitialise</name>
+        <qualifiedname>castor3d::RenderQueue::doInitialise</qualifiedname>
         <param>
-          <type>bool</type>
-          <declname>visible</declname>
+          <type><ref refid="dc/d61/a03950" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -128,37 +554,31 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="189" column="1"/>
+        <location file="Render/RenderQueue.hpp" line="147" column="6"/>
       </memberdef>
-      <memberdef kind="function" id="d0/d18/a04070_1af5cc24f0953f3adbe4718e1b1cc12d28" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d0/d18/a04070_1a1e2c4cbcc40a86dd16bf74d65a3b32b9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::DebugOverlays::MainDebugPanel::updatePosition</definition>
+        <definition>void castor3d::RenderQueue::doPrepareCommandBuffer</definition>
         <argsstring>()</argsstring>
-        <name>updatePosition</name>
+        <name>doPrepareCommandBuffer</name>
+        <qualifiedname>castor3d::RenderQueue::doPrepareCommandBuffer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="190" column="1"/>
+        <location file="Render/RenderQueue.hpp" line="148" column="6"/>
       </memberdef>
-      <memberdef kind="function" id="d0/d18/a04070_1a9da4c5838d3977742c2ec2b971f6a2f7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d0/d18/a04070_1adb7983da87a718897b778519a8cb7b87" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::DebugOverlays::MainDebugPanel::addTimePanel</definition>
-        <argsstring>(castor::String const &amp;name, castor::String const &amp;label, castor::Nanoseconds const &amp;value)</argsstring>
-        <name>addTimePanel</name>
+        <definition>void castor3d::RenderQueue::doSortRenderNodes</definition>
+        <argsstring>(ShadowMapLightTypeArray &amp;shadowMaps)</argsstring>
+        <name>doSortRenderNodes</name>
+        <qualifiedname>castor3d::RenderQueue::doSortRenderNodes</qualifiedname>
         <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>label</declname>
-        </param>
-        <param>
-          <type>castor::Nanoseconds const &amp;</type>
-          <declname>value</declname>
+          <type><ref refid="dc/df4/a01401_1ad3137fb4b01f8deea8b1e20522ec8e6c" kindref="member">ShadowMapLightTypeArray</ref> &amp;</type>
+          <declname>shadowMaps</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -166,24 +586,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="191" column="1"/>
+        <location file="Render/RenderQueue.hpp" line="149" column="6"/>
       </memberdef>
-      <memberdef kind="function" id="d0/d18/a04070_1ace01bdfd0299d332836d4d2518bc929f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d0/d18/a04070_1a96721259067c0752966ab425cbe2ae89" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::DebugOverlays::MainDebugPanel::addCountPanel</definition>
-        <argsstring>(castor::String const &amp;name, castor::String const &amp;label, uint32_t const &amp;value)</argsstring>
-        <name>addCountPanel</name>
+        <definition>void castor3d::RenderQueue::doOnCullerCompute</definition>
+        <argsstring>(SceneCuller const &amp;culler)</argsstring>
+        <name>doOnCullerCompute</name>
+        <qualifiedname>castor3d::RenderQueue::doOnCullerCompute</qualifiedname>
         <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>label</declname>
-        </param>
-        <param>
-          <type>uint32_t const &amp;</type>
-          <declname>value</declname>
+          <type><ref refid="d4/d2b/a03662" kindref="compound">SceneCuller</ref> const &amp;</type>
+          <declname>culler</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -191,53 +604,69 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="194" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d18/a04070_1a5da69487aae53d75cf8867271914c476" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::DebugOverlays::MainDebugPanel::addFpsPanel</definition>
-        <argsstring>(castor::String const &amp;name, castor::String const &amp;label, float const &amp;value)</argsstring>
-        <name>addFpsPanel</name>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>label</declname>
-        </param>
-        <param>
-          <type>float const &amp;</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="197" column="1"/>
+        <location file="Render/RenderQueue.hpp" line="150" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Overlay/DebugOverlays.hpp" line="184" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="183" bodyend="207"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::RenderQueue</label>
+        <link refid="d0/d18/a04070"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; RenderNodesPass &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::RenderQueue</label>
+        <link refid="d0/d18/a04070"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; RenderNodesPass &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Render/RenderQueue.hpp" line="26" column="1" bodyfile="Render/RenderQueue.hpp" bodystart="28" bodyend="165"/>
     <listofallmembers>
-      <member refid="d0/d18/a04070_1ace01bdfd0299d332836d4d2518bc929f" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::MainDebugPanel</scope><name>addCountPanel</name></member>
-      <member refid="d0/d18/a04070_1a5da69487aae53d75cf8867271914c476" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::MainDebugPanel</scope><name>addFpsPanel</name></member>
-      <member refid="d0/d18/a04070_1a9da4c5838d3977742c2ec2b971f6a2f7" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::MainDebugPanel</scope><name>addTimePanel</name></member>
-      <member refid="d0/d18/a04070_1a268f84d2a3d3dc5c8d146404c34377bc" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::MainDebugPanel</scope><name>m_cache</name></member>
-      <member refid="d0/d18/a04070_1aab9fba8e6a512773729d34425df1b1aa" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::MainDebugPanel</scope><name>m_counts</name></member>
-      <member refid="d0/d18/a04070_1ac129855fef55f38d99389ef5732cd0aa" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::MainDebugPanel</scope><name>m_fps</name></member>
-      <member refid="d0/d18/a04070_1a4ff47eb06509d7a0176c50b8d7371dfc" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::MainDebugPanel</scope><name>m_panel</name></member>
-      <member refid="d0/d18/a04070_1a768db1be1a91f3e75b3e66d912d46175" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::MainDebugPanel</scope><name>m_times</name></member>
-      <member refid="d0/d18/a04070_1a1566b147adea5e320accf06abb282491" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::MainDebugPanel</scope><name>MainDebugPanel</name></member>
-      <member refid="d0/d18/a04070_1a89084025799a35aa860425d97dbf61a6" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::MainDebugPanel</scope><name>setVisible</name></member>
-      <member refid="d0/d18/a04070_1aefdceb26f428defe05585997298b6824" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::MainDebugPanel</scope><name>update</name></member>
-      <member refid="d0/d18/a04070_1af5cc24f0953f3adbe4718e1b1cc12d28" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::MainDebugPanel</scope><name>updatePosition</name></member>
-      <member refid="d0/d18/a04070_1a7ae7fefd8c15a81ed64887c97b10a785" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::MainDebugPanel</scope><name>~MainDebugPanel</name></member>
+      <member refid="d0/d18/a04070_1a2ee30e7e9ce414eb215432659d919f3c" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>cleanup</name></member>
+      <member refid="d0/d18/a04070_1a9d8df299280c607ec5d9bfeb866ea904" prot="private" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>doInitialise</name></member>
+      <member refid="d0/d18/a04070_1a96721259067c0752966ab425cbe2ae89" prot="private" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>doOnCullerCompute</name></member>
+      <member refid="d0/d18/a04070_1a1e2c4cbcc40a86dd16bf74d65a3b32b9" prot="private" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>doPrepareCommandBuffer</name></member>
+      <member refid="d0/d18/a04070_1adb7983da87a718897b778519a8cb7b87" prot="private" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>doSortRenderNodes</name></member>
+      <member refid="d0/d18/a04070_1aa20f9773fe8380e0d1f15aa8e5b7f0af" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>getCommandBuffer</name></member>
+      <member refid="d0/d18/a04070_1abcc5ce78f38374e4f31930f904b1ed95" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>getCuller</name></member>
+      <member refid="d0/d18/a04070_1ae2ac2a82ea96be4e78c5ed9d8335daaa" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>getIgnoredNode</name></member>
+      <member refid="d0/d18/a04070_1a378fdb8c411e19b75af3bcd6f112318a" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>getMode</name></member>
+      <member refid="d0/d18/a04070_1ab1b80f578fa33d6d359aa09fd775243a" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>getRenderNodes</name></member>
+      <member refid="d0/d18/a04070_1a710be731288f4f3ad8c141e8c7aad541" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>hasCommandBuffer</name></member>
+      <member refid="d0/d18/a04070_1af07889a285e79d73e7a88767d3771906" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>hasNodes</name></member>
+      <member refid="d0/d18/a04070_1aaf4e1d436ce966badd694c26d3e4b490" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>initCommandBuffer</name></member>
+      <member refid="d0/d18/a04070_1a078f49e988eafb8231c40fb80d59ce41" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>initialise</name></member>
+      <member refid="d0/d18/a04070_1af9fa5331ebfce6618035b9b63f456e7d" prot="private" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>m_commandBuffer</name></member>
+      <member refid="d0/d18/a04070_1a021055d71a6649e7c0d47c6c8c5ab634" prot="private" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>m_commandsChanged</name></member>
+      <member refid="d0/d18/a04070_1ae09081842c78fd41d6348d271fb7f579" prot="private" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>m_culledChanged</name></member>
+      <member refid="d0/d18/a04070_1a778ae174e8fed22a4422bf81d22a67a5" prot="private" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>m_culler</name></member>
+      <member refid="d0/d18/a04070_1a8d66130a453587b64ab9f9ace4a199be" prot="private" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>m_eventMutex</name></member>
+      <member refid="d0/d18/a04070_1a47cc6b760de6a73200ee7b829ed71c1c" prot="private" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>m_ignoredNode</name></member>
+      <member refid="d0/d18/a04070_1ae65c47650479a6c5355048f8af1a1526" prot="private" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>m_initEvent</name></member>
+      <member refid="d0/d18/a04070_1a525f98b502f06c8acbc78462c4ec4e53" prot="private" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>m_onCullerCompute</name></member>
+      <member refid="d0/d18/a04070_1a42a3cc09d840fbacf56fce621885e08b" prot="private" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>m_renderNodes</name></member>
+      <member refid="d0/d18/a04070_1a5d59e85152fcfa6011ecc9f6327d8adf" prot="private" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>m_renderPassAtInit</name></member>
+      <member refid="d0/d18/a04070_1aab71575c233d1780c507110928c82a95" prot="private" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>m_scissor</name></member>
+      <member refid="d0/d18/a04070_1a7fa37d99a36ddd00bb5f48706b9aaa88" prot="private" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>m_viewport</name></member>
+      <member refid="d0/d18/a04070_1a3a35a4ac1b20abbab118ee5445598d05" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>RenderQueue</name></member>
+      <member refid="d0/d18/a04070_1a909bb8df6b36b6e3c18aa36b72e3cb6c" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>setIgnoredNode</name></member>
+      <member refid="d0/d18/a04070_1a0b6d1a683aabed9fff7fda7a9836c0cf" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>update</name></member>
+      <member refid="d0/d18/a04070_1abb286497d5b347a90ff658b1552f5c46" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>update</name></member>
+      <member refid="d0/d18/a04070_1a8b580aa852bd23ffcf5601db9ffb16d2" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>update</name></member>
+      <member refid="d0/d18/a04070_1a19afa751d64cf0e8cf5717e78bbdc0b3" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue</scope><name>~RenderQueue</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

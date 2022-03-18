@@ -1,0 +1,141 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="da/d06/a01403" kind="file" language="C++">
+    <compoundname>TextPanelOverlay.hpp</compoundname>
+    <includes refid="d7/db1/a00590" local="yes">Castor3D/Overlay/PanelOverlay.hpp</includes>
+    <includes local="no">CastorUtils/Data/TextWriter.hpp</includes>
+    <incdepgraph>
+      <node id="31023">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="31031">
+        <label>Castor3D/Material/MaterialModule.hpp</label>
+        <link refid="d8/d23/a00326"/>
+        <childnode refid="31018" relation="include">
+        </childnode>
+        <childnode refid="31032" relation="include">
+        </childnode>
+      </node>
+      <node id="31035">
+        <label>CastorUtils/Graphics/Size.hpp</label>
+      </node>
+      <node id="31026">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="31033">
+        <label>CastorUtils/Data/TextWriter.hpp</label>
+      </node>
+      <node id="31027">
+        <label>cstdint</label>
+      </node>
+      <node id="31032">
+        <label>CastorUtils/Design/Signal.hpp</label>
+      </node>
+      <node id="31025">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="31018">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="31019" relation="include">
+        </childnode>
+        <childnode refid="31020" relation="include">
+        </childnode>
+        <childnode refid="31021" relation="include">
+        </childnode>
+        <childnode refid="31022" relation="include">
+        </childnode>
+        <childnode refid="31023" relation="include">
+        </childnode>
+        <childnode refid="31024" relation="include">
+        </childnode>
+        <childnode refid="31025" relation="include">
+        </childnode>
+        <childnode refid="31026" relation="include">
+        </childnode>
+        <childnode refid="31027" relation="include">
+        </childnode>
+        <childnode refid="31028" relation="include">
+        </childnode>
+        <childnode refid="31029" relation="include">
+        </childnode>
+        <childnode refid="31030" relation="include">
+        </childnode>
+      </node>
+      <node id="31016">
+        <label>Castor3D/Overlay/OverlayVisitor.hpp</label>
+        <link refid="de/dde/a00587"/>
+        <childnode refid="31017" relation="include">
+        </childnode>
+      </node>
+      <node id="31029">
+        <label>string</label>
+      </node>
+      <node id="31015">
+        <label>Castor3D/Overlay/OverlayCategory.hpp</label>
+        <link refid="d9/d42/a00575"/>
+        <childnode refid="31016" relation="include">
+        </childnode>
+        <childnode refid="31031" relation="include">
+        </childnode>
+        <childnode refid="31033" relation="include">
+        </childnode>
+        <childnode refid="31034" relation="include">
+        </childnode>
+        <childnode refid="31035" relation="include">
+        </childnode>
+      </node>
+      <node id="31022">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="31019">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="31017">
+        <label>OverlayModule.hpp</label>
+        <link refid="d8/dc8/a00581"/>
+        <childnode refid="31018" relation="include">
+        </childnode>
+      </node>
+      <node id="31034">
+        <label>CastorUtils/Graphics/Position.hpp</label>
+      </node>
+      <node id="31021">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="31020">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="31030">
+        <label>vector</label>
+      </node>
+      <node id="31024">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="31014">
+        <label>Castor3D/Overlay/PanelOverlay.hpp</label>
+        <link refid="d7/db1/a00590"/>
+        <childnode refid="31015" relation="include">
+        </childnode>
+      </node>
+      <node id="31028">
+        <label>memory</label>
+      </node>
+      <node id="31013">
+        <label>Text/TextPanelOverlay.hpp</label>
+        <link refid="da/d06/a01403"/>
+        <childnode refid="31014" relation="include">
+        </childnode>
+        <childnode refid="31033" relation="include">
+        </childnode>
+      </node>
+    </incdepgraph>
+    <innerclass refid="d2/d02/a05708" prot="public">castor::TextWriter&lt; castor3d::PanelOverlay &gt;</innerclass>
+    <innernamespace refid="da/d36/a01482">castor</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Text/TextPanelOverlay.hpp"/>
+  </compounddef>
+</doxygen>

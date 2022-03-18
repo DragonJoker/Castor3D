@@ -1,9 +1,4 @@
-<map id="castor3d::CpuUpdater" name="castor3d::CpuUpdater">
-<area shape="rect" id="node1" title=" " alt="" coords="370,199,518,225"/>
-<area shape="rect" id="node2" href="$da/d44/a05256.html" title=" " alt="" coords="241,109,388,136"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,179,47"/>
-<area shape="rect" id="node4" title=" " alt="" coords="203,13,386,39"/>
-<area shape="rect" id="node5" title=" " alt="" coords="410,13,473,39"/>
-<area shape="rect" id="node6" title="STL class." alt="" coords="450,109,563,136"/>
-<area shape="rect" id="node7" title=" " alt="" coords="497,13,535,39"/>
+<map id="castor3d::RenderedObject" name="castor3d::RenderedObject">
+<area shape="rect" id="node1" title=" " alt="" coords="18,95,191,121"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,204,47"/>
 </map>

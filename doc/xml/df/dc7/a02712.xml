@@ -1,33 +1,271 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="df/dc7/a02712" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkSubmitInfo &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="df/dc7/a02712_1abbe051ec9aaeb65f3b24cd2394278f0a" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkSubmitInfo &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="df/dc7/a02712" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::CpuFrameEvent</compoundname>
+    <derivedcompoundref refid="db/d1d/a02716" prot="public" virt="non-virtual">castor3d::CpuFunctorEvent</derivedcompoundref>
+    <includes local="no">CpuFrameEvent.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="df/dc7/a02712_1a5a5e26283b8543afb6d89443498c3ece" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/df5/a01395_1ad442bf3c1ba8a06ac36f710ba30b2870" kindref="member">EventType</ref></type>
+        <definition>EventType castor3d::CpuFrameEvent::m_type</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_SUBMIT_INFO</initializer>
+        <name>m_type</name>
+        <qualifiedname>castor3d::CpuFrameEvent::m_type</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="18" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="18" bodyend="-1"/>
+        <location file="Event/Frame/CpuFrameEvent.hpp" line="76" column="11" bodyfile="Event/Frame/CpuFrameEvent.hpp" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/dc7/a02712_1ab3544f76bc99524b52a5254b9b7c693f" prot="private" static="no" mutable="no">
+        <type>std::atomic_bool</type>
+        <definition>std::atomic_bool castor3d::CpuFrameEvent::m_skip</definition>
+        <argsstring></argsstring>
+        <name>m_skip</name>
+        <qualifiedname>castor3d::CpuFrameEvent::m_skip</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/CpuFrameEvent.hpp" line="77" column="18" bodyfile="Event/Frame/CpuFrameEvent.hpp" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/dc7/a02712_1a524ea078d871f55861b6bf095da318a0" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::CpuFrameEvent::m_stackTrace</definition>
+        <argsstring></argsstring>
+        <name>m_stackTrace</name>
+        <qualifiedname>castor3d::CpuFrameEvent::m_stackTrace</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The event creation stack trace. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/CpuFrameEvent.hpp" line="83" column="16" bodyfile="Event/Frame/CpuFrameEvent.hpp" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/dc7/a02712_1ac63657c1d1318403f404e37ef2ac4991" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::CpuFrameEvent::CpuFrameEvent</definition>
+        <argsstring>(CpuFrameEvent const &amp;rhs)</argsstring>
+        <name>CpuFrameEvent</name>
+        <qualifiedname>castor3d::CpuFrameEvent::CpuFrameEvent</qualifiedname>
+        <param>
+          <type><ref refid="df/dc7/a02712" kindref="compound">CpuFrameEvent</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/CpuFrameEvent.hpp" line="14" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="df/dc7/a02712_1aec8cbff165bc8ca8f023122bc56b63ac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::CpuFrameEvent::CpuFrameEvent</definition>
+        <argsstring>(CpuFrameEvent &amp;&amp;rhs)</argsstring>
+        <name>CpuFrameEvent</name>
+        <qualifiedname>castor3d::CpuFrameEvent::CpuFrameEvent</qualifiedname>
+        <param>
+          <type><ref refid="df/dc7/a02712" kindref="compound">CpuFrameEvent</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/CpuFrameEvent.hpp" line="15" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="df/dc7/a02712_1aa45d683a8d4529ff7673dcdedf4b5001" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="df/dc7/a02712" kindref="compound">CpuFrameEvent</ref> &amp;</type>
+        <definition>C3D_API CpuFrameEvent &amp; castor3d::CpuFrameEvent::operator=</definition>
+        <argsstring>(CpuFrameEvent const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::CpuFrameEvent::operator=</qualifiedname>
+        <param>
+          <type><ref refid="df/dc7/a02712" kindref="compound">CpuFrameEvent</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/CpuFrameEvent.hpp" line="16" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="df/dc7/a02712_1aaee46162aa420bf14e7da7a536efd8bb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="df/dc7/a02712" kindref="compound">CpuFrameEvent</ref> &amp;</type>
+        <definition>C3D_API CpuFrameEvent &amp; castor3d::CpuFrameEvent::operator=</definition>
+        <argsstring>(CpuFrameEvent &amp;&amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::CpuFrameEvent::operator=</qualifiedname>
+        <param>
+          <type><ref refid="df/dc7/a02712" kindref="compound">CpuFrameEvent</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/CpuFrameEvent.hpp" line="17" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="df/dc7/a02712_1aaf3cac5e82d244c2c6dbe23debd5d915" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::CpuFrameEvent::CpuFrameEvent</definition>
+        <argsstring>(EventType type)</argsstring>
+        <name>CpuFrameEvent</name>
+        <qualifiedname>castor3d::CpuFrameEvent::CpuFrameEvent</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1ad442bf3c1ba8a06ac36f710ba30b2870" kindref="member">EventType</ref></type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The event type. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/CpuFrameEvent.hpp" line="26" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="df/dc7/a02712_1a4e9e9aceb04443692aa5c494293fdae2" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::CpuFrameEvent::~CpuFrameEvent</definition>
+        <argsstring>()=default</argsstring>
+        <name>~CpuFrameEvent</name>
+        <qualifiedname>castor3d::CpuFrameEvent::~CpuFrameEvent</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/CpuFrameEvent.hpp" line="33" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="df/dc7/a02712_1aac06743ee21e35f8be1eaf8009eebe19" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::CpuFrameEvent::apply</definition>
+        <argsstring>()</argsstring>
+        <name>apply</name>
+        <qualifiedname>castor3d::CpuFrameEvent::apply</qualifiedname>
+        <briefdescription>
+<para>Applies the event. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Must be implemented by children classes. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/CpuFrameEvent.hpp" line="42" column="6" bodyfile="Event/Frame/CpuFrameEvent.hpp" bodystart="42" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="df/dc7/a02712_1ac27ac4dfafec7a58ea2082f93d2a6318" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/df5/a01395_1ad442bf3c1ba8a06ac36f710ba30b2870" kindref="member">EventType</ref></type>
+        <definition>EventType castor3d::CpuFrameEvent::getType</definition>
+        <argsstring>() const</argsstring>
+        <name>getType</name>
+        <qualifiedname>castor3d::CpuFrameEvent::getType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The event type. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/CpuFrameEvent.hpp" line="57" column="11" bodyfile="Event/Frame/CpuFrameEvent.hpp" bodystart="57" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="function" id="df/dc7/a02712_1a050612a63f071895d333054a989f3178" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::CpuFrameEvent::skip</definition>
+        <argsstring>()</argsstring>
+        <name>skip</name>
+        <qualifiedname>castor3d::CpuFrameEvent::skip</qualifiedname>
+        <briefdescription>
+<para>Sets the event to be skipped. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/CpuFrameEvent.hpp" line="67" column="6" bodyfile="Event/Frame/CpuFrameEvent.hpp" bodystart="67" bodyend="70"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="df/dc7/a02712_1aed1b51ddfbfe024020df544d605c0337" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::CpuFrameEvent::doApply</definition>
+        <argsstring>()=0</argsstring>
+        <name>doApply</name>
+        <qualifiedname>castor3d::CpuFrameEvent::doApply</qualifiedname>
+        <reimplementedby refid="db/d1d/a02716_1a1ede0d332f924289c4d56bca6fe36f90">doApply</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/CpuFrameEvent.hpp" line="73" column="22"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="18" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="18" bodyend="18"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::CpuFrameEvent</label>
+        <link refid="df/dc7/a02712"/>
+      </node>
+      <node id="2">
+        <label>castor3d::CpuFunctorEvent</label>
+        <link refid="db/d1d/a02716"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="Event/Frame/CpuFrameEvent.hpp" line="11" column="1" bodyfile="Event/Frame/CpuFrameEvent.hpp" bodystart="12" bodyend="86"/>
     <listofallmembers>
-      <member refid="df/dc7/a02712_1abbe051ec9aaeb65f3b24cd2394278f0a" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkSubmitInfo &gt;</scope><name>value</name></member>
+      <member refid="df/dc7/a02712_1aac06743ee21e35f8be1eaf8009eebe19" prot="public" virt="non-virtual"><scope>castor3d::CpuFrameEvent</scope><name>apply</name></member>
+      <member refid="df/dc7/a02712_1ac63657c1d1318403f404e37ef2ac4991" prot="public" virt="non-virtual"><scope>castor3d::CpuFrameEvent</scope><name>CpuFrameEvent</name></member>
+      <member refid="df/dc7/a02712_1aec8cbff165bc8ca8f023122bc56b63ac" prot="public" virt="non-virtual"><scope>castor3d::CpuFrameEvent</scope><name>CpuFrameEvent</name></member>
+      <member refid="df/dc7/a02712_1aaf3cac5e82d244c2c6dbe23debd5d915" prot="public" virt="non-virtual"><scope>castor3d::CpuFrameEvent</scope><name>CpuFrameEvent</name></member>
+      <member refid="df/dc7/a02712_1aed1b51ddfbfe024020df544d605c0337" prot="private" virt="pure-virtual"><scope>castor3d::CpuFrameEvent</scope><name>doApply</name></member>
+      <member refid="df/dc7/a02712_1ac27ac4dfafec7a58ea2082f93d2a6318" prot="public" virt="non-virtual"><scope>castor3d::CpuFrameEvent</scope><name>getType</name></member>
+      <member refid="df/dc7/a02712_1ab3544f76bc99524b52a5254b9b7c693f" prot="private" virt="non-virtual"><scope>castor3d::CpuFrameEvent</scope><name>m_skip</name></member>
+      <member refid="df/dc7/a02712_1a524ea078d871f55861b6bf095da318a0" prot="private" virt="non-virtual"><scope>castor3d::CpuFrameEvent</scope><name>m_stackTrace</name></member>
+      <member refid="df/dc7/a02712_1a5a5e26283b8543afb6d89443498c3ece" prot="private" virt="non-virtual"><scope>castor3d::CpuFrameEvent</scope><name>m_type</name></member>
+      <member refid="df/dc7/a02712_1aa45d683a8d4529ff7673dcdedf4b5001" prot="public" virt="non-virtual"><scope>castor3d::CpuFrameEvent</scope><name>operator=</name></member>
+      <member refid="df/dc7/a02712_1aaee46162aa420bf14e7da7a536efd8bb" prot="public" virt="non-virtual"><scope>castor3d::CpuFrameEvent</scope><name>operator=</name></member>
+      <member refid="df/dc7/a02712_1a050612a63f071895d333054a989f3178" prot="public" virt="non-virtual"><scope>castor3d::CpuFrameEvent</scope><name>skip</name></member>
+      <member refid="df/dc7/a02712_1a4e9e9aceb04443692aa5c494293fdae2" prot="public" virt="virtual"><scope>castor3d::CpuFrameEvent</scope><name>~CpuFrameEvent</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

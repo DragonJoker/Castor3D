@@ -1,159 +1,209 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dd/d63/a04959" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::RenderDepthQuad</compoundname>
-    <basecompoundref refid="da/d95/a04435" prot="public" virt="non-virtual">castor3d::RenderQuad</basecompoundref>
-    <includes local="no">RenderDepthQuad.hpp</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="dd/d63/a04959_1abe4ef124f0633e6399c3f7973e744ff9" prot="private" static="no" mutable="no">
-        <type><ref refid="da/d2b/a05283" kindref="compound">ShaderProgram</ref></type>
-        <definition>ShaderProgram castor3d::RenderDepthQuad::m_program</definition>
+    <compoundname>castor3d::RsmConfigUbo</compoundname>
+    <includes local="no">RsmConfigUbo.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dd/d63/a04959_1aa9747da5cde15d324013b50e2db47344" prot="public" static="no">
+        <type><ref refid="d1/d9f/a05035" kindref="compound">RsmUboConfiguration</ref></type>
+        <definition>using castor3d::RsmConfigUbo::Configuration =  RsmUboConfiguration</definition>
         <argsstring></argsstring>
-        <name>m_program</name>
+        <name>Configuration</name>
+        <qualifiedname>castor3d::RsmConfigUbo::Configuration</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/RenderDepthQuad.hpp" line="64" column="1" bodyfile="Render/ToTexture/RenderDepthQuad.hpp" bodystart="64" bodyend="-1"/>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="47" column="1" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="47" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dd/d63/a04959_1af744415d16a4b0db9e297e986bab452f" prot="private" static="no" mutable="no">
-        <type>ashes::CommandBufferPtr</type>
-        <definition>ashes::CommandBufferPtr castor3d::RenderDepthQuad::m_commandBuffer</definition>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="dd/d63/a04959_1a535d4c129fa65a131042d2fdac154ec9" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::string const</type>
+        <definition>C3D_API std::string const castor3d::RsmConfigUbo::BufferRsmConfig</definition>
         <argsstring></argsstring>
-        <name>m_commandBuffer</name>
+        <name>BufferRsmConfig</name>
+        <qualifiedname>castor3d::RsmConfigUbo::BufferRsmConfig</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/RenderDepthQuad.hpp" line="65" column="1" bodyfile="Render/ToTexture/RenderDepthQuad.hpp" bodystart="65" bodyend="-1"/>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="78" column="34" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d63/a04959_1a2e3237285e75471399fab7bdda096393" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::string const</type>
+        <definition>C3D_API std::string const castor3d::RsmConfigUbo::RsmConfigData</definition>
+        <argsstring></argsstring>
+        <name>RsmConfigData</name>
+        <qualifiedname>castor3d::RsmConfigUbo::RsmConfigData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="79" column="34" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dd/d63/a04959_1a361fb0f84cea0e243f7d9e236f0885ca" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::RsmConfigUbo::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::RsmConfigUbo::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="82" column="21" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d63/a04959_1a48767860fe5a91e0d05835522369cfe8" prot="private" static="no" mutable="no">
+        <type><ref refid="d0/d01/a02511" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="dd/d63/a04959_1aa9747da5cde15d324013b50e2db47344" kindref="member">Configuration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::RsmConfigUbo::m_ubo</definition>
+        <argsstring></argsstring>
+        <name>m_ubo</name>
+        <qualifiedname>castor3d::RsmConfigUbo::m_ubo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="83" column="22" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="83" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="dd/d63/a04959_1ab4ea0b84e4138c3a50b882490de23137" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="dd/d63/a04959_1a8605726892160b26766887c089158d1a" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::RenderDepthQuad::RenderDepthQuad</definition>
-        <argsstring>(RenderSystem &amp;renderSystem, RenderDevice const &amp;device)</argsstring>
-        <name>RenderDepthQuad</name>
+        <definition>C3D_API castor3d::RsmConfigUbo::RsmConfigUbo</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>RsmConfigUbo</name>
+        <qualifiedname>castor3d::RsmConfigUbo::RsmConfigUbo</qualifiedname>
         <param>
-          <type><ref refid="d6/d55/a04603" kindref="compound">RenderSystem</ref> &amp;</type>
-          <declname>renderSystem</declname>
-        </param>
-        <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
           <declname>device</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">renderSystem</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The <ref refid="d6/d55/a04603" kindref="compound">RenderSystem</ref>. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/RenderDepthQuad.hpp" line="32" column="1"/>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="50" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="dd/d63/a04959_1a7125004ed6fca6de98ebf9dd7bb24cc9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderDepthQuad::initialise</definition>
+      <memberdef kind="function" id="dd/d63/a04959_1aa0b5b04a1147a1bb54d35eebb4c596e5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::RsmConfigUbo::RsmConfigUbo</definition>
+        <argsstring>(RsmConfigUbo const &amp;rhs)=delete</argsstring>
+        <name>RsmConfigUbo</name>
+        <qualifiedname>castor3d::RsmConfigUbo::RsmConfigUbo</qualifiedname>
+        <param>
+          <type><ref refid="dd/d63/a04959" kindref="compound">RsmConfigUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="51" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d63/a04959_1acb1d9cc28196a4f7be133fdca4d8c27c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dd/d63/a04959" kindref="compound">RsmConfigUbo</ref> &amp;</type>
+        <definition>C3D_API RsmConfigUbo &amp; castor3d::RsmConfigUbo::operator=</definition>
+        <argsstring>(RsmConfigUbo const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::RsmConfigUbo::operator=</qualifiedname>
+        <param>
+          <type><ref refid="dd/d63/a04959" kindref="compound">RsmConfigUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="52" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d63/a04959_1ae54af85de42ad6b49eb969933f4acdb8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::RsmConfigUbo::RsmConfigUbo</definition>
+        <argsstring>(RsmConfigUbo &amp;&amp;rhs)=default</argsstring>
+        <name>RsmConfigUbo</name>
+        <qualifiedname>castor3d::RsmConfigUbo::RsmConfigUbo</qualifiedname>
+        <param>
+          <type><ref refid="dd/d63/a04959" kindref="compound">RsmConfigUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="53" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d63/a04959_1a5af829a12918995e94d08edfad208ad3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dd/d63/a04959" kindref="compound">RsmConfigUbo</ref> &amp;</type>
+        <definition>C3D_API RsmConfigUbo &amp; castor3d::RsmConfigUbo::operator=</definition>
+        <argsstring>(RsmConfigUbo &amp;&amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::RsmConfigUbo::operator=</qualifiedname>
+        <param>
+          <type><ref refid="dd/d63/a04959" kindref="compound">RsmConfigUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="54" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d63/a04959_1ad9e1d5ae613996d779467c631a7b5c79" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::RsmConfigUbo::~RsmConfigUbo</definition>
         <argsstring>()</argsstring>
-        <name>initialise</name>
+        <name>~RsmConfigUbo</name>
+        <qualifiedname>castor3d::RsmConfigUbo::~RsmConfigUbo</qualifiedname>
         <briefdescription>
-<para>Initialises the program. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/RenderDepthQuad.hpp" line="40" column="1"/>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="55" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="dd/d63/a04959_1a916ed7d7e80f9550e04e4ee68b51a390" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="dd/d63/a04959_1ab897494355d37f5e9c3a2ecfe3918a24" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderDepthQuad::render</definition>
-        <argsstring>(ashes::RenderPass const &amp;renderPass, ashes::FrameBuffer const &amp;frameBuffer, castor::Position const &amp;position, castor::Size const &amp;size, TextureLayout const &amp;texture)</argsstring>
-        <name>render</name>
+        <definition>C3D_API void castor3d::RsmConfigUbo::update</definition>
+        <argsstring>(Light const &amp;light)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::RsmConfigUbo::update</qualifiedname>
         <param>
-          <type>ashes::RenderPass const &amp;</type>
-          <declname>renderPass</declname>
-        </param>
-        <param>
-          <type>ashes::FrameBuffer const &amp;</type>
-          <declname>frameBuffer</declname>
-        </param>
-        <param>
-          <type>castor::Position const &amp;</type>
-          <declname>position</declname>
-        </param>
-        <param>
-          <type>castor::Size const &amp;</type>
-          <declname>size</declname>
-        </param>
-        <param>
-          <type><ref refid="d9/d07/a02635" kindref="compound">TextureLayout</ref> const &amp;</type>
-          <declname>texture</declname>
+          <type><ref refid="da/dec/a04499" kindref="compound">Light</ref> const &amp;</type>
+          <declname>light</declname>
         </param>
         <briefdescription>
-<para>Renders the given depth texture to the given frame buffer. </para>
+<para>Updates the UBO from given values. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">renderPass</parametername>
+<parametername direction="in">light</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The render pass. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">frameBuffer</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The frame buffer. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">position</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render viewport position. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">size</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render viewport size. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">texture</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The texture. </para>
+<para>The light source. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -161,133 +211,84 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/RenderDepthQuad.hpp" line="57" column="1"/>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="64" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d63/a04959_1a409d04099ce176f7ba8601720b85c9b5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RsmConfigUbo::createSizedBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</argsstring>
+        <name>createSizedBinding</name>
+        <qualifiedname>castor3d::RsmConfigUbo::createSizedBinding</qualifiedname>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>layoutBinding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="66" column="6" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="66" bodyend="70"/>
+        <references refid="d0/d01/a02511_1a2c6ad146d4910651544564c25ca7dccd" compoundref="dc/d57/a00194" startline="96" endline="105">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d63/a04959_1aaf5479deec21c5f86dd53d37be8198b4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d0/d01/a02511" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="dd/d63/a04959_1aa9747da5cde15d324013b50e2db47344" kindref="member">Configuration</ref> &gt; const &amp;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; const  &amp; castor3d::RsmConfigUbo::getUbo</definition>
+        <argsstring>() const</argsstring>
+        <name>getUbo</name>
+        <qualifiedname>castor3d::RsmConfigUbo::getUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="72" column="29" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="72" bodyend="75"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="2863">
-        <label>castor3d::RenderQuad</label>
-        <link refid="da/d95/a04435"/>
-        <childnode refid="2864" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2862">
-        <label>castor3d::RenderDepthQuad</label>
-        <link refid="dd/d63/a04959"/>
-        <childnode refid="2863" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2864">
-        <label>Named</label>
-      </node>
-    </inheritancegraph>
     <collaborationgraph>
-      <node id="2868">
-        <label>castor3d::RenderSystem</label>
-        <link refid="d6/d55/a04603"/>
-        <childnode refid="2869" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2866">
-        <label>castor3d::RenderQuad</label>
-        <link refid="da/d95/a04435"/>
-        <childnode refid="2867" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2868" relation="usage">
-          <edgelabel>m_renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="2870" relation="usage">
-          <edgelabel>m_device</edgelabel>
-        </childnode>
-      </node>
-      <node id="2873">
-        <label>T</label>
-      </node>
-      <node id="2875">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="2873" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="2872">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="2873" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="2865">
-        <label>castor3d::RenderDepthQuad</label>
+      <node id="1">
+        <label>castor3d::RsmConfigUbo</label>
         <link refid="dd/d63/a04959"/>
-        <childnode refid="2866" relation="public-inheritance">
+        <childnode refid="2" relation="usage">
+          <edgelabel>BufferRsmConfig</edgelabel>
+          <edgelabel>RsmConfigData</edgelabel>
         </childnode>
       </node>
-      <node id="2874">
-        <label>std::vector&lt; ashes::CommandPoolPtr &gt;</label>
-        <childnode refid="2875" relation="template-instance">
-          <edgelabel>&lt; ashes::CommandPoolPtr &gt;</edgelabel>
-        </childnode>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
       </node>
-      <node id="2871">
-        <label>std::array&lt; uint32_t, 4u &gt;</label>
-        <childnode refid="2872" relation="template-instance">
-          <edgelabel>&lt; uint32_t, 4u &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2867">
-        <label>Named</label>
-      </node>
-      <node id="2869">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="2870">
-        <label>castor3d::RenderDevice</label>
-        <link refid="de/ddb/a04491"/>
-        <childnode refid="2871" relation="usage">
-          <edgelabel>queueFamiliesIndex</edgelabel>
-        </childnode>
-        <childnode refid="2868" relation="usage">
-          <edgelabel>renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="2874" relation="usage">
-          <edgelabel>commandPools</edgelabel>
+      <node id="2">
+        <label>std::string</label>
+        <childnode refid="3" relation="public-inheritance">
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Render/ToTexture/RenderDepthQuad.hpp" line="14" column="1" bodyfile="Render/ToTexture/RenderDepthQuad.hpp" bodystart="12" bodyend="66"/>
+    <location file="Shader/Ubos/RsmConfigUbo.hpp" line="44" column="1" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="45" bodyend="84"/>
     <listofallmembers>
-      <member refid="da/d95/a04435_1ab31f1f028639e2280dc81a5207c19361" prot="public" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>cleanup</name></member>
-      <member refid="da/d95/a04435_1a2d8f7fe31e95ec7563ab7e49d47f847f" prot="public" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>createPipeline</name></member>
-      <member refid="da/d95/a04435_1a9eed2ab1f518d2d215e10f79dd66b980" prot="public" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>createPipelineAndPass</name></member>
-      <member refid="da/d95/a04435_1a208ae566cd29dc14e874ec5381a40676" prot="public" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>getDevice</name></member>
-      <member refid="da/d95/a04435_1adf3b0cdd23bb9558df6d7f1b87b74ac6" prot="public" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>getRenderSystem</name></member>
-      <member refid="da/d95/a04435_1a2b4ea1f81bda3deace1e6f5b159f90db" prot="public" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>getSampler</name></member>
-      <member refid="dd/d63/a04959_1a7125004ed6fca6de98ebf9dd7bb24cc9" prot="public" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>initialise</name></member>
-      <member refid="da/d95/a04435_1a434520ea0e0f0a1ae885e7c9e19306a8" prot="public" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>initialisePasses</name></member>
-      <member refid="dd/d63/a04959_1af744415d16a4b0db9e297e986bab452f" prot="private" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>m_commandBuffer</name></member>
-      <member refid="da/d95/a04435_1ac07074df6fa0bb86ec6e9c76bf23f867" prot="protected" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>m_config</name></member>
-      <member refid="da/d95/a04435_1a0e0d911b83650f310a1d773e6774788c" prot="protected" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>m_device</name></member>
-      <member refid="dd/d63/a04959_1abe4ef124f0633e6399c3f7973e744ff9" prot="private" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>m_program</name></member>
-      <member refid="da/d95/a04435_1a67e531e63c3eef4d22c89cd5dcf26d39" prot="protected" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>m_renderSystem</name></member>
-      <member refid="da/d95/a04435_1ac424bcc12b49f4788b6a78e181e7d8c9" prot="protected" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>m_sampler</name></member>
-      <member refid="da/d95/a04435_1aba30b821ed0f043349148de3f91e1e28" prot="public" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1abb76aa593ad380a88d949bd26fea0202" prot="public" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1a612d681d62631e6bb92d9601c660b48e" prot="public" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1af64b5bc8b9a9a3013e46accb200156f5" prot="public" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1a43bab20a96e9bea365bc98d8667c977e" prot="public" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1afacd916c61c3a5b315a0d3e94a8ba84d" prot="public" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1a046a2ac1ba39bbd6114dfe87d4aaaf11" prot="public" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1ac0cf400425c8050429e895099c971715" prot="public" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>registerPass</name></member>
-      <member refid="da/d95/a04435_1a62f21f0ecc9017c47eb029d0bc19e396" prot="public" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>registerPass</name></member>
-      <member refid="da/d95/a04435_1a367adcd9b6cc6ac6b1c68a28b2580eb2" prot="public" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>registerPassInputs</name></member>
-      <member refid="dd/d63/a04959_1a916ed7d7e80f9550e04e4ee68b51a390" prot="public" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>render</name></member>
-      <member refid="dd/d63/a04959_1ab4ea0b84e4138c3a50b882490de23137" prot="public" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>RenderDepthQuad</name></member>
-      <member refid="da/d95/a04435_1a48a49fffd036c545328e87e1449e141d" prot="protected" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>RenderQuad</name></member>
-      <member refid="da/d95/a04435_1aeaeeae8d7065de723f0a710360bab119" prot="public" virt="non-virtual"><scope>castor3d::RenderDepthQuad</scope><name>RenderQuad</name></member>
-      <member refid="da/d95/a04435_1a8a01faf0243638f02d6f052ff9e85b4b" prot="public" virt="virtual"><scope>castor3d::RenderDepthQuad</scope><name>~RenderQuad</name></member>
+      <member refid="dd/d63/a04959_1a535d4c129fa65a131042d2fdac154ec9" prot="public" virt="non-virtual"><scope>castor3d::RsmConfigUbo</scope><name>BufferRsmConfig</name></member>
+      <member refid="dd/d63/a04959_1aa9747da5cde15d324013b50e2db47344" prot="public" virt="non-virtual"><scope>castor3d::RsmConfigUbo</scope><name>Configuration</name></member>
+      <member refid="dd/d63/a04959_1a409d04099ce176f7ba8601720b85c9b5" prot="public" virt="non-virtual"><scope>castor3d::RsmConfigUbo</scope><name>createSizedBinding</name></member>
+      <member refid="dd/d63/a04959_1aaf5479deec21c5f86dd53d37be8198b4" prot="public" virt="non-virtual"><scope>castor3d::RsmConfigUbo</scope><name>getUbo</name></member>
+      <member refid="dd/d63/a04959_1a361fb0f84cea0e243f7d9e236f0885ca" prot="private" virt="non-virtual"><scope>castor3d::RsmConfigUbo</scope><name>m_device</name></member>
+      <member refid="dd/d63/a04959_1a48767860fe5a91e0d05835522369cfe8" prot="private" virt="non-virtual"><scope>castor3d::RsmConfigUbo</scope><name>m_ubo</name></member>
+      <member refid="dd/d63/a04959_1acb1d9cc28196a4f7be133fdca4d8c27c" prot="public" virt="non-virtual"><scope>castor3d::RsmConfigUbo</scope><name>operator=</name></member>
+      <member refid="dd/d63/a04959_1a5af829a12918995e94d08edfad208ad3" prot="public" virt="non-virtual"><scope>castor3d::RsmConfigUbo</scope><name>operator=</name></member>
+      <member refid="dd/d63/a04959_1a2e3237285e75471399fab7bdda096393" prot="public" virt="non-virtual"><scope>castor3d::RsmConfigUbo</scope><name>RsmConfigData</name></member>
+      <member refid="dd/d63/a04959_1a8605726892160b26766887c089158d1a" prot="public" virt="non-virtual"><scope>castor3d::RsmConfigUbo</scope><name>RsmConfigUbo</name></member>
+      <member refid="dd/d63/a04959_1aa0b5b04a1147a1bb54d35eebb4c596e5" prot="public" virt="non-virtual"><scope>castor3d::RsmConfigUbo</scope><name>RsmConfigUbo</name></member>
+      <member refid="dd/d63/a04959_1ae54af85de42ad6b49eb969933f4acdb8" prot="public" virt="non-virtual"><scope>castor3d::RsmConfigUbo</scope><name>RsmConfigUbo</name></member>
+      <member refid="dd/d63/a04959_1ab897494355d37f5e9c3a2ecfe3918a24" prot="public" virt="non-virtual"><scope>castor3d::RsmConfigUbo</scope><name>update</name></member>
+      <member refid="dd/d63/a04959_1ad9e1d5ae613996d779467c631a7b5c79" prot="public" virt="non-virtual"><scope>castor3d::RsmConfigUbo</scope><name>~RsmConfigUbo</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,33 +1,127 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d0/d7c/a03318" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkSwapchainCounterCreateInfoEXT &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d0/d7c/a03318_1aacb18921443da7ef9c15da188d69294e" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkSwapchainCounterCreateInfoEXT &gt;::value</definition>
-        <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_SWAPCHAIN_COUNTER_CREATE_INFO_EXT</initializer>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d0/d7c/a03318" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Plane</compoundname>
+    <basecompoundref refid="d6/d18/a03350" prot="public" virt="non-virtual">castor3d::MeshGenerator</basecompoundref>
+    <includes local="no">Plane.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d7c/a03318_1a7d651ef25d42e04921eb2cc0686050e8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Plane::Plane</definition>
+        <argsstring>()</argsstring>
+        <name>Plane</name>
+        <qualifiedname>castor3d::Plane::Plane</qualifiedname>
         <briefdescription>
+<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="242" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="242" bodyend="-1"/>
+        <location file="Model/Mesh/Generator/Plane.hpp" line="21" column="9"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d0/d7c/a03318_1ad1dbadcd2049957fead93a7b49858d50" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> MeshGeneratorSPtr</type>
+        <definition>static C3D_API MeshGeneratorSPtr castor3d::Plane::create</definition>
+        <argsstring>()</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::Plane::create</qualifiedname>
+        <briefdescription>
+<para>Creation function, used by Factory. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><ref refid="d7/d2e/a03310" kindref="compound">Cylinder</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Plane.hpp" line="25" column="34"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d0/d7c/a03318_1af4a5b8cbe090abd0036d21ccd68cbd00" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Plane::doGenerate</definition>
+        <argsstring>(Mesh &amp;mesh, Parameters const &amp;parameters) override</argsstring>
+        <name>doGenerate</name>
+        <qualifiedname>castor3d::Plane::doGenerate</qualifiedname>
+        <reimplements refid="d6/d18/a03350_1a690745122d7e670b311e317ae86c9b45">doGenerate</reimplements>
+        <param>
+          <type><ref refid="dd/dc8/a03342" kindref="compound">Mesh</ref> &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para>Generates the mesh. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mesh. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The generator parameters. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Plane.hpp" line="28" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="242" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="242" bodyend="242"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::MeshGenerator</label>
+        <link refid="d6/d18/a03350"/>
+      </node>
+      <node id="1">
+        <label>castor3d::Plane</label>
+        <link refid="d0/d7c/a03318"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::MeshGenerator</label>
+        <link refid="d6/d18/a03350"/>
+      </node>
+      <node id="1">
+        <label>castor3d::Plane</label>
+        <link refid="d0/d7c/a03318"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/Generator/Plane.hpp" line="11" column="1" bodyfile="Model/Mesh/Generator/Plane.hpp" bodystart="13" bodyend="30"/>
     <listofallmembers>
-      <member refid="d0/d7c/a03318_1aacb18921443da7ef9c15da188d69294e" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkSwapchainCounterCreateInfoEXT &gt;</scope><name>value</name></member>
+      <member refid="d6/d18/a03350_1a3207825be521c851f6fc654751f54cf1" prot="public" virt="virtual"><scope>castor3d::Plane</scope><name>computeNormals</name></member>
+      <member refid="d0/d7c/a03318_1ad1dbadcd2049957fead93a7b49858d50" prot="public" virt="non-virtual"><scope>castor3d::Plane</scope><name>create</name></member>
+      <member refid="d0/d7c/a03318_1af4a5b8cbe090abd0036d21ccd68cbd00" prot="private" virt="virtual"><scope>castor3d::Plane</scope><name>doGenerate</name></member>
+      <member refid="d6/d18/a03350_1a9fdc140f2d871ca6cb81029250c346ae" prot="public" virt="virtual"><scope>castor3d::Plane</scope><name>generate</name></member>
+      <member refid="d6/d18/a03350_1a3ccec3fd88667bbca33c6e81afdeff19" prot="public" virt="non-virtual"><scope>castor3d::Plane</scope><name>MeshGenerator</name></member>
+      <member refid="d0/d7c/a03318_1a7d651ef25d42e04921eb2cc0686050e8" prot="public" virt="non-virtual"><scope>castor3d::Plane</scope><name>Plane</name></member>
+      <member refid="d6/d18/a03350_1adee42c7c921b0dff4cbbc99c29faf31f" prot="public" virt="virtual"><scope>castor3d::Plane</scope><name>~MeshGenerator</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

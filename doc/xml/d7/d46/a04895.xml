@@ -1,277 +1,165 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d7/d46/a04895" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::SsaoPass</compoundname>
-    <includes local="no">SsaoPass.hpp</includes>
+    <compoundname>castor3d::HdrConfigUbo</compoundname>
+    <includes local="no">HdrConfigUbo.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d7/d46/a04895_1a2440dca559ddaf38cf51bf61b701990b" prot="public" static="no">
+        <type><ref refid="d2/dcd/a04323" kindref="compound">HdrConfig</ref></type>
+        <definition>using castor3d::HdrConfigUbo::Configuration =  HdrConfig</definition>
+        <argsstring></argsstring>
+        <name>Configuration</name>
+        <qualifiedname>castor3d::HdrConfigUbo::Configuration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="57" column="1" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d7/d46/a04895_1ae3a9a43640e0d9fb106d8eb30f219694" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::HdrConfigUbo::BufferHdrConfig</definition>
+        <argsstring></argsstring>
+        <name>BufferHdrConfig</name>
+        <qualifiedname>castor3d::HdrConfigUbo::BufferHdrConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="94" column="37" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d46/a04895_1a3c13aff3fe08b2b7c48a857790ef290e" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::HdrConfigUbo::HdrConfigData</definition>
+        <argsstring></argsstring>
+        <name>HdrConfigData</name>
+        <qualifiedname>castor3d::HdrConfigUbo::HdrConfigData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="95" column="37" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d7/d46/a04895_1a2f3c0211b9d74dc4dc5de5bfe536559d" prot="private" static="no" mutable="no">
-        <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
-        <definition>Engine&amp; castor3d::SsaoPass::m_engine</definition>
+      <memberdef kind="variable" id="d7/d46/a04895_1afe900694c284997f4915bd010680ef12" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::HdrConfigUbo::m_device</definition>
         <argsstring></argsstring>
-        <name>m_engine</name>
+        <name>m_device</name>
+        <qualifiedname>castor3d::HdrConfigUbo::m_device</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/SsaoPass.hpp" line="97" column="1" bodyfile="Render/Technique/Opaque/SsaoPass.hpp" bodystart="97" bodyend="-1"/>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="98" column="21" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="98" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d7/d46/a04895_1a01cfafdc56872e208e50808aca0cbe78" prot="private" static="no" mutable="no">
-        <type><ref refid="d6/d12/a04691" kindref="compound">SsaoConfig</ref> &amp;</type>
-        <definition>SsaoConfig&amp; castor3d::SsaoPass::m_ssaoConfig</definition>
+      <memberdef kind="variable" id="d7/d46/a04895_1a4aefbb0dc431b0340043788a215eac69" prot="private" static="no" mutable="no">
+        <type><ref refid="d0/d01/a02511" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d2/dcd/a04323" kindref="compound">HdrConfig</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; HdrConfig &gt; castor3d::HdrConfigUbo::m_ubo</definition>
         <argsstring></argsstring>
-        <name>m_ssaoConfig</name>
+        <name>m_ubo</name>
+        <qualifiedname>castor3d::HdrConfigUbo::m_ubo</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/SsaoPass.hpp" line="98" column="1" bodyfile="Render/Technique/Opaque/SsaoPass.hpp" bodystart="98" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d46/a04895_1aff7e9137f63afc0e56c56baca24cfe9f" prot="private" static="no" mutable="no">
-        <type><ref refid="d8/dd7/a02643" kindref="compound">TextureUnit</ref> const  &amp;</type>
-        <definition>TextureUnit const&amp; castor3d::SsaoPass::m_linearisedDepth</definition>
-        <argsstring></argsstring>
-        <name>m_linearisedDepth</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/SsaoPass.hpp" line="99" column="1" bodyfile="Render/Technique/Opaque/SsaoPass.hpp" bodystart="99" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d46/a04895_1ac02df36ba34496d2cd1d317b543eacbd" prot="private" static="no" mutable="no">
-        <type><ref refid="da/d9f/a04859" kindref="compound">OpaquePassResult</ref> const  &amp;</type>
-        <definition>OpaquePassResult const&amp; castor3d::SsaoPass::m_gpResult</definition>
-        <argsstring></argsstring>
-        <name>m_gpResult</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/SsaoPass.hpp" line="100" column="1" bodyfile="Render/Technique/Opaque/SsaoPass.hpp" bodystart="100" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d46/a04895_1acb692d886e5f241015ab8d8cf70beb01" prot="private" static="no" mutable="no">
-        <type><ref refid="dd/d83/a05443" kindref="compound">GpInfoUbo</ref> const  &amp;</type>
-        <definition>GpInfoUbo const&amp; castor3d::SsaoPass::m_gpInfoUbo</definition>
-        <argsstring></argsstring>
-        <name>m_gpInfoUbo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/SsaoPass.hpp" line="101" column="1" bodyfile="Render/Technique/Opaque/SsaoPass.hpp" bodystart="101" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d46/a04895_1a9df8673cc61605ebc78b445f221c3644" prot="private" static="no" mutable="no">
-        <type>VkExtent2D</type>
-        <definition>VkExtent2D castor3d::SsaoPass::m_size</definition>
-        <argsstring></argsstring>
-        <name>m_size</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/SsaoPass.hpp" line="102" column="1" bodyfile="Render/Technique/Opaque/SsaoPass.hpp" bodystart="102" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d46/a04895_1aea73f20419bc3f9e7b1cf43bb046336f" prot="private" static="no" mutable="no">
-        <type><ref refid="d9/dae/a05475" kindref="compound">MatrixUbo</ref></type>
-        <definition>MatrixUbo castor3d::SsaoPass::m_matrixUbo</definition>
-        <argsstring></argsstring>
-        <name>m_matrixUbo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/SsaoPass.hpp" line="103" column="1" bodyfile="Render/Technique/Opaque/SsaoPass.hpp" bodystart="103" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d46/a04895_1aca3a776fd824415b4af1c8d881698614" prot="private" static="no" mutable="no">
-        <type>std::shared_ptr&lt; <ref refid="d9/d91/a05523" kindref="compound">SsaoConfigUbo</ref> &gt;</type>
-        <definition>std::shared_ptr&lt; SsaoConfigUbo &gt; castor3d::SsaoPass::m_ssaoConfigUbo</definition>
-        <argsstring></argsstring>
-        <name>m_ssaoConfigUbo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/SsaoPass.hpp" line="104" column="1" bodyfile="Render/Technique/Opaque/SsaoPass.hpp" bodystart="104" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d46/a04895_1ab789d47964964709aaed6cad5ff47167" prot="private" static="no" mutable="no">
-        <type>std::shared_ptr&lt; <ref refid="de/db5/a04695" kindref="compound">SsaoRawAOPass</ref> &gt;</type>
-        <definition>std::shared_ptr&lt; SsaoRawAOPass &gt; castor3d::SsaoPass::m_rawAoPass</definition>
-        <argsstring></argsstring>
-        <name>m_rawAoPass</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/SsaoPass.hpp" line="105" column="1" bodyfile="Render/Technique/Opaque/SsaoPass.hpp" bodystart="105" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d46/a04895_1a756d9f206b99b9aa7722a57d968a0d36" prot="private" static="no" mutable="no">
-        <type>std::shared_ptr&lt; <ref refid="d9/db6/a04683" kindref="compound">SsaoBlurPass</ref> &gt;</type>
-        <definition>std::shared_ptr&lt; SsaoBlurPass &gt; castor3d::SsaoPass::m_horizontalBlur</definition>
-        <argsstring></argsstring>
-        <name>m_horizontalBlur</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/SsaoPass.hpp" line="106" column="1" bodyfile="Render/Technique/Opaque/SsaoPass.hpp" bodystart="106" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d46/a04895_1a4735af462bc903a283e7882c45edcf7a" prot="private" static="no" mutable="no">
-        <type>std::shared_ptr&lt; <ref refid="d9/db6/a04683" kindref="compound">SsaoBlurPass</ref> &gt;</type>
-        <definition>std::shared_ptr&lt; SsaoBlurPass &gt; castor3d::SsaoPass::m_verticalBlur</definition>
-        <argsstring></argsstring>
-        <name>m_verticalBlur</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/SsaoPass.hpp" line="107" column="1" bodyfile="Render/Technique/Opaque/SsaoPass.hpp" bodystart="107" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d46/a04895_1ac663704d5321d606f2f61d2f37933fd9" prot="private" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::SsaoPass::m_initialised</definition>
-        <argsstring></argsstring>
-        <name>m_initialised</name>
-        <initializer>{ false }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/SsaoPass.hpp" line="108" column="1" bodyfile="Render/Technique/Opaque/SsaoPass.hpp" bodystart="108" bodyend="-1"/>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="99" column="22" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="99" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d7/d46/a04895_1a35aca7808b625c4ffc8a659595c856ab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d7/d46/a04895_1ab91fa60d45be47d64d6ae7482a58a564" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::SsaoPass::SsaoPass</definition>
-        <argsstring>(Engine &amp;engine, castor::Size const &amp;size, SsaoConfig &amp;ssaoConfig, TextureUnit const &amp;linearisedDepth, OpaquePassResult const &amp;gpResult, GpInfoUbo const &amp;gpInfoUbo)</argsstring>
-        <name>SsaoPass</name>
+        <definition>C3D_API castor3d::HdrConfigUbo::HdrConfigUbo</definition>
+        <argsstring>(HdrConfigUbo const &amp;rhs)=delete</argsstring>
+        <name>HdrConfigUbo</name>
+        <qualifiedname>castor3d::HdrConfigUbo::HdrConfigUbo</qualifiedname>
         <param>
-          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
-        </param>
-        <param>
-          <type>castor::Size const &amp;</type>
-          <declname>size</declname>
-        </param>
-        <param>
-          <type><ref refid="d6/d12/a04691" kindref="compound">SsaoConfig</ref> &amp;</type>
-          <declname>ssaoConfig</declname>
-        </param>
-        <param>
-          <type><ref refid="d8/dd7/a02643" kindref="compound">TextureUnit</ref> const &amp;</type>
-          <declname>linearisedDepth</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d9f/a04859" kindref="compound">OpaquePassResult</ref> const &amp;</type>
-          <declname>gpResult</declname>
-        </param>
-        <param>
-          <type><ref refid="dd/d83/a05443" kindref="compound">GpInfoUbo</ref> const &amp;</type>
-          <declname>gpInfoUbo</declname>
+          <type><ref refid="d7/d46/a04895" kindref="compound">HdrConfigUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">engine</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The engine. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">size</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render area dimensions. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">ssaoConfig</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The SSAO configuration. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">linearisedDepth</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The linearised depth buffer. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">gpResult</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The geometry pass result. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">gpInfoUbo</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GBuffer configuration UBO. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/SsaoPass.hpp" line="39" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d46/a04895_1a684518010f43b311dc0c0a4f03a2fd1c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::SsaoPass::~SsaoPass</definition>
-        <argsstring>()=default</argsstring>
-        <name>~SsaoPass</name>
-        <briefdescription>
-<para>Destructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/SsaoPass.hpp" line="51" column="1"/>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="60" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d7/d46/a04895_1af76ba330648bef52e5ba432d9d386c09" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SsaoPass::initialise</definition>
+      <memberdef kind="function" id="d7/d46/a04895_1a3eb4761f8c7b734fa1fa83a1cd1d46e5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/d46/a04895" kindref="compound">HdrConfigUbo</ref> &amp;</type>
+        <definition>C3D_API HdrConfigUbo &amp; castor3d::HdrConfigUbo::operator=</definition>
+        <argsstring>(HdrConfigUbo const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::HdrConfigUbo::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d7/d46/a04895" kindref="compound">HdrConfigUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="61" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d46/a04895_1a64901695f1fb427d91818dd1aa632fc1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::HdrConfigUbo::HdrConfigUbo</definition>
+        <argsstring>(HdrConfigUbo &amp;&amp;rhs)=default</argsstring>
+        <name>HdrConfigUbo</name>
+        <qualifiedname>castor3d::HdrConfigUbo::HdrConfigUbo</qualifiedname>
+        <param>
+          <type><ref refid="d7/d46/a04895" kindref="compound">HdrConfigUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="62" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d46/a04895_1af6e3e27f16ad71c0b195b6e88ef29568" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/d46/a04895" kindref="compound">HdrConfigUbo</ref> &amp;</type>
+        <definition>C3D_API HdrConfigUbo &amp; castor3d::HdrConfigUbo::operator=</definition>
+        <argsstring>(HdrConfigUbo &amp;&amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::HdrConfigUbo::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d7/d46/a04895" kindref="compound">HdrConfigUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="63" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d46/a04895_1ac8b31a1a1644a849ffa31cf1b1125294" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::HdrConfigUbo::HdrConfigUbo</definition>
         <argsstring>(RenderDevice const &amp;device)</argsstring>
-        <name>initialise</name>
+        <name>HdrConfigUbo</name>
+        <qualifiedname>castor3d::HdrConfigUbo::HdrConfigUbo</qualifiedname>
         <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
           <declname>device</declname>
         </param>
         <briefdescription>
@@ -280,44 +168,42 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/SsaoPass.hpp" line="52" column="1"/>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="64" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d7/d46/a04895_1a8578a44c92504b245fc3136e9bc5ee76" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SsaoPass::cleanup</definition>
-        <argsstring>(RenderDevice const &amp;device)</argsstring>
-        <name>cleanup</name>
-        <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
+      <memberdef kind="function" id="d7/d46/a04895_1a4b382d91005dd9eaa4a091bf33ca01ca" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::HdrConfigUbo::~HdrConfigUbo</definition>
+        <argsstring>()</argsstring>
+        <name>~HdrConfigUbo</name>
+        <qualifiedname>castor3d::HdrConfigUbo::~HdrConfigUbo</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/SsaoPass.hpp" line="53" column="1"/>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="65" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d7/d46/a04895_1a6a75b0a97bba21131f6594e703ef96e4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d7/d46/a04895_1a2f30a1d39e9c5ea861177803e507195b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SsaoPass::update</definition>
-        <argsstring>(CpuUpdater &amp;updater)</argsstring>
-        <name>update</name>
+        <definition>C3D_API void castor3d::HdrConfigUbo::cpuUpdate</definition>
+        <argsstring>(HdrConfig const &amp;config)</argsstring>
+        <name>cpuUpdate</name>
+        <qualifiedname>castor3d::HdrConfigUbo::cpuUpdate</qualifiedname>
         <param>
-          <type><ref refid="db/d82/a04567" kindref="compound">CpuUpdater</ref> &amp;</type>
-          <declname>updater</declname>
+          <type><ref refid="d2/dcd/a04323" kindref="compound">HdrConfig</ref> const &amp;</type>
+          <declname>config</declname>
         </param>
         <briefdescription>
-<para>Updates the render pass, CPU wise. </para>
+<para>Updates the UBO from given values. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="inout">updater</parametername>
+<parametername direction="in">config</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The update data. </para>
+<para>The HDR configuration. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -325,138 +211,88 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/SsaoPass.hpp" line="62" column="1"/>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="74" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d7/d46/a04895_1af99f907832fba28a147c6dfc21d2615b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Semaphore const  &amp;</type>
-        <definition>C3D_API ashes::Semaphore const&amp; castor3d::SsaoPass::render</definition>
-        <argsstring>(ashes::Semaphore const &amp;toWait) const</argsstring>
-        <name>render</name>
+      <memberdef kind="function" id="d7/d46/a04895_1acbca94618ea9c25507c9c222b1788abd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::HdrConfigUbo::createPassBinding</definition>
+        <argsstring>(crg::FramePass &amp;pass, uint32_t binding) const</argsstring>
+        <name>createPassBinding</name>
+        <qualifiedname>castor3d::HdrConfigUbo::createPassBinding</qualifiedname>
         <param>
-          <type>ashes::Semaphore const &amp;</type>
-          <declname>toWait</declname>
+          <type>crg::FramePass &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
         </param>
         <briefdescription>
-<para>Renders the SSAO pass. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">toWait</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The semaphore to wait. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/SsaoPass.hpp" line="71" column="1"/>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="76" column="6" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="76" bodyend="80"/>
       </memberdef>
-      <memberdef kind="function" id="d7/d46/a04895_1a1678e3bb5f9f0c996a99dbd80109818a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SsaoPass::accept</definition>
-        <argsstring>(PipelineVisitorBase &amp;visitor)</argsstring>
-        <name>accept</name>
+      <memberdef kind="function" id="d7/d46/a04895_1a22919fcbcf1d1c282e876e99e5e7cabe" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::HdrConfigUbo::createSizedBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</argsstring>
+        <name>createSizedBinding</name>
+        <qualifiedname>castor3d::HdrConfigUbo::createSizedBinding</qualifiedname>
         <param>
-          <type><ref refid="d7/dab/a03815" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
-          <declname>visitor</declname>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>layoutBinding</declname>
         </param>
         <briefdescription>
-<para>Visitor acceptance function. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername>visitor</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The ... visitor. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/SsaoPass.hpp" line="75" column="1"/>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="82" column="6" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="82" bodyend="86"/>
       </memberdef>
-      <memberdef kind="function" id="d7/d46/a04895_1a7afe576c78e32abbb890976297520544" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d8/dd7/a02643" kindref="compound">TextureUnit</ref> const  &amp;</type>
-        <definition>C3D_API TextureUnit const&amp; castor3d::SsaoPass::getResult</definition>
+      <memberdef kind="function" id="d7/d46/a04895_1aaca05e57743879da97df5a70aa401596" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d0/d01/a02511" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d7/d46/a04895_1a2440dca559ddaf38cf51bf61b701990b" kindref="member">Configuration</ref> &gt; const &amp;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; const  &amp; castor3d::HdrConfigUbo::getUbo</definition>
         <argsstring>() const</argsstring>
-        <name>getResult</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The SSAO pass result. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/SsaoPass.hpp" line="82" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d46/a04895_1ab962a4aa48e76573fc45b4eeef12f402" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d8/dd7/a02643" kindref="compound">TextureUnit</ref> const  &amp;</type>
-        <definition>C3D_API TextureUnit const&amp; castor3d::SsaoPass::getBentNormals</definition>
-        <argsstring>() const</argsstring>
-        <name>getBentNormals</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The bent normals. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/SsaoPass.hpp" line="89" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d46/a04895_1a52aad82f5cf95cd79eaab5bc1f054d50" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d6/d12/a04691" kindref="compound">SsaoConfig</ref> const  &amp;</type>
-        <definition>SsaoConfig const&amp; castor3d::SsaoPass::getConfig</definition>
-        <argsstring>() const</argsstring>
-        <name>getConfig</name>
+        <name>getUbo</name>
+        <qualifiedname>castor3d::HdrConfigUbo::getUbo</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/SsaoPass.hpp" line="91" column="1" bodyfile="Render/Technique/Opaque/SsaoPass.hpp" bodystart="91" bodyend="94"/>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="88" column="29" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="88" bodyend="91"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Technique/Opaque/SsaoPass.hpp" line="19" column="1" bodyfile="Render/Technique/Opaque/SsaoPass.hpp" bodystart="18" bodyend="109"/>
+    <location file="Shader/Ubos/HdrConfigUbo.hpp" line="54" column="1" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="55" bodyend="100"/>
     <listofallmembers>
-      <member refid="d7/d46/a04895_1a1678e3bb5f9f0c996a99dbd80109818a" prot="public" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>accept</name></member>
-      <member refid="d7/d46/a04895_1a8578a44c92504b245fc3136e9bc5ee76" prot="public" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>cleanup</name></member>
-      <member refid="d7/d46/a04895_1ab962a4aa48e76573fc45b4eeef12f402" prot="public" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>getBentNormals</name></member>
-      <member refid="d7/d46/a04895_1a52aad82f5cf95cd79eaab5bc1f054d50" prot="public" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>getConfig</name></member>
-      <member refid="d7/d46/a04895_1a7afe576c78e32abbb890976297520544" prot="public" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>getResult</name></member>
-      <member refid="d7/d46/a04895_1af76ba330648bef52e5ba432d9d386c09" prot="public" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>initialise</name></member>
-      <member refid="d7/d46/a04895_1a2f3c0211b9d74dc4dc5de5bfe536559d" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_engine</name></member>
-      <member refid="d7/d46/a04895_1acb692d886e5f241015ab8d8cf70beb01" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_gpInfoUbo</name></member>
-      <member refid="d7/d46/a04895_1ac02df36ba34496d2cd1d317b543eacbd" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_gpResult</name></member>
-      <member refid="d7/d46/a04895_1a756d9f206b99b9aa7722a57d968a0d36" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_horizontalBlur</name></member>
-      <member refid="d7/d46/a04895_1ac663704d5321d606f2f61d2f37933fd9" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_initialised</name></member>
-      <member refid="d7/d46/a04895_1aff7e9137f63afc0e56c56baca24cfe9f" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_linearisedDepth</name></member>
-      <member refid="d7/d46/a04895_1aea73f20419bc3f9e7b1cf43bb046336f" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_matrixUbo</name></member>
-      <member refid="d7/d46/a04895_1ab789d47964964709aaed6cad5ff47167" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_rawAoPass</name></member>
-      <member refid="d7/d46/a04895_1a9df8673cc61605ebc78b445f221c3644" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_size</name></member>
-      <member refid="d7/d46/a04895_1a01cfafdc56872e208e50808aca0cbe78" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_ssaoConfig</name></member>
-      <member refid="d7/d46/a04895_1aca3a776fd824415b4af1c8d881698614" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_ssaoConfigUbo</name></member>
-      <member refid="d7/d46/a04895_1a4735af462bc903a283e7882c45edcf7a" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_verticalBlur</name></member>
-      <member refid="d7/d46/a04895_1af99f907832fba28a147c6dfc21d2615b" prot="public" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>render</name></member>
-      <member refid="d7/d46/a04895_1a35aca7808b625c4ffc8a659595c856ab" prot="public" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>SsaoPass</name></member>
-      <member refid="d7/d46/a04895_1a6a75b0a97bba21131f6594e703ef96e4" prot="public" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>update</name></member>
-      <member refid="d7/d46/a04895_1a684518010f43b311dc0c0a4f03a2fd1c" prot="public" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>~SsaoPass</name></member>
+      <member refid="d7/d46/a04895_1ae3a9a43640e0d9fb106d8eb30f219694" prot="public" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>BufferHdrConfig</name></member>
+      <member refid="d7/d46/a04895_1a2440dca559ddaf38cf51bf61b701990b" prot="public" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>Configuration</name></member>
+      <member refid="d7/d46/a04895_1a2f30a1d39e9c5ea861177803e507195b" prot="public" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>cpuUpdate</name></member>
+      <member refid="d7/d46/a04895_1acbca94618ea9c25507c9c222b1788abd" prot="public" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>createPassBinding</name></member>
+      <member refid="d7/d46/a04895_1a22919fcbcf1d1c282e876e99e5e7cabe" prot="public" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>createSizedBinding</name></member>
+      <member refid="d7/d46/a04895_1aaca05e57743879da97df5a70aa401596" prot="public" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>getUbo</name></member>
+      <member refid="d7/d46/a04895_1a3c13aff3fe08b2b7c48a857790ef290e" prot="public" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>HdrConfigData</name></member>
+      <member refid="d7/d46/a04895_1ab91fa60d45be47d64d6ae7482a58a564" prot="public" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>HdrConfigUbo</name></member>
+      <member refid="d7/d46/a04895_1a64901695f1fb427d91818dd1aa632fc1" prot="public" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>HdrConfigUbo</name></member>
+      <member refid="d7/d46/a04895_1ac8b31a1a1644a849ffa31cf1b1125294" prot="public" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>HdrConfigUbo</name></member>
+      <member refid="d7/d46/a04895_1afe900694c284997f4915bd010680ef12" prot="private" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>m_device</name></member>
+      <member refid="d7/d46/a04895_1a4aefbb0dc431b0340043788a215eac69" prot="private" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>m_ubo</name></member>
+      <member refid="d7/d46/a04895_1a3eb4761f8c7b734fa1fa83a1cd1d46e5" prot="public" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>operator=</name></member>
+      <member refid="d7/d46/a04895_1af6e3e27f16ad71c0b195b6e88ef29568" prot="public" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>operator=</name></member>
+      <member refid="d7/d46/a04895_1a4b382d91005dd9eaa4a091bf33ca01ca" prot="public" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>~HdrConfigUbo</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

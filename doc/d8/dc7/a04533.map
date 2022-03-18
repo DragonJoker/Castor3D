@@ -1,5 +1,4 @@
-<map id="castor3d::NonTexturedCube" name="castor3d::NonTexturedCube">
-<area shape="rect" id="node1" title=" " alt="" coords="5,213,188,240"/>
-<area shape="rect" id="node2" href="$d0/d3d/a04539.html" title=" " alt="" coords="5,109,188,151"/>
-<area shape="rect" id="node3" href="$d5/dd2/a04543.html" title=" " alt="" coords="5,5,188,47"/>
+<map id="castor3d::MovableMergerT&lt; CacheT &gt;" name="castor3d::MovableMergerT&lt; CacheT &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="5,80,180,121"/>
+<area shape="rect" id="node2" title=" " alt="" coords="39,5,146,32"/>
 </map>

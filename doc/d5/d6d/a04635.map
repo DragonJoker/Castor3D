@@ -1,8 +1,9 @@
-<map id="castor3d::RenderWindow" name="castor3d::RenderWindow">
-<area shape="rect" id="node1" title=" " alt="" coords="452,81,619,108"/>
-<area shape="rect" id="node2" title=" " alt="" coords="213,5,400,32"/>
-<area shape="rect" id="node3" title=" " alt="" coords="275,56,338,83"/>
-<area shape="rect" id="node4" href="$de/d48/a02552.html" title=" " alt="" coords="209,107,404,133"/>
-<area shape="rect" id="node5" href="$d1/df6/a02544.html" title=" " alt="" coords="5,107,161,133"/>
-<area shape="rect" id="node6" title=" " alt="" coords="210,158,403,199"/>
+<map id="castor3d::SceneNode" name="castor3d::SceneNode">
+<area shape="rect" id="node1" title=" " alt="" coords="168,291,315,317"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,200,179,241"/>
+<area shape="rect" id="node3" href="$d8/d5f/a02216.html" title=" " alt="" coords="203,207,279,234"/>
+<area shape="rect" id="node4" title=" " alt="" coords="127,103,313,130"/>
+<area shape="rect" id="node5" href="$d8/d5f/a02216.html" title="Animable public interface." alt="" coords="338,96,489,137"/>
+<area shape="rect" id="node6" title=" " alt="" coords="319,5,507,47"/>
+<area shape="rect" id="node7" title=" " alt="" coords="304,207,411,234"/>
 </map>

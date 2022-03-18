@@ -1,81 +1,561 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="de/d08/a03934" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::FaceInfos</compoundname>
-    <includes local="no">FaceInfos.hpp</includes>
-    <innerclass refid="d4/dc4/a03938" prot="public">castor3d::FaceInfos::Vertex</innerclass>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="de/d08/a03934" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Ray</compoundname>
+    <includes local="no">Ray.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="de/d08/a03934_1a4a3ac3f4c86c3e2eae6aac994965e162" prot="public" static="no" mutable="no">
-        <type>std::array&lt; <ref refid="d4/dc4/a03938" kindref="compound">Vertex</ref>, 3 &gt;</type>
-        <definition>std::array&lt; Vertex, 3 &gt; castor3d::FaceInfos::m_vertex</definition>
+      <memberdef kind="variable" id="de/d08/a03934_1aeb4bdceba330a4f6be5e252c3dfe94a2" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::Ray::m_origin</definition>
         <argsstring></argsstring>
-        <name>m_vertex</name>
+        <name>m_origin</name>
+        <qualifiedname>castor3d::Ray::m_origin</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The 3 vertex informations. </para>
+<para>The ray origin. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/FaceInfos.hpp" line="42" column="1" bodyfile="Model/Mesh/Submesh/Component/FaceInfos.hpp" bodystart="42" bodyend="-1"/>
+        <location file="Render/Ray.hpp" line="167" column="17" bodyfile="Render/Ray.hpp" bodystart="167" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d08/a03934_1af507dcb336d7c19af6a8ae7f15b4f0ae" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::Ray::m_direction</definition>
+        <argsstring></argsstring>
+        <name>m_direction</name>
+        <qualifiedname>castor3d::Ray::m_direction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The ray direction. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ray.hpp" line="170" column="17" bodyfile="Render/Ray.hpp" bodystart="170" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/d08/a03934_1aa97b60404e050d524652e1447f5605c7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Ray::Ray</definition>
+        <argsstring>(castor::Position const &amp;point, Camera const &amp;camera)</argsstring>
+        <name>Ray</name>
+        <qualifiedname>castor3d::Ray::Ray</qualifiedname>
+        <param>
+          <type>castor::Position const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d2e/a04482" kindref="compound">Camera</ref> const &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <briefdescription>
+<para>Constructor from mouse coordinates and a camera. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mouse coordinates. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">camera</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The camera from which to retrieve the ray. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ray.hpp" line="26" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d08/a03934_1a2d61a856b9dacab355cdf6157e2d4108" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Ray::Ray</definition>
+        <argsstring>(int x, int y, Camera const &amp;camera)</argsstring>
+        <name>Ray</name>
+        <qualifiedname>castor3d::Ray::Ray</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d2e/a04482" kindref="compound">Camera</ref> const &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <briefdescription>
+<para>Constructor from mouse coordinates and a camera. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">x</parametername>
+<parametername direction="in">y</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mouse coordinates. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">camera</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The camera from which to retrieve the ray. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ray.hpp" line="38" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d08/a03934_1afebebeb4e598a187857e72771a0325cc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Ray::Ray</definition>
+        <argsstring>(castor::Point3f const &amp;origin, castor::Point3f const &amp;direction)</argsstring>
+        <name>Ray</name>
+        <qualifiedname>castor3d::Ray::Ray</qualifiedname>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>origin</declname>
+        </param>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>direction</declname>
+        </param>
+        <briefdescription>
+<para>Constructor from origin and direction. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">origin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The origin of the ray. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">direction</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The direction of the ray. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ray.hpp" line="50" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d08/a03934_1a7ff1586714576f930e0d10d326d5eecc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Intersection</type>
+        <definition>C3D_API castor::Intersection castor3d::Ray::intersects</definition>
+        <argsstring>(castor::Point3f const &amp;pt1, castor::Point3f const &amp;pt2, castor::Point3f const &amp;pt3, float &amp;distance) const</argsstring>
+        <name>intersects</name>
+        <qualifiedname>castor3d::Ray::intersects</qualifiedname>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>pt1</declname>
+        </param>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>pt2</declname>
+        </param>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>pt3</declname>
+        </param>
+        <param>
+          <type>float &amp;</type>
+          <declname>distance</declname>
+        </param>
+        <briefdescription>
+<para>Tells if the ray intersects the given triangle of vertices. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pt1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The first triangle vertex. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pt2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The second triangle vertex. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pt3</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The third triangle vertex. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">distance</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the distance. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>castor::Intersection::eIn</computeroutput> or <computeroutput>castor::Intersection::eOut</computeroutput>. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ray.hpp" line="68" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d08/a03934_1a5a760c3967c7c347468c616e315cdfa5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Intersection</type>
+        <definition>C3D_API castor::Intersection castor3d::Ray::intersects</definition>
+        <argsstring>(Face const &amp;face, castor::Matrix4x4f const &amp;transform, Submesh const &amp;submesh, float &amp;distance) const</argsstring>
+        <name>intersects</name>
+        <qualifiedname>castor3d::Ray::intersects</qualifiedname>
+        <param>
+          <type><ref refid="df/d7f/a03366" kindref="compound">Face</ref> const &amp;</type>
+          <declname>face</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>transform</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d46/a03430" kindref="compound">Submesh</ref> const &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <param>
+          <type>float &amp;</type>
+          <declname>distance</declname>
+        </param>
+        <briefdescription>
+<para>Tells if the ray intersects the given face. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">face</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The face to test. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">transform</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The face&apos;s vertex transformation matrix. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The submesh holding the face. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">distance</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the distance. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>castor::Intersection::eIn</computeroutput> or <computeroutput>castor::Intersection::eOut</computeroutput>. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ray.hpp" line="88" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d08/a03934_1a2a85a27a8bbd074b0523fb774c040c57" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Intersection</type>
+        <definition>C3D_API castor::Intersection castor3d::Ray::intersects</definition>
+        <argsstring>(castor::Point3f const &amp;point, float &amp;distance) const</argsstring>
+        <name>intersects</name>
+        <qualifiedname>castor3d::Ray::intersects</qualifiedname>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <param>
+          <type>float &amp;</type>
+          <declname>distance</declname>
+        </param>
+        <briefdescription>
+<para>Tells if the vertex is on the ray. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The vertex to test. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">distance</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the distance. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>castor::Intersection::eIn</computeroutput> or <computeroutput>castor::Intersection::eOut</computeroutput>. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ray.hpp" line="104" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d08/a03934_1aa87cfc0a8fe488d17cecf6c1747bc813" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Intersection</type>
+        <definition>C3D_API castor::Intersection castor3d::Ray::intersects</definition>
+        <argsstring>(castor::BoundingBox const &amp;box, float &amp;distance) const</argsstring>
+        <name>intersects</name>
+        <qualifiedname>castor3d::Ray::intersects</qualifiedname>
+        <param>
+          <type>castor::BoundingBox const &amp;</type>
+          <declname>box</declname>
+        </param>
+        <param>
+          <type>float &amp;</type>
+          <declname>distance</declname>
+        </param>
+        <briefdescription>
+<para>Tells if the ray intersects the given Combo box. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">box</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The box to test. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">distance</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the distance. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>castor::Intersection::eIn</computeroutput> or <computeroutput>castor::Intersection::eOut</computeroutput>. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ray.hpp" line="118" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d08/a03934_1a89ed1a615cc9828269fa44e6b0748049" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Intersection</type>
+        <definition>C3D_API castor::Intersection castor3d::Ray::intersects</definition>
+        <argsstring>(castor::BoundingSphere const &amp;sphere, float &amp;distance) const</argsstring>
+        <name>intersects</name>
+        <qualifiedname>castor3d::Ray::intersects</qualifiedname>
+        <param>
+          <type>castor::BoundingSphere const &amp;</type>
+          <declname>sphere</declname>
+        </param>
+        <param>
+          <type>float &amp;</type>
+          <declname>distance</declname>
+        </param>
+        <briefdescription>
+<para>Tells if the ray intersects the given <ref refid="dc/de3/a03326" kindref="compound">Sphere</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">sphere</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The sphere to test. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">distance</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the distance. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>castor::Intersection::eIn</computeroutput> or <computeroutput>castor::Intersection::eOut</computeroutput>. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ray.hpp" line="132" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d08/a03934_1a3662d907e547240fb4ff1a7833a31df9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Intersection</type>
+        <definition>C3D_API castor::Intersection castor3d::Ray::intersects</definition>
+        <argsstring>(GeometrySPtr geometry, Face &amp;nearestFace, SubmeshSPtr &amp;nearestSubmesh, float &amp;distance) const</argsstring>
+        <name>intersects</name>
+        <qualifiedname>castor3d::Ray::intersects</qualifiedname>
+        <param>
+          <type>GeometrySPtr</type>
+          <declname>geometry</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d7f/a03366" kindref="compound">Face</ref> &amp;</type>
+          <declname>nearestFace</declname>
+        </param>
+        <param>
+          <type>SubmeshSPtr &amp;</type>
+          <declname>nearestSubmesh</declname>
+        </param>
+        <param>
+          <type>float &amp;</type>
+          <declname>distance</declname>
+        </param>
+        <briefdescription>
+<para>Tells if the ray intersects the given <ref refid="d5/d47/a04490" kindref="compound">Geometry</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">geometry</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The geometry to test. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">nearestFace</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the intersected face. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">nearestSubmesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the intersected submesh. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">distance</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the distance. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>castor::Intersection::eIn</computeroutput> or <computeroutput>castor::Intersection::eOut</computeroutput>. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ray.hpp" line="150" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d08/a03934_1af50a25a795bb6ad8d4dda231e7a418a9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::Ray::projectVertex</definition>
+        <argsstring>(castor::Point3f const &amp;point, castor::Point3f &amp;result) const</argsstring>
+        <name>projectVertex</name>
+        <qualifiedname>castor3d::Ray::projectVertex</qualifiedname>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <param>
+          <type>castor::Point3f &amp;</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+<para>Projects the given vertex on the ray. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The vertex we want to project. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">result</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The projecion result. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> if the vertex can be projected on the ray, false if not. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ray.hpp" line="161" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="1146">
-        <label>T</label>
-      </node>
-      <node id="1145">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="1146" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="1142">
-        <label>std::array&lt; castor3d::FaceInfos::Vertex, 3 &gt;</label>
-        <childnode refid="1143" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-        <childnode refid="1145" relation="template-instance">
-          <edgelabel>&lt; castor3d::FaceInfos::Vertex, 3 &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1147">
-        <label>std::array&lt; float, 3 &gt;</label>
-        <childnode refid="1145" relation="template-instance">
-          <edgelabel>&lt; float, 3 &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1143">
-        <label>castor3d::FaceInfos::Vertex</label>
-        <link refid="d4/dc4/a03938"/>
-        <childnode refid="1144" relation="usage">
-          <edgelabel>m_fTexCoords</edgelabel>
-        </childnode>
-        <childnode refid="1147" relation="usage">
-          <edgelabel>m_fNormal</edgelabel>
-        </childnode>
-      </node>
-      <node id="1144">
-        <label>std::array&lt; float, 2 &gt;</label>
-        <childnode refid="1145" relation="template-instance">
-          <edgelabel>&lt; float, 2 &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1141">
-        <label>castor3d::FaceInfos</label>
-        <link refid="de/d08/a03934"/>
-        <childnode refid="1142" relation="usage">
-          <edgelabel>m_vertex</edgelabel>
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Model/Mesh/Submesh/Component/FaceInfos.hpp" line="12" column="1" bodyfile="Model/Mesh/Submesh/Component/FaceInfos.hpp" bodystart="11" bodyend="43"/>
+    <location file="Render/Ray.hpp" line="13" column="1" bodyfile="Render/Ray.hpp" bodystart="14" bodyend="171"/>
     <listofallmembers>
-      <member refid="de/d08/a03934_1a4a3ac3f4c86c3e2eae6aac994965e162" prot="public" virt="non-virtual"><scope>castor3d::FaceInfos</scope><name>m_vertex</name></member>
+      <member refid="de/d08/a03934_1a7ff1586714576f930e0d10d326d5eecc" prot="public" virt="non-virtual"><scope>castor3d::Ray</scope><name>intersects</name></member>
+      <member refid="de/d08/a03934_1a5a760c3967c7c347468c616e315cdfa5" prot="public" virt="non-virtual"><scope>castor3d::Ray</scope><name>intersects</name></member>
+      <member refid="de/d08/a03934_1a2a85a27a8bbd074b0523fb774c040c57" prot="public" virt="non-virtual"><scope>castor3d::Ray</scope><name>intersects</name></member>
+      <member refid="de/d08/a03934_1aa87cfc0a8fe488d17cecf6c1747bc813" prot="public" virt="non-virtual"><scope>castor3d::Ray</scope><name>intersects</name></member>
+      <member refid="de/d08/a03934_1a89ed1a615cc9828269fa44e6b0748049" prot="public" virt="non-virtual"><scope>castor3d::Ray</scope><name>intersects</name></member>
+      <member refid="de/d08/a03934_1a3662d907e547240fb4ff1a7833a31df9" prot="public" virt="non-virtual"><scope>castor3d::Ray</scope><name>intersects</name></member>
+      <member refid="de/d08/a03934_1af507dcb336d7c19af6a8ae7f15b4f0ae" prot="public" virt="non-virtual"><scope>castor3d::Ray</scope><name>m_direction</name></member>
+      <member refid="de/d08/a03934_1aeb4bdceba330a4f6be5e252c3dfe94a2" prot="public" virt="non-virtual"><scope>castor3d::Ray</scope><name>m_origin</name></member>
+      <member refid="de/d08/a03934_1af50a25a795bb6ad8d4dda231e7a418a9" prot="public" virt="non-virtual"><scope>castor3d::Ray</scope><name>projectVertex</name></member>
+      <member refid="de/d08/a03934_1aa97b60404e050d524652e1447f5605c7" prot="public" virt="non-virtual"><scope>castor3d::Ray</scope><name>Ray</name></member>
+      <member refid="de/d08/a03934_1a2d61a856b9dacab355cdf6157e2d4108" prot="public" virt="non-virtual"><scope>castor3d::Ray</scope><name>Ray</name></member>
+      <member refid="de/d08/a03934_1afebebeb4e598a187857e72771a0325cc" prot="public" virt="non-virtual"><scope>castor3d::Ray</scope><name>Ray</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,164 +1,587 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d4/d1d/a04268" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::LayeredLightPropagationVolumesBase::LightLpv</compoundname>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d4/d1d/a04268_1ae5b5a4d934978e77ec2a627e46b8b327" prot="public" static="no" mutable="no">
-        <type>LpvLightConfigUboArray</type>
-        <definition>LpvLightConfigUboArray castor3d::LayeredLightPropagationVolumesBase::LightLpv::lpvLightConfigUbos</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d4/d1d/a04268" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::OpaqueResolvePass</compoundname>
+    <basecompoundref prot="private" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <includes local="no">OpaqueResolvePass.hpp</includes>
+    <innerclass refid="d3/df5/a04272" prot="public">castor3d::OpaqueResolvePass::Program</innerclass>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d4/d1d/a04268_1a0a65766028b4568681fc7a78214a8bb5" prot="public" static="no">
+        <type>std::vector&lt; std::reference_wrapper&lt; <ref refid="dc/d4c/a03664" kindref="compound">EnvironmentMap</ref> &gt; &gt;</type>
+        <definition>using castor3d::OpaqueResolvePass::EnvMapArray =  std::vector&lt; std::reference_wrapper&lt; EnvironmentMap &gt; &gt;</definition>
         <argsstring></argsstring>
-        <name>lpvLightConfigUbos</name>
+        <name>EnvMapArray</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::EnvMapArray</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="78" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="78" bodyend="-1"/>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="35" column="1" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="35" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d4/d1d/a04268_1afc1ba9b24f4dc50c735caac7fde1d28c" prot="public" static="no" mutable="no">
-        <type>std::vector&lt; float &gt;</type>
-        <definition>std::vector&lt; float &gt; castor3d::LayeredLightPropagationVolumesBase::LightLpv::lpvCellSizes</definition>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d4/d1d/a04268_1abb288ceb5b999d97fe3987a5285111d4" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::OpaqueResolvePass::m_device</definition>
         <argsstring></argsstring>
-        <name>lpvCellSizes</name>
+        <name>m_device</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::m_device</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="79" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="79" bodyend="-1"/>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="108" column="21" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="108" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d4/d1d/a04268_1ae0b12c0f8ff418a8442de7ff1fbb4346" prot="public" static="no" mutable="no">
-        <type>LightInjectionPassArray</type>
-        <definition>LightInjectionPassArray castor3d::LayeredLightPropagationVolumesBase::LightLpv::lightInjectionPasses</definition>
+      <memberdef kind="variable" id="d4/d1d/a04268_1a798fbd83bc04be5c41804cb9f9504c04" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d34/a04592" kindref="compound">Scene</ref> const  &amp;</type>
+        <definition>Scene const&amp; castor3d::OpaqueResolvePass::m_scene</definition>
         <argsstring></argsstring>
-        <name>lightInjectionPasses</name>
+        <name>m_scene</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::m_scene</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="80" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="80" bodyend="-1"/>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="109" column="14" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="109" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d4/d1d/a04268_1a55776baf3db66e2215a450ba93105447" prot="public" static="no" mutable="no">
-        <type>GeometryInjectionPassArray</type>
-        <definition>GeometryInjectionPassArray castor3d::LayeredLightPropagationVolumesBase::LightLpv::geometryInjectionPasses</definition>
+      <memberdef kind="variable" id="d4/d1d/a04268_1a1eb13b9a9c746f07c450894dd9a0d6a3" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d46/a04312" kindref="compound">Texture</ref> const  &amp;</type>
+        <definition>Texture const&amp; castor3d::OpaqueResolvePass::m_result</definition>
         <argsstring></argsstring>
-        <name>geometryInjectionPasses</name>
+        <name>m_result</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::m_result</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="81" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="81" bodyend="-1"/>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="110" column="16" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d1d/a04268_1ac2bc7f64b8e6dd4984ed82c3fefb2863" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/dc6/a04964" kindref="compound">SceneUbo</ref> const  &amp;</type>
+        <definition>SceneUbo const&amp; castor3d::OpaqueResolvePass::m_sceneUbo</definition>
+        <argsstring></argsstring>
+        <name>m_sceneUbo</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::m_sceneUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="111" column="17" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d1d/a04268_1a99574eb739ff5c1b9dc9621167f4b320" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d32/a04884" kindref="compound">GpInfoUbo</ref> const  &amp;</type>
+        <definition>GpInfoUbo const&amp; castor3d::OpaqueResolvePass::m_gpInfoUbo</definition>
+        <argsstring></argsstring>
+        <name>m_gpInfoUbo</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::m_gpInfoUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="112" column="18" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d1d/a04268_1ad98b9ea8c6da53f2b2a7468fdda7c11b" prot="private" static="no" mutable="no">
+        <type><ref refid="db/d9e/a04892" kindref="compound">HdrConfigUbo</ref> const  &amp;</type>
+        <definition>HdrConfigUbo const&amp; castor3d::OpaqueResolvePass::m_hdrConfigUbo</definition>
+        <argsstring></argsstring>
+        <name>m_hdrConfigUbo</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::m_hdrConfigUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="113" column="21" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d1d/a04268_1ab8a3d36fa60f3a6d654f200b8bdd8d7c" prot="private" static="no" mutable="no">
+        <type><ref refid="dd/d00/a04164" kindref="compound">SsaoConfig</ref> const  &amp;</type>
+        <definition>SsaoConfig const&amp; castor3d::OpaqueResolvePass::m_ssao</definition>
+        <argsstring></argsstring>
+        <name>m_ssao</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::m_ssao</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="114" column="19" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d1d/a04268_1a4e0ce7a88300f644d2a3a1ec7d017987" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/deb/a04264" kindref="compound">OpaquePassResult</ref> const  &amp;</type>
+        <definition>OpaquePassResult const&amp; castor3d::OpaqueResolvePass::m_opaquePassResult</definition>
+        <argsstring></argsstring>
+        <name>m_opaquePassResult</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::m_opaquePassResult</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="115" column="25" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d1d/a04268_1a882f27d908b0e2488ae765dc9f23cb87" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d46/a04312" kindref="compound">Texture</ref> const  &amp;</type>
+        <definition>Texture const&amp; castor3d::OpaqueResolvePass::m_ssaoResult</definition>
+        <argsstring></argsstring>
+        <name>m_ssaoResult</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::m_ssaoResult</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="116" column="16" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d1d/a04268_1aa52f4406b82013aae3e9fa831d33a515" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d46/a04312" kindref="compound">Texture</ref> const  &amp;</type>
+        <definition>Texture const&amp; castor3d::OpaqueResolvePass::m_subsurfaceScattering</definition>
+        <argsstring></argsstring>
+        <name>m_subsurfaceScattering</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::m_subsurfaceScattering</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="117" column="16" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d1d/a04268_1a15e04b028747621e281ac5ced2ac8759" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d46/a04312" kindref="compound">Texture</ref> const  &amp;</type>
+        <definition>Texture const&amp; castor3d::OpaqueResolvePass::m_lightSpecular</definition>
+        <argsstring></argsstring>
+        <name>m_lightSpecular</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::m_lightSpecular</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="118" column="16" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="118" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d1d/a04268_1ac29e3fa002041f68724503746aaf9401" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d46/a04312" kindref="compound">Texture</ref> const  &amp;</type>
+        <definition>Texture const&amp; castor3d::OpaqueResolvePass::m_lightIndirectDiffuse</definition>
+        <argsstring></argsstring>
+        <name>m_lightIndirectDiffuse</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::m_lightIndirectDiffuse</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="119" column="16" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="119" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d1d/a04268_1a328729a735aa2c100b86b7fa1ca7771b" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d46/a04312" kindref="compound">Texture</ref> const  &amp;</type>
+        <definition>Texture const&amp; castor3d::OpaqueResolvePass::m_lightIndirectSpecular</definition>
+        <argsstring></argsstring>
+        <name>m_lightIndirectSpecular</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::m_lightIndirectSpecular</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="120" column="16" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d1d/a04268_1acef4b2874c9f9891237737cc3c178223" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d3/df5/a04272" kindref="compound">Program</ref> &gt;</type>
+        <definition>std::vector&lt; Program &gt; castor3d::OpaqueResolvePass::m_programs</definition>
+        <argsstring></argsstring>
+        <name>m_programs</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::m_programs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="121" column="13" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d1d/a04268_1a5361e6343d30e83403621cfa6dbb0172" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::OpaqueResolvePass::m_programIndex</definition>
+        <argsstring></argsstring>
+        <name>m_programIndex</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::m_programIndex</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="122" column="10" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="122" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d4/d1d/a04268_1a691e41cb613982e4bd8a96241fc0f046" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::LayeredLightPropagationVolumesBase::LightLpv::LightLpv</definition>
-        <argsstring>(RenderDevice const &amp;device, castor::String const &amp;name, LightCache const &amp;lightCache, LightType lightType, ShadowMapResult const &amp;smResult, LpvGridConfigUboArray const &amp;lpvGridConfigUbos, std::vector&lt; LightVolumePassResult &gt; const &amp;injection, std::vector&lt; TextureUnit &gt; const *geometry, std::vector&lt; float &gt; lpvCellSizes)</argsstring>
-        <name>LightLpv</name>
+      <memberdef kind="function" id="d4/d1d/a04268_1a4de92e51ba0d5ed5d189cb600c2061bb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::OpaqueResolvePass::OpaqueResolvePass</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePass const *&amp;previousPass, RenderDevice const &amp;device, ProgressBar *progress, Scene &amp;scene, OpaquePassResult const &amp;gp, SsaoConfig const &amp;ssao, Texture const &amp;ssaoResult, Texture const &amp;subsurfaceScattering, Texture const &amp;lightDiffuse, Texture const &amp;lightSpecular, Texture const &amp;lightIndirectDiffuse, Texture const &amp;lightIndirectSpecular, Texture const &amp;result, SceneUbo const &amp;sceneUbo, GpInfoUbo const &amp;gpInfoUbo, HdrConfigUbo const &amp;hdrConfigUbo)</argsstring>
+        <name>OpaqueResolvePass</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::OpaqueResolvePass</qualifiedname>
         <param>
-          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const *&amp;</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
           <declname>device</declname>
         </param>
         <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
+          <type><ref refid="d4/dcb/a03268" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
         </param>
         <param>
-          <type><ref refid="da/d1e/a01479_1a563d137a64a10483b6a4ba4b5174d05d" kindref="member">LightCache</ref> const &amp;</type>
-          <declname>lightCache</declname>
+          <type><ref refid="da/d34/a04592" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
         </param>
         <param>
-          <type><ref refid="da/d1e/a01479_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
-          <declname>lightType</declname>
+          <type><ref refid="d7/deb/a04264" kindref="compound">OpaquePassResult</ref> const &amp;</type>
+          <declname>gp</declname>
         </param>
         <param>
-          <type><ref refid="d9/dcf/a04692" kindref="compound">ShadowMapResult</ref> const &amp;</type>
-          <declname>smResult</declname>
+          <type><ref refid="dd/d00/a04164" kindref="compound">SsaoConfig</ref> const &amp;</type>
+          <declname>ssao</declname>
         </param>
         <param>
-          <type>LpvGridConfigUboArray const &amp;</type>
-          <declname>lpvGridConfigUbos</declname>
+          <type><ref refid="d4/d46/a04312" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>ssaoResult</declname>
         </param>
         <param>
-          <type>std::vector&lt; <ref refid="d7/de4/a04296" kindref="compound">LightVolumePassResult</ref> &gt; const &amp;</type>
-          <declname>injection</declname>
+          <type><ref refid="d4/d46/a04312" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>subsurfaceScattering</declname>
         </param>
         <param>
-          <type>std::vector&lt; <ref refid="d6/d18/a02664" kindref="compound">TextureUnit</ref> &gt; const *</type>
-          <declname>geometry</declname>
+          <type><ref refid="d4/d46/a04312" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>lightDiffuse</declname>
         </param>
         <param>
-          <type>std::vector&lt; float &gt;</type>
-          <declname>lpvCellSizes</declname>
+          <type><ref refid="d4/d46/a04312" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>lightSpecular</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d46/a04312" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>lightIndirectDiffuse</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d46/a04312" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>lightIndirectSpecular</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d46/a04312" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>result</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/dc6/a04964" kindref="compound">SceneUbo</ref> const &amp;</type>
+          <declname>sceneUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d32/a04884" kindref="compound">GpInfoUbo</ref> const &amp;</type>
+          <declname>gpInfoUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d9e/a04892" kindref="compound">HdrConfigUbo</ref> const &amp;</type>
+          <declname>hdrConfigUbo</declname>
         </param>
         <briefdescription>
+<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The rendered scene. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">gp</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The geometry pass result. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ssao</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The SSAO image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">subsurfaceScattering</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The subsurface scattering result. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lightDiffuse</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The diffuse result of the lighting pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lightSpecular</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The specular result of the lighting pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lightIndirectDiffuse</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The indirect diffuse result of the lighting pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lightIndirectSpecular</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The indirect specular result of the lighting pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">result</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The texture receiving the result. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sceneUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">gpInfoUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The geometry pass UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">hdrConfigUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The HDR UBO. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="68" column="1"/>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="70" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d4/d1d/a04268_1a0c775958f4c70add99b594a2b126983f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::LayeredLightPropagationVolumesBase::LightLpv::update</definition>
+      <memberdef kind="function" id="d4/d1d/a04268_1a2f5dacf98bb07d5d9e950a1acc9e0729" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::OpaqueResolvePass::update</definition>
         <argsstring>(CpuUpdater &amp;updater)</argsstring>
         <name>update</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::update</qualifiedname>
         <param>
-          <type><ref refid="dc/d0d/a04588" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <type><ref refid="db/d69/a04040" kindref="compound">CpuUpdater</ref> &amp;</type>
           <declname>updater</declname>
         </param>
         <briefdescription>
+<para>Updates the render pass, GPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="95" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d1d/a04268_1a75da26c7fb86f9de2d4414be58f4a950" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::OpaqueResolvePass::accept</definition>
+        <argsstring>(PipelineVisitorBase &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::accept</qualifiedname>
+        <param>
+          <type><ref refid="d3/d55/a03256" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Visitor acceptance function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ... visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="99" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d4/d1d/a04268_1a6242937a08294137b7a6c18c7c75562f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass const &amp;</type>
+        <definition>crg::FramePass const  &amp; castor3d::OpaqueResolvePass::doCreatePass</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePass const &amp;pass, ProgressBar *progress)</argsstring>
+        <name>doCreatePass</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::doCreatePass</qualifiedname>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/dcb/a03268" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="77" column="1"/>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="102" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d1d/a04268_1a6e3ffdc2200db8ccfd9e08b241c3f5b1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="d3/df5/a04272" kindref="compound">Program</ref> &gt;</type>
+        <definition>std::vector&lt; Program &gt; castor3d::OpaqueResolvePass::doCreatePrograms</definition>
+        <argsstring>()</argsstring>
+        <name>doCreatePrograms</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::doCreatePrograms</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="105" column="13"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::OpaqueResolvePass</label>
+        <link refid="d4/d1d/a04268"/>
+        <childnode refid="2" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </inheritancegraph>
     <collaborationgraph>
-      <node id="1500">
-        <label>T</label>
-      </node>
-      <node id="1499">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="1500" relation="usage">
-          <edgelabel>elements</edgelabel>
+      <node id="1">
+        <label>castor3d::OpaqueResolvePass</label>
+        <link refid="d4/d1d/a04268"/>
+        <childnode refid="2" relation="private-inheritance">
         </childnode>
       </node>
-      <node id="1498">
-        <label>std::vector&lt; float &gt;</label>
-        <childnode refid="1499" relation="template-instance">
-          <edgelabel>&lt; float &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1497">
-        <label>castor3d::LayeredLightPropagationVolumesBase::LightLpv</label>
-        <childnode refid="1498" relation="usage">
-          <edgelabel>lpvCellSizes</edgelabel>
-        </childnode>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
       </node>
     </collaborationgraph>
-    <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="67" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="66" bodyend="82"/>
+    <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="23" column="1" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="25" bodyend="123"/>
     <listofallmembers>
-      <member refid="d4/d1d/a04268_1a55776baf3db66e2215a450ba93105447" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase::LightLpv</scope><name>geometryInjectionPasses</name></member>
-      <member refid="d4/d1d/a04268_1ae0b12c0f8ff418a8442de7ff1fbb4346" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase::LightLpv</scope><name>lightInjectionPasses</name></member>
-      <member refid="d4/d1d/a04268_1a691e41cb613982e4bd8a96241fc0f046" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase::LightLpv</scope><name>LightLpv</name></member>
-      <member refid="d4/d1d/a04268_1afc1ba9b24f4dc50c735caac7fde1d28c" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase::LightLpv</scope><name>lpvCellSizes</name></member>
-      <member refid="d4/d1d/a04268_1ae5b5a4d934978e77ec2a627e46b8b327" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase::LightLpv</scope><name>lpvLightConfigUbos</name></member>
-      <member refid="d4/d1d/a04268_1a0c775958f4c70add99b594a2b126983f" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase::LightLpv</scope><name>update</name></member>
+      <member refid="d4/d1d/a04268_1a75da26c7fb86f9de2d4414be58f4a950" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass</scope><name>accept</name></member>
+      <member refid="d4/d1d/a04268_1a6242937a08294137b7a6c18c7c75562f" prot="private" virt="non-virtual"><scope>castor3d::OpaqueResolvePass</scope><name>doCreatePass</name></member>
+      <member refid="d4/d1d/a04268_1a6e3ffdc2200db8ccfd9e08b241c3f5b1" prot="private" virt="non-virtual"><scope>castor3d::OpaqueResolvePass</scope><name>doCreatePrograms</name></member>
+      <member refid="d4/d1d/a04268_1a0a65766028b4568681fc7a78214a8bb5" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass</scope><name>EnvMapArray</name></member>
+      <member refid="d4/d1d/a04268_1abb288ceb5b999d97fe3987a5285111d4" prot="private" virt="non-virtual"><scope>castor3d::OpaqueResolvePass</scope><name>m_device</name></member>
+      <member refid="d4/d1d/a04268_1a99574eb739ff5c1b9dc9621167f4b320" prot="private" virt="non-virtual"><scope>castor3d::OpaqueResolvePass</scope><name>m_gpInfoUbo</name></member>
+      <member refid="d4/d1d/a04268_1ad98b9ea8c6da53f2b2a7468fdda7c11b" prot="private" virt="non-virtual"><scope>castor3d::OpaqueResolvePass</scope><name>m_hdrConfigUbo</name></member>
+      <member refid="d4/d1d/a04268_1ac29e3fa002041f68724503746aaf9401" prot="private" virt="non-virtual"><scope>castor3d::OpaqueResolvePass</scope><name>m_lightIndirectDiffuse</name></member>
+      <member refid="d4/d1d/a04268_1a328729a735aa2c100b86b7fa1ca7771b" prot="private" virt="non-virtual"><scope>castor3d::OpaqueResolvePass</scope><name>m_lightIndirectSpecular</name></member>
+      <member refid="d4/d1d/a04268_1a15e04b028747621e281ac5ced2ac8759" prot="private" virt="non-virtual"><scope>castor3d::OpaqueResolvePass</scope><name>m_lightSpecular</name></member>
+      <member refid="d4/d1d/a04268_1a4e0ce7a88300f644d2a3a1ec7d017987" prot="private" virt="non-virtual"><scope>castor3d::OpaqueResolvePass</scope><name>m_opaquePassResult</name></member>
+      <member refid="d4/d1d/a04268_1a5361e6343d30e83403621cfa6dbb0172" prot="private" virt="non-virtual"><scope>castor3d::OpaqueResolvePass</scope><name>m_programIndex</name></member>
+      <member refid="d4/d1d/a04268_1acef4b2874c9f9891237737cc3c178223" prot="private" virt="non-virtual"><scope>castor3d::OpaqueResolvePass</scope><name>m_programs</name></member>
+      <member refid="d4/d1d/a04268_1a1eb13b9a9c746f07c450894dd9a0d6a3" prot="private" virt="non-virtual"><scope>castor3d::OpaqueResolvePass</scope><name>m_result</name></member>
+      <member refid="d4/d1d/a04268_1a798fbd83bc04be5c41804cb9f9504c04" prot="private" virt="non-virtual"><scope>castor3d::OpaqueResolvePass</scope><name>m_scene</name></member>
+      <member refid="d4/d1d/a04268_1ac2bc7f64b8e6dd4984ed82c3fefb2863" prot="private" virt="non-virtual"><scope>castor3d::OpaqueResolvePass</scope><name>m_sceneUbo</name></member>
+      <member refid="d4/d1d/a04268_1ab8a3d36fa60f3a6d654f200b8bdd8d7c" prot="private" virt="non-virtual"><scope>castor3d::OpaqueResolvePass</scope><name>m_ssao</name></member>
+      <member refid="d4/d1d/a04268_1a882f27d908b0e2488ae765dc9f23cb87" prot="private" virt="non-virtual"><scope>castor3d::OpaqueResolvePass</scope><name>m_ssaoResult</name></member>
+      <member refid="d4/d1d/a04268_1aa52f4406b82013aae3e9fa831d33a515" prot="private" virt="non-virtual"><scope>castor3d::OpaqueResolvePass</scope><name>m_subsurfaceScattering</name></member>
+      <member refid="d4/d1d/a04268_1a4de92e51ba0d5ed5d189cb600c2061bb" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass</scope><name>OpaqueResolvePass</name></member>
+      <member refid="d4/d1d/a04268_1a2f5dacf98bb07d5d9e950a1acc9e0729" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass</scope><name>update</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

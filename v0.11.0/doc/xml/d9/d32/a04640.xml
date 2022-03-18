@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d9/d32/a04640" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::RenderWindow::RenderingResources</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/d32/a04640_1a8c2ebf242a082f227a078b706b385912" prot="public" static="no" mutable="no">
+        <type>ashes::SemaphorePtr</type>
+        <definition>ashes::SemaphorePtr castor3d::RenderWindow::RenderingResources::imageAvailableSemaphore</definition>
+        <argsstring></argsstring>
+        <name>imageAvailableSemaphore</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderWindow.hpp" line="60" column="1" bodyfile="Render/RenderWindow.hpp" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d32/a04640_1a8cdafab6c18a008ad7c70cb156f4c7c5" prot="public" static="no" mutable="no">
+        <type>ashes::SemaphorePtr</type>
+        <definition>ashes::SemaphorePtr castor3d::RenderWindow::RenderingResources::finishedRenderingSemaphore</definition>
+        <argsstring></argsstring>
+        <name>finishedRenderingSemaphore</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderWindow.hpp" line="61" column="1" bodyfile="Render/RenderWindow.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d32/a04640_1ac2d3692cb256ec7883931ba7b9bb10a1" prot="public" static="no" mutable="no">
+        <type>ashes::FencePtr</type>
+        <definition>ashes::FencePtr castor3d::RenderWindow::RenderingResources::fence</definition>
+        <argsstring></argsstring>
+        <name>fence</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderWindow.hpp" line="62" column="1" bodyfile="Render/RenderWindow.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d32/a04640_1a863d0d7dd439ee3b83f11e4ba62e3712" prot="public" static="no" mutable="no">
+        <type>ashes::CommandBufferPtr</type>
+        <definition>ashes::CommandBufferPtr castor3d::RenderWindow::RenderingResources::commandBuffer</definition>
+        <argsstring></argsstring>
+        <name>commandBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderWindow.hpp" line="63" column="1" bodyfile="Render/RenderWindow.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d32/a04640_1a0c1b889e16668a30ea8f7ab55a6f3b68" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderWindow::RenderingResources::imageIndex</definition>
+        <argsstring></argsstring>
+        <name>imageIndex</name>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderWindow.hpp" line="64" column="1" bodyfile="Render/RenderWindow.hpp" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/d32/a04640_1ac6768e3ba4c429fd8564e6061c2d7284" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::RenderWindow::RenderingResources::RenderingResources</definition>
+        <argsstring>(ashes::SemaphorePtr imageAvailableSemaphore, ashes::SemaphorePtr finishedRenderingSemaphore, ashes::FencePtr fence, ashes::CommandBufferPtr commandBuffer, uint32_t imageIndex)</argsstring>
+        <name>RenderingResources</name>
+        <param>
+          <type>ashes::SemaphorePtr</type>
+          <declname>imageAvailableSemaphore</declname>
+        </param>
+        <param>
+          <type>ashes::SemaphorePtr</type>
+          <declname>finishedRenderingSemaphore</declname>
+        </param>
+        <param>
+          <type>ashes::FencePtr</type>
+          <declname>fence</declname>
+        </param>
+        <param>
+          <type>ashes::CommandBufferPtr</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>imageIndex</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderWindow.hpp" line="39" column="1" bodyfile="Render/RenderWindow.hpp" bodystart="39" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d32/a04640_1ac8dc7af53471de3be54c52527a4377be" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::RenderWindow::RenderingResources::~RenderingResources</definition>
+        <argsstring>()</argsstring>
+        <name>~RenderingResources</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderWindow.hpp" line="52" column="1" bodyfile="Render/RenderWindow.hpp" bodystart="52" bodyend="58"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/RenderWindow.hpp" line="38" column="1" bodyfile="Render/RenderWindow.hpp" bodystart="37" bodyend="65"/>
+    <listofallmembers>
+      <member refid="d9/d32/a04640_1a863d0d7dd439ee3b83f11e4ba62e3712" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::RenderingResources</scope><name>commandBuffer</name></member>
+      <member refid="d9/d32/a04640_1ac2d3692cb256ec7883931ba7b9bb10a1" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::RenderingResources</scope><name>fence</name></member>
+      <member refid="d9/d32/a04640_1a8cdafab6c18a008ad7c70cb156f4c7c5" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::RenderingResources</scope><name>finishedRenderingSemaphore</name></member>
+      <member refid="d9/d32/a04640_1a8c2ebf242a082f227a078b706b385912" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::RenderingResources</scope><name>imageAvailableSemaphore</name></member>
+      <member refid="d9/d32/a04640_1a0c1b889e16668a30ea8f7ab55a6f3b68" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::RenderingResources</scope><name>imageIndex</name></member>
+      <member refid="d9/d32/a04640_1ac6768e3ba4c429fd8564e6061c2d7284" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::RenderingResources</scope><name>RenderingResources</name></member>
+      <member refid="d9/d32/a04640_1ac8dc7af53471de3be54c52527a4377be" prot="public" virt="non-virtual"><scope>castor3d::RenderWindow::RenderingResources</scope><name>~RenderingResources</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

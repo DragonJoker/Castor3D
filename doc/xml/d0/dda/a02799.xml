@@ -1,33 +1,46 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d0/dda/a02799" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkSamplerCreateInfo &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d0/dda/a02799_1a20c4ebb4085e3d30ffec19e8481cf691" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkSamplerCreateInfo &gt;::value</definition>
+    <compoundname>castor3d::TextureFlagsId</compoundname>
+    <includes local="no">MaterialModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/dda/a02799_1ad57186504176a62f6e78d36337fb9221" prot="public" static="no" mutable="no">
+        <type><ref refid="da/de3/a01398_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref></type>
+        <definition>TextureFlags castor3d::TextureFlagsId::flags</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO</initializer>
+        <name>flags</name>
+        <qualifiedname>castor3d::TextureFlagsId::flags</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="45" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="45" bodyend="-1"/>
+        <location file="Material/MaterialModule.hpp" line="94" column="14" bodyfile="Material/MaterialModule.hpp" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dda/a02799_1add8db50fa1f749d90e7950caa4c691e8" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureFlagsId::id</definition>
+        <argsstring></argsstring>
+        <name>id</name>
+        <qualifiedname>castor3d::TextureFlagsId::id</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/MaterialModule.hpp" line="95" column="10" bodyfile="Material/MaterialModule.hpp" bodystart="95" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="45" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="45" bodyend="45"/>
+    <location file="Material/MaterialModule.hpp" line="92" column="1" bodyfile="Material/MaterialModule.hpp" bodystart="93" bodyend="96"/>
     <listofallmembers>
-      <member refid="d0/dda/a02799_1a20c4ebb4085e3d30ffec19e8481cf691" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkSamplerCreateInfo &gt;</scope><name>value</name></member>
+      <member refid="d0/dda/a02799_1ad57186504176a62f6e78d36337fb9221" prot="public" virt="non-virtual"><scope>castor3d::TextureFlagsId</scope><name>flags</name></member>
+      <member refid="d0/dda/a02799_1add8db50fa1f749d90e7950caa4c691e8" prot="public" virt="non-virtual"><scope>castor3d::TextureFlagsId</scope><name>id</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

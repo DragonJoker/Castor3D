@@ -1,6 +1,4 @@
-<map id="castor3d::Mesh" name="castor3d::Mesh">
-<area shape="rect" id="node1" title=" " alt="" coords="113,169,225,196"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,95,183,121"/>
-<area shape="rect" id="node3" href="$d8/de7/a02030.html" title="Animable public interface." alt="" coords="207,95,283,121"/>
-<area shape="rect" id="node4" title=" " alt="" coords="151,5,339,47"/>
+<map id="castor3d::RadianceComputer" name="castor3d::RadianceComputer">
+<area shape="rect" id="node1" title=" " alt="" coords="5,80,196,107"/>
+<area shape="rect" id="node2" href="$d2/d6b/a04334.html" title=" " alt="" coords="25,5,176,32"/>
 </map>

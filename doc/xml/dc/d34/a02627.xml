@@ -1,185 +1,853 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dc/d34/a02627" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::ArrayView</compoundname>
-    <includes local="no">TextureLayout.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dc/d34/a02627" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::CacheViewT</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::Named</basecompoundref>
+    <includes local="no">CacheView.hpp</includes>
     <templateparamlist>
       <param>
-        <type>typename</type>
-        <declname>ViewT</declname>
-        <defname>ViewT</defname>
+        <type>typename CacheT</type>
+      </param>
+      <param>
+        <type><ref refid="da/de3/a01398_1ad442bf3c1ba8a06ac36f710ba30b2870" kindref="member">EventType</ref></type>
+        <declname>EventT</declname>
+        <defname>EventT</defname>
       </param>
     </templateparamlist>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="dc/d34/a02627_1affa9ed91064c21995ebe2fe83b06ad5a" prot="public" static="no" mutable="no">
-        <type><ref refid="da/dfd/a02619" kindref="compound">MipView</ref> *</type>
-        <definition>MipView* castor3d::ArrayView&lt; ViewT &gt;::view</definition>
-        <argsstring></argsstring>
-        <name>view</name>
+      <sectiondef kind="user-defined">
+      <header>Iteration.</header>
+      <memberdef kind="function" id="dc/d34/a02627_1a9e9967f3ac8845303196cbd639ad05eb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::CacheViewT&lt; CacheT, EventT &gt;::begin</definition>
+        <argsstring>()</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor3d::CacheViewT::begin</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureLayout.hpp" line="103" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="103" bodyend="-1"/>
+        <location file="Cache/CacheView.hpp" line="195" column="13" bodyfile="Cache/CacheView.hpp" bodystart="195" bodyend="198"/>
       </memberdef>
-      <memberdef kind="variable" id="dc/d34/a02627_1aa647ac8bc0ba7a50aaa05d7e2320fad9" prot="public" static="no" mutable="no">
-        <type>std::vector&lt; ViewT &gt;</type>
-        <definition>std::vector&lt; ViewT &gt; castor3d::ArrayView&lt; ViewT &gt;::layers</definition>
-        <argsstring></argsstring>
-        <name>layers</name>
+      <memberdef kind="function" id="dc/d34/a02627_1a4a718ee6b78bcb7a6af5a508b0cdf3fa" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::CacheViewT&lt; CacheT, EventT &gt;::begin</definition>
+        <argsstring>() const</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor3d::CacheViewT::begin</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureLayout.hpp" line="104" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="104" bodyend="-1"/>
-        <referencedby refid="dc/d34/a02627_1a67ab0f0d5b204c536ac11ea7ca6ad9ac" compoundref="dc/d84/a00338" startline="116" endline="122">castor3d::ArrayView&lt; castor3d::CubeView &gt;::forEachFirstMipView</referencedby>
-        <referencedby refid="dc/d34/a02627_1aa2a9a6a8ad4dede91442f88e199fd8a2" compoundref="dc/d84/a00338" startline="125" endline="131">castor3d::ArrayView&lt; castor3d::CubeView &gt;::forEachLeafView</referencedby>
-        <referencedby refid="dc/d34/a02627_1a4326bf34de29aa53db509da1068b9b1c" compoundref="dc/d84/a00338" startline="107" endline="113">castor3d::ArrayView&lt; castor3d::CubeView &gt;::forEachView</referencedby>
+        <location file="Cache/CacheView.hpp" line="200" column="13" bodyfile="Cache/CacheView.hpp" bodystart="200" bodyend="203"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d34/a02627_1a6b90c6c7c4c381cda71eb1e0976c3a44" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::CacheViewT&lt; CacheT, EventT &gt;::end</definition>
+        <argsstring>()</argsstring>
+        <name>end</name>
+        <qualifiedname>castor3d::CacheViewT::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="205" column="13" bodyfile="Cache/CacheView.hpp" bodystart="205" bodyend="208"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d34/a02627_1a6a6d37e91611f42ebd32b956c76a5796" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::CacheViewT&lt; CacheT, EventT &gt;::end</definition>
+        <argsstring>() const</argsstring>
+        <name>end</name>
+        <qualifiedname>castor3d::CacheViewT::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="210" column="13" bodyfile="Cache/CacheView.hpp" bodystart="210" bodyend="213"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dc/d34/a02627_1af1ada30e267e0bc8da12a5bd0c1e056e" prot="public" static="no">
+        <type>CacheT</type>
+        <definition>using castor3d::CacheViewT&lt; CacheT, EventT &gt;::ElementCacheT =  CacheT</definition>
+        <argsstring></argsstring>
+        <name>ElementCacheT</name>
+        <qualifiedname>castor3d::CacheViewT::ElementCacheT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="22" column="1" bodyfile="Cache/CacheView.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d34/a02627_1a5b9ec556d0e7af181accfbd8e024d41d" prot="public" static="no">
+        <type>typename ElementCacheT::ElementT</type>
+        <definition>using castor3d::CacheViewT&lt; CacheT, EventT &gt;::ElementT =  typename ElementCacheT::ElementT</definition>
+        <argsstring></argsstring>
+        <name>ElementT</name>
+        <qualifiedname>castor3d::CacheViewT::ElementT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="23" column="1" bodyfile="Cache/CacheView.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d34/a02627_1ab5f9619eadd2ec6d6a699aa484636a33" prot="public" static="no">
+        <type>typename ElementCacheT::ElementKeyT</type>
+        <definition>using castor3d::CacheViewT&lt; CacheT, EventT &gt;::ElementKeyT =  typename ElementCacheT::ElementKeyT</definition>
+        <argsstring></argsstring>
+        <name>ElementKeyT</name>
+        <qualifiedname>castor3d::CacheViewT::ElementKeyT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="24" column="1" bodyfile="Cache/CacheView.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d34/a02627_1a121c73e62613ff51e4f3a3209438dcf5" prot="public" static="no">
+        <type>typename ElementCacheT::ElementCacheTraitsT</type>
+        <definition>using castor3d::CacheViewT&lt; CacheT, EventT &gt;::ElementCacheTraitsT =  typename ElementCacheT::ElementCacheTraitsT</definition>
+        <argsstring></argsstring>
+        <name>ElementCacheTraitsT</name>
+        <qualifiedname>castor3d::CacheViewT::ElementCacheTraitsT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="25" column="1" bodyfile="Cache/CacheView.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d34/a02627_1affd4e78e25e9f24f0b8d44878cd658c6" prot="public" static="no">
+        <type>typename ElementCacheT::ElementPtrT</type>
+        <definition>using castor3d::CacheViewT&lt; CacheT, EventT &gt;::ElementPtrT =  typename ElementCacheT::ElementPtrT</definition>
+        <argsstring></argsstring>
+        <name>ElementPtrT</name>
+        <qualifiedname>castor3d::CacheViewT::ElementPtrT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="26" column="1" bodyfile="Cache/CacheView.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d34/a02627_1a3e73620142d41d6798aabc46ecbca303" prot="public" static="no">
+        <type>typename ElementCacheT::ElementObsT</type>
+        <definition>using castor3d::CacheViewT&lt; CacheT, EventT &gt;::ElementObsT =  typename ElementCacheT::ElementObsT</definition>
+        <argsstring></argsstring>
+        <name>ElementObsT</name>
+        <qualifiedname>castor3d::CacheViewT::ElementObsT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="27" column="1" bodyfile="Cache/CacheView.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d34/a02627_1aaa33c58a2c17b91b6b503d475ad8be28" prot="public" static="no">
+        <type>typename ElementCacheT::ElementContT</type>
+        <definition>using castor3d::CacheViewT&lt; CacheT, EventT &gt;::ElementContT =  typename ElementCacheT::ElementContT</definition>
+        <argsstring></argsstring>
+        <name>ElementContT</name>
+        <qualifiedname>castor3d::CacheViewT::ElementContT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="28" column="1" bodyfile="Cache/CacheView.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d34/a02627_1a30f478d33b802fda0d7a89e97d0cc0f9" prot="public" static="no">
+        <type>typename ElementCacheT::ElementInitialiserT</type>
+        <definition>using castor3d::CacheViewT&lt; CacheT, EventT &gt;::ElementInitialiserT =  typename ElementCacheT::ElementInitialiserT</definition>
+        <argsstring></argsstring>
+        <name>ElementInitialiserT</name>
+        <qualifiedname>castor3d::CacheViewT::ElementInitialiserT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="29" column="1" bodyfile="Cache/CacheView.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d34/a02627_1a8ca263e5a558ca0a949208d5089ab294" prot="public" static="no">
+        <type>typename ElementCacheT::ElementCleanerT</type>
+        <definition>using castor3d::CacheViewT&lt; CacheT, EventT &gt;::ElementCleanerT =  typename ElementCacheT::ElementCleanerT</definition>
+        <argsstring></argsstring>
+        <name>ElementCleanerT</name>
+        <qualifiedname>castor3d::CacheViewT::ElementCleanerT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="30" column="1" bodyfile="Cache/CacheView.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d34/a02627_1a87291874f6fe24fb4b25b3b363b791ec" prot="public" static="no">
+        <type>typename ElementCacheT::ElementMergerT</type>
+        <definition>using castor3d::CacheViewT&lt; CacheT, EventT &gt;::ElementMergerT =  typename ElementCacheT::ElementMergerT</definition>
+        <argsstring></argsstring>
+        <name>ElementMergerT</name>
+        <qualifiedname>castor3d::CacheViewT::ElementMergerT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="31" column="1" bodyfile="Cache/CacheView.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dc/d34/a02627_1a720c91e0db82e4045d33cf168c75c1cb" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d34/a02627_1af1ada30e267e0bc8da12a5bd0c1e056e" kindref="member">ElementCacheT</ref> &amp;</type>
+        <definition>ElementCacheT&amp; castor3d::CacheViewT&lt; CacheT, EventT &gt;::m_cache</definition>
+        <argsstring></argsstring>
+        <name>m_cache</name>
+        <qualifiedname>castor3d::CacheViewT::m_cache</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="217" column="16" bodyfile="Cache/CacheView.hpp" bodystart="217" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d34/a02627_1aa1edb04c5b5d0699c7810378f38487ba" prot="private" static="no" mutable="no">
+        <type>std::set&lt; <ref refid="dc/d34/a02627_1ab5f9619eadd2ec6d6a699aa484636a33" kindref="member">ElementKeyT</ref> &gt;</type>
+        <definition>std::set&lt; ElementKeyT &gt; castor3d::CacheViewT&lt; CacheT, EventT &gt;::m_createdElements</definition>
+        <argsstring></argsstring>
+        <name>m_createdElements</name>
+        <qualifiedname>castor3d::CacheViewT::m_createdElements</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="218" column="10" bodyfile="Cache/CacheView.hpp" bodystart="218" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d34/a02627_1a4cf91b36c2862e9b8ef96e6f91148341" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d34/a02627_1a30f478d33b802fda0d7a89e97d0cc0f9" kindref="member">ElementInitialiserT</ref></type>
+        <definition>ElementInitialiserT castor3d::CacheViewT&lt; CacheT, EventT &gt;::m_initialise</definition>
+        <argsstring></argsstring>
+        <name>m_initialise</name>
+        <qualifiedname>castor3d::CacheViewT::m_initialise</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="219" column="21" bodyfile="Cache/CacheView.hpp" bodystart="219" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d34/a02627_1a1f8179bcc47343e3ad01404d30e17d0b" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d34/a02627_1a8ca263e5a558ca0a949208d5089ab294" kindref="member">ElementCleanerT</ref></type>
+        <definition>ElementCleanerT castor3d::CacheViewT&lt; CacheT, EventT &gt;::m_clean</definition>
+        <argsstring></argsstring>
+        <name>m_clean</name>
+        <qualifiedname>castor3d::CacheViewT::m_clean</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="220" column="17" bodyfile="Cache/CacheView.hpp" bodystart="220" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d34/a02627_1a16ebd1d43dc545573289ffee51f02506" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="dc/d34/a02627_1affd4e78e25e9f24f0b8d44878cd658c6" kindref="member">ElementPtrT</ref> &gt;</type>
+        <definition>std::vector&lt; ElementPtrT &gt; castor3d::CacheViewT&lt; CacheT, EventT &gt;::m_cleaning</definition>
+        <argsstring></argsstring>
+        <name>m_cleaning</name>
+        <qualifiedname>castor3d::CacheViewT::m_cleaning</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="221" column="13" bodyfile="Cache/CacheView.hpp" bodystart="221" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="dc/d34/a02627_1a4326bf34de29aa53db509da1068b9b1c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename FuncT</type>
-          </param>
-        </templateparamlist>
-        <type>void</type>
-        <definition>void castor3d::ArrayView&lt; ViewT &gt;::forEachView</definition>
-        <argsstring>(FuncT function) const</argsstring>
-        <name>forEachView</name>
+      <memberdef kind="function" id="dc/d34/a02627_1a985725335768d7d360a50510fd5b94fa" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::CacheViewT&lt; CacheT, EventT &gt;::CacheViewT</definition>
+        <argsstring>(castor::String const &amp;name, ElementCacheT &amp;cache, ElementInitialiserT initialise=[](ElementObsT const &amp;){}, ElementCleanerT clean=[](ElementObsT const &amp;){})</argsstring>
+        <name>CacheViewT</name>
+        <qualifiedname>castor3d::CacheViewT::CacheViewT</qualifiedname>
         <param>
-          <type>FuncT</type>
-          <declname>function</declname>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d34/a02627_1af1ada30e267e0bc8da12a5bd0c1e056e" kindref="member">ElementCacheT</ref> &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d34/a02627_1a30f478d33b802fda0d7a89e97d0cc0f9" kindref="member">ElementInitialiserT</ref></type>
+          <declname>initialise</declname>
+          <defval>[](<ref refid="dc/d34/a02627_1a3e73620142d41d6798aabc46ecbca303" kindref="member">ElementObsT</ref> const &amp;){}</defval>
+        </param>
+        <param>
+          <type><ref refid="dc/d34/a02627_1a8ca263e5a558ca0a949208d5089ab294" kindref="member">ElementCleanerT</ref></type>
+          <declname>clean</declname>
+          <defval>[](<ref refid="dc/d34/a02627_1a3e73620142d41d6798aabc46ecbca303" kindref="member">ElementObsT</ref> const &amp;){}</defval>
         </param>
         <briefdescription>
+<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The view name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">initialise</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element initialiser. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">clean</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element cleaner. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">cache</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The viewed cache. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureLayout.hpp" line="107" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="107" bodyend="113"/>
+        <location file="Cache/CacheView.hpp" line="48" column="8"/>
       </memberdef>
-      <memberdef kind="function" id="dc/d34/a02627_1a67ab0f0d5b204c536ac11ea7ca6ad9ac" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename FuncT</type>
-          </param>
-        </templateparamlist>
-        <type>void</type>
-        <definition>void castor3d::ArrayView&lt; ViewT &gt;::forEachFirstMipView</definition>
-        <argsstring>(FuncT function) const</argsstring>
-        <name>forEachFirstMipView</name>
-        <param>
-          <type>FuncT</type>
-          <declname>function</declname>
-        </param>
+      <memberdef kind="function" id="dc/d34/a02627_1aec70dbd7dc9fcf92ecc8da1e1f31e771" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::CacheViewT&lt; CacheT, EventT &gt;::~CacheViewT</definition>
+        <argsstring>()=default</argsstring>
+        <name>~CacheViewT</name>
+        <qualifiedname>castor3d::CacheViewT::~CacheViewT</qualifiedname>
         <briefdescription>
+<para>Destructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureLayout.hpp" line="116" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="116" bodyend="122"/>
+        <location file="Cache/CacheView.hpp" line="58" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="dc/d34/a02627_1aa2a9a6a8ad4dede91442f88e199fd8a2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename FuncT</type>
-          </param>
-        </templateparamlist>
+      <memberdef kind="function" id="dc/d34/a02627_1a691aa868ae79303e8704542bfd05c14a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::ArrayView&lt; ViewT &gt;::forEachLeafView</definition>
-        <argsstring>(FuncT function) const</argsstring>
-        <name>forEachLeafView</name>
-        <param>
-          <type>FuncT</type>
-          <declname>function</declname>
-        </param>
+        <definition>void castor3d::CacheViewT&lt; CacheT, EventT &gt;::clear</definition>
+        <argsstring>()</argsstring>
+        <name>clear</name>
+        <qualifiedname>castor3d::CacheViewT::clear</qualifiedname>
         <briefdescription>
+<para>Removes from the cache the elements created through this view. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureLayout.hpp" line="125" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="125" bodyend="131"/>
+        <location file="Cache/CacheView.hpp" line="65" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d34/a02627_1afe3c7d12620e2809fffad4ba3db7fa4c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>ParametersT</declname>
+            <defname>ParametersT</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="dc/d34/a02627_1a3e73620142d41d6798aabc46ecbca303" kindref="member">ElementObsT</ref></type>
+        <definition>ElementObsT castor3d::CacheViewT&lt; CacheT, EventT &gt;::add</definition>
+        <argsstring>(ElementKeyT const &amp;name, ParametersT &amp;&amp;... params)</argsstring>
+        <name>add</name>
+        <qualifiedname>castor3d::CacheViewT::add</qualifiedname>
+        <param>
+          <type><ref refid="dc/d34/a02627_1ab5f9619eadd2ec6d6a699aa484636a33" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dd3/a03251" kindref="compound">ParametersT</ref> &amp;&amp;...</type>
+          <declname>params</declname>
+        </param>
+        <briefdescription>
+<para>Creates an element with the given informations. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">params</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parameters forwarded to the viewed cache. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The created element. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="79" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d34/a02627_1ae579a672ee03e3caeca87d3c8e818973" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>ParametersT</declname>
+            <defname>ParametersT</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="dc/d34/a02627_1a3e73620142d41d6798aabc46ecbca303" kindref="member">ElementObsT</ref></type>
+        <definition>ElementObsT castor3d::CacheViewT&lt; CacheT, EventT &gt;::tryAdd</definition>
+        <argsstring>(ElementKeyT const &amp;name, bool initialise, ElementObsT &amp;created, ParametersT &amp;&amp;... params)</argsstring>
+        <name>tryAdd</name>
+        <qualifiedname>castor3d::CacheViewT::tryAdd</qualifiedname>
+        <param>
+          <type><ref refid="dc/d34/a02627_1ab5f9619eadd2ec6d6a699aa484636a33" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>initialise</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d34/a02627_1a3e73620142d41d6798aabc46ecbca303" kindref="member">ElementObsT</ref> &amp;</type>
+          <declname>created</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dd3/a03251" kindref="compound">ParametersT</ref> &amp;&amp;...</type>
+          <declname>params</declname>
+        </param>
+        <briefdescription>
+<para>Creates or retrieves an element with the given informations. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">initialise</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tells if the element is to be initialised after creation. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">created</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the created element if ti was created. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">params</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parameters forwarded to the viewed cache. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The created or existing element. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="98" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d34/a02627_1a8e23107e9198426ef1647ab14a633954" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::CacheViewT&lt; CacheT, EventT &gt;::tryAdd</definition>
+        <argsstring>(ElementKeyT const &amp;name, ElementPtrT &amp;element, bool initialise=false)</argsstring>
+        <name>tryAdd</name>
+        <qualifiedname>castor3d::CacheViewT::tryAdd</qualifiedname>
+        <param>
+          <type><ref refid="dc/d34/a02627_1ab5f9619eadd2ec6d6a699aa484636a33" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d34/a02627_1affd4e78e25e9f24f0b8d44878cd658c6" kindref="member">ElementPtrT</ref> &amp;</type>
+          <declname>element</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>initialise</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>adds an already created an element. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">element</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">initialise</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tells if the element is to be initialised after creation. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="114" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d34/a02627_1aaba0b632e8567430196b11960f8ef618" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dc/d34/a02627_1a3e73620142d41d6798aabc46ecbca303" kindref="member">ElementObsT</ref></type>
+        <definition>ElementObsT castor3d::CacheViewT&lt; CacheT, EventT &gt;::add</definition>
+        <argsstring>(ElementKeyT const &amp;name, ElementPtrT &amp;element, bool initialise=false)</argsstring>
+        <name>add</name>
+        <qualifiedname>castor3d::CacheViewT::add</qualifiedname>
+        <param>
+          <type><ref refid="dc/d34/a02627_1ab5f9619eadd2ec6d6a699aa484636a33" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d34/a02627_1affd4e78e25e9f24f0b8d44878cd658c6" kindref="member">ElementPtrT</ref> &amp;</type>
+          <declname>element</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>initialise</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>adds an already created an element. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">element</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">initialise</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tells if the element is to be initialised after creation. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="129" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d34/a02627_1ac97e9c462791d86493ab2798a4fd67ce" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::CacheViewT&lt; CacheT, EventT &gt;::isEmpty</definition>
+        <argsstring>() const</argsstring>
+        <name>isEmpty</name>
+        <qualifiedname>castor3d::CacheViewT::isEmpty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if the view is empty. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="138" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d34/a02627_1a022be791d388decb0f12a5ffaeee5ca8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::CacheViewT&lt; CacheT, EventT &gt;::has</definition>
+        <argsstring>(ElementKeyT const &amp;name) const</argsstring>
+        <name>has</name>
+        <qualifiedname>castor3d::CacheViewT::has</qualifiedname>
+        <param>
+          <type><ref refid="dc/d34/a02627_1ab5f9619eadd2ec6d6a699aa484636a33" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object name. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> if an element with given name exists. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="147" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d34/a02627_1a5847bda9ed76e2fb070016c47c2441bd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dc/d34/a02627_1a3e73620142d41d6798aabc46ecbca303" kindref="member">ElementObsT</ref></type>
+        <definition>ElementObsT castor3d::CacheViewT&lt; CacheT, EventT &gt;::tryFind</definition>
+        <argsstring>(ElementKeyT const &amp;name) const</argsstring>
+        <name>tryFind</name>
+        <qualifiedname>castor3d::CacheViewT::tryFind</qualifiedname>
+        <param>
+          <type><ref refid="dc/d34/a02627_1ab5f9619eadd2ec6d6a699aa484636a33" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Looks for an element with given name. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object name. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The found element, nullptr if not found. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="158" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d34/a02627_1a22d24fbafdc3164fddd0888e82de984d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dc/d34/a02627_1a3e73620142d41d6798aabc46ecbca303" kindref="member">ElementObsT</ref></type>
+        <definition>ElementObsT castor3d::CacheViewT&lt; CacheT, EventT &gt;::find</definition>
+        <argsstring>(ElementKeyT const &amp;name) const</argsstring>
+        <name>find</name>
+        <qualifiedname>castor3d::CacheViewT::find</qualifiedname>
+        <param>
+          <type><ref refid="dc/d34/a02627_1ab5f9619eadd2ec6d6a699aa484636a33" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Looks for an element with given name. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object name. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The found element, nullptr if not found. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="169" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d34/a02627_1a650d1f0935eb71c00f88731fc0ec093f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dc/d34/a02627_1a3e73620142d41d6798aabc46ecbca303" kindref="member">ElementObsT</ref></type>
+        <definition>ElementObsT castor3d::CacheViewT&lt; CacheT, EventT &gt;::tryRemove</definition>
+        <argsstring>(ElementKeyT const &amp;name)</argsstring>
+        <name>tryRemove</name>
+        <qualifiedname>castor3d::CacheViewT::tryRemove</qualifiedname>
+        <param>
+          <type><ref refid="dc/d34/a02627_1ab5f9619eadd2ec6d6a699aa484636a33" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Removes an element, given a name. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element name. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="178" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d34/a02627_1a7f5774433423824cbe11031946ecc2e1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::CacheViewT&lt; CacheT, EventT &gt;::remove</definition>
+        <argsstring>(ElementKeyT const &amp;name)</argsstring>
+        <name>remove</name>
+        <qualifiedname>castor3d::CacheViewT::remove</qualifiedname>
+        <param>
+          <type><ref refid="dc/d34/a02627_1ab5f9619eadd2ec6d6a699aa484636a33" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Removes an object, given a name. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object name. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheView.hpp" line="187" column="13"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
+<para>View on a resource cache. <simplesect kind="remark"><para>Allows deletion of elements created through the view, and only those. </para>
+</simplesect>
+</para>
     </detaileddescription>
     <inheritancegraph>
-      <node id="114">
-        <label>castor3d::ArrayView&lt; ViewT &gt;</label>
+      <node id="1">
+        <label>castor3d::CacheViewT&lt; CacheT, EventT &gt;</label>
         <link refid="dc/d34/a02627"/>
-      </node>
-      <node id="116">
-        <label>castor3d::ArrayView&lt; castor3d::CubeView &gt;</label>
-        <link refid="dc/d34/a02627"/>
-        <childnode refid="114" relation="template-instance">
-          <edgelabel>&lt; castor3d::CubeView &gt;</edgelabel>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="115">
-        <label>castor3d::ArrayView&lt; castor3d::MipView &gt;</label>
-        <link refid="dc/d34/a02627"/>
-        <childnode refid="114" relation="template-instance">
-          <edgelabel>&lt; castor3d::MipView &gt;</edgelabel>
-        </childnode>
+      <node id="2">
+        <label>castor::Named</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="120">
-        <label>T</label>
-      </node>
-      <node id="119">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="120" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="122">
-        <label>std::vector&lt; TextureViewUPtr &gt;</label>
-        <childnode refid="119" relation="template-instance">
-          <edgelabel>&lt; TextureViewUPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="118">
-        <label>std::vector&lt; ViewT &gt;</label>
-        <childnode refid="119" relation="template-instance">
-          <edgelabel>&lt; ViewT &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="121">
-        <label>castor3d::MipView</label>
-        <link refid="da/dfd/a02619"/>
-        <childnode refid="122" relation="usage">
-          <edgelabel>levels</edgelabel>
-        </childnode>
-      </node>
-      <node id="117">
-        <label>castor3d::ArrayView&lt; ViewT &gt;</label>
+      <node id="1">
+        <label>castor3d::CacheViewT&lt; CacheT, EventT &gt;</label>
         <link refid="dc/d34/a02627"/>
-        <childnode refid="118" relation="usage">
-          <edgelabel>layers</edgelabel>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
-        <childnode refid="121" relation="usage">
-          <edgelabel>view</edgelabel>
-        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
       </node>
     </collaborationgraph>
-    <location file="Material/Texture/TextureLayout.hpp" line="102" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="101" bodyend="132"/>
+    <location file="Cache/CacheView.hpp" line="18" column="1" bodyfile="Cache/CacheView.hpp" bodystart="20" bodyend="222"/>
     <listofallmembers>
-      <member refid="dc/d34/a02627_1a67ab0f0d5b204c536ac11ea7ca6ad9ac" prot="public" virt="non-virtual"><scope>castor3d::ArrayView</scope><name>forEachFirstMipView</name></member>
-      <member refid="dc/d34/a02627_1aa2a9a6a8ad4dede91442f88e199fd8a2" prot="public" virt="non-virtual"><scope>castor3d::ArrayView</scope><name>forEachLeafView</name></member>
-      <member refid="dc/d34/a02627_1a4326bf34de29aa53db509da1068b9b1c" prot="public" virt="non-virtual"><scope>castor3d::ArrayView</scope><name>forEachView</name></member>
-      <member refid="dc/d34/a02627_1aa647ac8bc0ba7a50aaa05d7e2320fad9" prot="public" virt="non-virtual"><scope>castor3d::ArrayView</scope><name>layers</name></member>
-      <member refid="dc/d34/a02627_1affa9ed91064c21995ebe2fe83b06ad5a" prot="public" virt="non-virtual"><scope>castor3d::ArrayView</scope><name>view</name></member>
+      <member refid="dc/d34/a02627_1afe3c7d12620e2809fffad4ba3db7fa4c" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>add</name></member>
+      <member refid="dc/d34/a02627_1aaba0b632e8567430196b11960f8ef618" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>add</name></member>
+      <member refid="dc/d34/a02627_1a9e9967f3ac8845303196cbd639ad05eb" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>begin</name></member>
+      <member refid="dc/d34/a02627_1a4a718ee6b78bcb7a6af5a508b0cdf3fa" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>begin</name></member>
+      <member refid="dc/d34/a02627_1a985725335768d7d360a50510fd5b94fa" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>CacheViewT</name></member>
+      <member refid="dc/d34/a02627_1a691aa868ae79303e8704542bfd05c14a" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>clear</name></member>
+      <member refid="dc/d34/a02627_1af1ada30e267e0bc8da12a5bd0c1e056e" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>ElementCacheT</name></member>
+      <member refid="dc/d34/a02627_1a121c73e62613ff51e4f3a3209438dcf5" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>ElementCacheTraitsT</name></member>
+      <member refid="dc/d34/a02627_1a8ca263e5a558ca0a949208d5089ab294" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>ElementCleanerT</name></member>
+      <member refid="dc/d34/a02627_1aaa33c58a2c17b91b6b503d475ad8be28" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>ElementContT</name></member>
+      <member refid="dc/d34/a02627_1a30f478d33b802fda0d7a89e97d0cc0f9" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>ElementInitialiserT</name></member>
+      <member refid="dc/d34/a02627_1ab5f9619eadd2ec6d6a699aa484636a33" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>ElementKeyT</name></member>
+      <member refid="dc/d34/a02627_1a87291874f6fe24fb4b25b3b363b791ec" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>ElementMergerT</name></member>
+      <member refid="dc/d34/a02627_1a3e73620142d41d6798aabc46ecbca303" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>ElementObsT</name></member>
+      <member refid="dc/d34/a02627_1affd4e78e25e9f24f0b8d44878cd658c6" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>ElementPtrT</name></member>
+      <member refid="dc/d34/a02627_1a5b9ec556d0e7af181accfbd8e024d41d" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>ElementT</name></member>
+      <member refid="dc/d34/a02627_1a6b90c6c7c4c381cda71eb1e0976c3a44" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>end</name></member>
+      <member refid="dc/d34/a02627_1a6a6d37e91611f42ebd32b956c76a5796" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>end</name></member>
+      <member refid="dc/d34/a02627_1a22d24fbafdc3164fddd0888e82de984d" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>find</name></member>
+      <member refid="dc/d34/a02627_1a022be791d388decb0f12a5ffaeee5ca8" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>has</name></member>
+      <member refid="dc/d34/a02627_1ac97e9c462791d86493ab2798a4fd67ce" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>isEmpty</name></member>
+      <member refid="dc/d34/a02627_1a720c91e0db82e4045d33cf168c75c1cb" prot="private" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>m_cache</name></member>
+      <member refid="dc/d34/a02627_1a1f8179bcc47343e3ad01404d30e17d0b" prot="private" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>m_clean</name></member>
+      <member refid="dc/d34/a02627_1a16ebd1d43dc545573289ffee51f02506" prot="private" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>m_cleaning</name></member>
+      <member refid="dc/d34/a02627_1aa1edb04c5b5d0699c7810378f38487ba" prot="private" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>m_createdElements</name></member>
+      <member refid="dc/d34/a02627_1a4cf91b36c2862e9b8ef96e6f91148341" prot="private" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>m_initialise</name></member>
+      <member refid="dc/d34/a02627_1a7f5774433423824cbe11031946ecc2e1" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>remove</name></member>
+      <member refid="dc/d34/a02627_1ae579a672ee03e3caeca87d3c8e818973" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>tryAdd</name></member>
+      <member refid="dc/d34/a02627_1a8e23107e9198426ef1647ab14a633954" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>tryAdd</name></member>
+      <member refid="dc/d34/a02627_1a5847bda9ed76e2fb070016c47c2441bd" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>tryFind</name></member>
+      <member refid="dc/d34/a02627_1a650d1f0935eb71c00f88731fc0ec093f" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>tryRemove</name></member>
+      <member refid="dc/d34/a02627_1aec70dbd7dc9fcf92ecc8da1e1f31e771" prot="public" virt="non-virtual"><scope>castor3d::CacheViewT</scope><name>~CacheViewT</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

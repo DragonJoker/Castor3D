@@ -1,4 +1,10 @@
-<map id="castor3d::StaticRenderNode" name="castor3d::StaticRenderNode">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,191,107"/>
-<area shape="rect" id="node2" href="$d1/df6/a04299.html" title="Helper structure used to render objects." alt="" coords="24,5,172,32"/>
+<map id="castor3d::RenderCube" name="castor3d::RenderCube">
+<area shape="rect" id="node1" title=" " alt="" coords="131,363,282,389"/>
+<area shape="rect" id="node2" href="$d2/df2/a03960.html" title=" " alt="" coords="127,273,286,300"/>
+<area shape="rect" id="node3" href="$d2/dbb/a04072.html" title=" " alt="" coords="15,184,182,211"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,95,192,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="207,184,385,211"/>
+<area shape="rect" id="node6" href="$d3/d70/a03952.html" title=" " alt="" coords="217,95,369,121"/>
+<area shape="rect" id="node7" title=" " alt="" coords="394,95,507,121"/>
+<area shape="rect" id="node8" title=" " alt="" coords="431,5,470,32"/>
 </map>

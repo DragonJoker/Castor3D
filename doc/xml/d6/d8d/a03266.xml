@@ -1,33 +1,46 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d6/d8d/a03266" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkImportSemaphoreFdInfoKHR &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d6/d8d/a03266_1ab9c25f7db8173f3ec7676a79a6fe3a74" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkImportSemaphoreFdInfoKHR &gt;::value</definition>
+    <compoundname>castor3d::PipelineVisitorBase::Config</compoundname>
+    <includes local="no">PipelineVisitor.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/d8d/a03266_1a26740e849dcb7faea5d4090540762a49" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineVisitorBase::Config::forceSubPassesVisit</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_IMPORT_SEMAPHORE_FD_INFO_KHR</initializer>
+        <name>forceSubPassesVisit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::Config::forceSubPassesVisit</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="221" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="221" bodyend="-1"/>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="27" column="6" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d8d/a03266_1af3e4f344f815da354dd14a32e162024a" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineVisitorBase::Config::forceMiplevelsVisit</definition>
+        <argsstring></argsstring>
+        <name>forceMiplevelsVisit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::Config::forceMiplevelsVisit</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="28" column="6" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="28" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="221" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="221" bodyend="221"/>
+    <location file="Miscellaneous/PipelineVisitor.hpp" line="25" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="26" bodyend="29"/>
     <listofallmembers>
-      <member refid="d6/d8d/a03266_1ab9c25f7db8173f3ec7676a79a6fe3a74" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkImportSemaphoreFdInfoKHR &gt;</scope><name>value</name></member>
+      <member refid="d6/d8d/a03266_1af3e4f344f815da354dd14a32e162024a" prot="public" virt="non-virtual"><scope>castor3d::PipelineVisitorBase::Config</scope><name>forceMiplevelsVisit</name></member>
+      <member refid="d6/d8d/a03266_1a26740e849dcb7faea5d4090540762a49" prot="public" virt="non-virtual"><scope>castor3d::PipelineVisitorBase::Config</scope><name>forceSubPassesVisit</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

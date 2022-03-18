@@ -1,19 +1,22 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_8eaf0d3926bbb6a7bcb1f8356136eebb" kind="dir">
     <compoundname>Miscellaneous</compoundname>
-    <innerfile refid="d5/db5/a00374">DebugCallbacks.hpp</innerfile>
-    <innerfile refid="d4/d13/a00377">DebugName.hpp</innerfile>
-    <innerfile refid="d8/ddd/a00380">GpuInformations.hpp</innerfile>
-    <innerfile refid="da/dee/a00383">GpuObjectTracker.hpp</innerfile>
-    <innerfile refid="dd/df5/a00386">Logger.hpp</innerfile>
-    <innerfile refid="dc/dc9/a00389">makeVkType.hpp</innerfile>
-    <innerfile refid="d4/d27/a00392">MiscellaneousModule.hpp</innerfile>
-    <innerfile refid="db/dbc/a00395">Parameter.hpp</innerfile>
-    <innerfile refid="d9/dd1/a00398">Pattern.hpp</innerfile>
-    <innerfile refid="d7/d00/a00401">PipelineVisitor.hpp</innerfile>
-    <innerfile refid="d9/de6/a00404">Version.hpp</innerfile>
-    <innerfile refid="d1/d98/a00407">VersionException.hpp</innerfile>
+    <innerfile refid="d8/ddd/a00380">DebugCallbacks.hpp</innerfile>
+    <innerfile refid="da/dee/a00383">DebugName.hpp</innerfile>
+    <innerfile refid="dd/df5/a00386">GpuInformations.hpp</innerfile>
+    <innerfile refid="dc/dc9/a00389">GpuObjectTracker.hpp</innerfile>
+    <innerfile refid="d4/d27/a00392">LoadingScreen.hpp</innerfile>
+    <innerfile refid="db/dbc/a00395">Logger.hpp</innerfile>
+    <innerfile refid="d9/dd1/a00398">makeVkType.hpp</innerfile>
+    <innerfile refid="d7/d00/a00401">MiscellaneousModule.hpp</innerfile>
+    <innerfile refid="d9/de6/a00404">Parameter.hpp</innerfile>
+    <innerfile refid="d1/d98/a00407">Pattern.hpp</innerfile>
+    <innerfile refid="d8/d91/a00410">PipelineVisitor.hpp</innerfile>
+    <innerfile refid="da/d9c/a00413">ProgressBar.hpp</innerfile>
+    <innerfile refid="df/d15/a00416">StagingData.hpp</innerfile>
+    <innerfile refid="d3/d29/a00419">Version.hpp</innerfile>
+    <innerfile refid="db/d43/a00422">VersionException.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

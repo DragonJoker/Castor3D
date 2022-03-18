@@ -1,42 +1,680 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d4/d9e/a02587" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::PassTyper&lt; MaterialType::eMetallicRoughness &gt;</compoundname>
-    <includes local="no">PassModule.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="d4/d9e/a02587_1adc1b6bbbade2f9f35965368d1825b368" prot="public" static="no">
-        <type><ref refid="d7/d12/a02571" kindref="compound">MetallicRoughnessPbrPass</ref></type>
-        <definition>using castor3d::PassTyper&lt; MaterialType::eMetallicRoughness &gt;::Type =  MetallicRoughnessPbrPass</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d4/d9e/a02587" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::PoolUniformBuffer</compoundname>
+    <includes local="no">PoolUniformBuffer.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d4/d9e/a02587_1a41ce37131b470a87b0ae6ab96ce5b3a7" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d9a/a04075" kindref="compound">RenderSystem</ref> const  &amp;</type>
+        <definition>RenderSystem const&amp; castor3d::PoolUniformBuffer::m_renderSystem</definition>
         <argsstring></argsstring>
-        <name>Type</name>
+        <name>m_renderSystem</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::m_renderSystem</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Pass/PassModule.hpp" line="213" column="1" bodyfile="Material/Pass/PassModule.hpp" bodystart="213" bodyend="-1"/>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="249" column="21" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="249" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d9e/a02587_1a85afdeb1cde8aedbc74d5d7be3d4d077" prot="private" static="no" mutable="no">
+        <type>VkBufferUsageFlags</type>
+        <definition>VkBufferUsageFlags castor3d::PoolUniformBuffer::m_usage</definition>
+        <argsstring></argsstring>
+        <name>m_usage</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::m_usage</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="250" column="20" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="250" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d9e/a02587_1a0f50cc79281f6c234c727f926ddfbcf8" prot="private" static="no" mutable="no">
+        <type>VkMemoryPropertyFlags</type>
+        <definition>VkMemoryPropertyFlags castor3d::PoolUniformBuffer::m_flags</definition>
+        <argsstring></argsstring>
+        <name>m_flags</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::m_flags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="251" column="23" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="251" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d9e/a02587_1a20d1cd447ae5f875a7c9d13419e33035" prot="private" static="no" mutable="no">
+        <type>ashes::QueueShare</type>
+        <definition>ashes::QueueShare castor3d::PoolUniformBuffer::m_sharingMode</definition>
+        <argsstring></argsstring>
+        <name>m_sharingMode</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::m_sharingMode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="252" column="19" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="252" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d9e/a02587_1aab23d4b9089c3943656b943c38c25289" prot="private" static="no" mutable="no">
+        <type>std::set&lt; <ref refid="d9/dce/a02519" kindref="compound">MemChunk</ref> &gt;</type>
+        <definition>std::set&lt; MemChunk &gt; castor3d::PoolUniformBuffer::m_allocated</definition>
+        <argsstring></argsstring>
+        <name>m_allocated</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::m_allocated</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="253" column="10" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="253" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d9e/a02587_1a1cd07230309159b3e8b81b32a8553266" prot="private" static="no" mutable="no">
+        <type>ashes::UniformBufferPtr</type>
+        <definition>ashes::UniformBufferPtr castor3d::PoolUniformBuffer::m_buffer</definition>
+        <argsstring></argsstring>
+        <name>m_buffer</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::m_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="254" column="25" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="254" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d9e/a02587_1a2f46362bb79c8f5bc308bd36978ab280" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::PoolUniformBuffer::m_debugName</definition>
+        <argsstring></argsstring>
+        <name>m_debugName</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::m_debugName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="255" column="16" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="255" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d9e/a02587_1a741b5ad3d0c991d22d148fb2a7933372" prot="private" static="no" mutable="no">
+        <type>castor::ArrayView&lt; uint8_t &gt;</type>
+        <definition>castor::ArrayView&lt; uint8_t &gt; castor3d::PoolUniformBuffer::m_data</definition>
+        <argsstring></argsstring>
+        <name>m_data</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::m_data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="256" column="19" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="256" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/d9e/a02587_1a2bb9306a9d408dd999bb213a20cfc58e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::PoolUniformBuffer::PoolUniformBuffer</definition>
+        <argsstring>(RenderSystem const &amp;renderSystem, castor::ArrayView&lt; uint8_t &gt; data, VkBufferUsageFlags usage, VkMemoryPropertyFlags flags, castor::String debugName, ashes::QueueShare sharingMode={})</argsstring>
+        <name>PoolUniformBuffer</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::PoolUniformBuffer</qualifiedname>
+        <param>
+          <type><ref refid="d3/d9a/a04075" kindref="compound">RenderSystem</ref> const &amp;</type>
+          <declname>renderSystem</declname>
+        </param>
+        <param>
+          <type>castor::ArrayView&lt; uint8_t &gt;</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>VkBufferUsageFlags</type>
+          <declname>usage</declname>
+        </param>
+        <param>
+          <type>VkMemoryPropertyFlags</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>castor::String</type>
+          <declname>debugName</declname>
+        </param>
+        <param>
+          <type>ashes::QueueShare</type>
+          <declname>sharingMode</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">renderSystem</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The <ref refid="d3/d9a/a04075" kindref="compound">RenderSystem</ref>. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mapped data. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">usage</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer usage flags. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer memory flags. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">debugName</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer debug name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sharingMode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The sharing mode. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="41" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d9e/a02587_1acb9da7d65165c0ffee76279f21ac9c54" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::PoolUniformBuffer::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::initialise</qualifiedname>
+        <param>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Initialises the GPU buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="55" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d9e/a02587_1ab2dde565384597c456092f4a8c884c13" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PoolUniformBuffer::cleanup</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::cleanup</qualifiedname>
+        <param>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Cleans up the GPU buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="64" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d9e/a02587_1af825adaf870341eb0810ef0fc70a2811" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PoolUniformBuffer::hasAvailable</definition>
+        <argsstring>(VkDeviceSize size) const</argsstring>
+        <name>hasAvailable</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::hasAvailable</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The size wanted. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> if there is enough remaining memory for a new element. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="73" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d9e/a02587_1a9b17010f71d69a2733e0e1563ddedd04" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PoolUniformBuffer::hasAllocated</definition>
+        <argsstring>() const</argsstring>
+        <name>hasAllocated</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::hasAllocated</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if at least one element has been allocated. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="80" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d9e/a02587_1a7cc2d0d50f79a7425983da27baae4147" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/dce/a02519" kindref="compound">MemChunk</ref></type>
+        <definition>C3D_API MemChunk castor3d::PoolUniformBuffer::allocate</definition>
+        <argsstring>(VkDeviceSize size)</argsstring>
+        <name>allocate</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::allocate</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Allocates a memory chunk for a CPU buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The size wanted. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The memory chunk offset. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="91" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d9e/a02587_1a7b2e62bf5f3fd11e264e8588838adba2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PoolUniformBuffer::deallocate</definition>
+        <argsstring>(VkDeviceSize offset)</argsstring>
+        <name>deallocate</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::deallocate</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+<para>Deallocates memory. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The memory chunk offset. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="100" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d9e/a02587_1a120bb112f7be0f8f0d893a1a1bd8910e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename DataT</type>
+          </param>
+        </templateparamlist>
+        <type>DataT const &amp;</type>
+        <definition>DataT const  &amp; castor3d::PoolUniformBuffer::getData</definition>
+        <argsstring>(VkDeviceSize offset) const</argsstring>
+        <name>getData</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::getData</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The N-th instance of the data. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The memory chunk offset. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="114" column="14" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="114" bodyend="117"/>
+        <referencedby refid="d0/d01/a02511_1a59505199eb458103512ef51fec723f12" compoundref="dc/d57/a00194" startline="51" endline="54">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getData</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/d9e/a02587_1a1ad0dbe57d8d7cdc4f4bf79b763b60ec" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename DataT</type>
+          </param>
+        </templateparamlist>
+        <type>DataT &amp;</type>
+        <definition>DataT &amp; castor3d::PoolUniformBuffer::getData</definition>
+        <argsstring>(VkDeviceSize offset)</argsstring>
+        <name>getData</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::getData</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The N-th instance of the data. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The memory chunk offset. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="131" column="8" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="131" bodyend="134"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d9e/a02587_1a1b1d69c156642513662b5db351e6bd22" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::ArrayView&lt; uint8_t &gt; const &amp;</type>
+        <definition>castor::ArrayView&lt; uint8_t &gt; const  &amp; castor3d::PoolUniformBuffer::getDatas</definition>
+        <argsstring>() const</argsstring>
+        <name>getDatas</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::getDatas</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The data. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="143" column="26" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="143" bodyend="146"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d9e/a02587_1ab040736570e5277841e2d4cf06670aaf" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::ArrayView&lt; uint8_t &gt; &amp;</type>
+        <definition>castor::ArrayView&lt; uint8_t &gt; &amp; castor3d::PoolUniformBuffer::getDatas</definition>
+        <argsstring>()</argsstring>
+        <name>getDatas</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::getDatas</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The data. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="155" column="20" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="155" bodyend="158"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d9e/a02587_1a77619c448a45c14bbfcd61b22b592274" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PoolUniformBuffer::hasBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>hasBuffer</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::hasBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>false</computeroutput> if the internal buffer doesn&apos;t exist. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="167" column="6" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="167" bodyend="170"/>
+        <referencedby refid="d0/d01/a02511_1ad7a4b5aef7f032e598077b111714ad28" compoundref="dc/d57/a00194" startline="31" endline="35">castor3d::UniformBufferOffsetT&lt; DataT &gt;::operator bool</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/d9e/a02587_1a7804d82ef261e90f61fd38589881c900" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::UniformBuffer const &amp;</type>
+        <definition>ashes::UniformBuffer const  &amp; castor3d::PoolUniformBuffer::getBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>getBuffer</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::getBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The internal buffer. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="179" column="29" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="179" bodyend="182"/>
+        <referencedby refid="d0/d01/a02511_1a2c6ad146d4910651544564c25ca7dccd" compoundref="dc/d57/a00194" startline="96" endline="105">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</referencedby>
+        <referencedby refid="d4/d9e/a02587_1a32a13128eaf15955c1ff544751dcac6a" compoundref="de/df3/a00185" startline="231" endline="234">getAlignedSize</referencedby>
+        <referencedby refid="d0/d01/a02511_1af6031892474c15c1ff806ca0e9842242" compoundref="dc/d57/a00194" startline="71" endline="74">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getBuffer</referencedby>
+        <referencedby refid="d0/d01/a02511_1af1486cfa4c196f82e0cbc2440edea70e" compoundref="dc/d57/a00194" startline="37" endline="42">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getByteOffset</referencedby>
+        <referencedby refid="d0/d01/a02511_1a11dc3f75dd4cd054c5ee5fd4e0c1f67f" compoundref="dc/d57/a00194" startline="44" endline="49">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getByteRange</referencedby>
+        <referencedby refid="d0/d01/a02511_1ad7dcad7c96a620540d10eb85f3d4586b" compoundref="dc/d57/a00194" startline="107" endline="120">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getDescriptorWrite</referencedby>
+        <referencedby refid="d4/d9e/a02587_1ad3de3f47551cdd4bd91f2372e504bd4d" compoundref="de/df3/a00185" startline="211" endline="214">getElementSize</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/d9e/a02587_1a3f8292fb08362bce16522a0e987f6344" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::PoolUniformBuffer::operator ashes::UniformBuffer const &amp;</definition>
+        <argsstring>() const</argsstring>
+        <name>operator ashes::UniformBuffer const &amp;</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::UniformBuffer const &amp;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="183" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="183" bodyend="186"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d9e/a02587_1ab3b072dc5db16c61c7982533fee8c223" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::UniformBuffer &amp;</type>
+        <definition>ashes::UniformBuffer &amp; castor3d::PoolUniformBuffer::getBuffer</definition>
+        <argsstring>()</argsstring>
+        <name>getBuffer</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::getBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The internal buffer. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="195" column="23" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="195" bodyend="198"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d9e/a02587_1aef9b5a32ba56c24595a4b819ad25c7c9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::PoolUniformBuffer::operator ashes::UniformBuffer &amp;</definition>
+        <argsstring>()</argsstring>
+        <name>operator ashes::UniformBuffer &amp;</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::UniformBuffer &amp;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="199" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="199" bodyend="202"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d9e/a02587_1ad3de3f47551cdd4bd91f2372e504bd4d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::PoolUniformBuffer::getElementSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getElementSize</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::getElementSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The size of one element in the buffer. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="211" column="10" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="211" bodyend="214"/>
+        <references refid="d4/d9e/a02587_1a7804d82ef261e90f61fd38589881c900" compoundref="de/df3/a00185" startline="179" endline="182">getBuffer</references>
+        <references refid="d4/d9e/a02587_1ad3de3f47551cdd4bd91f2372e504bd4d" compoundref="de/df3/a00185" startline="211" endline="214">getElementSize</references>
+        <referencedby refid="d4/d9e/a02587_1ab9520ff65055aeb19c8b5bfca02ae4a3" compoundref="de/df3/a00185" startline="243" endline="246">getAlignedSize</referencedby>
+        <referencedby refid="d4/d9e/a02587_1ad3de3f47551cdd4bd91f2372e504bd4d" compoundref="de/df3/a00185" startline="211" endline="214">getElementSize</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/d9e/a02587_1a32a13128eaf15955c1ff544751dcac6a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::PoolUniformBuffer::getAlignedSize</definition>
+        <argsstring>(uint32_t size) const</argsstring>
+        <name>getAlignedSize</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::getAlignedSize</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves the aligned size for an element. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The size of an element. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The aligned size. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="231" column="10" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="231" bodyend="234"/>
+        <references refid="d4/d9e/a02587_1ab9520ff65055aeb19c8b5bfca02ae4a3" compoundref="de/df3/a00185" startline="243" endline="246">getAlignedSize</references>
+        <references refid="d4/d9e/a02587_1a7804d82ef261e90f61fd38589881c900" compoundref="de/df3/a00185" startline="179" endline="182">getBuffer</references>
+        <referencedby refid="d0/d01/a02511_1a27740308743c3e5d9e0a84631b3df4b9" compoundref="dc/d57/a00194" startline="81" endline="84">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getAlignedSize</referencedby>
+        <referencedby refid="d0/d01/a02511_1a59505199eb458103512ef51fec723f12" compoundref="dc/d57/a00194" startline="51" endline="54">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getData</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/d9e/a02587_1ab9520ff65055aeb19c8b5bfca02ae4a3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::PoolUniformBuffer::getAlignedSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getAlignedSize</name>
+        <qualifiedname>castor3d::PoolUniformBuffer::getAlignedSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The aligned size for an element. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/PoolUniformBuffer.hpp" line="243" column="10" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="243" bodyend="246"/>
+        <references refid="d4/d9e/a02587_1ab9520ff65055aeb19c8b5bfca02ae4a3" compoundref="de/df3/a00185" startline="243" endline="246">getAlignedSize</references>
+        <references refid="d4/d9e/a02587_1ad3de3f47551cdd4bd91f2372e504bd4d" compoundref="de/df3/a00185" startline="211" endline="214">getElementSize</references>
+        <referencedby refid="d4/d9e/a02587_1a32a13128eaf15955c1ff544751dcac6a" compoundref="de/df3/a00185" startline="231" endline="234">getAlignedSize</referencedby>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Helper class to retrieve a pass type from a MaterialType. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
-</simplesect>
-<simplesect kind="version"><para>0.9.0 </para>
-</simplesect>
-<simplesect kind="date"><para>02/12/2016</para>
-</simplesect>
-<simplesect kind="remark"><para>Specialisation for <ref refid="d7/dd1/a01458_1a90306964da63b9bbc97f4e205ecc5b7aa070a8071cbe82751a559d66b7cc85024" kindref="member">MaterialType::eMetallicRoughness</ref>. </para>
-</simplesect>
-</para>
     </detaileddescription>
-    <location file="Material/Pass/PassModule.hpp" line="212" column="1" bodyfile="Material/Pass/PassModule.hpp" bodystart="211" bodyend="214"/>
+    <location file="Buffer/PoolUniformBuffer.hpp" line="20" column="1" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="21" bodyend="257"/>
     <listofallmembers>
-      <member refid="d4/d9e/a02587_1adc1b6bbbade2f9f35965368d1825b368" prot="public" virt="non-virtual"><scope>castor3d::PassTyper&lt; MaterialType::eMetallicRoughness &gt;</scope><name>Type</name></member>
+      <member refid="d4/d9e/a02587_1a7cc2d0d50f79a7425983da27baae4147" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>allocate</name></member>
+      <member refid="d4/d9e/a02587_1ab2dde565384597c456092f4a8c884c13" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>cleanup</name></member>
+      <member refid="d4/d9e/a02587_1a7b2e62bf5f3fd11e264e8588838adba2" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>deallocate</name></member>
+      <member refid="d4/d9e/a02587_1a32a13128eaf15955c1ff544751dcac6a" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getAlignedSize</name></member>
+      <member refid="d4/d9e/a02587_1ab9520ff65055aeb19c8b5bfca02ae4a3" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getAlignedSize</name></member>
+      <member refid="d4/d9e/a02587_1a7804d82ef261e90f61fd38589881c900" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getBuffer</name></member>
+      <member refid="d4/d9e/a02587_1ab3b072dc5db16c61c7982533fee8c223" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getBuffer</name></member>
+      <member refid="d4/d9e/a02587_1a120bb112f7be0f8f0d893a1a1bd8910e" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getData</name></member>
+      <member refid="d4/d9e/a02587_1a1ad0dbe57d8d7cdc4f4bf79b763b60ec" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getData</name></member>
+      <member refid="d4/d9e/a02587_1a1b1d69c156642513662b5db351e6bd22" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getDatas</name></member>
+      <member refid="d4/d9e/a02587_1ab040736570e5277841e2d4cf06670aaf" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getDatas</name></member>
+      <member refid="d4/d9e/a02587_1ad3de3f47551cdd4bd91f2372e504bd4d" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>getElementSize</name></member>
+      <member refid="d4/d9e/a02587_1a9b17010f71d69a2733e0e1563ddedd04" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>hasAllocated</name></member>
+      <member refid="d4/d9e/a02587_1af825adaf870341eb0810ef0fc70a2811" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>hasAvailable</name></member>
+      <member refid="d4/d9e/a02587_1a77619c448a45c14bbfcd61b22b592274" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>hasBuffer</name></member>
+      <member refid="d4/d9e/a02587_1acb9da7d65165c0ffee76279f21ac9c54" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>initialise</name></member>
+      <member refid="d4/d9e/a02587_1aab23d4b9089c3943656b943c38c25289" prot="private" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>m_allocated</name></member>
+      <member refid="d4/d9e/a02587_1a1cd07230309159b3e8b81b32a8553266" prot="private" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>m_buffer</name></member>
+      <member refid="d4/d9e/a02587_1a741b5ad3d0c991d22d148fb2a7933372" prot="private" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>m_data</name></member>
+      <member refid="d4/d9e/a02587_1a2f46362bb79c8f5bc308bd36978ab280" prot="private" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>m_debugName</name></member>
+      <member refid="d4/d9e/a02587_1a0f50cc79281f6c234c727f926ddfbcf8" prot="private" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>m_flags</name></member>
+      <member refid="d4/d9e/a02587_1a41ce37131b470a87b0ae6ab96ce5b3a7" prot="private" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>m_renderSystem</name></member>
+      <member refid="d4/d9e/a02587_1a20d1cd447ae5f875a7c9d13419e33035" prot="private" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>m_sharingMode</name></member>
+      <member refid="d4/d9e/a02587_1a85afdeb1cde8aedbc74d5d7be3d4d077" prot="private" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>m_usage</name></member>
+      <member refid="d4/d9e/a02587_1aef9b5a32ba56c24595a4b819ad25c7c9" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>operator ashes::UniformBuffer &amp;</name></member>
+      <member refid="d4/d9e/a02587_1a3f8292fb08362bce16522a0e987f6344" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>operator ashes::UniformBuffer const &amp;</name></member>
+      <member refid="d4/d9e/a02587_1a2bb9306a9d408dd999bb213a20cfc58e" prot="public" virt="non-virtual"><scope>castor3d::PoolUniformBuffer</scope><name>PoolUniformBuffer</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

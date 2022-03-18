@@ -1,345 +1,131 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d9/d4f/a02366" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::Cache</compoundname>
-    <basecompoundref refid="dc/dfd/a02370" prot="public" virt="non-virtual">castor3d::CacheBase&lt; ElementType, KeyType &gt;</basecompoundref>
-    <includes local="no">CacheModule.hpp</includes>
+    <compoundname>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</compoundname>
+    <basecompoundref refid="d3/d09/a02334" prot="public" virt="non-virtual">castor3d::BinaryParserBase&lt; SceneNodeAnimation &gt;</basecompoundref>
+    <includes local="no">BinarySceneNodeAnimation.hpp</includes>
     <templateparamlist>
-      <param>
-        <type>typename ElementType</type>
-      </param>
-      <param>
-        <type>typename KeyType</type>
-      </param>
     </templateparamlist>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="d9/d4f/a02366_1abcc369c1b262eeb8e01896a897a46209" prot="public" static="no">
-        <type><ref refid="dc/dfd/a02370" kindref="compound">CacheBase</ref>&lt; ElementType, KeyType &gt;</type>
-        <definition>using castor3d::Cache&lt; ElementType, KeyType &gt;::MyCacheType =  CacheBase&lt; ElementType, KeyType &gt;</definition>
-        <argsstring></argsstring>
-        <name>MyCacheType</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/Cache.hpp" line="16" column="1" bodyfile="Cache/Cache.hpp" bodystart="16" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d9/d4f/a02366_1ab6c9d70999aae906fd160e53bcaf67e2" prot="public" static="no">
-        <type>typename <ref refid="dc/dfd/a02370_1a81d75361a18a4455c9110b768de6f63e" kindref="member">MyCacheType::MyCacheTraits</ref></type>
-        <definition>using castor3d::Cache&lt; ElementType, KeyType &gt;::MyCacheTraits =  typename MyCacheType::MyCacheTraits</definition>
-        <argsstring></argsstring>
-        <name>MyCacheTraits</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/Cache.hpp" line="17" column="1" bodyfile="Cache/Cache.hpp" bodystart="17" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d9/d4f/a02366_1ac28fd957f1327b6e16600ecdf2d508d7" prot="public" static="no">
-        <type>typename <ref refid="dc/dfd/a02370_1a7fda54485c8f8e708df819c7a60596ac" kindref="member">MyCacheType::Element</ref></type>
-        <definition>using castor3d::Cache&lt; ElementType, KeyType &gt;::Element =  typename MyCacheType::Element</definition>
-        <argsstring></argsstring>
-        <name>Element</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/Cache.hpp" line="18" column="1" bodyfile="Cache/Cache.hpp" bodystart="18" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d9/d4f/a02366_1a974895d119a51618738bd5240282bd8a" prot="public" static="no">
-        <type>typename <ref refid="dc/dfd/a02370_1ac91d27606d9904c2033c6488fc65779f" kindref="member">MyCacheType::Key</ref></type>
-        <definition>using castor3d::Cache&lt; ElementType, KeyType &gt;::Key =  typename MyCacheType::Key</definition>
-        <argsstring></argsstring>
-        <name>Key</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/Cache.hpp" line="19" column="1" bodyfile="Cache/Cache.hpp" bodystart="19" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d9/d4f/a02366_1a2b2306f4304e71fd0b67fc45b1cbae00" prot="public" static="no">
-        <type>typename <ref refid="dc/dfd/a02370_1a73f0fe787eab6e9f181c8c23f1760e45" kindref="member">MyCacheType::Collection</ref></type>
-        <definition>using castor3d::Cache&lt; ElementType, KeyType &gt;::Collection =  typename MyCacheType::Collection</definition>
-        <argsstring></argsstring>
-        <name>Collection</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/Cache.hpp" line="20" column="1" bodyfile="Cache/Cache.hpp" bodystart="20" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d9/d4f/a02366_1af5e62f2aec01097379f691f96a81d317" prot="public" static="no">
-        <type>typename <ref refid="dc/dfd/a02370_1a11d69566e76e7970f4a4328fdc3f6025" kindref="member">MyCacheType::LockType</ref></type>
-        <definition>using castor3d::Cache&lt; ElementType, KeyType &gt;::LockType =  typename MyCacheType::LockType</definition>
-        <argsstring></argsstring>
-        <name>LockType</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/Cache.hpp" line="21" column="1" bodyfile="Cache/Cache.hpp" bodystart="21" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d9/d4f/a02366_1af33cdd02b0a5e0ad04c7fd009b267e30" prot="public" static="no">
-        <type>typename <ref refid="dc/dfd/a02370_1a7f322bd515ed3a1d6274b1882ad3fb4a" kindref="member">MyCacheType::ElementPtr</ref></type>
-        <definition>using castor3d::Cache&lt; ElementType, KeyType &gt;::ElementPtr =  typename MyCacheType::ElementPtr</definition>
-        <argsstring></argsstring>
-        <name>ElementPtr</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/Cache.hpp" line="22" column="1" bodyfile="Cache/Cache.hpp" bodystart="22" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d9/d4f/a02366_1a9328cadbe4e3af723e008a31da39b7c9" prot="public" static="no">
-        <type>typename <ref refid="dc/dfd/a02370_1aaad73790ec1428ae47565a5ff9640450" kindref="member">MyCacheType::Producer</ref></type>
-        <definition>using castor3d::Cache&lt; ElementType, KeyType &gt;::Producer =  typename MyCacheType::Producer</definition>
-        <argsstring></argsstring>
-        <name>Producer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/Cache.hpp" line="23" column="1" bodyfile="Cache/Cache.hpp" bodystart="23" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d9/d4f/a02366_1aa9c3c4c310d6cf83216528fc9910b029" prot="public" static="no">
-        <type>typename <ref refid="dc/dfd/a02370_1a1d9b7d10eb83df474eeb2fdff71002f5" kindref="member">MyCacheType::Initialiser</ref></type>
-        <definition>using castor3d::Cache&lt; ElementType, KeyType &gt;::Initialiser =  typename MyCacheType::Initialiser</definition>
-        <argsstring></argsstring>
-        <name>Initialiser</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/Cache.hpp" line="24" column="1" bodyfile="Cache/Cache.hpp" bodystart="24" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d9/d4f/a02366_1aec9da84e7f63f89b04e22d514fbc9050" prot="public" static="no">
-        <type>typename <ref refid="dc/dfd/a02370_1ac144f9ea07cb00eb2b01788678792fa4" kindref="member">MyCacheType::Cleaner</ref></type>
-        <definition>using castor3d::Cache&lt; ElementType, KeyType &gt;::Cleaner =  typename MyCacheType::Cleaner</definition>
-        <argsstring></argsstring>
-        <name>Cleaner</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/Cache.hpp" line="25" column="1" bodyfile="Cache/Cache.hpp" bodystart="25" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d9/d4f/a02366_1a401e3120726b6ddb3dc78c2edb9b707f" prot="public" static="no">
-        <type>typename <ref refid="dc/dfd/a02370_1a1c851c8660b72f8bbc71c81c40bf1c08" kindref="member">MyCacheType::Merger</ref></type>
-        <definition>using castor3d::Cache&lt; ElementType, KeyType &gt;::Merger =  typename MyCacheType::Merger</definition>
-        <argsstring></argsstring>
-        <name>Merger</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/Cache.hpp" line="26" column="1" bodyfile="Cache/Cache.hpp" bodystart="26" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d9/d4f/a02366_1a8fef3c63e79828f22ab9ac05051742ed" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::Cache&lt; ElementType, KeyType &gt;::Cache</definition>
-        <argsstring>(Engine &amp;engine, Producer &amp;&amp;produce, Initialiser &amp;&amp;initialise=Initialiser{}, Cleaner &amp;&amp;clean=Cleaner{}, Merger &amp;&amp;merge=Merger{})</argsstring>
-        <name>Cache</name>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d9/d4f/a02366_1a00c41dff8d7bf04a261298f9d1623232" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BinaryParser&lt; SceneNodeAnimation &gt;::doParse</definition>
+        <argsstring>(SceneNodeAnimation &amp;obj) override</argsstring>
+        <name>doParse</name>
+        <qualifiedname>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;::doParse</qualifiedname>
+        <reimplements refid="d3/d09/a02334_1a020a66d5fc1b452dc76c82702d72bbb1">doParse</reimplements>
         <param>
-          <type><ref refid="df/d9b/a02514" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
-        </param>
-        <param>
-          <type><ref refid="d9/d4f/a02366_1a9328cadbe4e3af723e008a31da39b7c9" kindref="member">Producer</ref> &amp;&amp;</type>
-          <declname>produce</declname>
-        </param>
-        <param>
-          <type><ref refid="d9/d4f/a02366_1aa9c3c4c310d6cf83216528fc9910b029" kindref="member">Initialiser</ref> &amp;&amp;</type>
-          <declname>initialise</declname>
-          <defval><ref refid="d9/d4f/a02366_1aa9c3c4c310d6cf83216528fc9910b029" kindref="member">Initialiser</ref>{}</defval>
-        </param>
-        <param>
-          <type><ref refid="d9/d4f/a02366_1aec9da84e7f63f89b04e22d514fbc9050" kindref="member">Cleaner</ref> &amp;&amp;</type>
-          <declname>clean</declname>
-          <defval><ref refid="d9/d4f/a02366_1aec9da84e7f63f89b04e22d514fbc9050" kindref="member">Cleaner</ref>{}</defval>
-        </param>
-        <param>
-          <type><ref refid="d9/d4f/a02366_1a401e3120726b6ddb3dc78c2edb9b707f" kindref="member">Merger</ref> &amp;&amp;</type>
-          <declname>merge</declname>
-          <defval><ref refid="d9/d4f/a02366_1a401e3120726b6ddb3dc78c2edb9b707f" kindref="member">Merger</ref>{}</defval>
+          <type><ref refid="d3/d74/a04418" kindref="compound">SceneNodeAnimation</ref> &amp;</type>
+          <declname>obj</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
+<para>Function used to retrieve specific data from the chunk. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">engine</parametername>
+<parametername direction="out">obj</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The engine. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">produce</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element producer. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">initialise</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element initialiser. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">clean</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element cleaner. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">merge</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The element collection merger. </para>
+<para>The object to read. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/Cache.hpp" line="43" column="1" bodyfile="Cache/Cache.hpp" bodystart="43" bodyend="54"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d4f/a02366_1adf687ed3c292e34e5f54810e4400f38c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::Cache&lt; ElementType, KeyType &gt;::~Cache</definition>
-        <argsstring>()</argsstring>
-        <name>~Cache</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/Cache.hpp" line="61" column="1" bodyfile="Cache/Cache.hpp" bodystart="61" bodyend="63"/>
+        <location file="Binary/BinarySceneNodeAnimation.hpp" line="71" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Base class for an element cache. </para>
+<para><ref refid="d3/d74/a04418" kindref="compound">SceneNodeAnimation</ref> binary loader. </para>
     </briefdescription>
     <detaileddescription>
+<para>Loader binaire de <ref refid="d3/d74/a04418" kindref="compound">SceneNodeAnimation</ref>. </para>
     </detaileddescription>
     <inheritancegraph>
-      <node id="512">
-        <label>castor3d::CacheBase&lt; ElementType, KeyType &gt;</label>
-        <link refid="dc/dfd/a02370"/>
-      </node>
-      <node id="511">
-        <label>castor3d::Cache&lt; ElementType, KeyType &gt;</label>
-        <link refid="d9/d4f/a02366"/>
-        <childnode refid="512" relation="public-inheritance">
+      <node id="2">
+        <label>castor3d::BinaryParserBase&lt; SceneNodeAnimation &gt;</label>
+        <link refid="d3/d09/a02334"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; SceneNodeAnimation &gt;</edgelabel>
         </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</label>
+        <link refid="d9/d4f/a02366"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
+        <link refid="d3/d09/a02334"/>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="514">
-        <label>castor3d::CacheBase&lt; ElementType, KeyType &gt;</label>
-        <link refid="dc/dfd/a02370"/>
-        <childnode refid="515" relation="usage">
-          <edgelabel>m_engine</edgelabel>
+      <node id="2">
+        <label>castor3d::BinaryParserBase&lt; SceneNodeAnimation &gt;</label>
+        <link refid="d3/d09/a02334"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_fileVersion</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; SceneNodeAnimation &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="513">
-        <label>castor3d::Cache&lt; ElementType, KeyType &gt;</label>
+      <node id="3">
+        <label>castor3d::BinaryChunk</label>
+        <link refid="dd/dae/a02294"/>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</label>
         <link refid="d9/d4f/a02366"/>
-        <childnode refid="514" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="516">
-        <label>castor::Unique&lt; Engine &gt;</label>
-      </node>
-      <node id="515">
-        <label>castor3d::Engine</label>
-        <link refid="df/d9b/a02514"/>
-        <childnode refid="516" relation="public-inheritance">
+      <node id="5">
+        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
+        <link refid="d3/d09/a02334"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
         </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_fileVersion</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::Version</label>
+        <link refid="d4/d1b/a03282"/>
       </node>
     </collaborationgraph>
-    <location file="Cache/Cache.hpp" line="14" column="1" bodyfile="Cache/Cache.hpp" bodystart="12" bodyend="64"/>
+    <location file="Binary/BinarySceneNodeAnimation.hpp" line="57" column="1" bodyfile="Binary/BinarySceneNodeAnimation.hpp" bodystart="59" bodyend="72"/>
     <listofallmembers>
-      <member refid="dc/dfd/a02370_1a9d8fa89aa1ea33853d74552cc8142343" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>add</name></member>
-      <member refid="dc/dfd/a02370_1a2a19e1d040d30a9d95cc7bb20c86a24d" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>add</name></member>
-      <member refid="dc/dfd/a02370_1a9f751edeb9359147511396227eb158a9" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>begin</name></member>
-      <member refid="dc/dfd/a02370_1a1ea0fbf3fb3b286964e1a6948adaa291" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>begin</name></member>
-      <member refid="d9/d4f/a02366_1a8fef3c63e79828f22ab9ac05051742ed" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>Cache</name></member>
-      <member refid="dc/dfd/a02370_1aeda43feb65387eb303a98b1d7716c115" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>CacheBase</name></member>
-      <member refid="d9/d4f/a02366_1aec9da84e7f63f89b04e22d514fbc9050" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>Cleaner</name></member>
-      <member refid="dc/dfd/a02370_1a5b8853e4191f80d06633e7adc80bfad6" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>cleanup</name></member>
-      <member refid="dc/dfd/a02370_1adb6be8b05884ebde0c91e11e0e289054" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>clear</name></member>
-      <member refid="d9/d4f/a02366_1a2b2306f4304e71fd0b67fc45b1cbae00" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>Collection</name></member>
-      <member refid="dc/dfd/a02370_1ab7b359e6d1bdc027bcac492bf965d02b" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>create</name></member>
-      <member refid="dc/dfd/a02370_1a40ce560883d2d3bc4e948cbd0a47b569" prot="protected" virt="non-virtual"><scope>castor3d::Cache</scope><name>doReportCreation</name></member>
-      <member refid="dc/dfd/a02370_1adb2613cc9082f6d3ecb0639c0726201e" prot="protected" virt="non-virtual"><scope>castor3d::Cache</scope><name>doReportDuplicate</name></member>
-      <member refid="dc/dfd/a02370_1af3cd6aabd6e0a4eda8177f0edf4ce18e" prot="protected" virt="non-virtual"><scope>castor3d::Cache</scope><name>doReportNull</name></member>
-      <member refid="d9/d4f/a02366_1ac28fd957f1327b6e16600ecdf2d508d7" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>Element</name></member>
-      <member refid="d9/d4f/a02366_1af33cdd02b0a5e0ad04c7fd009b267e30" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>ElementPtr</name></member>
-      <member refid="dc/dfd/a02370_1a6e0aa6994b70f00fb5f4d3f63859772f" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>end</name></member>
-      <member refid="dc/dfd/a02370_1af371833847bb6c5b5174179ffa83cbfe" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>end</name></member>
-      <member refid="dc/dfd/a02370_1aeafea13acfbda3f6de83daeea679c405" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>find</name></member>
-      <member refid="dc/dfd/a02370_1a37c3c620a716593723603fe85f7ce177" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>forEach</name></member>
-      <member refid="dc/dfd/a02370_1a1b49a63f062169b85d4f062a72b9aaf2" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>forEach</name></member>
-      <member refid="dc/dfd/a02370_1a64bb5eb01ea4f26c716188c21a7a7a7a" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>getEngine</name></member>
-      <member refid="dc/dfd/a02370_1a56d21fda75f9d4fe680e1038ab70a28e" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>getObjectCount</name></member>
-      <member refid="dc/dfd/a02370_1acb3cff2453faa98acad8f87ad503f4db" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>getObjectTypeName</name></member>
-      <member refid="dc/dfd/a02370_1a3dfb82ad7180685409d58893c3ac2338" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>has</name></member>
-      <member refid="d9/d4f/a02366_1aa9c3c4c310d6cf83216528fc9910b029" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>Initialiser</name></member>
-      <member refid="dc/dfd/a02370_1ae0e5acf460e942e68fd51fea02c1a77d" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>isEmpty</name></member>
-      <member refid="d9/d4f/a02366_1a974895d119a51618738bd5240282bd8a" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>Key</name></member>
-      <member refid="dc/dfd/a02370_1af7b763cc53cb034f8659f68c98a2d6dd" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>lock</name></member>
-      <member refid="d9/d4f/a02366_1af5e62f2aec01097379f691f96a81d317" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>LockType</name></member>
-      <member refid="dc/dfd/a02370_1ac5bb9606ef581093151816328cc26ff4" prot="protected" virt="non-virtual"><scope>castor3d::Cache</scope><name>m_clean</name></member>
-      <member refid="dc/dfd/a02370_1a13c91c0ec52f9bcbc06cf3fb0569df0b" prot="protected" virt="non-virtual"><scope>castor3d::Cache</scope><name>m_elements</name></member>
-      <member refid="dc/dfd/a02370_1a4b01de6e2c5f881abd2b1feb36beeb12" prot="protected" virt="non-virtual"><scope>castor3d::Cache</scope><name>m_engine</name></member>
-      <member refid="dc/dfd/a02370_1a2a00e398eed3a486012b21a4e38cf6d3" prot="protected" virt="non-virtual"><scope>castor3d::Cache</scope><name>m_initialise</name></member>
-      <member refid="dc/dfd/a02370_1a7c494722e04665b3c2d44d10d0a1d1f3" prot="protected" virt="non-virtual"><scope>castor3d::Cache</scope><name>m_merge</name></member>
-      <member refid="dc/dfd/a02370_1af339c470a64de4b3c9cb20f2ecd1bdbb" prot="protected" virt="non-virtual"><scope>castor3d::Cache</scope><name>m_produce</name></member>
-      <member refid="dc/dfd/a02370_1aeb4864133bd71b20b4446d74ad4562ce" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>mergeInto</name></member>
-      <member refid="d9/d4f/a02366_1a401e3120726b6ddb3dc78c2edb9b707f" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>Merger</name></member>
-      <member refid="d9/d4f/a02366_1ab6c9d70999aae906fd160e53bcaf67e2" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>MyCacheTraits</name></member>
-      <member refid="d9/d4f/a02366_1abcc369c1b262eeb8e01896a897a46209" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>MyCacheType</name></member>
-      <member refid="d9/d4f/a02366_1a9328cadbe4e3af723e008a31da39b7c9" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>Producer</name></member>
-      <member refid="dc/dfd/a02370_1af1031cfec660c870ca1b7284e1c88e25" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>remove</name></member>
-      <member refid="dc/dfd/a02370_1a575e8f46e806126ae4774a807bdc5c7d" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>unlock</name></member>
-      <member refid="d9/d4f/a02366_1adf687ed3c292e34e5f54810e4400f38c" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>~Cache</name></member>
-      <member refid="dc/dfd/a02370_1aeb5b2f55b43b39c9f03f6c9d680456ee" prot="public" virt="non-virtual"><scope>castor3d::Cache</scope><name>~CacheBase</name></member>
+      <member refid="d3/d09/a02334_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>checkError</name></member>
+      <member refid="d3/d09/a02334_1ae6f4694ede819151fe4e30e33235ff07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>createBinaryParser</name></member>
+      <member refid="d3/d09/a02334_1ab5f9ba53ad5865f967b41e5a27ed73a9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>doGetSubChunk</name></member>
+      <member refid="d9/d4f/a02366_1a00c41dff8d7bf04a261298f9d1623232" prot="private" virt="virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>doParse</name></member>
+      <member refid="d3/d09/a02334_1a0e1aa917e3bf897fab03a32d20890062" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d3/d09/a02334_1a22ca62addb3ab167995e18f49267efcf" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d3/d09/a02334_1a5a648553ce168f5bc34adeedc8d169a7" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d3/d09/a02334_1a90df4e46072e5ef14aebebd00cbcc1f5" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d3/d09/a02334_1a5fac84360102001f5e730be1927c024e" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d3/d09/a02334_1a035881aba2b64571b30a5efd3faaf3d9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>doParseHeader</name></member>
+      <member refid="d3/d09/a02334_1ab3df04f9aa2eb1f7a533ed18631f09c4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>m_chunk</name></member>
+      <member refid="d3/d09/a02334_1a455764ca72b659dab2652baf56ce5885" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>m_fileVersion</name></member>
+      <member refid="d3/d09/a02334_1ae4820a3ab3e4b282240e5f1b969153c1" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>Name</name></member>
+      <member refid="d3/d09/a02334_1a5db83668684ca219f67de3a381898e64" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>parse</name></member>
+      <member refid="d3/d09/a02334_1a6bbbb529f463085c7d259600ae1b3e99" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>parse</name></member>
+      <member refid="d3/d09/a02334_1a61b02dbf69d89569eff5be22facd5f07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>parse_v1_1</name></member>
+      <member refid="d3/d09/a02334_1a95788692ddd6fae91074c299b674aaab" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>parse_v1_2</name></member>
+      <member refid="d3/d09/a02334_1a6f39b66d980e4a65660016f71115a89c" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>parse_v1_3</name></member>
+      <member refid="d3/d09/a02334_1aabc068daf8d99718497aa35f7a17c346" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>parse_v1_4</name></member>
+      <member refid="d3/d09/a02334_1afb9e6fdcdc58e65458de7892d2bf8025" prot="public" virt="virtual"><scope>castor3d::BinaryParser&lt; SceneNodeAnimation &gt;</scope><name>~BinaryParserBase</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

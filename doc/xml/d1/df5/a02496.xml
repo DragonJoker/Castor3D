@@ -1,275 +1,98 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d1/df5/a02496" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::Cache&lt; Overlay, castor::String &gt;</compoundname>
-    <basecompoundref refid="df/d46/a02376" prot="public" virt="non-virtual">castor3d::CacheBase&lt; Overlay, castor::String &gt;</basecompoundref>
-    <includes local="no">OverlayCache.hpp</includes>
-    <innerclass refid="d3/df4/a02504" prot="public">castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayCleaner</innerclass>
-    <innerclass refid="d4/dad/a02500" prot="public">castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayInitialiser</innerclass>
+    <compoundname>castor3d::GpuBufferT</compoundname>
+    <basecompoundref refid="de/dec/a02524" prot="public" virt="non-virtual">castor3d::GpuBufferBase</basecompoundref>
+    <includes local="no">GpuBuffer.hpp</includes>
     <templateparamlist>
+      <param>
+        <type>typename AllocatorT</type>
+      </param>
     </templateparamlist>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="d1/df5/a02496_1af1b8711c16213c2b530d2e5e0439fe0d" prot="public" static="no">
-        <type><ref refid="df/d46/a02376" kindref="compound">CacheBase</ref>&lt; <ref refid="d1/da3/a04100" kindref="compound">Overlay</ref>, castor::String &gt;</type>
-        <definition>using castor3d::Cache&lt; Overlay, castor::String &gt;::MyCacheType =  CacheBase&lt; Overlay, castor::String &gt;</definition>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="d1/df5/a02496_1a01ce6a31562ddfd446c446f4a24ed188" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class GpuBufferPool</definition>
         <argsstring></argsstring>
-        <name>MyCacheType</name>
+        <name>GpuBufferPool</name>
+        <qualifiedname>castor3d::GpuBufferT::GpuBufferPool</qualifiedname>
+        <param>
+          <type><ref refid="de/d48/a02552" kindref="compound">GpuBufferPool</ref></type>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="51" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="51" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d1/df5/a02496_1ab705941883e5b721bdfe5957f3e88283" prot="public" static="no">
-        <type>typename <ref refid="df/d46/a02376_1a7fda54485c8f8e708df819c7a60596ac" kindref="member">MyCacheType::Element</ref></type>
-        <definition>using castor3d::Cache&lt; Overlay, castor::String &gt;::Element =  typename MyCacheType::Element</definition>
-        <argsstring></argsstring>
-        <name>Element</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="52" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="52" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d1/df5/a02496_1ad13b1a2674181dad152234c74547f892" prot="public" static="no">
-        <type>typename <ref refid="df/d46/a02376_1ac91d27606d9904c2033c6488fc65779f" kindref="member">MyCacheType::Key</ref></type>
-        <definition>using castor3d::Cache&lt; Overlay, castor::String &gt;::Key =  typename MyCacheType::Key</definition>
-        <argsstring></argsstring>
-        <name>Key</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="53" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="53" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d1/df5/a02496_1a4b3e00a27819c0fd4f67f083a126f499" prot="public" static="no">
-        <type>typename <ref refid="df/d46/a02376_1a73f0fe787eab6e9f181c8c23f1760e45" kindref="member">MyCacheType::Collection</ref></type>
-        <definition>using castor3d::Cache&lt; Overlay, castor::String &gt;::Collection =  typename MyCacheType::Collection</definition>
-        <argsstring></argsstring>
-        <name>Collection</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="54" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="54" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d1/df5/a02496_1a627af24de58255b02f101d3747bba23b" prot="public" static="no">
-        <type>typename <ref refid="df/d46/a02376_1a11d69566e76e7970f4a4328fdc3f6025" kindref="member">MyCacheType::LockType</ref></type>
-        <definition>using castor3d::Cache&lt; Overlay, castor::String &gt;::LockType =  typename MyCacheType::LockType</definition>
-        <argsstring></argsstring>
-        <name>LockType</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="55" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="55" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d1/df5/a02496_1a00bdb044c2a3cde67fe2c2cea82b1591" prot="public" static="no">
-        <type>typename <ref refid="df/d46/a02376_1a7f322bd515ed3a1d6274b1882ad3fb4a" kindref="member">MyCacheType::ElementPtr</ref></type>
-        <definition>using castor3d::Cache&lt; Overlay, castor::String &gt;::ElementPtr =  typename MyCacheType::ElementPtr</definition>
-        <argsstring></argsstring>
-        <name>ElementPtr</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="56" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="56" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d1/df5/a02496_1ade4832359c315c4c2485cd258142e40a" prot="public" static="no">
-        <type>typename <ref refid="df/d46/a02376_1aaad73790ec1428ae47565a5ff9640450" kindref="member">MyCacheType::Producer</ref></type>
-        <definition>using castor3d::Cache&lt; Overlay, castor::String &gt;::Producer =  typename MyCacheType::Producer</definition>
-        <argsstring></argsstring>
-        <name>Producer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="57" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="57" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d1/df5/a02496_1aa683db241f53980019504a6ed6325472" prot="public" static="no">
-        <type>typename <ref refid="df/d46/a02376_1a1c851c8660b72f8bbc71c81c40bf1c08" kindref="member">MyCacheType::Merger</ref></type>
-        <definition>using castor3d::Cache&lt; Overlay, castor::String &gt;::Merger =  typename MyCacheType::Merger</definition>
-        <argsstring></argsstring>
-        <name>Merger</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="58" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="58" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d1/df5/a02496_1aeadd3b032cd527ed67fc42361929a372" prot="public" static="no">
-        <type><ref refid="da/d75/a02372_1a2b2306f4304e71fd0b67fc45b1cbae00" kindref="member">castor::Collection</ref>&lt; <ref refid="d1/da3/a04100" kindref="compound">Overlay</ref>, castor::String &gt;::ObjectPtrTMapIt</type>
-        <definition>typedef castor::Collection&lt; Overlay, castor::String &gt;::ObjectPtrTMapIt castor3d::Cache&lt; Overlay, castor::String &gt;::iterator</definition>
-        <argsstring></argsstring>
-        <name>iterator</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="60" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="60" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d1/df5/a02496_1a17191045451146ea231035df8888e0bc" prot="public" static="no">
-        <type><ref refid="da/d75/a02372_1a2b2306f4304e71fd0b67fc45b1cbae00" kindref="member">castor::Collection</ref>&lt; <ref refid="d1/da3/a04100" kindref="compound">Overlay</ref>, castor::String &gt;::ObjectPtrTMapConstIt</type>
-        <definition>typedef castor::Collection&lt; Overlay, castor::String &gt;::ObjectPtrTMapConstIt castor3d::Cache&lt; Overlay, castor::String &gt;::const_iterator</definition>
-        <argsstring></argsstring>
-        <name>const_iterator</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="61" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="61" bodyend="-1"/>
+        <location file="Buffer/GpuBuffer.hpp" line="230" column="14" bodyfile="Buffer/GpuBuffer.hpp" bodystart="230" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d1/df5/a02496_1ac7d6cb545e205ed128a5785aab2bc83c" prot="private" static="no" mutable="no">
-        <type><ref refid="d5/d8b/a04112" kindref="compound">OverlayFactory</ref></type>
-        <definition>OverlayFactory castor3d::Cache&lt; Overlay, castor::String &gt;::m_overlayFactory</definition>
+      <memberdef kind="variable" id="d1/df5/a02496_1a796ce2a8671963500bc51ca7c5b614e0" prot="private" static="no" mutable="no">
+        <type>std::set&lt; <ref refid="d2/dab/a02516" kindref="compound">MemChunk</ref> &gt;</type>
+        <definition>std::set&lt; MemChunk &gt; castor3d::GpuBufferT&lt; AllocatorT &gt;::m_allocated</definition>
         <argsstring></argsstring>
-        <name>m_overlayFactory</name>
+        <name>m_allocated</name>
+        <qualifiedname>castor3d::GpuBufferT::m_allocated</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="280" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="280" bodyend="-1"/>
+        <location file="Buffer/GpuBuffer.hpp" line="299" column="10" bodyfile="Buffer/GpuBuffer.hpp" bodystart="299" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/df5/a02496_1a2555e27828884168301025af9762b284" prot="private" static="no" mutable="no">
-        <type><ref refid="da/d1e/a01479_1a6573844f0848fb7a4664ac788b817e88" kindref="member">OverlayCategorySet</ref></type>
-        <definition>OverlayCategorySet castor3d::Cache&lt; Overlay, castor::String &gt;::m_overlays</definition>
+      <memberdef kind="variable" id="d1/df5/a02496_1a6071a35b6da1688c22790fdb61282cc3" prot="private" static="no" mutable="no">
+        <type>AllocatorT</type>
+        <definition>AllocatorT castor3d::GpuBufferT&lt; AllocatorT &gt;::m_allocator</definition>
         <argsstring></argsstring>
-        <name>m_overlays</name>
+        <name>m_allocator</name>
+        <qualifiedname>castor3d::GpuBufferT::m_allocator</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="281" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="281" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/df5/a02496_1a9ae7452c56114bd8004a04b31562d3d8" prot="private" static="no" mutable="no">
-        <type><ref refid="d6/df3/a05008" kindref="compound">Viewport</ref></type>
-        <definition>Viewport castor3d::Cache&lt; Overlay, castor::String &gt;::m_viewport</definition>
-        <argsstring></argsstring>
-        <name>m_viewport</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="282" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="282" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/df5/a02496_1a5f872238084ed36ddcc6144811b63c3e" prot="private" static="no" mutable="no">
-        <type>std::vector&lt; int &gt;</type>
-        <definition>std::vector&lt; int &gt; castor3d::Cache&lt; Overlay, castor::String &gt;::m_overlayCountPerLevel</definition>
-        <argsstring></argsstring>
-        <name>m_overlayCountPerLevel</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="283" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="283" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/df5/a02496_1a28f0085d5a8b98c29cb8622df17d44e3" prot="private" static="no" mutable="no">
-        <type>castor::Matrix4x4f</type>
-        <definition>castor::Matrix4x4f castor3d::Cache&lt; Overlay, castor::String &gt;::m_projection</definition>
-        <argsstring></argsstring>
-        <name>m_projection</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="284" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="284" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/df5/a02496_1a71b579edcd8529df51dde1f40865a1b0" prot="private" static="no" mutable="no">
-        <type>FontTextureStrMap</type>
-        <definition>FontTextureStrMap castor3d::Cache&lt; Overlay, castor::String &gt;::m_fontTextures</definition>
-        <argsstring></argsstring>
-        <name>m_fontTextures</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="285" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="285" bodyend="-1"/>
+        <location file="Buffer/GpuBuffer.hpp" line="300" column="12" bodyfile="Buffer/GpuBuffer.hpp" bodystart="300" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d1/df5/a02496_1a45e44768d70176976d78bea5fa497a7a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d1/df5/a02496_1a6ea904ff84cdb033bb9f1c1b6e03e9a5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
-        <definition>castor3d::Cache&lt; Overlay, castor::String &gt;::CU_DeclareMap</definition>
-        <argsstring>(castor::String, FontTextureSPtr, FontTextureStr)</argsstring>
-        <name>CU_DeclareMap</name>
+        <definition>castor3d::GpuBufferT&lt; AllocatorT &gt;::GpuBufferT</definition>
+        <argsstring>(RenderSystem const &amp;renderSystem, VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryFlags, castor::String debugName, ashes::QueueShare sharingMode, AllocatorT allocator, bool smallData=false)</argsstring>
+        <name>GpuBufferT</name>
+        <qualifiedname>castor3d::GpuBufferT::GpuBufferT</qualifiedname>
+        <param>
+          <type><ref refid="d2/dbb/a04072" kindref="compound">RenderSystem</ref> const &amp;</type>
+          <declname>renderSystem</declname>
+        </param>
+        <param>
+          <type>VkBufferUsageFlags</type>
+          <declname>usage</declname>
+        </param>
+        <param>
+          <type>VkMemoryPropertyFlags</type>
+          <declname>memoryFlags</declname>
+        </param>
         <param>
           <type>castor::String</type>
+          <declname>debugName</declname>
         </param>
         <param>
-          <type>FontTextureSPtr</type>
+          <type>ashes::QueueShare</type>
+          <declname>sharingMode</declname>
         </param>
         <param>
-          <type>FontTextureStr</type>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="62" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/df5/a02496_1a535e30e0472d87ab641b80cf5ee17413" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::Cache&lt; Overlay, castor::String &gt;::Cache</definition>
-        <argsstring>(Engine &amp;engine, Producer &amp;&amp;produce, Initialiser &amp;&amp;initialise=Initialiser{}, Cleaner &amp;&amp;clean=Cleaner{}, Merger &amp;&amp;merge=Merger{})</argsstring>
-        <name>Cache</name>
-        <param>
-          <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
+          <type>AllocatorT</type>
+          <declname>allocator</declname>
         </param>
         <param>
-          <type><ref refid="d1/df5/a02496_1ade4832359c315c4c2485cd258142e40a" kindref="member">Producer</ref> &amp;&amp;</type>
-          <declname>produce</declname>
-        </param>
-        <param>
-          <type><ref refid="df/d46/a02376_1a1d9b7d10eb83df474eeb2fdff71002f5" kindref="member">Initialiser</ref> &amp;&amp;</type>
-          <declname>initialise</declname>
-          <defval><ref refid="df/d46/a02376_1a1d9b7d10eb83df474eeb2fdff71002f5" kindref="member">Initialiser</ref>{}</defval>
-        </param>
-        <param>
-          <type><ref refid="df/d46/a02376_1ac144f9ea07cb00eb2b01788678792fa4" kindref="member">Cleaner</ref> &amp;&amp;</type>
-          <declname>clean</declname>
-          <defval><ref refid="df/d46/a02376_1ac144f9ea07cb00eb2b01788678792fa4" kindref="member">Cleaner</ref>{}</defval>
-        </param>
-        <param>
-          <type><ref refid="d1/df5/a02496_1aa683db241f53980019504a6ed6325472" kindref="member">Merger</ref> &amp;&amp;</type>
-          <declname>merge</declname>
-          <defval><ref refid="d1/df5/a02496_1aa683db241f53980019504a6ed6325472" kindref="member">Merger</ref>{}</defval>
+          <type>bool</type>
+          <declname>smallData</declname>
+          <defval>false</defval>
         </param>
         <briefdescription>
 <para>Constructor. </para>
@@ -277,42 +100,58 @@
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">engine</parametername>
+<parametername direction="in">renderSystem</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The engine. </para>
+<para>The device on which the storage is allocated. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">produce</parametername>
+<parametername direction="in">usage</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The element producer. </para>
+<para>The buffer targets. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">initialise</parametername>
+<parametername direction="in">memoryFlags</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The element initialiser. </para>
+<para>The buffer memory properties. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">clean</parametername>
+<parametername direction="in">debugName</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The element cleaner. </para>
+<para>The debug name. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">merge</parametername>
+<parametername direction="in">sharingMode</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The element collection merger. </para>
+<para>The sharing mode. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">allocator</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The allocator. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">smallData</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tells if the memory chunks allocated through this buffer are less than 65536 bytes. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -320,239 +159,89 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="101" column="1"/>
+        <location file="Buffer/GpuBuffer.hpp" line="254" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="d1/df5/a02496_1ad4824b1f1b7bc7636abd909f3cc05e38" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::Cache&lt; Overlay, castor::String &gt;::~Cache</definition>
-        <argsstring>()</argsstring>
-        <name>~Cache</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="112" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/df5/a02496_1aadda08d37942fb37cd313b3edea5af89" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::Cache&lt; Overlay, castor::String &gt;::clear</definition>
-        <argsstring>()</argsstring>
-        <name>clear</name>
-        <briefdescription>
-<para>Clears all overlays lists. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="119" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/df5/a02496_1a8a7757fb898e86515d1cb9f0bc67a122" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::Cache&lt; Overlay, castor::String &gt;::cleanup</definition>
-        <argsstring>()</argsstring>
-        <name>cleanup</name>
-        <briefdescription>
-<para>Cleans all overlays up. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="126" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/df5/a02496_1a4ad55c1aa4c90dfbd2ff30bbad48a674" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> FontTextureSPtr</type>
-        <definition>C3D_API FontTextureSPtr castor3d::Cache&lt; Overlay, castor::String &gt;::getFontTexture</definition>
-        <argsstring>(castor::String const &amp;name)</argsstring>
-        <name>getFontTexture</name>
+      <memberdef kind="function" id="d1/df5/a02496_1a340716243a619af89f3542becf09b775" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::GpuBufferT&lt; AllocatorT &gt;::hasAvailable</definition>
+        <argsstring>(VkDeviceSize size) const</argsstring>
+        <name>hasAvailable</name>
+        <qualifiedname>castor3d::GpuBufferT::hasAvailable</qualifiedname>
         <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
+          <type>VkDeviceSize</type>
+          <declname>size</declname>
         </param>
         <briefdescription>
-<para>Retrieves a <ref refid="de/df2/a04096" kindref="compound">FontTexture</ref> given a font name. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">name</parametername>
+<parametername direction="in">size</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The font name. </para>
+<para>The requested memory size. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>The <ref refid="de/df2/a04096" kindref="compound">FontTexture</ref> if it exist, nullptr if not. </para>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> if there is enough remaining memory for given size. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="137" column="1"/>
+        <location file="Buffer/GpuBuffer.hpp" line="269" column="6"/>
       </memberdef>
-      <memberdef kind="function" id="d1/df5/a02496_1a22340a1b75ed6bdc59fc14900bc386d8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> FontTextureSPtr</type>
-        <definition>C3D_API FontTextureSPtr castor3d::Cache&lt; Overlay, castor::String &gt;::createFontTexture</definition>
-        <argsstring>(castor::FontSPtr font)</argsstring>
-        <name>createFontTexture</name>
+      <memberdef kind="function" id="d1/df5/a02496_1a4b6d873e1a9ab433cc2018e1630aef01" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dab/a02516" kindref="compound">MemChunk</ref></type>
+        <definition>MemChunk castor3d::GpuBufferT&lt; AllocatorT &gt;::allocate</definition>
+        <argsstring>(VkDeviceSize size)</argsstring>
+        <name>allocate</name>
+        <qualifiedname>castor3d::GpuBufferT::allocate</qualifiedname>
         <param>
-          <type>castor::FontSPtr</type>
-          <declname>font</declname>
+          <type>VkDeviceSize</type>
+          <declname>size</declname>
         </param>
         <briefdescription>
-<para>Creates a <ref refid="de/df2/a04096" kindref="compound">FontTexture</ref> from a font. </para>
+<para>Allocates a memory chunk for a CPU buffer. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">font</parametername>
+<parametername direction="in">size</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The font. </para>
+<para>The requested memory size. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>The created <ref refid="de/df2/a04096" kindref="compound">FontTexture</ref>. </para>
+<simplesect kind="return"><para>The memory chunk offset. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="148" column="1"/>
+        <location file="Buffer/GpuBuffer.hpp" line="280" column="10"/>
       </memberdef>
-      <memberdef kind="function" id="d1/df5/a02496_1a73edee002878b06ff380a8f4c9f23030" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d1/df5/a02496_1a00bdb044c2a3cde67fe2c2cea82b1591" kindref="member">ElementPtr</ref></type>
-        <definition>ElementPtr castor3d::Cache&lt; Overlay, castor::String &gt;::add</definition>
-        <argsstring>(Key const &amp;name, OverlayType type, SceneSPtr scene, OverlaySPtr parent)</argsstring>
-        <name>add</name>
-        <param>
-          <type><ref refid="d1/df5/a02496_1ad13b1a2674181dad152234c74547f892" kindref="member">Key</ref> const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d1e/a01479_1ad72150fb2c652b19d0d79b9ea4289a5c" kindref="member">OverlayType</ref></type>
-          <declname>type</declname>
-        </param>
-        <param>
-          <type>SceneSPtr</type>
-          <declname>scene</declname>
-        </param>
-        <param>
-          <type>OverlaySPtr</type>
-          <declname>parent</declname>
-        </param>
-        <briefdescription>
-<para>Creates an object. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The object name. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">type</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The overlay type. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">scene</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The scene. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">parent</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parent overlay, if any. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The created object. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="165" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="165" bodyend="171"/>
-        <references refid="df/d46/a02376_1a9d8fa89aa1ea33853d74552cc8142343" compoundref="d3/db1/a00200" startline="137" endline="161">castor3d::CacheBase&lt; ElementType, KeyType &gt;::add</references>
-      </memberdef>
-      <memberdef kind="function" id="d1/df5/a02496_1a9d1860f351d7d2783fb02c917d3970d8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d1/df5/a02496_1a00bdb044c2a3cde67fe2c2cea82b1591" kindref="member">ElementPtr</ref></type>
-        <definition>ElementPtr castor3d::Cache&lt; Overlay, castor::String &gt;::add</definition>
-        <argsstring>(Key const &amp;name, ElementPtr element)</argsstring>
-        <name>add</name>
-        <param>
-          <type><ref refid="d1/df5/a02496_1ad13b1a2674181dad152234c74547f892" kindref="member">Key</ref> const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/df5/a02496_1a00bdb044c2a3cde67fe2c2cea82b1591" kindref="member">ElementPtr</ref></type>
-          <declname>element</declname>
-        </param>
-        <briefdescription>
-<para>adds an already created object. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The object name. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">element</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The object. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para>The object. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="184" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="184" bodyend="188"/>
-        <references refid="df/d46/a02376_1a9d8fa89aa1ea33853d74552cc8142343" compoundref="d3/db1/a00200" startline="137" endline="161">castor3d::CacheBase&lt; ElementType, KeyType &gt;::add</references>
-      </memberdef>
-      <memberdef kind="function" id="d1/df5/a02496_1a5ec4f59f8524bb85cb6818de9bd65abd" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="d1/df5/a02496_1a02e814e19ee7a2a53b6c37b182e6bbdf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::Cache&lt; Overlay, castor::String &gt;::remove</definition>
-        <argsstring>(Key const &amp;name)</argsstring>
-        <name>remove</name>
+        <definition>void castor3d::GpuBufferT&lt; AllocatorT &gt;::deallocate</definition>
+        <argsstring>(MemChunk const &amp;mem)</argsstring>
+        <name>deallocate</name>
+        <qualifiedname>castor3d::GpuBufferT::deallocate</qualifiedname>
         <param>
-          <type><ref refid="d1/df5/a02496_1ad13b1a2674181dad152234c74547f892" kindref="member">Key</ref> const &amp;</type>
-          <declname>name</declname>
+          <type><ref refid="d2/dab/a02516" kindref="compound">MemChunk</ref> const &amp;</type>
+          <declname>mem</declname>
         </param>
         <briefdescription>
-<para>Removes an element, given a name. </para>
+<para>Deallocates memory. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">name</parametername>
+<parametername direction="in">mem</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The element name. </para>
+<para>The memory chunk. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -560,241 +249,85 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="197" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="197" bodyend="205"/>
-        <references refid="df/d46/a02376_1ac5bb9606ef581093151816328cc26ff4" compoundref="d3/db1/a00200" startline="419">castor3d::CacheBase&lt; ElementType, KeyType &gt;::m_clean</references>
-        <references refid="df/d46/a02376_1a13c91c0ec52f9bcbc06cf3fb0569df0b" compoundref="d3/db1/a00200" startline="410">castor3d::CacheBase&lt; ElementType, KeyType &gt;::m_elements</references>
+        <location file="Buffer/GpuBuffer.hpp" line="289" column="6"/>
       </memberdef>
-      <memberdef kind="function" id="d1/df5/a02496_1a7c9c1a1de1b61b7bb5be00a27e67d89d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>OverlayCategorySet::iterator</type>
-        <definition>OverlayCategorySet::iterator castor3d::Cache&lt; Overlay, castor::String &gt;::begin</definition>
-        <argsstring>()</argsstring>
-        <name>begin</name>
-        <briefdescription>
-<para>Retrieves an iterator to the first overlay. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The value </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="214" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="214" bodyend="217"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/df5/a02496_1ae5a5dd9e670de80939f73dcdbcc5839e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>OverlayCategorySet::const_iterator</type>
-        <definition>OverlayCategorySet::const_iterator castor3d::Cache&lt; Overlay, castor::String &gt;::begin</definition>
+      <memberdef kind="function" id="d1/df5/a02496_1a63c0f4ad44257645932622a3a4fb39e7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor3d::GpuBufferT&lt; AllocatorT &gt;::getMinAlignment</definition>
         <argsstring>() const</argsstring>
-        <name>begin</name>
+        <name>getMinAlignment</name>
+        <qualifiedname>castor3d::GpuBufferT::getMinAlignment</qualifiedname>
         <briefdescription>
-<para>Retrieves an iterator to the first overlay. </para>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The value </para>
+<para><simplesect kind="return"><para>The element aligned size. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="226" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="226" bodyend="229"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/df5/a02496_1aba658bd0ec065e159d977bdec8213dd5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>OverlayCategorySet::iterator</type>
-        <definition>OverlayCategorySet::iterator castor3d::Cache&lt; Overlay, castor::String &gt;::end</definition>
-        <argsstring>()</argsstring>
-        <name>end</name>
-        <briefdescription>
-<para>Retrieves an iterator to after the last overlay. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The value </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="238" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="238" bodyend="241"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/df5/a02496_1a13dc1d4aab97ddf99e8a374ba0dfff21" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>OverlayCategorySet::const_iterator</type>
-        <definition>OverlayCategorySet::const_iterator castor3d::Cache&lt; Overlay, castor::String &gt;::end</definition>
-        <argsstring>() const</argsstring>
-        <name>end</name>
-        <briefdescription>
-<para>Retrieves an iterator to after the last overlay. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The value </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="250" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="250" bodyend="253"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/df5/a02496_1aeaf5fa3b31898475c70bd15b03d4da3e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d5/d8b/a04112" kindref="compound">OverlayFactory</ref> const  &amp;</type>
-        <definition>OverlayFactory const&amp; castor3d::Cache&lt; Overlay, castor::String &gt;::getOverlayFactory</definition>
-        <argsstring>() const</argsstring>
-        <name>getOverlayFactory</name>
-        <briefdescription>
-<para>Retrieves the <ref refid="d1/da3/a04100" kindref="compound">Overlay</ref> factory. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The factory </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="262" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="262" bodyend="265"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/df5/a02496_1ae42adea36a6cf5d2f41ecabad2a144da" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d5/d8b/a04112" kindref="compound">OverlayFactory</ref> &amp;</type>
-        <definition>OverlayFactory&amp; castor3d::Cache&lt; Overlay, castor::String &gt;::getFactory</definition>
-        <argsstring>()</argsstring>
-        <name>getFactory</name>
-        <briefdescription>
-<para>Retrieves the <ref refid="d1/da3/a04100" kindref="compound">Overlay</ref> factory. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The factory </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="274" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="274" bodyend="277"/>
+        <location file="Buffer/GpuBuffer.hpp" line="296" column="8"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para><ref refid="d1/da3/a04100" kindref="compound">Overlay</ref> collection, with additional add and remove functions to manage Z-Index. </para>
+<para>A GPU buffer, that uses a buddy allocator to allocate sub-buffers. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
-</simplesect>
-<simplesect kind="date"><para>09/02/2010 </para>
-</simplesect>
-<simplesect kind="version"><para>0.1 </para>
-</simplesect>
-</para>
     </detaileddescription>
     <inheritancegraph>
-      <node id="582">
-        <label>castor3d::CacheBase&lt; ElementType, KeyType &gt;</label>
-        <link refid="df/d46/a02376"/>
-      </node>
-      <node id="581">
-        <label>castor3d::CacheBase&lt; Overlay, castor::String &gt;</label>
-        <link refid="df/d46/a02376"/>
-        <childnode refid="582" relation="template-instance">
-          <edgelabel>&lt; Overlay, castor::String &gt;</edgelabel>
+      <node id="3">
+        <label>castor3d::GpuBufferT&lt; GpuBufferPackedAllocator &gt;</label>
+        <link refid="d1/df5/a02496"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; GpuBufferPackedAllocator &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="580">
-        <label>castor3d::Cache&lt; Overlay, castor::String &gt;</label>
+      <node id="2">
+        <label>castor3d::GpuBufferBase</label>
+        <link refid="de/dec/a02524"/>
+      </node>
+      <node id="1">
+        <label>castor3d::GpuBufferT&lt; AllocatorT &gt;</label>
         <link refid="d1/df5/a02496"/>
-        <childnode refid="581" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="587">
-        <label>castor3d::CacheBase&lt; ElementType, KeyType &gt;</label>
-        <link refid="df/d46/a02376"/>
-        <childnode refid="585" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
+      <node id="2">
+        <label>castor3d::GpuBufferBase</label>
+        <link refid="de/dec/a02524"/>
       </node>
-      <node id="584">
-        <label>castor3d::CacheBase&lt; Overlay, castor::String &gt;</label>
-        <link refid="df/d46/a02376"/>
-        <childnode refid="585" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="587" relation="template-instance">
-          <edgelabel>&lt; Overlay, castor::String &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="586">
-        <label>castor::Unique&lt; Engine &gt;</label>
-      </node>
-      <node id="585">
-        <label>castor3d::Engine</label>
-        <link refid="dc/dbb/a02520"/>
-        <childnode refid="586" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="583">
-        <label>castor3d::Cache&lt; Overlay, castor::String &gt;</label>
+      <node id="1">
+        <label>castor3d::GpuBufferT&lt; AllocatorT &gt;</label>
         <link refid="d1/df5/a02496"/>
-        <childnode refid="584" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Cache/OverlayCache.hpp" line="49" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="47" bodyend="286"/>
+    <location file="Buffer/GpuBuffer.hpp" line="227" column="1" bodyfile="Buffer/GpuBuffer.hpp" bodystart="229" bodyend="301"/>
     <listofallmembers>
-      <member refid="d1/df5/a02496_1a73edee002878b06ff380a8f4c9f23030" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>add</name></member>
-      <member refid="d1/df5/a02496_1a9d1860f351d7d2783fb02c917d3970d8" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>add</name></member>
-      <member refid="df/d46/a02376_1a9d8fa89aa1ea33853d74552cc8142343" prot="public" virt="non-virtual" ambiguityscope="CacheBase&lt; Overlay, castor::String &gt;::"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>add</name></member>
-      <member refid="df/d46/a02376_1a2a19e1d040d30a9d95cc7bb20c86a24d" prot="public" virt="non-virtual" ambiguityscope="CacheBase&lt; Overlay, castor::String &gt;::"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>add</name></member>
-      <member refid="d1/df5/a02496_1a7c9c1a1de1b61b7bb5be00a27e67d89d" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>begin</name></member>
-      <member refid="d1/df5/a02496_1ae5a5dd9e670de80939f73dcdbcc5839e" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>begin</name></member>
-      <member refid="d1/df5/a02496_1a535e30e0472d87ab641b80cf5ee17413" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>Cache</name></member>
-      <member refid="df/d46/a02376_1aeda43feb65387eb303a98b1d7716c115" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>CacheBase</name></member>
-      <member refid="df/d46/a02376_1ac144f9ea07cb00eb2b01788678792fa4" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>Cleaner</name></member>
-      <member refid="d1/df5/a02496_1a8a7757fb898e86515d1cb9f0bc67a122" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>cleanup</name></member>
-      <member refid="d1/df5/a02496_1aadda08d37942fb37cd313b3edea5af89" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>clear</name></member>
-      <member refid="d1/df5/a02496_1a4b3e00a27819c0fd4f67f083a126f499" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>Collection</name></member>
-      <member refid="d1/df5/a02496_1a17191045451146ea231035df8888e0bc" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>const_iterator</name></member>
-      <member refid="df/d46/a02376_1ab7b359e6d1bdc027bcac492bf965d02b" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>create</name></member>
-      <member refid="d1/df5/a02496_1a22340a1b75ed6bdc59fc14900bc386d8" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>createFontTexture</name></member>
-      <member refid="d1/df5/a02496_1a45e44768d70176976d78bea5fa497a7a" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>CU_DeclareMap</name></member>
-      <member refid="df/d46/a02376_1a40ce560883d2d3bc4e948cbd0a47b569" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>doReportCreation</name></member>
-      <member refid="df/d46/a02376_1adb2613cc9082f6d3ecb0639c0726201e" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>doReportDuplicate</name></member>
-      <member refid="df/d46/a02376_1af3cd6aabd6e0a4eda8177f0edf4ce18e" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>doReportNull</name></member>
-      <member refid="d1/df5/a02496_1ab705941883e5b721bdfe5957f3e88283" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>Element</name></member>
-      <member refid="d1/df5/a02496_1a00bdb044c2a3cde67fe2c2cea82b1591" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>ElementPtr</name></member>
-      <member refid="d1/df5/a02496_1aba658bd0ec065e159d977bdec8213dd5" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>end</name></member>
-      <member refid="d1/df5/a02496_1a13dc1d4aab97ddf99e8a374ba0dfff21" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>end</name></member>
-      <member refid="df/d46/a02376_1aeafea13acfbda3f6de83daeea679c405" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>find</name></member>
-      <member refid="df/d46/a02376_1a37c3c620a716593723603fe85f7ce177" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>forEach</name></member>
-      <member refid="df/d46/a02376_1a1b49a63f062169b85d4f062a72b9aaf2" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>forEach</name></member>
-      <member refid="df/d46/a02376_1a64bb5eb01ea4f26c716188c21a7a7a7a" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>getEngine</name></member>
-      <member refid="d1/df5/a02496_1ae42adea36a6cf5d2f41ecabad2a144da" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>getFactory</name></member>
-      <member refid="d1/df5/a02496_1a4ad55c1aa4c90dfbd2ff30bbad48a674" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>getFontTexture</name></member>
-      <member refid="df/d46/a02376_1a56d21fda75f9d4fe680e1038ab70a28e" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>getObjectCount</name></member>
-      <member refid="df/d46/a02376_1acb3cff2453faa98acad8f87ad503f4db" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>getObjectTypeName</name></member>
-      <member refid="d1/df5/a02496_1aeaf5fa3b31898475c70bd15b03d4da3e" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>getOverlayFactory</name></member>
-      <member refid="df/d46/a02376_1a3dfb82ad7180685409d58893c3ac2338" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>has</name></member>
-      <member refid="df/d46/a02376_1a1d9b7d10eb83df474eeb2fdff71002f5" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>Initialiser</name></member>
-      <member refid="df/d46/a02376_1ae0e5acf460e942e68fd51fea02c1a77d" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>isEmpty</name></member>
-      <member refid="d1/df5/a02496_1aeadd3b032cd527ed67fc42361929a372" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>iterator</name></member>
-      <member refid="d1/df5/a02496_1ad13b1a2674181dad152234c74547f892" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>Key</name></member>
-      <member refid="df/d46/a02376_1af7b763cc53cb034f8659f68c98a2d6dd" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>lock</name></member>
-      <member refid="d1/df5/a02496_1a627af24de58255b02f101d3747bba23b" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>LockType</name></member>
-      <member refid="df/d46/a02376_1ac5bb9606ef581093151816328cc26ff4" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>m_clean</name></member>
-      <member refid="df/d46/a02376_1a13c91c0ec52f9bcbc06cf3fb0569df0b" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>m_elements</name></member>
-      <member refid="df/d46/a02376_1a4b01de6e2c5f881abd2b1feb36beeb12" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>m_engine</name></member>
-      <member refid="d1/df5/a02496_1a71b579edcd8529df51dde1f40865a1b0" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>m_fontTextures</name></member>
-      <member refid="df/d46/a02376_1a2a00e398eed3a486012b21a4e38cf6d3" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>m_initialise</name></member>
-      <member refid="df/d46/a02376_1a7c494722e04665b3c2d44d10d0a1d1f3" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>m_merge</name></member>
-      <member refid="d1/df5/a02496_1a5f872238084ed36ddcc6144811b63c3e" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>m_overlayCountPerLevel</name></member>
-      <member refid="d1/df5/a02496_1ac7d6cb545e205ed128a5785aab2bc83c" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>m_overlayFactory</name></member>
-      <member refid="d1/df5/a02496_1a2555e27828884168301025af9762b284" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>m_overlays</name></member>
-      <member refid="df/d46/a02376_1af339c470a64de4b3c9cb20f2ecd1bdbb" prot="protected" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>m_produce</name></member>
-      <member refid="d1/df5/a02496_1a28f0085d5a8b98c29cb8622df17d44e3" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>m_projection</name></member>
-      <member refid="d1/df5/a02496_1a9ae7452c56114bd8004a04b31562d3d8" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>m_viewport</name></member>
-      <member refid="df/d46/a02376_1aeb4864133bd71b20b4446d74ad4562ce" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>mergeInto</name></member>
-      <member refid="d1/df5/a02496_1aa683db241f53980019504a6ed6325472" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>Merger</name></member>
-      <member refid="df/d46/a02376_1a81d75361a18a4455c9110b768de6f63e" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>MyCacheTraits</name></member>
-      <member refid="d1/df5/a02496_1af1b8711c16213c2b530d2e5e0439fe0d" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>MyCacheType</name></member>
-      <member refid="d1/df5/a02496_1ade4832359c315c4c2485cd258142e40a" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>Producer</name></member>
-      <member refid="d1/df5/a02496_1a5ec4f59f8524bb85cb6818de9bd65abd" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>remove</name></member>
-      <member refid="df/d46/a02376_1af1031cfec660c870ca1b7284e1c88e25" prot="public" virt="non-virtual" ambiguityscope="CacheBase&lt; Overlay, castor::String &gt;::"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>remove</name></member>
-      <member refid="df/d46/a02376_1a575e8f46e806126ae4774a807bdc5c7d" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>unlock</name></member>
-      <member refid="d1/df5/a02496_1ad4824b1f1b7bc7636abd909f3cc05e38" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>~Cache</name></member>
-      <member refid="df/d46/a02376_1aeb5b2f55b43b39c9f03f6c9d680456ee" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;</scope><name>~CacheBase</name></member>
+      <member refid="d1/df5/a02496_1a4b6d873e1a9ab433cc2018e1630aef01" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>allocate</name></member>
+      <member refid="d1/df5/a02496_1a02e814e19ee7a2a53b6c37b182e6bbdf" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>deallocate</name></member>
+      <member refid="de/dec/a02524_1a2e96ae884d0c9c48a92282e0c9d1b816" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>getBuffer</name></member>
+      <member refid="de/dec/a02524_1ad5c0c039b286c923f49bfb1e7e6282e8" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>getBuffer</name></member>
+      <member refid="de/dec/a02524_1aa9ce48ae045bf1f7be2b87315bf56394" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>getData</name></member>
+      <member refid="de/dec/a02524_1a1c9e4696f89164001d11831b35f15f77" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>getData</name></member>
+      <member refid="de/dec/a02524_1ae81d18fb4565a12c2d525b775cb4e27f" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>getDatas</name></member>
+      <member refid="de/dec/a02524_1af3d715f75b94aba18ba8d3a39b5e73d2" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>getDatas</name></member>
+      <member refid="d1/df5/a02496_1a63c0f4ad44257645932622a3a4fb39e7" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>getMinAlignment</name></member>
+      <member refid="de/dec/a02524_1a4f0cb57ba7d81f99e64b3fa0096023fa" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>GpuBufferBase</name></member>
+      <member refid="d1/df5/a02496_1a01ce6a31562ddfd446c446f4a24ed188" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>GpuBufferPool</name></member>
+      <member refid="d1/df5/a02496_1a6ea904ff84cdb033bb9f1c1b6e03e9a5" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>GpuBufferT</name></member>
+      <member refid="d1/df5/a02496_1a340716243a619af89f3542becf09b775" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>hasAvailable</name></member>
+      <member refid="de/dec/a02524_1a3f399bb8c877bc2155fe02aebd6c0329" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>hasBuffer</name></member>
+      <member refid="d1/df5/a02496_1a796ce2a8671963500bc51ca7c5b614e0" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>m_allocated</name></member>
+      <member refid="d1/df5/a02496_1a6071a35b6da1688c22790fdb61282cc3" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>m_allocator</name></member>
+      <member refid="de/dec/a02524_1a06f1c510406ae4dd17d134022e94a497" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>markDirty</name></member>
+      <member refid="de/dec/a02524_1a91928d1e743ed5edbb8a3af9bd859af1" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>operator ashes::Buffer&lt; uint8_t &gt; &amp;</name></member>
+      <member refid="de/dec/a02524_1ab0b76b8e65ce793ffd15dc6c5d65a70d" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>operator ashes::Buffer&lt; uint8_t &gt; const &amp;</name></member>
+      <member refid="de/dec/a02524_1a23305046cd563d8ec97a43b9ab41500f" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>upload</name></member>
+      <member refid="de/dec/a02524_1adbd7c63833b19b5aeedc5c5ddbe10f6d" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>uploadDirect</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

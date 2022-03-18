@@ -1,9 +1,7 @@
-<map id="castor3d::MeshAnimation" name="castor3d::MeshAnimation">
-<area shape="rect" id="node1" title=" " alt="" coords="677,64,848,91"/>
-<area shape="rect" id="node2" href="$d4/ddd/a02040.html" title=" " alt="" coords="548,64,628,91"/>
-<area shape="rect" id="node3" title=" " alt="" coords="283,5,390,32"/>
-<area shape="rect" id="node4" title=" " alt="" coords="243,57,431,98"/>
-<area shape="rect" id="node5" href="$d4/ddd/a02040.html" title="Animation base class." alt="" coords="264,122,409,163"/>
-<area shape="rect" id="node6" title=" " alt="" coords="68,100,131,127"/>
-<area shape="rect" id="node7" title=" " alt="" coords="5,151,193,193"/>
+<map id="castor3d::PickingPass" name="castor3d::PickingPass">
+<area shape="rect" id="node1" title=" " alt="" coords="193,155,346,181"/>
+<area shape="rect" id="node2" href="$dc/d8b/a04052.html" title=" " alt="" coords="175,80,363,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,192,32"/>
+<area shape="rect" id="node4" title=" " alt="" coords="216,5,323,32"/>
+<area shape="rect" id="node5" title=" " alt="" coords="347,5,466,32"/>
 </map>

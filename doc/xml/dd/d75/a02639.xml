@@ -1,203 +1,312 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dd/d75/a02639" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::TextureSource</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">Named</basecompoundref>
-    <includes local="no">TextureSource.hpp</includes>
-      <sectiondef kind="user-defined">
-      <header>Accessors.</header>
-      <memberdef kind="function" id="dd/d75/a02639_1a4220bf29f250bd837ec9c82d7893138a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::String const  &amp;</type>
-        <definition>castor::String const&amp; castor3d::TextureSource::toString</definition>
-        <argsstring>() const</argsstring>
-        <name>toString</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Texture/TextureSource.hpp" line="60" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="60" bodyend="63"/>
-        <references refid="d7/dd1/a01458_1a5691da845a89609231c90071fccdfc20">castor3d::getName</references>
-      </memberdef>
-      <memberdef kind="function" id="dd/d75/a02639_1a10f4c8e3dd31efed12fecbf9f32a666b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::TextureSource::getBaseLayer</definition>
-        <argsstring>() const</argsstring>
-        <name>getBaseLayer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Texture/TextureSource.hpp" line="65" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="65" bodyend="68"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d75/a02639_1acfde42110a5953b8275207c0460d8906" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::TextureSource::getLayerCount</definition>
-        <argsstring>() const</argsstring>
-        <name>getLayerCount</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Texture/TextureSource.hpp" line="70" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="70" bodyend="73"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d75/a02639_1a4bb1185b673c1a8a1c20cfc74dcd1e93" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::TextureSource::getBaseLevel</definition>
-        <argsstring>() const</argsstring>
-        <name>getBaseLevel</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Texture/TextureSource.hpp" line="75" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="75" bodyend="78"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d75/a02639_1ab6d1fd08cb4d119a1afaeb97eadc2e0a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::TextureSource::getLevelCount</definition>
-        <argsstring>() const</argsstring>
-        <name>getLevelCount</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Texture/TextureSource.hpp" line="80" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="80" bodyend="83"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d75/a02639_1a17f4726bb3e2cb170f44add1903b26fc" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::TextureSource::getDepth</definition>
-        <argsstring>() const</argsstring>
-        <name>getDepth</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Texture/TextureSource.hpp" line="85" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="85" bodyend="88"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d75/a02639_1a92066b44ec2982894bddbb494c6bdee8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::TextureSource::hasBuffer</definition>
-        <argsstring>() const</argsstring>
-        <name>hasBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Texture/TextureSource.hpp" line="90" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="90" bodyend="93"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d75/a02639_1a0ae0f5afe102e323fc5839fc50f2f6ad" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::ImageLayout::ConstBuffer</type>
-        <definition>castor::ImageLayout::ConstBuffer castor3d::TextureSource::getBuffer</definition>
-        <argsstring>() const</argsstring>
-        <name>getBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Texture/TextureSource.hpp" line="95" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="95" bodyend="98"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d75/a02639_1a07ca40f903b281ce304a23ae06a1d342" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::ImageLayout::Buffer</type>
-        <definition>castor::ImageLayout::Buffer castor3d::TextureSource::getBuffer</definition>
-        <argsstring>()</argsstring>
-        <name>getBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Texture/TextureSource.hpp" line="100" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="100" bodyend="103"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="dd/d75/a02639_1a8d0f0a3ba8ce4f2c8aa49f5a6392fad6" prot="private" static="no" mutable="no">
-        <type>castor::Image *</type>
-        <definition>castor::Image* castor3d::TextureSource::m_image</definition>
+    <compoundname>castor3d::ObjectCacheT</compoundname>
+    <basecompoundref refid="d9/d07/a02635" prot="public" virt="non-virtual">castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;</basecompoundref>
+    <includes local="no">ObjectCache.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ObjT</type>
+      </param>
+      <param>
+        <type>typename KeyT</type>
+      </param>
+      <param>
+        <type>typename TraitsT</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dd/d75/a02639_1afe556631a2f20432b20bc03849457704" prot="public" static="no">
+        <type>ObjT</type>
+        <definition>using castor3d::ObjectCacheT&lt; ObjT, KeyT, TraitsT &gt;::ElementT =  ObjT</definition>
         <argsstring></argsstring>
-        <name>m_image</name>
+        <name>ElementT</name>
+        <qualifiedname>castor3d::ObjectCacheT::ElementT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureSource.hpp" line="107" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="107" bodyend="-1"/>
+        <location file="Cache/ObjectCache.hpp" line="16" column="1" bodyfile="Cache/ObjectCache.hpp" bodystart="16" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dd/d75/a02639_1a9282b9289d8416ba33c69851cfa50fbe" prot="private" static="no" mutable="no">
-        <type>castor::ImageLayout</type>
-        <definition>castor::ImageLayout castor3d::TextureSource::m_layout</definition>
+      <memberdef kind="typedef" id="dd/d75/a02639_1ac83059fefe9b5a3484073644bb673844" prot="public" static="no">
+        <type>KeyT</type>
+        <definition>using castor3d::ObjectCacheT&lt; ObjT, KeyT, TraitsT &gt;::ElementKeyT =  KeyT</definition>
         <argsstring></argsstring>
-        <name>m_layout</name>
+        <name>ElementKeyT</name>
+        <qualifiedname>castor3d::ObjectCacheT::ElementKeyT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureSource.hpp" line="108" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="108" bodyend="-1"/>
+        <location file="Cache/ObjectCache.hpp" line="17" column="1" bodyfile="Cache/ObjectCache.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d75/a02639_1a487c8e78cc61e870dcb64f6232d1a24e" prot="public" static="no">
+        <type>TraitsT</type>
+        <definition>using castor3d::ObjectCacheT&lt; ObjT, KeyT, TraitsT &gt;::ElementCacheTraitsT =  TraitsT</definition>
+        <argsstring></argsstring>
+        <name>ElementCacheTraitsT</name>
+        <qualifiedname>castor3d::ObjectCacheT::ElementCacheTraitsT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/ObjectCache.hpp" line="18" column="1" bodyfile="Cache/ObjectCache.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d75/a02639_1ae7800697b5cf4184b7bede565825264a" prot="public" static="no">
+        <type><ref refid="d9/d07/a02635" kindref="compound">ObjectCacheBaseT</ref>&lt; <ref refid="dd/d75/a02639_1afe556631a2f20432b20bc03849457704" kindref="member">ElementT</ref>, <ref refid="dd/d75/a02639_1ac83059fefe9b5a3484073644bb673844" kindref="member">ElementKeyT</ref>, <ref refid="dd/d75/a02639_1a487c8e78cc61e870dcb64f6232d1a24e" kindref="member">ElementCacheTraitsT</ref> &gt;</type>
+        <definition>using castor3d::ObjectCacheT&lt; ObjT, KeyT, TraitsT &gt;::ElementObjectCacheT =  ObjectCacheBaseT&lt; ElementT, ElementKeyT, ElementCacheTraitsT &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementObjectCacheT</name>
+        <qualifiedname>castor3d::ObjectCacheT::ElementObjectCacheT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/ObjectCache.hpp" line="19" column="1" bodyfile="Cache/ObjectCache.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d75/a02639_1aa1583a80a1fb76a0df7c159bd75c541e" prot="public" static="no">
+        <type>typename <ref refid="d9/d07/a02635_1ac64abf5d5b1d54b7309db409911089e8" kindref="member">ElementObjectCacheT::ElementPtrT</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; ObjT, KeyT, TraitsT &gt;::ElementPtrT =  typename ElementObjectCacheT::ElementPtrT</definition>
+        <argsstring></argsstring>
+        <name>ElementPtrT</name>
+        <qualifiedname>castor3d::ObjectCacheT::ElementPtrT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/ObjectCache.hpp" line="20" column="1" bodyfile="Cache/ObjectCache.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d75/a02639_1a5763f3f56695a01bcce24794bccc0e5c" prot="public" static="no">
+        <type>typename <ref refid="d9/d07/a02635_1a20564c6d1c8d37fa00fe04e267b1b8fa" kindref="member">ElementObjectCacheT::ElementObsT</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; ObjT, KeyT, TraitsT &gt;::ElementObsT =  typename ElementObjectCacheT::ElementObsT</definition>
+        <argsstring></argsstring>
+        <name>ElementObsT</name>
+        <qualifiedname>castor3d::ObjectCacheT::ElementObsT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/ObjectCache.hpp" line="21" column="1" bodyfile="Cache/ObjectCache.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d75/a02639_1a0a592618b136daf23b05102d095b5000" prot="public" static="no">
+        <type>typename <ref refid="d9/d07/a02635_1a5f6c89792190f153d2304470edab28b6" kindref="member">ElementObjectCacheT::ElementContT</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; ObjT, KeyT, TraitsT &gt;::ElementContT =  typename ElementObjectCacheT::ElementContT</definition>
+        <argsstring></argsstring>
+        <name>ElementContT</name>
+        <qualifiedname>castor3d::ObjectCacheT::ElementContT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/ObjectCache.hpp" line="22" column="1" bodyfile="Cache/ObjectCache.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d75/a02639_1afd52086039d6486547d55a5abf619a1c" prot="public" static="no">
+        <type>typename <ref refid="d9/d07/a02635_1ae9dcfec2c1a41e5ac0b9f0cbb0b4254c" kindref="member">ElementObjectCacheT::ElementInitialiserT</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; ObjT, KeyT, TraitsT &gt;::ElementInitialiserT =  typename ElementObjectCacheT::ElementInitialiserT</definition>
+        <argsstring></argsstring>
+        <name>ElementInitialiserT</name>
+        <qualifiedname>castor3d::ObjectCacheT::ElementInitialiserT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/ObjectCache.hpp" line="23" column="1" bodyfile="Cache/ObjectCache.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d75/a02639_1a9a4ecd3fb914fcace219e9262f6d390e" prot="public" static="no">
+        <type>typename <ref refid="d9/d07/a02635_1a0b96fa488b8fdd4fbcbc7f144ecbbb7e" kindref="member">ElementObjectCacheT::ElementCleanerT</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; ObjT, KeyT, TraitsT &gt;::ElementCleanerT =  typename ElementObjectCacheT::ElementCleanerT</definition>
+        <argsstring></argsstring>
+        <name>ElementCleanerT</name>
+        <qualifiedname>castor3d::ObjectCacheT::ElementCleanerT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/ObjectCache.hpp" line="24" column="1" bodyfile="Cache/ObjectCache.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d75/a02639_1ac12c980434042603168c5fc63da7707c" prot="public" static="no">
+        <type>typename <ref refid="d9/d07/a02635_1a120add2fe6c6efc840f052d926e609d6" kindref="member">ElementObjectCacheT::ElementMergerT</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; ObjT, KeyT, TraitsT &gt;::ElementMergerT =  typename ElementObjectCacheT::ElementMergerT</definition>
+        <argsstring></argsstring>
+        <name>ElementMergerT</name>
+        <qualifiedname>castor3d::ObjectCacheT::ElementMergerT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/ObjectCache.hpp" line="25" column="1" bodyfile="Cache/ObjectCache.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d75/a02639_1ae618af6081b608f7943f4ae13ed2c7e6" prot="public" static="no">
+        <type>typename <ref refid="d9/d07/a02635_1adadbb9ff475d6a6bf903139dad6ccb40" kindref="member">ElementObjectCacheT::ElementAttacherT</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; ObjT, KeyT, TraitsT &gt;::ElementAttacherT =  typename ElementObjectCacheT::ElementAttacherT</definition>
+        <argsstring></argsstring>
+        <name>ElementAttacherT</name>
+        <qualifiedname>castor3d::ObjectCacheT::ElementAttacherT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/ObjectCache.hpp" line="26" column="1" bodyfile="Cache/ObjectCache.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d75/a02639_1aa2ae783264c939e4ec5c6d94db7845c8" prot="public" static="no">
+        <type>typename <ref refid="d9/d07/a02635_1a3df1a58591b34493630c7ddce56d47a4" kindref="member">ElementObjectCacheT::ElementDetacherT</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; ObjT, KeyT, TraitsT &gt;::ElementDetacherT =  typename ElementObjectCacheT::ElementDetacherT</definition>
+        <argsstring></argsstring>
+        <name>ElementDetacherT</name>
+        <qualifiedname>castor3d::ObjectCacheT::ElementDetacherT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/ObjectCache.hpp" line="27" column="1" bodyfile="Cache/ObjectCache.hpp" bodystart="27" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="dd/d75/a02639_1a3dcb0a17d39b0b51ede8dede3e31f963" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="dd/d75/a02639_1afd14ef823f0654d1d291f22281c0a642" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
-        <definition>castor3d::TextureSource::TextureSource</definition>
-        <argsstring>(castor::Image &amp;image, castor::String name, castor::ImageLayout layout)</argsstring>
-        <name>TextureSource</name>
+        <definition>castor3d::ObjectCacheT&lt; ObjT, KeyT, TraitsT &gt;::ObjectCacheT</definition>
+        <argsstring>(Scene &amp;scene, SceneNodeSPtr rootNode, SceneNodeSPtr rootCameraNode, SceneNodeSPtr rootObjectNode, ElementInitialiserT initialise=ElementInitialiserT{}, ElementCleanerT clean=ElementCleanerT{}, ElementMergerT merge=ElementMergerT{}, ElementAttacherT attach=ElementAttacherT{}, ElementDetacherT detach=ElementDetacherT{})</argsstring>
+        <name>ObjectCacheT</name>
+        <qualifiedname>castor3d::ObjectCacheT::ObjectCacheT</qualifiedname>
         <param>
-          <type>castor::Image &amp;</type>
-          <declname>image</declname>
+          <type><ref refid="dd/dec/a04595" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
         </param>
         <param>
-          <type>castor::String</type>
-          <declname>name</declname>
+          <type>SceneNodeSPtr</type>
+          <declname>rootNode</declname>
         </param>
         <param>
-          <type>castor::ImageLayout</type>
-          <declname>layout</declname>
+          <type>SceneNodeSPtr</type>
+          <declname>rootCameraNode</declname>
+        </param>
+        <param>
+          <type>SceneNodeSPtr</type>
+          <declname>rootObjectNode</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d75/a02639_1afd52086039d6486547d55a5abf619a1c" kindref="member">ElementInitialiserT</ref></type>
+          <declname>initialise</declname>
+          <defval><ref refid="dd/d75/a02639_1afd52086039d6486547d55a5abf619a1c" kindref="member">ElementInitialiserT</ref>{}</defval>
+        </param>
+        <param>
+          <type><ref refid="dd/d75/a02639_1a9a4ecd3fb914fcace219e9262f6d390e" kindref="member">ElementCleanerT</ref></type>
+          <declname>clean</declname>
+          <defval><ref refid="dd/d75/a02639_1a9a4ecd3fb914fcace219e9262f6d390e" kindref="member">ElementCleanerT</ref>{}</defval>
+        </param>
+        <param>
+          <type><ref refid="dd/d75/a02639_1ac12c980434042603168c5fc63da7707c" kindref="member">ElementMergerT</ref></type>
+          <declname>merge</declname>
+          <defval><ref refid="dd/d75/a02639_1ac12c980434042603168c5fc63da7707c" kindref="member">ElementMergerT</ref>{}</defval>
+        </param>
+        <param>
+          <type><ref refid="dd/d75/a02639_1ae618af6081b608f7943f4ae13ed2c7e6" kindref="member">ElementAttacherT</ref></type>
+          <declname>attach</declname>
+          <defval><ref refid="dd/d75/a02639_1ae618af6081b608f7943f4ae13ed2c7e6" kindref="member">ElementAttacherT</ref>{}</defval>
+        </param>
+        <param>
+          <type><ref refid="dd/d75/a02639_1aa2ae783264c939e4ec5c6d94db7845c8" kindref="member">ElementDetacherT</ref></type>
+          <declname>detach</declname>
+          <defval><ref refid="dd/d75/a02639_1aa2ae783264c939e4ec5c6d94db7845c8" kindref="member">ElementDetacherT</ref>{}</defval>
         </param>
         <briefdescription>
+<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The texture buffer. </para>
-</simplesect>
-<parameterlist kind="param"><parameteritem>
+<para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">image</parametername>
+<parametername direction="in">scene</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The CPU image. </para>
+<para>The scene. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">name</parametername>
+<parametername direction="in">rootNode</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The source name. </para>
+<para>The root node. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">layout</parametername>
+<parametername direction="in">rootCameraNode</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The CPU image layout. </para>
+<para>The cameras root node. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">rootObjectNode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The objects root node. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">initialise</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element initialiser. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">clean</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element cleaner. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">merge</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element collection merger. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">attach</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element attacher (to a scene node). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">detach</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element detacher (from a scene node). </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -205,79 +314,102 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureSource.hpp" line="32" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="32" bodyend="39"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d75/a02639_1ac06cbc307ec31a52bcbe986a865b2371" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::TextureSource::update</definition>
-        <argsstring>(VkExtent3D const &amp;extent, VkFormat format, uint32_t mipLevels, uint32_t arrayLayers)</argsstring>
-        <name>update</name>
-        <param>
-          <type>VkExtent3D const &amp;</type>
-          <declname>extent</declname>
-        </param>
-        <param>
-          <type>VkFormat</type>
-          <declname>format</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>mipLevels</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>arrayLayers</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Material/Texture/TextureSource.hpp" line="41" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="41" bodyend="52"/>
+        <location file="Cache/ObjectCache.hpp" line="54" column="8" bodyfile="Cache/ObjectCache.hpp" bodystart="54" bodyend="73"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
+<para>Base class for a scene element cache. </para>
     </detaileddescription>
     <inheritancegraph>
-      <node id="4447">
-        <label>Named</label>
-      </node>
-      <node id="4446">
-        <label>castor3d::TextureSource</label>
-        <link refid="dd/d75/a02639"/>
-        <childnode refid="4447" relation="public-inheritance">
+      <node id="2">
+        <label>castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;</label>
+        <link refid="d9/d07/a02635"/>
+        <childnode refid="3" relation="public-inheritance">
         </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ObjectCacheT&lt; ObjT, KeyT, TraitsT &gt;</label>
+        <link refid="dd/d75/a02639"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="4">
+        <label>castor::ResourceCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="4449">
-        <label>Named</label>
-      </node>
-      <node id="4448">
-        <label>castor3d::TextureSource</label>
-        <link refid="dd/d75/a02639"/>
-        <childnode refid="4449" relation="public-inheritance">
+      <node id="5">
+        <label>castor3d::Engine</label>
+        <link refid="d8/dd0/a02711"/>
+        <childnode refid="6" relation="public-inheritance">
         </childnode>
       </node>
+      <node id="2">
+        <label>castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;</label>
+        <link refid="d9/d07/a02635"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_engine</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ObjectCacheT&lt; ObjT, KeyT, TraitsT &gt;</label>
+        <link refid="dd/d75/a02639"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="4">
+        <label>castor::ResourceCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;</label>
+      </node>
+      <node id="6">
+        <label>castor::Unique&lt; Engine &gt;</label>
+      </node>
     </collaborationgraph>
-    <location file="Material/Texture/TextureSource.hpp" line="18" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="16" bodyend="109"/>
+    <location file="Cache/ObjectCache.hpp" line="12" column="1" bodyfile="Cache/ObjectCache.hpp" bodystart="14" bodyend="74"/>
     <listofallmembers>
-      <member refid="dd/d75/a02639_1a10f4c8e3dd31efed12fecbf9f32a666b" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>getBaseLayer</name></member>
-      <member refid="dd/d75/a02639_1a4bb1185b673c1a8a1c20cfc74dcd1e93" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>getBaseLevel</name></member>
-      <member refid="dd/d75/a02639_1a0ae0f5afe102e323fc5839fc50f2f6ad" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>getBuffer</name></member>
-      <member refid="dd/d75/a02639_1a07ca40f903b281ce304a23ae06a1d342" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>getBuffer</name></member>
-      <member refid="dd/d75/a02639_1a17f4726bb3e2cb170f44add1903b26fc" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>getDepth</name></member>
-      <member refid="dd/d75/a02639_1acfde42110a5953b8275207c0460d8906" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>getLayerCount</name></member>
-      <member refid="dd/d75/a02639_1ab6d1fd08cb4d119a1afaeb97eadc2e0a" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>getLevelCount</name></member>
-      <member refid="dd/d75/a02639_1a92066b44ec2982894bddbb494c6bdee8" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>hasBuffer</name></member>
-      <member refid="dd/d75/a02639_1a8d0f0a3ba8ce4f2c8aa49f5a6392fad6" prot="private" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>m_image</name></member>
-      <member refid="dd/d75/a02639_1a9282b9289d8416ba33c69851cfa50fbe" prot="private" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>m_layout</name></member>
-      <member refid="dd/d75/a02639_1a3dcb0a17d39b0b51ede8dede3e31f963" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>TextureSource</name></member>
-      <member refid="dd/d75/a02639_1a4220bf29f250bd837ec9c82d7893138a" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>toString</name></member>
-      <member refid="dd/d75/a02639_1ac06cbc307ec31a52bcbe986a865b2371" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>update</name></member>
+      <member refid="dd/d75/a02639_1ae618af6081b608f7943f4ae13ed2c7e6" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>ElementAttacherT</name></member>
+      <member refid="d9/d07/a02635_1a833dc232271e526d2fff8e95be226a47" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>ElementCacheBaseT</name></member>
+      <member refid="d9/d07/a02635_1a8b2d0e83f5e04699b979b93e711dd38f" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>ElementCacheT</name></member>
+      <member refid="dd/d75/a02639_1a487c8e78cc61e870dcb64f6232d1a24e" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>ElementCacheTraitsT</name></member>
+      <member refid="dd/d75/a02639_1a9a4ecd3fb914fcace219e9262f6d390e" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>ElementCleanerT</name></member>
+      <member refid="dd/d75/a02639_1a0a592618b136daf23b05102d095b5000" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>ElementContT</name></member>
+      <member refid="dd/d75/a02639_1aa2ae783264c939e4ec5c6d94db7845c8" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>ElementDetacherT</name></member>
+      <member refid="dd/d75/a02639_1afd52086039d6486547d55a5abf619a1c" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>ElementInitialiserT</name></member>
+      <member refid="dd/d75/a02639_1ac83059fefe9b5a3484073644bb673844" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>ElementKeyT</name></member>
+      <member refid="dd/d75/a02639_1ac12c980434042603168c5fc63da7707c" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>ElementMergerT</name></member>
+      <member refid="dd/d75/a02639_1ae7800697b5cf4184b7bede565825264a" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>ElementObjectCacheT</name></member>
+      <member refid="dd/d75/a02639_1a5763f3f56695a01bcce24794bccc0e5c" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>ElementObsT</name></member>
+      <member refid="dd/d75/a02639_1aa1583a80a1fb76a0df7c159bd75c541e" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>ElementPtrT</name></member>
+      <member refid="dd/d75/a02639_1afe556631a2f20432b20bc03849457704" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>ElementT</name></member>
+      <member refid="d9/d07/a02635_1a9880998d44d2a4753ebaa66045f53e40" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>getEngine</name></member>
+      <member refid="d9/d07/a02635_1a53a7f1aca80a90ee48dbd7f0d2525d5f" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>getObjectTypeName</name></member>
+      <member refid="d9/d07/a02635_1ab163121f8e7748ad2d7bf093dd25e943" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>m_attach</name></member>
+      <member refid="d9/d07/a02635_1adb2cd25d360c2c9fefca61d26273e3ce" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>m_detach</name></member>
+      <member refid="d9/d07/a02635_1ad2d2ec81317e6a6424228ed476c38651" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>m_engine</name></member>
+      <member refid="d9/d07/a02635_1a4a7fda17cfa540fdf1ef120f49b23478" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>m_merge</name></member>
+      <member refid="d9/d07/a02635_1ab67f3f6ddd7d1f04ed5826dc3f21f263" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>m_rootCameraNode</name></member>
+      <member refid="d9/d07/a02635_1aac519a36083c69c42389af5dd3cea99a" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>m_rootNode</name></member>
+      <member refid="d9/d07/a02635_1aa98b874ccfd4e9d4e60f2725a1d6cadf" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>m_rootObjectNode</name></member>
+      <member refid="d9/d07/a02635_1ac2d02c45ec20d264310c39258cf8ce50" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>mergeInto</name></member>
+      <member refid="d9/d07/a02635_1a877651f0c6763836a11a7166e3ac5bff" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>ObjectCacheBaseT</name></member>
+      <member refid="dd/d75/a02639_1afd14ef823f0654d1d291f22281c0a642" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>ObjectCacheT</name></member>
+      <member refid="d9/d07/a02635_1a53f214ce6eab35501fb5509c504d4df1" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>OnChanged</name></member>
+      <member refid="d9/d07/a02635_1a91d72169bf2d52687170aeefc90f3dcd" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>onChanged</name></member>
+      <member refid="d9/d07/a02635_1abb32a9817ed3199de78a9e80ee634a44" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>OnChangedFunction</name></member>
+      <member refid="d9/d07/a02635_1aef5cfb8ffd6117cd01ff08475186e5e4" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>~ObjectCacheBaseT</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

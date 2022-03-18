@@ -1,51 +1,83 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d2/d78/a05087" kind="struct" language="C++" prot="protected">
-    <compoundname>castor3d::SceneBackground::Cube</compoundname>
-    <includes local="no">Background.hpp</includes>
-    <innerclass refid="d9/de1/a05091" prot="public">castor3d::SceneBackground::Cube::Quad</innerclass>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d2/d78/a05087_1a5a2d94bf18cbed6624899423a61c114d" prot="public" static="no" mutable="no">
-        <type><ref refid="d9/de1/a05091" kindref="compound">Quad</ref></type>
-        <definition>Quad castor3d::SceneBackground::Cube::faces[6]</definition>
-        <argsstring>[6]</argsstring>
-        <name>faces</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d2/d78/a05087" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::DirectionalLight &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::DirectionalLight &gt;</basecompoundref>
+    <includes local="no">TextDirectionalLight.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/d78/a05087_1aa6278c0ebab3897c1676b7c36b3a08a0" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::DirectionalLight &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs)</argsstring>
+        <name>TextWriter</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::DirectionalLight &gt;::TextWriter</qualifiedname>
+        <param>
+          <type>String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Background/Background.hpp" line="45" column="1" bodyfile="Scene/Background/Background.hpp" bodystart="45" bodyend="-1"/>
+        <location file="Text/TextDirectionalLight.hpp" line="18" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d78/a05087_1a55d2f9c5f93e88b83e13674ff59bc57e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::DirectionalLight &gt;::operator()</definition>
+        <argsstring>(castor3d::DirectionalLight const &amp;light, castor::StringStream &amp;file) override</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::DirectionalLight &gt;::operator()</qualifiedname>
+        <param>
+          <type><ref refid="db/dd8/a04495" kindref="compound">castor3d::DirectionalLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextDirectionalLight.hpp" line="19" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="3276">
-        <label>castor3d::SceneBackground::Cube::Quad</label>
-        <link refid="d9/de1/a05091"/>
-        <childnode refid="3277" relation="usage">
-          <edgelabel>vertex</edgelabel>
+    <inheritancegraph>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::DirectionalLight &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::DirectionalLight &gt;</label>
+        <link refid="d2/d78/a05087"/>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="3277">
-        <label>castor3d::SceneBackground::Cube::Quad::Vertex</label>
-        <link refid="de/d11/a05095"/>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::DirectionalLight &gt;</label>
       </node>
-      <node id="3275">
-        <label>castor3d::SceneBackground::Cube</label>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::DirectionalLight &gt;</label>
         <link refid="d2/d78/a05087"/>
-        <childnode refid="3276" relation="usage">
-          <edgelabel>faces</edgelabel>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Scene/Background/Background.hpp" line="34" column="1" bodyfile="Scene/Background/Background.hpp" bodystart="33" bodyend="46"/>
+    <location file="Text/TextDirectionalLight.hpp" line="14" column="1" bodyfile="Text/TextDirectionalLight.hpp" bodystart="16" bodyend="21"/>
     <listofallmembers>
-      <member refid="d2/d78/a05087_1a5a2d94bf18cbed6624899423a61c114d" prot="public" virt="non-virtual"><scope>castor3d::SceneBackground::Cube</scope><name>faces</name></member>
+      <member refid="d2/d78/a05087_1a55d2f9c5f93e88b83e13674ff59bc57e" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::DirectionalLight &gt;</scope><name>operator()</name></member>
+      <member refid="d2/d78/a05087_1aa6278c0ebab3897c1676b7c36b3a08a0" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::DirectionalLight &gt;</scope><name>TextWriter</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

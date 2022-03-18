@@ -1,5 +1,5 @@
-<map id="castor3d::MetallicRoughnessPbrPass" name="castor3d::MetallicRoughnessPbrPass">
-<area shape="rect" id="node1" title=" " alt="" coords="6,155,197,196"/>
-<area shape="rect" id="node2" href="$df/d5d/a02596.html" title=" " alt="" coords="46,80,157,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,197,32"/>
+<map id="castor3d::UniformBufferBase" name="castor3d::UniformBufferBase">
+<area shape="rect" id="node1" title=" " alt="" coords="5,11,192,38"/>
+<area shape="rect" id="node2" href="$de/dbd/a02507.html" title=" " alt="" coords="683,5,929,47"/>
+<area shape="rect" id="node3" href="$de/dbd/a02507.html" title="A uniform typed buffer, than can contain multiple sub&#45;buffers." alt="" coords="241,40,405,81"/>
 </map>

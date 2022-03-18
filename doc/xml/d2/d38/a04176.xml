@@ -1,155 +1,132 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d2/d38/a04176" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::GeneratorPlugin</compoundname>
-    <basecompoundref refid="db/d33/a04192" prot="public" virt="non-virtual">castor3d::Plugin</basecompoundref>
-    <includes local="no">GeneratorPlugin.hpp</includes>
-      <sectiondef kind="friend">
-      <memberdef kind="friend" id="d2/d38/a04176_1a6a6c1cc25d50ed6f67a2dc0fc546c5a3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>friend class</type>
-        <definition>friend class Plugin</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d2/d38/a04176" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::SsaoRawAOPass::Program</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/d38/a04176_1aabbe5d2a1a37eaba8302f0702b1420f9" prot="public" static="no" mutable="no">
+        <type><ref refid="d8/d0e/a04744" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::SsaoRawAOPass::Program::vertexShader</definition>
         <argsstring></argsstring>
-        <name>Plugin</name>
+        <name>vertexShader</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::Program::vertexShader</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/GeneratorPlugin.hpp" line="15" column="1" bodyfile="Plugin/GeneratorPlugin.hpp" bodystart="15" bodyend="-1"/>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="121" column="14" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="121" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="friend" id="d2/d38/a04176_1a3e1914489e4bed4f9f23cdeab34a43dc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>friend class</type>
-        <definition>friend class Engine</definition>
+      <memberdef kind="variable" id="d2/d38/a04176_1a630e306951eacd2c544eed5b1fe356bc" prot="public" static="no" mutable="no">
+        <type><ref refid="d8/d0e/a04744" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::SsaoRawAOPass::Program::pixelShader</definition>
         <argsstring></argsstring>
-        <name>Engine</name>
+        <name>pixelShader</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::Program::pixelShader</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/GeneratorPlugin.hpp" line="16" column="1" bodyfile="Plugin/GeneratorPlugin.hpp" bodystart="16" bodyend="-1"/>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="122" column="14" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d38/a04176_1ab8870faee075454285d1f7ba00d16fb3" prot="public" static="no" mutable="no">
+        <type>ashes::PipelineShaderStageCreateInfoArray</type>
+        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::SsaoRawAOPass::Program::stages</definition>
+        <argsstring></argsstring>
+        <name>stages</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::Program::stages</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="123" column="43" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="123" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d2/d38/a04176_1ab876e25e18ed2a588545b8e090733b5a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::GeneratorPlugin::GeneratorPlugin</definition>
-        <argsstring>(castor::DynamicLibrarySPtr library, Engine *engine)</argsstring>
-        <name>GeneratorPlugin</name>
+      <memberdef kind="function" id="d2/d38/a04176_1a75e2a4b919979cc14d8fc5f3444429b5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::SsaoRawAOPass::Program::Program</definition>
+        <argsstring>(RenderDevice const &amp;device, bool useNormalsBuffer, castor::String const &amp;prefix)</argsstring>
+        <name>Program</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::Program::Program</qualifiedname>
         <param>
-          <type>castor::DynamicLibrarySPtr</type>
-          <declname>library</declname>
+          <type><ref refid="d2/df2/a03960" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
         </param>
         <param>
-          <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> *</type>
-          <declname>engine</declname>
+          <type>bool</type>
+          <declname>useNormalsBuffer</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>prefix</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">library</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The shared library holding the plug-in </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">engine</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The engine </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Plugin/GeneratorPlugin.hpp" line="29" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d38/a04176_1a7e46cd3a692bd9fd07ad9861059e35a8" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>virtual C3D_API castor3d::GeneratorPlugin::~GeneratorPlugin</definition>
-        <argsstring>()</argsstring>
-        <name>~GeneratorPlugin</name>
-        <briefdescription>
-<para>Destructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/GeneratorPlugin.hpp" line="37" column="1"/>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="117" column="1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="1301">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="1299">
-        <label>castor3d::GeneratorPlugin</label>
-        <link refid="d2/d38/a04176"/>
-        <childnode refid="1300" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1300">
-        <label>castor3d::Plugin</label>
-        <link refid="db/d33/a04192"/>
-        <childnode refid="1301" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
     <collaborationgraph>
-      <node id="1304">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      <node id="7">
+        <label>T</label>
       </node>
-      <node id="1302">
-        <label>castor3d::GeneratorPlugin</label>
-        <link refid="d2/d38/a04176"/>
-        <childnode refid="1303" relation="public-inheritance">
+      <node id="2">
+        <label>castor3d::ShaderModule</label>
+        <link refid="d8/d0e/a04744"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>name</edgelabel>
+          <edgelabel>source</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>shader</edgelabel>
         </childnode>
       </node>
-      <node id="1303">
-        <label>castor3d::Plugin</label>
-        <link refid="db/d33/a04192"/>
-        <childnode refid="1304" relation="public-inheritance">
+      <node id="1">
+        <label>castor3d::SsaoRawAOPass::Program</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>pixelShader</edgelabel>
+          <edgelabel>vertexShader</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="3">
+        <label>std::string</label>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::unique_ptr&lt; ast::Shader &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; ast::Shader &gt;</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Plugin/GeneratorPlugin.hpp" line="13" column="1" bodyfile="Plugin/GeneratorPlugin.hpp" bodystart="11" bodyend="38"/>
+    <location file="Render/Ssao/SsaoRawAOPass.hpp" line="115" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="116" bodyend="124"/>
     <listofallmembers>
-      <member refid="d2/d38/a04176_1a3e1914489e4bed4f9f23cdeab34a43dc" prot="private" virt="non-virtual"><scope>castor3d::GeneratorPlugin</scope><name>Engine</name></member>
-      <member refid="d2/d38/a04176_1ab876e25e18ed2a588545b8e090733b5a" prot="public" virt="non-virtual"><scope>castor3d::GeneratorPlugin</scope><name>GeneratorPlugin</name></member>
-      <member refid="db/d33/a04192_1a76345cfa813957198ab5a735b3bf2c84" prot="public" virt="non-virtual"><scope>castor3d::GeneratorPlugin</scope><name>getName</name></member>
-      <member refid="db/d33/a04192_1a21c697a5bb64dc09df8604a595ed4ef1" prot="public" virt="non-virtual"><scope>castor3d::GeneratorPlugin</scope><name>getRequiredVersion</name></member>
-      <member refid="db/d33/a04192_1adfce87274549c3458e705ec6f49f2466" prot="public" virt="non-virtual"><scope>castor3d::GeneratorPlugin</scope><name>getType</name></member>
-      <member refid="db/d33/a04192_1a6eee27fad0b4dc406af8dac993816e1e" prot="protected" virt="non-virtual"><scope>castor3d::GeneratorPlugin</scope><name>load</name></member>
-      <member refid="db/d33/a04192_1ac89ef3325c33aebd3c45ff41a3912d25" prot="protected" virt="non-virtual"><scope>castor3d::GeneratorPlugin</scope><name>m_library</name></member>
-      <member refid="db/d33/a04192_1a5b06730be035851689f1f52a9d37a839" prot="protected" virt="non-virtual"><scope>castor3d::GeneratorPlugin</scope><name>m_pfnGetName</name></member>
-      <member refid="db/d33/a04192_1a3bbb683c98da8be6cb7eadd5ba677f18" prot="protected" virt="non-virtual"><scope>castor3d::GeneratorPlugin</scope><name>m_pfnGetRequiredVersion</name></member>
-      <member refid="db/d33/a04192_1ae4b1c74ae527aef8847250d27eb3acf0" prot="protected" virt="non-virtual"><scope>castor3d::GeneratorPlugin</scope><name>m_pfnOnLoad</name></member>
-      <member refid="db/d33/a04192_1a5d94afb97a6d885ed7d2885dafeda0dc" prot="protected" virt="non-virtual"><scope>castor3d::GeneratorPlugin</scope><name>m_pfnOnUnload</name></member>
-      <member refid="db/d33/a04192_1ad988a5d361f28b80ba19dd2caac722e1" prot="protected" virt="non-virtual"><scope>castor3d::GeneratorPlugin</scope><name>m_type</name></member>
-      <member refid="db/d33/a04192_1af3f82c3bbc1d49880fda39cdc7ea2015" prot="public" virt="non-virtual"><scope>castor3d::GeneratorPlugin</scope><name>PGetNameFunction</name></member>
-      <member refid="db/d33/a04192_1a571d2dbc7a601aca467b1b5d8a62d997" prot="public" virt="non-virtual"><scope>castor3d::GeneratorPlugin</scope><name>PGetRequiredVersionFunction</name></member>
-      <member refid="db/d33/a04192_1aa7caed7d5f2bd1d34409227a1e3b09bf" prot="public" virt="non-virtual"><scope>castor3d::GeneratorPlugin</scope><name>PGetTypeFunction</name></member>
-      <member refid="d2/d38/a04176_1a6a6c1cc25d50ed6f67a2dc0fc546c5a3" prot="private" virt="non-virtual"><scope>castor3d::GeneratorPlugin</scope><name>Plugin</name></member>
-      <member refid="db/d33/a04192_1ab1d7f300c810facf8bc08fceffff8c2b" prot="protected" virt="non-virtual" ambiguityscope="castor3d::Plugin::"><scope>castor3d::GeneratorPlugin</scope><name>Plugin</name></member>
-      <member refid="db/d33/a04192_1a54268afa0fd4a75c485f0ba59f108e65" prot="public" virt="non-virtual"><scope>castor3d::GeneratorPlugin</scope><name>POnLoadFunction</name></member>
-      <member refid="db/d33/a04192_1a186ebd8d8fe1eb8b52b7909347ce0fb4" prot="public" virt="non-virtual"><scope>castor3d::GeneratorPlugin</scope><name>POnUnloadFunction</name></member>
-      <member refid="db/d33/a04192_1a1062d08432032ec7d502e7941b4e0df4" prot="protected" virt="non-virtual"><scope>castor3d::GeneratorPlugin</scope><name>unload</name></member>
-      <member refid="d2/d38/a04176_1a7e46cd3a692bd9fd07ad9861059e35a8" prot="public" virt="virtual"><scope>castor3d::GeneratorPlugin</scope><name>~GeneratorPlugin</name></member>
-      <member refid="db/d33/a04192_1af7f881d3d5d32c7044c1b93164754c64" prot="public" virt="pure-virtual"><scope>castor3d::GeneratorPlugin</scope><name>~Plugin</name></member>
+      <member refid="d2/d38/a04176_1a630e306951eacd2c544eed5b1fe356bc" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::Program</scope><name>pixelShader</name></member>
+      <member refid="d2/d38/a04176_1a75e2a4b919979cc14d8fc5f3444429b5" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::Program</scope><name>Program</name></member>
+      <member refid="d2/d38/a04176_1ab8870faee075454285d1f7ba00d16fb3" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::Program</scope><name>stages</name></member>
+      <member refid="d2/d38/a04176_1aabbe5d2a1a37eaba8302f0702b1420f9" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::Program</scope><name>vertexShader</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

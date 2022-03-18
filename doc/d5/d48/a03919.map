@@ -1,5 +1,5 @@
-<map id="castor3d::Submesh" name="castor3d::Submesh">
-<area shape="rect" id="node1" title=" " alt="" coords="125,95,259,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,13,184,39"/>
-<area shape="rect" id="node3" title=" " alt="" coords="209,5,370,47"/>
+<map id="castor3d::PostEffect" name="castor3d::PostEffect">
+<area shape="rect" id="node1" title=" " alt="" coords="147,80,287,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,237,32"/>
+<area shape="rect" id="node3" title=" " alt="" coords="261,5,368,32"/>
 </map>

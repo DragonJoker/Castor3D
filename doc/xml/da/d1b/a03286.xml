@@ -1,33 +1,117 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="da/d1b/a03286" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkConditionalRenderingBeginInfoEXT &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="da/d1b/a03286_1a282f4fb6f39be5bd5d66e0f215d928af" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkConditionalRenderingBeginInfoEXT &gt;::value</definition>
-        <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_CONDITIONAL_RENDERING_BEGIN_INFO_EXT</initializer>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="da/d1b/a03286" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::VersionException</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::Exception</basecompoundref>
+    <includes local="no">VersionException.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/d1b/a03286_1afd9c24e163e939cbaf4dd54ff13d1bf9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::VersionException::VersionException</definition>
+        <argsstring>(Version const &amp;given, Version const &amp;expected, char const *file, char const *function, uint32_t line)</argsstring>
+        <name>VersionException</name>
+        <qualifiedname>castor3d::VersionException::VersionException</qualifiedname>
+        <param>
+          <type><ref refid="d4/d1b/a03282" kindref="compound">Version</ref> const &amp;</type>
+          <declname>given</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d1b/a03282" kindref="compound">Version</ref> const &amp;</type>
+          <declname>expected</declname>
+        </param>
+        <param>
+          <type>char const *</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type>char const *</type>
+          <declname>function</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>line</declname>
+        </param>
         <briefdescription>
+<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">given</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The given version </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">expected</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The expected version </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The file </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The function </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">line</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The file line </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="226" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="226" bodyend="-1"/>
+        <location file="Miscellaneous/VersionException.hpp" line="33" column="9"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="226" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="226" bodyend="226"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::VersionException</label>
+        <link refid="da/d1b/a03286"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Exception</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::VersionException</label>
+        <link refid="da/d1b/a03286"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Exception</label>
+      </node>
+    </collaborationgraph>
+    <location file="Miscellaneous/VersionException.hpp" line="13" column="1" bodyfile="Miscellaneous/VersionException.hpp" bodystart="15" bodyend="38"/>
     <listofallmembers>
-      <member refid="da/d1b/a03286_1a282f4fb6f39be5bd5d66e0f215d928af" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkConditionalRenderingBeginInfoEXT &gt;</scope><name>value</name></member>
+      <member refid="da/d1b/a03286_1afd9c24e163e939cbaf4dd54ff13d1bf9" prot="public" virt="non-virtual"><scope>castor3d::VersionException</scope><name>VersionException</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

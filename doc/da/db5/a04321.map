@@ -1,4 +1,5 @@
-<map id="castor3d::RenderNodesT&lt; NodeType, MapType &gt;" name="castor3d::RenderNodesT&lt; NodeType, MapType &gt;">
-<area shape="rect" id="node1" title="The render nodes for a specific scene." alt="" coords="5,109,171,151"/>
-<area shape="rect" id="node2" title=" " alt="" coords="51,5,125,32"/>
+<map id="castor3d::ToneMappingVisitor" name="castor3d::ToneMappingVisitor">
+<area shape="rect" id="node1" title=" " alt="" coords="5,155,200,181"/>
+<area shape="rect" id="node2" href="$d6/d13/a03258.html" title=" " alt="" coords="21,80,184,107"/>
+<area shape="rect" id="node3" href="$dc/d45/a03250.html" title=" " alt="" coords="6,5,199,32"/>
 </map>

@@ -1,33 +1,293 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d4/dbc/a02954" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkSparseImageMemoryRequirements2 &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d4/dbc/a02954_1adf33fe7876737ed93e099542d9b0a498" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkSparseImageMemoryRequirements2 &gt;::value</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d4/dbc/a02954" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::TextureSource</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::Named</basecompoundref>
+    <includes local="no">TextureSource.hpp</includes>
+      <sectiondef kind="user-defined">
+      <header>Accessors.</header>
+      <memberdef kind="variable" id="d4/dbc/a02954_1a8d0f0a3ba8ce4f2c8aa49f5a6392fad6" prot="private" static="no" mutable="no">
+        <type>castor::Image *</type>
+        <definition>castor::Image* castor3d::TextureSource::m_image</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_SPARSE_IMAGE_MEMORY_REQUIREMENTS_2</initializer>
+        <name>m_image</name>
+        <qualifiedname>castor3d::TextureSource::m_image</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="80" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="80" bodyend="-1"/>
+        <location file="Material/Texture/TextureSource.hpp" line="107" column="16" bodyfile="Material/Texture/TextureSource.hpp" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dbc/a02954_1a9282b9289d8416ba33c69851cfa50fbe" prot="private" static="no" mutable="no">
+        <type>castor::ImageLayout</type>
+        <definition>castor::ImageLayout castor3d::TextureSource::m_layout</definition>
+        <argsstring></argsstring>
+        <name>m_layout</name>
+        <qualifiedname>castor3d::TextureSource::m_layout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureSource.hpp" line="108" column="21" bodyfile="Material/Texture/TextureSource.hpp" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dbc/a02954_1a922a8a9f0e02adfdc4e4705ef558edd3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::String const &amp;</type>
+        <definition>castor::String const  &amp; castor3d::TextureSource::toString</definition>
+        <argsstring>() const</argsstring>
+        <name>toString</name>
+        <qualifiedname>castor3d::TextureSource::toString</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureSource.hpp" line="60" column="23" bodyfile="Material/Texture/TextureSource.hpp" bodystart="60" bodyend="63"/>
+        <references refid="dc/df4/a01401_1a5691da845a89609231c90071fccdfc20">castor3d::getName</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/dbc/a02954_1a10f4c8e3dd31efed12fecbf9f32a666b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureSource::getBaseLayer</definition>
+        <argsstring>() const</argsstring>
+        <name>getBaseLayer</name>
+        <qualifiedname>castor3d::TextureSource::getBaseLayer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureSource.hpp" line="65" column="10" bodyfile="Material/Texture/TextureSource.hpp" bodystart="65" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dbc/a02954_1acfde42110a5953b8275207c0460d8906" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureSource::getLayerCount</definition>
+        <argsstring>() const</argsstring>
+        <name>getLayerCount</name>
+        <qualifiedname>castor3d::TextureSource::getLayerCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureSource.hpp" line="70" column="10" bodyfile="Material/Texture/TextureSource.hpp" bodystart="70" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dbc/a02954_1a4bb1185b673c1a8a1c20cfc74dcd1e93" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureSource::getBaseLevel</definition>
+        <argsstring>() const</argsstring>
+        <name>getBaseLevel</name>
+        <qualifiedname>castor3d::TextureSource::getBaseLevel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureSource.hpp" line="75" column="10" bodyfile="Material/Texture/TextureSource.hpp" bodystart="75" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dbc/a02954_1ab6d1fd08cb4d119a1afaeb97eadc2e0a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureSource::getLevelCount</definition>
+        <argsstring>() const</argsstring>
+        <name>getLevelCount</name>
+        <qualifiedname>castor3d::TextureSource::getLevelCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureSource.hpp" line="80" column="10" bodyfile="Material/Texture/TextureSource.hpp" bodystart="80" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dbc/a02954_1a17f4726bb3e2cb170f44add1903b26fc" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureSource::getDepth</definition>
+        <argsstring>() const</argsstring>
+        <name>getDepth</name>
+        <qualifiedname>castor3d::TextureSource::getDepth</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureSource.hpp" line="85" column="10" bodyfile="Material/Texture/TextureSource.hpp" bodystart="85" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dbc/a02954_1a92066b44ec2982894bddbb494c6bdee8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::TextureSource::hasBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>hasBuffer</name>
+        <qualifiedname>castor3d::TextureSource::hasBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureSource.hpp" line="90" column="6" bodyfile="Material/Texture/TextureSource.hpp" bodystart="90" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dbc/a02954_1a0ae0f5afe102e323fc5839fc50f2f6ad" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::ImageLayout::ConstBuffer</type>
+        <definition>castor::ImageLayout::ConstBuffer castor3d::TextureSource::getBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>getBuffer</name>
+        <qualifiedname>castor3d::TextureSource::getBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureSource.hpp" line="95" column="34" bodyfile="Material/Texture/TextureSource.hpp" bodystart="95" bodyend="98"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dbc/a02954_1a07ca40f903b281ce304a23ae06a1d342" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::ImageLayout::Buffer</type>
+        <definition>castor::ImageLayout::Buffer castor3d::TextureSource::getBuffer</definition>
+        <argsstring>()</argsstring>
+        <name>getBuffer</name>
+        <qualifiedname>castor3d::TextureSource::getBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureSource.hpp" line="100" column="29" bodyfile="Material/Texture/TextureSource.hpp" bodystart="100" bodyend="103"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/dbc/a02954_1a3dcb0a17d39b0b51ede8dede3e31f963" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::TextureSource::TextureSource</definition>
+        <argsstring>(castor::Image &amp;image, castor::String name, castor::ImageLayout layout)</argsstring>
+        <name>TextureSource</name>
+        <qualifiedname>castor3d::TextureSource::TextureSource</qualifiedname>
+        <param>
+          <type>castor::Image &amp;</type>
+          <declname>image</declname>
+        </param>
+        <param>
+          <type>castor::String</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::ImageLayout</type>
+          <declname>layout</declname>
+        </param>
+        <briefdescription>
+<para>The texture buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">image</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The CPU image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The source name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">layout</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The CPU image layout. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureSource.hpp" line="32" column="10" bodyfile="Material/Texture/TextureSource.hpp" bodystart="32" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dbc/a02954_1ac06cbc307ec31a52bcbe986a865b2371" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextureSource::update</definition>
+        <argsstring>(VkExtent3D const &amp;extent, VkFormat format, uint32_t mipLevels, uint32_t arrayLayers)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::TextureSource::update</qualifiedname>
+        <param>
+          <type>VkExtent3D const &amp;</type>
+          <declname>extent</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>format</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>mipLevels</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>arrayLayers</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureSource.hpp" line="41" column="6" bodyfile="Material/Texture/TextureSource.hpp" bodystart="41" bodyend="52"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="80" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="80" bodyend="80"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::TextureSource</label>
+        <link refid="d4/dbc/a02954"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::TextureSource</label>
+        <link refid="d4/dbc/a02954"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Texture/TextureSource.hpp" line="16" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="18" bodyend="109"/>
     <listofallmembers>
-      <member refid="d4/dbc/a02954_1adf33fe7876737ed93e099542d9b0a498" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkSparseImageMemoryRequirements2 &gt;</scope><name>value</name></member>
+      <member refid="d4/dbc/a02954_1a10f4c8e3dd31efed12fecbf9f32a666b" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>getBaseLayer</name></member>
+      <member refid="d4/dbc/a02954_1a4bb1185b673c1a8a1c20cfc74dcd1e93" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>getBaseLevel</name></member>
+      <member refid="d4/dbc/a02954_1a0ae0f5afe102e323fc5839fc50f2f6ad" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>getBuffer</name></member>
+      <member refid="d4/dbc/a02954_1a07ca40f903b281ce304a23ae06a1d342" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>getBuffer</name></member>
+      <member refid="d4/dbc/a02954_1a17f4726bb3e2cb170f44add1903b26fc" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>getDepth</name></member>
+      <member refid="d4/dbc/a02954_1acfde42110a5953b8275207c0460d8906" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>getLayerCount</name></member>
+      <member refid="d4/dbc/a02954_1ab6d1fd08cb4d119a1afaeb97eadc2e0a" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>getLevelCount</name></member>
+      <member refid="d4/dbc/a02954_1a92066b44ec2982894bddbb494c6bdee8" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>hasBuffer</name></member>
+      <member refid="d4/dbc/a02954_1a8d0f0a3ba8ce4f2c8aa49f5a6392fad6" prot="private" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>m_image</name></member>
+      <member refid="d4/dbc/a02954_1a9282b9289d8416ba33c69851cfa50fbe" prot="private" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>m_layout</name></member>
+      <member refid="d4/dbc/a02954_1a3dcb0a17d39b0b51ede8dede3e31f963" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>TextureSource</name></member>
+      <member refid="d4/dbc/a02954_1a922a8a9f0e02adfdc4e4705ef558edd3" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>toString</name></member>
+      <member refid="d4/dbc/a02954_1ac06cbc307ec31a52bcbe986a865b2371" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>update</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,250 +1,57 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d3/d3a/a04891" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::RsmInterpolatePass</compoundname>
-    <basecompoundref refid="da/d95/a04435" prot="public" virt="non-virtual">castor3d::RenderQuad</basecompoundref>
-    <includes local="no">RsmInterpolatePass.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d3/d3a/a04891" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::HdrConfigData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">HdrConfigUbo.hpp</includes>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d3/d3a/a04891_1aff9d598e2049e08a326ac8c1a3c8d281" prot="private" static="no" mutable="no">
-        <type><ref refid="d7/dd1/a01458_1a563d137a64a10483b6a4ba4b5174d05d" kindref="member">LightCache</ref> const  &amp;</type>
-        <definition>LightCache const&amp; castor3d::RsmInterpolatePass::m_lightCache</definition>
+      <memberdef kind="variable" id="d3/d3a/a04891_1ac9b1139dea1f2ca136900262e46920b3" prot="private" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::HdrConfigData::m_exposure</definition>
         <argsstring></argsstring>
-        <name>m_lightCache</name>
+        <name>m_exposure</name>
+        <qualifiedname>castor3d::shader::HdrConfigData::m_exposure</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" line="46" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" bodystart="46" bodyend="-1"/>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="49" column="12" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="49" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d3/d3a/a04891_1a1a010b7e50f02e55109f702cc4efb3d0" prot="private" static="no" mutable="no">
-        <type><ref refid="dd/d83/a05443" kindref="compound">GpInfoUbo</ref> const  &amp;</type>
-        <definition>GpInfoUbo const&amp; castor3d::RsmInterpolatePass::m_gpInfo</definition>
+      <memberdef kind="variable" id="d3/d3a/a04891_1a6a6e0ba9011bb3a2c8aabe1c102097d5" prot="private" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::HdrConfigData::m_gamma</definition>
         <argsstring></argsstring>
-        <name>m_gpInfo</name>
+        <name>m_gamma</name>
+        <qualifiedname>castor3d::shader::HdrConfigData::m_gamma</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" line="47" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" bodystart="47" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d3a/a04891_1a7d45eed13afbb02f18d7c71729edc9a1" prot="private" static="no" mutable="no">
-        <type><ref refid="da/d9f/a04859" kindref="compound">OpaquePassResult</ref> const  &amp;</type>
-        <definition>OpaquePassResult const&amp; castor3d::RsmInterpolatePass::m_gpResult</definition>
-        <argsstring></argsstring>
-        <name>m_gpResult</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" line="48" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" bodystart="48" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d3a/a04891_1a3f0958db4668d123d9233c19433814a0" prot="private" static="no" mutable="no">
-        <type><ref refid="db/dc1/a04671" kindref="compound">ShadowMapResult</ref> const  &amp;</type>
-        <definition>ShadowMapResult const&amp; castor3d::RsmInterpolatePass::m_smResult</definition>
-        <argsstring></argsstring>
-        <name>m_smResult</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" line="49" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" bodystart="49" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d3a/a04891_1aeecd79d45c0b18a0323affd5efd430e1" prot="private" static="no" mutable="no">
-        <type><ref refid="d8/dd7/a02643" kindref="compound">TextureUnit</ref> const  &amp;</type>
-        <definition>TextureUnit const&amp; castor3d::RsmInterpolatePass::m_gi</definition>
-        <argsstring></argsstring>
-        <name>m_gi</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" line="50" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" bodystart="50" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d3a/a04891_1ace6470e84519c451a27fa4d90c412c51" prot="private" static="no" mutable="no">
-        <type><ref refid="d8/dd7/a02643" kindref="compound">TextureUnit</ref> const  &amp;</type>
-        <definition>TextureUnit const&amp; castor3d::RsmInterpolatePass::m_nml</definition>
-        <argsstring></argsstring>
-        <name>m_nml</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" line="51" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" bodystart="51" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d3a/a04891_1aaa999aaf7b1960876803961956e38367" prot="private" static="no" mutable="no">
-        <type><ref refid="d6/d15/a05503" kindref="compound">RsmConfigUbo</ref> const  &amp;</type>
-        <definition>RsmConfigUbo const&amp; castor3d::RsmInterpolatePass::m_rsmConfigUbo</definition>
-        <argsstring></argsstring>
-        <name>m_rsmConfigUbo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" line="52" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" bodystart="52" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d3a/a04891_1ad36105efd01ec57d087044f247fa5046" prot="private" static="no" mutable="no">
-        <type>ashes::Buffer&lt; castor::Point2f &gt; const  &amp;</type>
-        <definition>ashes::Buffer&lt; castor::Point2f &gt; const&amp; castor3d::RsmInterpolatePass::m_rsmSamplesSsbo</definition>
-        <argsstring></argsstring>
-        <name>m_rsmSamplesSsbo</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" line="53" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" bodystart="53" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d3a/a04891_1a4dd4106b8b4d0f099e0894cc650e6976" prot="private" static="no" mutable="no">
-        <type><ref refid="d8/dbd/a05291" kindref="compound">ShaderModule</ref></type>
-        <definition>ShaderModule castor3d::RsmInterpolatePass::m_vertexShader</definition>
-        <argsstring></argsstring>
-        <name>m_vertexShader</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" line="54" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" bodystart="54" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d3a/a04891_1ad0e039b1cfc6cb610a3be6931759204a" prot="private" static="no" mutable="no">
-        <type><ref refid="d8/dbd/a05291" kindref="compound">ShaderModule</ref></type>
-        <definition>ShaderModule castor3d::RsmInterpolatePass::m_pixelShader</definition>
-        <argsstring></argsstring>
-        <name>m_pixelShader</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" line="55" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" bodystart="55" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d3a/a04891_1ae30a1c835b8b0f9fee4e203d4f032c8c" prot="private" static="no" mutable="no">
-        <type>ashes::RenderPassPtr</type>
-        <definition>ashes::RenderPassPtr castor3d::RsmInterpolatePass::m_renderPass</definition>
-        <argsstring></argsstring>
-        <name>m_renderPass</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" line="56" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" bodystart="56" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d3a/a04891_1acb481785347cffe0720d75ee89fdb327" prot="private" static="no" mutable="no">
-        <type>ashes::FrameBufferPtr</type>
-        <definition>ashes::FrameBufferPtr castor3d::RsmInterpolatePass::m_frameBuffer</definition>
-        <argsstring></argsstring>
-        <name>m_frameBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" line="57" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" bodystart="57" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d3a/a04891_1a15259bb5ac18fae949e16bb921fefed6" prot="private" static="no" mutable="no">
-        <type>RenderPassTimerSPtr</type>
-        <definition>RenderPassTimerSPtr castor3d::RsmInterpolatePass::m_timer</definition>
-        <argsstring></argsstring>
-        <name>m_timer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" line="58" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" bodystart="58" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d3a/a04891_1a101d1f1dcb9a29108d5401b9baf4ee52" prot="private" static="no" mutable="no">
-        <type><ref refid="dd/d20/a04359" kindref="compound">CommandsSemaphore</ref></type>
-        <definition>CommandsSemaphore castor3d::RsmInterpolatePass::m_commands</definition>
-        <argsstring></argsstring>
-        <name>m_commands</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" line="59" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" bodystart="59" bodyend="-1"/>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="50" column="12" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="50" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d3/d3a/a04891_1ae2e7dd8df7703bdb286b230167383830" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d3/d3a/a04891_1aa4b3985e56b89eb774c91422268f503f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::RsmInterpolatePass::RsmInterpolatePass</definition>
-        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, LightCache const &amp;lightCache, LightType lightType, VkExtent2D const &amp;size, GpInfoUbo const &amp;gpInfoUbo, OpaquePassResult const &amp;gpResult, ShadowMapResult const &amp;smResult, RsmConfigUbo const &amp;rsmConfigUbo, ashes::Buffer&lt; castor::Point2f &gt; const &amp;rsmSamplesSsbo, TextureUnit const &amp;gi, TextureUnit const &amp;nml, TextureUnit const &amp;dst)</argsstring>
-        <name>RsmInterpolatePass</name>
+        <definition>C3D_API castor3d::shader::HdrConfigData::HdrConfigData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>HdrConfigData</name>
+        <qualifiedname>castor3d::shader::HdrConfigData::HdrConfigData</qualifiedname>
         <param>
-          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
         </param>
         <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
         </param>
         <param>
-          <type><ref refid="d7/dd1/a01458_1a563d137a64a10483b6a4ba4b5174d05d" kindref="member">LightCache</ref> const &amp;</type>
-          <declname>lightCache</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/dd1/a01458_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
-          <declname>lightType</declname>
-        </param>
-        <param>
-          <type>VkExtent2D const &amp;</type>
-          <declname>size</declname>
-        </param>
-        <param>
-          <type><ref refid="dd/d83/a05443" kindref="compound">GpInfoUbo</ref> const &amp;</type>
-          <declname>gpInfoUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="da/d9f/a04859" kindref="compound">OpaquePassResult</ref> const &amp;</type>
-          <declname>gpResult</declname>
-        </param>
-        <param>
-          <type><ref refid="db/dc1/a04671" kindref="compound">ShadowMapResult</ref> const &amp;</type>
-          <declname>smResult</declname>
-        </param>
-        <param>
-          <type><ref refid="d6/d15/a05503" kindref="compound">RsmConfigUbo</ref> const &amp;</type>
-          <declname>rsmConfigUbo</declname>
-        </param>
-        <param>
-          <type>ashes::Buffer&lt; castor::Point2f &gt; const &amp;</type>
-          <declname>rsmSamplesSsbo</declname>
-        </param>
-        <param>
-          <type><ref refid="d8/dd7/a02643" kindref="compound">TextureUnit</ref> const &amp;</type>
-          <declname>gi</declname>
-        </param>
-        <param>
-          <type><ref refid="d8/dd7/a02643" kindref="compound">TextureUnit</ref> const &amp;</type>
-          <declname>nml</declname>
-        </param>
-        <param>
-          <type><ref refid="d8/dd7/a02643" kindref="compound">TextureUnit</ref> const &amp;</type>
-          <declname>dst</declname>
+          <type>bool</type>
+          <declname>enabled</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -252,16 +59,19 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" line="27" column="1"/>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="23" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d3/d3a/a04891_1a5b098109d78cdd96fae041d6dd0d8e12" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Semaphore const  &amp;</type>
-        <definition>C3D_API ashes::Semaphore const&amp; castor3d::RsmInterpolatePass::compute</definition>
-        <argsstring>(ashes::Semaphore const &amp;toWait) const</argsstring>
-        <name>compute</name>
+      <memberdef kind="function" id="d3/d3a/a04891_1aa5fd6284c030c07bec5cd60563c3660c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::HdrConfigData::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, HdrConfigData)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::HdrConfigData::SDW_DeclStructInstance</qualifiedname>
         <param>
-          <type>ashes::Semaphore const &amp;</type>
-          <declname>toWait</declname>
+          <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        </param>
+        <param>
+          <type><ref refid="d3/d3a/a04891" kindref="compound">HdrConfigData</ref></type>
         </param>
         <briefdescription>
         </briefdescription>
@@ -269,20 +79,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" line="40" column="1"/>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="26" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="d3/d3a/a04891_1a6c8f1d1cd04e442e9546dea39a9525ca" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dd/d20/a04359" kindref="compound">CommandsSemaphore</ref></type>
-        <definition>C3D_API CommandsSemaphore castor3d::RsmInterpolatePass::getCommands</definition>
-        <argsstring>(RenderPassTimer const &amp;timer, uint32_t index) const</argsstring>
-        <name>getCommands</name>
+      <memberdef kind="function" id="d3/d3a/a04891_1a6000f9a1f644604620451d2e96c4a6c8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::HdrConfigData::removeGamma</definition>
+        <argsstring>(sdw::Vec3 const &amp;srgb) const</argsstring>
+        <name>removeGamma</name>
+        <qualifiedname>castor3d::shader::HdrConfigData::removeGamma</qualifiedname>
         <param>
-          <type><ref refid="d7/db9/a04591" kindref="compound">RenderPassTimer</ref> const &amp;</type>
-          <declname>timer</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>srgb</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -290,16 +97,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" line="41" column="1"/>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="31" column="19"/>
       </memberdef>
-      <memberdef kind="function" id="d3/d3a/a04891_1a56eb31827ce8118578b1a706e6966955" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RsmInterpolatePass::accept</definition>
-        <argsstring>(PipelineVisitorBase &amp;visitor)</argsstring>
-        <name>accept</name>
+      <memberdef kind="function" id="d3/d3a/a04891_1aa86b1a7cda6a33a6d42b7ceecbb030eb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::HdrConfigData::applyGamma</definition>
+        <argsstring>(sdw::Vec3 const &amp;hdr) const</argsstring>
+        <name>applyGamma</name>
+        <qualifiedname>castor3d::shader::HdrConfigData::applyGamma</qualifiedname>
         <param>
-          <type><ref refid="d7/dab/a03815" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
-          <declname>visitor</declname>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>hdr</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -307,7 +115,73 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" line="43" column="1"/>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="32" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d3a/a04891_1a2576a3e710aca8bc82b79251031a6346" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Float const &amp;</type>
+        <definition>sdw::Float const  &amp; castor3d::shader::HdrConfigData::getExposure</definition>
+        <argsstring>() const</argsstring>
+        <name>getExposure</name>
+        <qualifiedname>castor3d::shader::HdrConfigData::getExposure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="34" column="19" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="34" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d3a/a04891_1ad09c077e6ddf9d6fa57569132be85ab1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Float const &amp;</type>
+        <definition>sdw::Float const  &amp; castor3d::shader::HdrConfigData::getGamma</definition>
+        <argsstring>() const</argsstring>
+        <name>getGamma</name>
+        <qualifiedname>castor3d::shader::HdrConfigData::getGamma</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="39" column="19" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="39" bodyend="42"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d3/d3a/a04891_1ac7711ab0654723a9d18d0305e786036d" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
+        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::HdrConfigData::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::HdrConfigData::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="28" column="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d3a/a04891_1a6920224d376eaae015d791630cfca431" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::HdrConfigData::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::HdrConfigData::declare</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="29" column="32"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -315,138 +189,39 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="3206">
-        <label>castor3d::RenderQuad</label>
-        <link refid="da/d95/a04435"/>
-        <childnode refid="3207" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3205">
-        <label>castor3d::RsmInterpolatePass</label>
+      <node id="1">
+        <label>castor3d::shader::HdrConfigData</label>
         <link refid="d3/d3a/a04891"/>
-        <childnode refid="3206" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="3207">
-        <label>Named</label>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="3211">
-        <label>castor3d::RenderSystem</label>
-        <link refid="d6/d55/a04603"/>
-        <childnode refid="3212" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3209">
-        <label>castor3d::RenderQuad</label>
-        <link refid="da/d95/a04435"/>
-        <childnode refid="3210" relation="public-inheritance">
-        </childnode>
-        <childnode refid="3211" relation="usage">
-          <edgelabel>m_renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="3213" relation="usage">
-          <edgelabel>m_device</edgelabel>
-        </childnode>
-      </node>
-      <node id="3216">
-        <label>T</label>
-      </node>
-      <node id="3218">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="3216" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="3215">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="3216" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="3217">
-        <label>std::vector&lt; ashes::CommandPoolPtr &gt;</label>
-        <childnode refid="3218" relation="template-instance">
-          <edgelabel>&lt; ashes::CommandPoolPtr &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3214">
-        <label>std::array&lt; uint32_t, 4u &gt;</label>
-        <childnode refid="3215" relation="template-instance">
-          <edgelabel>&lt; uint32_t, 4u &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3208">
-        <label>castor3d::RsmInterpolatePass</label>
+      <node id="1">
+        <label>castor3d::shader::HdrConfigData</label>
         <link refid="d3/d3a/a04891"/>
-        <childnode refid="3209" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="3210">
-        <label>Named</label>
-      </node>
-      <node id="3212">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="3213">
-        <label>castor3d::RenderDevice</label>
-        <link refid="de/ddb/a04491"/>
-        <childnode refid="3214" relation="usage">
-          <edgelabel>queueFamiliesIndex</edgelabel>
-        </childnode>
-        <childnode refid="3211" relation="usage">
-          <edgelabel>renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="3217" relation="usage">
-          <edgelabel>commandPools</edgelabel>
-        </childnode>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </collaborationgraph>
-    <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" line="25" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp" bodystart="23" bodyend="60"/>
+    <location file="Shader/Ubos/HdrConfigUbo.hpp" line="20" column="1" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="22" bodyend="51"/>
     <listofallmembers>
-      <member refid="d3/d3a/a04891_1a56eb31827ce8118578b1a706e6966955" prot="public" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>accept</name></member>
-      <member refid="da/d95/a04435_1ab31f1f028639e2280dc81a5207c19361" prot="public" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>cleanup</name></member>
-      <member refid="d3/d3a/a04891_1a5b098109d78cdd96fae041d6dd0d8e12" prot="public" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>compute</name></member>
-      <member refid="da/d95/a04435_1a2d8f7fe31e95ec7563ab7e49d47f847f" prot="public" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>createPipeline</name></member>
-      <member refid="da/d95/a04435_1a9eed2ab1f518d2d215e10f79dd66b980" prot="public" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>createPipelineAndPass</name></member>
-      <member refid="d3/d3a/a04891_1a6c8f1d1cd04e442e9546dea39a9525ca" prot="public" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>getCommands</name></member>
-      <member refid="da/d95/a04435_1a208ae566cd29dc14e874ec5381a40676" prot="public" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>getDevice</name></member>
-      <member refid="da/d95/a04435_1adf3b0cdd23bb9558df6d7f1b87b74ac6" prot="public" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>getRenderSystem</name></member>
-      <member refid="da/d95/a04435_1a2b4ea1f81bda3deace1e6f5b159f90db" prot="public" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>getSampler</name></member>
-      <member refid="da/d95/a04435_1a434520ea0e0f0a1ae885e7c9e19306a8" prot="public" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>initialisePasses</name></member>
-      <member refid="d3/d3a/a04891_1a101d1f1dcb9a29108d5401b9baf4ee52" prot="private" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>m_commands</name></member>
-      <member refid="da/d95/a04435_1ac07074df6fa0bb86ec6e9c76bf23f867" prot="protected" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>m_config</name></member>
-      <member refid="da/d95/a04435_1a0e0d911b83650f310a1d773e6774788c" prot="protected" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>m_device</name></member>
-      <member refid="d3/d3a/a04891_1acb481785347cffe0720d75ee89fdb327" prot="private" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>m_frameBuffer</name></member>
-      <member refid="d3/d3a/a04891_1aeecd79d45c0b18a0323affd5efd430e1" prot="private" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>m_gi</name></member>
-      <member refid="d3/d3a/a04891_1a1a010b7e50f02e55109f702cc4efb3d0" prot="private" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>m_gpInfo</name></member>
-      <member refid="d3/d3a/a04891_1a7d45eed13afbb02f18d7c71729edc9a1" prot="private" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>m_gpResult</name></member>
-      <member refid="d3/d3a/a04891_1aff9d598e2049e08a326ac8c1a3c8d281" prot="private" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>m_lightCache</name></member>
-      <member refid="d3/d3a/a04891_1ace6470e84519c451a27fa4d90c412c51" prot="private" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>m_nml</name></member>
-      <member refid="d3/d3a/a04891_1ad0e039b1cfc6cb610a3be6931759204a" prot="private" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>m_pixelShader</name></member>
-      <member refid="d3/d3a/a04891_1ae30a1c835b8b0f9fee4e203d4f032c8c" prot="private" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>m_renderPass</name></member>
-      <member refid="da/d95/a04435_1a67e531e63c3eef4d22c89cd5dcf26d39" prot="protected" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>m_renderSystem</name></member>
-      <member refid="d3/d3a/a04891_1aaa999aaf7b1960876803961956e38367" prot="private" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>m_rsmConfigUbo</name></member>
-      <member refid="d3/d3a/a04891_1ad36105efd01ec57d087044f247fa5046" prot="private" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>m_rsmSamplesSsbo</name></member>
-      <member refid="da/d95/a04435_1ac424bcc12b49f4788b6a78e181e7d8c9" prot="protected" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>m_sampler</name></member>
-      <member refid="d3/d3a/a04891_1a3f0958db4668d123d9233c19433814a0" prot="private" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>m_smResult</name></member>
-      <member refid="d3/d3a/a04891_1a15259bb5ac18fae949e16bb921fefed6" prot="private" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>m_timer</name></member>
-      <member refid="d3/d3a/a04891_1a4dd4106b8b4d0f099e0894cc650e6976" prot="private" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>m_vertexShader</name></member>
-      <member refid="da/d95/a04435_1aba30b821ed0f043349148de3f91e1e28" prot="public" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1abb76aa593ad380a88d949bd26fea0202" prot="public" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1a612d681d62631e6bb92d9601c660b48e" prot="public" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1af64b5bc8b9a9a3013e46accb200156f5" prot="public" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1a43bab20a96e9bea365bc98d8667c977e" prot="public" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1afacd916c61c3a5b315a0d3e94a8ba84d" prot="public" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1a046a2ac1ba39bbd6114dfe87d4aaaf11" prot="public" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>makeDescriptorWrite</name></member>
-      <member refid="da/d95/a04435_1ac0cf400425c8050429e895099c971715" prot="public" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>registerPass</name></member>
-      <member refid="da/d95/a04435_1a62f21f0ecc9017c47eb029d0bc19e396" prot="public" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>registerPass</name></member>
-      <member refid="da/d95/a04435_1a367adcd9b6cc6ac6b1c68a28b2580eb2" prot="public" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>registerPassInputs</name></member>
-      <member refid="da/d95/a04435_1a48a49fffd036c545328e87e1449e141d" prot="protected" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>RenderQuad</name></member>
-      <member refid="da/d95/a04435_1aeaeeae8d7065de723f0a710360bab119" prot="public" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>RenderQuad</name></member>
-      <member refid="d3/d3a/a04891_1ae2e7dd8df7703bdb286b230167383830" prot="public" virt="non-virtual"><scope>castor3d::RsmInterpolatePass</scope><name>RsmInterpolatePass</name></member>
-      <member refid="da/d95/a04435_1a8a01faf0243638f02d6f052ff9e85b4b" prot="public" virt="virtual"><scope>castor3d::RsmInterpolatePass</scope><name>~RenderQuad</name></member>
+      <member refid="d3/d3a/a04891_1aa86b1a7cda6a33a6d42b7ceecbb030eb" prot="public" virt="non-virtual"><scope>castor3d::shader::HdrConfigData</scope><name>applyGamma</name></member>
+      <member refid="d3/d3a/a04891_1a6920224d376eaae015d791630cfca431" prot="public" virt="non-virtual"><scope>castor3d::shader::HdrConfigData</scope><name>declare</name></member>
+      <member refid="d3/d3a/a04891_1a2576a3e710aca8bc82b79251031a6346" prot="public" virt="non-virtual"><scope>castor3d::shader::HdrConfigData</scope><name>getExposure</name></member>
+      <member refid="d3/d3a/a04891_1ad09c077e6ddf9d6fa57569132be85ab1" prot="public" virt="non-virtual"><scope>castor3d::shader::HdrConfigData</scope><name>getGamma</name></member>
+      <member refid="d3/d3a/a04891_1aa4b3985e56b89eb774c91422268f503f" prot="public" virt="non-virtual"><scope>castor3d::shader::HdrConfigData</scope><name>HdrConfigData</name></member>
+      <member refid="d3/d3a/a04891_1ac9b1139dea1f2ca136900262e46920b3" prot="private" virt="non-virtual"><scope>castor3d::shader::HdrConfigData</scope><name>m_exposure</name></member>
+      <member refid="d3/d3a/a04891_1a6a6e0ba9011bb3a2c8aabe1c102097d5" prot="private" virt="non-virtual"><scope>castor3d::shader::HdrConfigData</scope><name>m_gamma</name></member>
+      <member refid="d3/d3a/a04891_1ac7711ab0654723a9d18d0305e786036d" prot="public" virt="non-virtual"><scope>castor3d::shader::HdrConfigData</scope><name>makeType</name></member>
+      <member refid="d3/d3a/a04891_1a6000f9a1f644604620451d2e96c4a6c8" prot="public" virt="non-virtual"><scope>castor3d::shader::HdrConfigData</scope><name>removeGamma</name></member>
+      <member refid="d3/d3a/a04891_1aa5fd6284c030c07bec5cd60563c3660c" prot="public" virt="non-virtual"><scope>castor3d::shader::HdrConfigData</scope><name>SDW_DeclStructInstance</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

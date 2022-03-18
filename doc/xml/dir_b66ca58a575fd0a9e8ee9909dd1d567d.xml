@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_b66ca58a575fd0a9e8ee9909dd1d567d" kind="dir">
     <compoundname>Render/PostEffect</compoundname>
-    <innerfile refid="d8/dba/a00773">PostEffect.hpp</innerfile>
-    <innerfile refid="d9/dd4/a00776">PostEffectFactory.hpp</innerfile>
-    <innerfile refid="d3/d95/a00779">PostEffectModule.hpp</innerfile>
-    <innerfile refid="da/d96/a00782">PostEffectSurface.hpp</innerfile>
+    <innerfile refid="d3/d00/a00785">PostEffect.hpp</innerfile>
+    <innerfile refid="df/d0c/a00788">PostEffectFactory.hpp</innerfile>
+    <innerfile refid="d4/d45/a00791">PostEffectModule.hpp</innerfile>
+    <innerfile refid="d5/d12/a00794">PostEffectSurface.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

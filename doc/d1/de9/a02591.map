@@ -1,5 +1,4 @@
-<map id="castor3d::MetallicRoughnessPbrPass" name="castor3d::MetallicRoughnessPbrPass">
-<area shape="rect" id="node1" title=" " alt="" coords="6,155,197,196"/>
-<area shape="rect" id="node2" href="$df/d5d/a02596.html" title=" " alt="" coords="46,80,157,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,197,32"/>
+<map id="castor3d::UniformBufferPool" name="castor3d::UniformBufferPool">
+<area shape="rect" id="node1" title=" " alt="" coords="30,80,213,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,237,32"/>
 </map>

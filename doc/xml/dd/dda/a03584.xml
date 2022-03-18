@@ -1,33 +1,104 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dd/dda/a03584" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPhysicalDeviceShadingRateImagePropertiesNV &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="dd/dda/a03584_1a5a82438dde7d0983df57256bb78a130d" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPhysicalDeviceShadingRateImagePropertiesNV &gt;::value</definition>
-        <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADING_RATE_IMAGE_PROPERTIES_NV</initializer>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dd/dda/a03584" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::OverlayVisitor</compoundname>
+    <derivedcompoundref refid="d9/d79/a03564" prot="public" virt="non-virtual">castor3d::OverlayRenderer::Preparer</derivedcompoundref>
+    <includes local="no">OverlayVisitor.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/dda/a03584_1ab177d0be7b6eb0efc27240c929ee9c90" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::OverlayVisitor::~OverlayVisitor</definition>
+        <argsstring>()=default</argsstring>
+        <name>~OverlayVisitor</name>
+        <qualifiedname>castor3d::OverlayVisitor::~OverlayVisitor</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="307" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="307" bodyend="-1"/>
+        <location file="Overlay/OverlayVisitor.hpp" line="14" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dda/a03584_1ae2d7c4f7df14a0ed05e5cc4f5870e701" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::OverlayVisitor::visit</definition>
+        <argsstring>(PanelOverlay const &amp;overlay)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::OverlayVisitor::visit</qualifiedname>
+        <reimplementedby refid="d9/d79/a03564_1ab329d3757df8f98db5913beb3f81e43b">visit</reimplementedby>
+        <param>
+          <type><ref refid="de/d51/a03588" kindref="compound">PanelOverlay</ref> const &amp;</type>
+          <declname>overlay</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayVisitor.hpp" line="15" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dda/a03584_1a5d126de418a8ae350b89dfface6aac4c" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::OverlayVisitor::visit</definition>
+        <argsstring>(BorderPanelOverlay const &amp;overlay)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::OverlayVisitor::visit</qualifiedname>
+        <reimplementedby refid="d9/d79/a03564_1a83d1827a4589cf052e5dc18e30cd20b5">visit</reimplementedby>
+        <param>
+          <type><ref refid="d8/d3d/a03492" kindref="compound">BorderPanelOverlay</ref> const &amp;</type>
+          <declname>overlay</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayVisitor.hpp" line="16" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dda/a03584_1a7adc92b8b93307b1ba2b5a784488e918" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::OverlayVisitor::visit</definition>
+        <argsstring>(TextOverlay const &amp;overlay)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::OverlayVisitor::visit</qualifiedname>
+        <reimplementedby refid="d9/d79/a03564_1ac8982edcec00df52b60feeed6adfaa70">visit</reimplementedby>
+        <param>
+          <type><ref refid="d8/d1b/a03592" kindref="compound">TextOverlay</ref> const &amp;</type>
+          <declname>overlay</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayVisitor.hpp" line="17" column="22"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="307" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="307" bodyend="307"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::OverlayRenderer::Preparer</label>
+        <link refid="d9/d79/a03564"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::OverlayVisitor</label>
+        <link refid="dd/dda/a03584"/>
+      </node>
+    </inheritancegraph>
+    <location file="Overlay/OverlayVisitor.hpp" line="11" column="1" bodyfile="Overlay/OverlayVisitor.hpp" bodystart="12" bodyend="18"/>
     <listofallmembers>
-      <member refid="dd/dda/a03584_1a5a82438dde7d0983df57256bb78a130d" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPhysicalDeviceShadingRateImagePropertiesNV &gt;</scope><name>value</name></member>
+      <member refid="dd/dda/a03584_1ae2d7c4f7df14a0ed05e5cc4f5870e701" prot="public" virt="pure-virtual"><scope>castor3d::OverlayVisitor</scope><name>visit</name></member>
+      <member refid="dd/dda/a03584_1a5d126de418a8ae350b89dfface6aac4c" prot="public" virt="pure-virtual"><scope>castor3d::OverlayVisitor</scope><name>visit</name></member>
+      <member refid="dd/dda/a03584_1a7adc92b8b93307b1ba2b5a784488e918" prot="public" virt="pure-virtual"><scope>castor3d::OverlayVisitor</scope><name>visit</name></member>
+      <member refid="dd/dda/a03584_1ab177d0be7b6eb0efc27240c929ee9c90" prot="public" virt="virtual"><scope>castor3d::OverlayVisitor</scope><name>~OverlayVisitor</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

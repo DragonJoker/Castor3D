@@ -1,103 +1,73 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d4/de8/a04646" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::ShadowMap::PassData</compoundname>
-    <includes local="no">ShadowMap.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d4/de8/a04646_1a1ffa8e192e90f7b60ec4101177d96352" prot="public" static="no" mutable="no">
-        <type>std::unique_ptr&lt; <ref refid="d2/d30/a05490" kindref="compound">MatrixUbo</ref> &gt;</type>
-        <definition>std::unique_ptr&lt; MatrixUbo &gt; castor3d::ShadowMap::PassData::matrixUbo</definition>
+    <compoundname>castor3d::SceneNodeAttacherT</compoundname>
+    <includes local="no">SceneNode.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename CacheT</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d4/de8/a04646_1ad222b47671d36f3244fee9efc56f523b" prot="public" static="no">
+        <type>typename CacheT::ElementT</type>
+        <definition>using castor3d::SceneNodeAttacherT&lt; CacheT &gt;::ElementT =  typename CacheT::ElementT</definition>
         <argsstring></argsstring>
-        <name>matrixUbo</name>
+        <name>ElementT</name>
+        <qualifiedname>castor3d::SceneNodeAttacherT::ElementT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMap.hpp" line="26" column="1" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="26" bodyend="-1"/>
+        <location file="Scene/SceneNode.hpp" line="333" column="1" bodyfile="Scene/SceneNode.hpp" bodystart="333" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d4/de8/a04646_1a4336e9fa692ced4edf49a884e521dccb" prot="public" static="no" mutable="no">
-        <type>CameraSPtr</type>
-        <definition>CameraSPtr castor3d::ShadowMap::PassData::camera</definition>
-        <argsstring></argsstring>
-        <name>camera</name>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/de8/a04646_1a4cbab95db29196e7c804cee7a77240cb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneNodeAttacherT&lt; CacheT &gt;::operator()</definition>
+        <argsstring>(ElementT &amp;element, SceneNode &amp;parent, SceneNodeSPtr rootNode, SceneNodeSPtr rootCameraNode, SceneNodeSPtr rootObjectNode)</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor3d::SceneNodeAttacherT::operator()</qualifiedname>
+        <param>
+          <type><ref refid="d4/de8/a04646_1ad222b47671d36f3244fee9efc56f523b" kindref="member">ElementT</ref> &amp;</type>
+          <declname>element</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d6a/a04642" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>parent</declname>
+        </param>
+        <param>
+          <type>SceneNodeSPtr</type>
+          <declname>rootNode</declname>
+        </param>
+        <param>
+          <type>SceneNodeSPtr</type>
+          <declname>rootCameraNode</declname>
+        </param>
+        <param>
+          <type>SceneNodeSPtr</type>
+          <declname>rootObjectNode</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMap.hpp" line="27" column="1" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="27" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/de8/a04646_1a337ed1e63511a39d4587c17ca0a2ef09" prot="public" static="no" mutable="no">
-        <type>SceneCullerUPtr</type>
-        <definition>SceneCullerUPtr castor3d::ShadowMap::PassData::culler</definition>
-        <argsstring></argsstring>
-        <name>culler</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMap.hpp" line="28" column="1" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="28" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/de8/a04646_1a3c1f79fe7756d392e1eda3b04fbf671b" prot="public" static="no" mutable="no">
-        <type>ShadowMapPassSPtr</type>
-        <definition>ShadowMapPassSPtr castor3d::ShadowMap::PassData::pass</definition>
-        <argsstring></argsstring>
-        <name>pass</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ShadowMap/ShadowMap.hpp" line="29" column="1" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="29" bodyend="-1"/>
+        <location file="Scene/SceneNode.hpp" line="335" column="6" bodyfile="Scene/SceneNode.hpp" bodystart="335" bodyend="342"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="3650">
-        <label>T</label>
-      </node>
-      <node id="3649">
-        <label>std::unique_ptr&lt; T &gt;</label>
-        <childnode refid="3650" relation="usage">
-          <edgelabel>ptr</edgelabel>
-        </childnode>
-      </node>
-      <node id="3647">
-        <label>std::unique_ptr&lt; castor3d::MatrixUbo &gt;</label>
-        <childnode refid="3648" relation="usage">
-          <edgelabel>ptr</edgelabel>
-        </childnode>
-        <childnode refid="3649" relation="template-instance">
-          <edgelabel>&lt; castor3d::MatrixUbo &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3648">
-        <label>castor3d::MatrixUbo</label>
-        <link refid="d2/d30/a05490"/>
-      </node>
-      <node id="3646">
-        <label>castor3d::ShadowMap::PassData</label>
-        <link refid="d4/de8/a04646"/>
-        <childnode refid="3647" relation="usage">
-          <edgelabel>matrixUbo</edgelabel>
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Render/ShadowMap/ShadowMap.hpp" line="25" column="1" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="24" bodyend="30"/>
+    <location file="Scene/SceneNode.hpp" line="331" column="1" bodyfile="Scene/SceneNode.hpp" bodystart="332" bodyend="343"/>
     <listofallmembers>
-      <member refid="d4/de8/a04646_1a4336e9fa692ced4edf49a884e521dccb" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::PassData</scope><name>camera</name></member>
-      <member refid="d4/de8/a04646_1a337ed1e63511a39d4587c17ca0a2ef09" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::PassData</scope><name>culler</name></member>
-      <member refid="d4/de8/a04646_1a1ffa8e192e90f7b60ec4101177d96352" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::PassData</scope><name>matrixUbo</name></member>
-      <member refid="d4/de8/a04646_1a3c1f79fe7756d392e1eda3b04fbf671b" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::PassData</scope><name>pass</name></member>
+      <member refid="d4/de8/a04646_1ad222b47671d36f3244fee9efc56f523b" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAttacherT</scope><name>ElementT</name></member>
+      <member refid="d4/de8/a04646_1a4cbab95db29196e7c804cee7a77240cb" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAttacherT</scope><name>operator()</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

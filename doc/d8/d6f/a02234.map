@@ -1,6 +1,4 @@
-<map id="castor3d::BinaryWriter&lt; SkeletonAnimationObject &gt;" name="castor3d::BinaryWriter&lt; SkeletonAnimationObject &gt;">
-<area shape="rect" id="node1" title="SkeletonAnimationObject binary loader." alt="" coords="5,289,199,331"/>
-<area shape="rect" id="node2" href="$dd/d3f/a02156.html" title=" " alt="" coords="5,199,199,240"/>
-<area shape="rect" id="node3" href="$d8/dd8/a02108.html" title=" " alt="" coords="57,5,211,32"/>
-<area shape="rect" id="node4" href="$dd/d3f/a02156.html" title="Binary data chunk writer base class." alt="" coords="163,95,345,136"/>
+<map id="castor3d::InterpolatorT&lt; Type, Mode &gt;" name="castor3d::InterpolatorT&lt; Type, Mode &gt;">
+<area shape="rect" id="node1" title="Template class which handles the interpolations, would it be quaternion, point, real,..." alt="" coords="25,5,176,47"/>
+<area shape="rect" id="node2" href="$d5/d5b/a02235.html" title=" " alt="" coords="5,124,196,180"/>
 </map>

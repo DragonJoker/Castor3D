@@ -1,33 +1,1915 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d7/d8a/a02830" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkWriteDescriptorSet &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d7/d8a/a02830_1af2b067276aba345a2825c0132749cd11" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkWriteDescriptorSet &gt;::value</definition>
-        <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET</initializer>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d7/d8a/a02830" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::PassVisitor</compoundname>
+    <basecompoundref refid="d1/de5/a02822" prot="public" virt="non-virtual">castor3d::PassVisitorBase</basecompoundref>
+    <includes local="no">PassVisitor.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d7/d8a/a02830_1a819d4d77db7bfa2697a751fc00b9e273" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, bool &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a6544497880da7fd36b435ed5ca563975">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>bool &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Global post effect configuration. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="178" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="178" bodyend="182"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a359aaceb92faaa6acba306ce11e617aa" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, int16_t &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a4900236f8c9a7200a6068ba344d2e044">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>int16_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="49" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="49" bodyend="-1"/>
+        <location file="Material/Pass/PassVisitor.hpp" line="184" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="184" bodyend="188"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1aaabad3426ff7559eb3cb8fa1d6791769" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, uint16_t &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1abc40d4fa446255aeacfdfc2e976c7870">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint16_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="190" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="190" bodyend="194"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a1cfd3196612dbe7b74b5de42cf0da82d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, int32_t &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a60baffa7c01e78e1e6cab9f821851cd3">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>int32_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="196" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="196" bodyend="200"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a14241ab827a6ad0d5a20f2d84e22dcaa" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, uint32_t &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a8cafb163ec7e20d5a989adabb568b6fd">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="202" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="202" bodyend="206"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1ac6f0519ab7ac1f35c7518800dcbf6384" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, int64_t &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1aa7ec069ac2337b41f896845cc7fcdb9a">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>int64_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="208" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="208" bodyend="212"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a7a6ebe3282463f39e099e87753846200" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, uint64_t &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a8d0b10d96f01719b4670708a8f2e0b7e">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint64_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="214" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="214" bodyend="218"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1aeab09a6e1705fc33d5bab050c81c5139" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, float &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a325239e28d199a6e1e758d94c70045c5">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>float &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="220" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="220" bodyend="224"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1ae9c32feda9f9537a171a50f3f0fd1218" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, double &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1ab3b538c9635fe2ddb3df2747794e2251">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="226" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="226" bodyend="230"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1ad9b02987e293644ecdb2ffb6dedb06b8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, BlendMode &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a136584f763631cad5b1002f921592078">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref> &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="232" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="232" bodyend="236"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1afc308ab6cc296ae79e44e6c795c16d18" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, ParallaxOcclusionMode &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1aa722d37469875c168cf2e7fb3bb6b5a8">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a808c81c0da4ffd2515292e95b6b4c124" kindref="member">ParallaxOcclusionMode</ref> &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="238" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="238" bodyend="242"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a15a729e60ef3c61e108ae1202236981e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, PassFlags &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a1706f736e458b9b5e9c3804e05badd74">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref> &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="244" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="244" bodyend="248"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a3e2b1defc25900bdd1687116dc9f8733" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkCompareOp &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1ab7015359759a56e073f405ea7c0807d7">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkCompareOp &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="250" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="250" bodyend="254"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a5aefaa6a1b11a004c95850c7367ac5c5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RgbColour &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1af4b0facac973fb471f084fc8fd8155ed">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RgbColour &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="256" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="256" bodyend="260"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1aae55688034b76de42dd686aaf6696767" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RgbaColour &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a1e686a904cd9af044be6c424c357eef9">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RgbaColour &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="262" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="262" bodyend="266"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a6929617ace25301a75595dd76d8273a4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::HdrRgbColour &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1aa689cff91aa4f5bea9937570dddafd1a">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::HdrRgbColour &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="268" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="268" bodyend="272"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a5bbc15c2dae2609f7cccd480f067ce9a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::HdrRgbaColour &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a4d0ae0e2a57b75f4d974640f47477cb9">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::HdrRgbaColour &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="274" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="274" bodyend="278"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1ae0691a12236c5218b27eb70adf24fc23" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point2f &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a6e782592f789963bc89690e91ac290fc">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point2f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="280" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="280" bodyend="284"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1ac81af7bd6c18408808f2766e146c2d35" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point2i &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a7eacdf4ae082cd1fbfba1b4393d72d35">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point2i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="286" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="286" bodyend="290"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a1668f27de733cd0362dff49823631c9b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point2ui &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a316518a9f8bd3ce7152d4dc0ce34d304">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point2ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="292" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="292" bodyend="296"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a0a5e72cf6f7bdf096b9ad876389a6b9b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point3f &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1ae46a7e0430f2087e2d9db754e6ae6de4">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point3f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="298" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="298" bodyend="302"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a5b8411725fbd061e9da1e87be560e7dd" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point3i &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a7569d912fed95b96c5354bb1714c5a64">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point3i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="304" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="304" bodyend="308"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a81a5fd1fe50a0d85316a0466ff4193d5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point3ui &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1ac789988f8f5c9a0d7b56bb1b4a9f6749">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point3ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="310" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="310" bodyend="314"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a0ee8667994709b5e87dfc77857402af3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point4f &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a0211cab7391e6b9cfa4ec1ddc46f63c6">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point4f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="316" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="316" bodyend="320"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1ae22ec4f52572888fded124dc40d56661" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point4i &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a61b9a1829464429feb4cb007f7d5c97a">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point4i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="322" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="322" bodyend="326"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a2575b4ee6176186adcd761a3a7df4d26" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point4ui &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1aa9aecfc3f6600f4335eaf12e745d1389">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point4ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="328" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="328" bodyend="332"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a029d2be67e1a68493e286532cc6a5892" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Matrix4x4f &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1acd119e176dcb265c2cfec36b5f59161a">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="334" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="334" bodyend="338"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a6a387868b505909de1e48bcb5a62d5b4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RangedValue&lt; float &gt; &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1abe8918d682ef830f3d97fe70cafd8195">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; float &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="340" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="340" bodyend="344"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1aace8e5ad19c24834919d1c2d380e0a67" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RangedValue&lt; int32_t &gt; &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a21360bf55f2b3d14c237d673abb8fae5">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; int32_t &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="346" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="346" bodyend="350"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a1fec830e9cfa9190bfbb6e09a2edd524" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RangedValue&lt; uint32_t &gt; &amp;value, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1ad55d5233d232d4bde68809ca743aa8f8">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; uint32_t &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="352" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="352" bodyend="356"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1ad895039734757d30d9927b22229fdee0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PassVisitor::visit</definition>
+        <argsstring>(castor::String const &amp;name, TextureFlag textureFlag, castor::Point2ui &amp;value, uint32_t componentsCount, bool *control) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1af3d5ac5b1a820312db33604dac4d1707">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1ae3a32e32f3eaa63d0b9886aa3e942742" kindref="member">TextureFlag</ref></type>
+          <declname>textureFlag</declname>
+        </param>
+        <param>
+          <type>castor::Point2ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>componentsCount</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="358" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="358" bodyend="364"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d7/d8a/a02830_1a0ca2bfde381c1a188ea17ff0ce2bc57c" prot="protected" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::PassVisitor::PassVisitor</definition>
+        <argsstring>(Config config)</argsstring>
+        <name>PassVisitor</name>
+        <qualifiedname>castor3d::PassVisitor::PassVisitor</qualifiedname>
+        <param>
+          <type><ref refid="d9/dff/a02826" kindref="compound">Config</ref></type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="163" column="10" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="163" bodyend="166"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/d8a/a02830_1a6544497880da7fd36b435ed5ca563975" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, bool &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a6544497880da7fd36b435ed5ca563975">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>bool &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Values. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a4900236f8c9a7200a6068ba344d2e044" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, int16_t &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a4900236f8c9a7200a6068ba344d2e044">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>int16_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1abc40d4fa446255aeacfdfc2e976c7870" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, uint16_t &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1abc40d4fa446255aeacfdfc2e976c7870">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint16_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a60baffa7c01e78e1e6cab9f821851cd3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, int32_t &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a60baffa7c01e78e1e6cab9f821851cd3">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>int32_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a8cafb163ec7e20d5a989adabb568b6fd" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, uint32_t &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a8cafb163ec7e20d5a989adabb568b6fd">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1aa7ec069ac2337b41f896845cc7fcdb9a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, int64_t &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1aa7ec069ac2337b41f896845cc7fcdb9a">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>int64_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a8d0b10d96f01719b4670708a8f2e0b7e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, uint64_t &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a8d0b10d96f01719b4670708a8f2e0b7e">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint64_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a325239e28d199a6e1e758d94c70045c5" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, float &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a325239e28d199a6e1e758d94c70045c5">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>float &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1ab3b538c9635fe2ddb3df2747794e2251" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, double &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1ab3b538c9635fe2ddb3df2747794e2251">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a136584f763631cad5b1002f921592078" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, BlendMode &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a136584f763631cad5b1002f921592078">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref> &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1aa722d37469875c168cf2e7fb3bb6b5a8" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, ParallaxOcclusionMode &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1aa722d37469875c168cf2e7fb3bb6b5a8">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a808c81c0da4ffd2515292e95b6b4c124" kindref="member">ParallaxOcclusionMode</ref> &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a1706f736e458b9b5e9c3804e05badd74" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, PassFlags &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a1706f736e458b9b5e9c3804e05badd74">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref> &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1ab7015359759a56e073f405ea7c0807d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkCompareOp &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1ab7015359759a56e073f405ea7c0807d7">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkCompareOp &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1af4b0facac973fb471f084fc8fd8155ed" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RgbColour &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1af4b0facac973fb471f084fc8fd8155ed">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RgbColour &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a1e686a904cd9af044be6c424c357eef9" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RgbaColour &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a1e686a904cd9af044be6c424c357eef9">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RgbaColour &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1aa689cff91aa4f5bea9937570dddafd1a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::HdrRgbColour &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1aa689cff91aa4f5bea9937570dddafd1a">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::HdrRgbColour &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a4d0ae0e2a57b75f4d974640f47477cb9" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::HdrRgbaColour &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a4d0ae0e2a57b75f4d974640f47477cb9">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::HdrRgbaColour &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a6e782592f789963bc89690e91ac290fc" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point2f &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a6e782592f789963bc89690e91ac290fc">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point2f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a7eacdf4ae082cd1fbfba1b4393d72d35" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point2i &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a7eacdf4ae082cd1fbfba1b4393d72d35">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point2i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a316518a9f8bd3ce7152d4dc0ce34d304" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point2ui &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a316518a9f8bd3ce7152d4dc0ce34d304">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point2ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1ae46a7e0430f2087e2d9db754e6ae6de4" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point3f &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1ae46a7e0430f2087e2d9db754e6ae6de4">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point3f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a7569d912fed95b96c5354bb1714c5a64" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point3i &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a7569d912fed95b96c5354bb1714c5a64">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point3i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1ac789988f8f5c9a0d7b56bb1b4a9f6749" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point3ui &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1ac789988f8f5c9a0d7b56bb1b4a9f6749">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point3ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a0211cab7391e6b9cfa4ec1ddc46f63c6" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point4f &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a0211cab7391e6b9cfa4ec1ddc46f63c6">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point4f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a61b9a1829464429feb4cb007f7d5c97a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point4i &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a61b9a1829464429feb4cb007f7d5c97a">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point4i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1aa9aecfc3f6600f4335eaf12e745d1389" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point4ui &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1aa9aecfc3f6600f4335eaf12e745d1389">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point4ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1acd119e176dcb265c2cfec36b5f59161a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Matrix4x4f &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1acd119e176dcb265c2cfec36b5f59161a">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1abe8918d682ef830f3d97fe70cafd8195" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RangedValue&lt; float &gt; &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1abe8918d682ef830f3d97fe70cafd8195">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; float &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a21360bf55f2b3d14c237d673abb8fae5" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RangedValue&lt; int32_t &gt; &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1a21360bf55f2b3d14c237d673abb8fae5">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; int32_t &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1ad55d5233d232d4bde68809ca743aa8f8" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RangedValue&lt; uint32_t &gt; &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1ad55d5233d232d4bde68809ca743aa8f8">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; uint32_t &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1af3d5ac5b1a820312db33604dac4d1707" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, TextureFlag textureFlag, castor::Point2ui &amp;value, uint32_t componentsCount, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <reimplements refid="d1/de5/a02822_1af3d5ac5b1a820312db33604dac4d1707">visit</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1ae3a32e32f3eaa63d0b9886aa3e942742" kindref="member">TextureFlag</ref></type>
+          <declname>textureFlag</declname>
+        </param>
+        <param>
+          <type>castor::Point2ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>componentsCount</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a0bcaaf024023c0f8df1b73bfe61d487e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TypeT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::ChangeTracked&lt; TypeT &gt; &amp;value)</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::ChangeTracked&lt; TypeT &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="139" bodyend="143"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d8a/a02830_1a8c5ceb194a25defa49f3c9d3265789cb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TypeT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::PassVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::GroupChangeTracked&lt; TypeT &gt; &amp;value)</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PassVisitor::visit</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::GroupChangeTracked&lt; TypeT &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="368" column="1" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="146" bodyend="150"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="49" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="49" bodyend="49"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::PassVisitor</label>
+        <link refid="d7/d8a/a02830"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::PassVisitorBase</label>
+        <link refid="d1/de5/a02822"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::PassVisitor</label>
+        <link refid="d7/d8a/a02830"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::PassVisitorBase</label>
+        <link refid="d1/de5/a02822"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>config</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PassVisitorBase::Config</label>
+        <link refid="d9/dff/a02826"/>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/PassVisitor.hpp" line="159" column="1" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="161" bodyend="369"/>
     <listofallmembers>
-      <member refid="d7/d8a/a02830_1af2b067276aba345a2825c0132749cd11" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkWriteDescriptorSet &gt;</scope><name>value</name></member>
+      <member refid="d1/de5/a02822_1a889fbcd7194051729a9a4ae5cb0658db" prot="public" virt="non-virtual"><scope>castor3d::PassVisitor</scope><name>config</name></member>
+      <member refid="d7/d8a/a02830_1a0ca2bfde381c1a188ea17ff0ce2bc57c" prot="protected" virt="non-virtual"><scope>castor3d::PassVisitor</scope><name>PassVisitor</name></member>
+      <member refid="d1/de5/a02822_1a78fc609c60c96ab10d32bd7ccab3aadf" prot="protected" virt="non-virtual"><scope>castor3d::PassVisitor</scope><name>PassVisitorBase</name></member>
+      <member refid="d7/d8a/a02830_1a819d4d77db7bfa2697a751fc00b9e273" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a359aaceb92faaa6acba306ce11e617aa" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1aaabad3426ff7559eb3cb8fa1d6791769" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a1cfd3196612dbe7b74b5de42cf0da82d" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a14241ab827a6ad0d5a20f2d84e22dcaa" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1ac6f0519ab7ac1f35c7518800dcbf6384" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a7a6ebe3282463f39e099e87753846200" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1aeab09a6e1705fc33d5bab050c81c5139" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1ae9c32feda9f9537a171a50f3f0fd1218" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1ad9b02987e293644ecdb2ffb6dedb06b8" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1afc308ab6cc296ae79e44e6c795c16d18" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a15a729e60ef3c61e108ae1202236981e" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a3e2b1defc25900bdd1687116dc9f8733" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a5aefaa6a1b11a004c95850c7367ac5c5" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1aae55688034b76de42dd686aaf6696767" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a6929617ace25301a75595dd76d8273a4" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a5bbc15c2dae2609f7cccd480f067ce9a" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1ae0691a12236c5218b27eb70adf24fc23" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1ac81af7bd6c18408808f2766e146c2d35" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a1668f27de733cd0362dff49823631c9b" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a0a5e72cf6f7bdf096b9ad876389a6b9b" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a5b8411725fbd061e9da1e87be560e7dd" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a81a5fd1fe50a0d85316a0466ff4193d5" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a0ee8667994709b5e87dfc77857402af3" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1ae22ec4f52572888fded124dc40d56661" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a2575b4ee6176186adcd761a3a7df4d26" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a029d2be67e1a68493e286532cc6a5892" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a6a387868b505909de1e48bcb5a62d5b4" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1aace8e5ad19c24834919d1c2d380e0a67" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a1fec830e9cfa9190bfbb6e09a2edd524" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1ad895039734757d30d9927b22229fdee0" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a6544497880da7fd36b435ed5ca563975" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a4900236f8c9a7200a6068ba344d2e044" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1abc40d4fa446255aeacfdfc2e976c7870" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a60baffa7c01e78e1e6cab9f821851cd3" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a8cafb163ec7e20d5a989adabb568b6fd" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1aa7ec069ac2337b41f896845cc7fcdb9a" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a8d0b10d96f01719b4670708a8f2e0b7e" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a325239e28d199a6e1e758d94c70045c5" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1ab3b538c9635fe2ddb3df2747794e2251" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a136584f763631cad5b1002f921592078" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1aa722d37469875c168cf2e7fb3bb6b5a8" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a1706f736e458b9b5e9c3804e05badd74" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1ab7015359759a56e073f405ea7c0807d7" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1af4b0facac973fb471f084fc8fd8155ed" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a1e686a904cd9af044be6c424c357eef9" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1aa689cff91aa4f5bea9937570dddafd1a" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a4d0ae0e2a57b75f4d974640f47477cb9" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a6e782592f789963bc89690e91ac290fc" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a7eacdf4ae082cd1fbfba1b4393d72d35" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a316518a9f8bd3ce7152d4dc0ce34d304" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1ae46a7e0430f2087e2d9db754e6ae6de4" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a7569d912fed95b96c5354bb1714c5a64" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1ac789988f8f5c9a0d7b56bb1b4a9f6749" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a0211cab7391e6b9cfa4ec1ddc46f63c6" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a61b9a1829464429feb4cb007f7d5c97a" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1aa9aecfc3f6600f4335eaf12e745d1389" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1acd119e176dcb265c2cfec36b5f59161a" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1abe8918d682ef830f3d97fe70cafd8195" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a21360bf55f2b3d14c237d673abb8fae5" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1ad55d5233d232d4bde68809ca743aa8f8" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1af3d5ac5b1a820312db33604dac4d1707" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a0bcaaf024023c0f8df1b73bfe61d487e" prot="public" virt="non-virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d7/d8a/a02830_1a8c5ceb194a25defa49f3c9d3265789cb" prot="public" virt="non-virtual"><scope>castor3d::PassVisitor</scope><name>visit</name></member>
+      <member refid="d1/de5/a02822_1a967afb3f5f352d193a24fd91741c42ee" prot="public" virt="virtual"><scope>castor3d::PassVisitor</scope><name>~PassVisitorBase</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

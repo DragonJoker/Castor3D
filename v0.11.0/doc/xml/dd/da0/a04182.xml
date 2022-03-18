@@ -1,0 +1,141 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dd/da0/a04182" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ParticlePlugin</compoundname>
+    <basecompoundref refid="dd/d6d/a04186" prot="public" virt="non-virtual">castor3d::Plugin</basecompoundref>
+    <includes local="no">ParticlePlugin.hpp</includes>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="dd/da0/a04182_1a6a6c1cc25d50ed6f67a2dc0fc546c5a3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>friend class</type>
+        <definition>friend class Plugin</definition>
+        <argsstring></argsstring>
+        <name>Plugin</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/ParticlePlugin.hpp" line="15" column="1" bodyfile="Plugin/ParticlePlugin.hpp" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/da0/a04182_1ae537d21983f13482e164d68422b71b1e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ParticlePlugin::ParticlePlugin</definition>
+        <argsstring>(castor::DynamicLibrarySPtr library, Engine *engine)</argsstring>
+        <name>ParticlePlugin</name>
+        <param>
+          <type>castor::DynamicLibrarySPtr</type>
+          <declname>library</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d9b/a02514" kindref="compound">Engine</ref> *</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">library</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The shared library holding the plug-in </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/ParticlePlugin.hpp" line="28" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/da0/a04182_1a287c2707eb76c27a903b0f6aec10ab24" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::ParticlePlugin::~ParticlePlugin</definition>
+        <argsstring>()</argsstring>
+        <name>~ParticlePlugin</name>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/ParticlePlugin.hpp" line="36" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2529">
+        <label>castor3d::ParticlePlugin</label>
+        <link refid="dd/da0/a04182"/>
+        <childnode refid="2530" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2531">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="2530">
+        <label>castor3d::Plugin</label>
+        <link refid="dd/d6d/a04186"/>
+        <childnode refid="2531" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2532">
+        <label>castor3d::ParticlePlugin</label>
+        <link refid="dd/da0/a04182"/>
+        <childnode refid="2533" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2534">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="2533">
+        <label>castor3d::Plugin</label>
+        <link refid="dd/d6d/a04186"/>
+        <childnode refid="2534" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Plugin/ParticlePlugin.hpp" line="13" column="1" bodyfile="Plugin/ParticlePlugin.hpp" bodystart="11" bodyend="37"/>
+    <listofallmembers>
+      <member refid="dd/d6d/a04186_1a76345cfa813957198ab5a735b3bf2c84" prot="public" virt="non-virtual"><scope>castor3d::ParticlePlugin</scope><name>getName</name></member>
+      <member refid="dd/d6d/a04186_1a21c697a5bb64dc09df8604a595ed4ef1" prot="public" virt="non-virtual"><scope>castor3d::ParticlePlugin</scope><name>getRequiredVersion</name></member>
+      <member refid="dd/d6d/a04186_1adfce87274549c3458e705ec6f49f2466" prot="public" virt="non-virtual"><scope>castor3d::ParticlePlugin</scope><name>getType</name></member>
+      <member refid="dd/d6d/a04186_1a6eee27fad0b4dc406af8dac993816e1e" prot="protected" virt="non-virtual"><scope>castor3d::ParticlePlugin</scope><name>load</name></member>
+      <member refid="dd/d6d/a04186_1ac89ef3325c33aebd3c45ff41a3912d25" prot="protected" virt="non-virtual"><scope>castor3d::ParticlePlugin</scope><name>m_library</name></member>
+      <member refid="dd/d6d/a04186_1a5b06730be035851689f1f52a9d37a839" prot="protected" virt="non-virtual"><scope>castor3d::ParticlePlugin</scope><name>m_pfnGetName</name></member>
+      <member refid="dd/d6d/a04186_1a3bbb683c98da8be6cb7eadd5ba677f18" prot="protected" virt="non-virtual"><scope>castor3d::ParticlePlugin</scope><name>m_pfnGetRequiredVersion</name></member>
+      <member refid="dd/d6d/a04186_1ae4b1c74ae527aef8847250d27eb3acf0" prot="protected" virt="non-virtual"><scope>castor3d::ParticlePlugin</scope><name>m_pfnOnLoad</name></member>
+      <member refid="dd/d6d/a04186_1a5d94afb97a6d885ed7d2885dafeda0dc" prot="protected" virt="non-virtual"><scope>castor3d::ParticlePlugin</scope><name>m_pfnOnUnload</name></member>
+      <member refid="dd/d6d/a04186_1ad988a5d361f28b80ba19dd2caac722e1" prot="protected" virt="non-virtual"><scope>castor3d::ParticlePlugin</scope><name>m_type</name></member>
+      <member refid="dd/da0/a04182_1ae537d21983f13482e164d68422b71b1e" prot="public" virt="non-virtual"><scope>castor3d::ParticlePlugin</scope><name>ParticlePlugin</name></member>
+      <member refid="dd/d6d/a04186_1af3f82c3bbc1d49880fda39cdc7ea2015" prot="public" virt="non-virtual"><scope>castor3d::ParticlePlugin</scope><name>PGetNameFunction</name></member>
+      <member refid="dd/d6d/a04186_1a571d2dbc7a601aca467b1b5d8a62d997" prot="public" virt="non-virtual"><scope>castor3d::ParticlePlugin</scope><name>PGetRequiredVersionFunction</name></member>
+      <member refid="dd/d6d/a04186_1aa7caed7d5f2bd1d34409227a1e3b09bf" prot="public" virt="non-virtual"><scope>castor3d::ParticlePlugin</scope><name>PGetTypeFunction</name></member>
+      <member refid="dd/da0/a04182_1a6a6c1cc25d50ed6f67a2dc0fc546c5a3" prot="private" virt="non-virtual"><scope>castor3d::ParticlePlugin</scope><name>Plugin</name></member>
+      <member refid="dd/d6d/a04186_1ab1d7f300c810facf8bc08fceffff8c2b" prot="protected" virt="non-virtual" ambiguityscope="castor3d::Plugin::"><scope>castor3d::ParticlePlugin</scope><name>Plugin</name></member>
+      <member refid="dd/d6d/a04186_1a54268afa0fd4a75c485f0ba59f108e65" prot="public" virt="non-virtual"><scope>castor3d::ParticlePlugin</scope><name>POnLoadFunction</name></member>
+      <member refid="dd/d6d/a04186_1a186ebd8d8fe1eb8b52b7909347ce0fb4" prot="public" virt="non-virtual"><scope>castor3d::ParticlePlugin</scope><name>POnUnloadFunction</name></member>
+      <member refid="dd/d6d/a04186_1a1062d08432032ec7d502e7941b4e0df4" prot="protected" virt="non-virtual"><scope>castor3d::ParticlePlugin</scope><name>unload</name></member>
+      <member refid="dd/da0/a04182_1a287c2707eb76c27a903b0f6aec10ab24" prot="public" virt="virtual"><scope>castor3d::ParticlePlugin</scope><name>~ParticlePlugin</name></member>
+      <member refid="dd/d6d/a04186_1af7f881d3d5d32c7044c1b93164754c64" prot="public" virt="pure-virtual"><scope>castor3d::ParticlePlugin</scope><name>~Plugin</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

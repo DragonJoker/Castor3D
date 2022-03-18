@@ -1,5 +1,6 @@
-<map id="castor3d::IndexMapping" name="castor3d::IndexMapping">
-<area shape="rect" id="node1" title=" " alt="" coords="26,155,186,181"/>
-<area shape="rect" id="node2" href="$d4/d2e/a03974.html" title=" " alt="" coords="5,80,207,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,207,32"/>
+<map id="castor3d::ExtensionStruct" name="castor3d::ExtensionStruct">
+<area shape="rect" id="node1" title=" " alt="" coords="50,185,223,212"/>
+<area shape="rect" id="node2" title=" " alt="" coords="29,96,109,123"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,132,47"/>
+<area shape="rect" id="node4" href="$d4/dc4/a03938.html" title=" " alt="" coords="133,96,282,123"/>
 </map>

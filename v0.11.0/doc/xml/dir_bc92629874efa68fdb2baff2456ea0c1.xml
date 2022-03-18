@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_bc92629874efa68fdb2baff2456ea0c1" kind="dir">
+    <compoundname>Material</compoundname>
+    <innerdir refid="dir_1956ab8499f3d6675d52a03f8658751b">Material/Pass</innerdir>
+    <innerdir refid="dir_18be4a81ac2698d65b2c41fdfc591567">Material/Texture</innerdir>
+    <innerfile refid="de/d55/a00323">Material.hpp</innerfile>
+    <innerfile refid="d8/d23/a00326">MaterialModule.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/"/>
+  </compounddef>
+</doxygen>

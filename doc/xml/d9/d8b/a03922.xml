@@ -1,82 +1,560 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d9/d8b/a03922" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::BonesInstantiationComponent</compoundname>
-    <basecompoundref refid="d4/d2e/a03974" prot="public" virt="non-virtual">castor3d::SubmeshComponent</basecompoundref>
-    <includes local="no">BonesInstantiationComponent.hpp</includes>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d9/d8b/a03922_1a047188d2096e53376c70ac5872407f7a" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
-        <definition>C3D_API castor::String const castor3d::BonesInstantiationComponent::Name</definition>
-        <argsstring></argsstring>
-        <name>Name</name>
+    <compoundname>castor3d::Picking</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <includes local="no">Picking.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d9/d8b/a03922_1a116a2084c379c7aa7066ff23bf51eadd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d47/a04490" kindref="compound">Geometry</ref> const *</type>
+        <definition>Geometry const  * castor3d::Picking::getPickedGeometry</definition>
+        <argsstring>() const</argsstring>
+        <name>getPickedGeometry</name>
+        <qualifiedname>castor3d::Picking::getPickedGeometry</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="96" column="17" bodyfile="Render/Picking.hpp" bodystart="96" bodyend="99"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d8b/a03922_1a0007c572f8e38251f6a14bed87a4bc67" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dc/d50/a04474" kindref="compound">BillboardBase</ref> const *</type>
+        <definition>BillboardBase const  * castor3d::Picking::getPickedBillboard</definition>
+        <argsstring>() const</argsstring>
+        <name>getPickedBillboard</name>
+        <qualifiedname>castor3d::Picking::getPickedBillboard</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="99" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="99" bodyend="-1"/>
+        <location file="Render/Picking.hpp" line="101" column="22" bodyfile="Render/Picking.hpp" bodystart="101" bodyend="104"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d8b/a03922_1ade5aa6f6de9fec90a1f4d691dddff434" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d7/d46/a03430" kindref="compound">Submesh</ref> const *</type>
+        <definition>Submesh const  * castor3d::Picking::getPickedSubmesh</definition>
+        <argsstring>() const</argsstring>
+        <name>getPickedSubmesh</name>
+        <qualifiedname>castor3d::Picking::getPickedSubmesh</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="106" column="16" bodyfile="Render/Picking.hpp" bodystart="106" bodyend="109"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d8b/a03922_1ad40ba1ad38411f0a32c0c4ac2a567efe" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Picking::getPickedFace</definition>
+        <argsstring>() const</argsstring>
+        <name>getPickedFace</name>
+        <qualifiedname>castor3d::Picking::getPickedFace</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="111" column="10" bodyfile="Render/Picking.hpp" bodystart="111" bodyend="114"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d8b/a03922_1a08e943004368edb80f8c6af7dc0ac76a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dc/df4/a01401_1a658b8a9f25669fd516ba89c1af1d52e6" kindref="member">PickNodeType</ref></type>
+        <definition>PickNodeType castor3d::Picking::getPickedNodeType</definition>
+        <argsstring>() const</argsstring>
+        <name>getPickedNodeType</name>
+        <qualifiedname>castor3d::Picking::getPickedNodeType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="116" column="14" bodyfile="Render/Picking.hpp" bodystart="116" bodyend="119"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d8b/a03922_1a7f04667a5ef2ce7d5c793944679a93f8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>crg::ImageViewId const &amp;</type>
+        <definition>crg::ImageViewId const  &amp; castor3d::Picking::getImageView</definition>
+        <argsstring>() const</argsstring>
+        <name>getImageView</name>
+        <qualifiedname>castor3d::Picking::getImageView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="121" column="25" bodyfile="Render/Picking.hpp" bodystart="121" bodyend="124"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d8b/a03922_1a779288d462b87e0ab23b6de7b16eb264" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>crg::SemaphoreWaitArray const &amp;</type>
+        <definition>crg::SemaphoreWaitArray const  &amp; castor3d::Picking::getSemaphoreWait</definition>
+        <argsstring>() const</argsstring>
+        <name>getSemaphoreWait</name>
+        <qualifiedname>castor3d::Picking::getSemaphoreWait</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="126" column="32" bodyfile="Render/Picking.hpp" bodystart="126" bodyend="129"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d8b/a03922_1a2663fccca1513747a1d617ba546e372a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::Picking::isPicking</definition>
+        <argsstring>() const</argsstring>
+        <name>isPicking</name>
+        <qualifiedname>castor3d::Picking::isPicking</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="131" column="6" bodyfile="Render/Picking.hpp" bodystart="131" bodyend="134"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d9/d8b/a03922_1a742184bc3466cb59b5c144ec901e170e" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::Picking::PickingWidth</definition>
+        <argsstring></argsstring>
+        <name>PickingWidth</name>
+        <qualifiedname>castor3d::Picking::PickingWidth</qualifiedname>
+        <initializer>= 32u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="145" column="27" bodyfile="Render/Picking.hpp" bodystart="145" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="d9/d8b/a03922_1ac5da22aa8b0c940aa1663ccca5b8fa3b" prot="private" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t const</type>
+        <definition>C3D_API uint32_t const castor3d::Picking::UboBindingPoint</definition>
+        <argsstring></argsstring>
+        <name>UboBindingPoint</name>
+        <qualifiedname>castor3d::Picking::UboBindingPoint</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="148" column="31" bodyfile="Render/Picking.hpp" bodystart="148" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d9/d8b/a03922_1a96a084705ada8643c43fb18b775ebd5c" prot="private" static="no" mutable="no">
-        <type><ref refid="dc/d61/a03950" kindref="compound">InstantiationComponent</ref> const  &amp;</type>
-        <definition>InstantiationComponent const&amp; castor3d::BonesInstantiationComponent::m_instantiation</definition>
+      <memberdef kind="variable" id="d9/d8b/a03922_1a727e1f13a7d9ed3c952ac36f4485e660" prot="private" static="no" mutable="no">
+        <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::Picking::m_device</definition>
         <argsstring></argsstring>
-        <name>m_instantiation</name>
+        <name>m_device</name>
+        <qualifiedname>castor3d::Picking::m_device</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="102" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="102" bodyend="-1"/>
+        <location file="Render/Picking.hpp" line="151" column="21" bodyfile="Render/Picking.hpp" bodystart="151" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d9/d8b/a03922_1abebbf5128deb57ad647278872ddfec1b" prot="private" static="no" mutable="no">
-        <type><ref refid="d8/d6b/a03918" kindref="compound">BonesComponent</ref> const  &amp;</type>
-        <definition>BonesComponent const&amp; castor3d::BonesInstantiationComponent::m_bones</definition>
+      <memberdef kind="variable" id="d9/d8b/a03922_1a7603367e323041f5f9474be00e107410" prot="private" static="no" mutable="no">
+        <type>castor::Size</type>
+        <definition>castor::Size castor3d::Picking::m_size</definition>
         <argsstring></argsstring>
-        <name>m_bones</name>
+        <name>m_size</name>
+        <qualifiedname>castor3d::Picking::m_size</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="103" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="103" bodyend="-1"/>
+        <location file="Render/Picking.hpp" line="152" column="14" bodyfile="Render/Picking.hpp" bodystart="152" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d9/d8b/a03922_1a28fd11a2707390b80d4e7b7375a64eb8" prot="private" static="no" mutable="no">
-        <type>ShaderBufferUPtr</type>
-        <definition>ShaderBufferUPtr castor3d::BonesInstantiationComponent::m_instancedBonesBuffer</definition>
+      <memberdef kind="variable" id="d9/d8b/a03922_1a8d97595c6c663629554f87b5e48f41ec" prot="private" static="no" mutable="no">
+        <type>crg::FrameGraph</type>
+        <definition>crg::FrameGraph castor3d::Picking::m_graph</definition>
         <argsstring></argsstring>
-        <name>m_instancedBonesBuffer</name>
+        <name>m_graph</name>
+        <qualifiedname>castor3d::Picking::m_graph</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="104" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="104" bodyend="-1"/>
+        <location file="Render/Picking.hpp" line="153" column="17" bodyfile="Render/Picking.hpp" bodystart="153" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d8b/a03922_1ab3b01680a4a95868b3c4877f19b897fb" prot="private" static="no" mutable="no">
+        <type>crg::ImageId</type>
+        <definition>crg::ImageId castor3d::Picking::m_colourImage</definition>
+        <argsstring></argsstring>
+        <name>m_colourImage</name>
+        <qualifiedname>castor3d::Picking::m_colourImage</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="154" column="14" bodyfile="Render/Picking.hpp" bodystart="154" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d8b/a03922_1a85187b61b169c2e313c74c54502a7770" prot="private" static="no" mutable="no">
+        <type>crg::ImageViewId</type>
+        <definition>crg::ImageViewId castor3d::Picking::m_colourImageView</definition>
+        <argsstring></argsstring>
+        <name>m_colourImageView</name>
+        <qualifiedname>castor3d::Picking::m_colourImageView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="155" column="18" bodyfile="Render/Picking.hpp" bodystart="155" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d8b/a03922_1a96802a3f63e66ea6dc35eb090ccb26df" prot="private" static="no" mutable="no">
+        <type>crg::ImageId</type>
+        <definition>crg::ImageId castor3d::Picking::m_depthImage</definition>
+        <argsstring></argsstring>
+        <name>m_depthImage</name>
+        <qualifiedname>castor3d::Picking::m_depthImage</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="156" column="14" bodyfile="Render/Picking.hpp" bodystart="156" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d8b/a03922_1afb7980b808ddcd5047642d1ca1c3b8f4" prot="private" static="no" mutable="no">
+        <type>crg::ImageViewId</type>
+        <definition>crg::ImageViewId castor3d::Picking::m_depthImageView</definition>
+        <argsstring></argsstring>
+        <name>m_depthImageView</name>
+        <qualifiedname>castor3d::Picking::m_depthImageView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="157" column="18" bodyfile="Render/Picking.hpp" bodystart="157" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d8b/a03922_1a43ad35126827c90c38d3b3c1e35b8303" prot="private" static="no" mutable="no">
+        <type>crg::FramePass *</type>
+        <definition>crg::FramePass* castor3d::Picking::m_pickingPassDesc</definition>
+        <argsstring></argsstring>
+        <name>m_pickingPassDesc</name>
+        <qualifiedname>castor3d::Picking::m_pickingPassDesc</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="158" column="17" bodyfile="Render/Picking.hpp" bodystart="158" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d8b/a03922_1a0b1a76545a1a8c3e486c6911afd73d6a" prot="private" static="no" mutable="no">
+        <type><ref refid="dd/d31/a03862" kindref="compound">PickingPass</ref> *</type>
+        <definition>PickingPass* castor3d::Picking::m_pickingPass</definition>
+        <argsstring></argsstring>
+        <name>m_pickingPass</name>
+        <qualifiedname>castor3d::Picking::m_pickingPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="159" column="14" bodyfile="Render/Picking.hpp" bodystart="159" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d8b/a03922_1ae210fe92461e91ab7fbea6db1f0fdb0b" prot="private" static="no" mutable="no">
+        <type>crg::RunnableGraphPtr</type>
+        <definition>crg::RunnableGraphPtr castor3d::Picking::m_runnable</definition>
+        <argsstring></argsstring>
+        <name>m_runnable</name>
+        <qualifiedname>castor3d::Picking::m_runnable</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="160" column="23" bodyfile="Render/Picking.hpp" bodystart="160" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d8b/a03922_1a32584956d7c5795f8e61e6b31dfe4437" prot="private" static="no" mutable="no">
+        <type>ashes::ImagePtr</type>
+        <definition>ashes::ImagePtr castor3d::Picking::m_colourTexture</definition>
+        <argsstring></argsstring>
+        <name>m_colourTexture</name>
+        <qualifiedname>castor3d::Picking::m_colourTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="161" column="17" bodyfile="Render/Picking.hpp" bodystart="161" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d8b/a03922_1a2fb144b26b11571096dab0076a023fdf" prot="private" static="no" mutable="no">
+        <type>ashes::ImageView</type>
+        <definition>ashes::ImageView castor3d::Picking::m_colourView</definition>
+        <argsstring></argsstring>
+        <name>m_colourView</name>
+        <qualifiedname>castor3d::Picking::m_colourView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="162" column="18" bodyfile="Render/Picking.hpp" bodystart="162" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d8b/a03922_1ae18e628b8cc0a9ab870d7ecbe9663d68" prot="private" static="no" mutable="no">
+        <type>VkBufferImageCopy</type>
+        <definition>VkBufferImageCopy castor3d::Picking::m_copyRegion</definition>
+        <argsstring></argsstring>
+        <name>m_copyRegion</name>
+        <qualifiedname>castor3d::Picking::m_copyRegion</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="163" column="19" bodyfile="Render/Picking.hpp" bodystart="163" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d8b/a03922_1aa657e95384e3d5c300a8a83cca002e34" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; VkBufferImageCopy &gt;</type>
+        <definition>std::vector&lt; VkBufferImageCopy &gt; castor3d::Picking::m_pickDisplayRegions</definition>
+        <argsstring></argsstring>
+        <name>m_pickDisplayRegions</name>
+        <qualifiedname>castor3d::Picking::m_pickDisplayRegions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="164" column="13" bodyfile="Render/Picking.hpp" bodystart="164" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d8b/a03922_1a912cb3ebe60c7fa300adb8df543399a2" prot="private" static="no" mutable="no">
+        <type>ashes::CommandBufferPtr</type>
+        <definition>ashes::CommandBufferPtr castor3d::Picking::m_commandBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_commandBuffer</name>
+        <qualifiedname>castor3d::Picking::m_commandBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="165" column="25" bodyfile="Render/Picking.hpp" bodystart="165" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d8b/a03922_1a8a97b05bba199bd001d06d81b3fab75f" prot="private" static="no" mutable="no">
+        <type>ashes::BufferPtr&lt; castor::Point4ui &gt;</type>
+        <definition>ashes::BufferPtr&lt; castor::Point4ui &gt; castor3d::Picking::m_stagingBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_stagingBuffer</name>
+        <qualifiedname>castor3d::Picking::m_stagingBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="166" column="18" bodyfile="Render/Picking.hpp" bodystart="166" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d8b/a03922_1a11dc98d36e1f7b4dd71f71cb02fb0ab7" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/d47/a04490" kindref="compound">Geometry</ref> const  *</type>
+        <definition>Geometry const* castor3d::Picking::m_geometry</definition>
+        <argsstring></argsstring>
+        <name>m_geometry</name>
+        <qualifiedname>castor3d::Picking::m_geometry</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="167" column="17" bodyfile="Render/Picking.hpp" bodystart="167" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d8b/a03922_1afcbba3bda977bb3947038809e44f162e" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/d46/a03430" kindref="compound">Submesh</ref> const  *</type>
+        <definition>Submesh const* castor3d::Picking::m_submesh</definition>
+        <argsstring></argsstring>
+        <name>m_submesh</name>
+        <qualifiedname>castor3d::Picking::m_submesh</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="168" column="16" bodyfile="Render/Picking.hpp" bodystart="168" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d8b/a03922_1a8dce7b1c9d3580b5e573474aa0d3ddde" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d50/a04474" kindref="compound">BillboardBase</ref> const  *</type>
+        <definition>BillboardBase const* castor3d::Picking::m_billboard</definition>
+        <argsstring></argsstring>
+        <name>m_billboard</name>
+        <qualifiedname>castor3d::Picking::m_billboard</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="169" column="22" bodyfile="Render/Picking.hpp" bodystart="169" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d8b/a03922_1ab6a3769c38cb6d68b27c059842f74bca" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Picking::m_face</definition>
+        <argsstring></argsstring>
+        <name>m_face</name>
+        <qualifiedname>castor3d::Picking::m_face</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="170" column="10" bodyfile="Render/Picking.hpp" bodystart="170" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d8b/a03922_1a90f18e65be57e3aa0e9d035a2250361d" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; castor::Point4ui &gt;</type>
+        <definition>std::vector&lt; castor::Point4ui &gt; castor3d::Picking::m_buffer</definition>
+        <argsstring></argsstring>
+        <name>m_buffer</name>
+        <qualifiedname>castor3d::Picking::m_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="171" column="13" bodyfile="Render/Picking.hpp" bodystart="171" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d8b/a03922_1ae70128fb977c842ebcfd7c7b4c9dc9cc" prot="private" static="no" mutable="no">
+        <type>ashes::FencePtr</type>
+        <definition>ashes::FencePtr castor3d::Picking::m_transferFence</definition>
+        <argsstring></argsstring>
+        <name>m_transferFence</name>
+        <qualifiedname>castor3d::Picking::m_transferFence</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="172" column="17" bodyfile="Render/Picking.hpp" bodystart="172" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d8b/a03922_1af56b26e5e8d6ba46661f871bc63181f6" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a658b8a9f25669fd516ba89c1af1d52e6" kindref="member">PickNodeType</ref></type>
+        <definition>PickNodeType castor3d::Picking::m_pickNodeType</definition>
+        <argsstring></argsstring>
+        <name>m_pickNodeType</name>
+        <qualifiedname>castor3d::Picking::m_pickNodeType</qualifiedname>
+        <initializer>{ <ref refid="dc/df4/a01401_1a658b8a9f25669fd516ba89c1af1d52e6abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">PickNodeType::eNone</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="173" column="14" bodyfile="Render/Picking.hpp" bodystart="173" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d8b/a03922_1a7dc1d3aa1fdb11a8b913c40d2c6a6896" prot="private" static="no" mutable="no">
+        <type>std::atomic_bool</type>
+        <definition>std::atomic_bool castor3d::Picking::m_picking</definition>
+        <argsstring></argsstring>
+        <name>m_picking</name>
+        <qualifiedname>castor3d::Picking::m_picking</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="174" column="18" bodyfile="Render/Picking.hpp" bodystart="174" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d8b/a03922_1a7f2adf4f8eef037c82310ca7b8ac3c5d" prot="private" static="no" mutable="no">
+        <type>crg::SemaphoreWaitArray</type>
+        <definition>crg::SemaphoreWaitArray castor3d::Picking::m_toWait</definition>
+        <argsstring></argsstring>
+        <name>m_toWait</name>
+        <qualifiedname>castor3d::Picking::m_toWait</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="175" column="25" bodyfile="Render/Picking.hpp" bodystart="175" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d8b/a03922_1a8f029eca1774fa12ff20ea5e7e1f44e0" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::Picking::m_first</definition>
+        <argsstring></argsstring>
+        <name>m_first</name>
+        <qualifiedname>castor3d::Picking::m_first</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="176" column="6" bodyfile="Render/Picking.hpp" bodystart="176" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d9/d8b/a03922_1a30a7fca985626d2d0ffb9786987b3c65" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::BonesInstantiationComponent::BonesInstantiationComponent</definition>
-        <argsstring>(Submesh &amp;submesh, InstantiationComponent const &amp;instantiation, BonesComponent const &amp;bones)</argsstring>
-        <name>BonesInstantiationComponent</name>
+      <memberdef kind="function" id="d9/d8b/a03922_1ab8c0b62e4bb5ac13af4ee4223500107a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Picking::Picking</definition>
+        <argsstring>(crg::ResourceHandler &amp;handler, RenderDevice const &amp;device, QueueData const &amp;queueData, castor::Size const &amp;size, MatrixUbo &amp;matrixUbo, SceneCuller &amp;culler)</argsstring>
+        <name>Picking</name>
+        <qualifiedname>castor3d::Picking::Picking</qualifiedname>
         <param>
-          <type><ref refid="d7/df2/a03986" kindref="compound">Submesh</ref> &amp;</type>
-          <declname>submesh</declname>
+          <type>crg::ResourceHandler &amp;</type>
+          <declname>handler</declname>
         </param>
         <param>
-          <type><ref refid="dc/d61/a03950" kindref="compound">InstantiationComponent</ref> const &amp;</type>
-          <declname>instantiation</declname>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
         </param>
         <param>
-          <type><ref refid="d8/d6b/a03918" kindref="compound">BonesComponent</ref> const &amp;</type>
-          <declname>bones</declname>
+          <type><ref refid="dc/d61/a03950" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d8f/a04930" kindref="compound">MatrixUbo</ref> &amp;</type>
+          <declname>matrixUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d2b/a03662" kindref="compound">SceneCuller</ref> &amp;</type>
+          <declname>culler</declname>
         </param>
         <briefdescription>
 <para>Constructor. </para>
@@ -84,26 +562,50 @@
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">submesh</parametername>
+<parametername direction="in">handler</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The parent submesh. </para>
+<para>The graph resources handler. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">instantiation</parametername>
+<parametername direction="in">device</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The instantiation component. </para>
+<para>The GPU device. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">bones</parametername>
+<parametername direction="in">queueData</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The bones component. </para>
+<para>The queue receiving the GPU commands. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render area dimensions. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">matrixUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene matrices UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">culler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The culler for this pass. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -111,140 +613,134 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="30" column="1"/>
+        <location file="Render/Picking.hpp" line="45" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d9/d8b/a03922_1a737776e6d0f26fbc51f9b65333f346ae" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::BonesInstantiationComponent::gather</definition>
-        <argsstring>(MaterialSPtr material, ashes::BufferCRefArray &amp;buffers, std::vector&lt; uint64_t &gt; &amp;offsets, ashes::PipelineVertexInputStateCreateInfoCRefArray &amp;layouts, uint32_t instanceMult) override</argsstring>
-        <name>gather</name>
-        <reimplements refid="d4/d2e/a03974_1a4b992d760e02c3c8dc32137aa43db62b">gather</reimplements>
-        <param>
-          <type>MaterialSPtr</type>
-          <declname>material</declname>
-        </param>
-        <param>
-          <type>ashes::BufferCRefArray &amp;</type>
-          <declname>buffers</declname>
-        </param>
-        <param>
-          <type>std::vector&lt; uint64_t &gt; &amp;</type>
-          <declname>offsets</declname>
-        </param>
-        <param>
-          <type>ashes::PipelineVertexInputStateCreateInfoCRefArray &amp;</type>
-          <declname>layouts</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>instanceMult</declname>
-        </param>
-        <briefdescription>
-<para>Gathers buffers that need to go in a VAO. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="36" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d8b/a03922_1a32e76e1e8642ee9500f1dbcd6aacf2a1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>SkeletonSPtr</type>
-        <definition>SkeletonSPtr castor3d::BonesInstantiationComponent::getSkeleton</definition>
-        <argsstring>() const</argsstring>
-        <name>getSkeleton</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The skeleton. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="47" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="47" bodyend="50"/>
-        <references refid="d8/d6b/a03918_1a6c0b7671b616ddd3073f2352bcafc3a5">castor3d::BonesComponent::getSkeleton</references>
-      </memberdef>
-      <memberdef kind="function" id="d9/d8b/a03922_1a837c880c0ed93a393c2ecf94f8b06096" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::BonesInstantiationComponent::hasInstancedBonesBuffer</definition>
-        <argsstring>() const</argsstring>
-        <name>hasInstancedBonesBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>Tells if the bone instantiation buffer exists. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="57" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="57" bodyend="60"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d8b/a03922_1a324db0d74a989b387a11285e8ca37604" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="db/dd7/a05302" kindref="compound">ShaderBuffer</ref> const  &amp;</type>
-        <definition>ShaderBuffer const&amp; castor3d::BonesInstantiationComponent::getInstancedBonesBuffer</definition>
-        <argsstring>() const</argsstring>
-        <name>getInstancedBonesBuffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The bone instantiation ShaderStorageBuffer. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="67" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="67" bodyend="70"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d8b/a03922_1a2622f1b71232bed018dbe0893d445fd5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="db/dd7/a05302" kindref="compound">ShaderBuffer</ref> &amp;</type>
-        <definition>ShaderBuffer&amp; castor3d::BonesInstantiationComponent::getInstancedBonesBuffer</definition>
+      <memberdef kind="function" id="d9/d8b/a03922_1a50a9767901f5db8b73225f1e498222a6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Picking::~Picking</definition>
         <argsstring>()</argsstring>
-        <name>getInstancedBonesBuffer</name>
+        <name>~Picking</name>
+        <qualifiedname>castor3d::Picking::~Picking</qualifiedname>
         <briefdescription>
+<para>Destructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The bone instantiation ShaderStorageBuffer. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="77" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="77" bodyend="80"/>
+        <location file="Render/Picking.hpp" line="57" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d9/d8b/a03922_1a772466b58d0ce73e90caf5fa9262efb1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
-        <type><ref refid="de/d13/a01473_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
-        <definition>ProgramFlags castor3d::BonesInstantiationComponent::getProgramFlags</definition>
-        <argsstring>(MaterialSPtr material) const override</argsstring>
-        <name>getProgramFlags</name>
-        <reimplements refid="d4/d2e/a03974_1aa5c81caafcdb1b7fa8610605060775f1">getProgramFlags</reimplements>
+      <memberdef kind="function" id="d9/d8b/a03922_1a22202dd82edb3a087eef1548420485bf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Picking::addScene</definition>
+        <argsstring>(Scene &amp;scene, Camera &amp;camera)</argsstring>
+        <name>addScene</name>
+        <qualifiedname>castor3d::Picking::addScene</qualifiedname>
         <param>
-          <type>MaterialSPtr</type>
-          <declname>material</declname>
+          <type><ref refid="d6/d71/a04598" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d2e/a04482" kindref="compound">Camera</ref> &amp;</type>
+          <declname>camera</declname>
         </param>
         <briefdescription>
+<para>Adds a scene rendered through this technique. </para>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The shader program flags. </para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">camera</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The camera through which the scene is viewed. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Picking.hpp" line="68" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d8b/a03922_1a45992c4c1267edbfe4ef097073ab0fb9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dc/df4/a01401_1a658b8a9f25669fd516ba89c1af1d52e6" kindref="member">PickNodeType</ref></type>
+        <definition>C3D_API PickNodeType castor3d::Picking::pick</definition>
+        <argsstring>(RenderDevice const &amp;device, castor::Position position, Camera const &amp;camera)</argsstring>
+        <name>pick</name>
+        <qualifiedname>castor3d::Picking::pick</qualifiedname>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::Position</type>
+          <declname>position</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d2e/a04482" kindref="compound">Camera</ref> const &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <briefdescription>
+<para>Picks a geometry at given mouse position. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">position</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The position in the pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">camera</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The viewing camera. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>PickingPass::PickNodeType::eNone if nothing was picked. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="87" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="87" bodyend="90"/>
+        <location file="Render/Picking.hpp" line="84" column="22"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-func">
-      <memberdef kind="function" id="d9/d8b/a03922_1a998d4ea20931a7aaf58b37a5cbc9c819" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>bool</type>
-        <definition>bool castor3d::BonesInstantiationComponent::doInitialise</definition>
-        <argsstring>(RenderDevice const &amp;device) override</argsstring>
-        <name>doInitialise</name>
-        <reimplements refid="d4/d2e/a03974_1a02633de92cd3a940ea28bc2ee63cdefb">doInitialise</reimplements>
+      <memberdef kind="function" id="d9/d8b/a03922_1a48ef0670886168121814637aa642364a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::Picking::doCreatePickingPass</definition>
+        <argsstring>(MatrixUbo &amp;matrixUbo, SceneCuller &amp;culler)</argsstring>
+        <name>doCreatePickingPass</name>
+        <qualifiedname>castor3d::Picking::doCreatePickingPass</qualifiedname>
         <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
+          <type><ref refid="da/d8f/a04930" kindref="compound">MatrixUbo</ref> &amp;</type>
+          <declname>matrixUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d2b/a03662" kindref="compound">SceneCuller</ref> &amp;</type>
+          <declname>culler</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -252,31 +748,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="93" column="1"/>
+        <location file="Render/Picking.hpp" line="138" column="17"/>
       </memberdef>
-      <memberdef kind="function" id="d9/d8b/a03922_1af743a0fbe57231727307beda937a0437" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::BonesInstantiationComponent::doCleanup</definition>
-        <argsstring>() override</argsstring>
-        <name>doCleanup</name>
-        <reimplements refid="d4/d2e/a03974_1a8574c2b5b3efa89e6446423448f4edfd">doCleanup</reimplements>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="94" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d8b/a03922_1a9774841e331a49b878254eb63cc91de0" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::BonesInstantiationComponent::doFill</definition>
-        <argsstring>(RenderDevice const &amp;device) override</argsstring>
-        <name>doFill</name>
-        <reimplements refid="d4/d2e/a03974_1a78f22f8994aae0890645c943e42c45c9">doFill</reimplements>
+      <memberdef kind="function" id="d9/d8b/a03922_1ae9dff798a714e42ae66311734a5b3688" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>castor::Point4ui</type>
+        <definition>castor::Point4ui castor3d::Picking::doFboPick</definition>
+        <argsstring>(castor::Position const &amp;position)</argsstring>
+        <name>doFboPick</name>
+        <qualifiedname>castor3d::Picking::doFboPick</qualifiedname>
         <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
+          <type>castor::Position const &amp;</type>
+          <declname>position</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -284,21 +766,29 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="95" column="1"/>
+        <location file="Render/Picking.hpp" line="140" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d9/d8b/a03922_1a3610cf6b6e728a6d9e281485ba9f1bd5" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::BonesInstantiationComponent::doUpload</definition>
-        <argsstring>() override</argsstring>
-        <name>doUpload</name>
-        <reimplements refid="d4/d2e/a03974_1a66e01bf8274e1d77bd20a669cb637a2e">doUpload</reimplements>
+      <memberdef kind="function" id="d9/d8b/a03922_1aa6bd4c2ae223a1eb980e1f307fb15fea" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/df4/a01401_1a658b8a9f25669fd516ba89c1af1d52e6" kindref="member">PickNodeType</ref></type>
+        <definition>PickNodeType castor3d::Picking::doPick</definition>
+        <argsstring>(castor::Point4ui const &amp;pixel, Scene const &amp;scene)</argsstring>
+        <name>doPick</name>
+        <qualifiedname>castor3d::Picking::doPick</qualifiedname>
+        <param>
+          <type>castor::Point4ui const &amp;</type>
+          <declname>pixel</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d71/a04598" kindref="compound">Scene</ref> const &amp;</type>
+          <declname>scene</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="96" column="1"/>
+        <location file="Render/Picking.hpp" line="141" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -306,65 +796,72 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="496">
-        <label>castor3d::SubmeshComponent</label>
-        <link refid="d4/d2e/a03974"/>
-        <childnode refid="497" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="495">
-        <label>castor3d::BonesInstantiationComponent</label>
+      <node id="1">
+        <label>castor3d::Picking</label>
         <link refid="d9/d8b/a03922"/>
-        <childnode refid="496" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="497">
-        <label>castor::OwnedBy&lt; Submesh &gt;</label>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="499">
-        <label>castor3d::SubmeshComponent</label>
-        <link refid="d4/d2e/a03974"/>
-        <childnode refid="500" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="498">
-        <label>castor3d::BonesInstantiationComponent</label>
+      <node id="1">
+        <label>castor3d::Picking</label>
         <link refid="d9/d8b/a03922"/>
-        <childnode refid="499" relation="public-inheritance">
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="500">
-        <label>castor::OwnedBy&lt; Submesh &gt;</label>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
       </node>
     </collaborationgraph>
-    <location file="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" line="16" column="1" bodyfile="Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp" bodystart="14" bodyend="105"/>
+    <location file="Render/Picking.hpp" line="23" column="1" bodyfile="Render/Picking.hpp" bodystart="25" bodyend="177"/>
     <listofallmembers>
-      <member refid="d9/d8b/a03922_1a30a7fca985626d2d0ffb9786987b3c65" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>BonesInstantiationComponent</name></member>
-      <member refid="d4/d2e/a03974_1af13d08b9487f0501a06c0f7df4c89f8c" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>cleanup</name></member>
-      <member refid="d9/d8b/a03922_1af743a0fbe57231727307beda937a0437" prot="private" virt="virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>doCleanup</name></member>
-      <member refid="d9/d8b/a03922_1a9774841e331a49b878254eb63cc91de0" prot="private" virt="virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>doFill</name></member>
-      <member refid="d9/d8b/a03922_1a998d4ea20931a7aaf58b37a5cbc9c819" prot="private" virt="virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>doInitialise</name></member>
-      <member refid="d9/d8b/a03922_1a3610cf6b6e728a6d9e281485ba9f1bd5" prot="private" virt="virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>doUpload</name></member>
-      <member refid="d4/d2e/a03974_1a53837125323ab11c28a86acbb187a770" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>fill</name></member>
-      <member refid="d9/d8b/a03922_1a737776e6d0f26fbc51f9b65333f346ae" prot="public" virt="virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>gather</name></member>
-      <member refid="d9/d8b/a03922_1a324db0d74a989b387a11285e8ca37604" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>getInstancedBonesBuffer</name></member>
-      <member refid="d9/d8b/a03922_1a2622f1b71232bed018dbe0893d445fd5" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>getInstancedBonesBuffer</name></member>
-      <member refid="d9/d8b/a03922_1a772466b58d0ce73e90caf5fa9262efb1" prot="public" virt="virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>getProgramFlags</name></member>
-      <member refid="d9/d8b/a03922_1a32e76e1e8642ee9500f1dbcd6aacf2a1" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>getSkeleton</name></member>
-      <member refid="d4/d2e/a03974_1a3782f6784f793eeccd48e637e85a9d6c" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>getType</name></member>
-      <member refid="d9/d8b/a03922_1a837c880c0ed93a393c2ecf94f8b06096" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>hasInstancedBonesBuffer</name></member>
-      <member refid="d4/d2e/a03974_1a98c6ad3457d19448c1eaa261598103ad" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>initialise</name></member>
-      <member refid="d9/d8b/a03922_1abebbf5128deb57ad647278872ddfec1b" prot="private" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>m_bones</name></member>
-      <member refid="d9/d8b/a03922_1a28fd11a2707390b80d4e7b7375a64eb8" prot="private" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>m_instancedBonesBuffer</name></member>
-      <member refid="d9/d8b/a03922_1a96a084705ada8643c43fb18b775ebd5c" prot="private" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>m_instantiation</name></member>
-      <member refid="d9/d8b/a03922_1a047188d2096e53376c70ac5872407f7a" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>Name</name></member>
-      <member refid="d4/d2e/a03974_1a7e21e4eda223d50b6751c40cb44f77a7" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>needsUpdate</name></member>
-      <member refid="d4/d2e/a03974_1a06b2ee9400bab62f5472f8ce8a03ee27" prot="public" virt="virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>setMaterial</name></member>
-      <member refid="d4/d2e/a03974_1aafbe6064005a72343870bb444e1e6a1f" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>SubmeshComponent</name></member>
-      <member refid="d4/d2e/a03974_1a2dbcda2b8c26f4c9c52db78a5740a0f8" prot="public" virt="non-virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>upload</name></member>
-      <member refid="d4/d2e/a03974_1a30231a167367ba38b41f9bf5b3bcd005" prot="public" virt="virtual"><scope>castor3d::BonesInstantiationComponent</scope><name>~SubmeshComponent</name></member>
+      <member refid="d9/d8b/a03922_1a22202dd82edb3a087eef1548420485bf" prot="public" virt="non-virtual"><scope>castor3d::Picking</scope><name>addScene</name></member>
+      <member refid="d9/d8b/a03922_1a48ef0670886168121814637aa642364a" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>doCreatePickingPass</name></member>
+      <member refid="d9/d8b/a03922_1ae9dff798a714e42ae66311734a5b3688" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>doFboPick</name></member>
+      <member refid="d9/d8b/a03922_1aa6bd4c2ae223a1eb980e1f307fb15fea" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>doPick</name></member>
+      <member refid="d9/d8b/a03922_1a7f04667a5ef2ce7d5c793944679a93f8" prot="public" virt="non-virtual"><scope>castor3d::Picking</scope><name>getImageView</name></member>
+      <member refid="d9/d8b/a03922_1a0007c572f8e38251f6a14bed87a4bc67" prot="public" virt="non-virtual"><scope>castor3d::Picking</scope><name>getPickedBillboard</name></member>
+      <member refid="d9/d8b/a03922_1ad40ba1ad38411f0a32c0c4ac2a567efe" prot="public" virt="non-virtual"><scope>castor3d::Picking</scope><name>getPickedFace</name></member>
+      <member refid="d9/d8b/a03922_1a116a2084c379c7aa7066ff23bf51eadd" prot="public" virt="non-virtual"><scope>castor3d::Picking</scope><name>getPickedGeometry</name></member>
+      <member refid="d9/d8b/a03922_1a08e943004368edb80f8c6af7dc0ac76a" prot="public" virt="non-virtual"><scope>castor3d::Picking</scope><name>getPickedNodeType</name></member>
+      <member refid="d9/d8b/a03922_1ade5aa6f6de9fec90a1f4d691dddff434" prot="public" virt="non-virtual"><scope>castor3d::Picking</scope><name>getPickedSubmesh</name></member>
+      <member refid="d9/d8b/a03922_1a779288d462b87e0ab23b6de7b16eb264" prot="public" virt="non-virtual"><scope>castor3d::Picking</scope><name>getSemaphoreWait</name></member>
+      <member refid="d9/d8b/a03922_1a2663fccca1513747a1d617ba546e372a" prot="public" virt="non-virtual"><scope>castor3d::Picking</scope><name>isPicking</name></member>
+      <member refid="d9/d8b/a03922_1a8dce7b1c9d3580b5e573474aa0d3ddde" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>m_billboard</name></member>
+      <member refid="d9/d8b/a03922_1a90f18e65be57e3aa0e9d035a2250361d" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>m_buffer</name></member>
+      <member refid="d9/d8b/a03922_1ab3b01680a4a95868b3c4877f19b897fb" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>m_colourImage</name></member>
+      <member refid="d9/d8b/a03922_1a85187b61b169c2e313c74c54502a7770" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>m_colourImageView</name></member>
+      <member refid="d9/d8b/a03922_1a32584956d7c5795f8e61e6b31dfe4437" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>m_colourTexture</name></member>
+      <member refid="d9/d8b/a03922_1a2fb144b26b11571096dab0076a023fdf" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>m_colourView</name></member>
+      <member refid="d9/d8b/a03922_1a912cb3ebe60c7fa300adb8df543399a2" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>m_commandBuffer</name></member>
+      <member refid="d9/d8b/a03922_1ae18e628b8cc0a9ab870d7ecbe9663d68" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>m_copyRegion</name></member>
+      <member refid="d9/d8b/a03922_1a96802a3f63e66ea6dc35eb090ccb26df" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>m_depthImage</name></member>
+      <member refid="d9/d8b/a03922_1afb7980b808ddcd5047642d1ca1c3b8f4" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>m_depthImageView</name></member>
+      <member refid="d9/d8b/a03922_1a727e1f13a7d9ed3c952ac36f4485e660" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>m_device</name></member>
+      <member refid="d9/d8b/a03922_1ab6a3769c38cb6d68b27c059842f74bca" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>m_face</name></member>
+      <member refid="d9/d8b/a03922_1a8f029eca1774fa12ff20ea5e7e1f44e0" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>m_first</name></member>
+      <member refid="d9/d8b/a03922_1a11dc98d36e1f7b4dd71f71cb02fb0ab7" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>m_geometry</name></member>
+      <member refid="d9/d8b/a03922_1a8d97595c6c663629554f87b5e48f41ec" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>m_graph</name></member>
+      <member refid="d9/d8b/a03922_1aa657e95384e3d5c300a8a83cca002e34" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>m_pickDisplayRegions</name></member>
+      <member refid="d9/d8b/a03922_1a7dc1d3aa1fdb11a8b913c40d2c6a6896" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>m_picking</name></member>
+      <member refid="d9/d8b/a03922_1a0b1a76545a1a8c3e486c6911afd73d6a" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>m_pickingPass</name></member>
+      <member refid="d9/d8b/a03922_1a43ad35126827c90c38d3b3c1e35b8303" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>m_pickingPassDesc</name></member>
+      <member refid="d9/d8b/a03922_1af56b26e5e8d6ba46661f871bc63181f6" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>m_pickNodeType</name></member>
+      <member refid="d9/d8b/a03922_1ae210fe92461e91ab7fbea6db1f0fdb0b" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>m_runnable</name></member>
+      <member refid="d9/d8b/a03922_1a7603367e323041f5f9474be00e107410" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>m_size</name></member>
+      <member refid="d9/d8b/a03922_1a8a97b05bba199bd001d06d81b3fab75f" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>m_stagingBuffer</name></member>
+      <member refid="d9/d8b/a03922_1afcbba3bda977bb3947038809e44f162e" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>m_submesh</name></member>
+      <member refid="d9/d8b/a03922_1a7f2adf4f8eef037c82310ca7b8ac3c5d" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>m_toWait</name></member>
+      <member refid="d9/d8b/a03922_1ae70128fb977c842ebcfd7c7b4c9dc9cc" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>m_transferFence</name></member>
+      <member refid="d9/d8b/a03922_1a45992c4c1267edbfe4ef097073ab0fb9" prot="public" virt="non-virtual"><scope>castor3d::Picking</scope><name>pick</name></member>
+      <member refid="d9/d8b/a03922_1ab8c0b62e4bb5ac13af4ee4223500107a" prot="public" virt="non-virtual"><scope>castor3d::Picking</scope><name>Picking</name></member>
+      <member refid="d9/d8b/a03922_1a742184bc3466cb59b5c144ec901e170e" prot="public" virt="non-virtual"><scope>castor3d::Picking</scope><name>PickingWidth</name></member>
+      <member refid="d9/d8b/a03922_1ac5da22aa8b0c940aa1663ccca5b8fa3b" prot="private" virt="non-virtual"><scope>castor3d::Picking</scope><name>UboBindingPoint</name></member>
+      <member refid="d9/d8b/a03922_1a50a9767901f5db8b73225f1e498222a6" prot="public" virt="non-virtual"><scope>castor3d::Picking</scope><name>~Picking</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

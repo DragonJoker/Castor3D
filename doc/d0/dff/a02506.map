@@ -1,7 +1,5 @@
-<map id="castor3d::Cache&lt; Plugin, castor::String &gt;" name="castor3d::Cache&lt; Plugin, castor::String &gt;">
-<area shape="rect" id="node1" title="Plug&#45;ins cache." alt="" coords="39,365,209,407"/>
-<area shape="rect" id="node2" href="$df/d46/a02376.html" title=" " alt="" coords="40,275,208,316"/>
-<area shape="rect" id="node3" href="$dc/dbb/a02520.html" title=" " alt="" coords="31,81,151,108"/>
-<area shape="rect" id="node5" href="$df/d46/a02376.html" title="Base class for an element cache." alt="" coords="155,171,336,212"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,5,176,32"/>
+<map id="castor3d::UniformBufferT&lt; DataT &gt;" name="castor3d::UniformBufferT&lt; DataT &gt;">
+<area shape="rect" id="node1" title="A uniform typed buffer, than can contain multiple sub&#45;buffers." alt="" coords="47,81,211,123"/>
+<area shape="rect" id="node3" href="$de/dbd/a02507.html" title=" " alt="" coords="5,185,252,227"/>
+<area shape="rect" id="node2" href="$d1/de9/a02591.html" title=" " alt="" coords="35,5,222,32"/>
 </map>

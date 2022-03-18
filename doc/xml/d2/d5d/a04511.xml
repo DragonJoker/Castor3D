@@ -1,505 +1,84 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d2/d5d/a04511" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::RenderLoopAsync</compoundname>
-    <basecompoundref refid="da/dec/a04499" prot="public" virt="non-virtual">castor3d::RenderLoop</basecompoundref>
-    <includes local="no">RenderLoopAsync.hpp</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d2/d5d/a04511_1a9970fa03c4edc6dfd0553e85c52113c3" prot="private" static="no" mutable="no">
-        <type>std::unique_ptr&lt; std::thread &gt;</type>
-        <definition>std::unique_ptr&lt; std::thread &gt; castor3d::RenderLoopAsync::m_mainLoopThread</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d2/d5d/a04511" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::RsmConfig</compoundname>
+    <includes local="no">LightModule.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d2/d5d/a04511_1a9818a93a8767f1c0315fc16bcd1ceff2" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr uint32_t</type>
+        <definition>constexpr uint32_t castor3d::RsmConfig::MaxRange</definition>
         <argsstring></argsstring>
-        <name>m_mainLoopThread</name>
+        <name>MaxRange</name>
+        <qualifiedname>castor3d::RsmConfig::MaxRange</qualifiedname>
+        <initializer>= 800u</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="135" column="1" bodyfile="Render/RenderLoopAsync.hpp" bodystart="135" bodyend="-1"/>
+        <location file="Scene/Light/LightModule.hpp" line="144" column="27" bodyfile="Scene/Light/LightModule.hpp" bodystart="144" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d2/d5d/a04511_1ab0abb9c17bccb8fc5368d3b1c414c4a1" prot="private" static="no" mutable="no">
-        <type>std::atomic_bool</type>
-        <definition>std::atomic_bool castor3d::RenderLoopAsync::m_ended</definition>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/d5d/a04511_1a508137cf40bcad324c86d581629a273a" prot="public" static="no" mutable="no">
+        <type>castor::ChangeTracked&lt; float &gt;</type>
+        <definition>castor::ChangeTracked&lt; float &gt; castor3d::RsmConfig::intensity</definition>
         <argsstring></argsstring>
-        <name>m_ended</name>
+        <name>intensity</name>
+        <qualifiedname>castor3d::RsmConfig::intensity</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="136" column="1" bodyfile="Render/RenderLoopAsync.hpp" bodystart="136" bodyend="-1"/>
+        <location file="Scene/Light/LightModule.hpp" line="146" column="23" bodyfile="Scene/Light/LightModule.hpp" bodystart="146" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d2/d5d/a04511_1a66b1cb542c06c31127dd416eb047b349" prot="private" static="no" mutable="no">
-        <type>std::atomic_bool</type>
-        <definition>std::atomic_bool castor3d::RenderLoopAsync::m_rendering</definition>
+      <memberdef kind="variable" id="d2/d5d/a04511_1ad8032cec156015c1ed788b972fdaea54" prot="public" static="no" mutable="no">
+        <type>castor::ChangeTracked&lt; float &gt;</type>
+        <definition>castor::ChangeTracked&lt; float &gt; castor3d::RsmConfig::maxRadius</definition>
         <argsstring></argsstring>
-        <name>m_rendering</name>
+        <name>maxRadius</name>
+        <qualifiedname>castor3d::RsmConfig::maxRadius</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="137" column="1" bodyfile="Render/RenderLoopAsync.hpp" bodystart="137" bodyend="-1"/>
+        <location file="Scene/Light/LightModule.hpp" line="147" column="23" bodyfile="Scene/Light/LightModule.hpp" bodystart="147" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d2/d5d/a04511_1a5576c9ace5923e61433b01f38eb3fcf3" prot="private" static="no" mutable="no">
-        <type>std::atomic_bool</type>
-        <definition>std::atomic_bool castor3d::RenderLoopAsync::m_frameEnded</definition>
+      <memberdef kind="variable" id="d2/d5d/a04511_1adf7f2dfd8cbf6704433baab1a3eb4da3" prot="public" static="no" mutable="no">
+        <type>castor::ChangeTracked&lt; castor::RangedValue&lt; uint32_t &gt; &gt;</type>
+        <definition>castor::ChangeTracked&lt; castor::RangedValue&lt; uint32_t &gt; &gt; castor3d::RsmConfig::sampleCount</definition>
         <argsstring></argsstring>
-        <name>m_frameEnded</name>
+        <name>sampleCount</name>
+        <qualifiedname>castor3d::RsmConfig::sampleCount</qualifiedname>
+        <initializer>{ castor::makeRangedValue( 100u, 20u, <ref refid="d2/d5d/a04511_1a9818a93a8767f1c0315fc16bcd1ceff2" kindref="member">MaxRange</ref> ) }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="138" column="1" bodyfile="Render/RenderLoopAsync.hpp" bodystart="138" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d5d/a04511_1a4d1b2547999e14287de9d780c6756092" prot="private" static="no" mutable="no">
-        <type>std::atomic_bool</type>
-        <definition>std::atomic_bool castor3d::RenderLoopAsync::m_paused</definition>
-        <argsstring></argsstring>
-        <name>m_paused</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="139" column="1" bodyfile="Render/RenderLoopAsync.hpp" bodystart="139" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d5d/a04511_1a4648b19177d56603dbcc5d8dd9c19825" prot="private" static="no" mutable="no">
-        <type>std::atomic_bool</type>
-        <definition>std::atomic_bool castor3d::RenderLoopAsync::m_createContext</definition>
-        <argsstring></argsstring>
-        <name>m_createContext</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="140" column="1" bodyfile="Render/RenderLoopAsync.hpp" bodystart="140" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d5d/a04511_1abfbf84024458b491fd06701675bd8fd1" prot="private" static="no" mutable="no">
-        <type>std::atomic_bool</type>
-        <definition>std::atomic_bool castor3d::RenderLoopAsync::m_created</definition>
-        <argsstring></argsstring>
-        <name>m_created</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="141" column="1" bodyfile="Render/RenderLoopAsync.hpp" bodystart="141" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d5d/a04511_1aebb366ac74e7bc7ae1bea596594b6a79" prot="private" static="no" mutable="no">
-        <type>std::atomic_bool</type>
-        <definition>std::atomic_bool castor3d::RenderLoopAsync::m_interrupted</definition>
-        <argsstring></argsstring>
-        <name>m_interrupted</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="142" column="1" bodyfile="Render/RenderLoopAsync.hpp" bodystart="142" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d5d/a04511_1a20ae9964c3b5c742c5af12c73722d41c" prot="private" static="no" mutable="yes">
-        <type>std::mutex</type>
-        <definition>std::mutex castor3d::RenderLoopAsync::m_mutexWindow</definition>
-        <argsstring></argsstring>
-        <name>m_mutexWindow</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="143" column="1" bodyfile="Render/RenderLoopAsync.hpp" bodystart="143" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d5d/a04511_1a96bbfafdd430fe74f4157e90a0c65da6" prot="private" static="no" mutable="no">
-        <type>RenderWindowRPtr</type>
-        <definition>RenderWindowRPtr castor3d::RenderLoopAsync::m_window</definition>
-        <argsstring></argsstring>
-        <name>m_window</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="144" column="1" bodyfile="Render/RenderLoopAsync.hpp" bodystart="144" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d5d/a04511_1ae38584dfb31f218edd6cdd229b92fc5f" prot="private" static="no" mutable="no">
-        <type>ashes::WindowHandle</type>
-        <definition>ashes::WindowHandle castor3d::RenderLoopAsync::m_handle</definition>
-        <argsstring></argsstring>
-        <name>m_handle</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="145" column="1" bodyfile="Render/RenderLoopAsync.hpp" bodystart="145" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d5d/a04511_1a529c9108bd88eb638579f11c67b89955" prot="private" static="no" mutable="no">
-        <type>castor::Milliseconds</type>
-        <definition>castor::Milliseconds castor3d::RenderLoopAsync::m_savedTime</definition>
-        <argsstring></argsstring>
-        <name>m_savedTime</name>
-        <initializer>{ 0 }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="146" column="1" bodyfile="Render/RenderLoopAsync.hpp" bodystart="146" bodyend="-1"/>
+        <location file="Scene/Light/LightModule.hpp" line="148" column="23" bodyfile="Scene/Light/LightModule.hpp" bodystart="148" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d2/d5d/a04511_1a45851e91e2d9cbdc2ee36d175e99bf3f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::RenderLoopAsync::RenderLoopAsync</definition>
-        <argsstring>(Engine &amp;engine, uint32_t wantedFPS)</argsstring>
-        <name>RenderLoopAsync</name>
+      <memberdef kind="function" id="d2/d5d/a04511_1adabd3e2bd5e3383dc5be814c20b4e5f7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RsmConfig::accept</definition>
+        <argsstring>(castor::String const &amp;name, PipelineVisitorBase &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::RsmConfig::accept</qualifiedname>
         <param>
-          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
         </param>
         <param>
-          <type>uint32_t</type>
-          <declname>wantedFPS</declname>
-        </param>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">engine</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The engine. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">wantedFPS</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The wanted FPS count. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="27" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d5d/a04511_1ae26cfe253b941c1ba01e3c4b128d4f20" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::RenderLoopAsync::~RenderLoopAsync</definition>
-        <argsstring>()</argsstring>
-        <name>~RenderLoopAsync</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="35" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d5d/a04511_1ae431940276f8113daf9c229b36e4765d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::RenderLoopAsync::isCreated</definition>
-        <argsstring>() const</argsstring>
-        <name>isCreated</name>
-        <briefdescription>
-<para>Retrieves the context creation status. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="remark"><para>Thread-safe. </para>
-</simplesect>
-<simplesect kind="return"><para><computeroutput>true</computeroutput> if created. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="46" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d5d/a04511_1a6b648801a009feac64dd5b26ab3d5bcf" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::RenderLoopAsync::isRendering</definition>
-        <argsstring>() const</argsstring>
-        <name>isRendering</name>
-        <briefdescription>
-<para>Retrieves the render start status. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="remark"><para>Thread-safe. </para>
-</simplesect>
-<simplesect kind="return"><para><computeroutput>true</computeroutput> if started. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="57" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d5d/a04511_1a728974ac19c8b6a957734bb9eb853624" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::RenderLoopAsync::isPaused</definition>
-        <argsstring>() const</argsstring>
-        <name>isPaused</name>
-        <briefdescription>
-<para>Retrieves the render paused status. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="remark"><para>Thread-safe. </para>
-</simplesect>
-<simplesect kind="return"><para><computeroutput>true</computeroutput> if paused. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="68" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d5d/a04511_1acd60d1549f4cfb02f20e540a6834ead3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::RenderLoopAsync::isInterrupted</definition>
-        <argsstring>() const</argsstring>
-        <name>isInterrupted</name>
-        <briefdescription>
-<para>Thread-safe. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if the render loop is interrupted. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="77" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d5d/a04511_1a99cfda764dc2de13afe6d2c926e739c8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::RenderLoopAsync::isEnded</definition>
-        <argsstring>() const</argsstring>
-        <name>isEnded</name>
-        <briefdescription>
-<para>Retrieves the render loop end status. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="remark"><para>Thread-safe. </para>
-</simplesect>
-<simplesect kind="return"><para><computeroutput>true</computeroutput> if created. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="88" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d5d/a04511_1a80f64ba0cc5c44dbddcf0d2e4e6c31ce" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderLoopAsync::enableVSync</definition>
-        <argsstring>(bool enable) override</argsstring>
-        <name>enableVSync</name>
-        <reimplements refid="da/dec/a04499_1a9920fa7ccc5a06415b08e238e1f4754f">enableVSync</reimplements>
-        <param>
-          <type>bool</type>
-          <declname>enable</declname>
-        </param>
-        <briefdescription>
-<para>Updates the V-Sync status. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">enable</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The status. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="92" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d5d/a04511_1a1659e9cacfacd9115e6aa1bad410c9d9" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderLoopAsync::beginRendering</definition>
-        <argsstring>() override</argsstring>
-        <name>beginRendering</name>
-        <reimplements refid="da/dec/a04499_1a7842a7d67f402edcc24be8fd09973818">beginRendering</reimplements>
-        <briefdescription>
-<para>Starts threaded render loop. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="96" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d5d/a04511_1a64cff74d50b270e8dc6fcfac0ff915e0" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderLoopAsync::renderSyncFrame</definition>
-        <argsstring>(castor::Milliseconds tslf) override</argsstring>
-        <name>renderSyncFrame</name>
-        <reimplements refid="da/dec/a04499_1aabd4de0429c0e2659058545c6ec1bad2">renderSyncFrame</reimplements>
-        <param>
-          <type>castor::Milliseconds</type>
-          <declname>tslf</declname>
-        </param>
-        <briefdescription>
-<para>Renders one frame, only if not in render loop. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">tslf</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The time elapsed since last frame. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="100" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d5d/a04511_1a972e43d249ca40bb3120dc7396c6a17b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderLoopAsync::pause</definition>
-        <argsstring>() override</argsstring>
-        <name>pause</name>
-        <reimplements refid="da/dec/a04499_1afbc75c36ac22821c05f284e6fee155af">pause</reimplements>
-        <briefdescription>
-<para>Pauses the render loop. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="104" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d5d/a04511_1a41474a08868fa78570450ff97369f123" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderLoopAsync::resume</definition>
-        <argsstring>() override</argsstring>
-        <name>resume</name>
-        <reimplements refid="da/dec/a04499_1ae909f2e21ba004087428391048d8db86">resume</reimplements>
-        <briefdescription>
-<para>Resumes the render loop. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="108" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d5d/a04511_1a7032d625b973c83fc5671654eabf57f0" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderLoopAsync::endRendering</definition>
-        <argsstring>() override</argsstring>
-        <name>endRendering</name>
-        <reimplements refid="da/dec/a04499_1ad9ec6cf47938ab0fb37512d0cf177a51">endRendering</reimplements>
-        <briefdescription>
-<para>Ends the render, cleans up engine. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="remark"><para>Ends the threaded render loop, if any. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="112" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d2/d5d/a04511_1afc700e5e1b1d1866fa0b86d37a9b2a6f" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> RenderDeviceSPtr</type>
-        <definition>C3D_API RenderDeviceSPtr castor3d::RenderLoopAsync::doCreateMainDevice</definition>
-        <argsstring>(ashes::WindowHandle handle, RenderWindow &amp;window) override</argsstring>
-        <name>doCreateMainDevice</name>
-        <reimplements refid="da/dec/a04499_1a9054d6b667a9b1a08c53a68ec83e3ee2">doCreateMainDevice</reimplements>
-        <param>
-          <type>ashes::WindowHandle</type>
-          <declname>handle</declname>
-        </param>
-        <param>
-          <type><ref refid="dc/d9b/a04615" kindref="compound">RenderWindow</ref> &amp;</type>
-          <declname>window</declname>
-        </param>
-        <briefdescription>
-<para>Asks for main render context creation. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">handle</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The native window handle. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">window</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render window used to initialise the render context, receives the context. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="118" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d5d/a04511_1ada1e99a27c4b074345cfa4be33bd85c2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderLoopAsync::doMainLoop</definition>
-        <argsstring>()</argsstring>
-        <name>doMainLoop</name>
-        <briefdescription>
-<para>The threaded render loop. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="remark"><para>The main context is created here, since OpenGL needs each thread to have its context. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="128" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d5d/a04511_1afb07b9a9caee7031b53aa98b54ec9ca0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderLoopAsync::doSetHandle</definition>
-        <argsstring>(ashes::WindowHandle handle)</argsstring>
-        <name>doSetHandle</name>
-        <param>
-          <type>ashes::WindowHandle</type>
-          <declname>handle</declname>
+          <type><ref refid="d6/d38/a03259" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -507,210 +86,20 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="129" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d5d/a04511_1a5c33ef37642699c46a7fda17294c5474" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::WindowHandle &amp;</type>
-        <definition>C3D_API ashes::WindowHandle&amp; castor3d::RenderLoopAsync::doGetHandle</definition>
-        <argsstring>()</argsstring>
-        <name>doGetHandle</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="130" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d5d/a04511_1a8fe2b064eae0367a0472b5719298e382" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::RenderLoopAsync::doSetWindow</definition>
-        <argsstring>(RenderWindow *window)</argsstring>
-        <name>doSetWindow</name>
-        <param>
-          <type><ref refid="dc/d9b/a04615" kindref="compound">RenderWindow</ref> *</type>
-          <declname>window</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="131" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d2/d5d/a04511_1acc1a6691cc95ee82e4e2eab82254825a" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dc/d9b/a04615" kindref="compound">RenderWindow</ref> *</type>
-        <definition>C3D_API RenderWindow* castor3d::RenderLoopAsync::doGetWindow</definition>
-        <argsstring>() const</argsstring>
-        <name>doGetWindow</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderLoopAsync.hpp" line="132" column="1"/>
+        <location file="Scene/Light/LightModule.hpp" line="141" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="2952">
-        <label>castor3d::RenderLoop</label>
-        <link refid="da/dec/a04499"/>
-        <childnode refid="2953" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2953">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="2951">
-        <label>castor3d::RenderLoopAsync</label>
-        <link refid="d2/d5d/a04511"/>
-        <childnode refid="2952" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="2957">
-        <label>std::array&lt; castor3d::RenderLoop::UploadResources, 2u &gt;</label>
-        <childnode refid="2958" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-        <childnode refid="2960" relation="template-instance">
-          <edgelabel>&lt; castor3d::RenderLoop::UploadResources, 2u &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2962">
-        <label>castor3d::RenderSystem</label>
-        <link refid="d6/d55/a04603"/>
-        <childnode refid="2956" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2961">
-        <label>T</label>
-      </node>
-      <node id="2960">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="2961" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="2955">
-        <label>castor3d::RenderLoop</label>
-        <link refid="da/dec/a04499"/>
-        <childnode refid="2956" relation="public-inheritance">
-        </childnode>
-        <childnode refid="2957" relation="usage">
-          <edgelabel>m_uploadResources</edgelabel>
-        </childnode>
-        <childnode refid="2962" relation="usage">
-          <edgelabel>m_renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="2963" relation="usage">
-          <edgelabel>m_debugOverlays</edgelabel>
-        </childnode>
-      </node>
-      <node id="2965">
-        <label>std::unique_ptr&lt; T &gt;</label>
-        <childnode refid="2961" relation="usage">
-          <edgelabel>ptr</edgelabel>
-        </childnode>
-      </node>
-      <node id="2963">
-        <label>std::unique_ptr&lt; castor3d::DebugOverlays &gt;</label>
-        <childnode refid="2964" relation="usage">
-          <edgelabel>ptr</edgelabel>
-        </childnode>
-        <childnode refid="2965" relation="template-instance">
-          <edgelabel>&lt; castor3d::DebugOverlays &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2958">
-        <label>castor3d::RenderLoop::UploadResources</label>
-        <link refid="d3/d0f/a04507"/>
-        <childnode refid="2959" relation="usage">
-          <edgelabel>commands</edgelabel>
-        </childnode>
-      </node>
-      <node id="2956">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="2959">
-        <label>castor3d::CommandsSemaphore</label>
-        <link refid="dd/d20/a04359"/>
-      </node>
-      <node id="2954">
-        <label>castor3d::RenderLoopAsync</label>
-        <link refid="d2/d5d/a04511"/>
-        <childnode refid="2955" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2964">
-        <label>castor3d::DebugOverlays</label>
-        <link refid="d6/dae/a04043"/>
-        <childnode refid="2956" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Render/RenderLoopAsync.hpp" line="15" column="1" bodyfile="Render/RenderLoopAsync.hpp" bodystart="13" bodyend="147"/>
+    <location file="Scene/Light/LightModule.hpp" line="139" column="1" bodyfile="Scene/Light/LightModule.hpp" bodystart="140" bodyend="149"/>
     <listofallmembers>
-      <member refid="d2/d5d/a04511_1a1659e9cacfacd9115e6aa1bad410c9d9" prot="public" virt="virtual"><scope>castor3d::RenderLoopAsync</scope><name>beginRendering</name></member>
-      <member refid="da/dec/a04499_1ad8988f97407d38c23b3f7ab1c5aa6c91" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>cleanup</name></member>
-      <member refid="da/dec/a04499_1a680de530d55207b6c3135752b81b4cb6" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>createDevice</name></member>
-      <member refid="da/dec/a04499_1abbe1eafae9da8783185ad55a228ed003" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>doCreateDevice</name></member>
-      <member refid="d2/d5d/a04511_1afc700e5e1b1d1866fa0b86d37a9b2a6f" prot="private" virt="virtual"><scope>castor3d::RenderLoopAsync</scope><name>doCreateMainDevice</name></member>
-      <member refid="d2/d5d/a04511_1a5c33ef37642699c46a7fda17294c5474" prot="private" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>doGetHandle</name></member>
-      <member refid="d2/d5d/a04511_1acc1a6691cc95ee82e4e2eab82254825a" prot="private" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>doGetWindow</name></member>
-      <member refid="d2/d5d/a04511_1ada1e99a27c4b074345cfa4be33bd85c2" prot="private" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>doMainLoop</name></member>
-      <member refid="da/dec/a04499_1adb8cd1592c293d4f956365f0e958e92d" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>doRenderFrame</name></member>
-      <member refid="d2/d5d/a04511_1afb07b9a9caee7031b53aa98b54ec9ca0" prot="private" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>doSetHandle</name></member>
-      <member refid="d2/d5d/a04511_1a8fe2b064eae0367a0472b5719298e382" prot="private" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>doSetWindow</name></member>
-      <member refid="d2/d5d/a04511_1a80f64ba0cc5c44dbddcf0d2e4e6c31ce" prot="public" virt="virtual"><scope>castor3d::RenderLoopAsync</scope><name>enableVSync</name></member>
-      <member refid="d2/d5d/a04511_1a7032d625b973c83fc5671654eabf57f0" prot="public" virt="virtual"><scope>castor3d::RenderLoopAsync</scope><name>endRendering</name></member>
-      <member refid="da/dec/a04499_1ab0cce3459fd96396758d47675c0d0f45" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>flushEvents</name></member>
-      <member refid="da/dec/a04499_1a79f739c91870a843cf239047d461e15b" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>getFrameTime</name></member>
-      <member refid="da/dec/a04499_1ad15d465d0c3cdf48c0bd198d9df85501" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>getLastFrameTime</name></member>
-      <member refid="da/dec/a04499_1a59d11c13fd374d43d0f7e22bd541938b" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>getWantedFps</name></member>
-      <member refid="da/dec/a04499_1a60b8176ab5eb5ca6b25663f955780e3e" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>hasDebugOverlays</name></member>
-      <member refid="d2/d5d/a04511_1ae431940276f8113daf9c229b36e4765d" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>isCreated</name></member>
-      <member refid="d2/d5d/a04511_1a99cfda764dc2de13afe6d2c926e739c8" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>isEnded</name></member>
-      <member refid="d2/d5d/a04511_1acd60d1549f4cfb02f20e540a6834ead3" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>isInterrupted</name></member>
-      <member refid="d2/d5d/a04511_1a728974ac19c8b6a957734bb9eb853624" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>isPaused</name></member>
-      <member refid="d2/d5d/a04511_1a6b648801a009feac64dd5b26ab3d5bcf" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>isRendering</name></member>
-      <member refid="d2/d5d/a04511_1a4648b19177d56603dbcc5d8dd9c19825" prot="private" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>m_createContext</name></member>
-      <member refid="d2/d5d/a04511_1abfbf84024458b491fd06701675bd8fd1" prot="private" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>m_created</name></member>
-      <member refid="da/dec/a04499_1a03f6c7a9ec87f3e1e24dfc1bf8868b89" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>m_currentUpdate</name></member>
-      <member refid="da/dec/a04499_1a3df1d0d853b8d30a64f9491ba2b64206" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>m_debugOverlays</name></member>
-      <member refid="d2/d5d/a04511_1ab0abb9c17bccb8fc5368d3b1c414c4a1" prot="private" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>m_ended</name></member>
-      <member refid="d2/d5d/a04511_1a5576c9ace5923e61433b01f38eb3fcf3" prot="private" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>m_frameEnded</name></member>
-      <member refid="da/dec/a04499_1a3fdea4c3d454da13b6874d71d031772a" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>m_frameTime</name></member>
-      <member refid="d2/d5d/a04511_1ae38584dfb31f218edd6cdd229b92fc5f" prot="private" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>m_handle</name></member>
-      <member refid="d2/d5d/a04511_1aebb366ac74e7bc7ae1bea596594b6a79" prot="private" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>m_interrupted</name></member>
-      <member refid="da/dec/a04499_1aadd20893be5df0f0a8bdfe52b5f4d148" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>m_lastFrameTime</name></member>
-      <member refid="d2/d5d/a04511_1a9970fa03c4edc6dfd0553e85c52113c3" prot="private" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>m_mainLoopThread</name></member>
-      <member refid="d2/d5d/a04511_1a20ae9964c3b5c742c5af12c73722d41c" prot="private" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>m_mutexWindow</name></member>
-      <member refid="d2/d5d/a04511_1a4d1b2547999e14287de9d780c6756092" prot="private" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>m_paused</name></member>
-      <member refid="da/dec/a04499_1a33d74cb1c3112d6c39a16b56af7dee3c" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>m_queueUpdater</name></member>
-      <member refid="d2/d5d/a04511_1a66b1cb542c06c31127dd416eb047b349" prot="private" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>m_rendering</name></member>
-      <member refid="da/dec/a04499_1a12c0e4650d67b30b6d3d8af64a6fdea6" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>m_renderSystem</name></member>
-      <member refid="d2/d5d/a04511_1a529c9108bd88eb638579f11c67b89955" prot="private" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>m_savedTime</name></member>
-      <member refid="da/dec/a04499_1a110d978875d737faa37572c0d01417f3" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>m_uploadResources</name></member>
-      <member refid="da/dec/a04499_1aca51dfa60d759d003d2e706b33124933" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>m_wantedFPS</name></member>
-      <member refid="d2/d5d/a04511_1a96bbfafdd430fe74f4157e90a0c65da6" prot="private" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>m_window</name></member>
-      <member refid="d2/d5d/a04511_1a972e43d249ca40bb3120dc7396c6a17b" prot="public" virt="virtual"><scope>castor3d::RenderLoopAsync</scope><name>pause</name></member>
-      <member refid="da/dec/a04499_1a8d80e8cd7f7e9764c3398da5e31e2a0a" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>registerTimer</name></member>
-      <member refid="da/dec/a04499_1a92f9f97a35dd1d47e537f6e6024952b7" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>RenderLoop</name></member>
-      <member refid="d2/d5d/a04511_1a45851e91e2d9cbdc2ee36d175e99bf3f" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>RenderLoopAsync</name></member>
-      <member refid="d2/d5d/a04511_1a64cff74d50b270e8dc6fcfac0ff915e0" prot="public" virt="virtual"><scope>castor3d::RenderLoopAsync</scope><name>renderSyncFrame</name></member>
-      <member refid="d2/d5d/a04511_1a41474a08868fa78570450ff97369f123" prot="public" virt="virtual"><scope>castor3d::RenderLoopAsync</scope><name>resume</name></member>
-      <member refid="da/dec/a04499_1aebff987d3a1a626374752685dff11c05" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>showDebugOverlays</name></member>
-      <member refid="da/dec/a04499_1a7d7f637bbf69880081916acac9dc08f2" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>unregisterTimer</name></member>
-      <member refid="da/dec/a04499_1a98370f8e34e7f81f1c9277129c71b718" prot="public" virt="virtual"><scope>castor3d::RenderLoopAsync</scope><name>~RenderLoop</name></member>
-      <member refid="d2/d5d/a04511_1ae26cfe253b941c1ba01e3c4b128d4f20" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopAsync</scope><name>~RenderLoopAsync</name></member>
+      <member refid="d2/d5d/a04511_1adabd3e2bd5e3383dc5be814c20b4e5f7" prot="public" virt="non-virtual"><scope>castor3d::RsmConfig</scope><name>accept</name></member>
+      <member refid="d2/d5d/a04511_1a508137cf40bcad324c86d581629a273a" prot="public" virt="non-virtual"><scope>castor3d::RsmConfig</scope><name>intensity</name></member>
+      <member refid="d2/d5d/a04511_1ad8032cec156015c1ed788b972fdaea54" prot="public" virt="non-virtual"><scope>castor3d::RsmConfig</scope><name>maxRadius</name></member>
+      <member refid="d2/d5d/a04511_1a9818a93a8767f1c0315fc16bcd1ceff2" prot="public" virt="non-virtual"><scope>castor3d::RsmConfig</scope><name>MaxRange</name></member>
+      <member refid="d2/d5d/a04511_1adf7f2dfd8cbf6704433baab1a3eb4da3" prot="public" virt="non-virtual"><scope>castor3d::RsmConfig</scope><name>sampleCount</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

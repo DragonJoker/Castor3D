@@ -1,231 +1,204 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d2/d1f/a04896" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::RsmLightPassConfig</compoundname>
-    <includes local="no">ReflectiveShadowMapGIModule.hpp</includes>
+    <compoundname>castor3d::shader::LayeredLpvGridData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">LayeredLpvGridConfigUbo.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d2/d1f/a04896_1a67b5155db40e54d849f00a25dca050a9" prot="public" static="no" mutable="no">
-        <type><ref refid="da/d0e/a04752" kindref="compound">LightPassConfig</ref></type>
-        <definition>LightPassConfig castor3d::RsmLightPassConfig::base</definition>
+      <memberdef kind="variable" id="d2/d1f/a04896_1a0063c6eeb4ec09e811e7126c4c10e70f" prot="public" static="no" mutable="no">
+        <type>sdw::Array&lt; sdw::Vec4 &gt;</type>
+        <definition>sdw::Array&lt; sdw::Vec4 &gt; castor3d::shader::LayeredLpvGridData::allMinVolumeCorners</definition>
         <argsstring></argsstring>
-        <name>base</name>
+        <name>allMinVolumeCorners</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::allMinVolumeCorners</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" line="87" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" bodystart="87" bodyend="-1"/>
-        <referencedby refid="db/d9e/a04892_1aec682c16bf1f28ec46627a6a18825c0c" compoundref="d8/d19/a00935" startline="43" endline="53">castor3d::LightPassReflectiveShadow&lt; LtType &gt;::LightPassReflectiveShadow</referencedby>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="33" column="12" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="33" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d2/d1f/a04896_1a11f7d9d7a7d1f670b6ca95dd8e1fe84a" prot="public" static="no" mutable="no">
-        <type><ref refid="da/d1e/a01479_1a563d137a64a10483b6a4ba4b5174d05d" kindref="member">LightCache</ref> const  &amp;</type>
-        <definition>LightCache const&amp; castor3d::RsmLightPassConfig::lightCache</definition>
+      <memberdef kind="variable" id="d2/d1f/a04896_1af313723153e566dde7c4b2e74be1e17c" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::LayeredLpvGridData::allCellSizes</definition>
         <argsstring></argsstring>
-        <name>lightCache</name>
+        <name>allCellSizes</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::allCellSizes</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" line="88" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" bodystart="88" bodyend="-1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="34" column="11" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="34" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d2/d1f/a04896_1aceccd989804b00062417cb5a49230b4e" prot="public" static="no" mutable="no">
-        <type><ref refid="d1/dcd/a04880" kindref="compound">OpaquePassResult</ref> const  &amp;</type>
-        <definition>OpaquePassResult const&amp; castor3d::RsmLightPassConfig::gpResult</definition>
+      <memberdef kind="variable" id="d2/d1f/a04896_1a7954951ecddf0d1e6e7a9f6cf16597b6" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::LayeredLpvGridData::gridSizesAtt</definition>
         <argsstring></argsstring>
-        <name>gpResult</name>
+        <name>gridSizesAtt</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::gridSizesAtt</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" line="89" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" bodystart="89" bodyend="-1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="35" column="11" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="35" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d2/d1f/a04896_1af99f8ae3de57fd69a1917c28aa986075" prot="public" static="no" mutable="no">
-        <type><ref refid="d9/dcf/a04692" kindref="compound">ShadowMapResult</ref> const  &amp;</type>
-        <definition>ShadowMapResult const&amp; castor3d::RsmLightPassConfig::smResult</definition>
+      <memberdef kind="variable" id="d2/d1f/a04896_1aa1a7c7aea39641bd98c059b73d605c37" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::LayeredLpvGridData::gridSizes</definition>
         <argsstring></argsstring>
-        <name>smResult</name>
+        <name>gridSizes</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::gridSizes</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" line="90" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" bodystart="90" bodyend="-1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="37" column="11" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d1f/a04896_1a6ba460245c93bf387a9b2b2834369dc6" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::LayeredLpvGridData::indirectAttenuation</definition>
+        <argsstring></argsstring>
+        <name>indirectAttenuation</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::indirectAttenuation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="38" column="12" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/d1f/a04896_1a8d94301768152db7b7a0fb120f573404" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::LayeredLpvGridData::LayeredLpvGridData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>LayeredLpvGridData</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::LayeredLpvGridData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="24" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d1f/a04896_1aede5a62185a9f5ae1b23efd4d4c2b927" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::LayeredLpvGridData::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, LayeredLpvGridData)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        </param>
+        <param>
+          <type><ref refid="d2/d1f/a04896" kindref="compound">LayeredLpvGridData</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="27" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d2/d1f/a04896_1ad2e47aefbd9b56363e9260e41cf0bc37" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
+        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::LayeredLpvGridData::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="29" column="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d1f/a04896_1ad6225133c60e87f3d5f41806cfa5401c" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::LayeredLpvGridData::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::declare</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="30" column="32"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="3237">
-        <label>castor3d::GBufferT&lt; DsTexture &gt;</label>
-        <link refid="d8/dc6/a04256"/>
-        <childnode refid="3234" relation="private-inheritance">
-        </childnode>
-        <childnode refid="3223" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="3235" relation="template-instance">
-          <edgelabel>&lt; DsTexture &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3222">
-        <label>castor3d::ObjectCacheBase&lt; Light, castor::String &gt;</label>
-        <link refid="d5/d04/a02428"/>
-        <childnode refid="3223" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="3225" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-        <childnode refid="3229" relation="template-instance">
-          <edgelabel>&lt; Light, castor::String &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3233">
-        <label>castor3d::GBufferT&lt; LpTexture &gt;</label>
-        <link refid="d8/dc6/a04256"/>
-        <childnode refid="3234" relation="private-inheritance">
-        </childnode>
-        <childnode refid="3223" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="3235" relation="template-instance">
-          <edgelabel>&lt; LpTexture &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3232">
-        <label>castor3d::LightPassResult</label>
-        <link refid="db/d2a/a04776"/>
-        <childnode refid="3233" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3221">
-        <label>castor3d::ObjectCache&lt; Light, castor::String &gt;</label>
-        <link refid="de/d4e/a02484"/>
-        <childnode refid="3222" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3220">
-        <label>castor3d::RsmLightPassConfig</label>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::LayeredLpvGridData</label>
         <link refid="d2/d1f/a04896"/>
-        <childnode refid="3221" relation="usage">
-          <edgelabel>lightCache</edgelabel>
-        </childnode>
-        <childnode refid="3230" relation="usage">
-          <edgelabel>base</edgelabel>
-        </childnode>
-        <childnode refid="3236" relation="usage">
-          <edgelabel>gpResult</edgelabel>
-        </childnode>
-        <childnode refid="3238" relation="usage">
-          <edgelabel>smResult</edgelabel>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="3238">
-        <label>castor3d::ShadowMapResult</label>
-        <link refid="d9/dcf/a04692"/>
-        <childnode refid="3239" relation="public-inheritance">
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::LayeredLpvGridData</label>
+        <link refid="d2/d1f/a04896"/>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="3228">
-        <label>Named</label>
-      </node>
-      <node id="3229">
-        <label>castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</label>
-        <link refid="d5/d04/a02428"/>
-        <childnode refid="3223" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="3225" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-      </node>
-      <node id="3224">
-        <label>castor::Unique&lt; Engine &gt;</label>
-      </node>
-      <node id="3226">
-        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
-      </node>
-      <node id="3227">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="3223">
-        <label>castor3d::Engine</label>
-        <link refid="dc/dbb/a02520"/>
-        <childnode refid="3224" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3231">
-        <label>castor3d::GpInfoUbo</label>
-        <link refid="d1/d22/a05464"/>
-      </node>
-      <node id="3235">
-        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
-        <link refid="d8/dc6/a04256"/>
-        <childnode refid="3234" relation="private-inheritance">
-        </childnode>
-        <childnode refid="3223" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-      </node>
-      <node id="3230">
-        <label>castor3d::LightPassConfig</label>
-        <link refid="da/d0e/a04752"/>
-        <childnode refid="3231" relation="usage">
-          <edgelabel>gpInfoUbo</edgelabel>
-        </childnode>
-        <childnode refid="3232" relation="usage">
-          <edgelabel>lpResult</edgelabel>
-        </childnode>
-      </node>
-      <node id="3234">
-        <label>castor3d::GBufferBase</label>
-        <link refid="dc/de4/a04252"/>
-        <childnode refid="3228" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3239">
-        <label>castor3d::GBufferT&lt; SmTexture &gt;</label>
-        <link refid="d8/dc6/a04256"/>
-        <childnode refid="3234" relation="private-inheritance">
-        </childnode>
-        <childnode refid="3223" relation="usage">
-          <edgelabel>m_engine</edgelabel>
-        </childnode>
-        <childnode refid="3235" relation="template-instance">
-          <edgelabel>&lt; SmTexture &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3236">
-        <label>castor3d::OpaquePassResult</label>
-        <link refid="d1/dcd/a04880"/>
-        <childnode refid="3237" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3225">
-        <label>castor3d::Scene</label>
-        <link refid="d5/d76/a05244"/>
-        <childnode refid="3226" relation="public-inheritance">
-        </childnode>
-        <childnode refid="3227" relation="public-inheritance">
-        </childnode>
-        <childnode refid="3228" relation="public-inheritance">
-        </childnode>
+      <node id="2">
+        <label>sdw::StructInstance</label>
       </node>
     </collaborationgraph>
-    <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" line="86" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" bodystart="85" bodyend="91"/>
+    <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="21" column="1" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="23" bodyend="43"/>
     <listofallmembers>
-      <member refid="d2/d1f/a04896_1a67b5155db40e54d849f00a25dca050a9" prot="public" virt="non-virtual"><scope>castor3d::RsmLightPassConfig</scope><name>base</name></member>
-      <member refid="d2/d1f/a04896_1aceccd989804b00062417cb5a49230b4e" prot="public" virt="non-virtual"><scope>castor3d::RsmLightPassConfig</scope><name>gpResult</name></member>
-      <member refid="d2/d1f/a04896_1a11f7d9d7a7d1f670b6ca95dd8e1fe84a" prot="public" virt="non-virtual"><scope>castor3d::RsmLightPassConfig</scope><name>lightCache</name></member>
-      <member refid="d2/d1f/a04896_1af99f8ae3de57fd69a1917c28aa986075" prot="public" virt="non-virtual"><scope>castor3d::RsmLightPassConfig</scope><name>smResult</name></member>
+      <member refid="d2/d1f/a04896_1af313723153e566dde7c4b2e74be1e17c" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>allCellSizes</name></member>
+      <member refid="d2/d1f/a04896_1a0063c6eeb4ec09e811e7126c4c10e70f" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>allMinVolumeCorners</name></member>
+      <member refid="d2/d1f/a04896_1ad6225133c60e87f3d5f41806cfa5401c" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>declare</name></member>
+      <member refid="d2/d1f/a04896_1aa1a7c7aea39641bd98c059b73d605c37" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>gridSizes</name></member>
+      <member refid="d2/d1f/a04896_1a7954951ecddf0d1e6e7a9f6cf16597b6" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>gridSizesAtt</name></member>
+      <member refid="d2/d1f/a04896_1a6ba460245c93bf387a9b2b2834369dc6" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>indirectAttenuation</name></member>
+      <member refid="d2/d1f/a04896_1a8d94301768152db7b7a0fb120f573404" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>LayeredLpvGridData</name></member>
+      <member refid="d2/d1f/a04896_1ad2e47aefbd9b56363e9260e41cf0bc37" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>makeType</name></member>
+      <member refid="d2/d1f/a04896_1aede5a62185a9f5ae1b23efd4d4c2b927" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>SDW_DeclStructInstance</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

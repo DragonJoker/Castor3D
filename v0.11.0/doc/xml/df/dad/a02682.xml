@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="df/dad/a02682" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::log</compoundname>
+    <includes local="no">Logger.hpp</includes>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="df/dad/a02682_1a3e1914489e4bed4f9f23cdeab34a43dc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>friend class</type>
+        <definition>friend class Engine</definition>
+        <argsstring></argsstring>
+        <name>Engine</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Logger.hpp" line="15" column="1" bodyfile="Miscellaneous/Logger.hpp" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="df/dad/a02682_1a6f4e9c00d2de4723f0e243d42372f435" prot="private" static="yes" mutable="no">
+        <type>castor::LoggerInstance *</type>
+        <definition>castor::LoggerInstance* castor3d::log::m_logger</definition>
+        <argsstring></argsstring>
+        <name>m_logger</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Logger.hpp" line="22" column="1" bodyfile="Miscellaneous/Logger.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="df/dad/a02682_1a3b3afd8086fe06663f1e48fdf08b9520" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::LoggerStreamT&lt; char, castor::TraceLoggerStreambufT &gt;</type>
+        <definition>C3D_API castor::LoggerStreamT&lt; char, castor::TraceLoggerStreambufT &gt; castor3d::log::trace</definition>
+        <argsstring></argsstring>
+        <name>trace</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Logger.hpp" line="25" column="1" bodyfile="Miscellaneous/Logger.hpp" bodystart="25" bodyend="-1"/>
+        <referencedby refid="dc/dfd/a02370_1a40ce560883d2d3bc4e948cbd0a47b569" compoundref="dc/d57/a00194" startline="382" endline="388">castor3d::CacheBase&lt; Overlay, castor::String &gt;::doReportCreation</referencedby>
+        <referencedby refid="d4/dde/a02422_1ab405bfd99e69c230efc69ab4b095d540" compoundref="d9/d01/a00227" startline="434" endline="440">castor3d::ObjectCacheBase&lt; BillboardList, castor::String &gt;::doReportCreation</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/dad/a02682_1a03f1492f319f514a4be4146d255bce73" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::LoggerStreamT&lt; char, castor::DebugLoggerStreambufT &gt;</type>
+        <definition>C3D_API castor::LoggerStreamT&lt; char, castor::DebugLoggerStreambufT &gt; castor3d::log::debug</definition>
+        <argsstring></argsstring>
+        <name>debug</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Logger.hpp" line="26" column="1" bodyfile="Miscellaneous/Logger.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/dad/a02682_1a958f02b923786c8ac58726c287316b3b" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::LoggerStreamT&lt; char, castor::InfoLoggerStreambufT &gt;</type>
+        <definition>C3D_API castor::LoggerStreamT&lt; char, castor::InfoLoggerStreambufT &gt; castor3d::log::info</definition>
+        <argsstring></argsstring>
+        <name>info</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Logger.hpp" line="27" column="1" bodyfile="Miscellaneous/Logger.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/dad/a02682_1ae0f926a36c8502d923618ac94126bff5" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::LoggerStreamT&lt; char, castor::WarningLoggerStreambufT &gt;</type>
+        <definition>C3D_API castor::LoggerStreamT&lt; char, castor::WarningLoggerStreambufT &gt; castor3d::log::warn</definition>
+        <argsstring></argsstring>
+        <name>warn</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Logger.hpp" line="28" column="1" bodyfile="Miscellaneous/Logger.hpp" bodystart="28" bodyend="-1"/>
+        <referencedby refid="df/de7/a02142_1a035881aba2b64571b30a5efd3faaf3d9" compoundref="df/d98/a00107" startline="321" endline="384">castor3d::BinaryParserBase&lt; Skeleton &gt;::doParseHeader</referencedby>
+        <referencedby refid="dc/dfd/a02370_1adb2613cc9082f6d3ecb0639c0726201e" compoundref="dc/d57/a00194" startline="390" endline="396">castor3d::CacheBase&lt; Overlay, castor::String &gt;::doReportDuplicate</referencedby>
+        <referencedby refid="d4/dde/a02422_1ade6b95376020032814e329727ac80f99" compoundref="d9/d01/a00227" startline="442" endline="448">castor3d::ObjectCacheBase&lt; BillboardList, castor::String &gt;::doReportDuplicate</referencedby>
+        <referencedby refid="dc/dfd/a02370_1af3cd6aabd6e0a4eda8177f0edf4ce18e" compoundref="dc/d57/a00194" startline="398" endline="402">castor3d::CacheBase&lt; Overlay, castor::String &gt;::doReportNull</referencedby>
+        <referencedby refid="d4/dde/a02422_1a4237b4fb13d344ea69cfb591cf56f503" compoundref="d9/d01/a00227" startline="450" endline="454">castor3d::ObjectCacheBase&lt; BillboardList, castor::String &gt;::doReportNull</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/dad/a02682_1aa59b94a4fd876453e5d3d04da799b209" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::LoggerStreamT&lt; char, castor::ErrorLoggerStreambufT &gt;</type>
+        <definition>C3D_API castor::LoggerStreamT&lt; char, castor::ErrorLoggerStreambufT &gt; castor3d::log::error</definition>
+        <argsstring></argsstring>
+        <name>error</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Logger.hpp" line="29" column="1" bodyfile="Miscellaneous/Logger.hpp" bodystart="29" bodyend="-1"/>
+        <referencedby refid="df/de7/a02142_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" compoundref="df/d98/a00107" startline="573" endline="580">castor3d::BinaryParserBase&lt; Skeleton &gt;::checkError</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-static-func">
+      <memberdef kind="function" id="df/dad/a02682_1abbe68a51a33c09e40cf0bada3f4a7146" prot="private" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>castor::LoggerInstance *</type>
+        <definition>static castor::LoggerInstance* castor3d::log::initialise</definition>
+        <argsstring>(castor::LoggerInstance &amp;logger)</argsstring>
+        <name>initialise</name>
+        <param>
+          <type>castor::LoggerInstance &amp;</type>
+          <declname>logger</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Logger.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/dad/a02682_1a98da3f5eb48c37177c75c3371626b128" prot="private" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void castor3d::log::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Logger.hpp" line="19" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Miscellaneous/Logger.hpp" line="14" column="1" bodyfile="Miscellaneous/Logger.hpp" bodystart="13" bodyend="30"/>
+    <listofallmembers>
+      <member refid="df/dad/a02682_1a98da3f5eb48c37177c75c3371626b128" prot="private" virt="non-virtual"><scope>castor3d::log</scope><name>cleanup</name></member>
+      <member refid="df/dad/a02682_1a03f1492f319f514a4be4146d255bce73" prot="public" virt="non-virtual"><scope>castor3d::log</scope><name>debug</name></member>
+      <member refid="df/dad/a02682_1a3e1914489e4bed4f9f23cdeab34a43dc" prot="private" virt="non-virtual"><scope>castor3d::log</scope><name>Engine</name></member>
+      <member refid="df/dad/a02682_1aa59b94a4fd876453e5d3d04da799b209" prot="public" virt="non-virtual"><scope>castor3d::log</scope><name>error</name></member>
+      <member refid="df/dad/a02682_1a958f02b923786c8ac58726c287316b3b" prot="public" virt="non-virtual"><scope>castor3d::log</scope><name>info</name></member>
+      <member refid="df/dad/a02682_1abbe68a51a33c09e40cf0bada3f4a7146" prot="private" virt="non-virtual"><scope>castor3d::log</scope><name>initialise</name></member>
+      <member refid="df/dad/a02682_1a6f4e9c00d2de4723f0e243d42372f435" prot="private" virt="non-virtual"><scope>castor3d::log</scope><name>m_logger</name></member>
+      <member refid="df/dad/a02682_1a3b3afd8086fe06663f1e48fdf08b9520" prot="public" virt="non-virtual"><scope>castor3d::log</scope><name>trace</name></member>
+      <member refid="df/dad/a02682_1ae0f926a36c8502d923618ac94126bff5" prot="public" virt="non-virtual"><scope>castor3d::log</scope><name>warn</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

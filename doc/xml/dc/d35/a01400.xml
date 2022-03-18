@@ -1,135 +1,1267 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dc/d35/a01400" kind="file" language="C++">
-    <compoundname>TextOverlayCategory.hpp</compoundname>
-    <includes refid="d9/d42/a00575" local="yes">Castor3D/Overlay/OverlayCategory.hpp</includes>
-    <includes local="no">CastorUtils/Data/TextWriter.hpp</includes>
-    <incdepgraph>
-      <node id="30999">
-        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
-      </node>
-      <node id="31007">
-        <label>Castor3D/Material/MaterialModule.hpp</label>
-        <link refid="d8/d23/a00326"/>
-        <childnode refid="30994" relation="include">
-        </childnode>
-        <childnode refid="31008" relation="include">
-        </childnode>
-      </node>
-      <node id="31011">
-        <label>CastorUtils/Graphics/Size.hpp</label>
-      </node>
-      <node id="31002">
-        <label>ashespp/AshesPPPrerequisites.hpp</label>
-      </node>
-      <node id="31009">
-        <label>CastorUtils/Data/TextWriter.hpp</label>
-      </node>
-      <node id="31003">
-        <label>cstdint</label>
-      </node>
-      <node id="31008">
-        <label>CastorUtils/Design/Signal.hpp</label>
-      </node>
-      <node id="31001">
-        <label>CastorUtils/Math/Point.hpp</label>
-      </node>
-      <node id="30994">
-        <label>Castor3D/Castor3DModule.hpp</label>
-        <link refid="d5/d35/a00266"/>
-        <childnode refid="30995" relation="include">
-        </childnode>
-        <childnode refid="30996" relation="include">
-        </childnode>
-        <childnode refid="30997" relation="include">
-        </childnode>
-        <childnode refid="30998" relation="include">
-        </childnode>
-        <childnode refid="30999" relation="include">
-        </childnode>
-        <childnode refid="31000" relation="include">
-        </childnode>
-        <childnode refid="31001" relation="include">
-        </childnode>
-        <childnode refid="31002" relation="include">
-        </childnode>
-        <childnode refid="31003" relation="include">
-        </childnode>
-        <childnode refid="31004" relation="include">
-        </childnode>
-        <childnode refid="31005" relation="include">
-        </childnode>
-        <childnode refid="31006" relation="include">
-        </childnode>
-      </node>
-      <node id="30992">
-        <label>Castor3D/Overlay/OverlayVisitor.hpp</label>
-        <link refid="de/dde/a00587"/>
-        <childnode refid="30993" relation="include">
-        </childnode>
-      </node>
-      <node id="31005">
-        <label>string</label>
-      </node>
-      <node id="30991">
-        <label>Castor3D/Overlay/OverlayCategory.hpp</label>
-        <link refid="d9/d42/a00575"/>
-        <childnode refid="30992" relation="include">
-        </childnode>
-        <childnode refid="31007" relation="include">
-        </childnode>
-        <childnode refid="31009" relation="include">
-        </childnode>
-        <childnode refid="31010" relation="include">
-        </childnode>
-        <childnode refid="31011" relation="include">
-        </childnode>
-      </node>
-      <node id="30998">
-        <label>CastorUtils/Exception/Assertion.hpp</label>
-      </node>
-      <node id="30995">
-        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
-      </node>
-      <node id="30993">
-        <label>OverlayModule.hpp</label>
-        <link refid="d8/dc8/a00581"/>
-        <childnode refid="30994" relation="include">
-        </childnode>
-      </node>
-      <node id="31010">
-        <label>CastorUtils/Graphics/Position.hpp</label>
-      </node>
-      <node id="30997">
-        <label>CastorUtils/Design/OwnedBy.hpp</label>
-      </node>
-      <node id="30996">
-        <label>CastorUtils/Design/FlagCombination.hpp</label>
-      </node>
-      <node id="31006">
-        <label>vector</label>
-      </node>
-      <node id="31000">
-        <label>CastorUtils/Math/Coords.hpp</label>
-      </node>
-      <node id="30990">
-        <label>Text/TextOverlayCategory.hpp</label>
-        <link refid="dc/d35/a01400"/>
-        <childnode refid="30991" relation="include">
-        </childnode>
-        <childnode refid="31009" relation="include">
-        </childnode>
-      </node>
-      <node id="31004">
-        <label>memory</label>
-      </node>
-    </incdepgraph>
-    <innerclass refid="d3/df8/a05704" prot="public">castor::TextWriter&lt; castor3d::OverlayCategory &gt;</innerclass>
-    <innernamespace refid="da/d36/a01482">castor</innernamespace>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dc/d35/a01400" kind="namespace" language="C++">
+    <compoundname>castor3d::shader</compoundname>
+    <innerclass refid="d1/d89/a04875" prot="public">castor3d::shader::BillboardData</innerclass>
+    <innerclass refid="d9/d9a/a02879" prot="public">castor3d::shader::BlinnPhongLightingModel</innerclass>
+    <innerclass refid="d0/dfa/a04759" prot="public">castor3d::shader::CookTorranceBRDF</innerclass>
+    <innerclass refid="d4/deb/a04779" prot="public">castor3d::shader::DirectionalLight</innerclass>
+    <innerclass refid="de/d5f/a04763" prot="public">castor3d::shader::Fog</innerclass>
+    <innerclass refid="d4/d10/a04839" prot="public">castor3d::shader::FragmentSurfaceT</innerclass>
+    <innerclass refid="d6/d67/a04767" prot="public">castor3d::shader::GlobalIllumination</innerclass>
+    <innerclass refid="d6/d48/a04883" prot="public">castor3d::shader::GpInfoData</innerclass>
+    <innerclass refid="d3/d3a/a04891" prot="public">castor3d::shader::HdrConfigData</innerclass>
+    <innerclass refid="d0/d0b/a04899" prot="public">castor3d::shader::LayeredLpvGridData</innerclass>
+    <innerclass refid="d9/d61/a04775" prot="public">castor3d::shader::Light</innerclass>
+    <innerclass refid="d8/def/a04771" prot="public">castor3d::shader::LightData</innerclass>
+    <innerclass refid="d5/df7/a04795" prot="public">castor3d::shader::LightingModel</innerclass>
+    <innerclass refid="db/d92/a04791" prot="public">castor3d::shader::LightMaterial</innerclass>
+    <innerclass refid="d6/d45/a04907" prot="public">castor3d::shader::LpvGridData</innerclass>
+    <innerclass refid="da/dea/a04915" prot="public">castor3d::shader::LpvLightData</innerclass>
+    <innerclass refid="d5/d6b/a04799" prot="public">castor3d::shader::Material</innerclass>
+    <innerclass refid="d9/d62/a04803" prot="public">castor3d::shader::Materials</innerclass>
+    <innerclass refid="d9/d52/a04923" prot="public">castor3d::shader::MatrixData</innerclass>
+    <innerclass refid="d8/d4c/a04931" prot="public">castor3d::shader::ModelIndices</innerclass>
+    <innerclass refid="d5/dc1/a04943" prot="public">castor3d::shader::MorphingData</innerclass>
+    <innerclass refid="d3/d16/a04935" prot="public">castor3d::shader::ObjectsIds</innerclass>
+    <innerclass refid="d2/d04/a04815" prot="public">castor3d::shader::OutputComponents</innerclass>
+    <innerclass refid="d7/dda/a04947" prot="public">castor3d::shader::OverlayData</innerclass>
+    <innerclass refid="d6/d97/a02835" prot="public">castor3d::shader::PbrLightingModel</innerclass>
+    <innerclass refid="d1/d24/a02847" prot="public">castor3d::shader::PbrLightMaterial</innerclass>
+    <innerclass refid="d8/d87/a02839" prot="public">castor3d::shader::PbrMRLightingModel</innerclass>
+    <innerclass refid="d0/de4/a02851" prot="public">castor3d::shader::PbrMRLightMaterial</innerclass>
+    <innerclass refid="d1/d39/a02859" prot="public">castor3d::shader::PbrReflectionModel</innerclass>
+    <innerclass refid="d0/d45/a02843" prot="public">castor3d::shader::PbrSGLightingModel</innerclass>
+    <innerclass refid="dc/d05/a02855" prot="public">castor3d::shader::PbrSGLightMaterial</innerclass>
+    <innerclass refid="d2/d80/a02875" prot="public">castor3d::shader::PhongLightingModel</innerclass>
+    <innerclass refid="dd/db9/a02883" prot="public">castor3d::shader::PhongLightMaterial</innerclass>
+    <innerclass refid="dd/d04/a02887" prot="public">castor3d::shader::PhongReflectionModel</innerclass>
+    <innerclass refid="d0/d9d/a04783" prot="public">castor3d::shader::PointLight</innerclass>
+    <innerclass refid="d6/d6f/a04819" prot="public">castor3d::shader::ReflectionModel</innerclass>
+    <innerclass refid="db/de9/a04955" prot="public">castor3d::shader::RsmConfigData</innerclass>
+    <innerclass refid="d5/d18/a04963" prot="public">castor3d::shader::SceneData</innerclass>
+    <innerclass refid="d6/d34/a04823" prot="public">castor3d::shader::Shadow</innerclass>
+    <innerclass refid="da/dd4/a04971" prot="public">castor3d::shader::ShadowMapData</innerclass>
+    <innerclass refid="d8/de5/a04867" prot="public">castor3d::shader::ShadowOptions</innerclass>
+    <innerclass refid="d4/d34/a04979" prot="public">castor3d::shader::SkinningData</innerclass>
+    <innerclass refid="d2/df3/a04787" prot="public">castor3d::shader::SpotLight</innerclass>
+    <innerclass refid="db/d40/a04987" prot="public">castor3d::shader::SsaoConfigData</innerclass>
+    <innerclass refid="d1/da9/a04807" prot="public">castor3d::shader::SssProfile</innerclass>
+    <innerclass refid="d8/d95/a04811" prot="public">castor3d::shader::SssProfiles</innerclass>
+    <innerclass refid="d6/da6/a04827" prot="public">castor3d::shader::SssTransmittance</innerclass>
+    <innerclass refid="d2/d2e/a04831" prot="public">castor3d::shader::SurfaceT</innerclass>
+    <innerclass refid="dd/dca/a04847" prot="public">castor3d::shader::TextureAnimations</innerclass>
+    <innerclass refid="d4/d06/a04843" prot="public">castor3d::shader::TextureAnimData</innerclass>
+    <innerclass refid="dd/d3b/a04851" prot="public">castor3d::shader::TextureConfigData</innerclass>
+    <innerclass refid="d9/d87/a04855" prot="public">castor3d::shader::TextureConfigurations</innerclass>
+    <innerclass refid="da/d9f/a04859" prot="public">castor3d::shader::Utils</innerclass>
+    <innerclass refid="db/db4/a04835" prot="public">castor3d::shader::VertexSurfaceT</innerclass>
+    <innerclass refid="df/d6c/a04863" prot="public">castor3d::shader::Voxel</innerclass>
+    <innerclass refid="d6/d32/a05051" prot="public">castor3d::shader::VoxelData</innerclass>
+      <sectiondef kind="user-defined">
+      <header>Sdw</header>
+      <memberdef kind="typedef" id="dc/d35/a01400_1afa7e0e1d1dbce1333aa48253fd404bf4" prot="public" static="no">
+        <type><ref refid="d2/d2e/a04831" kindref="compound">SurfaceT</ref>&lt; ast::var::Flag::eNone &gt;</type>
+        <definition>using castor3d::shader::Surface = typedef SurfaceT&lt; ast::var::Flag::eNone &gt;</definition>
+        <argsstring></argsstring>
+        <name>Surface</name>
+        <qualifiedname>castor3d::shader::Surface</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="111" column="1" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d35/a01400_1a69009a36ab335c9cd7d4eed926a70037" prot="public" static="no">
+        <type>std::unique_ptr&lt; <ref refid="d5/df7/a04795" kindref="compound">LightingModel</ref> &gt;</type>
+        <definition>using castor3d::shader::LightingModelPtr = typedef std::unique_ptr&lt; LightingModel &gt;</definition>
+        <argsstring></argsstring>
+        <name>LightingModelPtr</name>
+        <qualifiedname>castor3d::shader::LightingModelPtr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="132" column="1" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="132" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d35/a01400_1ae10c352f0c2ff7850fca0043640a06bb" prot="public" static="no">
+        <type>std::unique_ptr&lt; <ref refid="d6/d6f/a04819" kindref="compound">ReflectionModel</ref> &gt;</type>
+        <definition>using castor3d::shader::ReflectionModelPtr = typedef std::unique_ptr&lt; ReflectionModel &gt;</definition>
+        <argsstring></argsstring>
+        <name>ReflectionModelPtr</name>
+        <qualifiedname>castor3d::shader::ReflectionModelPtr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="133" column="1" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="133" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d35/a01400_1a100645f1ed72275702ff30244bfa3b15" prot="public" static="no">
+        <type>std::function&lt; <ref refid="dc/d35/a01400_1a69009a36ab335c9cd7d4eed926a70037" kindref="member">LightingModelPtr</ref>(sdw::ShaderWriter &amp;writer, <ref refid="da/d9f/a04859" kindref="compound">Utils</ref> &amp;utils, <ref refid="d8/de5/a04867" kindref="compound">ShadowOptions</ref> shadowsOptions, <ref refid="d8/d95/a04811" kindref="compound">SssProfiles</ref> const *sssProfiles, bool isOpaqueProgram) &gt;</type>
+        <definition>using castor3d::shader::LightingModelCreator = typedef std::function&lt; LightingModelPtr( sdw::ShaderWriter &amp; writer , Utils &amp; utils , ShadowOptions shadowsOptions , SssProfiles const * sssProfiles , bool isOpaqueProgram ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>LightingModelCreator</name>
+        <qualifiedname>castor3d::shader::LightingModelCreator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="134" column="1" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d35/a01400_1ae81a46c81c9db6b526e413791f2849b4" prot="public" static="no">
+        <type>castor::Factory&lt; <ref refid="d5/df7/a04795" kindref="compound">LightingModel</ref>, castor::String, <ref refid="dc/d35/a01400_1a69009a36ab335c9cd7d4eed926a70037" kindref="member">LightingModelPtr</ref>, <ref refid="dc/d35/a01400_1a100645f1ed72275702ff30244bfa3b15" kindref="member">LightingModelCreator</ref> &gt;</type>
+        <definition>using castor3d::shader::LightingModelFactory = typedef castor::Factory&lt; LightingModel , castor::String , LightingModelPtr , LightingModelCreator &gt;</definition>
+        <argsstring></argsstring>
+        <name>LightingModelFactory</name>
+        <qualifiedname>castor3d::shader::LightingModelFactory</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="140" column="1" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="143" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d35/a01400_1a51b2822a5ca0ee8b3805ce188ad0589b" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>constexpr uint32_t</type>
+        <definition>constexpr uint32_t castor3d::shader::LpvMaxCascadesCount</definition>
+        <argsstring></argsstring>
+        <name>LpvMaxCascadesCount</name>
+        <qualifiedname>castor3d::shader::LpvMaxCascadesCount</qualifiedname>
+        <initializer>= 3u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="70" column="20" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d35/a01400_1a87f62a0e97d2decbfa74c0ab2002d16a" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::shader::DirectionalMaxCascadesCount</definition>
+        <argsstring></argsstring>
+        <name>DirectionalMaxCascadesCount</name>
+        <qualifiedname>castor3d::shader::DirectionalMaxCascadesCount</qualifiedname>
+        <initializer>= <ref refid="da/de3/a01398_1ad6ae417f5b1b6abbfc32ecf42b5f61bb" kindref="member">ShadowMapDirectionalTileCountX</ref> * <ref refid="da/de3/a01398_1a9180ac3b21df0d2faf97c79bcf155cc6" kindref="member">ShadowMapDirectionalTileCountY</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="72" column="27" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d35/a01400_1a96918b587b06b43b541d6bf48a1cc60f" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::shader::MaxLightsCount</definition>
+        <argsstring></argsstring>
+        <name>MaxLightsCount</name>
+        <qualifiedname>castor3d::shader::MaxLightsCount</qualifiedname>
+        <initializer>= 2000u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="74" column="27" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d35/a01400_1a7b338366d9089204b462379c562ac670" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::shader::MaxMaterialsCount</definition>
+        <argsstring></argsstring>
+        <name>MaxMaterialsCount</name>
+        <qualifiedname>castor3d::shader::MaxMaterialsCount</qualifiedname>
+        <initializer>= 2000u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="76" column="27" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d35/a01400_1a9498041fc015afdb10bc23e7e583418f" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::shader::MaxSssProfilesCount</definition>
+        <argsstring></argsstring>
+        <name>MaxSssProfilesCount</name>
+        <qualifiedname>castor3d::shader::MaxSssProfilesCount</qualifiedname>
+        <initializer>= 100u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="77" column="27" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d35/a01400_1a6566444c3bccd0d51a1baa5e098eeecd" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>int constexpr</type>
+        <definition>int constexpr castor3d::shader::MaxMaterialComponentsCount</definition>
+        <argsstring></argsstring>
+        <name>MaxMaterialComponentsCount</name>
+        <qualifiedname>castor3d::shader::MaxMaterialComponentsCount</qualifiedname>
+        <initializer>= 8</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="78" column="22" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d35/a01400_1a7dda7bf332d4417ec5c496cbb85560b2" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::shader::MaxTextureConfigurationCount</definition>
+        <argsstring></argsstring>
+        <name>MaxTextureConfigurationCount</name>
+        <qualifiedname>castor3d::shader::MaxTextureConfigurationCount</qualifiedname>
+        <initializer>= 4000u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="80" column="27" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d35/a01400_1a1eae5c1601037c9f6c96e6ed5fe2d0b6" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>int constexpr</type>
+        <definition>int constexpr castor3d::shader::MaxTextureConfigurationComponentsCount</definition>
+        <argsstring></argsstring>
+        <name>MaxTextureConfigurationComponentsCount</name>
+        <qualifiedname>castor3d::shader::MaxTextureConfigurationComponentsCount</qualifiedname>
+        <initializer>= 12</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="81" column="22" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d35/a01400_1aa25c3e0fe670582a794007d01cd45bca" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::shader::MaxTextureAnimationCount</definition>
+        <argsstring></argsstring>
+        <name>MaxTextureAnimationCount</name>
+        <qualifiedname>castor3d::shader::MaxTextureAnimationCount</qualifiedname>
+        <initializer>= <ref refid="dc/d35/a01400_1a7dda7bf332d4417ec5c496cbb85560b2" kindref="member">MaxTextureConfigurationCount</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="83" column="27" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d35/a01400_1a3e22a05ad3a857bf334da1d2f4049ade" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>int constexpr</type>
+        <definition>int constexpr castor3d::shader::MaxTextureAnimationComponentsCount</definition>
+        <argsstring></argsstring>
+        <name>MaxTextureAnimationComponentsCount</name>
+        <qualifiedname>castor3d::shader::MaxTextureAnimationComponentsCount</qualifiedname>
+        <initializer>= 4</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="84" column="22" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d35/a01400_1a7f16b4c2f23f455f7689bcb883c66d42" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::shader::MaxModelDataCount</definition>
+        <argsstring></argsstring>
+        <name>MaxModelDataCount</name>
+        <qualifiedname>castor3d::shader::MaxModelDataCount</qualifiedname>
+        <initializer>= 16384</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="86" column="27" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1ac953662354e4996abdcbfba08083c85c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(DirectionalLight)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type><ref refid="d4/deb/a04779" kindref="compound">DirectionalLight</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="145" column="1" declfile="Shader/Shaders/SdwModule.hpp" declline="145" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1addee8b64987759df7832fbe725b539c6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(LayeredLpvGridData)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type><ref refid="d0/d0b/a04899" kindref="compound">LayeredLpvGridData</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="146" column="1" declfile="Shader/Shaders/SdwModule.hpp" declline="146" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1a9ce1d9a539ac44ff77ee79fcb5ff1126" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(Light)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type><ref refid="d9/d61/a04775" kindref="compound">Light</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="147" column="1" declfile="Shader/Shaders/SdwModule.hpp" declline="147" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1aad881aaad0b167a0fa58326b1ec4464f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(LightMaterial)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type><ref refid="db/d92/a04791" kindref="compound">LightMaterial</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="148" column="1" declfile="Shader/Shaders/SdwModule.hpp" declline="148" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1accf3d18ba139a2bedd74a0849fb1fedb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(LpvGridData)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type><ref refid="d6/d45/a04907" kindref="compound">LpvGridData</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="149" column="1" declfile="Shader/Shaders/SdwModule.hpp" declline="149" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1a65b279303a9f85d5a8fcc284c5697600" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(LpvLightData)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type><ref refid="da/dea/a04915" kindref="compound">LpvLightData</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="150" column="1" declfile="Shader/Shaders/SdwModule.hpp" declline="150" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1a75152d92f47d1c5203b5d9c3ec48ff72" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(PbrLightMaterial)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type><ref refid="d1/d24/a02847" kindref="compound">PbrLightMaterial</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="151" column="1" declfile="Shader/Shaders/SdwModule.hpp" declline="151" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1af8ea57732f4f1f6bfd0c4f821769d479" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(PhongLightMaterial)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type><ref refid="dd/db9/a02883" kindref="compound">PhongLightMaterial</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="152" column="1" declfile="Shader/Shaders/SdwModule.hpp" declline="152" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1a44eac598c9a88b6fd5a3d55284df87e5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(PointLight)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type><ref refid="d0/d9d/a04783" kindref="compound">PointLight</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="153" column="1" declfile="Shader/Shaders/SdwModule.hpp" declline="153" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1a1a552a23e1244c1e6c9007bbeaa852f4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(SpotLight)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type><ref refid="d2/df3/a04787" kindref="compound">SpotLight</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="154" column="1" declfile="Shader/Shaders/SdwModule.hpp" declline="154" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1aa82a33b3ac15a35d38532e99fbc342cf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(Surface)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type><ref refid="dc/d35/a01400_1afa7e0e1d1dbce1333aa48253fd404bf4" kindref="member">Surface</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="155" column="1" declfile="Shader/Shaders/SdwModule.hpp" declline="155" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1adc1a5e54b4ec968ec3e512db2606b8e5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(TextureConfigData)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type><ref refid="dd/d3b/a04851" kindref="compound">TextureConfigData</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="156" column="1" declfile="Shader/Shaders/SdwModule.hpp" declline="156" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1a1b43d56a584a4fa785723158989a9dec" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(VoxelData)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type><ref refid="d6/d32/a05051" kindref="compound">VoxelData</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="157" column="1" declfile="Shader/Shaders/SdwModule.hpp" declline="157" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1a8aa8132a02bb83e643a9fdb16c11241a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; <ref refid="d9/d62/a04803" kindref="compound">Materials</ref> &gt;</type>
+        <definition>C3D_API std::unique_ptr&lt; Materials &gt; castor3d::shader::createMaterials</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, PassFlags const &amp;passFlags)</argsstring>
+        <name>createMaterials</name>
+        <qualifiedname>castor3d::shader::createMaterials</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref> const &amp;</type>
+          <declname>passFlags</declname>
+        </param>
+        <briefdescription>
+<para>Creates the appropriate GLSL materials buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">writer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GLSL writer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>passFlags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass flags. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="168" column="25" declfile="Shader/Shaders/SdwModule.hpp" declline="168" declcolumn="25"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1a9c9f8c07ab53735cf2f08dc5d86ebe4b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::shader::getSpotShadowMapCount</definition>
+        <argsstring>()</argsstring>
+        <name>getSpotShadowMapCount</name>
+        <qualifiedname>castor3d::shader::getSpotShadowMapCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="170" column="18" declfile="Shader/Shaders/SdwModule.hpp" declline="170" declcolumn="18"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1a0846d0ad2a4a58ac64fbf89e9d1200dd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::shader::getPointShadowMapCount</definition>
+        <argsstring>()</argsstring>
+        <name>getPointShadowMapCount</name>
+        <qualifiedname>castor3d::shader::getPointShadowMapCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="171" column="18" declfile="Shader/Shaders/SdwModule.hpp" declline="171" declcolumn="18"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1a90b1e6f243401062a060b76261f0804a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::shader::getBaseLightComponentsCount</definition>
+        <argsstring>()</argsstring>
+        <name>getBaseLightComponentsCount</name>
+        <qualifiedname>castor3d::shader::getBaseLightComponentsCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="172" column="18" declfile="Shader/Shaders/SdwModule.hpp" declline="172" declcolumn="18"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1ad589cdbdf8c73aa7152d7af33ef9c6ab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::shader::getMaxLightComponentsCount</definition>
+        <argsstring>()</argsstring>
+        <name>getMaxLightComponentsCount</name>
+        <qualifiedname>castor3d::shader::getMaxLightComponentsCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="173" column="18" declfile="Shader/Shaders/SdwModule.hpp" declline="173" declcolumn="18"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="dc/d35/a01400_1a5d209a1e5cadff3d1a9ef770e6d9bdce" prot="public" static="no">
+        <type><ref refid="db/db4/a04835" kindref="compound">VertexSurfaceT</ref>&lt; ast::var::Flag::eShaderInput &gt;</type>
+        <definition>using castor3d::shader::InVertexSurface = typedef VertexSurfaceT&lt; ast::var::Flag::eShaderInput &gt;</definition>
+        <argsstring></argsstring>
+        <name>InVertexSurface</name>
+        <qualifiedname>castor3d::shader::InVertexSurface</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="102" column="1" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d35/a01400_1a483bb58ee2dd9315b1c241d98c3af972" prot="public" static="no">
+        <type><ref refid="d4/d10/a04839" kindref="compound">FragmentSurfaceT</ref>&lt; ast::var::Flag::eShaderOutput &gt;</type>
+        <definition>using castor3d::shader::OutVertexSurface = typedef FragmentSurfaceT&lt; ast::var::Flag::eShaderOutput &gt;</definition>
+        <argsstring></argsstring>
+        <name>OutVertexSurface</name>
+        <qualifiedname>castor3d::shader::OutVertexSurface</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="157" column="1" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="157" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d35/a01400_1ad2836608f22c8eb597c4199a06fdba3a" prot="public" static="no">
+        <type><ref refid="d4/d10/a04839" kindref="compound">FragmentSurfaceT</ref>&lt; ast::var::Flag::eShaderInput &gt;</type>
+        <definition>using castor3d::shader::InFragmentSurface = typedef FragmentSurfaceT&lt; ast::var::Flag::eShaderInput &gt;</definition>
+        <argsstring></argsstring>
+        <name>InFragmentSurface</name>
+        <qualifiedname>castor3d::shader::InFragmentSurface</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="158" column="1" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="158" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="var">
+      <memberdef kind="variable" id="dc/d35/a01400_1a9cdb51b5a77654ab0e5df6efa4ea02d7" prot="public" static="no" mutable="no">
+        <type>castor::String const</type>
+        <definition>castor::String const castor3d::shader::PassBufferName</definition>
+        <argsstring></argsstring>
+        <name>PassBufferName</name>
+        <qualifiedname>castor3d::shader::PassBufferName</qualifiedname>
+        <initializer>= cuT( &quot;Materials&quot; )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="14" column="22" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="14" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d35/a01400_1a204b5998e5df1f1bb1a69d235979a958" prot="public" static="no" mutable="no">
+        <type>castor::String const</type>
+        <definition>castor::String const castor3d::shader::TextureAnimationBufferName</definition>
+        <argsstring></argsstring>
+        <name>TextureAnimationBufferName</name>
+        <qualifiedname>castor3d::shader::TextureAnimationBufferName</qualifiedname>
+        <initializer>= cuT( &quot;C3D_TextureAnimations&quot; )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureAnimation.hpp" line="16" column="22" bodyfile="Shader/Shaders/GlslTextureAnimation.hpp" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d35/a01400_1a177d7f0497b6a9247795fff3c7b83b74" prot="public" static="no" mutable="no">
+        <type>castor::String const</type>
+        <definition>castor::String const castor3d::shader::TextureConfigurationBufferName</definition>
+        <argsstring></argsstring>
+        <name>TextureConfigurationBufferName</name>
+        <qualifiedname>castor3d::shader::TextureConfigurationBufferName</qualifiedname>
+        <initializer>= cuT( &quot;TextureConfigurations&quot; )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="17" column="22" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="dc/d35/a01400_1a38ee49de7d2e99e8b96fbd09af60bb76" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String</type>
+        <definition>C3D_API castor::String castor3d::shader::getLightingModelName</definition>
+        <argsstring>(Engine const &amp;engine, PassTypeID passType)</argsstring>
+        <name>getLightingModelName</name>
+        <qualifiedname>castor3d::shader::getLightingModelName</qualifiedname>
+        <param>
+          <type><ref refid="d8/dd0/a02711" kindref="compound">Engine</ref> const &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1a773fcfeb825d3fe54eb4a3dce23bca11" kindref="member">PassTypeID</ref></type>
+          <declname>passType</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="19" column="24" declfile="Shader/Shaders/GlslLighting.hpp" declline="19" declcolumn="24"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1a1cd3530db5bb455e07e29f3c8c3814ed" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::CU_DeclareSmartPtr</definition>
+        <argsstring>(Material)</argsstring>
+        <name>CU_DeclareSmartPtr</name>
+        <qualifiedname>castor3d::shader::CU_DeclareSmartPtr</qualifiedname>
+        <param>
+          <type><ref refid="d5/d6b/a04799" kindref="compound">Material</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="61" column="1" declfile="Shader/Shaders/GlslMaterial.hpp" declline="61" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1af8a40f40d9fb64eb3daf1a5506eb0e7f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::CU_DeclareSmartPtr</definition>
+        <argsstring>(SssProfile)</argsstring>
+        <name>CU_DeclareSmartPtr</name>
+        <qualifiedname>castor3d::shader::CU_DeclareSmartPtr</qualifiedname>
+        <param>
+          <type><ref refid="d1/da9/a04807" kindref="compound">SssProfile</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="105" column="1" declfile="Shader/Shaders/GlslMaterial.hpp" declline="105" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1a5bef12a504a0b15829d489972699042d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::expr::ExprList</type>
+        <definition>C3D_API ast::expr::ExprList castor3d::shader::makeFnArg</definition>
+        <argsstring>(sdw::ShaderWriter &amp;shader, OutputComponents const &amp;value)</argsstring>
+        <name>makeFnArg</name>
+        <qualifiedname>castor3d::shader::makeFnArg</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>shader</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d04/a04815" kindref="compound">OutputComponents</ref> const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="37" column="29" declfile="Shader/Shaders/GlslOutputComponents.hpp" declline="37" declcolumn="29"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1ab2c1bfa9d99368968566d3664670934c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename LhsT</type>
+          </param>
+          <param>
+            <type>typename RhsT</type>
+          </param>
+        </templateparamlist>
+        <type>LhsT</type>
+        <definition>LhsT castor3d::shader::translateUV</definition>
+        <argsstring>(LhsT const &amp;translate, RhsT const &amp;uv)</argsstring>
+        <name>translateUV</name>
+        <qualifiedname>castor3d::shader::translateUV</qualifiedname>
+        <param>
+          <type>LhsT const &amp;</type>
+          <declname>translate</declname>
+        </param>
+        <param>
+          <type>RhsT const &amp;</type>
+          <declname>uv</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="20" column="13" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="20" bodyend="24"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1a2a8f67a9a7852eac15c149339666cc58" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Vec2</type>
+        <definition>sdw::Vec2 castor3d::shader::rotateUV</definition>
+        <argsstring>(sdw::Vec2 const &amp;rotate, sdw::Vec2 const &amp;uv)</argsstring>
+        <name>rotateUV</name>
+        <qualifiedname>castor3d::shader::rotateUV</qualifiedname>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>rotate</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>uv</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="26" column="18" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="26" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1a5653f86dba07828b75f2f996a2255a30" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::rotateUV</definition>
+        <argsstring>(sdw::Vec3 const &amp;rotate, sdw::Vec3 const &amp;uv)</argsstring>
+        <name>rotateUV</name>
+        <qualifiedname>castor3d::shader::rotateUV</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>rotate</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>uv</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="34" column="18" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="34" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1a75113c2df26d352e5f67bd9feb3297ee" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename LhsT</type>
+          </param>
+          <param>
+            <type>typename RhsT</type>
+          </param>
+        </templateparamlist>
+        <type>LhsT</type>
+        <definition>LhsT castor3d::shader::scaleUV</definition>
+        <argsstring>(LhsT const &amp;scale, RhsT const &amp;uv)</argsstring>
+        <name>scaleUV</name>
+        <qualifiedname>castor3d::shader::scaleUV</qualifiedname>
+        <param>
+          <type>LhsT const &amp;</type>
+          <declname>scale</declname>
+        </param>
+        <param>
+          <type>RhsT const &amp;</type>
+          <declname>uv</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="41" column="13" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="41" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1aa12c88895cc3ae2e2a45dc1ca3cfca30" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(Voxel)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type><ref refid="df/d6c/a04863" kindref="compound">Voxel</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslVoxel.hpp" line="38" column="1" declfile="Shader/Shaders/GlslVoxel.hpp" declline="38" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1a3a1bcc6d9ec065032ad46b3f2a9836ba" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>ast::var::Flag</type>
+            <declname>FlagT</declname>
+            <defname>FlagT</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/d77/a04939" kindref="compound">shader::ObjectsIds::Ids</ref></type>
+        <definition>static shader::ObjectsIds::Ids castor3d::shader::getIds</definition>
+        <argsstring>(sdw::Array&lt; shader::ObjectsIds &gt; const &amp;data, shader::VertexSurfaceT&lt; FlagT &gt; const &amp;surface, sdw::UInt pipelineID, sdw::Int drawID, ProgramFlags const &amp;flags)</argsstring>
+        <name>getIds</name>
+        <qualifiedname>castor3d::shader::getIds</qualifiedname>
+        <param>
+          <type>sdw::Array&lt; <ref refid="d3/d16/a04935" kindref="compound">shader::ObjectsIds</ref> &gt; const &amp;</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type><ref refid="db/db4/a04835" kindref="compound">shader::VertexSurfaceT</ref>&lt; FlagT &gt; const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type>sdw::UInt</type>
+          <declname>pipelineID</declname>
+        </param>
+        <param>
+          <type>sdw::Int</type>
+          <declname>drawID</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="128" column="32" bodyfile="Shader/Ubos/ModelDataUbo.hpp" bodystart="128" bodyend="158"/>
+        <references refid="da/de3/a01398_1a6dbeb5480c4a424e0c24ace65835778ba925e615ac432b4dd6e17fe61359ad1c5">castor3d::eInstantiation</references>
+        <references refid="da/de3/a01398_1a6dbeb5480c4a424e0c24ace65835778bafc8be581627b97523b9662d9eae684b0">castor3d::eMorphing</references>
+        <references refid="da/de3/a01398_1a6dbeb5480c4a424e0c24ace65835778ba8da329f9a01cff2c195563173a86b2ee">castor3d::eSkinning</references>
+        <references refid="db/db4/a04835_1a911a19cd93f14c97bc3a574912058bc3" compoundref="d9/d31/a01208" startline="92">castor3d::shader::VertexSurfaceT&lt; FlagT &gt;::objectIds</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1abf229d17442cb0abb34fce78ddc16e39" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>ast::var::Flag</type>
+            <declname>FlagT</declname>
+            <defname>FlagT</defname>
+          </param>
+        </templateparamlist>
+        <type>sdw::UInt</type>
+        <definition>static sdw::UInt castor3d::shader::getNodeId</definition>
+        <argsstring>(sdw::Array&lt; shader::ObjectsIds &gt; const &amp;data, shader::VertexSurfaceT&lt; FlagT &gt; const &amp;surface, sdw::UInt pipelineID, sdw::Int drawID, ProgramFlags const &amp;flags)</argsstring>
+        <name>getNodeId</name>
+        <qualifiedname>castor3d::shader::getNodeId</qualifiedname>
+        <param>
+          <type>sdw::Array&lt; <ref refid="d3/d16/a04935" kindref="compound">shader::ObjectsIds</ref> &gt; const &amp;</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type><ref refid="db/db4/a04835" kindref="compound">shader::VertexSurfaceT</ref>&lt; FlagT &gt; const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type>sdw::UInt</type>
+          <declname>pipelineID</declname>
+        </param>
+        <param>
+          <type>sdw::Int</type>
+          <declname>drawID</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de3/a01398_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="161" column="18" bodyfile="Shader/Ubos/ModelDataUbo.hpp" bodystart="161" bodyend="177"/>
+        <references refid="da/de3/a01398_1a6dbeb5480c4a424e0c24ace65835778ba925e615ac432b4dd6e17fe61359ad1c5">castor3d::eInstantiation</references>
+        <references refid="db/db4/a04835_1a911a19cd93f14c97bc3a574912058bc3" compoundref="d9/d31/a01208" startline="92">castor3d::shader::VertexSurfaceT&lt; FlagT &gt;::objectIds</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1aaacbfe9070402dcc988414884421e9a8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::UInt</type>
+        <definition>C3D_API sdw::UInt castor3d::shader::getNodeId</definition>
+        <argsstring>(sdw::Array&lt; shader::ObjectsIds &gt; const &amp;data, sdw::UInt pipelineID, sdw::Int drawID)</argsstring>
+        <name>getNodeId</name>
+        <qualifiedname>castor3d::shader::getNodeId</qualifiedname>
+        <param>
+          <type>sdw::Array&lt; <ref refid="d3/d16/a04935" kindref="compound">shader::ObjectsIds</ref> &gt; const &amp;</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>sdw::UInt</type>
+          <declname>pipelineID</declname>
+        </param>
+        <param>
+          <type>sdw::Int</type>
+          <declname>drawID</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="179" column="19" declfile="Shader/Ubos/ModelDataUbo.hpp" declline="179" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1a6035415bc937c4b3af8a7bef76d5ea24" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(BillboardData)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type><ref refid="d1/d89/a04875" kindref="compound">BillboardData</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="43" column="1" declfile="Shader/Ubos/UbosModule.hpp" declline="43" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1a966d5caf3301079e013798d3f3a167b1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(GpInfoData)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type><ref refid="d6/d48/a04883" kindref="compound">GpInfoData</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="44" column="1" declfile="Shader/Ubos/UbosModule.hpp" declline="44" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1acb8d8165bd53fb983d9efb31856d8274" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(HdrConfigData)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type><ref refid="d3/d3a/a04891" kindref="compound">HdrConfigData</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="45" column="1" declfile="Shader/Ubos/UbosModule.hpp" declline="45" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1afd60ea543201a691834b02f0f2801c99" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(MatrixData)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type><ref refid="d9/d52/a04923" kindref="compound">MatrixData</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="49" column="1" declfile="Shader/Ubos/UbosModule.hpp" declline="49" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1afde28348a38b6a10137c9f1479decacd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(ModelInstancesData)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type>ModelInstancesData</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="50" column="1" declfile="Shader/Ubos/UbosModule.hpp" declline="50" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1a73202c4f23d85b2f89ea6ba08a2e074b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(ModelData)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type>ModelData</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="51" column="1" declfile="Shader/Ubos/UbosModule.hpp" declline="51" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1a7dbddc443f72aa3ff1e3331bfc0980fa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(MorphingData)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type><ref refid="d5/dc1/a04943" kindref="compound">MorphingData</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="52" column="1" declfile="Shader/Ubos/UbosModule.hpp" declline="52" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1a14ba723fc646b8957b92822cd0c1cc50" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(OverlayData)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type><ref refid="d7/dda/a04947" kindref="compound">OverlayData</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="53" column="1" declfile="Shader/Ubos/UbosModule.hpp" declline="53" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1a0569c02dd2c3e11dafb9eddd97088387" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(PickingData)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type>PickingData</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="54" column="1" declfile="Shader/Ubos/UbosModule.hpp" declline="54" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1a47e9106116703f87eb515a832bfb1ad0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(RsmConfigData)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type><ref refid="db/de9/a04955" kindref="compound">RsmConfigData</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="55" column="1" declfile="Shader/Ubos/UbosModule.hpp" declline="55" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1a4da8150eb7584b12664df4fbbb2996d3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(SceneData)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type><ref refid="d5/d18/a04963" kindref="compound">SceneData</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="56" column="1" declfile="Shader/Ubos/UbosModule.hpp" declline="56" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1a9cfce1e6d813ba2caddb219163561b76" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(ShadowMapData)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type><ref refid="da/dd4/a04971" kindref="compound">ShadowMapData</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="57" column="1" declfile="Shader/Ubos/UbosModule.hpp" declline="57" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1ab4a041560b134c84f47af0ae111974fa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(SsaoConfigData)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type><ref refid="db/d40/a04987" kindref="compound">SsaoConfigData</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="58" column="1" declfile="Shader/Ubos/UbosModule.hpp" declline="58" declcolumn="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d35/a01400_1a8f7b8414916d0d70ec09e84c2c95ee21" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Writer_Parameter</definition>
+        <argsstring>(TextureData)</argsstring>
+        <name>Writer_Parameter</name>
+        <qualifiedname>castor3d::shader::Writer_Parameter</qualifiedname>
+        <param>
+          <type>TextureData</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="59" column="1" declfile="Shader/Ubos/UbosModule.hpp" declline="59" declcolumn="1"/>
+      </memberdef>
+      </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Text/TextOverlayCategory.hpp"/>
+    <location file="Material/Pass/PBR/Shaders/GlslPbrLighting.hpp" line="13" column="1"/>
   </compounddef>
 </doxygen>

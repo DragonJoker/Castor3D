@@ -1,5 +1,8 @@
-<map id="castor3d::PhongPass" name="castor3d::PhongPass">
-<area shape="rect" id="node1" title=" " alt="" coords="28,155,175,181"/>
-<area shape="rect" id="node2" href="$df/d5d/a02596.html" title=" " alt="" coords="46,80,157,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,197,32"/>
+<map id="castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;" name="castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;">
+<area shape="rect" id="node1" title="BillboardList cache." alt="" coords="931,45,1133,101"/>
+<area shape="rect" id="node2" href="$d9/d07/a02635.html" title=" " alt="" coords="679,45,881,101"/>
+<area shape="rect" id="node3" title=" " alt="" coords="8,5,191,32"/>
+<area shape="rect" id="node5" href="$d9/d07/a02635.html" title=" " alt="" coords="253,53,439,94"/>
+<area shape="rect" id="node4" title=" " alt="" coords="243,119,449,175"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,61,193,102"/>
 </map>

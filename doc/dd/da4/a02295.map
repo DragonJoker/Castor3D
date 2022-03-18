@@ -1,5 +1,5 @@
-<map id="castor3d::UniformBufferT&lt; DataT &gt;" name="castor3d::UniformBufferT&lt; DataT &gt;">
-<area shape="rect" id="node1" title="A uniform typed buffer, than can contain multiple sub&#45;buffers." alt="" coords="60,81,224,123"/>
-<area shape="rect" id="node3" href="$d8/d9a/a02296.html" title=" " alt="" coords="5,200,279,241"/>
-<area shape="rect" id="node2" href="$d1/d03/a02332.html" title=" " alt="" coords="49,5,235,32"/>
+<map id="castor3d::BinaryWriter&lt; Mesh &gt;" name="castor3d::BinaryWriter&lt; Mesh &gt;">
+<area shape="rect" id="node1" title="MovableObject loader." alt="" coords="21,200,173,241"/>
+<area shape="rect" id="node2" href="$d3/d9c/a02336.html" title=" " alt="" coords="5,109,188,151"/>
+<area shape="rect" id="node3" href="$d3/d9c/a02336.html" title="Binary data chunk writer base class." alt="" coords="5,5,188,47"/>
 </map>

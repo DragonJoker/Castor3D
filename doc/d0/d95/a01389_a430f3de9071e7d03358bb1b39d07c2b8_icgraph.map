@@ -1,0 +1,11 @@
+<map id="castor3d::prepareChunkData" name="castor3d::prepareChunkData">
+<area shape="rect" id="node1" title="Sets given value to big endian." alt="" coords="908,79,1095,106"/>
+<area shape="rect" id="node2" href="$de/d91/a02458.html#a51aa9cc211a27e96cdfbdb431808cc8f" title="Retrieves a value array from a chunk." alt="" coords="705,39,860,80"/>
+<area shape="rect" id="node6" href="$d5/d61/a02474.html#ac4cf51584e348def2f360b81e6ec7a9a" title="Writes a subchunk value into a chunk." alt="" coords="707,104,859,145"/>
+<area shape="rect" id="node3" href="$d7/df2/a02322.html#a0e1aa917e3bf897fab03a32d20890062" title="Retrieves a value array from a chunk." alt="" coords="472,37,657,79"/>
+<area shape="rect" id="node4" href="$d7/df2/a02322.html#a035881aba2b64571b30a5efd3faaf3d9" title="Parses the header chunk." alt="" coords="239,32,424,73"/>
+<area shape="rect" id="node5" href="$d7/df2/a02322.html#a5db83668684ca219f67de3a381898e64" title="From file reader function." alt="" coords="5,29,191,71"/>
+<area shape="rect" id="node7" href="$d4/d42/a02330.html#a95685db95521fe46169767620976688c" title="Writes a subchunk value into a chunk." alt="" coords="473,105,656,147"/>
+<area shape="rect" id="node8" href="$d4/d42/a02330.html#a8828d359b7a61ea2b657d5aada2dd87b" title="Writes the header chunk." alt="" coords="240,107,423,148"/>
+<area shape="rect" id="node9" href="$d4/d42/a02330.html#a21e7985d2f99ff20a6056d198aac07c5" title="Writes an object to a file." alt="" coords="7,119,189,160"/>
+</map>

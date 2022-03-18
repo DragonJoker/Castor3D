@@ -1,0 +1,477 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dd/dc9/a04996" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::TextureProjection</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <includes local="no">TextureProjection.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="dd/dc9/a04996_1a10b7b69e9f20e0e8babfabb2de9f01c7" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::TextureProjection::TextureProjection</definition>
+        <argsstring>(Engine &amp;engine)</argsstring>
+        <name>TextureProjection</name>
+        <param>
+          <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Construction / Destruction. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjection.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dc9/a04996_1ad5278346571ee8bfe0d77c5ac907cde0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::TextureProjection::~TextureProjection</definition>
+        <argsstring>()</argsstring>
+        <name>~TextureProjection</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjection.hpp" line="36" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="dd/dc9/a04996_1a67dc5a37aa39c5f3a498952e9051e189" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureProjection::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device, ashes::ImageView const &amp;source, VkFormat targetColour, VkFormat targetDepth)</argsstring>
+        <name>initialise</name>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>ashes::ImageView const &amp;</type>
+          <declname>source</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>targetColour</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>targetDepth</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Initialisation / Cleanup. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjection.hpp" line="43" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dc9/a04996_1a7b6180ab7d65254723b38278ef89e5db" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureProjection::cleanup</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>cleanup</name>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjection.hpp" line="47" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="dd/dc9/a04996_1ade82f2281777a3e15e254a41da3b9df8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureProjection::update</definition>
+        <argsstring>(RenderDevice const &amp;device, Camera const &amp;camera)</argsstring>
+        <name>update</name>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d9c/a05152" kindref="compound">Camera</ref> const &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Update. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjection.hpp" line="54" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="dd/dc9/a04996_1ac2ad6ca9dcaab3e53d9e39319241eede" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::CommandBuffer const  &amp;</type>
+        <definition>ashes::CommandBuffer const&amp; castor3d::TextureProjection::getCommandBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>getCommandBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjection.hpp" line="62" column="1" bodyfile="Render/ToTexture/TextureProjection.hpp" bodystart="62" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dc9/a04996_1a1de51a1eb944b2fb6b26606a246cbc7e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Semaphore const  &amp;</type>
+        <definition>ashes::Semaphore const&amp; castor3d::TextureProjection::getSemaphore</definition>
+        <argsstring>() const</argsstring>
+        <name>getSemaphore</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjection.hpp" line="68" column="1" bodyfile="Render/ToTexture/TextureProjection.hpp" bodystart="68" bodyend="72"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dd/dc9/a04996_1a477a5bcf7c5fa9d625bb8ffe09d35f5e" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/d0e/a05496" kindref="compound">MatrixUbo</ref></type>
+        <definition>MatrixUbo castor3d::TextureProjection::m_matrixUbo</definition>
+        <argsstring></argsstring>
+        <name>m_matrixUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjection.hpp" line="85" column="1" bodyfile="Render/ToTexture/TextureProjection.hpp" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dc9/a04996_1a4d0edf9c7ce76b3f9fbed7b605421b62" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/d81/a05504" kindref="compound">ModelMatrixUbo</ref></type>
+        <definition>ModelMatrixUbo castor3d::TextureProjection::m_modelMatrixUbo</definition>
+        <argsstring></argsstring>
+        <name>m_modelMatrixUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjection.hpp" line="86" column="1" bodyfile="Render/ToTexture/TextureProjection.hpp" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dc9/a04996_1a9250f97140987aa239b722eba2763cf7" prot="private" static="no" mutable="no">
+        <type>castor::Size</type>
+        <definition>castor::Size castor3d::TextureProjection::m_size</definition>
+        <argsstring></argsstring>
+        <name>m_size</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjection.hpp" line="87" column="1" bodyfile="Render/ToTexture/TextureProjection.hpp" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dc9/a04996_1af0d1e7553f53354d609626ced6d9f4f8" prot="private" static="no" mutable="no">
+        <type>ashes::RenderPassPtr</type>
+        <definition>ashes::RenderPassPtr castor3d::TextureProjection::m_renderPass</definition>
+        <argsstring></argsstring>
+        <name>m_renderPass</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjection.hpp" line="88" column="1" bodyfile="Render/ToTexture/TextureProjection.hpp" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dc9/a04996_1a39a5c110d31b285779d151d73b5e6690" prot="private" static="no" mutable="no">
+        <type>ashes::PushConstantsBuffer&lt; castor::Point2f &gt;</type>
+        <definition>ashes::PushConstantsBuffer&lt; castor::Point2f &gt; castor3d::TextureProjection::m_sizePushConstant</definition>
+        <argsstring></argsstring>
+        <name>m_sizePushConstant</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjection.hpp" line="89" column="1" bodyfile="Render/ToTexture/TextureProjection.hpp" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dc9/a04996_1aa6f6003faab9c5484c0be5e5bf82c565" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetLayoutPtr</type>
+        <definition>ashes::DescriptorSetLayoutPtr castor3d::TextureProjection::m_descriptorLayout</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorLayout</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjection.hpp" line="90" column="1" bodyfile="Render/ToTexture/TextureProjection.hpp" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dc9/a04996_1ac85d0c841fbd744c08f498fa7c34c917" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetPoolPtr</type>
+        <definition>ashes::DescriptorSetPoolPtr castor3d::TextureProjection::m_descriptorPool</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorPool</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjection.hpp" line="91" column="1" bodyfile="Render/ToTexture/TextureProjection.hpp" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dc9/a04996_1a2d4fd61778fe577bc14cc636c0cf0541" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::TextureProjection::m_descriptorSet</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorSet</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjection.hpp" line="92" column="1" bodyfile="Render/ToTexture/TextureProjection.hpp" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dc9/a04996_1a9e754de5c63930356d872550efc7c4f5" prot="private" static="no" mutable="no">
+        <type>ashes::VertexBufferPtr&lt; <ref refid="d4/d81/a04556" kindref="compound">NonTexturedCube</ref> &gt;</type>
+        <definition>ashes::VertexBufferPtr&lt; NonTexturedCube &gt; castor3d::TextureProjection::m_vertexBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_vertexBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjection.hpp" line="93" column="1" bodyfile="Render/ToTexture/TextureProjection.hpp" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dc9/a04996_1a76fec5f65b283cbe23287f760cd74781" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineLayoutPtr</type>
+        <definition>ashes::PipelineLayoutPtr castor3d::TextureProjection::m_pipelineLayout</definition>
+        <argsstring></argsstring>
+        <name>m_pipelineLayout</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjection.hpp" line="94" column="1" bodyfile="Render/ToTexture/TextureProjection.hpp" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dc9/a04996_1a82bc2d528ec474514dd7a917b09ce45c" prot="private" static="no" mutable="no">
+        <type>ashes::GraphicsPipelinePtr</type>
+        <definition>ashes::GraphicsPipelinePtr castor3d::TextureProjection::m_pipeline</definition>
+        <argsstring></argsstring>
+        <name>m_pipeline</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjection.hpp" line="95" column="1" bodyfile="Render/ToTexture/TextureProjection.hpp" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dc9/a04996_1ad18c5bae1eb3573198d157296335d893" prot="private" static="no" mutable="no">
+        <type>SamplerSPtr</type>
+        <definition>SamplerSPtr castor3d::TextureProjection::m_sampler</definition>
+        <argsstring></argsstring>
+        <name>m_sampler</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjection.hpp" line="96" column="1" bodyfile="Render/ToTexture/TextureProjection.hpp" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dc9/a04996_1a68918f61806c55be1dfa470c36512a5b" prot="private" static="no" mutable="no">
+        <type>ashes::CommandBufferPtr</type>
+        <definition>ashes::CommandBufferPtr castor3d::TextureProjection::m_commandBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_commandBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjection.hpp" line="97" column="1" bodyfile="Render/ToTexture/TextureProjection.hpp" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dc9/a04996_1a99d4811716d38823f9e3ecf9cc5c9915" prot="private" static="no" mutable="no">
+        <type>ashes::SemaphorePtr</type>
+        <definition>ashes::SemaphorePtr castor3d::TextureProjection::m_finished</definition>
+        <argsstring></argsstring>
+        <name>m_finished</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjection.hpp" line="98" column="1" bodyfile="Render/ToTexture/TextureProjection.hpp" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dc9/a04996_1af3dca5109381f161fbd17ff2c76db470" prot="private" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::TextureProjection::m_mtxModel</definition>
+        <argsstring></argsstring>
+        <name>m_mtxModel</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjection.hpp" line="99" column="1" bodyfile="Render/ToTexture/TextureProjection.hpp" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="dd/dc9/a04996_1af0a7eae3def25c9c501f038785fe9de9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ashes::PipelineShaderStageCreateInfoArray</type>
+        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::TextureProjection::doInitialiseShader</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>doInitialiseShader</name>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjection.hpp" line="76" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dc9/a04996_1a7222503f203957390a8eaca85819ac9c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::TextureProjection::doInitialiseVertexBuffer</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>doInitialiseVertexBuffer</name>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjection.hpp" line="77" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dc9/a04996_1ac4370503ce93bb2dabe49818ec761153" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::TextureProjection::doInitialisePipeline</definition>
+        <argsstring>(RenderDevice const &amp;device, ashes::PipelineShaderStageCreateInfoArray &amp;program, ashes::ImageView const &amp;texture, ashes::RenderPass const &amp;renderPass)</argsstring>
+        <name>doInitialisePipeline</name>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>ashes::PipelineShaderStageCreateInfoArray &amp;</type>
+          <declname>program</declname>
+        </param>
+        <param>
+          <type>ashes::ImageView const &amp;</type>
+          <declname>texture</declname>
+        </param>
+        <param>
+          <type>ashes::RenderPass const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjection.hpp" line="78" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dc9/a04996_1ac65746031a2c1223ef1262a9b0ca5d88" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TextureProjection::doPrepareFrame</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>doPrepareFrame</name>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjection.hpp" line="82" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4428">
+        <label>castor3d::TextureProjection</label>
+        <link refid="dd/dc9/a04996"/>
+        <childnode refid="4429" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4429">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4430">
+        <label>castor3d::TextureProjection</label>
+        <link refid="dd/dc9/a04996"/>
+        <childnode refid="4431" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4431">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Render/ToTexture/TextureProjection.hpp" line="28" column="1" bodyfile="Render/ToTexture/TextureProjection.hpp" bodystart="26" bodyend="100"/>
+    <listofallmembers>
+      <member refid="dd/dc9/a04996_1a7b6180ab7d65254723b38278ef89e5db" prot="public" virt="non-virtual"><scope>castor3d::TextureProjection</scope><name>cleanup</name></member>
+      <member refid="dd/dc9/a04996_1ac4370503ce93bb2dabe49818ec761153" prot="private" virt="non-virtual"><scope>castor3d::TextureProjection</scope><name>doInitialisePipeline</name></member>
+      <member refid="dd/dc9/a04996_1af0a7eae3def25c9c501f038785fe9de9" prot="private" virt="non-virtual"><scope>castor3d::TextureProjection</scope><name>doInitialiseShader</name></member>
+      <member refid="dd/dc9/a04996_1a7222503f203957390a8eaca85819ac9c" prot="private" virt="non-virtual"><scope>castor3d::TextureProjection</scope><name>doInitialiseVertexBuffer</name></member>
+      <member refid="dd/dc9/a04996_1ac65746031a2c1223ef1262a9b0ca5d88" prot="private" virt="non-virtual"><scope>castor3d::TextureProjection</scope><name>doPrepareFrame</name></member>
+      <member refid="dd/dc9/a04996_1ac2ad6ca9dcaab3e53d9e39319241eede" prot="public" virt="non-virtual"><scope>castor3d::TextureProjection</scope><name>getCommandBuffer</name></member>
+      <member refid="dd/dc9/a04996_1a1de51a1eb944b2fb6b26606a246cbc7e" prot="public" virt="non-virtual"><scope>castor3d::TextureProjection</scope><name>getSemaphore</name></member>
+      <member refid="dd/dc9/a04996_1a67dc5a37aa39c5f3a498952e9051e189" prot="public" virt="non-virtual"><scope>castor3d::TextureProjection</scope><name>initialise</name></member>
+      <member refid="dd/dc9/a04996_1a68918f61806c55be1dfa470c36512a5b" prot="private" virt="non-virtual"><scope>castor3d::TextureProjection</scope><name>m_commandBuffer</name></member>
+      <member refid="dd/dc9/a04996_1aa6f6003faab9c5484c0be5e5bf82c565" prot="private" virt="non-virtual"><scope>castor3d::TextureProjection</scope><name>m_descriptorLayout</name></member>
+      <member refid="dd/dc9/a04996_1ac85d0c841fbd744c08f498fa7c34c917" prot="private" virt="non-virtual"><scope>castor3d::TextureProjection</scope><name>m_descriptorPool</name></member>
+      <member refid="dd/dc9/a04996_1a2d4fd61778fe577bc14cc636c0cf0541" prot="private" virt="non-virtual"><scope>castor3d::TextureProjection</scope><name>m_descriptorSet</name></member>
+      <member refid="dd/dc9/a04996_1a99d4811716d38823f9e3ecf9cc5c9915" prot="private" virt="non-virtual"><scope>castor3d::TextureProjection</scope><name>m_finished</name></member>
+      <member refid="dd/dc9/a04996_1a477a5bcf7c5fa9d625bb8ffe09d35f5e" prot="private" virt="non-virtual"><scope>castor3d::TextureProjection</scope><name>m_matrixUbo</name></member>
+      <member refid="dd/dc9/a04996_1a4d0edf9c7ce76b3f9fbed7b605421b62" prot="private" virt="non-virtual"><scope>castor3d::TextureProjection</scope><name>m_modelMatrixUbo</name></member>
+      <member refid="dd/dc9/a04996_1af3dca5109381f161fbd17ff2c76db470" prot="private" virt="non-virtual"><scope>castor3d::TextureProjection</scope><name>m_mtxModel</name></member>
+      <member refid="dd/dc9/a04996_1a82bc2d528ec474514dd7a917b09ce45c" prot="private" virt="non-virtual"><scope>castor3d::TextureProjection</scope><name>m_pipeline</name></member>
+      <member refid="dd/dc9/a04996_1a76fec5f65b283cbe23287f760cd74781" prot="private" virt="non-virtual"><scope>castor3d::TextureProjection</scope><name>m_pipelineLayout</name></member>
+      <member refid="dd/dc9/a04996_1af0d1e7553f53354d609626ced6d9f4f8" prot="private" virt="non-virtual"><scope>castor3d::TextureProjection</scope><name>m_renderPass</name></member>
+      <member refid="dd/dc9/a04996_1ad18c5bae1eb3573198d157296335d893" prot="private" virt="non-virtual"><scope>castor3d::TextureProjection</scope><name>m_sampler</name></member>
+      <member refid="dd/dc9/a04996_1a9250f97140987aa239b722eba2763cf7" prot="private" virt="non-virtual"><scope>castor3d::TextureProjection</scope><name>m_size</name></member>
+      <member refid="dd/dc9/a04996_1a39a5c110d31b285779d151d73b5e6690" prot="private" virt="non-virtual"><scope>castor3d::TextureProjection</scope><name>m_sizePushConstant</name></member>
+      <member refid="dd/dc9/a04996_1a9e754de5c63930356d872550efc7c4f5" prot="private" virt="non-virtual"><scope>castor3d::TextureProjection</scope><name>m_vertexBuffer</name></member>
+      <member refid="dd/dc9/a04996_1a10b7b69e9f20e0e8babfabb2de9f01c7" prot="public" virt="non-virtual"><scope>castor3d::TextureProjection</scope><name>TextureProjection</name></member>
+      <member refid="dd/dc9/a04996_1ade82f2281777a3e15e254a41da3b9df8" prot="public" virt="non-virtual"><scope>castor3d::TextureProjection</scope><name>update</name></member>
+      <member refid="dd/dc9/a04996_1ad5278346571ee8bfe0d77c5ac907cde0" prot="public" virt="non-virtual"><scope>castor3d::TextureProjection</scope><name>~TextureProjection</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

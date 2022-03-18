@@ -1,47 +1,95 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="db/da9/a04374" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::CommandsSemaphore</compoundname>
-    <includes local="no">CommandsSemaphore.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="db/da9/a04374_1a69f8a98779e7005fc1494f7cef97ebb4" prot="public" static="no" mutable="no">
-        <type>ashes::CommandBufferPtr</type>
-        <definition>ashes::CommandBufferPtr castor3d::CommandsSemaphore::commandBuffer</definition>
-        <argsstring></argsstring>
-        <name>commandBuffer</name>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="db/da9/a04374" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::AnimatedObject</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::Named</basecompoundref>
+    <derivedcompoundref refid="d7/dc9/a04370" prot="public" virt="non-virtual">castor3d::AnimatedMesh</derivedcompoundref>
+    <derivedcompoundref refid="d7/d1e/a04382" prot="public" virt="non-virtual">castor3d::AnimatedSceneNode</derivedcompoundref>
+    <derivedcompoundref refid="d9/dce/a04386" prot="public" virt="non-virtual">castor3d::AnimatedSkeleton</derivedcompoundref>
+    <derivedcompoundref refid="d5/de5/a04390" prot="public" virt="non-virtual">castor3d::AnimatedTexture</derivedcompoundref>
+    <includes local="no">AnimatedObject.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="db/da9/a04374_1a5fcebbda75e25b1806d1b5c2141a2924" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::AnimatedObject::AnimatedObject</definition>
+        <argsstring>(AnimatedObject &amp;&amp;rhs)=default</argsstring>
+        <name>AnimatedObject</name>
+        <qualifiedname>castor3d::AnimatedObject::AnimatedObject</qualifiedname>
+        <param>
+          <type><ref refid="db/da9/a04374" kindref="compound">AnimatedObject</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>name Copy / Move. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/CommandsSemaphore.hpp" line="25" column="1" bodyfile="Render/Passes/CommandsSemaphore.hpp" bodystart="25" bodyend="-1"/>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="24" column="9"/>
       </memberdef>
-      <memberdef kind="variable" id="db/da9/a04374_1ab63a3f9fdc8ca326973ddaccb1c5e074" prot="public" static="no" mutable="no">
-        <type>ashes::SemaphorePtr</type>
-        <definition>ashes::SemaphorePtr castor3d::CommandsSemaphore::semaphore</definition>
-        <argsstring></argsstring>
-        <name>semaphore</name>
+      <memberdef kind="function" id="db/da9/a04374_1a4fae64cf33b1a473e421691f2037f723" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="db/da9/a04374" kindref="compound">AnimatedObject</ref> &amp;</type>
+        <definition>C3D_API AnimatedObject &amp; castor3d::AnimatedObject::operator=</definition>
+        <argsstring>(AnimatedObject &amp;&amp;rhs)=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::AnimatedObject::operator=</qualifiedname>
+        <param>
+          <type><ref refid="db/da9/a04374" kindref="compound">AnimatedObject</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/CommandsSemaphore.hpp" line="26" column="1" bodyfile="Render/Passes/CommandsSemaphore.hpp" bodystart="26" bodyend="-1"/>
-        <referencedby refid="d8/d10/a05018_1a40adc4973e83d50829daa0c6c37c79f2" compoundref="d1/dd8/a01022" startline="96" endline="100">castor3d::VoxelizePass::getSemaphore</referencedby>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="25" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="db/da9/a04374_1af2eccff6842dec84ce84d0e0c599f38c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::AnimatedObject::AnimatedObject</definition>
+        <argsstring>(AnimatedObject const &amp;rhs)=delete</argsstring>
+        <name>AnimatedObject</name>
+        <qualifiedname>castor3d::AnimatedObject::AnimatedObject</qualifiedname>
+        <param>
+          <type><ref refid="db/da9/a04374" kindref="compound">AnimatedObject</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="26" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="db/da9/a04374_1a681a62403a76ff582f254ff7c43d3c10" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="db/da9/a04374" kindref="compound">AnimatedObject</ref> &amp;</type>
+        <definition>C3D_API AnimatedObject &amp; castor3d::AnimatedObject::operator=</definition>
+        <argsstring>(AnimatedObject const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::AnimatedObject::operator=</qualifiedname>
+        <param>
+          <type><ref refid="db/da9/a04374" kindref="compound">AnimatedObject</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="27" column="25"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="db/da9/a04374_1a2a84ae509877c923b4a13d559eb1de3a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::CommandsSemaphore::CommandsSemaphore</definition>
-        <argsstring>(RenderDevice const &amp;device, castor::String const &amp;name)</argsstring>
-        <name>CommandsSemaphore</name>
-        <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="db/da9/a04374_1ab2df0c8e698bcfdb593900ad8c146266" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::AnimatedObject::hasAnimation</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>hasAnimation</name>
+        <qualifiedname>castor3d::AnimatedObject::hasAnimation</qualifiedname>
         <param>
           <type>castor::String const &amp;</type>
           <declname>name</declname>
@@ -49,85 +97,579 @@
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>name Getters. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/CommandsSemaphore.hpp" line="16" column="1"/>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="141" column="6" bodyfile="Scene/Animation/AnimatedObject.hpp" bodystart="141" bodyend="144"/>
+        <references refid="db/da9/a04374_1a28e41bc599481520db66d3b41ec73a2d" compoundref="d4/d95/a00989" startline="196">m_animations</references>
       </memberdef>
-      <memberdef kind="function" id="db/da9/a04374_1a45111e76b54c590ed4c25560a30b5dab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::CommandsSemaphore::CommandsSemaphore</definition>
-        <argsstring>(ashes::CommandBufferPtr commandBuffer=nullptr, ashes::SemaphorePtr semaphore=nullptr)</argsstring>
-        <name>CommandsSemaphore</name>
-        <param>
-          <type>ashes::CommandBufferPtr</type>
-          <declname>commandBuffer</declname>
-          <defval>nullptr</defval>
-        </param>
-        <param>
-          <type>ashes::SemaphorePtr</type>
-          <declname>semaphore</declname>
-          <defval>nullptr</defval>
-        </param>
+      <memberdef kind="function" id="db/da9/a04374_1a2b7f1dcedebd594dd1f02ce399d06e59" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>AnimationInstancePtrStrMap const &amp;</type>
+        <definition>AnimationInstancePtrStrMap const  &amp; castor3d::AnimatedObject::getAnimations</definition>
+        <argsstring>() const</argsstring>
+        <name>getAnimations</name>
+        <qualifiedname>castor3d::AnimatedObject::getAnimations</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/CommandsSemaphore.hpp" line="18" column="1"/>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="146" column="35" bodyfile="Scene/Animation/AnimatedObject.hpp" bodystart="146" bodyend="149"/>
+        <references refid="db/da9/a04374_1a28e41bc599481520db66d3b41ec73a2d" compoundref="d4/d95/a00989" startline="196">m_animations</references>
       </memberdef>
-      <memberdef kind="function" id="db/da9/a04374_1a04f1d199d50dd4495c033943c7320352" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::CommandsSemaphore::submit</definition>
-        <argsstring>(ashes::Queue const &amp;queue) const</argsstring>
-        <name>submit</name>
-        <param>
-          <type>ashes::Queue const &amp;</type>
-          <declname>queue</declname>
-        </param>
+      <memberdef kind="function" id="db/da9/a04374_1aa371efe8253bc63995bf46f238c2a1d8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dc/df4/a01401_1a62712d9ea9e9184dffafc59c48e8e6e5" kindref="member">AnimationType</ref></type>
+        <definition>AnimationType castor3d::AnimatedObject::getKind</definition>
+        <argsstring>() const</argsstring>
+        <name>getKind</name>
+        <qualifiedname>castor3d::AnimatedObject::getKind</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/CommandsSemaphore.hpp" line="21" column="1"/>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="151" column="15" bodyfile="Scene/Animation/AnimatedObject.hpp" bodystart="151" bodyend="154"/>
       </memberdef>
-      <memberdef kind="function" id="db/da9/a04374_1aad5ed57fbc23c00ab8c57f38f0bb5968" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Semaphore const  &amp;</type>
-        <definition>C3D_API ashes::Semaphore const&amp; castor3d::CommandsSemaphore::submit</definition>
-        <argsstring>(ashes::Queue const &amp;queue, ashes::Semaphore const &amp;toWait) const</argsstring>
-        <name>submit</name>
-        <param>
-          <type>ashes::Queue const &amp;</type>
-          <declname>queue</declname>
-        </param>
-        <param>
-          <type>ashes::Semaphore const &amp;</type>
-          <declname>toWait</declname>
-        </param>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="db/da9/a04374_1a28e41bc599481520db66d3b41ec73a2d" prot="protected" static="no" mutable="no">
+        <type>AnimationInstancePtrStrMap</type>
+        <definition>AnimationInstancePtrStrMap castor3d::AnimatedObject::m_animations</definition>
+        <argsstring></argsstring>
+        <name>m_animations</name>
+        <qualifiedname>castor3d::AnimatedObject::m_animations</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>All animations. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="196" column="28" bodyfile="Scene/Animation/AnimatedObject.hpp" bodystart="196" bodyend="-1"/>
+        <referencedby refid="db/da9/a04374_1a2b7f1dcedebd594dd1f02ce399d06e59" compoundref="d4/d95/a00989" startline="146" endline="149">getAnimations</referencedby>
+        <referencedby refid="db/da9/a04374_1ab2df0c8e698bcfdb593900ad8c146266" compoundref="d4/d95/a00989" startline="141" endline="144">hasAnimation</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="db/da9/a04374_1a0137a413dfaf31d48fbb30f72d17a09e" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a62712d9ea9e9184dffafc59c48e8e6e5" kindref="member">AnimationType</ref></type>
+        <definition>AnimationType castor3d::AnimatedObject::m_kind</definition>
+        <argsstring></argsstring>
+        <name>m_kind</name>
+        <qualifiedname>castor3d::AnimatedObject::m_kind</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/CommandsSemaphore.hpp" line="22" column="1"/>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="199" column="15" bodyfile="Scene/Animation/AnimatedObject.hpp" bodystart="199" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/da9/a04374_1a1e050f4dc3a1962ca4cf375d9b16b89b" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::AnimatedObject::AnimatedObject</definition>
+        <argsstring>(AnimationType kind, castor::String const &amp;name)</argsstring>
+        <name>AnimatedObject</name>
+        <qualifiedname>castor3d::AnimatedObject::AnimatedObject</qualifiedname>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a62712d9ea9e9184dffafc59c48e8e6e5" kindref="member">AnimationType</ref></type>
+          <declname>kind</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">kind</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object name. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="39" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="db/da9/a04374_1ab7b23d33b93065511e6eccd2201410f1" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::AnimatedObject::~AnimatedObject</definition>
+        <argsstring>()=default</argsstring>
+        <name>~AnimatedObject</name>
+        <qualifiedname>castor3d::AnimatedObject::~AnimatedObject</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="47" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="db/da9/a04374_1ac19f279d240afe5d9aaee8ab764eb260" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedObject::addAnimation</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>addAnimation</name>
+        <qualifiedname>castor3d::AnimatedObject::addAnimation</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>adds the animation to the list </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation to add </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="56" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/da9/a04374_1a6ccec881b1147baafaa43c5ee286e0c7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedObject::startAnimation</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>startAnimation</name>
+        <qualifiedname>castor3d::AnimatedObject::startAnimation</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Starts the animation identified by the given name. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The name of the animation </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="65" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/da9/a04374_1af9cdab619fab70599c9568167075b9ac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedObject::stopAnimation</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>stopAnimation</name>
+        <qualifiedname>castor3d::AnimatedObject::stopAnimation</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Stops the animation identified by the given name. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The name of the animation </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="74" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/da9/a04374_1a7660dd415cda3afa98031e4fdc194944" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedObject::pauseAnimation</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>pauseAnimation</name>
+        <qualifiedname>castor3d::AnimatedObject::pauseAnimation</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Pauses the animation identified by the given name. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The name of the animation </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="83" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/da9/a04374_1a21fa4e1c150e3f1829fd698e10dc5d74" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedObject::startAllAnimations</definition>
+        <argsstring>()</argsstring>
+        <name>startAllAnimations</name>
+        <qualifiedname>castor3d::AnimatedObject::startAllAnimations</qualifiedname>
+        <briefdescription>
+<para>Starts all animations. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="90" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/da9/a04374_1af7a31c3fd0ac07fcb49df40e4cbc1f9f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedObject::stopAllAnimations</definition>
+        <argsstring>()</argsstring>
+        <name>stopAllAnimations</name>
+        <qualifiedname>castor3d::AnimatedObject::stopAllAnimations</qualifiedname>
+        <briefdescription>
+<para>Stops all animations. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="97" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/da9/a04374_1abdbb6424aa1619e85ef330dcab9ce2a0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedObject::pauseAllAnimations</definition>
+        <argsstring>()</argsstring>
+        <name>pauseAllAnimations</name>
+        <qualifiedname>castor3d::AnimatedObject::pauseAllAnimations</qualifiedname>
+        <briefdescription>
+<para>Pauses all animations. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="104" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/da9/a04374_1a779fc1e97feca6c7b48c9148f18901e5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/d22/a04394" kindref="compound">AnimationInstance</ref> &amp;</type>
+        <definition>C3D_API AnimationInstance &amp; castor3d::AnimatedObject::getAnimation</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>getAnimation</name>
+        <qualifiedname>castor3d::AnimatedObject::getAnimation</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves an animation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation name </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The animation </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="115" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="db/da9/a04374_1aa1ecac49a3faba10459c8089911216df" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::AnimatedObject::update</definition>
+        <argsstring>(castor::Milliseconds const &amp;elapsed)=0</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::AnimatedObject::update</qualifiedname>
+        <reimplementedby refid="d7/dc9/a04370_1a7c37a1707db9205c7b5e3d84024aba85">update</reimplementedby>
+        <reimplementedby refid="d7/d1e/a04382_1ac9668e42baad1f7648acd922da212429">update</reimplementedby>
+        <reimplementedby refid="d9/dce/a04386_1adbab6fc37b52041715d727bfc0d0a602">update</reimplementedby>
+        <reimplementedby refid="d5/de5/a04390_1afc1b444905e2763e02e4285139577a5a">update</reimplementedby>
+        <param>
+          <type>castor::Milliseconds const &amp;</type>
+          <declname>elapsed</declname>
+        </param>
+        <briefdescription>
+<para>Updates the animations of the object, given the time since the last frame. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">elapsed</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time elapsed since the last frame </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="124" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="db/da9/a04374_1a1c375eacf4a34296dca2ca8f490761d0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::AnimatedObject::isPlayingAnimation</definition>
+        <argsstring>() const =0</argsstring>
+        <name>isPlayingAnimation</name>
+        <qualifiedname>castor3d::AnimatedObject::isPlayingAnimation</qualifiedname>
+        <reimplementedby refid="d7/dc9/a04370_1a0293879e0d8b0282ed8467f1fab683bd">isPlayingAnimation</reimplementedby>
+        <reimplementedby refid="d7/d1e/a04382_1a93fc5b3e0474057778a4f7c501da0709">isPlayingAnimation</reimplementedby>
+        <reimplementedby refid="d9/dce/a04386_1a25cd572ba964740c47b53110261cca3f">isPlayingAnimation</reimplementedby>
+        <reimplementedby refid="d5/de5/a04390_1afdd0b9a478e69d2c1ced312fa33b0b03">isPlayingAnimation</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if the object is playing an animation. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="131" column="22"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="db/da9/a04374_1a2c7ed6f3a0ba8312617894ac212bf88c" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::AnimatedObject::doAddAnimation</definition>
+        <argsstring>(castor::String const &amp;name)=0</argsstring>
+        <name>doAddAnimation</name>
+        <qualifiedname>castor3d::AnimatedObject::doAddAnimation</qualifiedname>
+        <reimplementedby refid="d7/dc9/a04370_1aaedc9c3fe1afce5d7e7e4c6d2c165496">doAddAnimation</reimplementedby>
+        <reimplementedby refid="d7/d1e/a04382_1a1bc276e05bfa0c449a62d11be31b4d00">doAddAnimation</reimplementedby>
+        <reimplementedby refid="d9/dce/a04386_1a3e6cb742ae1d185d2385c2b8b908546a">doAddAnimation</reimplementedby>
+        <reimplementedby refid="d5/de5/a04390_1acdc097c0f87ef07efa0f68d7bcc306f9">doAddAnimation</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>adds the animation to the list </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation to add </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="166" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/da9/a04374_1a596f9c943daffeb70db5a29de2606c7d" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::AnimatedObject::doStartAnimation</definition>
+        <argsstring>(AnimationInstance &amp;animation)=0</argsstring>
+        <name>doStartAnimation</name>
+        <qualifiedname>castor3d::AnimatedObject::doStartAnimation</qualifiedname>
+        <reimplementedby refid="d7/dc9/a04370_1a08b09d2252c8e2373a656e5295f6c9b1">doStartAnimation</reimplementedby>
+        <reimplementedby refid="d7/d1e/a04382_1aca6222be5566a4a663d28c41231500b4">doStartAnimation</reimplementedby>
+        <reimplementedby refid="d9/dce/a04386_1aa46820ab994e78786247a1a20192e4df">doStartAnimation</reimplementedby>
+        <reimplementedby refid="d5/de5/a04390_1aa5c1843b9d6be1dbdc865bcabf2a302e">doStartAnimation</reimplementedby>
+        <param>
+          <type><ref refid="d5/d22/a04394" kindref="compound">AnimationInstance</ref> &amp;</type>
+          <declname>animation</declname>
+        </param>
+        <briefdescription>
+<para>Starts the given animation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">animation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="175" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/da9/a04374_1ab4296cdec28662f6241d2bf774f90a20" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::AnimatedObject::doStopAnimation</definition>
+        <argsstring>(AnimationInstance &amp;animation)=0</argsstring>
+        <name>doStopAnimation</name>
+        <qualifiedname>castor3d::AnimatedObject::doStopAnimation</qualifiedname>
+        <reimplementedby refid="d7/dc9/a04370_1ad74070ebe8cbac4684e39cd8ce04a7c1">doStopAnimation</reimplementedby>
+        <reimplementedby refid="d7/d1e/a04382_1a8c373183a4aef12ccca9543ff0871446">doStopAnimation</reimplementedby>
+        <reimplementedby refid="d9/dce/a04386_1af2f25831a75645aba46ef700ce11a68a">doStopAnimation</reimplementedby>
+        <reimplementedby refid="d5/de5/a04390_1a735fefb5e63b0e8037a81f2cc0bdb356">doStopAnimation</reimplementedby>
+        <param>
+          <type><ref refid="d5/d22/a04394" kindref="compound">AnimationInstance</ref> &amp;</type>
+          <declname>animation</declname>
+        </param>
+        <briefdescription>
+<para>Stops the given animation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">animation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="184" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/da9/a04374_1adc5a40387c363ce020fbd743598c645c" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::AnimatedObject::doClearAnimations</definition>
+        <argsstring>()=0</argsstring>
+        <name>doClearAnimations</name>
+        <qualifiedname>castor3d::AnimatedObject::doClearAnimations</qualifiedname>
+        <reimplementedby refid="d7/dc9/a04370_1ad10f86eacb689f088df387264957703c">doClearAnimations</reimplementedby>
+        <reimplementedby refid="d7/d1e/a04382_1a4319a58f28bfd57022a0c9194087957e">doClearAnimations</reimplementedby>
+        <reimplementedby refid="d9/dce/a04386_1a5abae22fdd3577ece9b53161838bf622">doClearAnimations</reimplementedby>
+        <reimplementedby refid="d5/de5/a04390_1ad29418d6b182db8b698e1068671a3567">doClearAnimations</reimplementedby>
+        <briefdescription>
+<para>Stops all animations. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="191" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Passes/CommandsSemaphore.hpp" line="15" column="1" bodyfile="Render/Passes/CommandsSemaphore.hpp" bodystart="14" bodyend="27"/>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor3d::AnimatedMesh</label>
+        <link refid="d7/dc9/a04370"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::AnimatedObject</label>
+        <link refid="db/da9/a04374"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::AnimatedSceneNode</label>
+        <link refid="d7/d1e/a04382"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::AnimatedSkeleton</label>
+        <link refid="d9/dce/a04386"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::AnimatedTexture</label>
+        <link refid="d5/de5/a04390"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::AnimatedObject</label>
+        <link refid="db/da9/a04374"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/Animation/AnimatedObject.hpp" line="13" column="1" bodyfile="Scene/Animation/AnimatedObject.hpp" bodystart="15" bodyend="200"/>
     <listofallmembers>
-      <member refid="db/da9/a04374_1a69f8a98779e7005fc1494f7cef97ebb4" prot="public" virt="non-virtual"><scope>castor3d::CommandsSemaphore</scope><name>commandBuffer</name></member>
-      <member refid="db/da9/a04374_1a2a84ae509877c923b4a13d559eb1de3a" prot="public" virt="non-virtual"><scope>castor3d::CommandsSemaphore</scope><name>CommandsSemaphore</name></member>
-      <member refid="db/da9/a04374_1a45111e76b54c590ed4c25560a30b5dab" prot="public" virt="non-virtual"><scope>castor3d::CommandsSemaphore</scope><name>CommandsSemaphore</name></member>
-      <member refid="db/da9/a04374_1ab63a3f9fdc8ca326973ddaccb1c5e074" prot="public" virt="non-virtual"><scope>castor3d::CommandsSemaphore</scope><name>semaphore</name></member>
-      <member refid="db/da9/a04374_1a04f1d199d50dd4495c033943c7320352" prot="public" virt="non-virtual"><scope>castor3d::CommandsSemaphore</scope><name>submit</name></member>
-      <member refid="db/da9/a04374_1aad5ed57fbc23c00ab8c57f38f0bb5968" prot="public" virt="non-virtual"><scope>castor3d::CommandsSemaphore</scope><name>submit</name></member>
+      <member refid="db/da9/a04374_1ac19f279d240afe5d9aaee8ab764eb260" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>addAnimation</name></member>
+      <member refid="db/da9/a04374_1a5fcebbda75e25b1806d1b5c2141a2924" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>AnimatedObject</name></member>
+      <member refid="db/da9/a04374_1af2eccff6842dec84ce84d0e0c599f38c" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>AnimatedObject</name></member>
+      <member refid="db/da9/a04374_1a1e050f4dc3a1962ca4cf375d9b16b89b" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>AnimatedObject</name></member>
+      <member refid="db/da9/a04374_1a2c7ed6f3a0ba8312617894ac212bf88c" prot="private" virt="pure-virtual"><scope>castor3d::AnimatedObject</scope><name>doAddAnimation</name></member>
+      <member refid="db/da9/a04374_1adc5a40387c363ce020fbd743598c645c" prot="private" virt="pure-virtual"><scope>castor3d::AnimatedObject</scope><name>doClearAnimations</name></member>
+      <member refid="db/da9/a04374_1a596f9c943daffeb70db5a29de2606c7d" prot="private" virt="pure-virtual"><scope>castor3d::AnimatedObject</scope><name>doStartAnimation</name></member>
+      <member refid="db/da9/a04374_1ab4296cdec28662f6241d2bf774f90a20" prot="private" virt="pure-virtual"><scope>castor3d::AnimatedObject</scope><name>doStopAnimation</name></member>
+      <member refid="db/da9/a04374_1a779fc1e97feca6c7b48c9148f18901e5" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>getAnimation</name></member>
+      <member refid="db/da9/a04374_1a2b7f1dcedebd594dd1f02ce399d06e59" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>getAnimations</name></member>
+      <member refid="db/da9/a04374_1aa371efe8253bc63995bf46f238c2a1d8" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>getKind</name></member>
+      <member refid="db/da9/a04374_1ab2df0c8e698bcfdb593900ad8c146266" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>hasAnimation</name></member>
+      <member refid="db/da9/a04374_1a1c375eacf4a34296dca2ca8f490761d0" prot="public" virt="pure-virtual"><scope>castor3d::AnimatedObject</scope><name>isPlayingAnimation</name></member>
+      <member refid="db/da9/a04374_1a28e41bc599481520db66d3b41ec73a2d" prot="protected" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>m_animations</name></member>
+      <member refid="db/da9/a04374_1a0137a413dfaf31d48fbb30f72d17a09e" prot="private" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>m_kind</name></member>
+      <member refid="db/da9/a04374_1a4fae64cf33b1a473e421691f2037f723" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>operator=</name></member>
+      <member refid="db/da9/a04374_1a681a62403a76ff582f254ff7c43d3c10" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>operator=</name></member>
+      <member refid="db/da9/a04374_1abdbb6424aa1619e85ef330dcab9ce2a0" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>pauseAllAnimations</name></member>
+      <member refid="db/da9/a04374_1a7660dd415cda3afa98031e4fdc194944" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>pauseAnimation</name></member>
+      <member refid="db/da9/a04374_1a21fa4e1c150e3f1829fd698e10dc5d74" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>startAllAnimations</name></member>
+      <member refid="db/da9/a04374_1a6ccec881b1147baafaa43c5ee286e0c7" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>startAnimation</name></member>
+      <member refid="db/da9/a04374_1af7a31c3fd0ac07fcb49df40e4cbc1f9f" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>stopAllAnimations</name></member>
+      <member refid="db/da9/a04374_1af9cdab619fab70599c9568167075b9ac" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>stopAnimation</name></member>
+      <member refid="db/da9/a04374_1aa1ecac49a3faba10459c8089911216df" prot="public" virt="pure-virtual"><scope>castor3d::AnimatedObject</scope><name>update</name></member>
+      <member refid="db/da9/a04374_1ab7b23d33b93065511e6eccd2201410f1" prot="public" virt="virtual"><scope>castor3d::AnimatedObject</scope><name>~AnimatedObject</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,28 +1,30 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_c0f5ae8941de6c2ef5bf77de2d17611b" kind="dir">
     <compoundname>Binary</compoundname>
-    <innerfile refid="db/dab/a00089">BinaryAnimation.hpp</innerfile>
-    <innerfile refid="d1/dc1/a00092">BinaryBone.hpp</innerfile>
-    <innerfile refid="d9/d77/a00095">BinaryBonesComponent.hpp</innerfile>
-    <innerfile refid="d1/d44/a00098">BinaryChunk.hpp</innerfile>
-    <innerfile refid="d4/d3a/a00101">BinaryMesh.hpp</innerfile>
-    <innerfile refid="d0/dc2/a00104">BinaryMeshAnimation.hpp</innerfile>
-    <innerfile refid="df/d98/a00107">BinaryMeshAnimationKeyFrame.hpp</innerfile>
-    <innerfile refid="d4/d81/a00110">BinaryModule.hpp</innerfile>
-    <innerfile refid="d3/d00/a00113">BinaryParser.hpp</innerfile>
-    <innerfile refid="d4/d3e/a00116">BinarySkeleton.hpp</innerfile>
-    <innerfile refid="df/d6a/a00119">BinarySkeletonAnimation.hpp</innerfile>
-    <innerfile refid="df/dc8/a00122">BinarySkeletonAnimationBone.hpp</innerfile>
-    <innerfile refid="dc/dfe/a00125">BinarySkeletonAnimationKeyFrame.hpp</innerfile>
-    <innerfile refid="d1/d88/a00128">BinarySkeletonAnimationNode.hpp</innerfile>
-    <innerfile refid="d7/d06/a00131">BinarySkeletonAnimationObject.hpp</innerfile>
-    <innerfile refid="de/d76/a00134">BinarySubmesh.hpp</innerfile>
-    <innerfile refid="d2/df5/a00137">BinaryWriter.hpp</innerfile>
-    <innerfile refid="d5/db1/a00140">ChunkData.hpp</innerfile>
-    <innerfile refid="d7/dce/a00143">ChunkParser.hpp</innerfile>
-    <innerfile refid="d9/db6/a00146">ChunkWriter.hpp</innerfile>
-    <innerfile refid="da/d1e/a00149">CmshImporter.hpp</innerfile>
+    <innerfile refid="da/d2a/a00086">BinaryAnimation.hpp</innerfile>
+    <innerfile refid="db/dab/a00089">BinaryBone.hpp</innerfile>
+    <innerfile refid="d1/dc1/a00092">BinaryBonesComponent.hpp</innerfile>
+    <innerfile refid="d9/d77/a00095">BinaryChunk.hpp</innerfile>
+    <innerfile refid="d1/d44/a00098">BinaryMesh.hpp</innerfile>
+    <innerfile refid="d4/d3a/a00101">BinaryMeshAnimation.hpp</innerfile>
+    <innerfile refid="d0/dc2/a00104">BinaryMeshAnimationKeyFrame.hpp</innerfile>
+    <innerfile refid="df/d98/a00107">BinaryModule.hpp</innerfile>
+    <innerfile refid="d4/d81/a00110">BinaryParser.hpp</innerfile>
+    <innerfile refid="d3/d00/a00113">BinarySceneNodeAnimation.hpp</innerfile>
+    <innerfile refid="d4/d3e/a00116">BinarySceneNodeAnimationKeyFrame.hpp</innerfile>
+    <innerfile refid="df/d6a/a00119">BinarySkeleton.hpp</innerfile>
+    <innerfile refid="df/dc8/a00122">BinarySkeletonAnimation.hpp</innerfile>
+    <innerfile refid="dc/dfe/a00125">BinarySkeletonAnimationBone.hpp</innerfile>
+    <innerfile refid="d1/d88/a00128">BinarySkeletonAnimationKeyFrame.hpp</innerfile>
+    <innerfile refid="d7/d06/a00131">BinarySkeletonAnimationNode.hpp</innerfile>
+    <innerfile refid="de/d76/a00134">BinarySkeletonAnimationObject.hpp</innerfile>
+    <innerfile refid="d2/df5/a00137">BinarySubmesh.hpp</innerfile>
+    <innerfile refid="d5/db1/a00140">BinaryWriter.hpp</innerfile>
+    <innerfile refid="d7/dce/a00143">ChunkData.hpp</innerfile>
+    <innerfile refid="d9/db6/a00146">ChunkParser.hpp</innerfile>
+    <innerfile refid="da/d1e/a00149">ChunkWriter.hpp</innerfile>
+    <innerfile refid="d7/d9a/a00152">CmshImporter.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

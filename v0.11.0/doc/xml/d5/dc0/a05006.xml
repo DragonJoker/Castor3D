@@ -1,0 +1,309 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d5/dc0/a05006" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::VoxelBufferToTexture</compoundname>
+    <includes local="no">VoxelBufferToTexture.hpp</includes>
+    <innerclass refid="d8/d79/a05010" prot="private">castor3d::VoxelBufferToTexture::Pipeline</innerclass>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d5/dc0/a05006_1a8ad08890503e89521bbf40641a00dc23" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::VoxelBufferToTexture::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelBufferToTexture.hpp" line="56" column="1" bodyfile="Render/Voxelize/VoxelBufferToTexture.hpp" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dc0/a05006_1a2bc5676ffe94a69bce964888778d6e93" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/df7/a05026" kindref="compound">VoxelSceneData</ref> const  &amp;</type>
+        <definition>VoxelSceneData const&amp; castor3d::VoxelBufferToTexture::m_vctConfig</definition>
+        <argsstring></argsstring>
+        <name>m_vctConfig</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelBufferToTexture.hpp" line="57" column="1" bodyfile="Render/Voxelize/VoxelBufferToTexture.hpp" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dc0/a05006_1aa63cf1ee88048d40bb74d766ee162bf1" prot="private" static="no" mutable="no">
+        <type>ashes::Buffer&lt; <ref refid="dc/d66/a05014" kindref="compound">Voxel</ref> &gt; const  &amp;</type>
+        <definition>ashes::Buffer&lt; Voxel &gt; const&amp; castor3d::VoxelBufferToTexture::m_voxels</definition>
+        <argsstring></argsstring>
+        <name>m_voxels</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelBufferToTexture.hpp" line="58" column="1" bodyfile="Render/Voxelize/VoxelBufferToTexture.hpp" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dc0/a05006_1a863beefbf35c789ea190b419ccc6bd54" prot="private" static="no" mutable="no">
+        <type><ref refid="df/d14/a02658" kindref="compound">TextureUnit</ref> const  &amp;</type>
+        <definition>TextureUnit const&amp; castor3d::VoxelBufferToTexture::m_result</definition>
+        <argsstring></argsstring>
+        <name>m_result</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelBufferToTexture.hpp" line="59" column="1" bodyfile="Render/Voxelize/VoxelBufferToTexture.hpp" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dc0/a05006_1afe97a98e1922a220ce6b6bdea93d45dd" prot="private" static="no" mutable="no">
+        <type>RenderPassTimerSPtr</type>
+        <definition>RenderPassTimerSPtr castor3d::VoxelBufferToTexture::m_timer</definition>
+        <argsstring></argsstring>
+        <name>m_timer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelBufferToTexture.hpp" line="60" column="1" bodyfile="Render/Voxelize/VoxelBufferToTexture.hpp" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dc0/a05006_1aa8dac9a90342a90fc470e35d58033b9b" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetLayoutPtr</type>
+        <definition>ashes::DescriptorSetLayoutPtr castor3d::VoxelBufferToTexture::m_descriptorSetLayout</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorSetLayout</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelBufferToTexture.hpp" line="61" column="1" bodyfile="Render/Voxelize/VoxelBufferToTexture.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dc0/a05006_1afea0621a70f6df4a4710862adde88ca9" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineLayoutPtr</type>
+        <definition>ashes::PipelineLayoutPtr castor3d::VoxelBufferToTexture::m_pipelineLayout</definition>
+        <argsstring></argsstring>
+        <name>m_pipelineLayout</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelBufferToTexture.hpp" line="62" column="1" bodyfile="Render/Voxelize/VoxelBufferToTexture.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dc0/a05006_1a1cb657d0b62b15f6dca24d779b42408b" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetPoolPtr</type>
+        <definition>ashes::DescriptorSetPoolPtr castor3d::VoxelBufferToTexture::m_descriptorSetPool</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorSetPool</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelBufferToTexture.hpp" line="63" column="1" bodyfile="Render/Voxelize/VoxelBufferToTexture.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dc0/a05006_1a155f8f083442a2c99eb120bee51d5222" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::VoxelBufferToTexture::m_descriptorSet</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorSet</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelBufferToTexture.hpp" line="64" column="1" bodyfile="Render/Voxelize/VoxelBufferToTexture.hpp" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dc0/a05006_1ac15eaeb4a44ef4ca8c037222436fb50a" prot="private" static="no" mutable="no">
+        <type>std::array&lt; std::unique_ptr&lt; Pipeline &gt;, 4u &gt;</type>
+        <definition>std::array&lt; std::unique_ptr&lt; Pipeline &gt;, 4u &gt; castor3d::VoxelBufferToTexture::m_pipelines</definition>
+        <argsstring></argsstring>
+        <name>m_pipelines</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelBufferToTexture.hpp" line="81" column="1" bodyfile="Render/Voxelize/VoxelBufferToTexture.hpp" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/dc0/a05006_1a98ed801aac8d45d0e0b64fd5f131faed" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::VoxelBufferToTexture::VoxelBufferToTexture</definition>
+        <argsstring>(RenderDevice const &amp;device, VoxelSceneData const &amp;vctConfig, ashes::Buffer&lt; Voxel &gt; const &amp;voxels, TextureUnit const &amp;result)</argsstring>
+        <name>VoxelBufferToTexture</name>
+        <param>
+          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df7/a05026" kindref="compound">VoxelSceneData</ref> const &amp;</type>
+          <declname>vctConfig</declname>
+        </param>
+        <param>
+          <type>ashes::Buffer&lt; <ref refid="dc/d66/a05014" kindref="compound">Voxel</ref> &gt; const &amp;</type>
+          <declname>voxels</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d14/a02658" kindref="compound">TextureUnit</ref> const &amp;</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">vctConfig</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The voxelizer configuration. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">voxels</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The voxels buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">result</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The resulting texture. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelBufferToTexture.hpp" line="34" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dc0/a05006_1a0170c953ef5bcdf7b5e8af297ddf4077" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Semaphore const  &amp;</type>
+        <definition>C3D_API ashes::Semaphore const&amp; castor3d::VoxelBufferToTexture::render</definition>
+        <argsstring>(RenderDevice const &amp;device, ashes::Semaphore const &amp;toWait)</argsstring>
+        <name>render</name>
+        <param>
+          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>ashes::Semaphore const &amp;</type>
+          <declname>toWait</declname>
+        </param>
+        <briefdescription>
+<para>Renders nodes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">toWait</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The semaphore from the previous render pass. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelBufferToTexture.hpp" line="48" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dc0/a05006_1ad2422b6aabcfaab9ee8f17ca131d1e3a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::VoxelBufferToTexture::accept</definition>
+        <argsstring>(RenderTechniqueVisitor &amp;visitor)</argsstring>
+        <name>accept</name>
+        <param>
+          <type><ref refid="de/de4/a04922" kindref="compound">RenderTechniqueVisitor</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Visitor acceptance function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ... visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelBufferToTexture.hpp" line="53" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d5/dc0/a05006_1acc7a048ab2c906b85cec4d8b1fef6ccb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Pipeline &amp;</type>
+        <definition>Pipeline&amp; castor3d::VoxelBufferToTexture::getPipeline</definition>
+        <argsstring>()</argsstring>
+        <name>getPipeline</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelBufferToTexture.hpp" line="84" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Voxelize/VoxelBufferToTexture.hpp" line="20" column="1" bodyfile="Render/Voxelize/VoxelBufferToTexture.hpp" bodystart="19" bodyend="85"/>
+    <listofallmembers>
+      <member refid="d5/dc0/a05006_1ad2422b6aabcfaab9ee8f17ca131d1e3a" prot="public" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>accept</name></member>
+      <member refid="d5/dc0/a05006_1acc7a048ab2c906b85cec4d8b1fef6ccb" prot="private" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>getPipeline</name></member>
+      <member refid="d5/dc0/a05006_1a155f8f083442a2c99eb120bee51d5222" prot="private" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>m_descriptorSet</name></member>
+      <member refid="d5/dc0/a05006_1aa8dac9a90342a90fc470e35d58033b9b" prot="private" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>m_descriptorSetLayout</name></member>
+      <member refid="d5/dc0/a05006_1a1cb657d0b62b15f6dca24d779b42408b" prot="private" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>m_descriptorSetPool</name></member>
+      <member refid="d5/dc0/a05006_1a8ad08890503e89521bbf40641a00dc23" prot="private" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>m_device</name></member>
+      <member refid="d5/dc0/a05006_1afea0621a70f6df4a4710862adde88ca9" prot="private" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>m_pipelineLayout</name></member>
+      <member refid="d5/dc0/a05006_1ac15eaeb4a44ef4ca8c037222436fb50a" prot="private" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>m_pipelines</name></member>
+      <member refid="d5/dc0/a05006_1a863beefbf35c789ea190b419ccc6bd54" prot="private" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>m_result</name></member>
+      <member refid="d5/dc0/a05006_1afe97a98e1922a220ce6b6bdea93d45dd" prot="private" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>m_timer</name></member>
+      <member refid="d5/dc0/a05006_1a2bc5676ffe94a69bce964888778d6e93" prot="private" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>m_vctConfig</name></member>
+      <member refid="d5/dc0/a05006_1aa63cf1ee88048d40bb74d766ee162bf1" prot="private" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>m_voxels</name></member>
+      <member refid="d5/dc0/a05006_1a0170c953ef5bcdf7b5e8af297ddf4077" prot="public" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>render</name></member>
+      <member refid="d5/dc0/a05006_1a98ed801aac8d45d0e0b64fd5f131faed" prot="public" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>VoxelBufferToTexture</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

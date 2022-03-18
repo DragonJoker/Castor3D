@@ -1,67 +1,49 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d3/d66/a03954" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::InstantiationComponent::Data</compoundname>
-    <includes local="no">InstantiationComponent.hpp</includes>
+    <compoundname>castor3d::QueueDataWrapper</compoundname>
+    <includes local="no">RenderDevice.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d3/d66/a03954_1a2283bed474f3f6c91a4d976d55fbb44c" prot="public" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::InstantiationComponent::Data::count</definition>
+      <memberdef kind="variable" id="d3/d66/a03954_1a0bcfdd67de41f4aae9b266a3592b4b20" prot="public" static="no" mutable="no">
+        <type><ref refid="de/d88/a03958" kindref="compound">QueuesData</ref> *</type>
+        <definition>QueuesData* castor3d::QueueDataWrapper::parent</definition>
         <argsstring></argsstring>
-        <name>count</name>
+        <name>parent</name>
+        <qualifiedname>castor3d::QueueDataWrapper::parent</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="35" column="1" bodyfile="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="35" bodyend="-1"/>
+        <location file="Render/RenderDevice.hpp" line="207" column="13" bodyfile="Render/RenderDevice.hpp" bodystart="207" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d3/d66/a03954_1a7fdf29c3bd7d326a2cd8361fd5cb855c" prot="public" static="no" mutable="no">
-        <type>ashes::VertexBufferPtr&lt; <ref refid="df/dfb/a03946" kindref="compound">InstantiationData</ref> &gt;</type>
-        <definition>ashes::VertexBufferPtr&lt; InstantiationData &gt; castor3d::InstantiationComponent::Data::buffer</definition>
-        <argsstring></argsstring>
-        <name>buffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="36" column="1" bodyfile="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="36" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d66/a03954_1a6fbc5bbf46c17fc6916de11d0b0e20c5" prot="public" static="no" mutable="no">
-        <type>std::vector&lt; <ref refid="df/dfb/a03946" kindref="compound">InstantiationData</ref> &gt;</type>
-        <definition>std::vector&lt; InstantiationData &gt; castor3d::InstantiationComponent::Data::data</definition>
+      <memberdef kind="variable" id="d3/d66/a03954_1a339ecf90937c14aa6a0a578ce629b07c" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/d61/a03950" kindref="compound">QueueData</ref> const  *</type>
+        <definition>QueueData const* castor3d::QueueDataWrapper::data</definition>
         <argsstring></argsstring>
         <name>data</name>
+        <qualifiedname>castor3d::QueueDataWrapper::data</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="37" column="1" bodyfile="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="37" bodyend="-1"/>
+        <location file="Render/RenderDevice.hpp" line="208" column="18" bodyfile="Render/RenderDevice.hpp" bodystart="208" bodyend="-1"/>
+        <referencedby refid="d3/d66/a03954_1a9fe4cac3233b0d1b1a4453b8e9acf7e3" compoundref="d5/d72/a00803" startline="202" endline="205">operator*</referencedby>
+        <referencedby refid="d3/d66/a03954_1ad019d52fc88e25628e9efa45ca9c1958" compoundref="d5/d72/a00803" startline="197" endline="200">operator-&gt;</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d3/d66/a03954_1ae81f75fb5ef58475f1fbbe5be7c02701" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="d3/d66/a03954_1a6ef1cb56606ca365396cf64c50879823" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
-        <definition>castor3d::InstantiationComponent::Data::Data</definition>
-        <argsstring>(uint32_t count, ashes::VertexBufferPtr&lt; InstantiationData &gt; buffer, std::vector&lt; InstantiationData &gt; data={})</argsstring>
-        <name>Data</name>
+        <definition>castor3d::QueueDataWrapper::QueueDataWrapper</definition>
+        <argsstring>(QueueDataWrapper const &amp;)=delete</argsstring>
+        <name>QueueDataWrapper</name>
+        <qualifiedname>castor3d::QueueDataWrapper::QueueDataWrapper</qualifiedname>
         <param>
-          <type>uint32_t</type>
-          <declname>count</declname>
-        </param>
-        <param>
-          <type>ashes::VertexBufferPtr&lt; <ref refid="df/dfb/a03946" kindref="compound">InstantiationData</ref> &gt;</type>
-          <declname>buffer</declname>
-        </param>
-        <param>
-          <type>std::vector&lt; <ref refid="df/dfb/a03946" kindref="compound">InstantiationData</ref> &gt;</type>
-          <declname>data</declname>
-          <defval>{}</defval>
+          <type><ref refid="d3/d66/a03954" kindref="compound">QueueDataWrapper</ref> const &amp;</type>
         </param>
         <briefdescription>
         </briefdescription>
@@ -69,7 +51,122 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="27" column="1" bodyfile="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="27" bodyend="34"/>
+        <location file="Render/RenderDevice.hpp" line="189" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d66/a03954_1a6575a713a0b8ce5cb7840663b000c0fa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d66/a03954" kindref="compound">QueueDataWrapper</ref> &amp;</type>
+        <definition>QueueDataWrapper &amp; castor3d::QueueDataWrapper::operator=</definition>
+        <argsstring>(QueueDataWrapper const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::QueueDataWrapper::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d3/d66/a03954" kindref="compound">QueueDataWrapper</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="190" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d66/a03954_1a4e895bc16d52f3d29bb275e56417bb6e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::QueueDataWrapper::QueueDataWrapper</definition>
+        <argsstring>(QueueDataWrapper &amp;&amp;rhs)</argsstring>
+        <name>QueueDataWrapper</name>
+        <qualifiedname>castor3d::QueueDataWrapper::QueueDataWrapper</qualifiedname>
+        <param>
+          <type><ref refid="d3/d66/a03954" kindref="compound">QueueDataWrapper</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="192" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d66/a03954_1ac683062f1999255aafe52a3a6a4e39ce" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/d66/a03954" kindref="compound">QueueDataWrapper</ref> &amp;</type>
+        <definition>C3D_API QueueDataWrapper &amp; castor3d::QueueDataWrapper::operator=</definition>
+        <argsstring>(QueueDataWrapper &amp;&amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::QueueDataWrapper::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d3/d66/a03954" kindref="compound">QueueDataWrapper</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="193" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d66/a03954_1abefccde6a2c009c388028d895bf99048" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::QueueDataWrapper::QueueDataWrapper</definition>
+        <argsstring>(QueuesData *parent)</argsstring>
+        <name>QueueDataWrapper</name>
+        <qualifiedname>castor3d::QueueDataWrapper::QueueDataWrapper</qualifiedname>
+        <param>
+          <type><ref refid="de/d88/a03958" kindref="compound">QueuesData</ref> *</type>
+          <declname>parent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="194" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d66/a03954_1ac55457c38ec19ee476b118e1c48ea59d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::QueueDataWrapper::~QueueDataWrapper</definition>
+        <argsstring>()</argsstring>
+        <name>~QueueDataWrapper</name>
+        <qualifiedname>castor3d::QueueDataWrapper::~QueueDataWrapper</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="195" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d66/a03954_1ad019d52fc88e25628e9efa45ca9c1958" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dc/d61/a03950" kindref="compound">QueueData</ref> const *</type>
+        <definition>QueueData const  * castor3d::QueueDataWrapper::operator-&gt;</definition>
+        <argsstring>()</argsstring>
+        <name>operator-&gt;</name>
+        <qualifiedname>castor3d::QueueDataWrapper::operator-&gt;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="197" column="18" bodyfile="Render/RenderDevice.hpp" bodystart="197" bodyend="200"/>
+        <references refid="d3/d66/a03954_1a339ecf90937c14aa6a0a578ce629b07c" compoundref="d5/d72/a00803" startline="208">data</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/d66/a03954_1a9fe4cac3233b0d1b1a4453b8e9acf7e3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dc/d61/a03950" kindref="compound">QueueData</ref> const &amp;</type>
+        <definition>QueueData const  &amp; castor3d::QueueDataWrapper::operator*</definition>
+        <argsstring>()</argsstring>
+        <name>operator*</name>
+        <qualifiedname>castor3d::QueueDataWrapper::operator*</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="202" column="18" bodyfile="Render/RenderDevice.hpp" bodystart="202" bodyend="205"/>
+        <references refid="d3/d66/a03954_1a339ecf90937c14aa6a0a578ce629b07c" compoundref="d5/d72/a00803" startline="208">data</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -77,42 +174,40 @@
     <detaileddescription>
     </detaileddescription>
     <collaborationgraph>
-      <node id="1454">
-        <label>T</label>
-      </node>
-      <node id="1453">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="1454" relation="usage">
-          <edgelabel>elements</edgelabel>
+      <node id="3">
+        <label>castor3d::QueueData</label>
+        <link refid="dc/d61/a03950"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>parent</edgelabel>
         </childnode>
       </node>
-      <node id="1450">
-        <label>castor3d::InstantiationComponent::Data</label>
+      <node id="1">
+        <label>castor3d::QueueDataWrapper</label>
         <link refid="d3/d66/a03954"/>
-        <childnode refid="1451" relation="usage">
+        <childnode refid="2" relation="usage">
+          <edgelabel>parent</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
           <edgelabel>data</edgelabel>
         </childnode>
       </node>
-      <node id="1451">
-        <label>std::vector&lt; castor3d::InstantiationData &gt;</label>
-        <childnode refid="1452" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-        <childnode refid="1453" relation="template-instance">
-          <edgelabel>&lt; castor3d::InstantiationData &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1452">
-        <label>castor3d::InstantiationData</label>
-        <link refid="df/dfb/a03946"/>
+      <node id="2">
+        <label>castor3d::QueuesData</label>
+        <link refid="de/d88/a03958"/>
       </node>
     </collaborationgraph>
-    <location file="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="26" column="1" bodyfile="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="25" bodyend="38"/>
+    <location file="Render/RenderDevice.hpp" line="187" column="1" bodyfile="Render/RenderDevice.hpp" bodystart="188" bodyend="209"/>
     <listofallmembers>
-      <member refid="d3/d66/a03954_1a7fdf29c3bd7d326a2cd8361fd5cb855c" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent::Data</scope><name>buffer</name></member>
-      <member refid="d3/d66/a03954_1a2283bed474f3f6c91a4d976d55fbb44c" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent::Data</scope><name>count</name></member>
-      <member refid="d3/d66/a03954_1a6fbc5bbf46c17fc6916de11d0b0e20c5" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent::Data</scope><name>data</name></member>
-      <member refid="d3/d66/a03954_1ae81f75fb5ef58475f1fbbe5be7c02701" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent::Data</scope><name>Data</name></member>
+      <member refid="d3/d66/a03954_1a339ecf90937c14aa6a0a578ce629b07c" prot="public" virt="non-virtual"><scope>castor3d::QueueDataWrapper</scope><name>data</name></member>
+      <member refid="d3/d66/a03954_1a9fe4cac3233b0d1b1a4453b8e9acf7e3" prot="public" virt="non-virtual"><scope>castor3d::QueueDataWrapper</scope><name>operator*</name></member>
+      <member refid="d3/d66/a03954_1ad019d52fc88e25628e9efa45ca9c1958" prot="public" virt="non-virtual"><scope>castor3d::QueueDataWrapper</scope><name>operator-&gt;</name></member>
+      <member refid="d3/d66/a03954_1a6575a713a0b8ce5cb7840663b000c0fa" prot="public" virt="non-virtual"><scope>castor3d::QueueDataWrapper</scope><name>operator=</name></member>
+      <member refid="d3/d66/a03954_1ac683062f1999255aafe52a3a6a4e39ce" prot="public" virt="non-virtual"><scope>castor3d::QueueDataWrapper</scope><name>operator=</name></member>
+      <member refid="d3/d66/a03954_1a0bcfdd67de41f4aae9b266a3592b4b20" prot="public" virt="non-virtual"><scope>castor3d::QueueDataWrapper</scope><name>parent</name></member>
+      <member refid="d3/d66/a03954_1a6ef1cb56606ca365396cf64c50879823" prot="public" virt="non-virtual"><scope>castor3d::QueueDataWrapper</scope><name>QueueDataWrapper</name></member>
+      <member refid="d3/d66/a03954_1a4e895bc16d52f3d29bb275e56417bb6e" prot="public" virt="non-virtual"><scope>castor3d::QueueDataWrapper</scope><name>QueueDataWrapper</name></member>
+      <member refid="d3/d66/a03954_1abefccde6a2c009c388028d895bf99048" prot="public" virt="non-virtual"><scope>castor3d::QueueDataWrapper</scope><name>QueueDataWrapper</name></member>
+      <member refid="d3/d66/a03954_1ac55457c38ec19ee476b118e1c48ea59d" prot="public" virt="non-virtual"><scope>castor3d::QueueDataWrapper</scope><name>~QueueDataWrapper</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

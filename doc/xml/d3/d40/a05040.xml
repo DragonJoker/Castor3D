@@ -1,158 +1,77 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d3/d40/a05040" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::VoxelSecondaryBounce::SecondaryBounce</compoundname>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d3/d40/a05040" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ShadowMapUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d3/d40/a05040_1a5f643b63a0a5baa70b56d423205a5891" prot="public" static="no" mutable="no">
-        <type><ref refid="d7/d32/a05312" kindref="compound">ShaderModule</ref></type>
-        <definition>ShaderModule castor3d::VoxelSecondaryBounce::SecondaryBounce::computeShader</definition>
+      <memberdef kind="variable" id="d3/d40/a05040_1a440ced704c065ffdbf0f29f60e3b971b" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::ShadowMapUboConfiguration::lightProjection</definition>
         <argsstring></argsstring>
-        <name>computeShader</name>
+        <name>lightProjection</name>
+        <qualifiedname>castor3d::ShadowMapUboConfiguration::lightProjection</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Voxelize/VoxelSecondaryBounce.hpp" line="84" column="1" bodyfile="Render/Voxelize/VoxelSecondaryBounce.hpp" bodystart="84" bodyend="-1"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="363" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="363" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d3/d40/a05040_1afc5ec3f414b68d7f99d3f14868aacf4e" prot="public" static="no" mutable="no">
-        <type>ashes::ComputePipelinePtr</type>
-        <definition>ashes::ComputePipelinePtr castor3d::VoxelSecondaryBounce::SecondaryBounce::pipeline</definition>
+      <memberdef kind="variable" id="d3/d40/a05040_1a3b0097393ead8c6396d2fc299b804c97" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::ShadowMapUboConfiguration::lightView</definition>
         <argsstring></argsstring>
-        <name>pipeline</name>
+        <name>lightView</name>
+        <qualifiedname>castor3d::ShadowMapUboConfiguration::lightView</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Voxelize/VoxelSecondaryBounce.hpp" line="85" column="1" bodyfile="Render/Voxelize/VoxelSecondaryBounce.hpp" bodystart="85" bodyend="-1"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="364" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="364" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d3/d40/a05040_1af0921d90d413abd8fbebf260ff3a273b" prot="public" static="no" mutable="no">
-        <type><ref refid="d1/da6/a04380" kindref="compound">CommandsSemaphore</ref></type>
-        <definition>CommandsSemaphore castor3d::VoxelSecondaryBounce::SecondaryBounce::commands</definition>
+      <memberdef kind="variable" id="d3/d40/a05040_1aad9a7eddde3a1ac0857212592b858000" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::ShadowMapUboConfiguration::lightPosFarPlane</definition>
         <argsstring></argsstring>
-        <name>commands</name>
+        <name>lightPosFarPlane</name>
+        <qualifiedname>castor3d::ShadowMapUboConfiguration::lightPosFarPlane</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Voxelize/VoxelSecondaryBounce.hpp" line="86" column="1" bodyfile="Render/Voxelize/VoxelSecondaryBounce.hpp" bodystart="86" bodyend="-1"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="365" column="17" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="365" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d3/d40/a05040_1a1b1cbc247f5530edc7da124614ee25ea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::VoxelSecondaryBounce::SecondaryBounce::SecondaryBounce</definition>
-        <argsstring>(RenderDevice const &amp;device, ashes::PipelineLayout const &amp;pipelineLayout, ashes::DescriptorSet const &amp;descriptorSet, ashes::Buffer&lt; Voxel &gt; const &amp;voxels, VoxelizerUbo const &amp;voxelUbo, TextureUnit const &amp;firstBounce, TextureUnit const &amp;result, RenderPassTimer &amp;timer, uint32_t voxelGridSize)</argsstring>
-        <name>SecondaryBounce</name>
-        <param>
-          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>ashes::PipelineLayout const &amp;</type>
-          <declname>pipelineLayout</declname>
-        </param>
-        <param>
-          <type>ashes::DescriptorSet const &amp;</type>
-          <declname>descriptorSet</declname>
-        </param>
-        <param>
-          <type>ashes::Buffer&lt; <ref refid="d4/d79/a05020" kindref="compound">Voxel</ref> &gt; const &amp;</type>
-          <declname>voxels</declname>
-        </param>
-        <param>
-          <type><ref refid="dd/da7/a05632" kindref="compound">VoxelizerUbo</ref> const &amp;</type>
-          <declname>voxelUbo</declname>
-        </param>
-        <param>
-          <type><ref refid="d6/d18/a02664" kindref="compound">TextureUnit</ref> const &amp;</type>
-          <declname>firstBounce</declname>
-        </param>
-        <param>
-          <type><ref refid="d6/d18/a02664" kindref="compound">TextureUnit</ref> const &amp;</type>
-          <declname>result</declname>
-        </param>
-        <param>
-          <type><ref refid="d7/dc4/a04612" kindref="compound">RenderPassTimer</ref> &amp;</type>
-          <declname>timer</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>voxelGridSize</declname>
-        </param>
+      <memberdef kind="variable" id="d3/d40/a05040_1aec457c7c31aca4cbdd69e1460d2c9b4e" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ShadowMapUboConfiguration::lightIndex</definition>
+        <argsstring></argsstring>
+        <name>lightIndex</name>
+        <qualifiedname>castor3d::ShadowMapUboConfiguration::lightIndex</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Voxelize/VoxelSecondaryBounce.hpp" line="74" column="1"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="366" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="366" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>Shadow map data. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="5296">
-        <label>T</label>
-      </node>
-      <node id="5291">
-        <label>castor3d::VoxelSecondaryBounce::SecondaryBounce</label>
-        <childnode refid="5292" relation="usage">
-          <edgelabel>commands</edgelabel>
-        </childnode>
-        <childnode refid="5293" relation="usage">
-          <edgelabel>computeShader</edgelabel>
-        </childnode>
-      </node>
-      <node id="5295">
-        <label>std::unique_ptr&lt; T &gt;</label>
-        <childnode refid="5296" relation="usage">
-          <edgelabel>ptr</edgelabel>
-        </childnode>
-      </node>
-      <node id="5298">
-        <label>std::basic_string&lt; char &gt;</label>
-      </node>
-      <node id="5294">
-        <label>std::unique_ptr&lt; ast::Shader &gt;</label>
-        <childnode refid="5295" relation="template-instance">
-          <edgelabel>&lt; ast::Shader &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="5292">
-        <label>castor3d::CommandsSemaphore</label>
-        <link refid="d1/da6/a04380"/>
-      </node>
-      <node id="5293">
-        <label>castor3d::ShaderModule</label>
-        <link refid="d7/d32/a05312"/>
-        <childnode refid="5294" relation="usage">
-          <edgelabel>shader</edgelabel>
-        </childnode>
-        <childnode refid="5297" relation="usage">
-          <edgelabel>source</edgelabel>
-          <edgelabel>name</edgelabel>
-        </childnode>
-      </node>
-      <node id="5297">
-        <label>std::string</label>
-        <childnode refid="5298" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Render/Voxelize/VoxelSecondaryBounce.hpp" line="73" column="1" bodyfile="Render/Voxelize/VoxelSecondaryBounce.hpp" bodystart="72" bodyend="87"/>
+    <location file="Shader/Ubos/UbosModule.hpp" line="361" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="362" bodyend="367"/>
     <listofallmembers>
-      <member refid="d3/d40/a05040_1af0921d90d413abd8fbebf260ff3a273b" prot="public" virt="non-virtual"><scope>castor3d::VoxelSecondaryBounce::SecondaryBounce</scope><name>commands</name></member>
-      <member refid="d3/d40/a05040_1a5f643b63a0a5baa70b56d423205a5891" prot="public" virt="non-virtual"><scope>castor3d::VoxelSecondaryBounce::SecondaryBounce</scope><name>computeShader</name></member>
-      <member refid="d3/d40/a05040_1afc5ec3f414b68d7f99d3f14868aacf4e" prot="public" virt="non-virtual"><scope>castor3d::VoxelSecondaryBounce::SecondaryBounce</scope><name>pipeline</name></member>
-      <member refid="d3/d40/a05040_1a1b1cbc247f5530edc7da124614ee25ea" prot="public" virt="non-virtual"><scope>castor3d::VoxelSecondaryBounce::SecondaryBounce</scope><name>SecondaryBounce</name></member>
+      <member refid="d3/d40/a05040_1aec457c7c31aca4cbdd69e1460d2c9b4e" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUboConfiguration</scope><name>lightIndex</name></member>
+      <member refid="d3/d40/a05040_1aad9a7eddde3a1ac0857212592b858000" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUboConfiguration</scope><name>lightPosFarPlane</name></member>
+      <member refid="d3/d40/a05040_1a440ced704c065ffdbf0f29f60e3b971b" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUboConfiguration</scope><name>lightProjection</name></member>
+      <member refid="d3/d40/a05040_1a3b0097393ead8c6396d2fc299b804c97" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUboConfiguration</scope><name>lightView</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

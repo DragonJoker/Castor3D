@@ -1,3 +1,12 @@
-<map id="castor3d::TextureConfiguration" name="castor3d::TextureConfiguration">
-<area shape="rect" id="node1" title="Specifies the usages of a texture, per image component." alt="" coords="5,73,204,99"/>
+<map id="castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;" name="castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="243,113,428,155"/>
+<area shape="rect" id="node4" href="$dd/d75/a02639.html" title=" " alt="" coords="685,5,848,47"/>
+<area shape="rect" id="node5" href="$d9/d07/a02635.html" title=" " alt="" coords="665,71,868,127"/>
+<area shape="rect" id="node7" href="$d9/d07/a02635.html" title=" " alt="" coords="673,151,861,207"/>
+<area shape="rect" id="node9" href="$d9/d07/a02635.html" title=" " alt="" coords="674,231,859,287"/>
+<area shape="rect" id="node2" title=" " alt="" coords="8,91,191,118"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,143,193,184"/>
+<area shape="rect" id="node6" href="$dc/dcf/a02615.html" title="BillboardList cache." alt="" coords="917,71,1120,127"/>
+<area shape="rect" id="node8" href="$dd/dd8/a02655.html" title="Geometry cache." alt="" coords="928,151,1109,207"/>
+<area shape="rect" id="node10" href="$db/d86/a02663.html" title="Light cache." alt="" coords="937,231,1100,287"/>
 </map>

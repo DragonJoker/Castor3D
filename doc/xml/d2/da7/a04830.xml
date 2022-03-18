@@ -1,58 +1,248 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d2/da7/a04830" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::SubsurfaceScatteringPass::BlurWeights</compoundname>
-    <includes local="no">SubsurfaceScatteringPass.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d2/da7/a04830_1a9f824803d0628b0dd429b3a58f6dfa69" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::SubsurfaceScatteringPass::BlurWeights::originalWeight</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d2/da7/a04830" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::SssTransmittance</compoundname>
+    <includes local="no">GlslSssTransmittance.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/da7/a04830_1a5b278a43b97ecb5fd36cc2ed4d7e47d4" prot="private" static="no" mutable="no">
+        <type>sdw::ShaderWriter &amp;</type>
+        <definition>sdw::ShaderWriter&amp; castor3d::shader::SssTransmittance::m_writer</definition>
         <argsstring></argsstring>
-        <name>originalWeight</name>
+        <name>m_writer</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::m_writer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="117" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="117" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="36" column="20" bodyfile="Shader/Shaders/GlslSssTransmittance.hpp" bodystart="36" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d2/da7/a04830_1a3229ded5b54533f92a6332f493eced2e" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::SubsurfaceScatteringPass::BlurWeights::blurWeights[3u]</definition>
-        <argsstring>[3u]</argsstring>
-        <name>blurWeights</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="118" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="118" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/da7/a04830_1a0bf0b2b2456f6fed0218719ac6e99e3e" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::SubsurfaceScatteringPass::BlurWeights::blurVariance</definition>
+      <memberdef kind="variable" id="d2/da7/a04830_1a2dcde58b66991fb45dbe46ddfdbeadbd" prot="private" static="no" mutable="no">
+        <type><ref refid="d0/de6/a04814" kindref="compound">SssProfiles</ref> const  &amp;</type>
+        <definition>SssProfiles const&amp; castor3d::shader::SssTransmittance::m_sssProfiles</definition>
         <argsstring></argsstring>
-        <name>blurVariance</name>
+        <name>m_sssProfiles</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::m_sssProfiles</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="119" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="119" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="37" column="20" bodyfile="Shader/Shaders/GlslSssTransmittance.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/da7/a04830_1ad1873b9cc3d34b21f7a079ee364a096c" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::shader::SssTransmittance::m_shadowMap</definition>
+        <argsstring></argsstring>
+        <name>m_shadowMap</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::m_shadowMap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="39" column="6" bodyfile="Shader/Shaders/GlslSssTransmittance.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/da7/a04830_1a047b94b31ab59f197b5ea171818b9359" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InFloat, sdw::InFloat, sdw::InUInt, sdw::InVec3, sdw::InFloat, sdw::InVec3, sdw::InFloat &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InFloat , sdw::InFloat , sdw::InUInt , sdw::InVec3 , sdw::InFloat , sdw::InVec3 , sdw::InFloat &gt; castor3d::shader::SssTransmittance::m_compute</definition>
+        <argsstring></argsstring>
+        <name>m_compute</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::m_compute</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="48" column="2" bodyfile="Shader/Shaders/GlslSssTransmittance.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/da7/a04830_1a6ca6b6309b57dc43bdecf1bd0aa1db73" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InUInt, sdw::InFloat, InDirectionalLight, InSurface &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InUInt , sdw::InFloat , InDirectionalLight , InSurface &gt; castor3d::shader::SssTransmittance::m_computeDirectional</definition>
+        <argsstring></argsstring>
+        <name>m_computeDirectional</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::m_computeDirectional</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="53" column="2" bodyfile="Shader/Shaders/GlslSssTransmittance.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/da7/a04830_1a54c1f9ca0da73b24de8f24d4b8862b24" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InUInt, sdw::InFloat, InPointLight, InSurface &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InUInt , sdw::InFloat , InPointLight , InSurface &gt; castor3d::shader::SssTransmittance::m_computePoint</definition>
+        <argsstring></argsstring>
+        <name>m_computePoint</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::m_computePoint</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="58" column="2" bodyfile="Shader/Shaders/GlslSssTransmittance.hpp" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/da7/a04830_1a13e2eb573d14cb9cf8f6adfa16b5f148" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InUInt, sdw::InFloat, InSpotLight, InSurface &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InUInt , sdw::InFloat , InSpotLight , InSurface &gt; castor3d::shader::SssTransmittance::m_computeSpot</definition>
+        <argsstring></argsstring>
+        <name>m_computeSpot</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::m_computeSpot</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="63" column="2" bodyfile="Shader/Shaders/GlslSssTransmittance.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/da7/a04830_1a881e43f949336c4bffe8d852644a1b59" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::SssTransmittance::SssTransmittance</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ShadowOptions shadowOptions, SssProfiles const &amp;sssProfiles)</argsstring>
+        <name>SssTransmittance</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::SssTransmittance</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/db9/a04870" kindref="compound">ShadowOptions</ref></type>
+          <declname>shadowOptions</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/de6/a04814" kindref="compound">SssProfiles</ref> const &amp;</type>
+          <declname>sssProfiles</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="19" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da7/a04830_1af3766868d0e0f7331dacc2b53a417cb0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::SssTransmittance::compute</definition>
+        <argsstring>(shader::LightMaterial const &amp;material, shader::DirectionalLight const &amp;light, Surface const &amp;surface)</argsstring>
+        <name>compute</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::compute</qualifiedname>
+        <param>
+          <type><ref refid="de/d4c/a04794" kindref="compound">shader::LightMaterial</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="db/da6/a04782" kindref="compound">shader::DirectionalLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d06/a01403_1afa7e0e1d1dbce1333aa48253fd404bf4" kindref="member">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="23" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da7/a04830_1a37d7d8adc10ffe1d95bc55db125decce" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::SssTransmittance::compute</definition>
+        <argsstring>(shader::LightMaterial const &amp;material, shader::PointLight const &amp;light, Surface const &amp;surface)</argsstring>
+        <name>compute</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::compute</qualifiedname>
+        <param>
+          <type><ref refid="de/d4c/a04794" kindref="compound">shader::LightMaterial</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dec/a04786" kindref="compound">shader::PointLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d06/a01403_1afa7e0e1d1dbce1333aa48253fd404bf4" kindref="member">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="26" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da7/a04830_1a0e0aa7ddd15defd89c3d23507cc74170" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::SssTransmittance::compute</definition>
+        <argsstring>(shader::LightMaterial const &amp;material, shader::SpotLight const &amp;light, Surface const &amp;surface)</argsstring>
+        <name>compute</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::compute</qualifiedname>
+        <param>
+          <type><ref refid="de/d4c/a04794" kindref="compound">shader::LightMaterial</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d56/a04790" kindref="compound">shader::SpotLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d06/a01403_1afa7e0e1d1dbce1333aa48253fd404bf4" kindref="member">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="29" column="19"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d2/da7/a04830_1a8d2d0129571dc2d1c3520a6f5bd7b5cf" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::SssTransmittance::doDeclare</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclare</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::doDeclare</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="34" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="116" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="115" bodyend="120"/>
+    <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="16" column="1" bodyfile="Shader/Shaders/GlslSssTransmittance.hpp" bodystart="17" bodyend="64"/>
     <listofallmembers>
-      <member refid="d2/da7/a04830_1a0bf0b2b2456f6fed0218719ac6e99e3e" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::BlurWeights</scope><name>blurVariance</name></member>
-      <member refid="d2/da7/a04830_1a3229ded5b54533f92a6332f493eced2e" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::BlurWeights</scope><name>blurWeights</name></member>
-      <member refid="d2/da7/a04830_1a9f824803d0628b0dd429b3a58f6dfa69" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::BlurWeights</scope><name>originalWeight</name></member>
+      <member refid="d2/da7/a04830_1af3766868d0e0f7331dacc2b53a417cb0" prot="public" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>compute</name></member>
+      <member refid="d2/da7/a04830_1a37d7d8adc10ffe1d95bc55db125decce" prot="public" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>compute</name></member>
+      <member refid="d2/da7/a04830_1a0e0aa7ddd15defd89c3d23507cc74170" prot="public" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>compute</name></member>
+      <member refid="d2/da7/a04830_1a8d2d0129571dc2d1c3520a6f5bd7b5cf" prot="private" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>doDeclare</name></member>
+      <member refid="d2/da7/a04830_1a047b94b31ab59f197b5ea171818b9359" prot="private" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>m_compute</name></member>
+      <member refid="d2/da7/a04830_1a6ca6b6309b57dc43bdecf1bd0aa1db73" prot="private" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>m_computeDirectional</name></member>
+      <member refid="d2/da7/a04830_1a54c1f9ca0da73b24de8f24d4b8862b24" prot="private" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>m_computePoint</name></member>
+      <member refid="d2/da7/a04830_1a13e2eb573d14cb9cf8f6adfa16b5f148" prot="private" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>m_computeSpot</name></member>
+      <member refid="d2/da7/a04830_1ad1873b9cc3d34b21f7a079ee364a096c" prot="private" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>m_shadowMap</name></member>
+      <member refid="d2/da7/a04830_1a2dcde58b66991fb45dbe46ddfdbeadbd" prot="private" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>m_sssProfiles</name></member>
+      <member refid="d2/da7/a04830_1a5b278a43b97ecb5fd36cc2ed4d7e47d4" prot="private" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>m_writer</name></member>
+      <member refid="d2/da7/a04830_1a881e43f949336c4bffe8d852644a1b59" prot="public" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>SssTransmittance</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

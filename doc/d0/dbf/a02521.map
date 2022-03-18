@@ -1,4 +1,7 @@
-<map id="castor3d::CpuFunctorEvent" name="castor3d::CpuFunctorEvent">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,184,107"/>
-<area shape="rect" id="node2" href="$d6/de1/a02518.html" title=" " alt="" coords="9,5,181,32"/>
+<map id="castor3d::GeometryBuffers" name="castor3d::GeometryBuffers">
+<area shape="rect" id="node1" title=" " alt="" coords="124,304,301,331"/>
+<area shape="rect" id="node2" href="$d3/d80/a02559.html" title=" " alt="" coords="120,215,305,241"/>
+<area shape="rect" id="node3" href="$d0/d7c/a02499.html" title="A GPU buffer, that uses a buddy allocator to allocate sub&#45;buffers." alt="" coords="17,81,161,123"/>
+<area shape="rect" id="node4" href="$d7/d7d/a02527.html" title=" " alt="" coords="5,5,172,32"/>
+<area shape="rect" id="node5" href="$d9/dce/a02519.html" title="A memory range, in bytes." alt="" coords="185,89,331,115"/>
 </map>

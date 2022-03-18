@@ -1,33 +1,71 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d6/d83/a03332" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPhysicalDeviceMultiviewPerViewAttributesPropertiesNVX &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d6/d83/a03332_1a099de467626dd278697cc9252b4a6d1c" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPhysicalDeviceMultiviewPerViewAttributesPropertiesNVX &gt;::value</definition>
-        <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTIVIEW_PER_VIEW_ATTRIBUTES_PROPERTIES_NVX</initializer>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d6/d83/a03332" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::MeshImporterFactory</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::Factory&lt; MeshImporter, castor::String, MeshImporterUPtr, std::function&lt; MeshImporterUPtr(Engine &amp;) &gt; &gt;</basecompoundref>
+    <includes local="no">ImporterFactory.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d83/a03332_1ab8c66c78e679eb45fbb9b0c1d17e856c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MeshImporterFactory::MeshImporterFactory</definition>
+        <argsstring>()</argsstring>
+        <name>MeshImporterFactory</name>
+        <qualifiedname>castor3d::MeshImporterFactory::MeshImporterFactory</qualifiedname>
         <briefdescription>
+<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="244" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="244" bodyend="-1"/>
+        <location file="Model/Mesh/ImporterFactory.hpp" line="23" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d83/a03332_1a487226529aa95edbf4def120475511f9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MeshImporterFactory::~MeshImporterFactory</definition>
+        <argsstring>()</argsstring>
+        <name>~MeshImporterFactory</name>
+        <qualifiedname>castor3d::MeshImporterFactory::~MeshImporterFactory</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/ImporterFactory.hpp" line="30" column="9"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="244" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="244" bodyend="244"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::MeshImporterFactory</label>
+        <link refid="d6/d83/a03332"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Factory&lt; MeshImporter, castor::String, MeshImporterUPtr, std::function&lt; MeshImporterUPtr(Engine &amp;) &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::MeshImporterFactory</label>
+        <link refid="d6/d83/a03332"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Factory&lt; MeshImporter, castor::String, MeshImporterUPtr, std::function&lt; MeshImporterUPtr(Engine &amp;) &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/ImporterFactory.hpp" line="13" column="1" bodyfile="Model/Mesh/ImporterFactory.hpp" bodystart="15" bodyend="31"/>
     <listofallmembers>
-      <member refid="d6/d83/a03332_1a099de467626dd278697cc9252b4a6d1c" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPhysicalDeviceMultiviewPerViewAttributesPropertiesNVX &gt;</scope><name>value</name></member>
+      <member refid="d6/d83/a03332_1ab8c66c78e679eb45fbb9b0c1d17e856c" prot="public" virt="non-virtual"><scope>castor3d::MeshImporterFactory</scope><name>MeshImporterFactory</name></member>
+      <member refid="d6/d83/a03332_1a487226529aa95edbf4def120475511f9" prot="public" virt="non-virtual"><scope>castor3d::MeshImporterFactory</scope><name>~MeshImporterFactory</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

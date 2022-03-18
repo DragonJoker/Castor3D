@@ -1,43 +1,110 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d8/d51/a02244" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::ChunkTyper&lt; Submesh &gt;</compoundname>
-    <includes local="no">BinarySubmesh.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d8/d51/a02244" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::InterpolatorT&lt; DataT, InterpolatorType::eLinear &gt;</compoundname>
+    <basecompoundref refid="de/dfd/a02228" prot="public" virt="non-virtual">castor3d::Interpolator&lt; DataT &gt;</basecompoundref>
+    <includes local="no">Interpolator.hpp</includes>
     <templateparamlist>
+      <param>
+        <type>class DataT</type>
+      </param>
     </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d8/d51/a02244_1a9aa8e9641c55c88cae0e7bb0b59c3e13" prot="public" static="yes" mutable="no">
-        <type><ref refid="da/d1e/a01479_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref> const</type>
-        <definition>ChunkType const castor3d::ChunkTyper&lt; Submesh &gt;::Value</definition>
-        <argsstring></argsstring>
-        <name>Value</name>
-        <initializer>= <ref refid="da/d1e/a01479_1a742783d4e4b7354fac3e375ae107414da1c6e623c4f3ed72ce3d17fb2896ccbfc" kindref="member">ChunkType::eSubmesh</ref></initializer>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/d51/a02244_1a92a8a65c746a2f9070fcfb0a48d7cff8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>DataT</type>
+        <definition>DataT castor3d::InterpolatorT&lt; DataT, InterpolatorType::eLinear &gt;::interpolate</definition>
+        <argsstring>(DataT const &amp;src, DataT const &amp;dst, float percent) const override</argsstring>
+        <name>interpolate</name>
+        <qualifiedname>castor3d::InterpolatorT&lt; DataT, InterpolatorType::eLinear &gt;::interpolate</qualifiedname>
+        <reimplements refid="de/dfd/a02228_1a38c4c864a411f0fbc92d8af20d4ec52f">interpolate</reimplements>
+        <param>
+          <type>DataT const &amp;</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type>DataT const &amp;</type>
+          <declname>dst</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>percent</declname>
+        </param>
         <briefdescription>
+<para>Interpolation function. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">src</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The start. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dst</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The end. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">percent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The percentage. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Binary/BinarySubmesh.hpp" line="28" column="1" bodyfile="Binary/BinarySubmesh.hpp" bodystart="28" bodyend="-1"/>
+        <location file="Animation/Interpolator.hpp" line="89" column="7" bodyfile="Animation/Interpolator.hpp" bodystart="89" bodyend="109"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Helper structure to find ChunkType from a type. </para>
+<para>Partial specialisation of <ref refid="db/d14/a02232" kindref="compound">InterpolatorT</ref>, for <ref refid="d2/df5/a01395_1ad38387ab8e17377a42314bc21c171ab0ab4f471e7b4231c34ab95df36681e7a86" kindref="member">InterpolatorType::eLinear</ref>. </para>
     </briefdescription>
     <detaileddescription>
 <para><simplesect kind="author"><para>Sylvain DOREMUS </para>
 </simplesect>
-<simplesect kind="version"><para>0.9.0 </para>
+<simplesect kind="version"><para>0.8.0 </para>
 </simplesect>
-<simplesect kind="date"><para>28/05/2016</para>
-</simplesect>
-<simplesect kind="remark"><para>Specialisation for <ref refid="d9/d0c/a03992" kindref="compound">Submesh</ref>. </para>
+<simplesect kind="date"><para>24/01/2016 </para>
 </simplesect>
 </para>
     </detaileddescription>
-    <location file="Binary/BinarySubmesh.hpp" line="27" column="1" bodyfile="Binary/BinarySubmesh.hpp" bodystart="26" bodyend="29"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::Interpolator&lt; DataT &gt;</label>
+        <link refid="de/dfd/a02228"/>
+      </node>
+      <node id="1">
+        <label>castor3d::InterpolatorT&lt; DataT, InterpolatorType::eLinear &gt;</label>
+        <link refid="d8/d51/a02244"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::Interpolator&lt; DataT &gt;</label>
+        <link refid="de/dfd/a02228"/>
+      </node>
+      <node id="1">
+        <label>castor3d::InterpolatorT&lt; DataT, InterpolatorType::eLinear &gt;</label>
+        <link refid="d8/d51/a02244"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Animation/Interpolator.hpp" line="73" column="1" bodyfile="Animation/Interpolator.hpp" bodystart="75" bodyend="110"/>
     <listofallmembers>
-      <member refid="d8/d51/a02244_1a9aa8e9641c55c88cae0e7bb0b59c3e13" prot="public" virt="non-virtual"><scope>castor3d::ChunkTyper&lt; Submesh &gt;</scope><name>Value</name></member>
+      <member refid="d8/d51/a02244_1a92a8a65c746a2f9070fcfb0a48d7cff8" prot="public" virt="virtual"><scope>castor3d::InterpolatorT&lt; DataT, InterpolatorType::eLinear &gt;</scope><name>interpolate</name></member>
+      <member refid="de/dfd/a02228_1a86511dc9c5cf1b7f36a57452e147cfef" prot="protected" virt="virtual"><scope>castor3d::InterpolatorT&lt; DataT, InterpolatorType::eLinear &gt;</scope><name>~Interpolator</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

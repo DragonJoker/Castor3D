@@ -1,140 +1,83 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d7/d13/a05156" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::Fog</compoundname>
-    <includes local="no">Fog.hpp</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d7/d13/a05156_1aa335665572c9bc485e59e03415b27c4b" prot="private" static="no" mutable="no">
-        <type><ref refid="da/d1e/a01479_1a99a6b51dbe68abcf95c70f03008dd3a3" kindref="member">FogType</ref></type>
-        <definition>FogType castor3d::Fog::m_type</definition>
-        <argsstring></argsstring>
-        <name>m_type</name>
-        <initializer>{ <ref refid="da/d1e/a01479_1a99a6b51dbe68abcf95c70f03008dd3a3ab32b520e58e1334ea07d4df5a4c5c402" kindref="member">FogType::eDisabled</ref> }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Fog.hpp" line="60" column="1" bodyfile="Scene/Fog.hpp" bodystart="60" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d13/a05156_1a9c71be33bfb8286212d196e10ee4a9ea" prot="private" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::Fog::m_density</definition>
-        <argsstring></argsstring>
-        <name>m_density</name>
-        <initializer>{ 0.0f }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Fog.hpp" line="61" column="1" bodyfile="Scene/Fog.hpp" bodystart="61" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
+    <compoundname>castor::TextWriter&lt; castor3d::RsmConfig &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::RsmConfig &gt;</basecompoundref>
+    <includes local="no">TextRsmConfig.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d7/d13/a05156_1a8d3651269c2eaa72f82f733e6e6ad5a6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>float</type>
-        <definition>float castor3d::Fog::getDensity</definition>
-        <argsstring>() const</argsstring>
-        <name>getDensity</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The fog&apos;s density. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Fog.hpp" line="20" column="1" bodyfile="Scene/Fog.hpp" bodystart="20" bodyend="23"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d13/a05156_1a40727e4aeb3f250f47241951510f6051" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::Fog::setDensity</definition>
-        <argsstring>(float value)</argsstring>
-        <name>setDensity</name>
+      <memberdef kind="function" id="d7/d13/a05156_1aca99457a9cac25f6ef11c2974e6c16a5" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::RsmConfig &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs)</argsstring>
+        <name>TextWriter</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::RsmConfig &gt;::TextWriter</qualifiedname>
         <param>
-          <type>float</type>
-          <declname>value</declname>
+          <type>String const &amp;</type>
+          <declname>tabs</declname>
         </param>
         <briefdescription>
-<para>Sets the fog&apos;s density. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The new value. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Fog.hpp" line="32" column="1" bodyfile="Scene/Fog.hpp" bodystart="32" bodyend="35"/>
+        <location file="Text/TextRsmConfig.hpp" line="18" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d7/d13/a05156_1a17321980e758b1ae9093f548f0feddd8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="da/d1e/a01479_1a99a6b51dbe68abcf95c70f03008dd3a3" kindref="member">FogType</ref></type>
-        <definition>FogType castor3d::Fog::getType</definition>
-        <argsstring>() const</argsstring>
-        <name>getType</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The fog type. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Fog.hpp" line="42" column="1" bodyfile="Scene/Fog.hpp" bodystart="42" bodyend="45"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d13/a05156_1a22f56909dc877e7713ece4e753e125be" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::Fog::setType</definition>
-        <argsstring>(FogType value)</argsstring>
-        <name>setType</name>
+      <memberdef kind="function" id="d7/d13/a05156_1ac47a901874fa53872b65a81a9dff090a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::RsmConfig &gt;::operator()</definition>
+        <argsstring>(castor3d::RsmConfig const &amp;config, castor::StringStream &amp;file) override</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::RsmConfig &gt;::operator()</qualifiedname>
         <param>
-          <type><ref refid="da/d1e/a01479_1a99a6b51dbe68abcf95c70f03008dd3a3" kindref="member">FogType</ref></type>
-          <declname>value</declname>
+          <type><ref refid="dd/d8c/a04508" kindref="compound">castor3d::RsmConfig</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
         </param>
         <briefdescription>
-<para>Sets the fog type. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">value</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The new value. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Fog.hpp" line="54" column="1" bodyfile="Scene/Fog.hpp" bodystart="54" bodyend="57"/>
+        <location file="Text/TextRsmConfig.hpp" line="19" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Scene/Fog.hpp" line="12" column="1" bodyfile="Scene/Fog.hpp" bodystart="11" bodyend="62"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::RsmConfig &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::RsmConfig &gt;</label>
+        <link refid="d7/d13/a05156"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::RsmConfig &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::RsmConfig &gt;</label>
+        <link refid="d7/d13/a05156"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextRsmConfig.hpp" line="14" column="1" bodyfile="Text/TextRsmConfig.hpp" bodystart="16" bodyend="21"/>
     <listofallmembers>
-      <member refid="d7/d13/a05156_1a8d3651269c2eaa72f82f733e6e6ad5a6" prot="public" virt="non-virtual"><scope>castor3d::Fog</scope><name>getDensity</name></member>
-      <member refid="d7/d13/a05156_1a17321980e758b1ae9093f548f0feddd8" prot="public" virt="non-virtual"><scope>castor3d::Fog</scope><name>getType</name></member>
-      <member refid="d7/d13/a05156_1a9c71be33bfb8286212d196e10ee4a9ea" prot="private" virt="non-virtual"><scope>castor3d::Fog</scope><name>m_density</name></member>
-      <member refid="d7/d13/a05156_1aa335665572c9bc485e59e03415b27c4b" prot="private" virt="non-virtual"><scope>castor3d::Fog</scope><name>m_type</name></member>
-      <member refid="d7/d13/a05156_1a40727e4aeb3f250f47241951510f6051" prot="public" virt="non-virtual"><scope>castor3d::Fog</scope><name>setDensity</name></member>
-      <member refid="d7/d13/a05156_1a22f56909dc877e7713ece4e753e125be" prot="public" virt="non-virtual"><scope>castor3d::Fog</scope><name>setType</name></member>
+      <member refid="d7/d13/a05156_1ac47a901874fa53872b65a81a9dff090a" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::RsmConfig &gt;</scope><name>operator()</name></member>
+      <member refid="d7/d13/a05156_1aca99457a9cac25f6ef11c2974e6c16a5" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::RsmConfig &gt;</scope><name>TextWriter</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

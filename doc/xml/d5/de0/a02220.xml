@@ -1,43 +1,697 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d5/de0/a02220" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::ChunkTyper&lt; SkeletonAnimationNode &gt;</compoundname>
-    <includes local="no">BinarySkeletonAnimationNode.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d5/de0/a02220" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::AnimationT</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::Named</basecompoundref>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; AnimableHandlerT &gt;</basecompoundref>
+    <includes local="no">Animation.hpp</includes>
     <templateparamlist>
+      <param>
+        <type>typename AnimableHandlerT</type>
+      </param>
     </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d5/de0/a02220_1a5713a20264e0ee8c90e7e1d8d4d22fb8" prot="public" static="yes" mutable="no">
-        <type><ref refid="da/d1e/a01479_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref> const</type>
-        <definition>ChunkType const castor3d::ChunkTyper&lt; SkeletonAnimationNode &gt;::Value</definition>
-        <argsstring></argsstring>
-        <name>Value</name>
-        <initializer>= <ref refid="da/d1e/a01479_1a742783d4e4b7354fac3e375ae107414da0acf24819b388bf13a6881408227607f" kindref="member">ChunkType::eSkeletonAnimationNode</ref></initializer>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d5/de0/a02220_1adb1052af5d809dbe7cb65d7abfa71dfd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::AnimationT&lt; AnimableHandlerT &gt;::AnimationT</definition>
+        <argsstring>(AnimationT &amp;&amp;rhs)=default</argsstring>
+        <name>AnimationT</name>
+        <qualifiedname>castor3d::AnimationT::AnimationT</qualifiedname>
+        <param>
+          <type><ref refid="d5/de0/a02220" kindref="compound">AnimationT</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Copy / Move. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animation.hpp" line="28" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de0/a02220_1a0c4cc84356b5918bcd5f32a56724bfd0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/de0/a02220" kindref="compound">AnimationT</ref> &amp;</type>
+        <definition>C3D_API AnimationT &amp; castor3d::AnimationT&lt; AnimableHandlerT &gt;::operator=</definition>
+        <argsstring>(AnimationT &amp;&amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::AnimationT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d5/de0/a02220" kindref="compound">AnimationT</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Binary/BinarySkeletonAnimationNode.hpp" line="28" column="1" bodyfile="Binary/BinarySkeletonAnimationNode.hpp" bodystart="28" bodyend="-1"/>
+        <location file="Animation/Animation.hpp" line="29" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de0/a02220_1af8e6704a37b5aca0c24363b10be3e196" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::AnimationT&lt; AnimableHandlerT &gt;::AnimationT</definition>
+        <argsstring>(AnimationT const &amp;rhs)=delete</argsstring>
+        <name>AnimationT</name>
+        <qualifiedname>castor3d::AnimationT::AnimationT</qualifiedname>
+        <param>
+          <type><ref refid="d5/de0/a02220" kindref="compound">AnimationT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animation.hpp" line="30" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de0/a02220_1a55e638295c5571c3051c2dcffa43c88d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/de0/a02220" kindref="compound">AnimationT</ref> &amp;</type>
+        <definition>C3D_API AnimationT &amp; castor3d::AnimationT&lt; AnimableHandlerT &gt;::operator=</definition>
+        <argsstring>(AnimationT const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::AnimationT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d5/de0/a02220" kindref="compound">AnimationT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animation.hpp" line="31" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de0/a02220_1a792680fb5eac70b3543a4272924aee11" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::AnimationT&lt; AnimableHandlerT &gt;::~AnimationT</definition>
+        <argsstring>()=default</argsstring>
+        <name>~AnimationT</name>
+        <qualifiedname>castor3d::AnimationT::~AnimationT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animation.hpp" line="32" column="17"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d5/de0/a02220_1a3072da6120ff9933da94eba55981d04f" prot="protected" static="no" mutable="no">
+        <type><ref refid="d8/d5f/a02216" kindref="compound">AnimableT</ref>&lt; AnimableHandlerT &gt; *</type>
+        <definition>AnimableT&lt; AnimableHandlerT &gt;* castor3d::AnimationT&lt; AnimableHandlerT &gt;::m_animable</definition>
+        <argsstring></argsstring>
+        <name>m_animable</name>
+        <qualifiedname>castor3d::AnimationT::m_animable</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animation.hpp" line="184" column="12" bodyfile="Animation/Animation.hpp" bodystart="184" bodyend="-1"/>
+        <referencedby refid="d5/de0/a02220_1ac2ea4433da1220bf08252286df377c40" compoundref="d0/d89/a00071" startline="178" endline="181">castor3d::AnimationT&lt; AnimableHandlerT &gt;::getAnimable</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/de0/a02220_1aacafe3fc6cde0dfaa39f09da0ea4107e" prot="protected" static="no" mutable="no">
+        <type><ref refid="d2/df5/a01395_1a62712d9ea9e9184dffafc59c48e8e6e5" kindref="member">AnimationType</ref></type>
+        <definition>AnimationType castor3d::AnimationT&lt; AnimableHandlerT &gt;::m_type</definition>
+        <argsstring></argsstring>
+        <name>m_type</name>
+        <qualifiedname>castor3d::AnimationT::m_type</qualifiedname>
+        <initializer>{ <ref refid="d2/df5/a01395_1a62712d9ea9e9184dffafc59c48e8e6e5ae558bb69fadec037d9eae46601a4df8e" kindref="member">AnimationType::eCount</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The animation type. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animation.hpp" line="187" column="15" bodyfile="Animation/Animation.hpp" bodystart="187" bodyend="-1"/>
+        <referencedby refid="d5/de0/a02220_1aa23c8683e8eb8e813b654d6e59e08a85" compoundref="d0/d89/a00071" startline="163" endline="166">castor3d::AnimationT&lt; AnimableHandlerT &gt;::getType</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/de0/a02220_1a24f5bd291c689cf9157a7860fd6a5d7f" prot="protected" static="no" mutable="no">
+        <type>castor::Milliseconds</type>
+        <definition>castor::Milliseconds castor3d::AnimationT&lt; AnimableHandlerT &gt;::m_length</definition>
+        <argsstring></argsstring>
+        <name>m_length</name>
+        <qualifiedname>castor3d::AnimationT::m_length</qualifiedname>
+        <initializer>{ 0 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The animation length. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animation.hpp" line="190" column="22" bodyfile="Animation/Animation.hpp" bodystart="190" bodyend="-1"/>
+        <referencedby refid="d5/de0/a02220_1ad45c59abfe36c3a47bb0d35a15b7b280" compoundref="d0/d89/a00071" startline="173" endline="176">castor3d::AnimationT&lt; AnimableHandlerT &gt;::getLength</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/de0/a02220_1afcef08681fffacaf889104e64afaefde" prot="protected" static="no" mutable="no">
+        <type>AnimationKeyFrameArray</type>
+        <definition>AnimationKeyFrameArray castor3d::AnimationT&lt; AnimableHandlerT &gt;::m_keyframes</definition>
+        <argsstring></argsstring>
+        <name>m_keyframes</name>
+        <qualifiedname>castor3d::AnimationT::m_keyframes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The key frames. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animation.hpp" line="193" column="24" bodyfile="Animation/Animation.hpp" bodystart="193" bodyend="-1"/>
+        <referencedby refid="d5/de0/a02220_1a030124cf2d675db7befc1439c032a239" compoundref="d0/d89/a00071" startline="123" endline="126">castor3d::AnimationT&lt; AnimableHandlerT &gt;::begin</referencedby>
+        <referencedby refid="d5/de0/a02220_1ae9f0f55cd804d87dcf3061da7e2bf8c7" compoundref="d0/d89/a00071" startline="143" endline="146">castor3d::AnimationT&lt; AnimableHandlerT &gt;::end</referencedby>
+        <referencedby refid="d5/de0/a02220_1a569d370c8ac8e7b2171bde6538167f8f" compoundref="d0/d89/a00071" startline="113" endline="116">castor3d::AnimationT&lt; AnimableHandlerT &gt;::isEmpty</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="d5/de0/a02220_1a7e26f15a7ab5adb5bfd78c8e38a06cbe" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class BinaryWriter&lt; AnimationT &gt;</definition>
+        <argsstring></argsstring>
+        <name>BinaryWriter&lt; AnimationT &gt;</name>
+        <qualifiedname>castor3d::AnimationT::BinaryWriter&lt; AnimationT &gt;</qualifiedname>
+        <param>
+          <type><ref refid="df/d49/a02340" kindref="compound">BinaryWriter</ref>&lt; <ref refid="d5/de0/a02220" kindref="compound">AnimationT</ref> &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animation.hpp" line="193" column="24" bodyfile="Animation/Animation.hpp" bodystart="195" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="d5/de0/a02220_1ad6e2214b2b9e5b501d9521d80d6aa33c" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class BinaryParser&lt; AnimationT &gt;</definition>
+        <argsstring></argsstring>
+        <name>BinaryParser&lt; AnimationT &gt;</name>
+        <qualifiedname>castor3d::AnimationT::BinaryParser&lt; AnimationT &gt;</qualifiedname>
+        <param>
+          <type><ref refid="d1/d03/a02332" kindref="compound">BinaryParser</ref>&lt; <ref refid="d5/de0/a02220" kindref="compound">AnimationT</ref> &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animation.hpp" line="193" column="24" bodyfile="Animation/Animation.hpp" bodystart="196" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/de0/a02220_1aaeaa385f6dc3ff2650a8b3b34784c038" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::AnimationT&lt; AnimableHandlerT &gt;::AnimationT</definition>
+        <argsstring>(AnimableHandlerT &amp;handler, AnimationType type, AnimableT&lt; AnimableHandlerT &gt; &amp;animable, castor::String const &amp;name=castor::cuEmptyString)</argsstring>
+        <name>AnimationT</name>
+        <qualifiedname>castor3d::AnimationT::AnimationT</qualifiedname>
+        <param>
+          <type>AnimableHandlerT &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a62712d9ea9e9184dffafc59c48e8e6e5" kindref="member">AnimationType</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d5f/a02216" kindref="compound">AnimableT</ref>&lt; AnimableHandlerT &gt; &amp;</type>
+          <declname>animable</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+          <defval>castor::cuEmptyString</defval>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">handler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent handler. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of the animation. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">animable</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent animable object. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The name of the animation. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animation.hpp" line="48" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de0/a02220_1a44a8302d52493997f5047dfb98ee9132" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::AnimationT&lt; AnimableHandlerT &gt;::AnimationT</definition>
+        <argsstring>(AnimableHandlerT &amp;handler, AnimationType type, castor::String const &amp;name=castor::cuEmptyString)</argsstring>
+        <name>AnimationT</name>
+        <qualifiedname>castor3d::AnimationT::AnimationT</qualifiedname>
+        <param>
+          <type>AnimableHandlerT &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a62712d9ea9e9184dffafc59c48e8e6e5" kindref="member">AnimationType</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+          <defval>castor::cuEmptyString</defval>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">handler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent handler. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of the animation. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The name of the animation. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animation.hpp" line="64" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de0/a02220_1a006d6ed2641a537bceebaca154133415" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::AnimationT&lt; AnimableHandlerT &gt;::addKeyFrame</definition>
+        <argsstring>(AnimationKeyFrameUPtr keyFrame)</argsstring>
+        <name>addKeyFrame</name>
+        <qualifiedname>castor3d::AnimationT::addKeyFrame</qualifiedname>
+        <param>
+          <type>AnimationKeyFrameUPtr</type>
+          <declname>keyFrame</declname>
+        </param>
+        <briefdescription>
+<para>Adds a keyframe to the animation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">keyFrame</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The keyframe. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animation.hpp" line="75" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de0/a02220_1a948349eb0ae8905ab203815a8a2d16d9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>AnimationKeyFrameArray::iterator</type>
+        <definition>AnimationKeyFrameArray::iterator castor3d::AnimationT&lt; AnimableHandlerT &gt;::find</definition>
+        <argsstring>(castor::Milliseconds const &amp;time)</argsstring>
+        <name>find</name>
+        <qualifiedname>castor3d::AnimationT::find</qualifiedname>
+        <param>
+          <type>castor::Milliseconds const &amp;</type>
+          <declname>time</declname>
+        </param>
+        <briefdescription>
+<para>Finds a keyframe given a time index. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">time</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The time index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animation.hpp" line="84" column="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de0/a02220_1a43459e4e85d0d100c0bb33ce76301596" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::AnimationT&lt; AnimableHandlerT &gt;::findKeyFrame</definition>
+        <argsstring>(castor::Milliseconds const &amp;time, AnimationKeyFrameArray::iterator &amp;prv, AnimationKeyFrameArray::iterator &amp;cur) const</argsstring>
+        <name>findKeyFrame</name>
+        <qualifiedname>castor3d::AnimationT::findKeyFrame</qualifiedname>
+        <param>
+          <type>castor::Milliseconds const &amp;</type>
+          <declname>time</declname>
+        </param>
+        <param>
+          <type>AnimationKeyFrameArray::iterator &amp;</type>
+          <declname>prv</declname>
+        </param>
+        <param>
+          <type>AnimationKeyFrameArray::iterator &amp;</type>
+          <declname>cur</declname>
+        </param>
+        <briefdescription>
+<para>Finds a keyframe given a time index. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">time</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The time index. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">prv</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The previous keyframe, receives the new previous keyframe, if there is a change. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">cur</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the current keyframe, receives the new current keyframe, if there is a change. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animation.hpp" line="97" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de0/a02220_1a18b4cbd78559233907c4acd14bc9f9a6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::AnimationT&lt; AnimableHandlerT &gt;::updateLength</definition>
+        <argsstring>()</argsstring>
+        <name>updateLength</name>
+        <qualifiedname>castor3d::AnimationT::updateLength</qualifiedname>
+        <briefdescription>
+<para>Updates the animation length. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animation.hpp" line="106" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de0/a02220_1a569d370c8ac8e7b2171bde6538167f8f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::AnimationT&lt; AnimableHandlerT &gt;::isEmpty</definition>
+        <argsstring>() const</argsstring>
+        <name>isEmpty</name>
+        <qualifiedname>castor3d::AnimationT::isEmpty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if the key frames list is empty. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animation.hpp" line="113" column="13" bodyfile="Animation/Animation.hpp" bodystart="113" bodyend="116"/>
+        <references refid="d5/de0/a02220_1afcef08681fffacaf889104e64afaefde" compoundref="d0/d89/a00071" startline="193">castor3d::AnimationT&lt; AnimableHandlerT &gt;::m_keyframes</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/de0/a02220_1a030124cf2d675db7befc1439c032a239" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>AnimationKeyFrameArray::const_iterator</type>
+        <definition>AnimationKeyFrameArray::const_iterator castor3d::AnimationT&lt; AnimableHandlerT &gt;::begin</definition>
+        <argsstring>() const</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor3d::AnimationT::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The beginning of the key frames. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animation.hpp" line="123" column="47" bodyfile="Animation/Animation.hpp" bodystart="123" bodyend="126"/>
+        <references refid="d5/de0/a02220_1afcef08681fffacaf889104e64afaefde" compoundref="d0/d89/a00071" startline="193">castor3d::AnimationT&lt; AnimableHandlerT &gt;::m_keyframes</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/de0/a02220_1a10eb3a79ab8187133d04bbbac79a867e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>AnimationKeyFrameArray::iterator</type>
+        <definition>AnimationKeyFrameArray::iterator castor3d::AnimationT&lt; AnimableHandlerT &gt;::begin</definition>
+        <argsstring>()</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor3d::AnimationT::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The beginning of the key frames. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animation.hpp" line="133" column="41" bodyfile="Animation/Animation.hpp" bodystart="133" bodyend="136"/>
+        <references refid="d5/de0/a02220_1afcef08681fffacaf889104e64afaefde" compoundref="d0/d89/a00071" startline="193">castor3d::AnimationT&lt; AnimableHandlerT &gt;::m_keyframes</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/de0/a02220_1ae9f0f55cd804d87dcf3061da7e2bf8c7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>AnimationKeyFrameArray::const_iterator</type>
+        <definition>AnimationKeyFrameArray::const_iterator castor3d::AnimationT&lt; AnimableHandlerT &gt;::end</definition>
+        <argsstring>() const</argsstring>
+        <name>end</name>
+        <qualifiedname>castor3d::AnimationT::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The end of the key frames. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animation.hpp" line="143" column="47" bodyfile="Animation/Animation.hpp" bodystart="143" bodyend="146"/>
+        <references refid="d5/de0/a02220_1afcef08681fffacaf889104e64afaefde" compoundref="d0/d89/a00071" startline="193">castor3d::AnimationT&lt; AnimableHandlerT &gt;::m_keyframes</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/de0/a02220_1afffd735843f39b88370bd7fb352b22b1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>AnimationKeyFrameArray::iterator</type>
+        <definition>AnimationKeyFrameArray::iterator castor3d::AnimationT&lt; AnimableHandlerT &gt;::end</definition>
+        <argsstring>()</argsstring>
+        <name>end</name>
+        <qualifiedname>castor3d::AnimationT::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The end of the key frames. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animation.hpp" line="153" column="41" bodyfile="Animation/Animation.hpp" bodystart="153" bodyend="156"/>
+        <references refid="d5/de0/a02220_1afcef08681fffacaf889104e64afaefde" compoundref="d0/d89/a00071" startline="193">castor3d::AnimationT&lt; AnimableHandlerT &gt;::m_keyframes</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/de0/a02220_1aa23c8683e8eb8e813b654d6e59e08a85" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/df5/a01395_1a62712d9ea9e9184dffafc59c48e8e6e5" kindref="member">AnimationType</ref></type>
+        <definition>AnimationType castor3d::AnimationT&lt; AnimableHandlerT &gt;::getType</definition>
+        <argsstring>() const</argsstring>
+        <name>getType</name>
+        <qualifiedname>castor3d::AnimationT::getType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The animation type. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animation.hpp" line="163" column="22" bodyfile="Animation/Animation.hpp" bodystart="163" bodyend="166"/>
+        <references refid="d5/de0/a02220_1aacafe3fc6cde0dfaa39f09da0ea4107e" compoundref="d0/d89/a00071" startline="187">castor3d::AnimationT&lt; AnimableHandlerT &gt;::m_type</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/de0/a02220_1ad45c59abfe36c3a47bb0d35a15b7b280" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Milliseconds const &amp;</type>
+        <definition>castor::Milliseconds const  &amp; castor3d::AnimationT&lt; AnimableHandlerT &gt;::getLength</definition>
+        <argsstring>() const</argsstring>
+        <name>getLength</name>
+        <qualifiedname>castor3d::AnimationT::getLength</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The animation length. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animation.hpp" line="173" column="36" bodyfile="Animation/Animation.hpp" bodystart="173" bodyend="176"/>
+        <references refid="d5/de0/a02220_1a24f5bd291c689cf9157a7860fd6a5d7f" compoundref="d0/d89/a00071" startline="190">castor3d::AnimationT&lt; AnimableHandlerT &gt;::m_length</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/de0/a02220_1ac2ea4433da1220bf08252286df377c40" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d8/d5f/a02216" kindref="compound">AnimableT</ref>&lt; AnimableHandlerT &gt; *</type>
+        <definition>AnimableT&lt; AnimableHandlerT &gt; * castor3d::AnimationT&lt; AnimableHandlerT &gt;::getAnimable</definition>
+        <argsstring>() const</argsstring>
+        <name>getAnimable</name>
+        <qualifiedname>castor3d::AnimationT::getAnimable</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animation.hpp" line="178" column="19" bodyfile="Animation/Animation.hpp" bodystart="178" bodyend="181"/>
+        <references refid="d5/de0/a02220_1a3072da6120ff9933da94eba55981d04f" compoundref="d0/d89/a00071" startline="184">castor3d::AnimationT&lt; AnimableHandlerT &gt;::m_animable</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Helper structure to find ChunkType from a type. </para>
+<para>Animation base class. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
-</simplesect>
-<simplesect kind="version"><para>0.9.0 </para>
-</simplesect>
-<simplesect kind="date"><para>28/05/2016</para>
-</simplesect>
-<simplesect kind="remark"><para>Specialisation for <ref refid="df/d49/a04020" kindref="compound">SkeletonAnimationNode</ref>. </para>
+<para><simplesect kind="remark"><para>An animation is played using an <ref refid="d6/d5c/a04388" kindref="compound">AnimationInstance</ref>. </para>
 </simplesect>
 </para>
     </detaileddescription>
-    <location file="Binary/BinarySkeletonAnimationNode.hpp" line="27" column="1" bodyfile="Binary/BinarySkeletonAnimationNode.hpp" bodystart="26" bodyend="29"/>
+    <inheritancegraph>
+      <node id="4">
+        <label>castor3d::AnimationT&lt; Engine &gt;</label>
+        <link refid="d5/de0/a02220"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::AnimationT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d5/de0/a02220"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::MeshAnimation</label>
+        <link refid="d6/d25/a03284"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::SceneNodeAnimation</label>
+        <link refid="db/daf/a04412"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::SkeletonAnimation</label>
+        <link refid="d4/d87/a03436"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::TextureAnimation</label>
+        <link refid="d7/d07/a02892"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::AnimationT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d5/de0/a02220"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Animation/Animation.hpp" line="16" column="1" bodyfile="Animation/Animation.hpp" bodystart="19" bodyend="197"/>
     <listofallmembers>
-      <member refid="d5/de0/a02220_1a5713a20264e0ee8c90e7e1d8d4d22fb8" prot="public" virt="non-virtual"><scope>castor3d::ChunkTyper&lt; SkeletonAnimationNode &gt;</scope><name>Value</name></member>
+      <member refid="d5/de0/a02220_1a006d6ed2641a537bceebaca154133415" prot="public" virt="non-virtual"><scope>castor3d::AnimationT</scope><name>addKeyFrame</name></member>
+      <member refid="d5/de0/a02220_1adb1052af5d809dbe7cb65d7abfa71dfd" prot="public" virt="non-virtual"><scope>castor3d::AnimationT</scope><name>AnimationT</name></member>
+      <member refid="d5/de0/a02220_1af8e6704a37b5aca0c24363b10be3e196" prot="public" virt="non-virtual"><scope>castor3d::AnimationT</scope><name>AnimationT</name></member>
+      <member refid="d5/de0/a02220_1aaeaa385f6dc3ff2650a8b3b34784c038" prot="public" virt="non-virtual"><scope>castor3d::AnimationT</scope><name>AnimationT</name></member>
+      <member refid="d5/de0/a02220_1a44a8302d52493997f5047dfb98ee9132" prot="public" virt="non-virtual"><scope>castor3d::AnimationT</scope><name>AnimationT</name></member>
+      <member refid="d5/de0/a02220_1a030124cf2d675db7befc1439c032a239" prot="public" virt="non-virtual"><scope>castor3d::AnimationT</scope><name>begin</name></member>
+      <member refid="d5/de0/a02220_1a10eb3a79ab8187133d04bbbac79a867e" prot="public" virt="non-virtual"><scope>castor3d::AnimationT</scope><name>begin</name></member>
+      <member refid="d5/de0/a02220_1ad6e2214b2b9e5b501d9521d80d6aa33c" prot="protected" virt="non-virtual"><scope>castor3d::AnimationT</scope><name>BinaryParser&lt; AnimationT &gt;</name></member>
+      <member refid="d5/de0/a02220_1a7e26f15a7ab5adb5bfd78c8e38a06cbe" prot="protected" virt="non-virtual"><scope>castor3d::AnimationT</scope><name>BinaryWriter&lt; AnimationT &gt;</name></member>
+      <member refid="d5/de0/a02220_1ae9f0f55cd804d87dcf3061da7e2bf8c7" prot="public" virt="non-virtual"><scope>castor3d::AnimationT</scope><name>end</name></member>
+      <member refid="d5/de0/a02220_1afffd735843f39b88370bd7fb352b22b1" prot="public" virt="non-virtual"><scope>castor3d::AnimationT</scope><name>end</name></member>
+      <member refid="d5/de0/a02220_1a948349eb0ae8905ab203815a8a2d16d9" prot="public" virt="non-virtual"><scope>castor3d::AnimationT</scope><name>find</name></member>
+      <member refid="d5/de0/a02220_1a43459e4e85d0d100c0bb33ce76301596" prot="public" virt="non-virtual"><scope>castor3d::AnimationT</scope><name>findKeyFrame</name></member>
+      <member refid="d5/de0/a02220_1ac2ea4433da1220bf08252286df377c40" prot="public" virt="non-virtual"><scope>castor3d::AnimationT</scope><name>getAnimable</name></member>
+      <member refid="d5/de0/a02220_1ad45c59abfe36c3a47bb0d35a15b7b280" prot="public" virt="non-virtual"><scope>castor3d::AnimationT</scope><name>getLength</name></member>
+      <member refid="d5/de0/a02220_1aa23c8683e8eb8e813b654d6e59e08a85" prot="public" virt="non-virtual"><scope>castor3d::AnimationT</scope><name>getType</name></member>
+      <member refid="d5/de0/a02220_1a569d370c8ac8e7b2171bde6538167f8f" prot="public" virt="non-virtual"><scope>castor3d::AnimationT</scope><name>isEmpty</name></member>
+      <member refid="d5/de0/a02220_1a3072da6120ff9933da94eba55981d04f" prot="protected" virt="non-virtual"><scope>castor3d::AnimationT</scope><name>m_animable</name></member>
+      <member refid="d5/de0/a02220_1afcef08681fffacaf889104e64afaefde" prot="protected" virt="non-virtual"><scope>castor3d::AnimationT</scope><name>m_keyframes</name></member>
+      <member refid="d5/de0/a02220_1a24f5bd291c689cf9157a7860fd6a5d7f" prot="protected" virt="non-virtual"><scope>castor3d::AnimationT</scope><name>m_length</name></member>
+      <member refid="d5/de0/a02220_1aacafe3fc6cde0dfaa39f09da0ea4107e" prot="protected" virt="non-virtual"><scope>castor3d::AnimationT</scope><name>m_type</name></member>
+      <member refid="d5/de0/a02220_1a0c4cc84356b5918bcd5f32a56724bfd0" prot="public" virt="non-virtual"><scope>castor3d::AnimationT</scope><name>operator=</name></member>
+      <member refid="d5/de0/a02220_1a55e638295c5571c3051c2dcffa43c88d" prot="public" virt="non-virtual"><scope>castor3d::AnimationT</scope><name>operator=</name></member>
+      <member refid="d5/de0/a02220_1a18b4cbd78559233907c4acd14bc9f9a6" prot="public" virt="non-virtual"><scope>castor3d::AnimationT</scope><name>updateLength</name></member>
+      <member refid="d5/de0/a02220_1a792680fb5eac70b3543a4272924aee11" prot="public" virt="virtual"><scope>castor3d::AnimationT</scope><name>~AnimationT</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

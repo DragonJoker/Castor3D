@@ -1,7 +1,4 @@
-<map id="castor3d::Camera" name="castor3d::Camera">
-<area shape="rect" id="node1" title=" " alt="" coords="83,244,209,271"/>
-<area shape="rect" id="node2" href="$d9/d4a/a05192.html" title=" " alt="" coords="63,169,229,196"/>
-<area shape="rect" id="node3" href="$d7/db2/a02036.html" title="Animable public interface." alt="" coords="61,95,137,121"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,5,193,47"/>
-<area shape="rect" id="node5" title=" " alt="" coords="161,95,224,121"/>
+<map id="castor::TextWriter&lt; castor3d::RenderWindow &gt;" name="castor::TextWriter&lt; castor3d::RenderWindow &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="5,95,196,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="25,5,176,47"/>
 </map>

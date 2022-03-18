@@ -1,15 +1,21 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d1/d6c/a04478" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::IblTextures</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Scene &gt;</basecompoundref>
-    <includes local="no">IblTextures.hpp</includes>
+    <compoundname>castor3d::BillboardList</compoundname>
+    <basecompoundref refid="d1/d4a/a04530" prot="public" virt="non-virtual">castor3d::MovableObject</basecompoundref>
+    <basecompoundref refid="dc/d50/a04474" prot="public" virt="non-virtual">castor3d::BillboardBase</basecompoundref>
+    <includes local="no">BillboardList.hpp</includes>
       <sectiondef kind="user-defined">
-      <memberdef kind="function" id="d1/d6c/a04478_1ab9bdf726119dc6dad0d3bc06897366df" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::ImageView const  &amp;</type>
-        <definition>ashes::ImageView const&amp; castor3d::IblTextures::getIrradianceTexture</definition>
-        <argsstring>() const</argsstring>
-        <name>getIrradianceTexture</name>
+      <memberdef kind="function" id="d1/d6c/a04478_1a5e4245821ad0fff0cf69699e8135592f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point3f const &amp;</type>
+        <definition>castor::Point3f const  &amp; castor3d::BillboardList::getAt</definition>
+        <argsstring>(uint32_t index) const</argsstring>
+        <name>getAt</name>
+        <qualifiedname>castor3d::BillboardList::getAt</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -17,166 +23,135 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="80" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="80" bodyend="83"/>
-        <references refid="d7/d2e/a04482_1af5a3a3243ba1dd29450e7cd8367688bf" compoundref="d3/d4f/a00761" startline="69" endline="72">castor3d::RadianceComputer::getResult</references>
+        <location file="Scene/BillboardList.hpp" line="330" column="31" bodyfile="Scene/BillboardList.hpp" bodystart="330" bodyend="333"/>
+        <references refid="d1/d6c/a04478_1af0c64ec626a3d6336d2731ec9b4c50f4" compoundref="d9/db3/a01064" startline="372">m_arrayPositions</references>
       </memberdef>
-      <memberdef kind="function" id="d1/d6c/a04478_1a5f1b72447c7debd0c884ce628b718bdf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::ImageView const  &amp;</type>
-        <definition>ashes::ImageView const&amp; castor3d::IblTextures::getPrefilteredEnvironmentTexture</definition>
-        <argsstring>() const</argsstring>
-        <name>getPrefilteredEnvironmentTexture</name>
+      <memberdef kind="function" id="d1/d6c/a04478_1adf0deba5f82b8c8719752cefc0bf1d05" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point3fArrayIt</type>
+        <definition>castor::Point3fArrayIt castor3d::BillboardList::begin</definition>
+        <argsstring>()</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor3d::BillboardList::begin</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="85" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="85" bodyend="88"/>
-        <references refid="dd/d3c/a04466_1a432eda24881219a29f325c583ff68ca3" compoundref="dd/d5c/a00752" startline="100" endline="103">castor3d::EnvironmentPrefilter::getResult</references>
+        <location file="Scene/BillboardList.hpp" line="335" column="31" bodyfile="Scene/BillboardList.hpp" bodystart="335" bodyend="338"/>
+        <references refid="d1/d6c/a04478_1af0c64ec626a3d6336d2731ec9b4c50f4" compoundref="d9/db3/a01064" startline="372">m_arrayPositions</references>
       </memberdef>
-      <memberdef kind="function" id="d1/d6c/a04478_1a0fadef06d78460e0f57b7c73d1743cc5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::ImageView const  &amp;</type>
-        <definition>ashes::ImageView const&amp; castor3d::IblTextures::getPrefilteredBrdfTexture</definition>
+      <memberdef kind="function" id="d1/d6c/a04478_1ad2714072bfc146584d61d6ed0b55d2c3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point3fArrayConstIt</type>
+        <definition>castor::Point3fArrayConstIt castor3d::BillboardList::begin</definition>
         <argsstring>() const</argsstring>
-        <name>getPrefilteredBrdfTexture</name>
+        <name>begin</name>
+        <qualifiedname>castor3d::BillboardList::begin</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="90" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="90" bodyend="93"/>
+        <location file="Scene/BillboardList.hpp" line="340" column="36" bodyfile="Scene/BillboardList.hpp" bodystart="340" bodyend="343"/>
+        <references refid="d1/d6c/a04478_1af0c64ec626a3d6336d2731ec9b4c50f4" compoundref="d9/db3/a01064" startline="372">m_arrayPositions</references>
       </memberdef>
-      <memberdef kind="function" id="d1/d6c/a04478_1ac929a2cee25cd0cc758d601ae9de8144" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::Sampler const  &amp;</type>
-        <definition>ashes::Sampler const&amp; castor3d::IblTextures::getIrradianceSampler</definition>
-        <argsstring>() const</argsstring>
-        <name>getIrradianceSampler</name>
+      <memberdef kind="function" id="d1/d6c/a04478_1adc5292ae57d38acfe65fead0fe19049f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point3fArrayIt</type>
+        <definition>castor::Point3fArrayIt castor3d::BillboardList::end</definition>
+        <argsstring>()</argsstring>
+        <name>end</name>
+        <qualifiedname>castor3d::BillboardList::end</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="95" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="95" bodyend="98"/>
-        <references refid="d7/d2e/a04482_1a31fc2df8651d5866af9071e15e8cef35">castor3d::RadianceComputer::getSampler</references>
+        <location file="Scene/BillboardList.hpp" line="345" column="31" bodyfile="Scene/BillboardList.hpp" bodystart="345" bodyend="348"/>
+        <references refid="d1/d6c/a04478_1af0c64ec626a3d6336d2731ec9b4c50f4" compoundref="d9/db3/a01064" startline="372">m_arrayPositions</references>
       </memberdef>
-      <memberdef kind="function" id="d1/d6c/a04478_1a89468d02a076cf84f24ec26123e1f6e1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::Sampler const  &amp;</type>
-        <definition>ashes::Sampler const&amp; castor3d::IblTextures::getPrefilteredEnvironmentSampler</definition>
+      <memberdef kind="function" id="d1/d6c/a04478_1a5fc1a4c09dc5f9b5b836c6e1ba0a2367" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point3fArrayConstIt</type>
+        <definition>castor::Point3fArrayConstIt castor3d::BillboardList::end</definition>
         <argsstring>() const</argsstring>
-        <name>getPrefilteredEnvironmentSampler</name>
+        <name>end</name>
+        <qualifiedname>castor3d::BillboardList::end</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="100" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="100" bodyend="103"/>
-        <references refid="dd/d3c/a04466_1ae19f95cf5dd58bb2ceef4d57d8ade925" compoundref="dd/d5c/a00752" startline="105" endline="108">castor3d::EnvironmentPrefilter::getSampler</references>
-      </memberdef>
-      <memberdef kind="function" id="d1/d6c/a04478_1a1332177eb8ef664b4cdab52ef25cfdd1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::Sampler const  &amp;</type>
-        <definition>ashes::Sampler const&amp; castor3d::IblTextures::getPrefilteredBrdfSampler</definition>
-        <argsstring>() const</argsstring>
-        <name>getPrefilteredBrdfSampler</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="105" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="105" bodyend="108"/>
+        <location file="Scene/BillboardList.hpp" line="350" column="36" bodyfile="Scene/BillboardList.hpp" bodystart="350" bodyend="353"/>
+        <references refid="d1/d6c/a04478_1af0c64ec626a3d6336d2731ec9b4c50f4" compoundref="d9/db3/a01064" startline="372">m_arrayPositions</references>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d1/d6c/a04478_1aeb03ae17132cdbc5c59d81ecab517543" prot="private" static="no" mutable="no">
-        <type>ashes::ImagePtr</type>
-        <definition>ashes::ImagePtr castor3d::IblTextures::m_prefilteredBrdf</definition>
-        <argsstring></argsstring>
-        <name>m_prefilteredBrdf</name>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d1/d6c/a04478_1ad70ba8ae2b324464addfb19eb064622d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BillboardList::setAt</definition>
+        <argsstring>(uint32_t index, castor::Point3f const &amp;position)</argsstring>
+        <name>setAt</name>
+        <qualifiedname>castor3d::BillboardList::setAt</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>position</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>name Setters. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="112" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="112" bodyend="-1"/>
+        <location file="Scene/BillboardList.hpp" line="364" column="13" bodyfile="Scene/BillboardList.hpp" bodystart="364" bodyend="368"/>
+        <references refid="d1/d6c/a04478_1af0c64ec626a3d6336d2731ec9b4c50f4" compoundref="d9/db3/a01064" startline="372">m_arrayPositions</references>
+        <references refid="dc/d50/a04474_1aa88a00c3f84ed4a0cea55b3976ee7a1e" compoundref="d9/db3/a01064" startline="233">castor3d::BillboardBase::m_needUpdate</references>
       </memberdef>
-      <memberdef kind="variable" id="d1/d6c/a04478_1ad3a72bd93748368aebd28a913a2de34d" prot="private" static="no" mutable="no">
-        <type>ashes::ImageView</type>
-        <definition>ashes::ImageView castor3d::IblTextures::m_prefilteredBrdfView</definition>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d1/d6c/a04478_1af0c64ec626a3d6336d2731ec9b4c50f4" prot="protected" static="no" mutable="no">
+        <type>castor::Point3fArray</type>
+        <definition>castor::Point3fArray castor3d::BillboardList::m_arrayPositions</definition>
         <argsstring></argsstring>
-        <name>m_prefilteredBrdfView</name>
+        <name>m_arrayPositions</name>
+        <qualifiedname>castor3d::BillboardList::m_arrayPositions</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="113" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="113" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/d6c/a04478_1ad0ade1df7ddc5541cb4b2cd4c30d279e" prot="private" static="no" mutable="no">
-        <type>SamplerSPtr</type>
-        <definition>SamplerSPtr castor3d::IblTextures::m_sampler</definition>
-        <argsstring></argsstring>
-        <name>m_sampler</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="114" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="114" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/d6c/a04478_1a5fba7190da8b10e7a66579ab8c9bf721" prot="private" static="no" mutable="no">
-        <type><ref refid="d7/d2e/a04482" kindref="compound">RadianceComputer</ref></type>
-        <definition>RadianceComputer castor3d::IblTextures::m_radianceComputer</definition>
-        <argsstring></argsstring>
-        <name>m_radianceComputer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="115" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="115" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/d6c/a04478_1a0b8a2ed6e7b6504d80d2100bcdd22eb1" prot="private" static="no" mutable="no">
-        <type><ref refid="dd/d3c/a04466" kindref="compound">EnvironmentPrefilter</ref></type>
-        <definition>EnvironmentPrefilter castor3d::IblTextures::m_environmentPrefilter</definition>
-        <argsstring></argsstring>
-        <name>m_environmentPrefilter</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="116" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="116" bodyend="-1"/>
+        <location file="Scene/BillboardList.hpp" line="372" column="22" bodyfile="Scene/BillboardList.hpp" bodystart="372" bodyend="-1"/>
+        <referencedby refid="d1/d6c/a04478_1adf0deba5f82b8c8719752cefc0bf1d05" compoundref="d9/db3/a01064" startline="335" endline="338">begin</referencedby>
+        <referencedby refid="d1/d6c/a04478_1adc5292ae57d38acfe65fead0fe19049f" compoundref="d9/db3/a01064" startline="345" endline="348">end</referencedby>
+        <referencedby refid="d1/d6c/a04478_1a5e4245821ad0fff0cf69699e8135592f" compoundref="d9/db3/a01064" startline="330" endline="333">getAt</referencedby>
+        <referencedby refid="d1/d6c/a04478_1ad70ba8ae2b324464addfb19eb064622d" compoundref="d9/db3/a01064" startline="364" endline="368">setAt</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d1/d6c/a04478_1ade1997c1f92aef1ddd8ef233801c950e" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::IblTextures::IblTextures</definition>
-        <argsstring>(Scene &amp;scene, RenderDevice const &amp;device, ashes::Image const &amp;source, SamplerSPtr sampler)</argsstring>
-        <name>IblTextures</name>
+      <memberdef kind="function" id="d1/d6c/a04478_1a8fdbef4e2813538fc025bd38031929b7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::BillboardList::BillboardList</definition>
+        <argsstring>(castor::String const &amp;name, Scene &amp;scene, SceneNode &amp;parent)</argsstring>
+        <name>BillboardList</name>
+        <qualifiedname>castor3d::BillboardList::BillboardList</qualifiedname>
         <param>
-          <type><ref refid="d6/d66/a05238" kindref="compound">Scene</ref> &amp;</type>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d71/a04598" kindref="compound">Scene</ref> &amp;</type>
           <declname>scene</declname>
         </param>
         <param>
-          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>ashes::Image const &amp;</type>
-          <declname>source</declname>
-        </param>
-        <param>
-          <type>SamplerSPtr</type>
-          <declname>sampler</declname>
+          <type><ref refid="dd/d6a/a04642" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>parent</declname>
         </param>
         <briefdescription>
 <para>Constructor. </para>
@@ -184,34 +159,26 @@
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
 <parametername direction="in">scene</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The scene. </para>
+<para>The parent scene. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">device</parametername>
+<parametername direction="in">parent</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">source</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The source environment map. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">sampler</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The sampler used for the environment map. </para>
+<para>The parent scene node. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -219,55 +186,40 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="35" column="1"/>
+        <location file="Scene/BillboardList.hpp" line="259" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d6c/a04478_1a22e8af0801fa2367f7bbcb052929d9c4" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>virtual C3D_API castor3d::IblTextures::~IblTextures</definition>
-        <argsstring>()</argsstring>
-        <name>~IblTextures</name>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="45" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d6c/a04478_1a381eeb8bf63b295044c7017087bfc7c1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::IblTextures::update</definition>
-        <argsstring>()</argsstring>
-        <name>update</name>
-        <briefdescription>
-<para>Updates the environment maps. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="52" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d6c/a04478_1af18aed1ad05c4d704e324ec051c0d249" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Semaphore const  &amp;</type>
-        <definition>C3D_API ashes::Semaphore const&amp; castor3d::IblTextures::update</definition>
-        <argsstring>(ashes::Semaphore const &amp;toWait)</argsstring>
-        <name>update</name>
+      <memberdef kind="function" id="d1/d6c/a04478_1a60c2219e326c4180b8b1bb46121b08c6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::BillboardList::BillboardList</definition>
+        <argsstring>(castor::String const &amp;name, Scene &amp;scene)</argsstring>
+        <name>BillboardList</name>
+        <qualifiedname>castor3d::BillboardList::BillboardList</qualifiedname>
         <param>
-          <type>ashes::Semaphore const &amp;</type>
-          <declname>toWait</declname>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d71/a04598" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
         </param>
         <briefdescription>
-<para>Updates the environment maps. </para>
+<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">toWait</parametername>
+<parametername direction="in">name</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The semaphore from the previous render pass. </para>
+<para>The name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent scene. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -275,27 +227,59 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="61" column="1"/>
+        <location file="Scene/BillboardList.hpp" line="272" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d6c/a04478_1a2b70c8a53dce789d4c504ff5435be539" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::IblTextures::debugDisplay</definition>
-        <argsstring>(castor::Size const &amp;size) const</argsstring>
-        <name>debugDisplay</name>
+      <memberdef kind="function" id="d1/d6c/a04478_1a3408cc3ab8090aecb8469fd5ca87f09e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BillboardList::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::BillboardList::initialise</qualifiedname>
         <param>
-          <type>castor::Size const &amp;</type>
-          <declname>size</declname>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
         </param>
         <briefdescription>
-<para>Displays the maps. </para>
+<para>Initialises GPU side elements. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">size</parametername>
+<parametername>device</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The render size. </para>
+<para>The current device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> if all is OK </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/BillboardList.hpp" line="284" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d6c/a04478_1a6357aa771a9b4f94faaba89a224b1559" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BillboardList::removePoint</definition>
+        <argsstring>(uint32_t index)</argsstring>
+        <name>removePoint</name>
+        <qualifiedname>castor3d::BillboardList::removePoint</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Removes a point from the list. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The point index </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -303,7 +287,95 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/IblTextures.hpp" line="70" column="1"/>
+        <location file="Scene/BillboardList.hpp" line="293" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d6c/a04478_1aec88247abc204bb75895255d310f8517" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BillboardList::addPoint</definition>
+        <argsstring>(castor::Point3f const &amp;position)</argsstring>
+        <name>addPoint</name>
+        <qualifiedname>castor3d::BillboardList::addPoint</qualifiedname>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <briefdescription>
+<para>adds a point to the list </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">position</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The point </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/BillboardList.hpp" line="302" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d6c/a04478_1a9934f82b36f89eada85937d22b288352" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BillboardList::addPoints</definition>
+        <argsstring>(castor::Point3fArray const &amp;positions)</argsstring>
+        <name>addPoints</name>
+        <qualifiedname>castor3d::BillboardList::addPoints</qualifiedname>
+        <param>
+          <type>castor::Point3fArray const &amp;</type>
+          <declname>positions</declname>
+        </param>
+        <briefdescription>
+<para>adds a points list to the list </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">positions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The points list </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/BillboardList.hpp" line="311" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d6c/a04478_1a9dd2ca096fbcf603036aedb7c67d0a20" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BillboardList::attachTo</definition>
+        <argsstring>(SceneNode &amp;node) override</argsstring>
+        <name>attachTo</name>
+        <qualifiedname>castor3d::BillboardList::attachTo</qualifiedname>
+        <reimplements refid="d1/d4a/a04530_1ab2169299d3e08b4e50066e400d1d86dc">attachTo</reimplements>
+        <param>
+          <type><ref refid="dd/d6a/a04642" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+<para>Attaches the movable object to a node. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">node</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent scene node. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/BillboardList.hpp" line="320" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -311,45 +383,346 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="1397">
+      <node id="5">
+        <label>castor3d::BillboardBase</label>
+        <link refid="dc/d50/a04474"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::BillboardList</label>
+        <link refid="d1/d6c/a04478"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::MovableObject</label>
+        <link refid="d1/d4a/a04530"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::RenderedObject</label>
+        <link refid="d0/d7e/a04594"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
+      </node>
+      <node id="3">
         <label>castor::OwnedBy&lt; Scene &gt;</label>
       </node>
-      <node id="1396">
-        <label>castor3d::IblTextures</label>
-        <link refid="d1/d6c/a04478"/>
-        <childnode refid="1397" relation="public-inheritance">
-        </childnode>
+      <node id="7">
+        <label>std::enable_shared_from_this&lt; RenderedObject &gt;</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="1399">
+      <node id="7">
+        <label>Animable</label>
+        <link refid="d6/d41/a02222"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor3d::GpuBufferOffsetT&lt; uint8_t &gt;</label>
+        <link refid="d0/dff/a02506"/>
+        <childnode refid="22" relation="usage">
+          <edgelabel>buffer</edgelabel>
+        </childnode>
+        <childnode refid="23" relation="usage">
+          <edgelabel>chunk</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="template-instance">
+          <edgelabel>&lt; uint8_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>K</label>
+      </node>
+      <node id="12">
+        <label>T</label>
+      </node>
+      <node id="13">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d6/d41/a02222"/>
+        <childnode refid="14" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::BillboardBase</label>
+        <link refid="dc/d50/a04474"/>
+        <childnode refid="16" relation="public-inheritance">
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>m_scene</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_node</edgelabel>
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>m_vertexBuffer</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="usage">
+          <edgelabel>m_geometryBuffers</edgelabel>
+        </childnode>
+        <childnode refid="28" relation="usage">
+          <edgelabel>m_ids</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::BillboardList</label>
+        <link refid="d1/d6c/a04478"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="25">
+        <label>castor3d::GeometryBuffers</label>
+        <link refid="d9/d76/a02526"/>
+        <childnode refid="26" relation="usage">
+          <edgelabel>bufferOffset</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>castor3d::GpuBufferBase</label>
+        <link refid="d3/d41/a02530"/>
+      </node>
+      <node id="24">
+        <label>castor3d::GpuBufferOffsetT&lt; DataT &gt;</label>
+        <link refid="d0/dff/a02506"/>
+        <childnode refid="22" relation="usage">
+          <edgelabel>buffer</edgelabel>
+        </childnode>
+        <childnode refid="23" relation="usage">
+          <edgelabel>chunk</edgelabel>
+        </childnode>
+      </node>
+      <node id="27">
+        <label>castor3d::GpuBufferT&lt; AllocatorT &gt;</label>
+        <link refid="db/d09/a02502"/>
+        <childnode refid="22" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="23">
+        <label>castor3d::MemChunk</label>
+        <link refid="d7/da8/a02522"/>
+      </node>
+      <node id="2">
+        <label>castor3d::MovableObject</label>
+        <link refid="d1/d4a/a04530"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
+      </node>
+      <node id="26">
+        <label>castor3d::ObjectBufferOffset</label>
+        <link refid="d9/d66/a02562"/>
+        <childnode refid="27" relation="usage">
+          <edgelabel>bonBuffer</edgelabel>
+          <edgelabel>idxBuffer</edgelabel>
+          <edgelabel>vtxBuffer</edgelabel>
+        </childnode>
+        <childnode refid="23" relation="usage">
+          <edgelabel>bonChunk</edgelabel>
+          <edgelabel>idxChunk</edgelabel>
+          <edgelabel>vtxChunk</edgelabel>
+        </childnode>
+      </node>
+      <node id="29">
+        <label>castor3d::Pass</label>
+        <link refid="d6/d59/a02810"/>
+        <childnode refid="30" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor3d::RenderedObject</label>
+        <link refid="d0/d7e/a04594"/>
+        <childnode refid="17" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor3d::Scene</label>
+        <link refid="d6/d71/a04598"/>
+        <childnode refid="19" relation="public-inheritance">
+        </childnode>
+        <childnode refid="20" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::SceneNode</label>
+        <link refid="dd/d6a/a04642"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
+      </node>
+      <node id="14">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="8">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="20">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="30">
+        <label>castor::OwnedBy&lt; Material &gt;</label>
+      </node>
+      <node id="3">
         <label>castor::OwnedBy&lt; Scene &gt;</label>
       </node>
-      <node id="1398">
-        <label>castor3d::IblTextures</label>
-        <link refid="d1/d6c/a04478"/>
-        <childnode refid="1399" relation="public-inheritance">
+      <node id="9">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>std::enable_shared_from_this&lt; RenderedObject &gt;</label>
+      </node>
+      <node id="19">
+        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
+      </node>
+      <node id="6">
+        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
+      </node>
+      <node id="10">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="11" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="31">
+        <label>std::unordered_map&lt; K, T &gt;</label>
+        <childnode refid="11" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="28">
+        <label>std::unordered_map&lt; castor3d::Pass const *, uint32_t &gt;</label>
+        <childnode refid="29" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="31" relation="template-instance">
+          <edgelabel>&lt; castor3d::Pass const *, uint32_t &gt;</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Render/PBR/IblTextures.hpp" line="19" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="17" bodyend="117"/>
+    <location file="Scene/BillboardList.hpp" line="242" column="1" bodyfile="Scene/BillboardList.hpp" bodystart="245" bodyend="373"/>
     <listofallmembers>
-      <member refid="d1/d6c/a04478_1a2b70c8a53dce789d4c504ff5435be539" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>debugDisplay</name></member>
-      <member refid="d1/d6c/a04478_1ac929a2cee25cd0cc758d601ae9de8144" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getIrradianceSampler</name></member>
-      <member refid="d1/d6c/a04478_1ab9bdf726119dc6dad0d3bc06897366df" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getIrradianceTexture</name></member>
-      <member refid="d1/d6c/a04478_1a1332177eb8ef664b4cdab52ef25cfdd1" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getPrefilteredBrdfSampler</name></member>
-      <member refid="d1/d6c/a04478_1a0fadef06d78460e0f57b7c73d1743cc5" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getPrefilteredBrdfTexture</name></member>
-      <member refid="d1/d6c/a04478_1a89468d02a076cf84f24ec26123e1f6e1" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getPrefilteredEnvironmentSampler</name></member>
-      <member refid="d1/d6c/a04478_1a5f1b72447c7debd0c884ce628b718bdf" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getPrefilteredEnvironmentTexture</name></member>
-      <member refid="d1/d6c/a04478_1ade1997c1f92aef1ddd8ef233801c950e" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>IblTextures</name></member>
-      <member refid="d1/d6c/a04478_1a0b8a2ed6e7b6504d80d2100bcdd22eb1" prot="private" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>m_environmentPrefilter</name></member>
-      <member refid="d1/d6c/a04478_1aeb03ae17132cdbc5c59d81ecab517543" prot="private" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>m_prefilteredBrdf</name></member>
-      <member refid="d1/d6c/a04478_1ad3a72bd93748368aebd28a913a2de34d" prot="private" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>m_prefilteredBrdfView</name></member>
-      <member refid="d1/d6c/a04478_1a5fba7190da8b10e7a66579ab8c9bf721" prot="private" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>m_radianceComputer</name></member>
-      <member refid="d1/d6c/a04478_1ad0ade1df7ddc5541cb4b2cd4c30d279e" prot="private" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>m_sampler</name></member>
-      <member refid="d1/d6c/a04478_1a381eeb8bf63b295044c7017087bfc7c1" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>update</name></member>
-      <member refid="d1/d6c/a04478_1af18aed1ad05c4d704e324ec051c0d249" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>update</name></member>
-      <member refid="d1/d6c/a04478_1a22e8af0801fa2367f7bbcb052929d9c4" prot="public" virt="virtual"><scope>castor3d::IblTextures</scope><name>~IblTextures</name></member>
+      <member refid="d1/d6c/a04478_1aec88247abc204bb75895255d310f8517" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>addPoint</name></member>
+      <member refid="d1/d6c/a04478_1a9934f82b36f89eada85937d22b288352" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>addPoints</name></member>
+      <member refid="d1/d6c/a04478_1a9dd2ca096fbcf603036aedb7c67d0a20" prot="public" virt="virtual"><scope>castor3d::BillboardList</scope><name>attachTo</name></member>
+      <member refid="d1/d6c/a04478_1adf0deba5f82b8c8719752cefc0bf1d05" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>begin</name></member>
+      <member refid="d1/d6c/a04478_1ad2714072bfc146584d61d6ed0b55d2c3" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>begin</name></member>
+      <member refid="dc/d50/a04474_1ade332cce4a0deaa684753268f3aa6150" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>BillboardBase</name></member>
+      <member refid="d1/d6c/a04478_1a8fdbef4e2813538fc025bd38031929b7" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>BillboardList</name></member>
+      <member refid="d1/d6c/a04478_1a60c2219e326c4180b8b1bb46121b08c6" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>BillboardList</name></member>
+      <member refid="dc/d50/a04474_1af25ebbfa518667b58bbeff5f9ff633d2" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>cleanup</name></member>
+      <member refid="d1/d4a/a04530_1afbef8194f2a0b9e15c9cc483221a08ee" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>detach</name></member>
+      <member refid="d1/d6c/a04478_1adc5292ae57d38acfe65fead0fe19049f" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>end</name></member>
+      <member refid="d1/d6c/a04478_1a5fc1a4c09dc5f9b5b836c6e1ba0a2367" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>end</name></member>
+      <member refid="d1/d6c/a04478_1a5e4245821ad0fff0cf69699e8135592f" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>getAt</name></member>
+      <member refid="dc/d50/a04474_1ac54afd87f8b946683422cf39c544d7a2" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>getBillboardSize</name></member>
+      <member refid="dc/d50/a04474_1aeb51ff87bbe59575cddf1163820260f4" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>getBillboardType</name></member>
+      <member refid="dc/d50/a04474_1ab73bba0010a7661c357975fd609d0b21" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>getBufferOffsets</name></member>
+      <member refid="dc/d50/a04474_1ac71849729aeb037a19160256c3210752" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>getCount</name></member>
+      <member refid="dc/d50/a04474_1a631de23e4121824e3abea098484edb66" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>getDimensions</name></member>
+      <member refid="d1/d4a/a04530_1aa6c7b745273530f44b2fe2b2a2603e8d" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>getEngine</name></member>
+      <member refid="dc/d50/a04474_1aee4bb06221702c8d82eb30b5921a6412" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>getGeometryBuffers</name></member>
+      <member refid="dc/d50/a04474_1a3bcd3db80d54c0126ffba789acafe8e7" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>getId</name></member>
+      <member refid="dc/d50/a04474_1ab1bb4536e134acae08be8ae346f094ae" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>getMaterial</name></member>
+      <member refid="dc/d50/a04474_1a85c6e61e074cb524c5e87d144f5e9bac" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>getNode</name></member>
+      <member refid="d1/d4a/a04530_1a19af4c363050397777f59c30b451be05" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>getParent</name></member>
+      <member refid="dc/d50/a04474_1a57c47ef7623f3059cfc09b9f0cd14af7" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>getParentScene</name></member>
+      <member refid="dc/d50/a04474_1a9a4e97d70597476d11366463b0545eec" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>getParentScene</name></member>
+      <member refid="dc/d50/a04474_1ae3e3185db2da5ee7cd318fd5cd16db2a" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>getProgramFlags</name></member>
+      <member refid="d1/d4a/a04530_1acf2dafd94427b63121981ac18ac652a7" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>getType</name></member>
+      <member refid="dc/d50/a04474_1a84cc1f721f8162074dba707e1113d953" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>getVertexBuffer</name></member>
+      <member refid="dc/d50/a04474_1ab852aaf4197198bc758085bbb0301615" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>getVertexBuffer</name></member>
+      <member refid="d1/d6c/a04478_1a3408cc3ab8090aecb8469fd5ca87f09e" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>initialise</name></member>
+      <member refid="dc/d50/a04474_1ae06f9c2542019228516e163b31ddbe43" prot="public" virt="non-virtual" ambiguityscope="castor3d::BillboardBase::"><scope>castor3d::BillboardList</scope><name>initialise</name></member>
+      <member refid="d0/d7e/a04594_1a29922953eee8cbc43aae4b710f08c29a" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>isCulled</name></member>
+      <member refid="dc/d50/a04474_1a7532b17c83f5b674f9f823d71a26e1ce" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>isInitialised</name></member>
+      <member refid="d0/d7e/a04594_1ab40947f3ec91820fc5e70a85f1cc160a" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>isShadowCaster</name></member>
+      <member refid="d0/d7e/a04594_1a3e73e7500445cfd605cf4b6f2414277b" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>isShadowReceiver</name></member>
+      <member refid="d0/d7e/a04594_1a5ce1326805379a47d42dec81b6b41d62" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>isVisible</name></member>
+      <member refid="d1/d6c/a04478_1af0c64ec626a3d6336d2731ec9b4c50f4" prot="protected" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>m_arrayPositions</name></member>
+      <member refid="dc/d50/a04474_1a43fe7d3c6db72bc7a2bd9b2839dfe26d" prot="protected" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>m_billboardSize</name></member>
+      <member refid="dc/d50/a04474_1ad4bd86d0442df4fffe2eb0b508efbd5f" prot="protected" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>m_billboardType</name></member>
+      <member refid="dc/d50/a04474_1ad52c72f998e9114d6167ab1a5039ecde" prot="protected" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>m_cameraPosition</name></member>
+      <member refid="dc/d50/a04474_1acf87b3db191ac0b86ae17d8b9a638920" prot="protected" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>m_centerOffset</name></member>
+      <member refid="dc/d50/a04474_1a9a4efed3a8e7c15666f7c247320a4fe4" prot="protected" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>m_count</name></member>
+      <member refid="dc/d50/a04474_1a09d25c6b7307c04da36c369ddb28f79e" prot="protected" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>m_dimensions</name></member>
+      <member refid="dc/d50/a04474_1a0ead2f61831f7bc726164abddc656c30" prot="protected" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>m_geometryBuffers</name></member>
+      <member refid="dc/d50/a04474_1a022216916be82ecb28e8ff994a43d171" prot="protected" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>m_ids</name></member>
+      <member refid="dc/d50/a04474_1a74be0e59b5eee9879665e61300fee870" prot="protected" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>m_initialised</name></member>
+      <member refid="dc/d50/a04474_1aebf9fb087c7f42a0f45350981abfc17c" prot="protected" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>m_material</name></member>
+      <member refid="dc/d50/a04474_1aa88a00c3f84ed4a0cea55b3976ee7a1e" prot="protected" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>m_needUpdate</name></member>
+      <member refid="dc/d50/a04474_1ad2cc3f7e0edbe12748c3481bcc235009" prot="protected" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>m_node</name></member>
+      <member refid="d1/d4a/a04530_1a8385c7c8fd9aee20a3c6de804cb09514" prot="protected" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>m_notifyIndex</name></member>
+      <member refid="dc/d50/a04474_1aae5039513f3d96e1ae37c523a7b0fb15" prot="protected" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>m_quadLayout</name></member>
+      <member refid="dc/d50/a04474_1a74a90ad6131e26ea7f22e72288796c19" prot="protected" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>m_scene</name></member>
+      <member refid="d1/d4a/a04530_1aa058c86365c45c7d4b85a04ce56a9d22" prot="protected" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>m_sceneNode</name></member>
+      <member refid="d1/d4a/a04530_1ab9493ad12e9af9b47db11e76d372a156" prot="protected" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>m_strNodeName</name></member>
+      <member refid="d1/d4a/a04530_1acf6726e80bb3098468fe1fcd5a1f720e" prot="protected" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>m_type</name></member>
+      <member refid="dc/d50/a04474_1a0db5895aa99bba0334abdf5e9226b6e1" prot="protected" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>m_vertexBuffer</name></member>
+      <member refid="dc/d50/a04474_1a15c81471c13d7632a166bd6e43137b38" prot="protected" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>m_vertexLayout</name></member>
+      <member refid="dc/d50/a04474_1a1acf93d1957547400252817e0fddc764" prot="protected" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>m_vertexStride</name></member>
+      <member refid="d1/d4a/a04530_1a40b0fe7602fb945cb5b89de71a8cf4d8" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>MovableObject</name></member>
+      <member refid="d1/d4a/a04530_1acf7517058566afbb2290a7856fc9dfee" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>MovableObject</name></member>
+      <member refid="dc/d50/a04474_1aea0af924efbdc6e29aef75417814c2e0" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>onMaterialChanged</name></member>
+      <member refid="dc/d50/a04474_1a7bdc5d8171b0eecc7ae453c0d63c4b32" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>Quad</name></member>
+      <member refid="d1/d6c/a04478_1a6357aa771a9b4f94faaba89a224b1559" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>removePoint</name></member>
+      <member refid="d1/d6c/a04478_1ad70ba8ae2b324464addfb19eb064622d" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>setAt</name></member>
+      <member refid="dc/d50/a04474_1a05a363b8f60f99e9037b4a5cb0a03344" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>setBillboardSize</name></member>
+      <member refid="dc/d50/a04474_1a55c8105e717f50c9aa9ee5cab1cba96d" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>setBillboardType</name></member>
+      <member refid="dc/d50/a04474_1a802e4bd732a29f4e6bfde9955fda9152" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>setCenterOffset</name></member>
+      <member refid="dc/d50/a04474_1ad99066100e5a16c6503eeabd5f3e7b69" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>setCount</name></member>
+      <member refid="d0/d7e/a04594_1a4e32f37027d761824f754df07c6703ae" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>setCulled</name></member>
+      <member refid="dc/d50/a04474_1a6a45c206c54916d7f81e0a2bd51e0352" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>setDimensions</name></member>
+      <member refid="dc/d50/a04474_1affeb5080c626afd0b8a1da9cb760085c" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>setId</name></member>
+      <member refid="dc/d50/a04474_1a0b3635774375dcb30377678d5b4614c2" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>setMaterial</name></member>
+      <member refid="dc/d50/a04474_1aa02da0105085d18a5560b465ae0993be" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>setNode</name></member>
+      <member refid="d0/d7e/a04594_1a5b052f28d3f247a7231c34b1c9520997" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>setShadowCaster</name></member>
+      <member refid="d0/d7e/a04594_1a17b0b8487b724ca7492f2e08ce8706f6" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>setShadowReceiver</name></member>
+      <member refid="d0/d7e/a04594_1ac78739036c5c66a41cb2f960e532627e" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>setVisible</name></member>
+      <member refid="dc/d50/a04474_1aa8bb696e97c87f83c7597e0af57d29e9" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>sortByDistance</name></member>
+      <member refid="dc/d50/a04474_1a93b3ebf6b417cb85d6abcd483514c803" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>update</name></member>
+      <member refid="dc/d50/a04474_1a11c4b4ce3c85d79ef8fc6c9a060d5310" prot="public" virt="non-virtual"><scope>castor3d::BillboardList</scope><name>~BillboardBase</name></member>
+      <member refid="d1/d4a/a04530_1a05bd8e8940d26cb4361fccfa67733b03" prot="public" virt="virtual"><scope>castor3d::BillboardList</scope><name>~MovableObject</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

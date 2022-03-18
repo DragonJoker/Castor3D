@@ -1,44 +1,19 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="df/d49/a02340" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::UniformBufferPool::Buffer</compoundname>
-    <includes local="no">UniformBufferPool.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="df/d49/a02340_1a8be6c9bfdbc08d8ad27bc188c408165a" prot="public" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::UniformBufferPool::Buffer::index</definition>
-        <argsstring></argsstring>
-        <name>index</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/UniformBufferPool.hpp" line="23" column="1" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="23" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="df/d49/a02340_1a93439f45e2bb2a12935501dabbc23349" prot="public" static="no" mutable="no">
-        <type>PoolUniformBufferUPtr</type>
-        <definition>PoolUniformBufferUPtr castor3d::UniformBufferPool::Buffer::buffer</definition>
-        <argsstring></argsstring>
-        <name>buffer</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/UniformBufferPool.hpp" line="24" column="1" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="24" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="df/d49/a02340" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BinaryWriter</compoundname>
+    <templateparamlist>
+      <param>
+        <type>class TWritten</type>
+      </param>
+    </templateparamlist>
     <briefdescription>
+<para>Specialisable binary data chunk writer class. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Buffer/UniformBufferPool.hpp" line="22" column="1" bodyfile="Buffer/UniformBufferPool.hpp" bodystart="21" bodyend="25"/>
+    <location file="Binary/BinaryModule.hpp" line="62" column="1" bodyfile="Binary/BinaryModule.hpp" bodystart="62" bodyend="-1"/>
     <listofallmembers>
-      <member refid="df/d49/a02340_1a93439f45e2bb2a12935501dabbc23349" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferPool::Buffer</scope><name>buffer</name></member>
-      <member refid="df/d49/a02340_1a8be6c9bfdbc08d8ad27bc188c408165a" prot="public" virt="non-virtual"><scope>castor3d::UniformBufferPool::Buffer</scope><name>index</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

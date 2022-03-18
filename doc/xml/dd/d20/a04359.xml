@@ -1,50 +1,97 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="dd/d20/a04359" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::CommandsSemaphore</compoundname>
-    <includes local="no">CommandsSemaphore.hpp</includes>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dd/d20/a04359" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::Texture3DTo2D::Texture3DToScreen</compoundname>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="dd/d20/a04359_1a69f8a98779e7005fc1494f7cef97ebb4" prot="public" static="no" mutable="no">
-        <type>ashes::CommandBufferPtr</type>
-        <definition>ashes::CommandBufferPtr castor3d::CommandsSemaphore::commandBuffer</definition>
+      <memberdef kind="variable" id="dd/d20/a04359_1a93fd371f4d901c039161cdc3234559ae" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::Texture3DTo2D::Texture3DToScreen::descriptorSet</definition>
         <argsstring></argsstring>
-        <name>commandBuffer</name>
+        <name>descriptorSet</name>
+        <qualifiedname>castor3d::Texture3DTo2D::Texture3DToScreen::descriptorSet</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/CommandsSemaphore.hpp" line="25" column="1" bodyfile="Render/Passes/CommandsSemaphore.hpp" bodystart="25" bodyend="-1"/>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="83" column="25" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="83" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dd/d20/a04359_1ab63a3f9fdc8ca326973ddaccb1c5e074" prot="public" static="no" mutable="no">
-        <type>ashes::SemaphorePtr</type>
-        <definition>ashes::SemaphorePtr castor3d::CommandsSemaphore::semaphore</definition>
+      <memberdef kind="variable" id="dd/d20/a04359_1aea7670a2c520c74f48952e1123d65ec7" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/dab/a03815" kindref="compound">CommandsSemaphore</ref></type>
+        <definition>CommandsSemaphore castor3d::Texture3DTo2D::Texture3DToScreen::commands</definition>
         <argsstring></argsstring>
-        <name>semaphore</name>
+        <name>commands</name>
+        <qualifiedname>castor3d::Texture3DTo2D::Texture3DToScreen::commands</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/CommandsSemaphore.hpp" line="26" column="1" bodyfile="Render/Passes/CommandsSemaphore.hpp" bodystart="26" bodyend="-1"/>
-        <referencedby refid="d7/d3c/a05003_1a40adc4973e83d50829daa0c6c37c79f2" compoundref="d6/d8d/a01007" startline="96" endline="100">castor3d::VoxelizePass::getSemaphore</referencedby>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="84" column="19" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="84" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="dd/d20/a04359_1a2a84ae509877c923b4a13d559eb1de3a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::CommandsSemaphore::CommandsSemaphore</definition>
-        <argsstring>(RenderDevice const &amp;device, castor::String const &amp;name)</argsstring>
-        <name>CommandsSemaphore</name>
+      <memberdef kind="function" id="dd/d20/a04359_1ac75528d996f9f865cae2dc90be6321c2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::Texture3DTo2D::Texture3DToScreen::Texture3DToScreen</definition>
+        <argsstring>()</argsstring>
+        <name>Texture3DToScreen</name>
+        <qualifiedname>castor3d::Texture3DTo2D::Texture3DToScreen::Texture3DToScreen</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="71" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d20/a04359_1a26277a3b7330b274f94fd19e5de1d2ec" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::Texture3DTo2D::Texture3DToScreen::Texture3DToScreen</definition>
+        <argsstring>(RenderDevice const &amp;device, QueueData const &amp;queueData, UniformBufferOffsetT&lt; Texture3DTo2DData &gt; const &amp;uniformBuffer, MatrixUbo const &amp;matrixUbo, IntermediateView const &amp;texture3D, ashes::RenderPass const &amp;renderPass, ashes::DescriptorSetPool const &amp;descriptorSetPool, ashes::FrameBuffer const &amp;frameBuffer, ashes::PipelineLayout const &amp;pipelineLayout, ashes::GraphicsPipeline const &amp;pipeline)</argsstring>
+        <name>Texture3DToScreen</name>
+        <qualifiedname>castor3d::Texture3DTo2D::Texture3DToScreen::Texture3DToScreen</qualifiedname>
         <param>
-          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <type><ref refid="d4/d87/a03963" kindref="compound">RenderDevice</ref> const &amp;</type>
           <declname>device</declname>
         </param>
         <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
+          <type><ref refid="da/d1d/a03947" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/d01/a02511" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="dd/d18/a04351" kindref="compound">Texture3DTo2DData</ref> &gt; const &amp;</type>
+          <declname>uniformBuffer</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d42/a04927" kindref="compound">MatrixUbo</ref> const &amp;</type>
+          <declname>matrixUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="de/dc3/a04319" kindref="compound">IntermediateView</ref> const &amp;</type>
+          <declname>texture3D</declname>
+        </param>
+        <param>
+          <type>ashes::RenderPass const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type>ashes::DescriptorSetPool const &amp;</type>
+          <declname>descriptorSetPool</declname>
+        </param>
+        <param>
+          <type>ashes::FrameBuffer const &amp;</type>
+          <declname>frameBuffer</declname>
+        </param>
+        <param>
+          <type>ashes::PipelineLayout const &amp;</type>
+          <declname>pipelineLayout</declname>
+        </param>
+        <param>
+          <type>ashes::GraphicsPipeline const &amp;</type>
+          <declname>pipeline</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -52,82 +99,31 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/CommandsSemaphore.hpp" line="16" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d20/a04359_1a45111e76b54c590ed4c25560a30b5dab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::CommandsSemaphore::CommandsSemaphore</definition>
-        <argsstring>(ashes::CommandBufferPtr commandBuffer=nullptr, ashes::SemaphorePtr semaphore=nullptr)</argsstring>
-        <name>CommandsSemaphore</name>
-        <param>
-          <type>ashes::CommandBufferPtr</type>
-          <declname>commandBuffer</declname>
-          <defval>nullptr</defval>
-        </param>
-        <param>
-          <type>ashes::SemaphorePtr</type>
-          <declname>semaphore</declname>
-          <defval>nullptr</defval>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/CommandsSemaphore.hpp" line="18" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d20/a04359_1a04f1d199d50dd4495c033943c7320352" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::CommandsSemaphore::submit</definition>
-        <argsstring>(ashes::Queue const &amp;queue) const</argsstring>
-        <name>submit</name>
-        <param>
-          <type>ashes::Queue const &amp;</type>
-          <declname>queue</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/CommandsSemaphore.hpp" line="21" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d20/a04359_1aad5ed57fbc23c00ab8c57f38f0bb5968" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Semaphore const  &amp;</type>
-        <definition>C3D_API ashes::Semaphore const&amp; castor3d::CommandsSemaphore::submit</definition>
-        <argsstring>(ashes::Queue const &amp;queue, ashes::Semaphore const &amp;toWait) const</argsstring>
-        <name>submit</name>
-        <param>
-          <type>ashes::Queue const &amp;</type>
-          <declname>queue</declname>
-        </param>
-        <param>
-          <type>ashes::Semaphore const &amp;</type>
-          <declname>toWait</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/CommandsSemaphore.hpp" line="22" column="1"/>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="72" column="1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Passes/CommandsSemaphore.hpp" line="15" column="1" bodyfile="Render/Passes/CommandsSemaphore.hpp" bodystart="14" bodyend="27"/>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::CommandsSemaphore</label>
+        <link refid="d7/dab/a03815"/>
+      </node>
+      <node id="1">
+        <label>castor3d::Texture3DTo2D::Texture3DToScreen</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>commands</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/ToTexture/Texture3DTo2D.hpp" line="69" column="1" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="70" bodyend="85"/>
     <listofallmembers>
-      <member refid="dd/d20/a04359_1a69f8a98779e7005fc1494f7cef97ebb4" prot="public" virt="non-virtual"><scope>castor3d::CommandsSemaphore</scope><name>commandBuffer</name></member>
-      <member refid="dd/d20/a04359_1a2a84ae509877c923b4a13d559eb1de3a" prot="public" virt="non-virtual"><scope>castor3d::CommandsSemaphore</scope><name>CommandsSemaphore</name></member>
-      <member refid="dd/d20/a04359_1a45111e76b54c590ed4c25560a30b5dab" prot="public" virt="non-virtual"><scope>castor3d::CommandsSemaphore</scope><name>CommandsSemaphore</name></member>
-      <member refid="dd/d20/a04359_1ab63a3f9fdc8ca326973ddaccb1c5e074" prot="public" virt="non-virtual"><scope>castor3d::CommandsSemaphore</scope><name>semaphore</name></member>
-      <member refid="dd/d20/a04359_1a04f1d199d50dd4495c033943c7320352" prot="public" virt="non-virtual"><scope>castor3d::CommandsSemaphore</scope><name>submit</name></member>
-      <member refid="dd/d20/a04359_1aad5ed57fbc23c00ab8c57f38f0bb5968" prot="public" virt="non-virtual"><scope>castor3d::CommandsSemaphore</scope><name>submit</name></member>
+      <member refid="dd/d20/a04359_1aea7670a2c520c74f48952e1123d65ec7" prot="public" virt="non-virtual"><scope>castor3d::Texture3DTo2D::Texture3DToScreen</scope><name>commands</name></member>
+      <member refid="dd/d20/a04359_1a93fd371f4d901c039161cdc3234559ae" prot="public" virt="non-virtual"><scope>castor3d::Texture3DTo2D::Texture3DToScreen</scope><name>descriptorSet</name></member>
+      <member refid="dd/d20/a04359_1ac75528d996f9f865cae2dc90be6321c2" prot="public" virt="non-virtual"><scope>castor3d::Texture3DTo2D::Texture3DToScreen</scope><name>Texture3DToScreen</name></member>
+      <member refid="dd/d20/a04359_1a26277a3b7330b274f94fd19e5de1d2ec" prot="public" virt="non-virtual"><scope>castor3d::Texture3DTo2D::Texture3DToScreen</scope><name>Texture3DToScreen</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

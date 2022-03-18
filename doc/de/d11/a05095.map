@@ -1,6 +1,4 @@
-<map id="castor3d::SkeletonAnimationInstanceObject" name="castor3d::SkeletonAnimationInstanceObject">
-<area shape="rect" id="node1" title=" " alt="" coords="112,95,301,136"/>
-<area shape="rect" id="node3" href="$d5/d56/a05084.html" title=" " alt="" coords="5,184,195,225"/>
-<area shape="rect" id="node4" href="$d9/d2c/a05092.html" title=" " alt="" coords="219,184,408,225"/>
-<area shape="rect" id="node2" title=" " alt="" coords="114,5,299,47"/>
+<map id="castor::TextWriter&lt; castor3d::HdrConfig &gt;" name="castor::TextWriter&lt; castor3d::HdrConfig &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="5,95,165,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="10,5,161,47"/>
 </map>

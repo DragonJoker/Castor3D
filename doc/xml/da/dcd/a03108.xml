@@ -1,33 +1,34 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="da/dcd/a03108" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkPhysicalDeviceExternalFenceInfo &gt;</compoundname>
+    <compoundname>castor3d::VkStructTraits&lt; VkGraphicsPipelineCreateInfo &gt;</compoundname>
     <includes local="no">makeVkType.hpp</includes>
     <templateparamlist>
     </templateparamlist>
       <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="da/dcd/a03108_1ab16eab94c8bb85725296f6b4bebc1dcc" prot="public" static="yes" mutable="no">
+      <memberdef kind="variable" id="da/dcd/a03108_1a4f46186858a75c6cc800494a2ddd7bd7" prot="public" static="yes" constexpr="yes" mutable="no">
         <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPhysicalDeviceExternalFenceInfo &gt;::value</definition>
+        <definition>VkStructureType constexpr castor3d::VkStructTraits&lt; VkGraphicsPipelineCreateInfo &gt;::value</definition>
         <argsstring></argsstring>
         <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_FENCE_INFO</initializer>
+        <qualifiedname>castor3d::VkStructTraits&lt; VkGraphicsPipelineCreateInfo &gt;::value</qualifiedname>
+        <initializer>= VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="117" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="117" bodyend="-1"/>
+        <location file="Miscellaneous/makeVkType.hpp" line="42" column="65" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="42" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="117" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="117" bodyend="117"/>
+    <location file="Miscellaneous/makeVkType.hpp" line="42" column="10" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="42" bodyend="42"/>
     <listofallmembers>
-      <member refid="da/dcd/a03108_1ab16eab94c8bb85725296f6b4bebc1dcc" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPhysicalDeviceExternalFenceInfo &gt;</scope><name>value</name></member>
+      <member refid="da/dcd/a03108_1a4f46186858a75c6cc800494a2ddd7bd7" prot="public" virt="non-virtual"><scope>castor3d::VkStructTraits&lt; VkGraphicsPipelineCreateInfo &gt;</scope><name>value</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,203 +1,282 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="de/d7b/a02660" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::TextureSource</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">Named</basecompoundref>
-    <includes local="no">TextureSource.hpp</includes>
-      <sectiondef kind="user-defined">
-      <header>Accessors.</header>
-      <memberdef kind="function" id="de/d7b/a02660_1a4220bf29f250bd837ec9c82d7893138a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::String const  &amp;</type>
-        <definition>castor::String const&amp; castor3d::TextureSource::toString</definition>
-        <argsstring>() const</argsstring>
-        <name>toString</name>
+    <compoundname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</compoundname>
+    <basecompoundref refid="dd/dc4/a02632" prot="public" virt="non-virtual">castor3d::ObjectCacheBaseT&lt; Light, castor::String, LightCacheTraits &gt;</basecompoundref>
+    <includes local="no">LightCache.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="de/d7b/a02660_1a886cc0e36e13e48edcd3a41b5f73aa5c" prot="public" static="no">
+        <type><ref refid="d1/d55/a04496" kindref="compound">Light</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::ElementT =  Light</definition>
+        <argsstring></argsstring>
+        <name>ElementT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::ElementT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureSource.hpp" line="60" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="60" bodyend="63"/>
-        <references refid="da/d1e/a01479_1a5691da845a89609231c90071fccdfc20">castor3d::getName</references>
+        <location file="Cache/LightCache.hpp" line="28" column="1" bodyfile="Cache/LightCache.hpp" bodystart="28" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="de/d7b/a02660_1a10f4c8e3dd31efed12fecbf9f32a666b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::TextureSource::getBaseLayer</definition>
-        <argsstring>() const</argsstring>
-        <name>getBaseLayer</name>
+      <memberdef kind="typedef" id="de/d7b/a02660_1aacdf49035fc6b81ef91fab0d9932087b" prot="public" static="no">
+        <type>castor::String</type>
+        <definition>using castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::ElementKeyT =  castor::String</definition>
+        <argsstring></argsstring>
+        <name>ElementKeyT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::ElementKeyT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureSource.hpp" line="65" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="65" bodyend="68"/>
+        <location file="Cache/LightCache.hpp" line="29" column="1" bodyfile="Cache/LightCache.hpp" bodystart="29" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="de/d7b/a02660_1acfde42110a5953b8275207c0460d8906" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::TextureSource::getLayerCount</definition>
-        <argsstring>() const</argsstring>
-        <name>getLayerCount</name>
+      <memberdef kind="typedef" id="de/d7b/a02660_1a21ad01add06fb3a619d09da584b56713" prot="public" static="no">
+        <type><ref refid="d2/df5/a01395_1a1d70144238b18ccc38f775a51c47b1cc" kindref="member">LightCacheTraits</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::ElementCacheTraitsT =  LightCacheTraits</definition>
+        <argsstring></argsstring>
+        <name>ElementCacheTraitsT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::ElementCacheTraitsT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureSource.hpp" line="70" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="70" bodyend="73"/>
+        <location file="Cache/LightCache.hpp" line="30" column="1" bodyfile="Cache/LightCache.hpp" bodystart="30" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="de/d7b/a02660_1a4bb1185b673c1a8a1c20cfc74dcd1e93" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::TextureSource::getBaseLevel</definition>
-        <argsstring>() const</argsstring>
-        <name>getBaseLevel</name>
+      <memberdef kind="typedef" id="de/d7b/a02660_1ace55d14865d910c9bd070f1479971ffa" prot="public" static="no">
+        <type><ref refid="dd/dc4/a02632" kindref="compound">ObjectCacheBaseT</ref>&lt; <ref refid="de/d7b/a02660_1a886cc0e36e13e48edcd3a41b5f73aa5c" kindref="member">ElementT</ref>, <ref refid="de/d7b/a02660_1aacdf49035fc6b81ef91fab0d9932087b" kindref="member">ElementKeyT</ref>, <ref refid="de/d7b/a02660_1a21ad01add06fb3a619d09da584b56713" kindref="member">ElementCacheTraitsT</ref> &gt;</type>
+        <definition>using castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::ElementObjectCacheT =  ObjectCacheBaseT&lt; ElementT, ElementKeyT, ElementCacheTraitsT &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementObjectCacheT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::ElementObjectCacheT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureSource.hpp" line="75" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="75" bodyend="78"/>
+        <location file="Cache/LightCache.hpp" line="31" column="1" bodyfile="Cache/LightCache.hpp" bodystart="31" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="de/d7b/a02660_1ab6d1fd08cb4d119a1afaeb97eadc2e0a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::TextureSource::getLevelCount</definition>
-        <argsstring>() const</argsstring>
-        <name>getLevelCount</name>
+      <memberdef kind="typedef" id="de/d7b/a02660_1a54b623055be36b85e681cbdee522c5d6" prot="public" static="no">
+        <type>typename <ref refid="dd/dc4/a02632_1ac64abf5d5b1d54b7309db409911089e8" kindref="member">ElementObjectCacheT::ElementPtrT</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::ElementPtrT =  typename ElementObjectCacheT::ElementPtrT</definition>
+        <argsstring></argsstring>
+        <name>ElementPtrT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::ElementPtrT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureSource.hpp" line="80" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="80" bodyend="83"/>
+        <location file="Cache/LightCache.hpp" line="32" column="1" bodyfile="Cache/LightCache.hpp" bodystart="32" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="de/d7b/a02660_1a17f4726bb3e2cb170f44add1903b26fc" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::TextureSource::getDepth</definition>
-        <argsstring>() const</argsstring>
-        <name>getDepth</name>
+      <memberdef kind="typedef" id="de/d7b/a02660_1af2940bc608cca3112e2da907188a6cb3" prot="public" static="no">
+        <type>typename <ref refid="dd/dc4/a02632_1a5f6c89792190f153d2304470edab28b6" kindref="member">ElementObjectCacheT::ElementContT</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::ElementContT =  typename ElementObjectCacheT::ElementContT</definition>
+        <argsstring></argsstring>
+        <name>ElementContT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::ElementContT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureSource.hpp" line="85" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="85" bodyend="88"/>
+        <location file="Cache/LightCache.hpp" line="33" column="1" bodyfile="Cache/LightCache.hpp" bodystart="33" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="de/d7b/a02660_1a92066b44ec2982894bddbb494c6bdee8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::TextureSource::hasBuffer</definition>
-        <argsstring>() const</argsstring>
-        <name>hasBuffer</name>
+      <memberdef kind="typedef" id="de/d7b/a02660_1a872d49380fefd77f57fef3841065aa29" prot="public" static="no">
+        <type>typename <ref refid="dd/dc4/a02632_1ae9dcfec2c1a41e5ac0b9f0cbb0b4254c" kindref="member">ElementObjectCacheT::ElementInitialiserT</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::ElementInitialiserT =  typename ElementObjectCacheT::ElementInitialiserT</definition>
+        <argsstring></argsstring>
+        <name>ElementInitialiserT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::ElementInitialiserT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureSource.hpp" line="90" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="90" bodyend="93"/>
+        <location file="Cache/LightCache.hpp" line="34" column="1" bodyfile="Cache/LightCache.hpp" bodystart="34" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="de/d7b/a02660_1a0ae0f5afe102e323fc5839fc50f2f6ad" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::ImageLayout::ConstBuffer</type>
-        <definition>castor::ImageLayout::ConstBuffer castor3d::TextureSource::getBuffer</definition>
-        <argsstring>() const</argsstring>
-        <name>getBuffer</name>
+      <memberdef kind="typedef" id="de/d7b/a02660_1a8a5041b6be9c44fbd933d49abfb6250c" prot="public" static="no">
+        <type>typename <ref refid="dd/dc4/a02632_1a0b96fa488b8fdd4fbcbc7f144ecbbb7e" kindref="member">ElementObjectCacheT::ElementCleanerT</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::ElementCleanerT =  typename ElementObjectCacheT::ElementCleanerT</definition>
+        <argsstring></argsstring>
+        <name>ElementCleanerT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::ElementCleanerT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureSource.hpp" line="95" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="95" bodyend="98"/>
+        <location file="Cache/LightCache.hpp" line="35" column="1" bodyfile="Cache/LightCache.hpp" bodystart="35" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="de/d7b/a02660_1a07ca40f903b281ce304a23ae06a1d342" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::ImageLayout::Buffer</type>
-        <definition>castor::ImageLayout::Buffer castor3d::TextureSource::getBuffer</definition>
-        <argsstring>()</argsstring>
-        <name>getBuffer</name>
+      <memberdef kind="typedef" id="de/d7b/a02660_1abed2dfab52c2c88a37faaaea09a4535c" prot="public" static="no">
+        <type>typename <ref refid="dd/dc4/a02632_1a120add2fe6c6efc840f052d926e609d6" kindref="member">ElementObjectCacheT::ElementMergerT</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::ElementMergerT =  typename ElementObjectCacheT::ElementMergerT</definition>
+        <argsstring></argsstring>
+        <name>ElementMergerT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::ElementMergerT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureSource.hpp" line="100" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="100" bodyend="103"/>
+        <location file="Cache/LightCache.hpp" line="36" column="1" bodyfile="Cache/LightCache.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d7b/a02660_1a7612966a5eed148ee5a327e5b4ed7f62" prot="public" static="no">
+        <type>typename <ref refid="dd/dc4/a02632_1adadbb9ff475d6a6bf903139dad6ccb40" kindref="member">ElementObjectCacheT::ElementAttacherT</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::ElementAttacherT =  typename ElementObjectCacheT::ElementAttacherT</definition>
+        <argsstring></argsstring>
+        <name>ElementAttacherT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::ElementAttacherT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/LightCache.hpp" line="37" column="1" bodyfile="Cache/LightCache.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d7b/a02660_1aa0f8c2b0dcfa80eab4993ff72cd5ae8e" prot="public" static="no">
+        <type>typename <ref refid="dd/dc4/a02632_1a3df1a58591b34493630c7ddce56d47a4" kindref="member">ElementObjectCacheT::ElementDetacherT</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::ElementDetacherT =  typename ElementObjectCacheT::ElementDetacherT</definition>
+        <argsstring></argsstring>
+        <name>ElementDetacherT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::ElementDetacherT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/LightCache.hpp" line="38" column="1" bodyfile="Cache/LightCache.hpp" bodystart="38" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="de/d7b/a02660_1a8d0f0a3ba8ce4f2c8aa49f5a6392fad6" prot="private" static="no" mutable="no">
-        <type>castor::Image *</type>
-        <definition>castor::Image* castor3d::TextureSource::m_image</definition>
+      <memberdef kind="variable" id="de/d7b/a02660_1ab268754e5000a33fcde3b5a24826507c" prot="private" static="no" mutable="no">
+        <type>LightsRefArray</type>
+        <definition>LightsRefArray castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::m_dirtyLights</definition>
         <argsstring></argsstring>
-        <name>m_image</name>
+        <name>m_dirtyLights</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::m_dirtyLights</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureSource.hpp" line="107" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="107" bodyend="-1"/>
+        <location file="Cache/LightCache.hpp" line="172" column="16" bodyfile="Cache/LightCache.hpp" bodystart="172" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="de/d7b/a02660_1a9282b9289d8416ba33c69851cfa50fbe" prot="private" static="no" mutable="no">
-        <type>castor::ImageLayout</type>
-        <definition>castor::ImageLayout castor3d::TextureSource::m_layout</definition>
+      <memberdef kind="variable" id="de/d7b/a02660_1a31e16641d976f06bfe63957d289fc27d" prot="private" static="no" mutable="no">
+        <type>std::map&lt; <ref refid="d1/d55/a04496" kindref="compound">Light</ref> *, <ref refid="d2/df5/a01395_1a099e189b5c7efa89e27d48091a4d746a" kindref="member">OnLightChangedConnection</ref> &gt;</type>
+        <definition>std::map&lt; Light *, OnLightChangedConnection &gt; castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::m_connections</definition>
         <argsstring></argsstring>
-        <name>m_layout</name>
+        <name>m_connections</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::m_connections</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureSource.hpp" line="108" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="108" bodyend="-1"/>
+        <location file="Cache/LightCache.hpp" line="173" column="10" bodyfile="Cache/LightCache.hpp" bodystart="173" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d7b/a02660_1a830e4552c7b577ca23b28a4d332a6fa8" prot="private" static="no" mutable="no">
+        <type>LightBufferUPtr</type>
+        <definition>LightBufferUPtr castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::m_lightBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_lightBuffer</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::m_lightBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/LightCache.hpp" line="174" column="17" bodyfile="Cache/LightCache.hpp" bodystart="174" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d7b/a02660_1a5b8742e908e17833c715b2367fb96d6b" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d1/d55/a04496" kindref="compound">Light</ref> * &gt;</type>
+        <definition>std::vector&lt; Light * &gt; castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::m_pendingLights</definition>
+        <argsstring></argsstring>
+        <name>m_pendingLights</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::m_pendingLights</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/LightCache.hpp" line="175" column="13" bodyfile="Cache/LightCache.hpp" bodystart="175" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="de/d7b/a02660_1a3dcb0a17d39b0b51ede8dede3e31f963" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::TextureSource::TextureSource</definition>
-        <argsstring>(castor::Image &amp;image, castor::String name, castor::ImageLayout layout)</argsstring>
-        <name>TextureSource</name>
+      <memberdef kind="function" id="de/d7b/a02660_1a381eab2ac0468f6c210eefe56e0db5d5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::ObjectCacheT</definition>
+        <argsstring>(Scene &amp;scene, SceneNodeSPtr rootNode, SceneNodeSPtr rootCameraNode, SceneNodeSPtr rootObjectNode)</argsstring>
+        <name>ObjectCacheT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::ObjectCacheT</qualifiedname>
         <param>
-          <type>castor::Image &amp;</type>
-          <declname>image</declname>
+          <type><ref refid="da/d34/a04592" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
         </param>
         <param>
-          <type>castor::String</type>
-          <declname>name</declname>
+          <type>SceneNodeSPtr</type>
+          <declname>rootNode</declname>
         </param>
         <param>
-          <type>castor::ImageLayout</type>
-          <declname>layout</declname>
+          <type>SceneNodeSPtr</type>
+          <declname>rootCameraNode</declname>
+        </param>
+        <param>
+          <type>SceneNodeSPtr</type>
+          <declname>rootObjectNode</declname>
         </param>
         <briefdescription>
+<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The texture buffer. </para>
-</simplesect>
-<parameterlist kind="param"><parameteritem>
+<para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">image</parametername>
+<parametername direction="in">scene</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The CPU image. </para>
+<para>The scene. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">name</parametername>
+<parametername direction="in">rootNode</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The source name. </para>
+<para>The root node. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">layout</parametername>
+<parametername direction="in">rootCameraNode</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The CPU image layout. </para>
+<para>The cameras root node. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">rootObjectNode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The objects root node. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -205,28 +284,326 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureSource.hpp" line="32" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="32" bodyend="39"/>
+        <location file="Cache/LightCache.hpp" line="53" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="de/d7b/a02660_1ac06cbc307ec31a52bcbe986a865b2371" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::TextureSource::update</definition>
-        <argsstring>(VkExtent3D const &amp;extent, VkFormat format, uint32_t mipLevels, uint32_t arrayLayers)</argsstring>
+      <memberdef kind="function" id="de/d7b/a02660_1aecb780134e809d10ddf25b4c80646029" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::~ObjectCacheT</definition>
+        <argsstring>()=default</argsstring>
+        <name>~ObjectCacheT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::~ObjectCacheT</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/LightCache.hpp" line="63" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d7b/a02660_1a06837962d779e1c0c23841431800ed7e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::initialise</definition>
+        <argsstring>(castor3d::RenderDevice const &amp;device)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::initialise</qualifiedname>
+        <param>
+          <type><ref refid="d2/df2/a03960" kindref="compound">castor3d::RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Intialises GPU buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/LightCache.hpp" line="72" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d7b/a02660_1ad66e5df2530da2752bd345e44e635e18" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::cleanup</qualifiedname>
+        <briefdescription>
+<para>Sets all the elements to be cleaned up. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/LightCache.hpp" line="79" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d7b/a02660_1abe9c91d12a940d1e63b8970ccdefd3f0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
         <name>update</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::update</qualifiedname>
         <param>
-          <type>VkExtent3D const &amp;</type>
-          <declname>extent</declname>
+          <type><ref refid="db/d69/a04040" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
         </param>
+        <briefdescription>
+<para>Updates the render pass, CPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/LightCache.hpp" line="88" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d7b/a02660_1a1239a58a354d4042720212bd53f51cbc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::update</definition>
+        <argsstring>(GpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::update</qualifiedname>
         <param>
-          <type>VkFormat</type>
-          <declname>format</declname>
+          <type><ref refid="d1/dc7/a04044" kindref="compound">GpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, GPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/LightCache.hpp" line="97" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d7b/a02660_1a9df8b38682dcadc058e6bfe38ad12ff9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::upload</definition>
+        <argsstring>(ashes::CommandBuffer const &amp;cb) const</argsstring>
+        <name>upload</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::upload</qualifiedname>
+        <param>
+          <type>ashes::CommandBuffer const &amp;</type>
+          <declname>cb</declname>
+        </param>
+        <briefdescription>
+<para>Uploads all GPU buffers to VRAM. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">cb</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The command buffer on which transfer commands are recorded. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/LightCache.hpp" line="106" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d7b/a02660_1a23c4d505365f9b3d4e516266463de064" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> LightsArray</type>
+        <definition>C3D_API LightsArray castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::getLights</definition>
+        <argsstring>(LightType type) const</argsstring>
+        <name>getLights</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::getLights</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves the lights of given type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The light type. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The lights. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/LightCache.hpp" line="117" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d7b/a02660_1a45cc5f3f1e7842c447552c85e51d20c8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::createPassBinding</definition>
+        <argsstring>(crg::FramePass &amp;pass, uint32_t binding) const</argsstring>
+        <name>createPassBinding</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::createPassBinding</qualifiedname>
+        <param>
+          <type>crg::FramePass &amp;</type>
+          <declname>pass</declname>
         </param>
         <param>
           <type>uint32_t</type>
-          <declname>mipLevels</declname>
+          <declname>binding</declname>
         </param>
+        <briefdescription>
+<para>Creates a frame pass binding. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/LightCache.hpp" line="124" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d7b/a02660_1ac4368ef112b0f47f80ab7d206bb03769" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkDescriptorSetLayoutBinding</type>
+        <definition>C3D_API VkDescriptorSetLayoutBinding castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::createLayoutBinding</definition>
+        <argsstring>(uint32_t index=0u) const</argsstring>
+        <name>createLayoutBinding</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::createLayoutBinding</qualifiedname>
         <param>
           <type>uint32_t</type>
-          <declname>arrayLayers</declname>
+          <declname>index</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+<para>Creates the descriptor set layout binding at given point. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The binding point index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/LightCache.hpp" line="134" column="38"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d7b/a02660_1a640756ec60c5ee3d504ba6e12063d418" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::WriteDescriptorSet</type>
+        <definition>C3D_API ashes::WriteDescriptorSet castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::getBinding</definition>
+        <argsstring>(uint32_t binding) const</argsstring>
+        <name>getBinding</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::getBinding</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+<para>Creates the descriptor write for the lights buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/LightCache.hpp" line="141" column="35"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d7b/a02660_1a0eeaecfa51a2fd51e9cbc2e8957662d9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dc8/a00242_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::WriteDescriptorSet</type>
+        <definition>C3D_API ashes::WriteDescriptorSet castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::getBinding</definition>
+        <argsstring>(uint32_t binding, VkDeviceSize offset, VkDeviceSize size) const</argsstring>
+        <name>getBinding</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::getBinding</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Creates the descriptor write for the lights buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/LightCache.hpp" line="148" column="35"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d7b/a02660_1a1ceb9ad442ee1b235d7bb9ad38323e87" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::getLightsCount</definition>
+        <argsstring>(LightType type) const</argsstring>
+        <name>getLightsCount</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::getLightsCount</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves the count of the lights of given type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The light type. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The count. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/LightCache.hpp" line="161" column="10" bodyfile="Cache/LightCache.hpp" bodystart="161" bodyend="164"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="de/d7b/a02660_1ac02a11aa1189efad61e3a236e0f03e78" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::doCheckUniqueDirectionalLight</definition>
+        <argsstring>(LightType toAdd)</argsstring>
+        <name>doCheckUniqueDirectionalLight</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::doCheckUniqueDirectionalLight</qualifiedname>
+        <param>
+          <type><ref refid="d2/df5/a01395_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>toAdd</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -234,50 +611,188 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Material/Texture/TextureSource.hpp" line="41" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="41" bodyend="52"/>
+        <location file="Cache/LightCache.hpp" line="167" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d7b/a02660_1a646db6c063a491f4adcda1c67bde4a00" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::doRegisterLight</definition>
+        <argsstring>(Light &amp;light)</argsstring>
+        <name>doRegisterLight</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::doRegisterLight</qualifiedname>
+        <param>
+          <type><ref refid="d1/d55/a04496" kindref="compound">Light</ref> &amp;</type>
+          <declname>light</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/LightCache.hpp" line="168" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d7b/a02660_1a1eb2064ddb98543bb0f14217d6e8e1dc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::doUnregisterLight</definition>
+        <argsstring>(Light &amp;light)</argsstring>
+        <name>doUnregisterLight</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;::doUnregisterLight</qualifiedname>
+        <param>
+          <type><ref refid="d1/d55/a04496" kindref="compound">Light</ref> &amp;</type>
+          <declname>light</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/LightCache.hpp" line="169" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para><ref refid="d1/d55/a04496" kindref="compound">Light</ref> cache. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="4447">
-        <label>Named</label>
-      </node>
-      <node id="4446">
-        <label>castor3d::TextureSource</label>
-        <link refid="de/d7b/a02660"/>
-        <childnode refid="4447" relation="public-inheritance">
+      <node id="2">
+        <label>castor3d::ObjectCacheBaseT&lt; Light, castor::String, LightCacheTraits &gt;</label>
+        <link refid="dd/dc4/a02632"/>
+        <childnode refid="3" relation="public-inheritance">
         </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; Light, castor::String, LightCacheTraits &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;</label>
+        <link refid="dd/dc4/a02632"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</label>
+        <link refid="de/d7b/a02660"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="4">
+        <label>castor::ResourceCacheBaseT&lt; Light, castor::String, LightCacheTraits &gt;</label>
+      </node>
+      <node id="6">
+        <label>castor::ResourceCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="4449">
-        <label>Named</label>
-      </node>
-      <node id="4448">
-        <label>castor3d::TextureSource</label>
-        <link refid="de/d7b/a02660"/>
-        <childnode refid="4449" relation="public-inheritance">
+      <node id="2">
+        <label>castor3d::ObjectCacheBaseT&lt; Light, castor::String, LightCacheTraits &gt;</label>
+        <link refid="dd/dc4/a02632"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_engine</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; Light, castor::String, LightCacheTraits &gt;</edgelabel>
         </childnode>
       </node>
+      <node id="5">
+        <label>castor3d::Engine</label>
+        <link refid="d7/d73/a02708"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;</label>
+        <link refid="dd/dc4/a02632"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_engine</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</label>
+        <link refid="de/d7b/a02660"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="4">
+        <label>castor::ResourceCacheBaseT&lt; Light, castor::String, LightCacheTraits &gt;</label>
+      </node>
+      <node id="8">
+        <label>castor::ResourceCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;</label>
+      </node>
+      <node id="6">
+        <label>castor::Unique&lt; Engine &gt;</label>
+      </node>
     </collaborationgraph>
-    <location file="Material/Texture/TextureSource.hpp" line="18" column="1" bodyfile="Material/Texture/TextureSource.hpp" bodystart="16" bodyend="109"/>
+    <location file="Cache/LightCache.hpp" line="24" column="1" bodyfile="Cache/LightCache.hpp" bodystart="26" bodyend="176"/>
     <listofallmembers>
-      <member refid="de/d7b/a02660_1a10f4c8e3dd31efed12fecbf9f32a666b" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>getBaseLayer</name></member>
-      <member refid="de/d7b/a02660_1a4bb1185b673c1a8a1c20cfc74dcd1e93" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>getBaseLevel</name></member>
-      <member refid="de/d7b/a02660_1a0ae0f5afe102e323fc5839fc50f2f6ad" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>getBuffer</name></member>
-      <member refid="de/d7b/a02660_1a07ca40f903b281ce304a23ae06a1d342" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>getBuffer</name></member>
-      <member refid="de/d7b/a02660_1a17f4726bb3e2cb170f44add1903b26fc" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>getDepth</name></member>
-      <member refid="de/d7b/a02660_1acfde42110a5953b8275207c0460d8906" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>getLayerCount</name></member>
-      <member refid="de/d7b/a02660_1ab6d1fd08cb4d119a1afaeb97eadc2e0a" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>getLevelCount</name></member>
-      <member refid="de/d7b/a02660_1a92066b44ec2982894bddbb494c6bdee8" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>hasBuffer</name></member>
-      <member refid="de/d7b/a02660_1a8d0f0a3ba8ce4f2c8aa49f5a6392fad6" prot="private" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>m_image</name></member>
-      <member refid="de/d7b/a02660_1a9282b9289d8416ba33c69851cfa50fbe" prot="private" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>m_layout</name></member>
-      <member refid="de/d7b/a02660_1a3dcb0a17d39b0b51ede8dede3e31f963" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>TextureSource</name></member>
-      <member refid="de/d7b/a02660_1a4220bf29f250bd837ec9c82d7893138a" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>toString</name></member>
-      <member refid="de/d7b/a02660_1ac06cbc307ec31a52bcbe986a865b2371" prot="public" virt="non-virtual"><scope>castor3d::TextureSource</scope><name>update</name></member>
+      <member refid="de/d7b/a02660_1ad66e5df2530da2752bd345e44e635e18" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>cleanup</name></member>
+      <member refid="de/d7b/a02660_1ac4368ef112b0f47f80ab7d206bb03769" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>createLayoutBinding</name></member>
+      <member refid="de/d7b/a02660_1a45cc5f3f1e7842c447552c85e51d20c8" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>createPassBinding</name></member>
+      <member refid="de/d7b/a02660_1ac02a11aa1189efad61e3a236e0f03e78" prot="private" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>doCheckUniqueDirectionalLight</name></member>
+      <member refid="de/d7b/a02660_1a646db6c063a491f4adcda1c67bde4a00" prot="private" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>doRegisterLight</name></member>
+      <member refid="de/d7b/a02660_1a1eb2064ddb98543bb0f14217d6e8e1dc" prot="private" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>doUnregisterLight</name></member>
+      <member refid="de/d7b/a02660_1a7612966a5eed148ee5a327e5b4ed7f62" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>ElementAttacherT</name></member>
+      <member refid="dd/dc4/a02632_1a833dc232271e526d2fff8e95be226a47" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>ElementCacheBaseT</name></member>
+      <member refid="dd/dc4/a02632_1a8b2d0e83f5e04699b979b93e711dd38f" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>ElementCacheT</name></member>
+      <member refid="de/d7b/a02660_1a21ad01add06fb3a619d09da584b56713" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>ElementCacheTraitsT</name></member>
+      <member refid="de/d7b/a02660_1a8a5041b6be9c44fbd933d49abfb6250c" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>ElementCleanerT</name></member>
+      <member refid="de/d7b/a02660_1af2940bc608cca3112e2da907188a6cb3" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>ElementContT</name></member>
+      <member refid="de/d7b/a02660_1aa0f8c2b0dcfa80eab4993ff72cd5ae8e" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>ElementDetacherT</name></member>
+      <member refid="de/d7b/a02660_1a872d49380fefd77f57fef3841065aa29" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>ElementInitialiserT</name></member>
+      <member refid="de/d7b/a02660_1aacdf49035fc6b81ef91fab0d9932087b" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>ElementKeyT</name></member>
+      <member refid="de/d7b/a02660_1abed2dfab52c2c88a37faaaea09a4535c" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>ElementMergerT</name></member>
+      <member refid="de/d7b/a02660_1ace55d14865d910c9bd070f1479971ffa" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>ElementObjectCacheT</name></member>
+      <member refid="dd/dc4/a02632_1a20564c6d1c8d37fa00fe04e267b1b8fa" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>ElementObsT</name></member>
+      <member refid="de/d7b/a02660_1a54b623055be36b85e681cbdee522c5d6" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>ElementPtrT</name></member>
+      <member refid="de/d7b/a02660_1a886cc0e36e13e48edcd3a41b5f73aa5c" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>ElementT</name></member>
+      <member refid="de/d7b/a02660_1a640756ec60c5ee3d504ba6e12063d418" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>getBinding</name></member>
+      <member refid="de/d7b/a02660_1a0eeaecfa51a2fd51e9cbc2e8957662d9" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>getBinding</name></member>
+      <member refid="dd/dc4/a02632_1a9880998d44d2a4753ebaa66045f53e40" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>getEngine</name></member>
+      <member refid="de/d7b/a02660_1a23c4d505365f9b3d4e516266463de064" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>getLights</name></member>
+      <member refid="de/d7b/a02660_1a1ceb9ad442ee1b235d7bb9ad38323e87" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>getLightsCount</name></member>
+      <member refid="dd/dc4/a02632_1a53a7f1aca80a90ee48dbd7f0d2525d5f" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>getObjectTypeName</name></member>
+      <member refid="de/d7b/a02660_1a06837962d779e1c0c23841431800ed7e" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>initialise</name></member>
+      <member refid="dd/dc4/a02632_1ab163121f8e7748ad2d7bf093dd25e943" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>m_attach</name></member>
+      <member refid="de/d7b/a02660_1a31e16641d976f06bfe63957d289fc27d" prot="private" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>m_connections</name></member>
+      <member refid="dd/dc4/a02632_1adb2cd25d360c2c9fefca61d26273e3ce" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>m_detach</name></member>
+      <member refid="de/d7b/a02660_1ab268754e5000a33fcde3b5a24826507c" prot="private" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>m_dirtyLights</name></member>
+      <member refid="dd/dc4/a02632_1ad2d2ec81317e6a6424228ed476c38651" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>m_engine</name></member>
+      <member refid="de/d7b/a02660_1a830e4552c7b577ca23b28a4d332a6fa8" prot="private" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>m_lightBuffer</name></member>
+      <member refid="dd/dc4/a02632_1a4a7fda17cfa540fdf1ef120f49b23478" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>m_merge</name></member>
+      <member refid="de/d7b/a02660_1a5b8742e908e17833c715b2367fb96d6b" prot="private" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>m_pendingLights</name></member>
+      <member refid="dd/dc4/a02632_1ab67f3f6ddd7d1f04ed5826dc3f21f263" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>m_rootCameraNode</name></member>
+      <member refid="dd/dc4/a02632_1aac519a36083c69c42389af5dd3cea99a" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>m_rootNode</name></member>
+      <member refid="dd/dc4/a02632_1aa98b874ccfd4e9d4e60f2725a1d6cadf" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>m_rootObjectNode</name></member>
+      <member refid="dd/dc4/a02632_1ac2d02c45ec20d264310c39258cf8ce50" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>mergeInto</name></member>
+      <member refid="dd/dc4/a02632_1a877651f0c6763836a11a7166e3ac5bff" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>ObjectCacheBaseT</name></member>
+      <member refid="de/d7b/a02660_1a381eab2ac0468f6c210eefe56e0db5d5" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>ObjectCacheT</name></member>
+      <member refid="dd/dc4/a02632_1a53f214ce6eab35501fb5509c504d4df1" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>OnChanged</name></member>
+      <member refid="dd/dc4/a02632_1a91d72169bf2d52687170aeefc90f3dcd" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>onChanged</name></member>
+      <member refid="dd/dc4/a02632_1abb32a9817ed3199de78a9e80ee634a44" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>OnChangedFunction</name></member>
+      <member refid="de/d7b/a02660_1abe9c91d12a940d1e63b8970ccdefd3f0" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>update</name></member>
+      <member refid="de/d7b/a02660_1a1239a58a354d4042720212bd53f51cbc" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>update</name></member>
+      <member refid="de/d7b/a02660_1a9df8b38682dcadc058e6bfe38ad12ff9" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>upload</name></member>
+      <member refid="dd/dc4/a02632_1aef5cfb8ffd6117cd01ff08475186e5e4" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>~ObjectCacheBaseT</name></member>
+      <member refid="de/d7b/a02660_1aecb780134e809d10ddf25b4c80646029" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</scope><name>~ObjectCacheT</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,33 +1,169 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d8/db3/a03488" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VkTypeTraits&lt; VkRenderPassSampleLocationsBeginInfoEXT &gt;</compoundname>
-    <includes local="no">makeVkType.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d8/db3/a03488_1a71a399b6db2b2bb5751aecfc5cde8b69" prot="public" static="yes" mutable="no">
-        <type>VkStructureType constexpr</type>
-        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkRenderPassSampleLocationsBeginInfoEXT &gt;::value</definition>
+    <compoundname>castor3d::InterleavedVertex</compoundname>
+    <includes local="no">VertexGroup.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/db3/a03488_1a058c6919ba730368b595422840be3dad" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::InterleavedVertex::pos</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <initializer>= VK_STRUCTURE_TYPE_RENDER_PASS_SAMPLE_LOCATIONS_BEGIN_INFO_EXT</initializer>
+        <name>pos</name>
+        <qualifiedname>castor3d::InterleavedVertex::pos</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The vertex coordinates. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/VertexGroup.hpp" line="39" column="17" bodyfile="Model/VertexGroup.hpp" bodystart="39" bodyend="-1"/>
+        <referencedby refid="d8/db3/a03488_1a674014c40d77765eb85230253e63942d" compoundref="d6/d06/a00572" startline="13" endline="17">position</referencedby>
+        <referencedby refid="d2/df5/a01395_1a58ff625ab28b77d7933ef9517c1b632c" compoundref="d5/db1/a00140" startline="1242" endline="1259">castor3d::prepareChunkData</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d8/db3/a03488_1a2e43c87c53a30c9781d2519d1d59075b" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::InterleavedVertex::nml</definition>
+        <argsstring></argsstring>
+        <name>nml</name>
+        <qualifiedname>castor3d::InterleavedVertex::nml</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The vertex normal. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/VertexGroup.hpp" line="42" column="17" bodyfile="Model/VertexGroup.hpp" bodystart="42" bodyend="-1"/>
+        <referencedby refid="d8/db3/a03488_1a9e793156c33a5926210f27a8cbba3549" compoundref="d6/d06/a00572" startline="19" endline="23">normal</referencedby>
+        <referencedby refid="d2/df5/a01395_1a58ff625ab28b77d7933ef9517c1b632c" compoundref="d5/db1/a00140" startline="1242" endline="1259">castor3d::prepareChunkData</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d8/db3/a03488_1a03cd62cf0f3f553c1272751ea8e489b0" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::InterleavedVertex::tan</definition>
+        <argsstring></argsstring>
+        <name>tan</name>
+        <qualifiedname>castor3d::InterleavedVertex::tan</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The vertex tangent. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/VertexGroup.hpp" line="45" column="17" bodyfile="Model/VertexGroup.hpp" bodystart="45" bodyend="-1"/>
+        <referencedby refid="d2/df5/a01395_1a58ff625ab28b77d7933ef9517c1b632c" compoundref="d5/db1/a00140" startline="1242" endline="1259">castor3d::prepareChunkData</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d8/db3/a03488_1a87c080a75ad69b858fcbf5f8a748c517" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::InterleavedVertex::tex</definition>
+        <argsstring></argsstring>
+        <name>tex</name>
+        <qualifiedname>castor3d::InterleavedVertex::tex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The vertex texture coordinates. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/VertexGroup.hpp" line="48" column="17" bodyfile="Model/VertexGroup.hpp" bodystart="48" bodyend="-1"/>
+        <referencedby refid="d2/df5/a01395_1a58ff625ab28b77d7933ef9517c1b632c" compoundref="d5/db1/a00140" startline="1242" endline="1259">castor3d::prepareChunkData</referencedby>
+        <referencedby refid="d8/db3/a03488_1a102d695ffc7c50ffcc6173e94c3597a8" compoundref="d6/d06/a00572" startline="25" endline="29">texcoord</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/db3/a03488_1a674014c40d77765eb85230253e63942d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d8/db3/a03488" kindref="compound">InterleavedVertex</ref> &amp;</type>
+        <definition>InterleavedVertex &amp; castor3d::InterleavedVertex::position</definition>
+        <argsstring>(castor::Point3f const &amp;val)</argsstring>
+        <name>position</name>
+        <qualifiedname>castor3d::InterleavedVertex::position</qualifiedname>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>val</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/makeVkType.hpp" line="283" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="283" bodyend="-1"/>
+        <location file="Model/VertexGroup.hpp" line="13" column="20" bodyfile="Model/VertexGroup.hpp" bodystart="13" bodyend="17"/>
+        <references refid="d8/db3/a03488_1a058c6919ba730368b595422840be3dad" compoundref="d6/d06/a00572" startline="39">pos</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/db3/a03488_1a9e793156c33a5926210f27a8cbba3549" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d8/db3/a03488" kindref="compound">InterleavedVertex</ref> &amp;</type>
+        <definition>InterleavedVertex &amp; castor3d::InterleavedVertex::normal</definition>
+        <argsstring>(castor::Point3f const &amp;val)</argsstring>
+        <name>normal</name>
+        <qualifiedname>castor3d::InterleavedVertex::normal</qualifiedname>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/VertexGroup.hpp" line="19" column="20" bodyfile="Model/VertexGroup.hpp" bodystart="19" bodyend="23"/>
+        <references refid="d8/db3/a03488_1a2e43c87c53a30c9781d2519d1d59075b" compoundref="d6/d06/a00572" startline="42">nml</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/db3/a03488_1a102d695ffc7c50ffcc6173e94c3597a8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d8/db3/a03488" kindref="compound">InterleavedVertex</ref> &amp;</type>
+        <definition>InterleavedVertex &amp; castor3d::InterleavedVertex::texcoord</definition>
+        <argsstring>(castor::Point2f const &amp;val)</argsstring>
+        <name>texcoord</name>
+        <qualifiedname>castor3d::InterleavedVertex::texcoord</qualifiedname>
+        <param>
+          <type>castor::Point2f const &amp;</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/VertexGroup.hpp" line="25" column="20" bodyfile="Model/VertexGroup.hpp" bodystart="25" bodyend="29"/>
+        <references refid="d8/db3/a03488_1a87c080a75ad69b858fcbf5f8a748c517" compoundref="d6/d06/a00572" startline="48">tex</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/db3/a03488_1a21b75fae76bd4fe6fda4c4b8882ffe2d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d8/db3/a03488" kindref="compound">InterleavedVertex</ref> &amp;</type>
+        <definition>InterleavedVertex &amp; castor3d::InterleavedVertex::texcoord</definition>
+        <argsstring>(castor::Point3f const &amp;val)</argsstring>
+        <name>texcoord</name>
+        <qualifiedname>castor3d::InterleavedVertex::texcoord</qualifiedname>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/VertexGroup.hpp" line="31" column="20" bodyfile="Model/VertexGroup.hpp" bodystart="31" bodyend="35"/>
+        <references refid="d8/db3/a03488_1a87c080a75ad69b858fcbf5f8a748c517" compoundref="d6/d06/a00572" startline="48">tex</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/makeVkType.hpp" line="283" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="283" bodyend="283"/>
+    <location file="Model/VertexGroup.hpp" line="11" column="1" bodyfile="Model/VertexGroup.hpp" bodystart="12" bodyend="49"/>
     <listofallmembers>
-      <member refid="d8/db3/a03488_1a71a399b6db2b2bb5751aecfc5cde8b69" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkRenderPassSampleLocationsBeginInfoEXT &gt;</scope><name>value</name></member>
+      <member refid="d8/db3/a03488_1a2e43c87c53a30c9781d2519d1d59075b" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertex</scope><name>nml</name></member>
+      <member refid="d8/db3/a03488_1a9e793156c33a5926210f27a8cbba3549" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertex</scope><name>normal</name></member>
+      <member refid="d8/db3/a03488_1a058c6919ba730368b595422840be3dad" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertex</scope><name>pos</name></member>
+      <member refid="d8/db3/a03488_1a674014c40d77765eb85230253e63942d" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertex</scope><name>position</name></member>
+      <member refid="d8/db3/a03488_1a03cd62cf0f3f553c1272751ea8e489b0" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertex</scope><name>tan</name></member>
+      <member refid="d8/db3/a03488_1a87c080a75ad69b858fcbf5f8a748c517" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertex</scope><name>tex</name></member>
+      <member refid="d8/db3/a03488_1a102d695ffc7c50ffcc6173e94c3597a8" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertex</scope><name>texcoord</name></member>
+      <member refid="d8/db3/a03488_1a21b75fae76bd4fe6fda4c4b8882ffe2d" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertex</scope><name>texcoord</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

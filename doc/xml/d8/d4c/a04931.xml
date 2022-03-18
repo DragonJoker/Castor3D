@@ -1,50 +1,636 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
-  <compounddef id="d8/d4c/a04931" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::HdrConfig</compoundname>
-    <includes local="no">HdrConfig.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d8/d4c/a04931_1ac8fd9583280cdc34d0a26e1237764a0d" prot="public" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::HdrConfig::exposure</definition>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d8/d4c/a04931" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::ModelIndices</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">ModelDataUbo.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d8/d4c/a04931_1aa6fa8c8b03652f70c973cf7c6bc385fe" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::shader::ModelIndices::BufferName</definition>
         <argsstring></argsstring>
-        <name>exposure</name>
-        <initializer>{ 1.0f }</initializer>
+        <name>BufferName</name>
+        <qualifiedname>castor3d::shader::ModelIndices::BufferName</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The exposure value. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToneMapping/HdrConfig.hpp" line="18" column="1" bodyfile="Render/ToneMapping/HdrConfig.hpp" bodystart="18" bodyend="-1"/>
-        <referencedby refid="d0/dcf/a05131_1a3164f41de67e9bb9b4df3e39a3bc4433" compoundref="d2/df3/a01085" startline="264" endline="268">castor3d::Camera::setExposure</referencedby>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="72" column="37" bodyfile="Shader/Ubos/ModelDataUbo.hpp" bodystart="72" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d8/d4c/a04931_1a9d5123b1dbd5da1ebb2517854c23fb26" prot="public" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::HdrConfig::gamma</definition>
+      <memberdef kind="variable" id="d8/d4c/a04931_1a78e8f607645588b1f34c5f314ba711fb" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::shader::ModelIndices::DataName</definition>
         <argsstring></argsstring>
-        <name>gamma</name>
-        <initializer>{ 2.2f }</initializer>
+        <name>DataName</name>
+        <qualifiedname>castor3d::shader::ModelIndices::DataName</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The gamma correction value. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToneMapping/HdrConfig.hpp" line="21" column="1" bodyfile="Render/ToneMapping/HdrConfig.hpp" bodystart="21" bodyend="-1"/>
-        <referencedby refid="d0/dcf/a05131_1af59eaccd54cff1df69b3ef0f406a2e06" compoundref="d2/df3/a01085" startline="270" endline="274">castor3d::Camera::setGamma</referencedby>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="73" column="37" bodyfile="Shader/Ubos/ModelDataUbo.hpp" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d8/d4c/a04931_1a9ea3460ccd89e29244ddd06202fc47ee" prot="private" static="no" mutable="no">
+        <type>sdw::Mat4</type>
+        <definition>sdw::Mat4 castor3d::shader::ModelIndices::m_prvMtxModel</definition>
+        <argsstring></argsstring>
+        <name>m_prvMtxModel</name>
+        <qualifiedname>castor3d::shader::ModelIndices::m_prvMtxModel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="80" column="11" bodyfile="Shader/Ubos/ModelDataUbo.hpp" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d4c/a04931_1ae7ce80eb39ad53e368e192c5714d0325" prot="private" static="no" mutable="no">
+        <type>sdw::Mat4</type>
+        <definition>sdw::Mat4 castor3d::shader::ModelIndices::m_curMtxModel</definition>
+        <argsstring></argsstring>
+        <name>m_curMtxModel</name>
+        <qualifiedname>castor3d::shader::ModelIndices::m_curMtxModel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="81" column="11" bodyfile="Shader/Ubos/ModelDataUbo.hpp" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d4c/a04931_1a1c7adaed44a001568a8b271343d1668c" prot="private" static="no" mutable="no">
+        <type>sdw::Mat4</type>
+        <definition>sdw::Mat4 castor3d::shader::ModelIndices::m_mtxNormal</definition>
+        <argsstring></argsstring>
+        <name>m_mtxNormal</name>
+        <qualifiedname>castor3d::shader::ModelIndices::m_mtxNormal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="82" column="11" bodyfile="Shader/Ubos/ModelDataUbo.hpp" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d4c/a04931_1a040959d7e33d8db6c7a4b9742d750eb4" prot="private" static="no" mutable="no">
+        <type>sdw::UVec4</type>
+        <definition>sdw::UVec4 castor3d::shader::ModelIndices::m_textures0</definition>
+        <argsstring></argsstring>
+        <name>m_textures0</name>
+        <qualifiedname>castor3d::shader::ModelIndices::m_textures0</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="83" column="12" bodyfile="Shader/Ubos/ModelDataUbo.hpp" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d4c/a04931_1aec909f88601458ad3289ca32dc01a570" prot="private" static="no" mutable="no">
+        <type>sdw::UVec4</type>
+        <definition>sdw::UVec4 castor3d::shader::ModelIndices::m_textures1</definition>
+        <argsstring></argsstring>
+        <name>m_textures1</name>
+        <qualifiedname>castor3d::shader::ModelIndices::m_textures1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="84" column="12" bodyfile="Shader/Ubos/ModelDataUbo.hpp" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d4c/a04931_1a628f7689f7789f3857c3445ef77293f4" prot="private" static="no" mutable="no">
+        <type>sdw::IVec4</type>
+        <definition>sdw::IVec4 castor3d::shader::ModelIndices::m_countsIDs</definition>
+        <argsstring></argsstring>
+        <name>m_countsIDs</name>
+        <qualifiedname>castor3d::shader::ModelIndices::m_countsIDs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="85" column="12" bodyfile="Shader/Ubos/ModelDataUbo.hpp" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d4c/a04931_1af6f6b330696a96c42189e11ab0c4800c" prot="private" static="no" mutable="no">
+        <type>sdw::Int</type>
+        <definition>sdw::Int castor3d::shader::ModelIndices::m_textures</definition>
+        <argsstring></argsstring>
+        <name>m_textures</name>
+        <qualifiedname>castor3d::shader::ModelIndices::m_textures</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="86" column="10" bodyfile="Shader/Ubos/ModelDataUbo.hpp" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d4c/a04931_1a01a25374e24ad686c8fa207d760aa97f" prot="private" static="no" mutable="no">
+        <type>sdw::Int</type>
+        <definition>sdw::Int castor3d::shader::ModelIndices::m_materialId</definition>
+        <argsstring></argsstring>
+        <name>m_materialId</name>
+        <qualifiedname>castor3d::shader::ModelIndices::m_materialId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="87" column="10" bodyfile="Shader/Ubos/ModelDataUbo.hpp" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d4c/a04931_1a70f4565a20f8d6c40db8a98034104823" prot="private" static="no" mutable="no">
+        <type>sdw::Int</type>
+        <definition>sdw::Int castor3d::shader::ModelIndices::m_envMapId</definition>
+        <argsstring></argsstring>
+        <name>m_envMapId</name>
+        <qualifiedname>castor3d::shader::ModelIndices::m_envMapId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="88" column="10" bodyfile="Shader/Ubos/ModelDataUbo.hpp" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d4c/a04931_1a485dd9589bf4507eddae39c72ed5bb77" prot="private" static="no" mutable="no">
+        <type>sdw::Int</type>
+        <definition>sdw::Int castor3d::shader::ModelIndices::m_shadowReceiver</definition>
+        <argsstring></argsstring>
+        <name>m_shadowReceiver</name>
+        <qualifiedname>castor3d::shader::ModelIndices::m_shadowReceiver</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="89" column="10" bodyfile="Shader/Ubos/ModelDataUbo.hpp" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/d4c/a04931_1a0329c644689ec6ecb8de218a2b012d60" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::ModelIndices::ModelIndices</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>ModelIndices</name>
+        <qualifiedname>castor3d::shader::ModelIndices::ModelIndices</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="18" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d4c/a04931_1a547ecd539046123e3bc2b577e1fd58ac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::ModelIndices::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, ModelIndices)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::ModelIndices::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        </param>
+        <param>
+          <type><ref refid="d8/d4c/a04931" kindref="compound">ModelIndices</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="21" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d4c/a04931_1a378149c5143bba7c3b9b02d117bff9a4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Mat4</type>
+        <definition>C3D_API sdw::Mat4 castor3d::shader::ModelIndices::getPrvModelMtx</definition>
+        <argsstring>(ProgramFlags programFlags, sdw::Mat4 const &amp;curModelMatrix) const</argsstring>
+        <name>getPrvModelMtx</name>
+        <qualifiedname>castor3d::shader::ModelIndices::getPrvModelMtx</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
+          <declname>programFlags</declname>
+        </param>
+        <param>
+          <type>sdw::Mat4 const &amp;</type>
+          <declname>curModelMatrix</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="25" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d4c/a04931_1a6351e3742e3cd741e629ed00aea33e7e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Mat3</type>
+        <definition>C3D_API sdw::Mat3 castor3d::shader::ModelIndices::getNormalMtx</definition>
+        <argsstring>(ProgramFlags programFlags, sdw::Mat4 const &amp;curModelMatrix) const</argsstring>
+        <name>getNormalMtx</name>
+        <qualifiedname>castor3d::shader::ModelIndices::getNormalMtx</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
+          <declname>programFlags</declname>
+        </param>
+        <param>
+          <type>sdw::Mat4 const &amp;</type>
+          <declname>curModelMatrix</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="27" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d4c/a04931_1a4b77d38c4b82cd05f65806e801100c2e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::ModelIndices::worldToModel</definition>
+        <argsstring>(sdw::Vec4 const &amp;pos) const</argsstring>
+        <name>worldToModel</name>
+        <qualifiedname>castor3d::shader::ModelIndices::worldToModel</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>pos</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="29" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d4c/a04931_1a5ab96f1bfb56f1071d1c436ed64d6598" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::ModelIndices::modelToWorld</definition>
+        <argsstring>(sdw::Vec4 const &amp;pos) const</argsstring>
+        <name>modelToWorld</name>
+        <qualifiedname>castor3d::shader::ModelIndices::modelToWorld</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>pos</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="30" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d4c/a04931_1a781593922f16e6ca20b35fddbe45953c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::ModelIndices::modelToCurWorld</definition>
+        <argsstring>(sdw::Vec4 const &amp;pos) const</argsstring>
+        <name>modelToCurWorld</name>
+        <qualifiedname>castor3d::shader::ModelIndices::modelToCurWorld</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>pos</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="31" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d4c/a04931_1a1ef79c71e1faf101849040acc4372d40" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::ModelIndices::modelToPrvWorld</definition>
+        <argsstring>(sdw::Vec4 const &amp;pos) const</argsstring>
+        <name>modelToPrvWorld</name>
+        <qualifiedname>castor3d::shader::ModelIndices::modelToPrvWorld</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>pos</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="32" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d4c/a04931_1a3fc03254620fcbf9f44a9f3f5a790ca0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Mat4</type>
+        <definition>C3D_API sdw::Mat4 castor3d::shader::ModelIndices::getCurModelMtx</definition>
+        <argsstring>(ProgramFlags programFlags, SkinningData const &amp;skinning, sdw::Mat4 const &amp;transform, sdw::UInt const &amp;skinningId, sdw::UVec4 const &amp;boneIds0, sdw::UVec4 const &amp;boneIds1, sdw::Vec4 const &amp;boneWeights0, sdw::Vec4 const &amp;boneWeights1) const</argsstring>
+        <name>getCurModelMtx</name>
+        <qualifiedname>castor3d::shader::ModelIndices::getCurModelMtx</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
+          <declname>programFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d34/a04979" kindref="compound">SkinningData</ref> const &amp;</type>
+          <declname>skinning</declname>
+        </param>
+        <param>
+          <type>sdw::Mat4 const &amp;</type>
+          <declname>transform</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>skinningId</declname>
+        </param>
+        <param>
+          <type>sdw::UVec4 const &amp;</type>
+          <declname>boneIds0</declname>
+        </param>
+        <param>
+          <type>sdw::UVec4 const &amp;</type>
+          <declname>boneIds1</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>boneWeights0</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>boneWeights1</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="33" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d4c/a04931_1aabbd64323e9e19857d3119991b603c09" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Mat4</type>
+        <definition>C3D_API sdw::Mat4 castor3d::shader::ModelIndices::getCurModelMtx</definition>
+        <argsstring>(ProgramFlags programFlags, SkinningData const &amp;skinning, sdw::UInt const &amp;skinningId, sdw::UVec4 const &amp;boneIds0, sdw::UVec4 const &amp;boneIds1, sdw::Vec4 const &amp;boneWeights0, sdw::Vec4 const &amp;boneWeights1) const</argsstring>
+        <name>getCurModelMtx</name>
+        <qualifiedname>castor3d::shader::ModelIndices::getCurModelMtx</qualifiedname>
+        <param>
+          <type><ref refid="da/de3/a01398_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
+          <declname>programFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d34/a04979" kindref="compound">SkinningData</ref> const &amp;</type>
+          <declname>skinning</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>skinningId</declname>
+        </param>
+        <param>
+          <type>sdw::UVec4 const &amp;</type>
+          <declname>boneIds0</declname>
+        </param>
+        <param>
+          <type>sdw::UVec4 const &amp;</type>
+          <declname>boneIds1</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>boneWeights0</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>boneWeights1</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="41" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d4c/a04931_1a2ac8c6c47d16cf90ce699c26e13a55d7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::UVec4</type>
+        <definition>C3D_API sdw::UVec4 castor3d::shader::ModelIndices::getTextures0</definition>
+        <argsstring>() const</argsstring>
+        <name>getTextures0</name>
+        <qualifiedname>castor3d::shader::ModelIndices::getTextures0</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="48" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d4c/a04931_1a01aa1ff2ddfe6c96dcd5df7c8a84b426" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::UVec4</type>
+        <definition>C3D_API sdw::UVec4 castor3d::shader::ModelIndices::getTextures1</definition>
+        <argsstring>() const</argsstring>
+        <name>getTextures1</name>
+        <qualifiedname>castor3d::shader::ModelIndices::getTextures1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="49" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d4c/a04931_1a275192934f9f91c36e5a94fd23c64983" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Int</type>
+        <definition>C3D_API sdw::Int castor3d::shader::ModelIndices::getTextures</definition>
+        <argsstring>() const</argsstring>
+        <name>getTextures</name>
+        <qualifiedname>castor3d::shader::ModelIndices::getTextures</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="50" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d4c/a04931_1a4524dce5ee4599aab7bafc59242d6e49" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::UInt</type>
+        <definition>C3D_API sdw::UInt castor3d::shader::ModelIndices::getMaterialId</definition>
+        <argsstring>() const</argsstring>
+        <name>getMaterialId</name>
+        <qualifiedname>castor3d::shader::ModelIndices::getMaterialId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="51" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d4c/a04931_1a815f2584a52e73fa07095f06845b677b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Int const &amp;</type>
+        <definition>sdw::Int const  &amp; castor3d::shader::ModelIndices::isShadowReceiver</definition>
+        <argsstring>() const</argsstring>
+        <name>isShadowReceiver</name>
+        <qualifiedname>castor3d::shader::ModelIndices::isShadowReceiver</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="56" column="17" bodyfile="Shader/Ubos/ModelDataUbo.hpp" bodystart="56" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d4c/a04931_1ad59bb8a847a0952a46a7e57e2be82091" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Int const &amp;</type>
+        <definition>sdw::Int const  &amp; castor3d::shader::ModelIndices::getEnvMapIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>getEnvMapIndex</name>
+        <qualifiedname>castor3d::shader::ModelIndices::getEnvMapIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="61" column="17" bodyfile="Shader/Ubos/ModelDataUbo.hpp" bodystart="61" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d4c/a04931_1a1740ade2cd388b522ee4ff75a725f67f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Mat4 const &amp;</type>
+        <definition>sdw::Mat4 const  &amp; castor3d::shader::ModelIndices::getModelMtx</definition>
+        <argsstring>() const</argsstring>
+        <name>getModelMtx</name>
+        <qualifiedname>castor3d::shader::ModelIndices::getModelMtx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="66" column="18" bodyfile="Shader/Ubos/ModelDataUbo.hpp" bodystart="66" bodyend="69"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d8/d4c/a04931_1a1495898e9e3fab356329d187235232d1" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
+        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::ModelIndices::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::ModelIndices::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="23" column="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d4c/a04931_1a96bfd2b8e078883ac15029dae2774019" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::UInt</type>
+        <definition>static C3D_API sdw::UInt castor3d::shader::ModelIndices::getTexture</definition>
+        <argsstring>(sdw::UVec4 const &amp;textures0, sdw::UVec4 const &amp;textures1, uint32_t index)</argsstring>
+        <name>getTexture</name>
+        <qualifiedname>castor3d::shader::ModelIndices::getTexture</qualifiedname>
+        <param>
+          <type>sdw::UVec4 const &amp;</type>
+          <declname>textures0</declname>
+        </param>
+        <param>
+          <type>sdw::UVec4 const &amp;</type>
+          <declname>textures1</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="52" column="26"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/ToneMapping/HdrConfig.hpp" line="14" column="1" bodyfile="Render/ToneMapping/HdrConfig.hpp" bodystart="13" bodyend="22"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::ModelIndices</label>
+        <link refid="d8/d4c/a04931"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::ModelIndices</label>
+        <link refid="d8/d4c/a04931"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Ubos/ModelDataUbo.hpp" line="15" column="1" bodyfile="Shader/Ubos/ModelDataUbo.hpp" bodystart="17" bodyend="90"/>
     <listofallmembers>
-      <member refid="d8/d4c/a04931_1ac8fd9583280cdc34d0a26e1237764a0d" prot="public" virt="non-virtual"><scope>castor3d::HdrConfig</scope><name>exposure</name></member>
-      <member refid="d8/d4c/a04931_1a9d5123b1dbd5da1ebb2517854c23fb26" prot="public" virt="non-virtual"><scope>castor3d::HdrConfig</scope><name>gamma</name></member>
+      <member refid="d8/d4c/a04931_1aa6fa8c8b03652f70c973cf7c6bc385fe" prot="public" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>BufferName</name></member>
+      <member refid="d8/d4c/a04931_1a78e8f607645588b1f34c5f314ba711fb" prot="public" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>DataName</name></member>
+      <member refid="d8/d4c/a04931_1a3fc03254620fcbf9f44a9f3f5a790ca0" prot="public" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>getCurModelMtx</name></member>
+      <member refid="d8/d4c/a04931_1aabbd64323e9e19857d3119991b603c09" prot="public" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>getCurModelMtx</name></member>
+      <member refid="d8/d4c/a04931_1ad59bb8a847a0952a46a7e57e2be82091" prot="public" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>getEnvMapIndex</name></member>
+      <member refid="d8/d4c/a04931_1a4524dce5ee4599aab7bafc59242d6e49" prot="public" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>getMaterialId</name></member>
+      <member refid="d8/d4c/a04931_1a1740ade2cd388b522ee4ff75a725f67f" prot="public" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>getModelMtx</name></member>
+      <member refid="d8/d4c/a04931_1a6351e3742e3cd741e629ed00aea33e7e" prot="public" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>getNormalMtx</name></member>
+      <member refid="d8/d4c/a04931_1a378149c5143bba7c3b9b02d117bff9a4" prot="public" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>getPrvModelMtx</name></member>
+      <member refid="d8/d4c/a04931_1a96bfd2b8e078883ac15029dae2774019" prot="public" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>getTexture</name></member>
+      <member refid="d8/d4c/a04931_1a275192934f9f91c36e5a94fd23c64983" prot="public" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>getTextures</name></member>
+      <member refid="d8/d4c/a04931_1a2ac8c6c47d16cf90ce699c26e13a55d7" prot="public" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>getTextures0</name></member>
+      <member refid="d8/d4c/a04931_1a01aa1ff2ddfe6c96dcd5df7c8a84b426" prot="public" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>getTextures1</name></member>
+      <member refid="d8/d4c/a04931_1a815f2584a52e73fa07095f06845b677b" prot="public" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>isShadowReceiver</name></member>
+      <member refid="d8/d4c/a04931_1a628f7689f7789f3857c3445ef77293f4" prot="private" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>m_countsIDs</name></member>
+      <member refid="d8/d4c/a04931_1ae7ce80eb39ad53e368e192c5714d0325" prot="private" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>m_curMtxModel</name></member>
+      <member refid="d8/d4c/a04931_1a70f4565a20f8d6c40db8a98034104823" prot="private" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>m_envMapId</name></member>
+      <member refid="d8/d4c/a04931_1a01a25374e24ad686c8fa207d760aa97f" prot="private" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>m_materialId</name></member>
+      <member refid="d8/d4c/a04931_1a1c7adaed44a001568a8b271343d1668c" prot="private" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>m_mtxNormal</name></member>
+      <member refid="d8/d4c/a04931_1a9ea3460ccd89e29244ddd06202fc47ee" prot="private" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>m_prvMtxModel</name></member>
+      <member refid="d8/d4c/a04931_1a485dd9589bf4507eddae39c72ed5bb77" prot="private" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>m_shadowReceiver</name></member>
+      <member refid="d8/d4c/a04931_1af6f6b330696a96c42189e11ab0c4800c" prot="private" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>m_textures</name></member>
+      <member refid="d8/d4c/a04931_1a040959d7e33d8db6c7a4b9742d750eb4" prot="private" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>m_textures0</name></member>
+      <member refid="d8/d4c/a04931_1aec909f88601458ad3289ca32dc01a570" prot="private" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>m_textures1</name></member>
+      <member refid="d8/d4c/a04931_1a1495898e9e3fab356329d187235232d1" prot="public" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>makeType</name></member>
+      <member refid="d8/d4c/a04931_1a0329c644689ec6ecb8de218a2b012d60" prot="public" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>ModelIndices</name></member>
+      <member refid="d8/d4c/a04931_1a781593922f16e6ca20b35fddbe45953c" prot="public" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>modelToCurWorld</name></member>
+      <member refid="d8/d4c/a04931_1a1ef79c71e1faf101849040acc4372d40" prot="public" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>modelToPrvWorld</name></member>
+      <member refid="d8/d4c/a04931_1a5ab96f1bfb56f1071d1c436ed64d6598" prot="public" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>modelToWorld</name></member>
+      <member refid="d8/d4c/a04931_1a547ecd539046123e3bc2b577e1fd58ac" prot="public" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="d8/d4c/a04931_1a4b77d38c4b82cd05f65806e801100c2e" prot="public" virt="non-virtual"><scope>castor3d::shader::ModelIndices</scope><name>worldToModel</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>
